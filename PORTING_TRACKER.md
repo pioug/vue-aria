@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `108 / 133` tracked items
-- Remaining: `25`
+- Completed: `112 / 133` tracked items
+- Remaining: `21`
 - Current stage: tree/table/grid aria parity
 
 ## 0) Dependency baseline
@@ -140,10 +140,10 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] `useGridListItem`
 - [ ] `useGrid`
 - [ ] `useGridCell`
-- [ ] `useTable`
-- [ ] `useTableCell`
-- [ ] `useTableColumnHeader`
-- [ ] `useTableRow`
+- [x] `useTable`
+- [x] `useTableCell`
+- [x] `useTableColumnHeader`
+- [x] `useTableRow`
 - [x] `useTree`
 - [x] `useTreeItem`
 - [ ] Row/column keyboard navigation delegates

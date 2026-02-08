@@ -55,6 +55,7 @@ export default defineConfig({
           { text: "@vue-aria/list-state", link: "/packages/list-state" },
           { text: "@vue-aria/tree", link: "/packages/tree" },
           { text: "@vue-aria/tree-state", link: "/packages/tree-state" },
+          { text: "@vue-aria/table", link: "/packages/table" },
           { text: "@vue-aria/table-state", link: "/packages/table-state" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/selection-state", link: "/packages/selection-state" },

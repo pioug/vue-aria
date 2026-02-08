@@ -184,6 +184,13 @@ This port follows React Aria's package-first structure.
 
 - `useTreeState`
 
+### `@vue-aria/table`
+
+- `useTable`
+- `useTableRow`
+- `useTableCell`
+- `useTableColumnHeader`
+
 ### `@vue-aria/table-state`
 
 - `useTableState`

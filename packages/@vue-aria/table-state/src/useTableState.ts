@@ -17,6 +17,8 @@ export interface SortDescriptor {
 export interface TableColumn {
   key: Key;
   textValue?: string;
+  allowsSorting?: boolean;
+  colSpan?: number;
   isRowHeader?: boolean;
   isSelectionCell?: boolean;
   isDragButtonCell?: boolean;

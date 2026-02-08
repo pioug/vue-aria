@@ -84,6 +84,12 @@ export {
 export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
 export { useTree, useTreeItem } from "@vue-aria/tree";
 export { useTreeState } from "@vue-aria/tree-state";
+export {
+  useTable,
+  useTableRow,
+  useTableCell,
+  useTableColumnHeader,
+} from "@vue-aria/table";
 export { useTableState } from "@vue-aria/table-state";
 export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
 export { useMultipleSelectionState } from "@vue-aria/selection-state";
@@ -189,6 +195,16 @@ export type {
   UseTreeItemOptions,
   UseTreeItemResult,
 } from "@vue-aria/tree";
+export type {
+  UseTableOptions,
+  UseTableResult,
+  UseTableRowOptions,
+  UseTableRowResult,
+  UseTableCellOptions,
+  UseTableCellResult,
+  UseTableColumnHeaderOptions,
+  UseTableColumnHeaderResult,
+} from "@vue-aria/table";
 export type {
   TreeCollection,
   TreeCollectionNode,
