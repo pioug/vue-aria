@@ -53,6 +53,7 @@ export default defineConfig({
           { text: "@vue-aria/tooltip", link: "/packages/tooltip" },
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
           { text: "@vue-aria/list-state", link: "/packages/list-state" },
+          { text: "@vue-aria/tree-state", link: "/packages/tree-state" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/selection-state", link: "/packages/selection-state" },
           { text: "@vue-aria/combobox-state", link: "/packages/combobox-state" },
