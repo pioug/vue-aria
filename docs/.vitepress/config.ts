@@ -61,6 +61,7 @@ export default defineConfig({
           { text: "@vue-aria/gridlist", link: "/packages/gridlist" },
           { text: "@vue-aria/tree", link: "/packages/tree" },
           { text: "@vue-aria/tree-state", link: "/packages/tree-state" },
+          { text: "@vue-aria/virtualizer", link: "/packages/virtualizer" },
           { text: "@vue-aria/virtualizer-state", link: "/packages/virtualizer-state" },
           { text: "@vue-aria/table", link: "/packages/table" },
           { text: "@vue-aria/table-state", link: "/packages/table-state" },

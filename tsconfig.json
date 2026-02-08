@@ -44,6 +44,7 @@
       "@vue-aria/gridlist": ["packages/@vue-aria/gridlist/src/index.ts"],
       "@vue-aria/tree": ["packages/@vue-aria/tree/src/index.ts"],
       "@vue-aria/tree-state": ["packages/@vue-aria/tree-state/src/index.ts"],
+      "@vue-aria/virtualizer": ["packages/@vue-aria/virtualizer/src/index.ts"],
       "@vue-aria/virtualizer-state": ["packages/@vue-aria/virtualizer-state/src/index.ts"],
       "@vue-aria/table": ["packages/@vue-aria/table/src/index.ts"],
       "@vue-aria/table-state": ["packages/@vue-aria/table-state/src/index.ts"],

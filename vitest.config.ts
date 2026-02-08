@@ -115,6 +115,9 @@ export default defineConfig({
       "@vue-aria/tree-state": fileURLToPath(
         new URL("./packages/@vue-aria/tree-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/virtualizer": fileURLToPath(
+        new URL("./packages/@vue-aria/virtualizer/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/virtualizer-state": fileURLToPath(
         new URL("./packages/@vue-aria/virtualizer-state/src/index.ts", import.meta.url)
       ),

@@ -134,6 +134,13 @@ export { useGridList, useGridListItem } from "@vue-aria/gridlist";
 export { useTree, useTreeItem } from "@vue-aria/tree";
 export { useTreeState } from "@vue-aria/tree-state";
 export {
+  getRTLOffsetType,
+  getScrollLeft,
+  setScrollLeft,
+  layoutInfoToStyle,
+  useVirtualizerItem,
+} from "@vue-aria/virtualizer";
+export {
   Point as VirtualizerPoint,
   Size as VirtualizerSize,
   Rect as VirtualizerRect,
@@ -382,6 +389,13 @@ export type {
   UseTreeStateOptions,
   UseTreeStateResult,
 } from "@vue-aria/tree-state";
+export type {
+  Direction as VirtualizerDirection,
+  RTLOffsetType as VirtualizerRTLOffsetType,
+  VirtualizerItemOptions,
+  VirtualizerItemVirtualizer,
+  UseVirtualizerItemResult,
+} from "@vue-aria/virtualizer";
 export type {
   RectCorner as VirtualizerRectCorner,
   InvalidationContext as VirtualizerInvalidationContext,

@@ -222,6 +222,14 @@ This port follows React Aria's package-first structure.
 
 - `useTreeState`
 
+### `@vue-aria/virtualizer`
+
+- `useVirtualizerItem`
+- `layoutInfoToStyle`
+- `getRTLOffsetType`
+- `getScrollLeft`
+- `setScrollLeft`
+
 ### `@vue-aria/virtualizer-state`
 
 - `Point`
