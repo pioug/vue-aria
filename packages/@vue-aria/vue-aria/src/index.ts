@@ -13,6 +13,7 @@ export {
 export { useButton, useToggleButton } from "@vue-aria/button";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
+export { useTextField } from "@vue-aria/textfield";
 export { useSeparator } from "@vue-aria/separator";
 export {
   useVisuallyHidden,

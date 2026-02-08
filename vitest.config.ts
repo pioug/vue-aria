@@ -28,6 +28,9 @@ export default defineConfig({
       "@vue-aria/label": fileURLToPath(
         new URL("./packages/@vue-aria/label/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/textfield": fileURLToPath(
+        new URL("./packages/@vue-aria/textfield/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/separator": fileURLToPath(
         new URL("./packages/@vue-aria/separator/src/index.ts", import.meta.url)
       ),

@@ -20,10 +20,14 @@ This port follows React Aria's package-first structure.
 - `useFocus`
 - `useFocusWithin`
 - `useHover`
+- `useLongPress`
+- `useMove`
+- `useInteractOutside`
 
 ### `@vue-aria/button`
 
 - `useButton`
+- `useToggleButton`
 
 ### `@vue-aria/link`
 
@@ -33,6 +37,10 @@ This port follows React Aria's package-first structure.
 
 - `useLabel`
 - `useField`
+
+### `@vue-aria/textfield`
+
+- `useTextField`
 
 ### `@vue-aria/separator`
 
@@ -46,6 +54,8 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/utils`
 
 - `mergeProps`
+- `useDescription`
+- `useErrorMessage`
 
 ## Planned
 
