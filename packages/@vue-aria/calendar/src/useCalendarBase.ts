@@ -1,4 +1,5 @@
-import { computed, ref, toValue, watchEffect } from "vue";
+import { computed, ref, toValue, watch, watchEffect } from "vue";
+import { announce } from "@vue-aria/live-announcer";
 import { filterDOMProps } from "@vue-aria/utils";
 import { mergeProps } from "@vue-aria/utils";
 import { useId } from "@vue-aria/ssr";
@@ -26,15 +27,19 @@ export function useCalendarBase(
   const visibleRangeDescription = useVisibleRangeDescription(state);
   const selectedDateDescription = useSelectedDateDescription(state);
 
-  hookData.set(state as object, {
-    ariaLabel:
-      options["aria-label"] === undefined ? undefined : (toValue(options["aria-label"]) ?? undefined),
-    ariaLabelledBy:
-      options["aria-labelledby"] === undefined
-        ? undefined
-        : (toValue(options["aria-labelledby"]) ?? undefined),
-    errorMessageId: errorMessageId.value,
-    selectedDateDescription: selectedDateDescription.value,
+  watchEffect(() => {
+    hookData.set(state as object, {
+      ariaLabel:
+        options["aria-label"] === undefined
+          ? undefined
+          : (toValue(options["aria-label"]) ?? undefined),
+      ariaLabelledBy:
+        options["aria-labelledby"] === undefined
+          ? undefined
+          : (toValue(options["aria-labelledby"]) ?? undefined),
+      errorMessageId: errorMessageId.value,
+      selectedDateDescription: selectedDateDescription.value,
+    });
   });
 
   const nextFocused = ref(false);
@@ -42,6 +47,9 @@ export function useCalendarBase(
 
   const isDisabled = computed(() =>
     options.isDisabled === undefined ? false : Boolean(toValue(options.isDisabled))
+  );
+  const isFocused = computed(() =>
+    state.isFocused === undefined ? false : Boolean(toValue(state.isFocused))
   );
   const nextDisabled = computed(
     () => isDisabled.value || Boolean(state.isNextVisibleRangeInvalid())
@@ -62,6 +70,22 @@ export function useCalendarBase(
       previousFocused.value = false;
       state.setFocused(true);
     }
+  });
+
+  watch(visibleRangeDescription, (value, previous) => {
+    if (previous === undefined) {
+      return;
+    }
+    if (!isFocused.value && value) {
+      announce(value, "polite");
+    }
+  });
+
+  watch(selectedDateDescription, (value, previous) => {
+    if (!value || value === previous) {
+      return;
+    }
+    announce(value, "polite", 4000);
   });
 
   const title = computed(() => visibleRangeDescription.value);

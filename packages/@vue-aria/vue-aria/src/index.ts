@@ -1,4 +1,5 @@
 export { useId, provideSSR, useIsSSR } from "@vue-aria/ssr";
+export { announce, clearAnnouncer, destroyAnnouncer } from "@vue-aria/live-announcer";
 export { provideI18n, useDefaultLocale, useLocale, isRTL } from "@vue-aria/i18n";
 export { useFocusVisible, useFocusRing } from "@vue-aria/focus";
 export {

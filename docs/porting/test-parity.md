@@ -26,6 +26,7 @@ Current test files:
 - `packages/@vue-aria/utils/test/useErrorMessage.test.ts`
 - `packages/@vue-aria/ssr/test/useId.test.ts`
 - `packages/@vue-aria/ssr/test/ssrProvider.test.ts`
+- `packages/@vue-aria/live-announcer/test/liveAnnouncer.test.ts`
 - `packages/@vue-aria/i18n/test/useLocale.test.ts`
 - `packages/@vue-aria/focus/test/useFocusVisible.test.ts`
 - `packages/@vue-aria/focus/test/useFocusRing.test.ts`

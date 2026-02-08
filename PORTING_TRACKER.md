@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `54 / 133` tracked items
-- Remaining: `79`
+- Completed: `55 / 133` tracked items
+- Remaining: `78`
 - Current stage: foundation hardening and navigation/list infrastructure migration
 
 ## 0) Dependency baseline
@@ -26,7 +26,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Deterministic SSR id strategy (`SSRProvider` equivalent)
 - [x] DOM prop filtering utilities (`filterDOMProps` equivalent)
 - [x] Locale + direction provider (`I18nProvider` equivalent)
-- [ ] Announcer/live region infrastructure
+- [x] Announcer/live region infrastructure
 - [ ] Collection builder helpers (nodes, sections, keys)
 - [ ] Keyboard delegate infrastructure
 - [ ] Router integration abstraction (link navigation)

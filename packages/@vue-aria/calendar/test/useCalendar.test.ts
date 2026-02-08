@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { nextTick, ref } from "vue";
+import { destroyAnnouncer } from "@vue-aria/live-announcer";
 import { hookData, useCalendar } from "../src";
 import type { CalendarDateLike, UseCalendarBaseState } from "../src/types";
 
@@ -17,6 +18,48 @@ function createDate(value: string): CalendarDateLike {
 }
 
 describe("useCalendar", () => {
+  it("announces visible range changes when calendar is not focused", async () => {
+    destroyAnnouncer();
+    document.body.innerHTML = "";
+
+    const start = createDate("2026-02-01");
+    const end = createDate("2026-02-28");
+    const visibleRange = ref({ start, end });
+
+    const state: UseCalendarBaseState = {
+      visibleRange,
+      timeZone: ref("UTC"),
+      isFocused: ref(false),
+      value: ref(start),
+      isNextVisibleRangeInvalid: () => false,
+      isPreviousVisibleRangeInvalid: () => false,
+      focusNextPage: vi.fn(),
+      focusPreviousPage: vi.fn(),
+      setFocused: vi.fn(),
+    };
+
+    useCalendar(
+      {
+        "aria-label": "Booking calendar",
+      },
+      state
+    );
+
+    visibleRange.value = {
+      start: createDate("2026-03-01"),
+      end: createDate("2026-03-31"),
+    };
+    await nextTick();
+
+    const politeLog = document.querySelector(
+      "[data-live-announcer='true'] [aria-live='polite']"
+    );
+    expect(politeLog?.textContent).toContain("2026-03-01 - 2026-03-31");
+
+    destroyAnnouncer();
+    document.body.innerHTML = "";
+  });
+
   it("returns base calendar semantics and paging button behavior", async () => {
     const start = createDate("2026-02-01");
     const end = createDate("2026-02-28");

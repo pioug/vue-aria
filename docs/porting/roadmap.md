@@ -4,13 +4,13 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `54 / 133` (about `40.6%`)
-- Tracked items remaining: `79`
+- Tracked items completed: `55 / 133` (about `41.4%`)
+- Tracked items remaining: `78`
 - Current parity focus: collection/listbox/select stack after foundation parity updates
 
 ## Done So Far
 
-- Foundation primitives: `mergeProps`, `useId`, `provideSSR`, `useIsSSR`, `filterDOMProps`, `provideI18n`, `useLocale`
+- Foundation primitives: `mergeProps`, `useId`, `provideSSR`, `useIsSSR`, `filterDOMProps`, `provideI18n`, `useLocale`, `announce`
 - Focus and interactions: `useFocusVisible`, `useFocusRing`, `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`, `useLongPress`, `useMove`, `useInteractOutside`
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
@@ -24,7 +24,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## What Is Left (By Area)
 
-- Foundation: `4` remaining
+- Foundation: `3` remaining
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining

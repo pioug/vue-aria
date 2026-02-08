@@ -10,6 +10,12 @@ This port follows React Aria's package-first structure.
 - `provideSSR`
 - `useIsSSR`
 
+### `@vue-aria/live-announcer`
+
+- `announce`
+- `clearAnnouncer`
+- `destroyAnnouncer`
+
 ### `@vue-aria/i18n`
 
 - `provideI18n`

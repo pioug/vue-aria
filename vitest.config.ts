@@ -13,6 +13,9 @@ export default defineConfig({
       "@vue-aria/ssr": fileURLToPath(
         new URL("./packages/@vue-aria/ssr/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/live-announcer": fileURLToPath(
+        new URL("./packages/@vue-aria/live-announcer/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/focus": fileURLToPath(
         new URL("./packages/@vue-aria/focus/src/index.ts", import.meta.url)
       ),

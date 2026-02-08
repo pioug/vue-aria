@@ -10,6 +10,7 @@
       "@vue-aria/types": ["packages/@vue-aria/types/src/index.ts"],
       "@vue-aria/utils": ["packages/@vue-aria/utils/src/index.ts"],
       "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"],
+      "@vue-aria/live-announcer": ["packages/@vue-aria/live-announcer/src/index.ts"],
       "@vue-aria/focus": ["packages/@vue-aria/focus/src/index.ts"],
       "@vue-aria/i18n": ["packages/@vue-aria/i18n/src/index.ts"],
       "@vue-aria/interactions": ["packages/@vue-aria/interactions/src/index.ts"],
