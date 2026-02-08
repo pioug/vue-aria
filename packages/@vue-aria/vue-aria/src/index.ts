@@ -64,6 +64,7 @@ export {
   useModalProvider,
   useModal,
   useModalOverlay,
+  usePopover,
   usePreventScroll,
 } from "@vue-aria/overlays";
 export {
@@ -143,6 +144,8 @@ export type {
   UseModalResult,
   UseModalOverlayOptions,
   UseModalOverlayResult,
+  UsePopoverOptions,
+  UsePopoverResult,
   UsePreventScrollOptions,
 } from "@vue-aria/overlays";
 export type {

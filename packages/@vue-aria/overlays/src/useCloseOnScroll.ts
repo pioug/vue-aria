@@ -37,7 +37,7 @@ export function useCloseOnScroll(options: UseCloseOnScrollOptions): void {
   const isOpen = computed(() => resolveBoolean(options.isOpen));
 
   watchEffect((onCleanup) => {
-    if (!isOpen.value) {
+    if (!isOpen.value || options.onClose === null) {
       return;
     }
 

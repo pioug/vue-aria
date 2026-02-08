@@ -26,6 +26,11 @@ coordination for nested modal stacks.
 Composes overlay dismissal, scroll locking, and outside-content hiding for modal
 underlay/content pairs.
 
+## `usePopover`
+
+Composes overlay dismissal and positioning for trigger-anchored popovers, with
+modal or non-modal behavior.
+
 ```ts
 import { useOverlayPosition, useOverlayTrigger } from "@vue-aria/overlays";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
