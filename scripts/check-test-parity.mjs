@@ -25,6 +25,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/checkbox/test/useCheckboxGroup.test.ts",
   "packages/@vue-aria/radio/test/useRadioGroup.test.ts",
   "packages/@vue-aria/radio/test/useRadio.test.ts",
+  "packages/@vue-aria/switch/test/useSwitch.test.ts",
   "packages/@vue-aria/link/test/useLink.test.ts",
   "packages/@vue-aria/label/test/useLabel.test.ts",
   "packages/@vue-aria/label/test/useField.test.ts",

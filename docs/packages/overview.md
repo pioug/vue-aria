@@ -40,6 +40,10 @@ This port follows React Aria's package-first structure.
 - `useRadioGroup`
 - `useRadio`
 
+### `@vue-aria/switch`
+
+- `useSwitch`
+
 ### `@vue-aria/link`
 
 - `useLink`

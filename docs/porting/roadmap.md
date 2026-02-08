@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `34 / 133` (about `25.6%`)
-- Tracked items remaining: `99`
+- Tracked items completed: `35 / 133` (about `26.3%`)
+- Tracked items remaining: `98`
 - Current parity focus: selection controls after text/number control baseline completion
 
 ## Done So Far
@@ -15,7 +15,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
 - Form controls: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`
-- Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`
+- Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`
 
 ## What Is Left (By Area)
 
@@ -23,7 +23,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
-- Selection controls: `4` remaining
+- Selection controls: `3` remaining
 - Date/time: `9` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
@@ -45,8 +45,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ### Phase 2: Form Controls (Text/Number Completed)
 
 - Text and number baseline complete: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`, textarea behavior parity, validation wiring parity.
-- Checkbox/radio baseline complete: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`.
-- Remaining selection controls: `useSwitch`, `useSlider`, `useSliderThumb`
+- Checkbox/radio/switch baseline complete: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`.
+- Remaining selection controls: `useSlider`, `useSliderThumb`
 
 ### Phase 3: Overlay + Navigation Systems
 
@@ -70,6 +70,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Continue selection controls with `useSwitch`.
-2. Move to slider hooks (`useSlider`, `useSliderThumb`) after switch parity lands.
-3. Add slider state adapters after base slider hooks are in place.
+1. Continue selection controls with slider hooks (`useSlider`, `useSliderThumb`).
+2. Add slider state adapters after base slider hooks are in place.
+3. Start date/time hooks after slider baseline stabilizes.

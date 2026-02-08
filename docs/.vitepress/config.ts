@@ -30,6 +30,7 @@ export default defineConfig({
           { text: "@vue-aria/button", link: "/packages/button" },
           { text: "@vue-aria/checkbox", link: "/packages/checkbox" },
           { text: "@vue-aria/radio", link: "/packages/radio" },
+          { text: "@vue-aria/switch", link: "/packages/switch" },
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },
