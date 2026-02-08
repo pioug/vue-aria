@@ -15,13 +15,15 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - `useHover`
 - `useButton`
 - `useLink`
+- `useLabel`
+- `useField`
 
 ## Next Priority
 
 1. `useLongPress`
 2. `useMove`
 3. `useInteractOutside`
-4. `useLabel`
+4. `useSeparator`
 5. `useCheckbox` and `useTextField`
 
 ## Major Workstreams

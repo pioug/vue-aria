@@ -29,6 +29,11 @@ This port follows React Aria's package-first structure.
 
 - `useLink`
 
+### `@vue-aria/label`
+
+- `useLabel`
+- `useField`
+
 ### `@vue-aria/utils`
 
 - `mergeProps`

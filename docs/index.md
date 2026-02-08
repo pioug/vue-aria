@@ -37,6 +37,7 @@ Implemented packages and hooks:
 - `@vue-aria/interactions`: `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`
 - `@vue-aria/button`: `useButton`
 - `@vue-aria/link`: `useLink`
+- `@vue-aria/label`: `useLabel`, `useField`
 - `@vue-aria/utils`: `mergeProps`
 
 ## Upstream Reference

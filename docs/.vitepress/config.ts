@@ -29,6 +29,7 @@ export default defineConfig({
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
           { text: "@vue-aria/button", link: "/packages/button" },
           { text: "@vue-aria/link", link: "/packages/link" },
+          { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/utils", link: "/packages/utils" },
         ],
       },

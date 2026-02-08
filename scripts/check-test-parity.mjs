@@ -16,6 +16,8 @@ const requiredTestFiles = [
   "packages/@vue-aria/interactions/test/useHover.test.ts",
   "packages/@vue-aria/button/test/useButton.test.ts",
   "packages/@vue-aria/link/test/useLink.test.ts",
+  "packages/@vue-aria/label/test/useLabel.test.ts",
+  "packages/@vue-aria/label/test/useField.test.ts",
 ];
 
 const missing = requiredTestFiles.filter((file) => {
