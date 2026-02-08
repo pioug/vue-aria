@@ -29,6 +29,8 @@
       "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
       "@vue-aria/collections": ["packages/@vue-aria/collections/src/index.ts"],
       "@vue-aria/menu": ["packages/@vue-aria/menu/src/index.ts"],
+      "@vue-aria/overlays-state": ["packages/@vue-aria/overlays-state/src/index.ts"],
+      "@vue-aria/overlays": ["packages/@vue-aria/overlays/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
       "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],

@@ -47,6 +47,7 @@ export {
   useAccordionItem,
 } from "@vue-aria/disclosure";
 export { buildCollection } from "@vue-aria/collections";
+export { useOverlayTriggerState } from "@vue-aria/overlays-state";
 export {
   useMenuTriggerState,
   useMenuTrigger,
@@ -54,6 +55,7 @@ export {
   useMenuItem,
   useMenuSection,
 } from "@vue-aria/menu";
+export { useOverlayTrigger, useOverlay } from "@vue-aria/overlays";
 export {
   useListBoxState,
   useListBox,
@@ -113,6 +115,16 @@ export type {
   UseMenuSectionResult,
   UseMenuSectionOptions,
 } from "@vue-aria/menu";
+export type {
+  UseOverlayTriggerStateResult,
+  UseOverlayTriggerStateOptions,
+} from "@vue-aria/overlays-state";
+export type {
+  UseOverlayTriggerResult,
+  UseOverlayTriggerOptions,
+  UseOverlayResult,
+  UseOverlayOptions,
+} from "@vue-aria/overlays";
 export type {
   Href,
   LinkDOMProps,

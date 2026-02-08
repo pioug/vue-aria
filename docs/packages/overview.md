@@ -124,6 +124,15 @@ This port follows React Aria's package-first structure.
 - `useMenuItem`
 - `useMenuSection`
 
+### `@vue-aria/overlays-state`
+
+- `useOverlayTriggerState`
+
+### `@vue-aria/overlays`
+
+- `useOverlayTrigger`
+- `useOverlay`
+
 ### `@vue-aria/listbox`
 
 - `useListBoxState`

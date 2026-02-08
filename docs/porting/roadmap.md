@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `78 / 133` (about `58.6%`)
-- Tracked items remaining: `55`
-- Current parity focus: combobox + menu/overlay infrastructure and stately hardening
+- Tracked items completed: `81 / 133` (about `60.9%`)
+- Tracked items remaining: `52`
+- Current parity focus: combobox + overlay infrastructure and stately hardening
 
 ## Done So Far
 
@@ -25,6 +25,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Accordion item behavior: `useAccordionItem`
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`
+- Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Listbox: `useListBoxState`, `useListBox`, `useOption`, `useListBoxSection`
 - Selection primitives: `useListKeyboardDelegate`, `useTypeSelect`
@@ -42,11 +43,11 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections/lists: `3` remaining
 - Menus/actions: `3` remaining
 - Tabs/disclosure/navigation: `0` remaining
-- Overlays/dialogs: `11` remaining
+- Overlays/dialogs: `9` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
-- Stately parity layer: `11` remaining
+- Stately parity layer: `10` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity
@@ -67,7 +68,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - `useComboBox`
 - Menu hardening: submenu trigger behavior, context menu behavior, action-vs-selection semantics
-- Overlay stack: `useOverlay`, `useOverlayTrigger`, `usePopover`, `useDialog`, `useTooltip`
+- Overlay stack: `useOverlayPosition`, `useModal`, `useModalOverlay`, `usePopover`, `useDialog`, `useTooltip`
 
 ### Phase 4: Data + Advanced Interaction
 
@@ -86,4 +87,4 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 1. Port `useComboBox` and associated autocomplete behavior.
 2. Close menu hardening gaps (submenu, context menu, action-vs-selection semantics).
-3. Start overlay core (`useOverlay`, `useOverlayTrigger`, `usePopover`) plus state-layer adapters.
+3. Continue overlay stack (`useOverlayPosition`, `useModal`, `usePopover`) plus focus/scroll hardening.

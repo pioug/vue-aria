@@ -70,6 +70,12 @@ export default defineConfig({
       "@vue-aria/menu": fileURLToPath(
         new URL("./packages/@vue-aria/menu/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/overlays-state": fileURLToPath(
+        new URL("./packages/@vue-aria/overlays-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/overlays": fileURLToPath(
+        new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/listbox": fileURLToPath(
         new URL("./packages/@vue-aria/listbox/src/index.ts", import.meta.url)
       ),
