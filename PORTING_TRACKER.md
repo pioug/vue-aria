@@ -153,6 +153,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - In progress baseline: `@vue-aria/dnd` clipboard data transfer primitives (`useClipboard`, `writeToDataTransfer`, `readFromDataTransfer`)
 - In progress baseline: keyboard drop-target traversal primitive (`navigate`)
 - In progress baseline: native drag source primitive (`useDrag`)
+- In progress baseline: drag preview renderer primitive (`createDragPreviewRenderer`)
 - In progress baseline: draggable item primitive (`useDraggableItem`)
 - In progress baseline: droppable item primitive (`useDroppableItem`)
 - In progress baseline: drop indicator primitive (`useDropIndicator`)

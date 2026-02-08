@@ -26,6 +26,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/interactions/test/useMove.test.ts",
   "packages/@vue-aria/interactions/test/useInteractOutside.test.ts",
   "packages/@vue-aria/dnd/test/useClipboard.test.ts",
+  "packages/@vue-aria/dnd/test/DragPreview.test.ts",
   "packages/@vue-aria/dnd/test/useDrag.test.ts",
   "packages/@vue-aria/dnd/test/useDrop.test.ts",
   "packages/@vue-aria/dnd/test/useAutoScroll.test.ts",

@@ -2,6 +2,7 @@ import { useDescription } from "@vue-aria/utils";
 import { computed } from "vue";
 import type { Key } from "@vue-aria/types";
 import type { DragItem, DropOperation } from "./types";
+import type { DragPreviewRenderer } from "./DragPreview";
 import {
   clearGlobalDnDState,
   isInternalDropOperation,
@@ -42,7 +43,7 @@ export interface DraggableItemState {
   selectionManager: DraggableItemSelectionManager;
   collection: DraggableItemCollection;
   draggingKeys: Set<Key>;
-  preview?: unknown;
+  preview?: DragPreviewRenderer | null;
   getItems: (key: Key) => DragItem[];
   getAllowedDropOperations?: () => DropOperation[];
   startDrag: (key: Key, event: DragStartEvent) => void;

@@ -3,6 +3,7 @@ import { EFFECT_ALLOWED, DROP_EFFECT_TO_DROP_OPERATION, DROP_OPERATION } from ".
 import { writeToDataTransfer } from "./utils";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { DragItem, DropOperation } from "./types";
+import type { DragPreviewRenderer } from "./DragPreview";
 
 export interface DragStartEvent {
   type: "dragstart";
@@ -28,7 +29,7 @@ export interface DragOptions {
   onDragMove?: (event: DragMoveEvent) => void;
   onDragEnd?: (event: DragEndEvent) => void;
   getItems: () => DragItem[];
-  preview?: unknown;
+  preview?: DragPreviewRenderer | null;
   getAllowedDropOperations?: () => DropOperation[];
   hasDragButton?: boolean;
   isDisabled?: MaybeReactive<boolean>;
@@ -50,6 +51,52 @@ function resolveDropOperation(effect: string | undefined): DropOperation {
   }
 
   return "cancel";
+}
+
+function setDragPreviewImage(
+  event: DragEvent,
+  dataTransfer: DataTransfer,
+  previewRenderer: DragPreviewRenderer,
+  items: DragItem[]
+): void {
+  previewRenderer(items, (node, userX, userY) => {
+    if (!node) {
+      return;
+    }
+
+    const size = node.getBoundingClientRect();
+    const currentTarget =
+      event.currentTarget instanceof HTMLElement
+        ? event.currentTarget
+        : event.target instanceof HTMLElement
+          ? event.target
+          : null;
+    const rect = currentTarget?.getBoundingClientRect() ?? size;
+
+    let offsetX = event.clientX - rect.x;
+    let offsetY = event.clientY - rect.y;
+    if (
+      offsetX > size.width ||
+      offsetY > size.height ||
+      offsetX < 0 ||
+      offsetY < 0
+    ) {
+      offsetX = size.width / 2;
+      offsetY = size.height / 2;
+    }
+
+    if (typeof userX === "number" && typeof userY === "number") {
+      offsetX = userX;
+      offsetY = userY;
+    }
+
+    offsetX = Math.max(0, Math.min(offsetX, size.width));
+    offsetY = Math.max(0, Math.min(offsetY, size.height));
+    const height = 2 * Math.round(size.height / 2);
+    node.style.height = `${height}px`;
+
+    dataTransfer.setDragImage(node, offsetX, offsetY);
+  });
 }
 
 export function useDrag(options: DragOptions): DragResult {
@@ -79,7 +126,8 @@ export function useDrag(options: DragOptions): DragResult {
     const dataTransfer = event.dataTransfer;
     if (dataTransfer) {
       dataTransfer.clearData?.();
-      writeToDataTransfer(dataTransfer, options.getItems());
+      const items = options.getItems();
+      writeToDataTransfer(dataTransfer, items);
 
       let allowed = DROP_OPERATION.all;
       if (typeof options.getAllowedDropOperations === "function") {
@@ -91,6 +139,10 @@ export function useDrag(options: DragOptions): DragResult {
 
       const effectAllowed = EFFECT_ALLOWED[allowed] ?? "none";
       dataTransfer.effectAllowed = effectAllowed === "cancel" ? "none" : effectAllowed;
+
+      if (typeof options.preview === "function") {
+        setDragPreviewImage(event, dataTransfer, options.preview, items);
+      }
     }
 
     options.onDragStart?.({

@@ -1,5 +1,6 @@
 export { useClipboard } from "./useClipboard";
 export { useDrag } from "./useDrag";
+export { createDragPreviewRenderer } from "./DragPreview";
 export { useDrop } from "./useDrop";
 export { useDropIndicator } from "./useDropIndicator";
 export { useDroppableItem } from "./useDroppableItem";
@@ -74,6 +75,12 @@ export type {
   TextDropItem,
 } from "./types";
 export type { ClipboardProps, ClipboardResult } from "./useClipboard";
+export type {
+  DragPreviewRenderResult,
+  DragPreviewRenderer,
+  DragPreviewTemplate,
+  DragPreviewTemplateResult,
+} from "./DragPreview";
 export type {
   DragEndEvent,
   DragMoveEvent,

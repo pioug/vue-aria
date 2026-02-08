@@ -15,6 +15,7 @@ export {
 export {
   useClipboard,
   useDrag,
+  createDragPreviewRenderer,
   useDrop,
   useDropIndicator,
   useDroppableItem,
@@ -207,6 +208,10 @@ export type {
   GlobalDndState,
   DragOptions,
   DragResult,
+  DragPreviewRenderResult,
+  DragPreviewRenderer,
+  DragPreviewTemplate,
+  DragPreviewTemplateResult,
   DragStartEvent,
   DragMoveEvent,
   DragEndEvent,

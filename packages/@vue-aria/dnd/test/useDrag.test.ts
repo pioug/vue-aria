@@ -216,4 +216,82 @@ describe("useDrag", () => {
       y: 6,
     });
   });
+
+  it("uses preview renderer to set drag image", () => {
+    const previewElement = document.createElement("div");
+    Object.defineProperty(previewElement, "getBoundingClientRect", {
+      configurable: true,
+      value: () => ({
+        x: 0,
+        y: 0,
+        width: 20,
+        height: 9,
+        left: 0,
+        top: 0,
+        right: 20,
+        bottom: 9,
+        toJSON: () => ({}),
+      }),
+    });
+
+    const currentTarget = document.createElement("div");
+    Object.defineProperty(currentTarget, "getBoundingClientRect", {
+      configurable: true,
+      value: () => ({
+        x: 0,
+        y: 0,
+        width: 40,
+        height: 40,
+        left: 0,
+        top: 0,
+        right: 40,
+        bottom: 40,
+        toJSON: () => ({}),
+      }),
+    });
+
+    const preview = vi.fn((items, callback) => {
+      expect(items).toEqual([
+        {
+          "text/plain": "hello world",
+        },
+      ]);
+      callback(previewElement, 5, 6);
+    });
+
+    const { dragProps } = useDrag({
+      getItems: () => [
+        {
+          "text/plain": "hello world",
+        },
+      ],
+      preview,
+    });
+
+    const handlers = dragProps as unknown as DragHandlers;
+    const dataTransfer = new DataTransferMock();
+    const event = new DragEventMock("dragstart", {
+      dataTransfer,
+      clientX: 8,
+      clientY: 7,
+    }) as unknown as DragEvent;
+    Object.defineProperty(event, "currentTarget", {
+      configurable: true,
+      value: currentTarget,
+    });
+    Object.defineProperty(event, "target", {
+      configurable: true,
+      value: currentTarget,
+    });
+
+    handlers.onDragstart(event);
+
+    expect(preview).toHaveBeenCalledTimes(1);
+    expect((dataTransfer as unknown as { dragImage?: { node: Element; x: number; y: number } }).dragImage).toEqual({
+      node: previewElement,
+      x: 5,
+      y: 6,
+    });
+    expect(previewElement.style.height).toBe("10px");
+  });
 });
