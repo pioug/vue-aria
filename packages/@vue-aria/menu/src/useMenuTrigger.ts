@@ -144,11 +144,21 @@ export function useMenuTrigger(
     state.open("first");
   };
 
+  const onContextmenu = (event: MouseEvent): void => {
+    if (isDisabled.value || trigger.value !== "longPress") {
+      return;
+    }
+
+    event.preventDefault();
+    focusTarget(event.target);
+    state.open("first");
+  };
+
   const menuTriggerProps = computed<Record<string, unknown>>(() => {
     const interactionProps =
       trigger.value === "press"
         ? { onPressStart, onPress }
-        : { onLongPressStart, onLongPress };
+        : { onLongPressStart, onLongPress, onContextmenu };
 
     return {
       ...interactionProps,

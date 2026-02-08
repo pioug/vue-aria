@@ -87,4 +87,44 @@ describe("useMenuTrigger", () => {
 
     expect(state.isOpen.value).toBe(false);
   });
+
+  it("opens on contextmenu when trigger is longPress", () => {
+    const state = useMenuTriggerState();
+    const { menuTriggerProps } = useMenuTrigger({ trigger: "longPress" }, state);
+    const preventDefault = vi.fn();
+    const target = document.createElement("button");
+    document.body.appendChild(target);
+
+    (
+      menuTriggerProps.value.onContextmenu as (event: MouseEvent) => void
+    )({
+      preventDefault,
+      target,
+    } as unknown as MouseEvent);
+
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(state.isOpen.value).toBe(true);
+    expect(state.focusStrategy.value).toBe("first");
+    expect(document.activeElement).toBe(target);
+    target.remove();
+  });
+
+  it("does not open on contextmenu when longPress trigger is disabled", () => {
+    const state = useMenuTriggerState();
+    const { menuTriggerProps } = useMenuTrigger(
+      { trigger: "longPress", isDisabled: true },
+      state
+    );
+    const preventDefault = vi.fn();
+
+    (
+      menuTriggerProps.value.onContextmenu as (event: MouseEvent) => void
+    )({
+      preventDefault,
+      target: document.createElement("button"),
+    } as unknown as MouseEvent);
+
+    expect(preventDefault).not.toHaveBeenCalled();
+    expect(state.isOpen.value).toBe(false);
+  });
 });

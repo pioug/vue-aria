@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `96 / 133` (about `72.2%`)
-- Tracked items remaining: `37`
+- Tracked items completed: `97 / 133` (about `72.9%`)
+- Tracked items remaining: `36`
 - Current parity focus: combobox + menu hardening and stately hardening
 
 ## Done So Far
@@ -44,7 +44,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Selection controls: `0` remaining
 - Date/time: `1` remaining
 - Collections/lists: `3` remaining
-- Menus/actions: `2` remaining
+- Menus/actions: `1` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `11` remaining
