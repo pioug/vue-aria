@@ -1,5 +1,6 @@
 export { useDisclosure } from "./useDisclosure";
 export { useDisclosureState } from "./useDisclosureState";
+export { useDisclosureGroupState } from "./useDisclosureGroupState";
 
 export type {
   DisclosurePressEvent,
@@ -10,3 +11,7 @@ export type {
   UseDisclosureStateOptions,
   UseDisclosureStateResult,
 } from "./useDisclosureState";
+export type {
+  UseDisclosureGroupStateOptions,
+  UseDisclosureGroupStateResult,
+} from "./useDisclosureGroupState";

@@ -33,7 +33,11 @@ export {
 } from "@vue-aria/datepicker";
 export { useCalendarBase, useCalendar, useRangeCalendar, useCalendarCell } from "@vue-aria/calendar";
 export { useBreadcrumbItem } from "@vue-aria/breadcrumbs";
-export { useDisclosure, useDisclosureState } from "@vue-aria/disclosure";
+export {
+  useDisclosure,
+  useDisclosureState,
+  useDisclosureGroupState,
+} from "@vue-aria/disclosure";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
@@ -50,6 +54,7 @@ export { mergeProps, useDescription, useErrorMessage } from "@vue-aria/utils";
 
 export type {
   HoverEvent,
+  Key,
   LongPressEvent,
   MaybeReactive,
   MoveEvent,

@@ -2,6 +2,8 @@ import type { MaybeRefOrGetter, Ref } from "vue";
 
 export type MaybeReactive<T> = MaybeRefOrGetter<T>;
 
+export type Key = string | number;
+
 export type PointerType = "mouse" | "touch" | "pen" | "keyboard" | "virtual";
 
 export type ReadonlyRef<T> = Readonly<Ref<T>>;
