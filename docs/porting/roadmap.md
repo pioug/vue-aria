@@ -4,13 +4,14 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `126 / 139` (about `90.6%`)
+- Tracked items completed: `128 / 141` (about `90.8%`)
 - Tracked items remaining: `13`
 - Current parity focus: drag/drop + virtualizer parity
 
 ## Done So Far
 
 - Foundation primitives: `mergeProps`, `useId`, `provideSSR`, `useIsSSR`, `filterDOMProps`, `provideI18n`, `useLocale`, `announce`, `provideRouter`, `useRouter`
+- Shared utility baseline: `useLoadMore`
 - Focus and interactions: `useFocusVisible`, `useFocusRing`, `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`, `useLongPress`, `useMove`, `useInteractOutside`
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
@@ -48,6 +49,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Virtualizer state baseline: `useVirtualizerState`
 - React Aria virtualizer item/scroll helpers baseline: `useVirtualizerItem`, `layoutInfoToStyle`, `getRTLOffsetType`, `getScrollLeft`, `setScrollLeft`
 - React Aria virtualizer scroll container baseline: `useScrollView`
+- React Aria virtualizer composition baseline: `useVirtualizer`
 
 ## What Is Left (By Area)
 

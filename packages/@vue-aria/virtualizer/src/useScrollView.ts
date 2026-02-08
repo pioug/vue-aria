@@ -13,7 +13,7 @@ export interface UseScrollViewOptions {
   innerStyle?: MaybeReactive<CSSProperties | undefined>;
   onScrollStart?: () => void;
   onScrollEnd?: () => void;
-  scrollDirection?: ScrollDirection;
+  scrollDirection?: MaybeReactive<ScrollDirection | undefined>;
   onScroll?: (event: Event) => void;
   style?: MaybeReactive<CSSProperties | undefined>;
 }
@@ -61,7 +61,6 @@ export function useScrollView(
   const state = createScrollState();
   const isScrolling = ref(false);
   const locale = useLocale();
-  const scrollDirection = options.scrollDirection ?? "both";
   const isUpdatingSize = ref(false);
   const lastContentSize = ref<Size | null>(null);
 
@@ -205,6 +204,7 @@ export function useScrollView(
 
   const scrollViewProps = computed(() => {
     const contentSize = toValue(options.contentSize);
+    const scrollDirection = toValue(options.scrollDirection) ?? "both";
     const style: CSSProperties = {
       padding: 0,
       ...(toValue(options.style) ?? {}),

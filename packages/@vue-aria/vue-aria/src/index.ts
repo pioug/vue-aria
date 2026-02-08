@@ -139,6 +139,7 @@ export {
   setScrollLeft,
   layoutInfoToStyle,
   useScrollView,
+  useVirtualizer,
   useVirtualizerItem,
 } from "@vue-aria/virtualizer";
 export {
@@ -186,6 +187,7 @@ export {
 } from "@vue-aria/visually-hidden";
 export {
   mergeProps,
+  useLoadMore,
   useDescription,
   useErrorMessage,
   provideRouter,
@@ -392,6 +394,10 @@ export type {
 } from "@vue-aria/tree-state";
 export type {
   ScrollDirection,
+  DefaultRenderedView,
+  RenderWrapper,
+  UseVirtualizerOptions,
+  UseVirtualizerResult,
   UseScrollViewOptions,
   UseScrollViewResult,
   Direction as VirtualizerDirection,
@@ -486,4 +492,5 @@ export type {
   ProvideRouterOptions,
   Router,
   RouterOptions,
+  UseLoadMoreOptions,
 } from "@vue-aria/utils";

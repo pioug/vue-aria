@@ -224,6 +224,7 @@ This port follows React Aria's package-first structure.
 
 ### `@vue-aria/virtualizer`
 
+- `useVirtualizer`
 - `useScrollView`
 - `useVirtualizerItem`
 - `layoutInfoToStyle`
@@ -314,6 +315,7 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/utils`
 
 - `mergeProps`
+- `useLoadMore`
 - `filterDOMProps`
 - `nodeContains`
 - `provideRouter`

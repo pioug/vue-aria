@@ -22,6 +22,24 @@ const props = mergeProps(
 - `style` objects are shallow-merged.
 - `undefined` values are ignored.
 
+## `useLoadMore`
+
+Triggers incremental loading callbacks as a scroll container approaches the end.
+
+```ts
+import { useLoadMore } from "@vue-aria/utils";
+
+useLoadMore(
+  {
+    isLoading,
+    onLoadMore: () => fetchNextPage(),
+    scrollOffset: 1,
+    items,
+  },
+  scrollRef
+);
+```
+
 ## `filterDOMProps`
 
 Filters arbitrary props down to DOM-safe props (`aria-*`, `data-*`, and known DOM attributes).

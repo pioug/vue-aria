@@ -43,8 +43,12 @@ afterAll(() => {
 
 function createContainer(width = 120, height = 80): HTMLElement {
   const node = document.createElement("div");
-  (node as HTMLElement & { __testClientWidth: number }).__testClientWidth = width;
-  (node as HTMLElement & { __testClientHeight: number }).__testClientHeight = height;
+  const testNode = node as HTMLElement & {
+    __testClientWidth?: number;
+    __testClientHeight?: number;
+  };
+  testNode.__testClientWidth = width;
+  testNode.__testClientHeight = height;
   node.scrollLeft = 0;
   node.scrollTop = 0;
   return node;
