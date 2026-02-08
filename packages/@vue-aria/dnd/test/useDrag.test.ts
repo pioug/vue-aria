@@ -182,4 +182,38 @@ describe("useDrag", () => {
     expect(onDragStart).not.toHaveBeenCalled();
     expect([...dataTransfer.items]).toHaveLength(0);
   });
+
+  it("moves handlers to dragButtonProps when hasDragButton is true", () => {
+    const onDragStart = vi.fn();
+    const { dragProps, dragButtonProps } = useDrag({
+      getItems: () => [
+        {
+          "text/plain": "hello world",
+        },
+      ],
+      hasDragButton: true,
+      onDragStart,
+    });
+
+    expect((dragProps as Record<string, unknown>).onDragstart).toBeUndefined();
+
+    const buttonHandlers = dragButtonProps as unknown as DragHandlers;
+    expect(typeof buttonHandlers.onDragstart).toBe("function");
+
+    const dataTransfer = new DataTransferMock();
+    buttonHandlers.onDragstart(
+      new DragEventMock("dragstart", {
+        dataTransfer,
+        clientX: 4,
+        clientY: 6,
+      }) as unknown as DragEvent
+    );
+
+    expect(onDragStart).toHaveBeenCalledTimes(1);
+    expect(onDragStart).toHaveBeenCalledWith({
+      type: "dragstart",
+      x: 4,
+      y: 6,
+    });
+  });
 });

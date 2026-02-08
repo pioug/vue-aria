@@ -29,6 +29,7 @@ export interface DragOptions {
   onDragEnd?: (event: DragEndEvent) => void;
   getItems: () => DragItem[];
   getAllowedDropOperations?: () => DropOperation[];
+  hasDragButton?: boolean;
   isDisabled?: MaybeReactive<boolean>;
 }
 
@@ -135,13 +136,23 @@ export function useDrag(options: DragOptions): DragResult {
     });
   };
 
+  const dragInteractionProps: Record<string, unknown> = {
+    draggable: !isDisabled(),
+    onDragstart,
+    onDrag,
+    onDragend,
+  };
+
+  if (options.hasDragButton) {
+    return {
+      dragProps: {},
+      dragButtonProps: dragInteractionProps,
+      isDragging,
+    };
+  }
+
   return {
-    dragProps: {
-      draggable: !isDisabled(),
-      onDragstart,
-      onDrag,
-      onDragend,
-    },
+    dragProps: dragInteractionProps,
     dragButtonProps: {},
     isDragging,
   };
