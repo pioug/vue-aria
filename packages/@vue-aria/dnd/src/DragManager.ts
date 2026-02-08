@@ -1,6 +1,7 @@
 import { shallowRef, toValue } from "vue";
 import { announce } from "@vue-aria/live-announcer";
 import { nodeContains } from "@vue-aria/utils";
+import { hideOthers, inertOthers, supportsInert } from "aria-hidden";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type {
   DropItem,
@@ -77,6 +78,7 @@ interface ManagedDragSession extends DragSession {
   currentDropTarget: RegisteredDropTarget | null;
   currentDropItem: RegisteredDropItem | null;
   dropOperation: DropOperation | null;
+  restoreAriaHidden: (() => void) | null;
 }
 
 function isManagedDragSession(session: DragSession | null): session is ManagedDragSession {
@@ -161,6 +163,69 @@ function setCurrentDropTarget(
   }
 }
 
+function getVisibleDropItems(session: ManagedDragSession): RegisteredDropItem[] {
+  const types = getTypes(session.dragTarget.items);
+  return Array.from(dropItems.values()).filter((item) => {
+    if (isHiddenFromAccessibility(item.element)) {
+      return false;
+    }
+
+    const inValidTarget = session.validDropTargets.some((target) =>
+      nodeContains(target.element, item.element)
+    );
+    if (!inValidTarget) {
+      return false;
+    }
+
+    if (typeof item.getDropOperation === "function") {
+      return (
+        item.getDropOperation(types, session.dragTarget.allowedDropOperations) !==
+        "cancel"
+      );
+    }
+
+    return true;
+  });
+}
+
+function hideOutside(session: ManagedDragSession): void {
+  session.restoreAriaHidden?.();
+
+  const visibleElements: Element[] = [];
+  if (session.dragTarget.element instanceof Element) {
+    visibleElements.push(session.dragTarget.element);
+  }
+
+  const visibleDropItems = getVisibleDropItems(session);
+  for (const item of visibleDropItems) {
+    visibleElements.push(item.element);
+    const activateButton = resolveActivateButtonRef(item.activateButtonRef);
+    if (activateButton) {
+      visibleElements.push(activateButton);
+    }
+  }
+
+  const visibleDropTargets = session.validDropTargets.filter((target) =>
+    !visibleDropItems.some((item) => nodeContains(target.element, item.element))
+  );
+  for (const target of visibleDropTargets) {
+    visibleElements.push(target.element);
+    const activateButton = resolveActivateButtonRef(target.activateButtonRef);
+    if (activateButton) {
+      visibleElements.push(activateButton);
+    }
+  }
+
+  if (visibleElements.length === 0) {
+    session.restoreAriaHidden = null;
+    return;
+  }
+
+  session.restoreAriaHidden = supportsInert()
+    ? inertOthers(visibleElements)
+    : hideOthers(visibleElements);
+}
+
 function updateValidDropTargets(session: ManagedDragSession): void {
   const types = getTypes(session.dragTarget.items);
   session.validDropTargets = Array.from(dropTargets.values()).filter((target) => {
@@ -184,6 +249,8 @@ function updateValidDropTargets(session: ManagedDragSession): void {
   ) {
     setCurrentDropTarget(session, session.validDropTargets[0] ?? null);
   }
+
+  hideOutside(session);
 }
 
 function moveToRelativeDropTarget(session: ManagedDragSession, step: 1 | -1): void {
@@ -293,6 +360,8 @@ function teardownManagedSession(): void {
 
 function endManagedSession(session: ManagedDragSession, focusElement: HTMLElement | null): void {
   setCurrentDropTarget(session, null);
+  session.restoreAriaHidden?.();
+  session.restoreAriaHidden = null;
   teardownManagedSession();
   dragSession.value = null;
 
@@ -407,6 +476,7 @@ export function beginDragging(session: DragSession = {}): void {
       currentDropTarget: null,
       currentDropItem: null,
       dropOperation: null,
+      restoreAriaHidden: null,
     };
 
     dragSession.value = managedSession;
@@ -428,6 +498,10 @@ export function beginDragging(session: DragSession = {}): void {
 }
 
 export function endDragging(): void {
+  if (isManagedDragSession(dragSession.value)) {
+    dragSession.value.restoreAriaHidden?.();
+    dragSession.value.restoreAriaHidden = null;
+  }
   teardownManagedSession();
   dragSession.value = null;
 }

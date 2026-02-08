@@ -31,6 +31,10 @@ function setRect(
   });
 }
 
+function isA11yHidden(element: HTMLElement): boolean {
+  return element.getAttribute("aria-hidden") === "true" || element.hasAttribute("inert");
+}
+
 describe("DragManager", () => {
   afterEach(() => {
     endDragging();
@@ -311,5 +315,34 @@ describe("DragManager", () => {
       expect.objectContaining({ dropOperation: "copy" })
     );
     expect(isVirtualDragging()).toBe(false);
+  });
+
+  it("hides non-drop content from screen readers during managed dragging", () => {
+    const dragElement = document.createElement("button");
+    const dropElement = document.createElement("button");
+    const otherElement = document.createElement("div");
+    document.body.append(dragElement, dropElement, otherElement);
+    setRect(dragElement, { x: 0, y: 0, width: 40, height: 20 });
+    setRect(dropElement, { x: 50, y: 0, width: 40, height: 20 });
+
+    registerDropTarget({
+      element: dropElement,
+      getDropOperation: () => "copy",
+    });
+
+    beginDragging({
+      dragTarget: {
+        element: dragElement,
+        items: [{ "text/plain": "hello" }],
+        allowedDropOperations: ["copy"],
+      },
+    });
+
+    expect(isA11yHidden(otherElement)).toBe(true);
+    expect(isA11yHidden(dropElement)).toBe(false);
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+
+    expect(isA11yHidden(otherElement)).toBe(false);
   });
 });
