@@ -34,6 +34,9 @@ export default defineConfig({
       "@vue-aria/slider": fileURLToPath(
         new URL("./packages/@vue-aria/slider/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/progress": fileURLToPath(
+        new URL("./packages/@vue-aria/progress/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

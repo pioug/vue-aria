@@ -50,6 +50,10 @@ This port follows React Aria's package-first structure.
 - `useSlider`
 - `useSliderThumb`
 
+### `@vue-aria/progress`
+
+- `useProgressBar`
+
 ### `@vue-aria/link`
 
 - `useLink`
