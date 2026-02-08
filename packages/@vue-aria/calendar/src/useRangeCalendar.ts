@@ -1,13 +1,10 @@
 import { computed, toValue } from "vue";
 import { mergeProps } from "@vue-aria/utils";
+import { nodeContains } from "@vue-aria/utils";
 import { useCalendarBase } from "./useCalendarBase";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { UseCalendarBaseResult } from "./useCalendarBase";
 import type { UseCalendarBaseOptions, UseRangeCalendarState } from "./types";
-
-function nodeContains(parent: Element | null | undefined, target: EventTarget | null): boolean {
-  return target instanceof Node ? Boolean(parent?.contains(target)) : false;
-}
 
 function resolveBoolean(value: MaybeReactive<boolean | undefined> | undefined): boolean {
   if (value === undefined) {

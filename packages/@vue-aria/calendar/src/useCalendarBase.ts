@@ -1,4 +1,5 @@
 import { computed, ref, toValue, watchEffect } from "vue";
+import { filterDOMProps } from "@vue-aria/utils";
 import { mergeProps } from "@vue-aria/utils";
 import { useId } from "@vue-aria/ssr";
 import type { ReadonlyRef } from "@vue-aria/types";
@@ -15,23 +16,6 @@ export interface UseCalendarBaseResult {
 
 function resolveBoolean(value: unknown): boolean {
   return Boolean(value);
-}
-
-function collectDOMProps(options: UseCalendarBaseOptions): Record<string, unknown> {
-  const domProps: Record<string, unknown> = {};
-
-  for (const [key, rawValue] of Object.entries(options)) {
-    if (
-      key.startsWith("data-") ||
-      key === "class" ||
-      key === "style" ||
-      key === "slot"
-    ) {
-      domProps[key] = rawValue;
-    }
-  }
-
-  return domProps;
 }
 
 export function useCalendarBase(
@@ -81,7 +65,7 @@ export function useCalendarBase(
   });
 
   const title = computed(() => visibleRangeDescription.value);
-  const domProps = collectDOMProps(options);
+  const domProps = filterDOMProps(options as Record<string, unknown>);
   const calendarProps = computed<Record<string, unknown>>(() => {
     const labelledBy =
       options["aria-labelledby"] === undefined

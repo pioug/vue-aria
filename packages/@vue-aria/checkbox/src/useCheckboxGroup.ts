@@ -1,6 +1,7 @@
 import { computed, toValue, watchEffect } from "vue";
 import { useFocusWithin } from "@vue-aria/interactions";
 import { useField } from "@vue-aria/label";
+import { filterDOMProps } from "@vue-aria/utils";
 import { mergeProps } from "@vue-aria/utils";
 import { checkboxGroupData } from "./utils";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
@@ -68,23 +69,6 @@ function resolveValidationBehavior(
   return toValue(value) ?? "aria";
 }
 
-function collectDOMProps(options: UseCheckboxGroupOptions): Record<string, unknown> {
-  const domProps: Record<string, unknown> = {};
-
-  for (const [key, rawValue] of Object.entries(options)) {
-    if (
-      key.startsWith("data-") ||
-      key === "class" ||
-      key === "style" ||
-      key === "slot"
-    ) {
-      domProps[key] = rawValue;
-    }
-  }
-
-  return domProps;
-}
-
 export function useCheckboxGroup(
   options: UseCheckboxGroupOptions = {},
   state: UseCheckboxGroupState
@@ -150,7 +134,7 @@ export function useCheckboxGroup(
     onFocusWithinChange: options.onFocusChange,
   });
 
-  const domProps = collectDOMProps(options);
+  const domProps = filterDOMProps(options as Record<string, unknown>);
   const groupProps = computed<Record<string, unknown>>(() =>
     mergeProps(domProps, fieldProps.value, focusWithinProps, {
       role: "group",

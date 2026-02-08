@@ -20,6 +20,8 @@ npm run test:parity
 Current test files:
 
 - `packages/@vue-aria/utils/test/mergeProps.test.ts`
+- `packages/@vue-aria/utils/test/filterDOMProps.test.ts`
+- `packages/@vue-aria/utils/test/nodeContains.test.ts`
 - `packages/@vue-aria/utils/test/useDescription.test.ts`
 - `packages/@vue-aria/utils/test/useErrorMessage.test.ts`
 - `packages/@vue-aria/ssr/test/useId.test.ts`

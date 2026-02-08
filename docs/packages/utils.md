@@ -22,6 +22,31 @@ const props = mergeProps(
 - `style` objects are shallow-merged.
 - `undefined` values are ignored.
 
+## `filterDOMProps`
+
+Filters arbitrary props down to DOM-safe props (`aria-*`, `data-*`, and known DOM attributes).
+
+```ts
+import { filterDOMProps } from "@vue-aria/utils";
+
+const domProps = filterDOMProps({
+  id: "calendar",
+  "data-test": "calendar",
+  "aria-label": "Calendar",
+  customProp: "ignored",
+});
+```
+
+## `nodeContains`
+
+Safe helper for checking whether an event target is contained in an element.
+
+```ts
+import { nodeContains } from "@vue-aria/utils";
+
+const isInside = nodeContains(rootElement, event.relatedTarget);
+```
+
 ## `useDescription`
 
 Provides hidden assistive text and returns `aria-describedby`.

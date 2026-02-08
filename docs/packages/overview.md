@@ -118,6 +118,8 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/utils`
 
 - `mergeProps`
+- `filterDOMProps`
+- `nodeContains`
 - `useDescription`
 - `useErrorMessage`
 

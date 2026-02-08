@@ -6,7 +6,9 @@ import {
 } from "@vue-aria/datefield";
 import { useDatePickerGroup } from "./useDatePickerGroup";
 import { useDescription } from "@vue-aria/utils";
+import { filterDOMProps } from "@vue-aria/utils";
 import { mergeProps } from "@vue-aria/utils";
+import { nodeContains } from "@vue-aria/utils";
 import { useId } from "@vue-aria/ssr";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { DateLike, UseDatePickerState } from "./types";
@@ -106,27 +108,6 @@ function resolveLocale(options: UseDatePickerOptions): string {
   }
 
   return "en-US";
-}
-
-function collectDOMProps(options: UseDatePickerOptions): Record<string, unknown> {
-  const domProps: Record<string, unknown> = {};
-
-  for (const [key, rawValue] of Object.entries(options)) {
-    if (
-      key.startsWith("data-") ||
-      key === "class" ||
-      key === "style" ||
-      key === "slot"
-    ) {
-      domProps[key] = rawValue;
-    }
-  }
-
-  return domProps;
-}
-
-function nodeContains(parent: Element | null, target: EventTarget | null): boolean {
-  return target instanceof Node ? Boolean(parent?.contains(target)) : false;
 }
 
 function isWithin(currentTarget: EventTarget | null, target: EventTarget | null): boolean {
@@ -308,7 +289,7 @@ export function useDatePicker<T extends DateLike>(
     },
   }));
 
-  const domProps = collectDOMProps(options);
+  const domProps = filterDOMProps(options as Record<string, unknown>);
   const labelProps = computed<Record<string, unknown>>(() =>
     mergeProps(baseLabelProps.value, {
       onClick: () => {

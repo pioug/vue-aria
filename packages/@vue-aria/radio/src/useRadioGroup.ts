@@ -2,6 +2,7 @@ import { computed, toValue, watchEffect } from "vue";
 import { useId } from "@vue-aria/ssr";
 import { useFocusWithin } from "@vue-aria/interactions";
 import { useField } from "@vue-aria/label";
+import { filterDOMProps } from "@vue-aria/utils";
 import { mergeProps } from "@vue-aria/utils";
 import { radioGroupData } from "./utils";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
@@ -93,23 +94,6 @@ function resolveDirection(
   }
 
   return toValue(value) ?? "ltr";
-}
-
-function collectDOMProps(options: UseRadioGroupOptions): Record<string, unknown> {
-  const domProps: Record<string, unknown> = {};
-
-  for (const [key, rawValue] of Object.entries(options)) {
-    if (
-      key.startsWith("data-") ||
-      key === "class" ||
-      key === "style" ||
-      key === "slot"
-    ) {
-      domProps[key] = rawValue;
-    }
-  }
-
-  return domProps;
 }
 
 function getFocusableRadios(container: HTMLElement): HTMLInputElement[] {
@@ -261,7 +245,7 @@ export function useRadioGroup(
     state.setSelectedValue(nextRadio.value);
   };
 
-  const domProps = collectDOMProps(options);
+  const domProps = filterDOMProps(options as Record<string, unknown>);
 
   const radioGroupProps = computed<Record<string, unknown>>(() =>
     mergeProps(domProps, fieldProps.value, focusWithinProps, {
