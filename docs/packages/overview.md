@@ -168,6 +168,10 @@ This port follows React Aria's package-first structure.
 - `mergeProps`
 - `filterDOMProps`
 - `nodeContains`
+- `provideRouter`
+- `useRouter`
+- `useLinkProps`
+- `handleLinkClick`
 - `useDescription`
 - `useErrorMessage`
 

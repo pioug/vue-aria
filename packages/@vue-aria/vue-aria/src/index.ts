@@ -66,7 +66,15 @@ export {
   visuallyHiddenStyles,
   VisuallyHidden,
 } from "@vue-aria/visually-hidden";
-export { mergeProps, useDescription, useErrorMessage } from "@vue-aria/utils";
+export {
+  mergeProps,
+  useDescription,
+  useErrorMessage,
+  provideRouter,
+  useRouter,
+  useLinkProps,
+  handleLinkClick,
+} from "@vue-aria/utils";
 
 export type {
   HoverEvent,
@@ -79,3 +87,10 @@ export type {
   ReadonlyRef,
 } from "@vue-aria/types";
 export type { KeyboardDelegate } from "@vue-aria/selection";
+export type {
+  Href,
+  LinkDOMProps,
+  ProvideRouterOptions,
+  Router,
+  RouterOptions,
+} from "@vue-aria/utils";

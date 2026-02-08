@@ -69,3 +69,13 @@ const { errorMessageProps, errorMessageId, isInvalid } = useErrorMessage({
   validationState: "invalid",
 });
 ```
+
+## Router Utilities
+
+- `provideRouter`
+- `useRouter`
+- `useLinkProps`
+- `handleLinkClick`
+
+These helpers mirror React Aria's router abstraction so hooks like `useLink` can
+do framework-level client navigation while preserving native link semantics.

@@ -30,3 +30,8 @@ const { linkProps, isPressed } = useLink({
 - Applies `aria-disabled=true`.
 - Removes focusability for non-native link elements.
 - Prevents default click navigation behavior.
+
+## Router Integration
+
+When wrapped in `provideRouter`, `useLink` routes same-origin links through the
+provided `navigate` function for client-side navigation.
