@@ -11,7 +11,9 @@ import type {
 } from "@vue-aria/dnd";
 
 export interface DraggableCollectionSelectionManager {
+  selectionMode: MaybeReactive<string>;
   selectedKeys: MaybeReactive<Iterable<Key>>;
+  isDisabled: (key: Key) => boolean;
   isSelected: (key: Key) => boolean;
   setFocused: (isFocused: boolean) => void;
 }

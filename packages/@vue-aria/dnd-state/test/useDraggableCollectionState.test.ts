@@ -86,7 +86,9 @@ describe("useDraggableCollectionState", () => {
     const state = useDraggableCollectionState({
       collection: createCollection(),
       selectionManager: {
+        selectionMode: "multiple",
         selectedKeys,
+        isDisabled: () => false,
         setFocused,
         isSelected: (key) => selectedKeys.has(String(key)),
       },
@@ -112,7 +114,9 @@ describe("useDraggableCollectionState", () => {
     const state = useDraggableCollectionState({
       collection: createCollection(),
       selectionManager: {
+        selectionMode: "multiple",
         selectedKeys,
+        isDisabled: () => false,
         setFocused: vi.fn(),
         isSelected: (key) => selectedKeys.has(String(key)),
       },
@@ -131,7 +135,9 @@ describe("useDraggableCollectionState", () => {
     const state = useDraggableCollectionState({
       collection: createCollection(),
       selectionManager: {
+        selectionMode: "multiple",
         selectedKeys,
+        isDisabled: () => false,
         setFocused: vi.fn(),
         isSelected: (key) => selectedKeys.value.has(String(key)),
       },
@@ -158,7 +164,9 @@ describe("useDraggableCollectionState", () => {
     const state = useDraggableCollectionState({
       collection: createCollection(),
       selectionManager: {
+        selectionMode: "multiple",
         selectedKeys,
+        isDisabled: () => false,
         setFocused: vi.fn(),
         isSelected: (key) => selectedKeys.has(String(key)),
       },

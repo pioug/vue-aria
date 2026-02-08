@@ -1,6 +1,6 @@
 import { useDescription } from "@vue-aria/utils";
-import { computed } from "vue";
-import type { Key } from "@vue-aria/types";
+import { computed, toValue } from "vue";
+import type { Key, MaybeReactive } from "@vue-aria/types";
 import type { DragItem, DropOperation } from "./types";
 import type { DragPreviewRenderer } from "./DragPreview";
 import {
@@ -28,7 +28,7 @@ interface DraggableItemCollection {
 }
 
 interface DraggableItemSelectionManager {
-  selectionMode: string;
+  selectionMode: MaybeReactive<string>;
   isDisabled: (key: Key) => boolean;
   isSelected: (key: Key) => boolean;
 }
@@ -144,8 +144,9 @@ export function useDraggableItem(
 
   let dragButtonLabel: string | undefined;
   let description: string | undefined;
+  const selectionMode = toValue(state.selectionManager.selectionMode);
 
-  if (!props.hasDragButton && state.selectionManager.selectionMode !== "none") {
+  if (!props.hasDragButton && selectionMode !== "none") {
     description = getDragDescription(modality, {
       hasAction,
       isSelected,

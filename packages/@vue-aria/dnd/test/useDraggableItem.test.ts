@@ -179,4 +179,25 @@ describe("useDraggableItem", () => {
     expect(dragProps).toEqual({});
     expect(dragButtonProps.isDisabled).toBe(true);
   });
+
+  it("supports reactive selection mode values", async () => {
+    const selectionMode = ref("none");
+    const state = createState({
+      selectionManager: {
+        selectionMode,
+        isDisabled: () => false,
+        isSelected: () => false,
+      },
+    });
+
+    const scope = effectScope();
+    let result: ReturnType<typeof useDraggableItem> | undefined;
+    scope.run(() => {
+      result = useDraggableItem({ key: "item-1" }, state);
+    });
+
+    await nextTick();
+    expect(result?.dragProps["aria-describedby"]).toBeUndefined();
+    scope.stop();
+  });
 });
