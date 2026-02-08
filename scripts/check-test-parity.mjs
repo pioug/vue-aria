@@ -27,6 +27,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/interactions/test/useInteractOutside.test.ts",
   "packages/@vue-aria/dnd/test/useClipboard.test.ts",
   "packages/@vue-aria/dnd/test/DropTargetKeyboardNavigation.test.ts",
+  "packages/@vue-aria/dnd/test/ListDropTargetDelegate.test.ts",
   "packages/@vue-aria/button/test/useButton.test.ts",
   "packages/@vue-aria/button/test/useToggleButton.test.ts",
   "packages/@vue-aria/checkbox/test/useCheckbox.test.ts",
