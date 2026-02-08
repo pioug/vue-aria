@@ -48,6 +48,8 @@
       "@vue-aria/selection-state": ["packages/@vue-aria/selection-state/src/index.ts"],
       "@vue-aria/combobox-state": ["packages/@vue-aria/combobox-state/src/index.ts"],
       "@vue-aria/combobox": ["packages/@vue-aria/combobox/src/index.ts"],
+      "@vue-aria/toast-state": ["packages/@vue-aria/toast-state/src/index.ts"],
+      "@vue-aria/toast": ["packages/@vue-aria/toast/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
       "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],

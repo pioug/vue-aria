@@ -82,6 +82,15 @@ This port follows React Aria's package-first structure.
 
 - `useMeter`
 
+### `@vue-aria/toast-state`
+
+- `useToastState`
+
+### `@vue-aria/toast`
+
+- `useToast`
+- `useToastRegion`
+
 ### `@vue-aria/datefield`
 
 - `useDateField`

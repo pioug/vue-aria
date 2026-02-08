@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `117 / 133` tracked items
-- Remaining: `16`
-- Current stage: drag/drop + virtualizer and quality hardening
+- Completed: `119 / 133` tracked items
+- Remaining: `14`
+- Current stage: drag/drop + virtualizer parity
 
 ## 0) Dependency baseline
 
@@ -162,8 +162,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useProgressBar`
 - [x] `useProgressCircle`
 - [x] `useMeter`
-- [ ] `useToast` / `useToastRegion`
-- [ ] Live region status updates parity
+- [x] `useToast` / `useToastRegion`
+- [x] Live region status updates parity
 
 ## 14) React Stately parity layer (or Vue-native equivalents)
 

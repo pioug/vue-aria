@@ -37,6 +37,8 @@ export default defineConfig({
           { text: "@vue-aria/slider", link: "/packages/slider" },
           { text: "@vue-aria/progress", link: "/packages/progress" },
           { text: "@vue-aria/meter", link: "/packages/meter" },
+          { text: "@vue-aria/toast-state", link: "/packages/toast-state" },
+          { text: "@vue-aria/toast", link: "/packages/toast" },
           { text: "@vue-aria/datefield", link: "/packages/datefield" },
           { text: "@vue-aria/datepicker", link: "/packages/datepicker" },
           { text: "@vue-aria/datepicker-state", link: "/packages/datepicker-state" },

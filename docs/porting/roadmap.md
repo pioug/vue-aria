@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `117 / 133` (about `88.0%`)
-- Tracked items remaining: `16`
-- Current parity focus: drag/drop + virtualizer parity and hardening
+- Tracked items completed: `119 / 133` (about `89.5%`)
+- Tracked items remaining: `14`
+- Current parity focus: drag/drop + virtualizer parity
 
 ## Done So Far
 
@@ -27,6 +27,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Menu stack: `useMenuTriggerState`, `useSubmenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`, `useSubmenuTrigger`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
 - Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`, `useCalendarState`, `useRangeCalendarState`, `useDatePickerState`, `useTreeState`, `useTableState`
+- Toast state primitive: `useToastState`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
@@ -38,7 +39,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Selection primitives: `useListKeyboardDelegate`, `useGridKeyboardDelegate`, `useTypeSelect`
 - Select: `useSelectState`, `useSelect`
 - ComboBox: `useComboBoxState`, `useComboBox`
-- Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`
+- Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`, `useToast`, `useToastRegion`
 
 ## What Is Left (By Area)
 
@@ -54,7 +55,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `0` remaining
 - Drag/drop + virtualizer: `6` remaining
-- Feedback/status: `2` remaining
+- Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
 - Quality gates: `7` remaining
 
@@ -74,7 +75,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ### Phase 3: Data + Advanced Interaction
 
-- Table/grid/tree hooks (`useGrid`, `useTable`, `useTree` families)
+- Table/grid/tree hooks completed
 - DnD and keyboard DnD parity
 - Virtualizer infrastructure parity
 

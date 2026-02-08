@@ -101,6 +101,8 @@ export {
 export { useMultipleSelectionState } from "@vue-aria/selection-state";
 export { useComboBoxState } from "@vue-aria/combobox-state";
 export { useComboBox } from "@vue-aria/combobox";
+export { useToastState, Timer as ToastTimerClass } from "@vue-aria/toast-state";
+export { useToast, useToastRegion } from "@vue-aria/toast";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
@@ -275,6 +277,19 @@ export type {
   UseComboBoxStateOptions,
   UseComboBoxStateResult,
 } from "@vue-aria/combobox-state";
+export type {
+  QueuedToast,
+  ToastOptions,
+  ToastTimer,
+  UseToastStateOptions,
+  UseToastStateResult,
+} from "@vue-aria/toast-state";
+export type {
+  UseToastOptions,
+  UseToastResult,
+  UseToastRegionOptions,
+  UseToastRegionResult,
+} from "@vue-aria/toast";
 export type {
   DatePickerGranularity,
   TimeValue as DatePickerStateTimeValue,
