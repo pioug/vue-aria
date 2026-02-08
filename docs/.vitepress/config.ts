@@ -40,6 +40,7 @@ export default defineConfig({
           { text: "@vue-aria/datefield", link: "/packages/datefield" },
           { text: "@vue-aria/datepicker", link: "/packages/datepicker" },
           { text: "@vue-aria/calendar", link: "/packages/calendar" },
+          { text: "@vue-aria/calendar-state", link: "/packages/calendar-state" },
           { text: "@vue-aria/breadcrumbs", link: "/packages/breadcrumbs" },
           { text: "@vue-aria/disclosure", link: "/packages/disclosure" },
           { text: "@vue-aria/collections", link: "/packages/collections" },

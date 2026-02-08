@@ -39,6 +39,7 @@ export {
   privateValidationStateSymbol,
 } from "@vue-aria/datepicker";
 export { useCalendarBase, useCalendar, useRangeCalendar, useCalendarCell } from "@vue-aria/calendar";
+export { useCalendarState, useRangeCalendarState } from "@vue-aria/calendar-state";
 export { useBreadcrumbItem } from "@vue-aria/breadcrumbs";
 export {
   useDisclosure,
@@ -202,6 +203,17 @@ export type {
   UseComboBoxStateOptions,
   UseComboBoxStateResult,
 } from "@vue-aria/combobox-state";
+export type {
+  CalendarRangeValue,
+  DateValue as CalendarStateDateValue,
+  DayOfWeek,
+  PageBehavior,
+  SelectionAlignment,
+  UseCalendarStateOptions,
+  UseCalendarStateResult,
+  UseRangeCalendarStateOptions,
+  UseRangeCalendarStateResult,
+} from "@vue-aria/calendar-state";
 export type {
   UseComboBoxOptions,
   UseComboBoxResult,

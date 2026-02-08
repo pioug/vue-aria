@@ -52,6 +52,8 @@ const requiredTestFiles = [
   "packages/@vue-aria/calendar/test/useCalendar.test.ts",
   "packages/@vue-aria/calendar/test/useRangeCalendar.test.ts",
   "packages/@vue-aria/calendar/test/useCalendarCell.test.ts",
+  "packages/@vue-aria/calendar-state/test/useCalendarState.test.ts",
+  "packages/@vue-aria/calendar-state/test/useRangeCalendarState.test.ts",
   "packages/@vue-aria/breadcrumbs/test/useBreadcrumbItem.test.ts",
   "packages/@vue-aria/disclosure/test/useDisclosureState.test.ts",
   "packages/@vue-aria/disclosure/test/useDisclosureGroupState.test.ts",
