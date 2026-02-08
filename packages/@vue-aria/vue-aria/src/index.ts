@@ -137,6 +137,8 @@ export {
   getRTLOffsetType,
   getScrollLeft,
   setScrollLeft,
+  ScrollView,
+  VirtualizerItem,
   layoutInfoToStyle,
   useScrollView,
   useVirtualizer,

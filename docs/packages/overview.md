@@ -224,6 +224,8 @@ This port follows React Aria's package-first structure.
 
 ### `@vue-aria/virtualizer`
 
+- `ScrollView`
+- `VirtualizerItem`
 - `useVirtualizer`
 - `useScrollView`
 - `useVirtualizerItem`
