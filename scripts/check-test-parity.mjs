@@ -64,6 +64,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/menu/test/useMenuItem.test.ts",
   "packages/@vue-aria/menu/test/useMenuSection.test.ts",
   "packages/@vue-aria/overlays-state/test/useOverlayTriggerState.test.ts",
+  "packages/@vue-aria/toggle-state/test/useToggleState.test.ts",
   "packages/@vue-aria/overlays/test/useOverlayTrigger.test.ts",
   "packages/@vue-aria/overlays/test/useOverlay.test.ts",
   "packages/@vue-aria/overlays/test/useOverlayPosition.test.ts",

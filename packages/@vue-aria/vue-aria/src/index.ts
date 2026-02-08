@@ -48,6 +48,7 @@ export {
 } from "@vue-aria/disclosure";
 export { buildCollection } from "@vue-aria/collections";
 export { useOverlayTriggerState } from "@vue-aria/overlays-state";
+export { useToggleState } from "@vue-aria/toggle-state";
 export {
   useMenuTriggerState,
   useMenuTrigger,
@@ -133,6 +134,10 @@ export type {
   UseOverlayTriggerStateResult,
   UseOverlayTriggerStateOptions,
 } from "@vue-aria/overlays-state";
+export type {
+  UseToggleStateOptions,
+  UseToggleStateResult,
+} from "@vue-aria/toggle-state";
 export type {
   UseOverlayTriggerResult,
   UseOverlayTriggerOptions,

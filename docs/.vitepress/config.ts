@@ -45,6 +45,7 @@ export default defineConfig({
           { text: "@vue-aria/collections", link: "/packages/collections" },
           { text: "@vue-aria/menu", link: "/packages/menu" },
           { text: "@vue-aria/overlays-state", link: "/packages/overlays-state" },
+          { text: "@vue-aria/toggle-state", link: "/packages/toggle-state" },
           { text: "@vue-aria/overlays", link: "/packages/overlays" },
           { text: "@vue-aria/dialog", link: "/packages/dialog" },
           { text: "@vue-aria/tooltip", link: "/packages/tooltip" },

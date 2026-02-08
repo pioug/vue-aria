@@ -128,6 +128,10 @@ This port follows React Aria's package-first structure.
 
 - `useOverlayTriggerState`
 
+### `@vue-aria/toggle-state`
+
+- `useToggleState`
+
 ### `@vue-aria/overlays`
 
 - `useOverlayTrigger`
@@ -135,6 +139,8 @@ This port follows React Aria's package-first structure.
 - `useOverlayPosition`
 - `useModal`
 - `useModalOverlay`
+- `useOverlayFocusContain`
+- `usePreventScroll`
 - `usePopover`
 
 ### `@vue-aria/dialog`

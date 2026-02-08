@@ -73,6 +73,9 @@ export default defineConfig({
       "@vue-aria/overlays-state": fileURLToPath(
         new URL("./packages/@vue-aria/overlays-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/toggle-state": fileURLToPath(
+        new URL("./packages/@vue-aria/toggle-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/overlays": fileURLToPath(
         new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
       ),

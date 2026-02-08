@@ -26,6 +26,16 @@ coordination for nested modal stacks.
 Composes overlay dismissal, scroll locking, and outside-content hiding for modal
 underlay/content pairs.
 
+## `useOverlayFocusContain`
+
+Contains keyboard focus within an overlay and restores focus to the previously
+focused element on cleanup.
+
+## `usePreventScroll`
+
+Prevents document scroll while overlays are active, with nested-overlay cleanup
+semantics.
+
 ## `usePopover`
 
 Composes overlay dismissal and positioning for trigger-anchored popovers, with

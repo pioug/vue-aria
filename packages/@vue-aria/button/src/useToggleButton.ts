@@ -1,12 +1,10 @@
 import { computed, toValue } from "vue";
 import { mergeProps } from "@vue-aria/utils";
+import type { UseToggleStateResult } from "@vue-aria/toggle-state";
 import { useButton, type UseButtonOptions } from "./useButton";
-import type { MaybeReactive, PressEvent, ReadonlyRef } from "@vue-aria/types";
+import type { PressEvent, ReadonlyRef } from "@vue-aria/types";
 
-export interface UseToggleButtonState {
-  isSelected: MaybeReactive<boolean>;
-  toggle: () => void;
-}
+export type UseToggleButtonState = Pick<UseToggleStateResult, "isSelected" | "toggle">;
 
 export interface UseToggleButtonOptions extends UseButtonOptions {}
 
