@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `66 / 133` tracked items
-- Remaining: `67`
+- Completed: `68 / 133` tracked items
+- Remaining: `65`
 - Current stage: collection/list and overlay infrastructure migration
 
 ## 0) Dependency baseline
@@ -93,7 +93,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useListBox`
 - [x] `useOption`
 - [x] `useListBoxSection`
-- [ ] `useSelect`
+- [x] `useSelect`
 - [ ] `useComboBox`
 - [ ] `useAutocomplete`-style behavior parity
 - [ ] Typeahead behavior parity
@@ -175,7 +175,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] Tree state
 - [ ] Table state
 - [ ] ComboBox state
-- [ ] Select state
+- [x] Select state
 - [ ] Menu trigger state
 - [x] Tabs state
 - [ ] Calendar state

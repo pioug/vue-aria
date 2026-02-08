@@ -136,6 +136,11 @@ This port follows React Aria's package-first structure.
 
 - `useSearchField`
 
+### `@vue-aria/select`
+
+- `useSelectState`
+- `useSelect`
+
 ### `@vue-aria/numberfield`
 
 - `useNumberField`

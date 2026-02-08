@@ -56,6 +56,7 @@ export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
 export { useSearchField } from "@vue-aria/searchfield";
+export { useSelectState, useSelect } from "@vue-aria/select";
 export { useNumberField } from "@vue-aria/numberfield";
 export { useSpinButton } from "@vue-aria/spinbutton";
 export { useSeparator } from "@vue-aria/separator";

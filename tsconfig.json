@@ -32,6 +32,7 @@
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
       "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],
       "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
+      "@vue-aria/select": ["packages/@vue-aria/select/src/index.ts"],
       "@vue-aria/numberfield": ["packages/@vue-aria/numberfield/src/index.ts"],
       "@vue-aria/spinbutton": ["packages/@vue-aria/spinbutton/src/index.ts"],
       "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"],

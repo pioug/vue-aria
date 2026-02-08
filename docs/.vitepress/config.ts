@@ -47,6 +47,7 @@ export default defineConfig({
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },
           { text: "@vue-aria/searchfield", link: "/packages/searchfield" },
+          { text: "@vue-aria/select", link: "/packages/select" },
           { text: "@vue-aria/numberfield", link: "/packages/numberfield" },
           { text: "@vue-aria/spinbutton", link: "/packages/spinbutton" },
           { text: "@vue-aria/separator", link: "/packages/separator" },

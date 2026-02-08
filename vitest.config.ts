@@ -79,6 +79,9 @@ export default defineConfig({
       "@vue-aria/searchfield": fileURLToPath(
         new URL("./packages/@vue-aria/searchfield/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/select": fileURLToPath(
+        new URL("./packages/@vue-aria/select/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/numberfield": fileURLToPath(
         new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
       ),
