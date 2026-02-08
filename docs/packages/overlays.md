@@ -11,8 +11,13 @@ Provides trigger and overlay ARIA wiring (haspopup, expanded, controls).
 Provides overlay dismissal behavior for outside interaction, Escape key, and
 optional blur-dismiss semantics.
 
+## `useOverlayPosition`
+
+Positions overlays relative to a trigger, supports flip/cross-offset behavior,
+and exposes arrow positioning metadata.
+
 ```ts
-import { useOverlayTrigger } from "@vue-aria/overlays";
+import { useOverlayPosition, useOverlayTrigger } from "@vue-aria/overlays";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 
 const state = useOverlayTriggerState();
@@ -20,4 +25,9 @@ const { triggerProps, overlayProps } = useOverlayTrigger(
   { type: "menu" },
   state
 );
+
+const { overlayProps: positionProps } = useOverlayPosition({
+  targetRef: triggerElement,
+  overlayRef: overlayElement,
+});
 ```

@@ -55,7 +55,7 @@ export {
   useMenuItem,
   useMenuSection,
 } from "@vue-aria/menu";
-export { useOverlayTrigger, useOverlay } from "@vue-aria/overlays";
+export { useOverlayTrigger, useOverlay, useOverlayPosition } from "@vue-aria/overlays";
 export {
   useListBoxState,
   useListBox,
@@ -124,6 +124,10 @@ export type {
   UseOverlayTriggerOptions,
   UseOverlayResult,
   UseOverlayOptions,
+  UseOverlayPositionResult,
+  UseOverlayPositionOptions,
+  Placement,
+  PlacementAxis,
 } from "@vue-aria/overlays";
 export type {
   Href,

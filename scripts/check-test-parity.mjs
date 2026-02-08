@@ -66,6 +66,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/overlays-state/test/useOverlayTriggerState.test.ts",
   "packages/@vue-aria/overlays/test/useOverlayTrigger.test.ts",
   "packages/@vue-aria/overlays/test/useOverlay.test.ts",
+  "packages/@vue-aria/overlays/test/useOverlayPosition.test.ts",
   "packages/@vue-aria/listbox/test/useListBoxState.test.ts",
   "packages/@vue-aria/listbox/test/useListBox.test.ts",
   "packages/@vue-aria/listbox/test/useOption.test.ts",

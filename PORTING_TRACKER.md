@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `81 / 133` tracked items
-- Remaining: `52`
-- Current stage: overlay infrastructure migration and combobox baseline
+- Completed: `82 / 133` tracked items
+- Remaining: `51`
+- Current stage: overlay/dialog stack hardening and combobox baseline
 
 ## 0) Dependency baseline
 
@@ -124,7 +124,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 - [x] `useOverlay`
 - [x] `useOverlayTrigger`
-- [ ] `useOverlayPosition`
+- [x] `useOverlayPosition`
 - [ ] `useModal`
 - [ ] `useModalOverlay`
 - [ ] `usePopover`

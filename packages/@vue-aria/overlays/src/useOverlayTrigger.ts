@@ -1,7 +1,8 @@
-import { computed, toValue } from "vue";
+import { computed, toValue, watchEffect } from "vue";
 import { useId } from "@vue-aria/ssr";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { UseOverlayTriggerStateResult } from "@vue-aria/overlays-state";
+import { onCloseMap } from "./useCloseOnScroll";
 
 export type OverlayTriggerType = "dialog" | "menu" | "listbox" | "tree" | "grid";
 
@@ -28,9 +29,23 @@ function resolveAriaHasPopup(type: OverlayTriggerType): boolean | "listbox" | un
 
 export function useOverlayTrigger(
   options: UseOverlayTriggerOptions,
-  state: UseOverlayTriggerStateResult
+  state: UseOverlayTriggerStateResult,
+  ref?: MaybeReactive<Element | null | undefined>
 ): UseOverlayTriggerResult {
   const overlayId = useId(undefined, "v-aria-overlay");
+
+  watchEffect(() => {
+    if (!ref) {
+      return;
+    }
+
+    const element = toValue(ref);
+    if (!element) {
+      return;
+    }
+
+    onCloseMap.set(element, state.close);
+  });
 
   const triggerProps = computed<Record<string, unknown>>(() => {
     const type = toValue(options.type);
