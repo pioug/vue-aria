@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `105 / 133` (about `78.9%`)
-- Tracked items remaining: `28`
+- Tracked items completed: `106 / 133` (about `79.7%`)
+- Tracked items remaining: `27`
 - Current parity focus: stately + date/time hardening
 
 ## Done So Far
@@ -26,7 +26,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useSubmenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`, `useSubmenuTrigger`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
-- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`, `useCalendarState`, `useRangeCalendarState`, `useDatePickerState`, `useTreeState`
+- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`, `useCalendarState`, `useRangeCalendarState`, `useDatePickerState`, `useTreeState`, `useTableState`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
@@ -51,7 +51,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
-- Stately parity layer: `1` remaining
+- Stately parity layer: `0` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity
@@ -83,6 +83,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Continue stately hardening with table state primitive.
-2. Start table/tree/grid aria hooks.
-3. Close remaining date/time parity gaps (international calendar + timezone behavior).
+1. Start table/tree/grid aria hooks.
+2. Close remaining date/time parity gaps (international calendar + timezone behavior).
+3. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).

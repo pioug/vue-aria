@@ -179,6 +179,10 @@ This port follows React Aria's package-first structure.
 
 - `useTreeState`
 
+### `@vue-aria/table-state`
+
+- `useTableState`
+
 ### `@vue-aria/selection`
 
 - `useListKeyboardDelegate`

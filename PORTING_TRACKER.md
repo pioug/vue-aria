@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `105 / 133` tracked items
-- Remaining: `28`
+- Completed: `106 / 133` tracked items
+- Remaining: `27`
 - Current stage: stately parity and date/time hardening
 
 ## 0) Dependency baseline
@@ -173,7 +173,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Multiple selection state
 - [x] Single selection state
 - [x] Tree state
-- [ ] Table state
+- [x] Table state
 - [x] ComboBox state
 - [x] Select state
 - [x] Menu trigger state

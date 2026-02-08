@@ -39,6 +39,7 @@
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
       "@vue-aria/list-state": ["packages/@vue-aria/list-state/src/index.ts"],
       "@vue-aria/tree-state": ["packages/@vue-aria/tree-state/src/index.ts"],
+      "@vue-aria/table-state": ["packages/@vue-aria/table-state/src/index.ts"],
       "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/selection-state": ["packages/@vue-aria/selection-state/src/index.ts"],
       "@vue-aria/combobox-state": ["packages/@vue-aria/combobox-state/src/index.ts"],

@@ -83,6 +83,7 @@ export {
 } from "@vue-aria/listbox";
 export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
 export { useTreeState } from "@vue-aria/tree-state";
+export { useTableState } from "@vue-aria/table-state";
 export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
 export { useMultipleSelectionState } from "@vue-aria/selection-state";
 export { useComboBoxState } from "@vue-aria/combobox-state";
@@ -189,6 +190,18 @@ export type {
   UseTreeStateOptions,
   UseTreeStateResult,
 } from "@vue-aria/tree-state";
+export type {
+  SortDescriptor as TableSortDescriptor,
+  SortDirection as TableSortDirection,
+  TableCell,
+  TableCollection,
+  TableColumn,
+  TableRow,
+  TableRowNode,
+  TableSelectionManager,
+  UseTableStateOptions,
+  UseTableStateResult,
+} from "@vue-aria/table-state";
 export type {
   ListSelectionManager,
   UseListStateOptions,
