@@ -12,6 +12,8 @@ Handles focused copy/cut/paste interactions and normalizes clipboard payloads fo
 - `readFromDataTransfer`
 - `DragTypes`
 - `DIRECTORY_DRAG_TYPE`
+- `navigate` (drop-target keyboard traversal)
+- `ListDropTargetDelegate` (point-to-drop-target mapping)
 
 ```ts
 import { useClipboard } from "@vue-aria/dnd";

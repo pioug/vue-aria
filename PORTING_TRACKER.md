@@ -151,6 +151,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 ## 12) Drag and drop + virtualizer
 
 - In progress baseline: `@vue-aria/dnd` clipboard data transfer primitives (`useClipboard`, `writeToDataTransfer`, `readFromDataTransfer`)
+- In progress baseline: keyboard drop-target traversal primitive (`navigate`)
 - [ ] Drag source hooks parity
 - [ ] Drop target hooks parity
 - [ ] Keyboard drag and drop parity

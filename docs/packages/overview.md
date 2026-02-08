@@ -45,6 +45,8 @@ This port follows React Aria's package-first structure.
 - `writeToDataTransfer`
 - `readFromDataTransfer`
 - `DragTypes`
+- `navigate`
+- `ListDropTargetDelegate`
 
 ### `@vue-aria/button`
 

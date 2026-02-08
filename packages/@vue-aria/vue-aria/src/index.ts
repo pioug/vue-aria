@@ -14,6 +14,8 @@ export {
 } from "@vue-aria/interactions";
 export {
   useClipboard,
+  navigate,
+  ListDropTargetDelegate,
   DIRECTORY_DRAG_TYPE,
   DragTypes,
   readFromDataTransfer,
@@ -149,10 +151,21 @@ export type {
 export type {
   ClipboardProps,
   ClipboardResult,
+  Collection as DndCollection,
+  CollectionNode as DndCollectionNode,
+  Direction as DndDirection,
   DirectoryDropItem,
   DragItem,
   IDragTypes,
+  DropOperation,
   DropItem,
+  DropPosition,
+  DropTarget,
+  DropTargetDelegate,
+  ItemDropTarget,
+  KeyboardDelegate as DropKeyboardDelegate,
+  Orientation as DndOrientation,
+  RootDropTarget,
   FileDropItem,
   TextDropItem,
 } from "@vue-aria/dnd";
