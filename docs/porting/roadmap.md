@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `57 / 133` (about `42.9%`)
-- Tracked items remaining: `76`
-- Current parity focus: collection/listbox/select stack after foundation parity updates
+- Tracked items completed: `61 / 133` (about `45.9%`)
+- Tracked items remaining: `72`
+- Current parity focus: tabs wrapper parity plus collection/listbox/select stack
 
 ## Done So Far
 
@@ -22,6 +22,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Navigation: `useBreadcrumbItem`
 - Disclosure: `useDisclosure`, `useDisclosureState`
 - Disclosure groups: `useDisclosureGroupState`
+- Tabs: `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`
 
 ## What Is Left (By Area)
@@ -34,12 +35,12 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Date/time: `1` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
-- Tabs/disclosure/navigation: `5` remaining
+- Tabs/disclosure/navigation: `2` remaining
 - Overlays/dialogs: `11` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
-- Stately parity layer: `14` remaining
+- Stately parity layer: `13` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity
@@ -60,7 +61,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - `useSelect`, `useComboBox`, `useListBox`, `useOption`, `useListBoxSection`
 - `useMenu`, `useMenuItem`, `useMenuSection`, `useMenuTrigger`
-- `useTabs`, `useTabList`, `useTab`, `useTabPanel`
+- `useTabs`
 - Overlay stack: `useOverlay`, `useOverlayTrigger`, `usePopover`, `useDialog`, `useTooltip`
 
 ### Phase 4: Data + Advanced Interaction

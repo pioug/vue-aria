@@ -20,6 +20,7 @@ export {
 } from "@vue-aria/checkbox";
 export { useRadioGroup, useRadio } from "@vue-aria/radio";
 export { useSwitch } from "@vue-aria/switch";
+export { useTabListState, useTabList, useTab, useTabPanel } from "@vue-aria/tabs";
 export { useSlider, useSliderThumb, useSliderState } from "@vue-aria/slider";
 export { useProgressBar, useProgressCircle } from "@vue-aria/progress";
 export { useMeter } from "@vue-aria/meter";

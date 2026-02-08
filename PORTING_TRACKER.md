@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `57 / 133` tracked items
-- Remaining: `76`
-- Current stage: foundation hardening and navigation/list infrastructure migration
+- Completed: `61 / 133` tracked items
+- Remaining: `72`
+- Current stage: tabs/navigation and collection/list infrastructure migration
 
 ## 0) Dependency baseline
 
@@ -112,9 +112,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 ## 9) Tabs, disclosure, navigation
 
 - [ ] `useTabs`
-- [ ] `useTabList`
-- [ ] `useTab`
-- [ ] `useTabPanel`
+- [x] `useTabList`
+- [x] `useTab`
+- [x] `useTabPanel`
 - [x] `useDisclosure`
 - [x] `useDisclosureGroup`
 - [ ] `useAccordion`-style behavior parity
@@ -177,7 +177,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] ComboBox state
 - [ ] Select state
 - [ ] Menu trigger state
-- [ ] Tabs state
+- [x] Tabs state
 - [ ] Calendar state
 - [ ] Date picker state
 - [ ] Range calendar state

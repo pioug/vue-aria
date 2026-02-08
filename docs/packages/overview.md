@@ -59,6 +59,13 @@ This port follows React Aria's package-first structure.
 
 - `useSwitch`
 
+### `@vue-aria/tabs`
+
+- `useTabListState`
+- `useTabList`
+- `useTab`
+- `useTabPanel`
+
 ### `@vue-aria/slider`
 
 - `useSliderState`

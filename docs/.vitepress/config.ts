@@ -33,6 +33,7 @@ export default defineConfig({
           { text: "@vue-aria/checkbox", link: "/packages/checkbox" },
           { text: "@vue-aria/radio", link: "/packages/radio" },
           { text: "@vue-aria/switch", link: "/packages/switch" },
+          { text: "@vue-aria/tabs", link: "/packages/tabs" },
           { text: "@vue-aria/slider", link: "/packages/slider" },
           { text: "@vue-aria/progress", link: "/packages/progress" },
           { text: "@vue-aria/meter", link: "/packages/meter" },
