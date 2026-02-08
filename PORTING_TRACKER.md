@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `52 / 133` tracked items
-- Remaining: `81`
-- Current stage: date/time core migration with calendar baseline in progress
+- Completed: `54 / 133` tracked items
+- Remaining: `79`
+- Current stage: foundation hardening and navigation/list infrastructure migration
 
 ## 0) Dependency baseline
 
@@ -23,9 +23,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 - [x] `mergeProps`
 - [x] `useId`
-- [ ] Deterministic SSR id strategy (`SSRProvider` equivalent)
+- [x] Deterministic SSR id strategy (`SSRProvider` equivalent)
 - [x] DOM prop filtering utilities (`filterDOMProps` equivalent)
-- [ ] Locale + direction provider (`I18nProvider` equivalent)
+- [x] Locale + direction provider (`I18nProvider` equivalent)
 - [ ] Announcer/live region infrastructure
 - [ ] Collection builder helpers (nodes, sections, keys)
 - [ ] Keyboard delegate infrastructure

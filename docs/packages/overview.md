@@ -7,6 +7,15 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/ssr`
 
 - `useId`
+- `provideSSR`
+- `useIsSSR`
+
+### `@vue-aria/i18n`
+
+- `provideI18n`
+- `useLocale`
+- `useDefaultLocale`
+- `isRTL`
 
 ### `@vue-aria/focus`
 

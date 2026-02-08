@@ -25,6 +25,7 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/packages/overview" },
           { text: "@vue-aria/ssr", link: "/packages/ssr" },
+          { text: "@vue-aria/i18n", link: "/packages/i18n" },
           { text: "@vue-aria/focus", link: "/packages/focus" },
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
           { text: "@vue-aria/button", link: "/packages/button" },

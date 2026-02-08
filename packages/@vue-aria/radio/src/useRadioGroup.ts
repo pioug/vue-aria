@@ -1,4 +1,5 @@
 import { computed, toValue, watchEffect } from "vue";
+import { useLocale } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { useFocusWithin } from "@vue-aria/interactions";
 import { useField } from "@vue-aria/label";
@@ -87,13 +88,14 @@ function resolveOrientation(
 }
 
 function resolveDirection(
-  value: MaybeReactive<Direction | undefined> | undefined
+  value: MaybeReactive<Direction | undefined> | undefined,
+  fallback: Direction
 ): Direction {
   if (value === undefined) {
-    return "ltr";
+    return fallback;
   }
 
-  return toValue(value) ?? "ltr";
+  return toValue(value) ?? fallback;
 }
 
 function getFocusableRadios(container: HTMLElement): HTMLInputElement[] {
@@ -106,8 +108,11 @@ export function useRadioGroup(
   options: UseRadioGroupOptions = {},
   state: UseRadioGroupState
 ): UseRadioGroupResult {
+  const locale = useLocale();
   const orientation = computed(() => resolveOrientation(options.orientation));
-  const direction = computed(() => resolveDirection(options.direction));
+  const direction = computed(() =>
+    resolveDirection(options.direction, locale.value.direction)
+  );
   const validationBehavior = computed(() =>
     resolveValidationBehavior(options.validationBehavior)
   );

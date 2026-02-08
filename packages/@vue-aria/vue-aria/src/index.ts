@@ -1,4 +1,5 @@
-export { useId } from "@vue-aria/ssr";
+export { useId, provideSSR, useIsSSR } from "@vue-aria/ssr";
+export { provideI18n, useDefaultLocale, useLocale, isRTL } from "@vue-aria/i18n";
 export { useFocusVisible, useFocusRing } from "@vue-aria/focus";
 export {
   usePress,

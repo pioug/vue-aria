@@ -1,5 +1,6 @@
 import { computed, toValue } from "vue";
 import { usePress } from "@vue-aria/interactions";
+import { useLocale } from "@vue-aria/i18n";
 import { mergeProps } from "@vue-aria/utils";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { DatePickerGroupState } from "./types";
@@ -123,6 +124,7 @@ export function useDatePickerGroup(
   groupRef: MaybeReactive<Element | null | undefined>,
   disableArrowNavigation?: MaybeReactive<boolean | undefined>
 ): UseDatePickerGroupResult {
+  const locale = useLocale();
   const focusManager = createFocusManager(groupRef);
 
   const onKeydown = (event: KeyboardEvent) => {
@@ -148,14 +150,22 @@ export function useDatePickerGroup(
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       event.stopPropagation();
-      focusManager.focusPrevious();
+      if (locale.value.direction === "rtl") {
+        focusManager.focusNext();
+      } else {
+        focusManager.focusPrevious();
+      }
       return;
     }
 
     if (event.key === "ArrowRight") {
       event.preventDefault();
       event.stopPropagation();
-      focusManager.focusNext();
+      if (locale.value.direction === "rtl") {
+        focusManager.focusPrevious();
+      } else {
+        focusManager.focusNext();
+      }
     }
   };
 

@@ -1,4 +1,6 @@
-import { computed, ref } from "vue";
+import { mount } from "@vue/test-utils";
+import { provideI18n } from "@vue-aria/i18n";
+import { computed, defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useRadioGroup, type UseRadioGroupState } from "../src/useRadioGroup";
 
@@ -200,6 +202,56 @@ describe("useRadioGroup", () => {
     document.body.appendChild(container);
 
     handlers.onKeydown?.({
+      key: "ArrowRight",
+      preventDefault: vi.fn(),
+      currentTarget: container,
+      target: cats,
+    } as unknown as KeyboardEvent);
+
+    expect(state.selectedValueRef.value).toBe("dogs");
+    expect(document.activeElement).toBe(dogs);
+  });
+
+  it("falls back to locale direction when explicit direction is not provided", () => {
+    const state = createRadioGroupState({ selectedValue: "cats" });
+    let handlers: RadioGroupHandlers | undefined;
+
+    const container = document.createElement("div");
+    const dogs = document.createElement("input");
+    dogs.type = "radio";
+    dogs.value = "dogs";
+    const cats = document.createElement("input");
+    cats.type = "radio";
+    cats.value = "cats";
+    const dragons = document.createElement("input");
+    dragons.type = "radio";
+    dragons.value = "dragons";
+    container.append(dogs, cats, dragons);
+    document.body.appendChild(container);
+
+    const Reader = defineComponent({
+      setup() {
+        handlers = useRadioGroup(
+          {
+            label: "Favorite Pet",
+            orientation: "horizontal",
+          },
+          state
+        ).radioGroupProps.value as RadioGroupHandlers;
+        return () => h("div");
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        provideI18n({ locale: "ar-EG" });
+        return () => h(Reader);
+      },
+    });
+
+    mount(App);
+
+    handlers?.onKeydown?.({
       key: "ArrowRight",
       preventDefault: vi.fn(),
       currentTarget: container,

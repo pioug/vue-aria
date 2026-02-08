@@ -1,3 +1,6 @@
+import { mount } from "@vue/test-utils";
+import { provideI18n } from "@vue-aria/i18n";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useDatePickerGroup } from "../src/useDatePickerGroup";
 
@@ -79,6 +82,40 @@ describe("useDatePickerGroup", () => {
 
     handlers.onKeydown?.(createKeyboardEvent("ArrowLeft", root, second));
     expect(document.activeElement).toBe(first);
+  });
+
+  it("uses locale direction for RTL arrow behavior", () => {
+    const root = document.createElement("div");
+    const first = document.createElement("div");
+    const second = document.createElement("div");
+    first.tabIndex = 0;
+    second.tabIndex = 0;
+    root.append(first, second);
+    document.body.appendChild(root);
+
+    let handlers: GroupHandlers | undefined;
+    const Reader = defineComponent({
+      setup() {
+        handlers = useDatePickerGroup({}, root).groupProps.value as GroupHandlers;
+        return () => h("div");
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        provideI18n({ locale: "ar-EG" });
+        return () => h(Reader);
+      },
+    });
+
+    mount(App);
+
+    second.focus();
+    handlers?.onKeydown?.(createKeyboardEvent("ArrowRight", root, second));
+    expect(document.activeElement).toBe(first);
+
+    handlers?.onKeydown?.(createKeyboardEvent("ArrowLeft", root, first));
+    expect(document.activeElement).toBe(second);
   });
 
   it("focuses the last non-placeholder segment on mouse press", () => {
