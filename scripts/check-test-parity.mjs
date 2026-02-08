@@ -19,6 +19,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/interactions/test/useMove.test.ts",
   "packages/@vue-aria/interactions/test/useInteractOutside.test.ts",
   "packages/@vue-aria/button/test/useButton.test.ts",
+  "packages/@vue-aria/button/test/useToggleButton.test.ts",
   "packages/@vue-aria/link/test/useLink.test.ts",
   "packages/@vue-aria/label/test/useLabel.test.ts",
   "packages/@vue-aria/label/test/useField.test.ts",

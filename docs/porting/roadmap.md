@@ -4,22 +4,22 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `20 / 133` (about `15.0%`)
-- Tracked items remaining: `113`
+- Tracked items completed: `21 / 133` (about `15.8%`)
+- Tracked items remaining: `112`
 - Current parity focus: foundational interactions + core semantics
 
 ## Done So Far
 
 - Foundation primitives: `mergeProps`, `useId`
 - Focus and interactions: `useFocusVisible`, `useFocusRing`, `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`, `useLongPress`, `useMove`, `useInteractOutside`
-- Core semantics: `useButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
+- Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`
 
 ## What Is Left (By Area)
 
 - Foundation: `7` remaining
 - Interactions: `2` remaining
-- Core semantics: `2` remaining
+- Core semantics: `1` remaining
 - Text/number inputs: `6` remaining
 - Selection controls: `8` remaining
 - Date/time: `9` remaining

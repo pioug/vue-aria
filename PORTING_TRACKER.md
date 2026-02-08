@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `20 / 133` tracked items
-- Remaining: `113`
+- Completed: `21 / 133` tracked items
+- Remaining: `112`
 - Current stage: closing remaining interaction edge cases before form/control and overlay systems
 
 ## 0) Dependency baseline
@@ -49,7 +49,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 ## 3) Core semantics
 
 - [x] `useButton`
-- [ ] `useToggleButton`
+- [x] `useToggleButton`
 - [x] `useLink`
 - [x] `useLabel`
 - [x] `useSeparator`

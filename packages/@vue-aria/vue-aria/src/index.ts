@@ -10,7 +10,7 @@ export {
   useMove,
   useInteractOutside,
 } from "@vue-aria/interactions";
-export { useButton } from "@vue-aria/button";
+export { useButton, useToggleButton } from "@vue-aria/button";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useSeparator } from "@vue-aria/separator";
