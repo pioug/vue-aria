@@ -38,6 +38,7 @@ export {
   useTimeField,
   privateValidationStateSymbol,
 } from "@vue-aria/datepicker";
+export { useDatePickerState } from "@vue-aria/datepicker-state";
 export { useCalendarBase, useCalendar, useRangeCalendar, useCalendarCell } from "@vue-aria/calendar";
 export { useCalendarState, useRangeCalendarState } from "@vue-aria/calendar-state";
 export { useBreadcrumbItem } from "@vue-aria/breadcrumbs";
@@ -203,6 +204,12 @@ export type {
   UseComboBoxStateOptions,
   UseComboBoxStateResult,
 } from "@vue-aria/combobox-state";
+export type {
+  DatePickerGranularity,
+  TimeValue as DatePickerStateTimeValue,
+  UseDatePickerStateOptions,
+  UseDatePickerStateResult,
+} from "@vue-aria/datepicker-state";
 export type {
   CalendarRangeValue,
   DateValue as CalendarStateDateValue,

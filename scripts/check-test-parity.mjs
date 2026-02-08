@@ -49,6 +49,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/datepicker/test/useDatePicker.test.ts",
   "packages/@vue-aria/datepicker/test/useDateRangePicker.test.ts",
   "packages/@vue-aria/datepicker/test/useTimeField.test.ts",
+  "packages/@vue-aria/datepicker-state/test/useDatePickerState.test.ts",
   "packages/@vue-aria/calendar/test/useCalendar.test.ts",
   "packages/@vue-aria/calendar/test/useRangeCalendar.test.ts",
   "packages/@vue-aria/calendar/test/useCalendarCell.test.ts",

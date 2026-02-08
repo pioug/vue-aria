@@ -94,6 +94,10 @@ This port follows React Aria's package-first structure.
 - `useDateRangePicker`
 - `useTimeField`
 
+### `@vue-aria/datepicker-state`
+
+- `useDatePickerState`
+
 ### `@vue-aria/calendar`
 
 - `useCalendarBase`

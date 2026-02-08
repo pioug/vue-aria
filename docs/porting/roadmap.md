@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `103 / 133` (about `77.4%`)
-- Tracked items remaining: `30`
+- Tracked items completed: `104 / 133` (about `78.2%`)
+- Tracked items remaining: `29`
 - Current parity focus: stately + date/time hardening
 
 ## Done So Far
@@ -26,7 +26,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useSubmenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`, `useSubmenuTrigger`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
-- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`, `useCalendarState`, `useRangeCalendarState`
+- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`, `useCalendarState`, `useRangeCalendarState`, `useDatePickerState`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
@@ -51,7 +51,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
-- Stately parity layer: `3` remaining
+- Stately parity layer: `2` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity
@@ -83,6 +83,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Continue stately hardening with tree/table + date picker state primitives.
+1. Continue stately hardening with tree/table state primitives.
 2. Start table/tree/grid aria hooks.
 3. Close remaining date/time parity gaps (international calendar + timezone behavior).
