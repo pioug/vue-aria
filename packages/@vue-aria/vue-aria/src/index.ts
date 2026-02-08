@@ -15,6 +15,7 @@ export {
 export {
   useClipboard,
   useDrag,
+  useDrop,
   useVirtualDrop,
   beginDragging,
   endDragging,
@@ -181,6 +182,13 @@ export type {
   DragEndEvent,
   DragSession,
   VirtualDropResult,
+  DropOptions,
+  DropResult,
+  DropEnterEvent,
+  DropMoveEvent,
+  DropActivateEvent,
+  DropExitEvent,
+  DropEvent,
   FileDropItem,
   TextDropItem,
 } from "@vue-aria/dnd";

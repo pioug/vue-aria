@@ -10,6 +10,10 @@ Handles focused copy/cut/paste interactions and normalizes clipboard payloads fo
 
 Provides native drag lifecycle wiring (`dragstart`/`drag`/`dragend`) with data transfer population and allowed drop operation mapping.
 
+## `useDrop`
+
+Provides native drop target lifecycle wiring (`dragenter`/`dragover`/`dragleave`/`drop`) with operation negotiation and parsed dropped items.
+
 ## `useVirtualDrop`
 
 Provides keyboard/virtual drop affordance props, including `aria-describedby` guidance during active drag sessions.

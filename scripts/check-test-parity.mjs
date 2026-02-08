@@ -27,6 +27,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/interactions/test/useInteractOutside.test.ts",
   "packages/@vue-aria/dnd/test/useClipboard.test.ts",
   "packages/@vue-aria/dnd/test/useDrag.test.ts",
+  "packages/@vue-aria/dnd/test/useDrop.test.ts",
   "packages/@vue-aria/dnd/test/DropTargetKeyboardNavigation.test.ts",
   "packages/@vue-aria/dnd/test/ListDropTargetDelegate.test.ts",
   "packages/@vue-aria/dnd/test/DragManager.test.ts",
