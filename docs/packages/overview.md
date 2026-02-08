@@ -44,6 +44,11 @@ This port follows React Aria's package-first structure.
 
 - `useSwitch`
 
+### `@vue-aria/slider`
+
+- `useSlider`
+- `useSliderThumb`
+
 ### `@vue-aria/link`
 
 - `useLink`

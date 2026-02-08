@@ -27,6 +27,23 @@ const ARROW_KEY_TO_DELTA: Record<string, { deltaX: number; deltaY: number }> = {
   Down: { deltaX: 0, deltaY: 1 },
 };
 
+function resolvePointerPosition(event: PointerEvent): Position {
+  const pageX = event.pageX;
+  const pageY = event.pageY;
+  if (
+    Number.isFinite(pageX) &&
+    Number.isFinite(pageY) &&
+    !(pageX === 0 && pageY === 0 && (event.clientX !== 0 || event.clientY !== 0))
+  ) {
+    return { pageX, pageY };
+  }
+
+  return {
+    pageX: event.clientX,
+    pageY: event.clientY,
+  };
+}
+
 function toPointerType(event: PointerEvent): PointerType {
   if (event.pointerType === "touch") {
     return "touch";
@@ -115,11 +132,12 @@ export function useMove(options: UseMoveOptions = {}): UseMoveResult {
       return;
     }
 
-    const lastPosition = state.lastPosition ?? { pageX: event.pageX, pageY: event.pageY };
-    const deltaX = event.pageX - lastPosition.pageX;
-    const deltaY = event.pageY - lastPosition.pageY;
+    const position = resolvePointerPosition(event);
+    const lastPosition = state.lastPosition ?? position;
+    const deltaX = position.pageX - lastPosition.pageX;
+    const deltaY = position.pageY - lastPosition.pageY;
     move(event, state.pointerType ?? toPointerType(event), deltaX, deltaY);
-    state.lastPosition = { pageX: event.pageX, pageY: event.pageY };
+    state.lastPosition = position;
   };
 
   const onPointerEnd = (event: PointerEvent) => {
@@ -160,7 +178,7 @@ export function useMove(options: UseMoveOptions = {}): UseMoveResult {
     state.didMove = false;
     state.pointerId = event.pointerId;
     state.pointerType = toPointerType(event);
-    state.lastPosition = { pageX: event.pageX, pageY: event.pageY };
+    state.lastPosition = resolvePointerPosition(event);
     attachGlobalListeners();
   };
 

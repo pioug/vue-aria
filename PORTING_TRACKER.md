@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `35 / 133` tracked items
-- Remaining: `98`
-- Current stage: selection-controls migration in progress after completing checkbox/radio/switch baseline
+- Completed: `37 / 133` tracked items
+- Remaining: `96`
+- Current stage: selection-controls migration in progress after completing checkbox/radio/switch/slider baseline
 
 ## 0) Dependency baseline
 
@@ -72,8 +72,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useRadio`
 - [x] `useRadioGroup`
 - [x] `useSwitch`
-- [ ] `useSlider`
-- [ ] `useSliderThumb`
+- [x] `useSlider`
+- [x] `useSliderThumb`
 - [ ] `useSliderState` parity adapters
 
 ## 6) Date and time

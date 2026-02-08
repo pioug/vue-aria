@@ -31,6 +31,9 @@ export default defineConfig({
       "@vue-aria/switch": fileURLToPath(
         new URL("./packages/@vue-aria/switch/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/slider": fileURLToPath(
+        new URL("./packages/@vue-aria/slider/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),
