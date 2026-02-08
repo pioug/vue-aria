@@ -1,6 +1,11 @@
 export { useListKeyboardDelegate } from "./useListKeyboardDelegate";
+export { useGridKeyboardDelegate } from "./useGridKeyboardDelegate";
 export { useTypeSelect } from "./useTypeSelect";
 
+export type {
+  GridKeyboardCollectionItem,
+  UseGridKeyboardDelegateOptions,
+} from "./useGridKeyboardDelegate";
 export type {
   KeyboardCollectionItem,
   UseListKeyboardDelegateOptions,

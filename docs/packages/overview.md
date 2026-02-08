@@ -175,6 +175,16 @@ This port follows React Aria's package-first structure.
 - `useListState`
 - `useSingleSelectListState`
 
+### `@vue-aria/grid`
+
+- `useGrid`
+- `useGridCell`
+
+### `@vue-aria/gridlist`
+
+- `useGridList`
+- `useGridListItem`
+
 ### `@vue-aria/tree`
 
 - `useTree`
@@ -198,6 +208,7 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/selection`
 
 - `useListKeyboardDelegate`
+- `useGridKeyboardDelegate`
 - `useTypeSelect`
 
 ### `@vue-aria/selection-state`

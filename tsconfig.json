@@ -38,6 +38,8 @@
       "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
       "@vue-aria/list-state": ["packages/@vue-aria/list-state/src/index.ts"],
+      "@vue-aria/grid": ["packages/@vue-aria/grid/src/index.ts"],
+      "@vue-aria/gridlist": ["packages/@vue-aria/gridlist/src/index.ts"],
       "@vue-aria/tree": ["packages/@vue-aria/tree/src/index.ts"],
       "@vue-aria/tree-state": ["packages/@vue-aria/tree-state/src/index.ts"],
       "@vue-aria/table": ["packages/@vue-aria/table/src/index.ts"],

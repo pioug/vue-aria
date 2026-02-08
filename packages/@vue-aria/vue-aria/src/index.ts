@@ -82,6 +82,8 @@ export {
   useListBoxSection,
 } from "@vue-aria/listbox";
 export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
+export { useGrid, useGridCell } from "@vue-aria/grid";
+export { useGridList, useGridListItem } from "@vue-aria/gridlist";
 export { useTree, useTreeItem } from "@vue-aria/tree";
 export { useTreeState } from "@vue-aria/tree-state";
 export {
@@ -91,7 +93,11 @@ export {
   useTableColumnHeader,
 } from "@vue-aria/table";
 export { useTableState } from "@vue-aria/table-state";
-export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
+export {
+  useListKeyboardDelegate,
+  useGridKeyboardDelegate,
+  useTypeSelect,
+} from "@vue-aria/selection";
 export { useMultipleSelectionState } from "@vue-aria/selection-state";
 export { useComboBoxState } from "@vue-aria/combobox-state";
 export { useComboBox } from "@vue-aria/combobox";
@@ -129,6 +135,14 @@ export type {
   ReadonlyRef,
 } from "@vue-aria/types";
 export type { KeyboardDelegate } from "@vue-aria/selection";
+export type {
+  GridKeyboardCollectionItem,
+  UseGridKeyboardDelegateOptions,
+  KeyboardCollectionItem,
+  UseListKeyboardDelegateOptions,
+  UseTypeSelectOptions,
+  UseTypeSelectResult,
+} from "@vue-aria/selection";
 export type {
   BuiltCollection,
   CollectionInput,
@@ -189,6 +203,18 @@ export type {
   UseTooltipTriggerOptions,
   UseTooltipTriggerResult,
 } from "@vue-aria/tooltip";
+export type {
+  UseGridOptions,
+  UseGridResult,
+  UseGridCellOptions,
+  UseGridCellResult,
+} from "@vue-aria/grid";
+export type {
+  UseGridListOptions,
+  UseGridListResult,
+  UseGridListItemOptions,
+  UseGridListItemResult,
+} from "@vue-aria/gridlist";
 export type {
   UseTreeOptions,
   UseTreeResult,

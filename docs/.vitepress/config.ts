@@ -53,6 +53,8 @@ export default defineConfig({
           { text: "@vue-aria/tooltip", link: "/packages/tooltip" },
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
           { text: "@vue-aria/list-state", link: "/packages/list-state" },
+          { text: "@vue-aria/grid", link: "/packages/grid" },
+          { text: "@vue-aria/gridlist", link: "/packages/gridlist" },
           { text: "@vue-aria/tree", link: "/packages/tree" },
           { text: "@vue-aria/tree-state", link: "/packages/tree-state" },
           { text: "@vue-aria/table", link: "/packages/table" },

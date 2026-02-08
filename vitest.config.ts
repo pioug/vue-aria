@@ -97,6 +97,12 @@ export default defineConfig({
       "@vue-aria/list-state": fileURLToPath(
         new URL("./packages/@vue-aria/list-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/grid": fileURLToPath(
+        new URL("./packages/@vue-aria/grid/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/gridlist": fileURLToPath(
+        new URL("./packages/@vue-aria/gridlist/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/tree": fileURLToPath(
         new URL("./packages/@vue-aria/tree/src/index.ts", import.meta.url)
       ),
