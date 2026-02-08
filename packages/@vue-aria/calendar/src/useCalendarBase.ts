@@ -1,0 +1,153 @@
+import { computed, ref, toValue, watchEffect } from "vue";
+import { mergeProps } from "@vue-aria/utils";
+import { useId } from "@vue-aria/ssr";
+import type { ReadonlyRef } from "@vue-aria/types";
+import type { UseCalendarBaseOptions, UseCalendarBaseState } from "./types";
+import { hookData, useSelectedDateDescription, useVisibleRangeDescription } from "./utils";
+
+export interface UseCalendarBaseResult {
+  calendarProps: ReadonlyRef<Record<string, unknown>>;
+  nextButtonProps: ReadonlyRef<Record<string, unknown>>;
+  prevButtonProps: ReadonlyRef<Record<string, unknown>>;
+  errorMessageProps: ReadonlyRef<Record<string, unknown>>;
+  title: ReadonlyRef<string>;
+}
+
+function resolveBoolean(value: unknown): boolean {
+  return Boolean(value);
+}
+
+function collectDOMProps(options: UseCalendarBaseOptions): Record<string, unknown> {
+  const domProps: Record<string, unknown> = {};
+
+  for (const [key, rawValue] of Object.entries(options)) {
+    if (
+      key.startsWith("data-") ||
+      key === "class" ||
+      key === "style" ||
+      key === "slot"
+    ) {
+      domProps[key] = rawValue;
+    }
+  }
+
+  return domProps;
+}
+
+export function useCalendarBase(
+  options: UseCalendarBaseOptions,
+  state: UseCalendarBaseState
+): UseCalendarBaseResult {
+  const errorMessageId = useId(undefined, "v-aria-calendar-error");
+  const visibleRangeDescription = useVisibleRangeDescription(state);
+  const selectedDateDescription = useSelectedDateDescription(state);
+
+  hookData.set(state as object, {
+    ariaLabel:
+      options["aria-label"] === undefined ? undefined : (toValue(options["aria-label"]) ?? undefined),
+    ariaLabelledBy:
+      options["aria-labelledby"] === undefined
+        ? undefined
+        : (toValue(options["aria-labelledby"]) ?? undefined),
+    errorMessageId: errorMessageId.value,
+    selectedDateDescription: selectedDateDescription.value,
+  });
+
+  const nextFocused = ref(false);
+  const previousFocused = ref(false);
+
+  const isDisabled = computed(() =>
+    options.isDisabled === undefined ? false : Boolean(toValue(options.isDisabled))
+  );
+  const nextDisabled = computed(
+    () => isDisabled.value || Boolean(state.isNextVisibleRangeInvalid())
+  );
+  const previousDisabled = computed(
+    () => isDisabled.value || Boolean(state.isPreviousVisibleRangeInvalid())
+  );
+
+  watchEffect(() => {
+    if (nextDisabled.value && nextFocused.value) {
+      nextFocused.value = false;
+      state.setFocused(true);
+    }
+  });
+
+  watchEffect(() => {
+    if (previousDisabled.value && previousFocused.value) {
+      previousFocused.value = false;
+      state.setFocused(true);
+    }
+  });
+
+  const title = computed(() => visibleRangeDescription.value);
+  const domProps = collectDOMProps(options);
+  const calendarProps = computed<Record<string, unknown>>(() => {
+    const labelledBy =
+      options["aria-labelledby"] === undefined
+        ? undefined
+        : toValue(options["aria-labelledby"]);
+    const explicitLabel =
+      options["aria-label"] === undefined
+        ? undefined
+        : toValue(options["aria-label"]);
+
+    const ariaLabel = [explicitLabel, visibleRangeDescription.value]
+      .filter(Boolean)
+      .join(", ");
+
+    return mergeProps(domProps, {
+      id: options.id === undefined ? undefined : toValue(options.id),
+      role: "application",
+      "aria-label": ariaLabel || undefined,
+      "aria-labelledby": labelledBy,
+      "aria-details":
+        options["aria-details"] === undefined
+          ? undefined
+          : toValue(options["aria-details"]),
+      "aria-describedby":
+        options["aria-describedby"] === undefined
+          ? undefined
+          : toValue(options["aria-describedby"]),
+      "data-selected-description": selectedDateDescription.value || undefined,
+    });
+  });
+
+  const nextButtonProps = computed<Record<string, unknown>>(() => ({
+    onPress: () => state.focusNextPage(),
+    "aria-label": "Next",
+    isDisabled: nextDisabled.value,
+    onFocusChange: (isFocused: boolean) => {
+      nextFocused.value = isFocused;
+    },
+  }));
+
+  const prevButtonProps = computed<Record<string, unknown>>(() => ({
+    onPress: () => state.focusPreviousPage(),
+    "aria-label": "Previous",
+    isDisabled: previousDisabled.value,
+    onFocusChange: (isFocused: boolean) => {
+      previousFocused.value = isFocused;
+    },
+  }));
+
+  const errorMessageProps = computed<Record<string, unknown>>(() => {
+    const hasErrorMessage =
+      options.errorMessage !== undefined && String(toValue(options.errorMessage) ?? "") !== "";
+    const isInvalid =
+      resolveBoolean(options.isInvalid === undefined ? false : toValue(options.isInvalid)) ||
+      (options.validationState !== undefined && toValue(options.validationState) === "invalid");
+
+    return {
+      id: hasErrorMessage && isInvalid ? errorMessageId.value : undefined,
+    };
+  });
+
+  return {
+    calendarProps,
+    nextButtonProps,
+    prevButtonProps,
+    errorMessageProps,
+    title,
+  };
+}

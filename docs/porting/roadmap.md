@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `46 / 133` (about `34.6%`)
-- Tracked items remaining: `87`
-- Current parity focus: calendar hooks after date/time picker baseline completion
+- Tracked items completed: `49 / 133` (about `36.8%`)
+- Tracked items remaining: `84`
+- Current parity focus: date/time i18n/timezone hardening after calendar baseline
 
 ## Done So Far
 
@@ -18,6 +18,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`
 - Date/time: `useDateField`, `useDateSegment`
 - Date/time pickers: `useDatePickerGroup`, `useDatePicker`, `useDateRangePicker`, `useTimeField`
+- Calendar: `useCalendarBase`, `useCalendar`, `useCalendarCell`, `useRangeCalendar`
 - Feedback/status: `useProgressBar`, `useMeter`
 
 ## What Is Left (By Area)
@@ -27,7 +28,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
 - Selection controls: `0` remaining
-- Date/time: `4` remaining
+- Date/time: `1` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
 - Tabs/disclosure/navigation: `8` remaining
@@ -49,8 +50,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - Text and number baseline complete: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`, textarea behavior parity, validation wiring parity.
 - Selection controls complete baseline: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`.
-- Date-field and picker baseline is in place: `useDateField`, `useDateSegment`, `useDatePickerGroup`, `useDatePicker`, `useDateRangePicker`, `useTimeField`.
-- Next major area: calendar date/time hooks (`useCalendar`, `useCalendarCell`, `useRangeCalendar`) and timezone/i18n hardening.
+- Date/time baseline is in place across field, picker, and calendar hooks: `useDateField`, `useDateSegment`, `useDatePickerGroup`, `useDatePicker`, `useDateRangePicker`, `useTimeField`, `useCalendarBase`, `useCalendar`, `useCalendarCell`, `useRangeCalendar`.
+- Remaining date/time gap: international calendar and timezone behavior parity hardening.
 
 ### Phase 3: Overlay + Navigation Systems
 
@@ -74,6 +75,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Add calendar hooks (`useCalendar`, `useCalendarCell`, `useRangeCalendar`).
-2. Harden date/time i18n and timezone behavior parity.
-3. Move into collection/listbox/select stack after date/time baseline closes.
+1. Harden date/time i18n and timezone behavior parity.
+2. Move into collection/listbox/select stack after date/time baseline closes.
+3. Add state-layer equivalents for calendar/date-picker state where needed.

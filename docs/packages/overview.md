@@ -70,6 +70,13 @@ This port follows React Aria's package-first structure.
 - `useDateRangePicker`
 - `useTimeField`
 
+### `@vue-aria/calendar`
+
+- `useCalendarBase`
+- `useCalendar`
+- `useRangeCalendar`
+- `useCalendarCell`
+
 ### `@vue-aria/link`
 
 - `useLink`

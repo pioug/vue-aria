@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `46 / 133` tracked items
-- Remaining: `87`
-- Current stage: date/time picker migration in progress after datefield baseline
+- Completed: `49 / 133` tracked items
+- Remaining: `84`
+- Current stage: date/time core migration with calendar baseline in progress
 
 ## 0) Dependency baseline
 
@@ -82,9 +82,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useDateSegment`
 - [x] `useDatePicker`
 - [x] `useDateRangePicker`
-- [ ] `useCalendar`
-- [ ] `useCalendarCell`
-- [ ] `useRangeCalendar`
+- [x] `useCalendar`
+- [x] `useCalendarCell`
+- [x] `useRangeCalendar`
 - [x] `useTimeField`
 - [ ] International calendar + timezone behavior parity
 

@@ -29,6 +29,7 @@ export {
   useTimeField,
   privateValidationStateSymbol,
 } from "@vue-aria/datepicker";
+export { useCalendarBase, useCalendar, useRangeCalendar, useCalendarCell } from "@vue-aria/calendar";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
