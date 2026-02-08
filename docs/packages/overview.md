@@ -179,6 +179,10 @@ This port follows React Aria's package-first structure.
 
 - `useComboBoxState`
 
+### `@vue-aria/combobox`
+
+- `useComboBox`
+
 ### `@vue-aria/link`
 
 - `useLink`

@@ -54,6 +54,7 @@ export default defineConfig({
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/selection-state", link: "/packages/selection-state" },
           { text: "@vue-aria/combobox-state", link: "/packages/combobox-state" },
+          { text: "@vue-aria/combobox", link: "/packages/combobox" },
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },

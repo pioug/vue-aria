@@ -100,6 +100,9 @@ export default defineConfig({
       "@vue-aria/combobox-state": fileURLToPath(
         new URL("./packages/@vue-aria/combobox-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/combobox": fileURLToPath(
+        new URL("./packages/@vue-aria/combobox/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

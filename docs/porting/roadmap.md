@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `98 / 133` (about `73.7%`)
-- Tracked items remaining: `35`
-- Current parity focus: combobox + stately hardening
+- Tracked items completed: `99 / 133` (about `74.4%`)
+- Tracked items remaining: `34`
+- Current parity focus: autocomplete + stately hardening
 
 ## Done So Far
 
@@ -33,6 +33,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Listbox: `useListBoxState`, `useListBox`, `useOption`, `useListBoxSection`
 - Selection primitives: `useListKeyboardDelegate`, `useTypeSelect`
 - Select: `useSelectState`, `useSelect`
+- ComboBox: `useComboBoxState`, `useComboBox`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`
 
 ## What Is Left (By Area)
@@ -43,7 +44,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Text/number inputs: `0` remaining
 - Selection controls: `0` remaining
 - Date/time: `1` remaining
-- Collections/lists: `3` remaining
+- Collections/lists: `2` remaining
 - Menus/actions: `0` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
@@ -69,7 +70,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ### Phase 3: Overlay + Navigation Systems
 
-- `useComboBox`
+- `useAutocomplete`-style behavior parity
 
 ### Phase 4: Data + Advanced Interaction
 
@@ -86,6 +87,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Port `useComboBox` and associated autocomplete behavior.
+1. Close `useAutocomplete` behavior parity (completion and advanced filtering flows).
 2. Continue stately hardening with tree/table + calendar/date state primitives.
-3. Start table/tree/grid aria hooks after combobox baseline lands.
+3. Start table/tree/grid aria hooks after autocomplete hardening lands.

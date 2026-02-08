@@ -83,6 +83,7 @@ export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
 export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
 export { useMultipleSelectionState } from "@vue-aria/selection-state";
 export { useComboBoxState } from "@vue-aria/combobox-state";
+export { useComboBox } from "@vue-aria/combobox";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
@@ -200,6 +201,10 @@ export type {
   UseComboBoxStateOptions,
   UseComboBoxStateResult,
 } from "@vue-aria/combobox-state";
+export type {
+  UseComboBoxOptions,
+  UseComboBoxResult,
+} from "@vue-aria/combobox";
 export type {
   Href,
   LinkDOMProps,
