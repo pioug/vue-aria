@@ -7,7 +7,14 @@ import {
   useDroppableCollection,
   type DroppableCollectionState,
 } from "../src/useDroppableCollection";
-import type { DropOperation, DropTarget, DropTargetDelegate } from "../src/types";
+import type {
+  Collection,
+  CollectionNode,
+  DropOperation,
+  DropTarget,
+  DropTargetDelegate,
+  KeyboardDelegate,
+} from "../src/types";
 import {
   getDroppableCollectionId,
   getDroppableCollectionRef,
@@ -61,6 +68,69 @@ function setupCollectionElement(): HTMLElement {
     }),
   });
   return element;
+}
+
+function createCollection(): Collection {
+  const nodes = new Map<string, CollectionNode>([
+    [
+      "a",
+      {
+        type: "item",
+        key: "a",
+        value: null,
+        level: 0,
+        hasChildNodes: false,
+        childNodes: [],
+        rendered: "A",
+        textValue: "A",
+        index: 0,
+        parentKey: null,
+        nextKey: "b",
+        prevKey: null,
+      },
+    ],
+    [
+      "b",
+      {
+        type: "item",
+        key: "b",
+        value: null,
+        level: 0,
+        hasChildNodes: false,
+        childNodes: [],
+        rendered: "B",
+        textValue: "B",
+        index: 1,
+        parentKey: null,
+        nextKey: null,
+        prevKey: "a",
+      },
+    ],
+  ]);
+
+  return {
+    getItem(key) {
+      return nodes.get(String(key)) ?? null;
+    },
+    getKeyAfter(key) {
+      return nodes.get(String(key))?.nextKey ?? null;
+    },
+    getKeyBefore(key) {
+      return nodes.get(String(key))?.prevKey ?? null;
+    },
+    [Symbol.iterator]() {
+      return nodes.values();
+    },
+  };
+}
+
+function createKeyboardDelegate(): KeyboardDelegate {
+  return {
+    getFirstKey: () => "a",
+    getLastKey: () => "b",
+    getKeyBelow: (key) => (key === "a" ? "b" : null),
+    getKeyAbove: (key) => (key === "b" ? "a" : null),
+  };
 }
 
 describe("useDroppableCollection", () => {
@@ -182,5 +252,40 @@ describe("useDroppableCollection", () => {
       isInternal: false,
       draggingKeys: new Set(),
     });
+  });
+
+  it("supports keyboard navigation for virtual drop targets", () => {
+    const element = setupCollectionElement();
+    const state = createState("copy");
+
+    useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate({ type: "root" }),
+        collection: createCollection(),
+        keyboardDelegate: createKeyboardDelegate(),
+      },
+      state,
+      ref(element)
+    );
+
+    const registered = getRegisteredDropTargets().get(element);
+    expect(registered).toBeDefined();
+
+    const drag = {
+      items: [{ "text/plain": "value" }],
+      allowedDropOperations: ["copy"] as DropOperation[],
+    };
+
+    registered?.onDropEnter?.({ type: "dropenter", x: 0, y: 0 }, drag);
+    expect(state.target).toEqual({ type: "root" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "ArrowDown" }), drag);
+    expect(state.target).toEqual({ type: "item", key: "a", dropPosition: "before" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "End" }), drag);
+    expect(state.target).toEqual({ type: "item", key: "b", dropPosition: "after" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "Home" }), drag);
+    expect(state.target).toEqual({ type: "root" });
   });
 });
