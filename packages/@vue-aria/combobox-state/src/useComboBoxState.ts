@@ -7,6 +7,7 @@ export type FocusStrategy = "first" | "last" | null;
 export type MenuTrigger = "input" | "focus" | "manual";
 export type MenuTriggerAction = "input" | "focus" | "manual";
 export type FilterFn = (textValue: string, inputValue: string) => boolean;
+export type CompletionMode = "none" | "list";
 
 export interface UseComboBoxStateOptions<T extends ListBoxItem = ListBoxItem> {
   collection?: MaybeReactive<Iterable<T> | undefined>;
@@ -20,6 +21,7 @@ export interface UseComboBoxStateOptions<T extends ListBoxItem = ListBoxItem> {
   defaultOpen?: MaybeReactive<boolean | undefined>;
   onOpenChange?: (isOpen: boolean, trigger?: MenuTriggerAction) => void;
   defaultFilter?: FilterFn;
+  completionMode?: MaybeReactive<CompletionMode | undefined>;
   menuTrigger?: MaybeReactive<MenuTrigger | undefined>;
   allowsEmptyCollection?: MaybeReactive<boolean | undefined>;
   allowsCustomValue?: MaybeReactive<boolean | undefined>;
@@ -87,6 +89,16 @@ function resolveMenuTrigger(
   return toValue(value) ?? "input";
 }
 
+function resolveCompletionMode(
+  value: MaybeReactive<CompletionMode | undefined> | undefined
+): CompletionMode {
+  if (value === undefined) {
+    return "none";
+  }
+
+  return toValue(value) ?? "none";
+}
+
 function toCollectionArray<T extends ListBoxItem>(
   collection: Iterable<T> | undefined
 ): T[] {
@@ -151,6 +163,7 @@ export function useComboBoxState<T extends ListBoxItem>(
   const showAllItems = ref(false);
   const menuOpenTrigger = ref<MenuTriggerAction | undefined>(undefined);
   const menuTrigger = computed(() => resolveMenuTrigger(options.menuTrigger));
+  const completionMode = computed(() => resolveCompletionMode(options.completionMode));
   const allowsEmptyCollection = computed(() =>
     resolveBoolean(options.allowsEmptyCollection)
   );
@@ -276,6 +289,10 @@ export function useComboBoxState<T extends ListBoxItem>(
     menuOpenTrigger.value = trigger;
     focusStrategy.value = nextFocusStrategy;
     overlayState.open();
+
+    if (completionMode.value === "list" && filteredCollection.value.length > 0) {
+      listState.setFocusedKey(filteredCollection.value[0]?.key ?? null);
+    }
   };
 
   const close = (): void => {
@@ -370,6 +387,19 @@ export function useComboBoxState<T extends ListBoxItem>(
       if (allowsEmptyCollection.value || nextFilteredCollection.length > 0) {
         open(null, "input");
       }
+    }
+
+    const nextFilteredCollection = filterCollectionByInputValue(value);
+    if (completionMode.value === "list") {
+      listState.setFocusedKey(nextFilteredCollection[0]?.key ?? null);
+    }
+
+    if (
+      overlayState.isOpen.value &&
+      !allowsEmptyCollection.value &&
+      nextFilteredCollection.length === 0
+    ) {
+      close();
     }
   };
 

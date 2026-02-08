@@ -9,6 +9,7 @@ Provides:
 
 - controlled/uncontrolled selected key and input value
 - input filtering via `defaultFilter`
+- list completion via `completionMode: "list"`
 - menu open/close/toggle with trigger reasons
 - commit/revert behavior for selected or custom values
 

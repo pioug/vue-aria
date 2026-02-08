@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `99 / 133` tracked items
-- Remaining: `34`
-- Current stage: autocomplete hardening with stately parity work
+- Completed: `100 / 133` tracked items
+- Remaining: `33`
+- Current stage: single/multi selection hardening with stately parity work
 
 ## 0) Dependency baseline
 
@@ -95,7 +95,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useListBoxSection`
 - [x] `useSelect`
 - [x] `useComboBox`
-- [ ] `useAutocomplete`-style behavior parity
+- [x] `useAutocomplete`-style behavior parity
 - [x] Typeahead behavior parity
 - [ ] Single vs multi-select behavior parity
 

@@ -194,6 +194,7 @@ export type {
   UseMultipleSelectionStateResult,
 } from "@vue-aria/selection-state";
 export type {
+  CompletionMode,
   FilterFn,
   FocusStrategy as ComboBoxFocusStrategy,
   MenuTrigger,

@@ -138,4 +138,33 @@ describe("useComboBoxState", () => {
     expect(onOpenChange).toHaveBeenNthCalledWith(1, true, "manual");
     expect(onOpenChange).toHaveBeenNthCalledWith(2, false, undefined);
   });
+
+  it("supports list completion mode by focusing the first matching option", () => {
+    const state = useComboBoxState({
+      collection: items,
+      completionMode: "list",
+      defaultFilter: (textValue, inputValue) =>
+        textValue.toLowerCase().startsWith(inputValue.toLowerCase()),
+    });
+
+    state.setFocused(true);
+    state.setInputValue("t");
+
+    expect(state.focusedKey.value).toBe("two");
+  });
+
+  it("closes when filtering results become empty", () => {
+    const state = useComboBoxState({
+      collection: items,
+      defaultFilter: (textValue, inputValue) =>
+        textValue.toLowerCase().startsWith(inputValue.toLowerCase()),
+    });
+
+    state.setFocused(true);
+    state.setInputValue("t");
+    expect(state.isOpen.value).toBe(true);
+
+    state.setInputValue("zzz");
+    expect(state.isOpen.value).toBe(false);
+  });
 });
