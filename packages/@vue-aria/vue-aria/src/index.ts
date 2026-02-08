@@ -11,6 +11,11 @@ export {
   useInteractOutside,
 } from "@vue-aria/interactions";
 export { useButton, useToggleButton } from "@vue-aria/button";
+export {
+  useCheckbox,
+  useCheckboxGroup,
+  useCheckboxGroupItem,
+} from "@vue-aria/checkbox";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";

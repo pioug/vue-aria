@@ -29,6 +29,12 @@ This port follows React Aria's package-first structure.
 - `useButton`
 - `useToggleButton`
 
+### `@vue-aria/checkbox`
+
+- `useCheckbox`
+- `useCheckboxGroup`
+- `useCheckboxGroupItem`
+
 ### `@vue-aria/link`
 
 - `useLink`
