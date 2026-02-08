@@ -19,6 +19,15 @@ export interface UsePressResult {
   isPressed: ReadonlyRef<boolean>;
 }
 
+function createSyntheticEvent(type: string, target: EventTarget | null): Event {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  if (target) {
+    Object.defineProperty(event, "target", { value: target });
+    Object.defineProperty(event, "currentTarget", { value: target });
+  }
+  return event;
+}
+
 function toPressEvent(originalEvent: Event, pointerType: PointerType): PressEvent {
   return {
     type: "press",
@@ -31,6 +40,8 @@ function toPressEvent(originalEvent: Event, pointerType: PointerType): PressEven
 export function usePress(options: UsePressOptions = {}): UsePressResult {
   const isPressed = ref(false);
   const activePointerType = ref<PointerType | null>(null);
+  const activePressTarget = ref<EventTarget | null>(null);
+  let removeScrollListener: (() => void) | null = null;
 
   const isDisabled = () =>
     Boolean(options.isDisabled === undefined ? false : toValue(options.isDisabled));
@@ -39,13 +50,36 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
       options.disableKeyboard === undefined ? false : toValue(options.disableKeyboard)
     );
 
+  const clearScrollListener = () => {
+    removeScrollListener?.();
+    removeScrollListener = null;
+  };
+
   const startPress = (event: Event, pointerType: PointerType) => {
     if (isDisabled()) {
       return;
     }
 
     activePointerType.value = pointerType;
+    activePressTarget.value = event.currentTarget ?? event.target;
     isPressed.value = true;
+
+    clearScrollListener();
+    if (pointerType === "touch" && typeof window !== "undefined") {
+      const onScroll = () => {
+        if (!isPressed.value || activePointerType.value !== "touch") {
+          return;
+        }
+
+        endPress(createSyntheticEvent("pointercancel", activePressTarget.value), false);
+      };
+
+      window.addEventListener("scroll", onScroll, true);
+      removeScrollListener = () => {
+        window.removeEventListener("scroll", onScroll, true);
+      };
+    }
+
     options.onPressStart?.(toPressEvent(event, pointerType));
   };
 
@@ -57,6 +91,8 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
     const pointerType = activePointerType.value ?? "virtual";
     isPressed.value = false;
     activePointerType.value = null;
+    activePressTarget.value = null;
+    clearScrollListener();
 
     const pressEvent = toPressEvent(event, pointerType);
     options.onPressEnd?.(pressEvent);
@@ -136,6 +172,8 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
     if (isDisabled()) {
       isPressed.value = false;
       activePointerType.value = null;
+      activePressTarget.value = null;
+      clearScrollListener();
     }
   });
 

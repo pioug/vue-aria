@@ -102,6 +102,16 @@ describe("usePress", () => {
     expect(onPress.mock.calls[0][0].pointerType).toBe("virtual");
   });
 
+  it("does not fire virtual press from non-virtual click", () => {
+    const onPress = vi.fn();
+    const { pressProps } = usePress({ onPress });
+    const handlers = pressProps as unknown as PressHandlers;
+
+    handlers.onClick(new MouseEvent("click", { detail: 1 }));
+
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
   it("does not press when disabled", () => {
     const onPressStart = vi.fn();
     const onPress = vi.fn();
@@ -145,5 +155,55 @@ describe("usePress", () => {
     expect(isPressed.value).toBe(false);
     expect(onPressEnd).toHaveBeenCalledTimes(1);
     expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it("cancels touch press when the page scrolls", () => {
+    const onPressEnd = vi.fn();
+    const onPress = vi.fn();
+    const { pressProps, isPressed } = usePress({ onPressEnd, onPress });
+    const handlers = pressProps as unknown as PressHandlers;
+    const target = document.createElement("div");
+    document.body.appendChild(target);
+
+    const pointerDown = new PointerEvent("pointerdown", {
+      button: 0,
+      pointerType: "touch",
+    });
+    Object.defineProperty(pointerDown, "pointerType", { value: "touch" });
+    Object.defineProperty(pointerDown, "target", { value: target });
+    Object.defineProperty(pointerDown, "currentTarget", { value: target });
+    handlers.onPointerdown(pointerDown);
+
+    expect(isPressed.value).toBe(true);
+
+    window.dispatchEvent(new Event("scroll", { bubbles: true }));
+
+    expect(isPressed.value).toBe(false);
+    expect(onPressEnd).toHaveBeenCalledTimes(1);
+    expect(onPressEnd.mock.calls[0]?.[0].pointerType).toBe("touch");
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it("does not cancel mouse press on scroll", () => {
+    const onPress = vi.fn();
+    const { pressProps, isPressed } = usePress({ onPress });
+    const handlers = pressProps as unknown as PressHandlers;
+
+    handlers.onPointerdown(
+      new PointerEvent("pointerdown", {
+        button: 0,
+        pointerType: "mouse",
+      })
+    );
+    window.dispatchEvent(new Event("scroll", { bubbles: true }));
+    expect(isPressed.value).toBe(true);
+
+    handlers.onPointerup(
+      new PointerEvent("pointerup", {
+        button: 0,
+        pointerType: "mouse",
+      })
+    );
+    expect(onPress).toHaveBeenCalledTimes(1);
   });
 });

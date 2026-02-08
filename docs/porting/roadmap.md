@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `22 / 133` (about `16.5%`)
-- Tracked items remaining: `111`
-- Current parity focus: foundational interactions + core semantics
+- Tracked items completed: `24 / 133` (about `18.0%`)
+- Tracked items remaining: `109`
+- Current parity focus: form controls after baseline interaction/core semantics completion
 
 ## Done So Far
 
@@ -18,7 +18,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ## What Is Left (By Area)
 
 - Foundation: `7` remaining
-- Interactions: `2` remaining
+- Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `6` remaining
 - Selection controls: `8` remaining
@@ -35,10 +35,10 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Critical Path To Parity
 
-### Phase 1: Finish Interaction Baseline
+### Phase 1: Finish Interaction Baseline (Completed)
 
-- Press edge-case parity (cancel on scroll/pointer-capture nuances)
-- Virtual click/screen-reader parity tests
+- Long press, move, and interact-outside hooks are ported with parity tests.
+- Press edge-case baseline parity is in place (touch scroll cancel + virtual click tests).
 
 ### Phase 2: Form Controls
 
@@ -67,6 +67,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Complete Phase 1 interaction edge-case parity.
-2. Ship corresponding parity tests in the same commits.
-3. Only then start Phase 2 form-control migration.
+1. Start Phase 2 with `useTextField` as the base for text/search/number inputs.
+2. Port and test `useSearchField` and `useNumberField` on top of `useTextField`.
+3. Move into selection controls once text/number hooks are stable.

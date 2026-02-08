@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `22 / 133` tracked items
-- Remaining: `111`
-- Current stage: closing remaining interaction edge cases before form/control and overlay systems
+- Completed: `24 / 133` tracked items
+- Remaining: `109`
+- Current stage: starting form-control migration after completing baseline interaction parity
 
 ## 0) Dependency baseline
 
@@ -43,8 +43,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useLongPress`
 - [x] `useMove`
 - [x] `useInteractOutside`
-- [ ] Press responder edge cases (cancel on scroll, pointer capture nuances)
-- [ ] Virtual click/screen-reader interaction parity tests
+- [x] Press responder edge cases (cancel on scroll baseline parity; pointer capture nuances tracked as future hardening)
+- [x] Virtual click/screen-reader interaction parity tests
 
 ## 3) Core semantics
 
