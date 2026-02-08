@@ -46,8 +46,19 @@ export interface UseTextFieldOptions {
   "aria-autocomplete"?: MaybeReactive<string | undefined>;
   "aria-haspopup"?: MaybeReactive<string | undefined>;
   "aria-controls"?: MaybeReactive<string | undefined>;
+  onFocus?: (event: FocusEvent) => void;
+  onBlur?: (event: FocusEvent) => void;
   onKeydown?: (event: KeyboardEvent) => void;
   onKeyup?: (event: KeyboardEvent) => void;
+  onCopy?: (event: ClipboardEvent) => void;
+  onCut?: (event: ClipboardEvent) => void;
+  onPaste?: (event: ClipboardEvent) => void;
+  onCompositionStart?: (event: CompositionEvent) => void;
+  onCompositionEnd?: (event: CompositionEvent) => void;
+  onCompositionUpdate?: (event: CompositionEvent) => void;
+  onSelect?: (event: Event) => void;
+  onBeforeInput?: (event: InputEvent) => void;
+  onInput?: (event: Event) => void;
   onChange?: (value: string) => void;
 }
 
@@ -189,9 +200,20 @@ export function useTextField(options: UseTextFieldOptions = {}): UseTextFieldRes
       onInput: (event: Event) => {
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
         setValue(target?.value ?? "");
+        options.onInput?.(event);
       },
+      onFocus: options.onFocus,
+      onBlur: options.onBlur,
       onKeydown: options.onKeydown,
       onKeyup: options.onKeyup,
+      onCopy: options.onCopy,
+      onCut: options.onCut,
+      onPaste: options.onPaste,
+      onCompositionStart: options.onCompositionStart,
+      onCompositionEnd: options.onCompositionEnd,
+      onCompositionUpdate: options.onCompositionUpdate,
+      onSelect: options.onSelect,
+      onBeforeInput: options.onBeforeInput,
     };
 
     if (inputElementType.value === "input") {

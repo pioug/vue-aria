@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `26 / 133` (about `19.5%`)
-- Tracked items remaining: `107`
+- Tracked items completed: `27 / 133` (about `20.3%`)
+- Tracked items remaining: `106`
 - Current parity focus: form controls after baseline interaction/core semantics completion
 
 ## Done So Far
@@ -14,14 +14,14 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Focus and interactions: `useFocusVisible`, `useFocusRing`, `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`, `useLongPress`, `useMove`, `useInteractOutside`
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
-- Form controls: `useTextField`, `useSearchField`
+- Form controls: `useTextField`, `useSearchField`, `useNumberField`
 
 ## What Is Left (By Area)
 
 - Foundation: `7` remaining
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
-- Text/number inputs: `4` remaining
+- Text/number inputs: `3` remaining
 - Selection controls: `8` remaining
 - Date/time: `9` remaining
 - Collections/lists: `8` remaining
@@ -43,7 +43,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ### Phase 2: Form Controls
 
-- Text inputs: `useNumberField`, `useTextArea`, spinbutton semantics
+- Text inputs: `useTextArea`, spinbutton semantics
 - Selection controls: `useCheckbox`, `useCheckboxGroup`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`
 
 ### Phase 3: Overlay + Navigation Systems
@@ -68,6 +68,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Port and test `useNumberField` on top of `useTextField`.
-2. Finish text-area and spinbutton behavior parity.
+1. Finish text-area and spinbutton behavior parity.
+2. Harden number-field localization/format behavior against upstream edge cases.
 3. Move into selection controls once text/number hooks are stable.

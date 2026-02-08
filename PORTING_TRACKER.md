@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `26 / 133` tracked items
-- Remaining: `107`
+- Completed: `27 / 133` tracked items
+- Remaining: `106`
 - Current stage: starting form-control migration after completing baseline interaction parity
 
 ## 0) Dependency baseline
@@ -60,7 +60,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 - [x] `useTextField`
 - [x] `useSearchField`
-- [ ] `useNumberField`
+- [x] `useNumberField`
 - [ ] `useTextArea` behavior parity
 - [ ] Spinbutton semantics parity
 - [ ] Input validation state + aria-invalid wiring
