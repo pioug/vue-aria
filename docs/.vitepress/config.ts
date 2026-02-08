@@ -50,6 +50,7 @@ export default defineConfig({
           { text: "@vue-aria/dialog", link: "/packages/dialog" },
           { text: "@vue-aria/tooltip", link: "/packages/tooltip" },
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
+          { text: "@vue-aria/list-state", link: "/packages/list-state" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/label", link: "/packages/label" },

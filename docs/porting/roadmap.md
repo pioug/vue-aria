@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `91 / 133` (about `68.4%`)
-- Tracked items remaining: `42`
+- Tracked items completed: `93 / 133` (about `69.9%`)
+- Tracked items remaining: `40`
 - Current parity focus: combobox + menu hardening and stately hardening
 
 ## Done So Far
@@ -26,7 +26,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
-- Stately toggle primitive: `useToggleState`
+- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
@@ -50,7 +50,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
-- Stately parity layer: `9` remaining
+- Stately parity layer: `7` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity
@@ -89,4 +89,4 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 1. Port `useComboBox` and associated autocomplete behavior.
 2. Close menu hardening gaps (submenu, context menu, action-vs-selection semantics).
-3. Continue stately hardening with `useListState` and selection state primitives.
+3. Continue stately hardening with multiple-selection + tree/table/combobox state primitives.

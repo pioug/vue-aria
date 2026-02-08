@@ -35,6 +35,7 @@
       "@vue-aria/dialog": ["packages/@vue-aria/dialog/src/index.ts"],
       "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
+      "@vue-aria/list-state": ["packages/@vue-aria/list-state/src/index.ts"],
       "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],

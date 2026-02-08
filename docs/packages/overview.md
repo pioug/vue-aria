@@ -159,6 +159,11 @@ This port follows React Aria's package-first structure.
 - `useOption`
 - `useListBoxSection`
 
+### `@vue-aria/list-state`
+
+- `useListState`
+- `useSingleSelectListState`
+
 ### `@vue-aria/selection`
 
 - `useListKeyboardDelegate`

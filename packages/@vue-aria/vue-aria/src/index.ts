@@ -77,6 +77,7 @@ export {
   useOption,
   useListBoxSection,
 } from "@vue-aria/listbox";
+export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
 export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
@@ -168,6 +169,13 @@ export type {
   UseTooltipTriggerOptions,
   UseTooltipTriggerResult,
 } from "@vue-aria/tooltip";
+export type {
+  ListSelectionManager,
+  UseListStateOptions,
+  UseListStateResult,
+  UseSingleSelectListStateOptions,
+  UseSingleSelectListStateResult,
+} from "@vue-aria/list-state";
 export type {
   Href,
   LinkDOMProps,
