@@ -1,6 +1,7 @@
 export { useClipboard } from "./useClipboard";
 export { useDrag } from "./useDrag";
 export { useDrop } from "./useDrop";
+export { useDropIndicator } from "./useDropIndicator";
 export { useDroppableItem } from "./useDroppableItem";
 export { useVirtualDrop } from "./useVirtualDrop";
 export { useAutoScroll } from "./useAutoScroll";
@@ -87,6 +88,11 @@ export type {
   DraggableItemResult,
   DraggableItemState,
 } from "./useDraggableItem";
+export type {
+  DropIndicatorAria,
+  DropIndicatorProps,
+  DropIndicatorState,
+} from "./useDropIndicator";
 export type {
   DroppableItemGetOperationOptions,
   DroppableItemOptions,

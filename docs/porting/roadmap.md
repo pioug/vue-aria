@@ -40,7 +40,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Select: `useSelectState`, `useSelect`
 - ComboBox: `useComboBoxState`, `useComboBox`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`, `useToast`, `useToastRegion`
-- Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `useDrop`, `useDroppableItem`, `useVirtualDrop`, `useAutoScroll`, `useDraggableCollection`, `useDraggableItem`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate` (with `hasDragButton`/`hasDropButton` affordances)
+- Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `useDrop`, `useDropIndicator`, `useDroppableItem`, `useVirtualDrop`, `useAutoScroll`, `useDraggableCollection`, `useDraggableItem`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate` (with `hasDragButton`/`hasDropButton` affordances)
 
 ## What Is Left (By Area)
 
