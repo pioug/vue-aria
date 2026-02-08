@@ -27,6 +27,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/textfield/test/useTextField.test.ts",
   "packages/@vue-aria/searchfield/test/useSearchField.test.ts",
   "packages/@vue-aria/numberfield/test/useNumberField.test.ts",
+  "packages/@vue-aria/spinbutton/test/useSpinButton.test.ts",
   "packages/@vue-aria/separator/test/useSeparator.test.ts",
   "packages/@vue-aria/visually-hidden/test/useVisuallyHidden.test.ts",
 ];

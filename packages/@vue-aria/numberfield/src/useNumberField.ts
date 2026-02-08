@@ -1,5 +1,7 @@
 import { computed, ref, toValue, watchEffect } from "vue";
 import { useTextField, type UseTextFieldOptions } from "@vue-aria/textfield";
+import { useSpinButton } from "@vue-aria/spinbutton";
+import { mergeProps } from "@vue-aria/utils";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 
 export interface UseNumberFieldOptions
@@ -154,7 +156,7 @@ export function useNumberField(
     commitNumberValue(normalized);
   };
 
-  const changeByStep = (direction: 1 | -1) => {
+  const changeByStep = (direction: 1 | -1, factor = 1) => {
     if (isDisabled.value || isReadOnly.value) {
       return;
     }
@@ -164,7 +166,7 @@ export function useNumberField(
       parsedInput ??
       currentNumberValue.value ??
       (minValue.value !== undefined ? minValue.value : 0);
-    const nextValue = clamp(base + step.value * direction);
+    const nextValue = clamp(base + step.value * factor * direction);
     inputValue.value = formatNumber(nextValue);
     commitNumberValue(nextValue);
 
@@ -173,6 +175,22 @@ export function useNumberField(
     } else {
       options.onDecrement?.(nextValue);
     }
+  };
+
+  const setToMin = () => {
+    if (minValue.value === undefined || isDisabled.value || isReadOnly.value) {
+      return;
+    }
+    inputValue.value = formatNumber(minValue.value);
+    commitNumberValue(minValue.value);
+  };
+
+  const setToMax = () => {
+    if (maxValue.value === undefined || isDisabled.value || isReadOnly.value) {
+      return;
+    }
+    inputValue.value = formatNumber(maxValue.value);
+    commitNumberValue(maxValue.value);
   };
 
   const hasDecimals = computed(() => {
@@ -222,16 +240,30 @@ export function useNumberField(
       if (event.key === "Enter") {
         event.preventDefault();
         commit();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        changeByStep(1);
-      } else if (event.key === "ArrowDown") {
-        event.preventDefault();
-        changeByStep(-1);
       }
 
       options.onKeydown?.(event);
     },
+  });
+
+  const {
+    spinButtonProps,
+    incrementButtonProps: stepperIncrementButtonProps,
+    decrementButtonProps: stepperDecrementButtonProps,
+  } = useSpinButton({
+    value: currentNumberValue,
+    textValue: inputValue,
+    minValue,
+    maxValue,
+    isDisabled: options.isDisabled,
+    isReadOnly: options.isReadOnly,
+    isRequired: options.isRequired,
+    onIncrement: () => changeByStep(1),
+    onIncrementPage: () => changeByStep(1, 10),
+    onDecrement: () => changeByStep(-1),
+    onDecrementPage: () => changeByStep(-1, 10),
+    onDecrementToMin: setToMin,
+    onIncrementToMax: setToMax,
   });
 
   const canIncrement = computed(() => {
@@ -273,49 +305,52 @@ export function useNumberField(
       : undefined
   );
 
-  const inputProps = computed<Record<string, unknown>>(() => ({
-    ...textFieldProps.value,
-    role: null,
-    "aria-roledescription": "numberField",
-    "aria-valuenow": null,
-    "aria-valuetext": null,
-    "aria-valuemin": null,
-    "aria-valuemax": null,
-    autoCorrect: "off",
-    spellCheck: false,
-  }));
+  const inputProps = computed<Record<string, unknown>>(() =>
+    mergeProps(spinButtonProps.value, textFieldProps.value, {
+      role: null,
+      "aria-roledescription": "numberField",
+      "aria-valuenow": null,
+      "aria-valuetext": null,
+      "aria-valuemin": null,
+      "aria-valuemax": null,
+      autoCorrect: "off",
+      spellCheck: false,
+    })
+  );
 
-  const incrementButtonProps = computed<Record<string, unknown>>(() => ({
-    "aria-label":
-      options.incrementAriaLabel === undefined
-        ? `Increase ${fieldLabel.value}`.trim()
-        : toValue(options.incrementAriaLabel),
-    "aria-controls": inputId.value,
-    excludeFromTabOrder: true,
-    preventFocusOnPress: true,
-    isDisabled: !canIncrement.value,
-    onPress: () => changeByStep(1),
-    onPressStart: () => {
-      const inputRef = options.inputRef === undefined ? undefined : toValue(options.inputRef);
-      inputRef?.focus();
-    },
-  }));
+  const incrementButtonProps = computed<Record<string, unknown>>(() =>
+    mergeProps(stepperIncrementButtonProps.value, {
+      "aria-label":
+        options.incrementAriaLabel === undefined
+          ? `Increase ${fieldLabel.value}`.trim()
+          : toValue(options.incrementAriaLabel),
+      "aria-controls": inputId.value,
+      excludeFromTabOrder: true,
+      preventFocusOnPress: true,
+      isDisabled: !canIncrement.value,
+      onPressStart: () => {
+        const inputRef = options.inputRef === undefined ? undefined : toValue(options.inputRef);
+        inputRef?.focus();
+      },
+    })
+  );
 
-  const decrementButtonProps = computed<Record<string, unknown>>(() => ({
-    "aria-label":
-      options.decrementAriaLabel === undefined
-        ? `Decrease ${fieldLabel.value}`.trim()
-        : toValue(options.decrementAriaLabel),
-    "aria-controls": inputId.value,
-    excludeFromTabOrder: true,
-    preventFocusOnPress: true,
-    isDisabled: !canDecrement.value,
-    onPress: () => changeByStep(-1),
-    onPressStart: () => {
-      const inputRef = options.inputRef === undefined ? undefined : toValue(options.inputRef);
-      inputRef?.focus();
-    },
-  }));
+  const decrementButtonProps = computed<Record<string, unknown>>(() =>
+    mergeProps(stepperDecrementButtonProps.value, {
+      "aria-label":
+        options.decrementAriaLabel === undefined
+          ? `Decrease ${fieldLabel.value}`.trim()
+          : toValue(options.decrementAriaLabel),
+      "aria-controls": inputId.value,
+      excludeFromTabOrder: true,
+      preventFocusOnPress: true,
+      isDisabled: !canDecrement.value,
+      onPressStart: () => {
+        const inputRef = options.inputRef === undefined ? undefined : toValue(options.inputRef);
+        inputRef?.focus();
+      },
+    })
+  );
 
   const groupProps = computed<Record<string, unknown>>(() => ({
     role: "group",

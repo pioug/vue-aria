@@ -37,6 +37,9 @@ export default defineConfig({
       "@vue-aria/numberfield": fileURLToPath(
         new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/spinbutton": fileURLToPath(
+        new URL("./packages/@vue-aria/spinbutton/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/separator": fileURLToPath(
         new URL("./packages/@vue-aria/separator/src/index.ts", import.meta.url)
       ),

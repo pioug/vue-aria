@@ -17,7 +17,18 @@ interface NumberFieldHandlers {
 
 interface StepperHandlers {
   onPress?: () => void;
-  onPressStart?: () => void;
+  onPressStart?: (event: {
+    type: "press";
+    pointerType: "mouse" | "touch" | "pen" | "keyboard" | "virtual";
+    target: EventTarget | null;
+    originalEvent: Event;
+  }) => void;
+  onPressEnd?: (event: {
+    type: "press";
+    pointerType: "mouse" | "touch" | "pen" | "keyboard" | "virtual";
+    target: EventTarget | null;
+    originalEvent: Event;
+  }) => void;
 }
 
 describe("useNumberField", () => {
@@ -105,11 +116,21 @@ describe("useNumberField", () => {
     const incrementHandlers = incrementButtonProps.value as StepperHandlers;
     const decrementHandlers = decrementButtonProps.value as StepperHandlers;
 
-    incrementHandlers.onPress?.();
+    incrementHandlers.onPressStart?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mousedown"),
+    });
     expect(onIncrement).toHaveBeenCalledWith(3);
     expect(inputProps.value.value).toBe("3");
 
-    decrementHandlers.onPress?.();
+    decrementHandlers.onPressStart?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mousedown"),
+    });
     expect(onDecrement).toHaveBeenCalledWith(1);
     expect(inputProps.value.value).toBe("1");
     expect(onChange).toHaveBeenCalled();
@@ -146,7 +167,12 @@ describe("useNumberField", () => {
     });
     const handlers = incrementButtonProps.value as StepperHandlers;
 
-    handlers.onPressStart?.();
+    handlers.onPressStart?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mousedown"),
+    });
     expect(focus).toHaveBeenCalledTimes(1);
   });
 });

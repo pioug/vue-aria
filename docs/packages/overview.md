@@ -50,6 +50,10 @@ This port follows React Aria's package-first structure.
 
 - `useNumberField`
 
+### `@vue-aria/spinbutton`
+
+- `useSpinButton`
+
 ### `@vue-aria/separator`
 
 - `useSeparator`
