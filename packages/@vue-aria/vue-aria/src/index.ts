@@ -18,7 +18,7 @@ export {
 } from "@vue-aria/checkbox";
 export { useRadioGroup, useRadio } from "@vue-aria/radio";
 export { useSwitch } from "@vue-aria/switch";
-export { useSlider, useSliderThumb } from "@vue-aria/slider";
+export { useSlider, useSliderThumb, useSliderState } from "@vue-aria/slider";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";

@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `37 / 133` (about `27.8%`)
-- Tracked items remaining: `96`
+- Tracked items completed: `39 / 133` (about `29.3%`)
+- Tracked items remaining: `94`
 - Current parity focus: selection controls after text/number control baseline completion
 
 ## Done So Far
@@ -15,7 +15,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
 - Form controls: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`
-- Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`
+- Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`
 
 ## What Is Left (By Area)
 
@@ -23,7 +23,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
-- Selection controls: `1` remaining
+- Selection controls: `0` remaining
 - Date/time: `9` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
@@ -32,7 +32,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `5` remaining
-- Stately parity layer: `15` remaining
+- Stately parity layer: `14` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity
@@ -45,8 +45,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ### Phase 2: Form Controls (Text/Number Completed)
 
 - Text and number baseline complete: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`, textarea behavior parity, validation wiring parity.
-- Checkbox/radio/switch/slider baseline complete: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`.
-- Remaining selection-control task: `useSliderState` parity adapters
+- Selection controls complete baseline: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`.
+- Next major area: date/time hooks (`useDateField`, `useDateSegment`, picker/calendar hooks)
 
 ### Phase 3: Overlay + Navigation Systems
 
@@ -70,6 +70,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Complete `useSliderState` parity adapters for the slider hooks.
-2. Start date/time hooks after slider-state baseline stabilizes.
-3. Continue with `useDateField` and segment-level behavior parity.
+1. Start date/time hooks with `useDateField` and `useDateSegment`.
+2. Continue with picker/calendar hooks once segment behavior is stable.
+3. Revisit shared i18n/date infrastructure gaps as date/time work expands.

@@ -46,6 +46,7 @@ This port follows React Aria's package-first structure.
 
 ### `@vue-aria/slider`
 
+- `useSliderState`
 - `useSlider`
 - `useSliderThumb`
 

@@ -1,5 +1,6 @@
 export { useSlider } from "./useSlider";
 export { useSliderThumb } from "./useSliderThumb";
+export { useSliderState } from "./useSliderState";
 
 export type {
   UseSliderOptions,
@@ -11,3 +12,7 @@ export type {
   UseSliderThumbResult,
   UseSliderThumbState,
 } from "./useSliderThumb";
+export type {
+  UseSliderStateOptions,
+  UseSliderStateResult,
+} from "./useSliderState";

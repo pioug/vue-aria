@@ -42,6 +42,7 @@ Current test files:
 - `packages/@vue-aria/switch/test/useSwitch.test.ts`
 - `packages/@vue-aria/slider/test/useSlider.test.ts`
 - `packages/@vue-aria/slider/test/useSliderThumb.test.ts`
+- `packages/@vue-aria/slider/test/useSliderState.test.ts`
 - `packages/@vue-aria/link/test/useLink.test.ts`
 - `packages/@vue-aria/label/test/useLabel.test.ts`
 - `packages/@vue-aria/label/test/useField.test.ts`
