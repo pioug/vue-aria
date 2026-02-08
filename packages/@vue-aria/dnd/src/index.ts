@@ -11,6 +11,10 @@ export {
   endDragging,
   useDragSession,
   isVirtualDragging,
+  registerDropTarget,
+  registerDropItem,
+  getRegisteredDropTargets,
+  getRegisteredDropItems,
 } from "./DragManager";
 export {
   DROP_OPERATION,
@@ -76,6 +80,10 @@ export type {
   DropOptions,
   DropResult,
 } from "./useDrop";
-export type { DragSession } from "./DragManager";
+export type {
+  DragSession,
+  RegisteredDropItem,
+  RegisteredDropTarget,
+} from "./DragManager";
 export type { VirtualDropResult } from "./useVirtualDrop";
 export type { AutoScrollAria } from "./useAutoScroll";
