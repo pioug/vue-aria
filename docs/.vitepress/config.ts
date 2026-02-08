@@ -31,6 +31,7 @@ export default defineConfig({
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },
+          { text: "@vue-aria/searchfield", link: "/packages/searchfield" },
           { text: "@vue-aria/separator", link: "/packages/separator" },
           { text: "@vue-aria/visually-hidden", link: "/packages/visually-hidden" },
           { text: "@vue-aria/utils", link: "/packages/utils" },

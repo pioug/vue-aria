@@ -42,6 +42,10 @@ This port follows React Aria's package-first structure.
 
 - `useTextField`
 
+### `@vue-aria/searchfield`
+
+- `useSearchField`
+
 ### `@vue-aria/separator`
 
 - `useSeparator`

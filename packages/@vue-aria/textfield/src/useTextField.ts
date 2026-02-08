@@ -46,6 +46,8 @@ export interface UseTextFieldOptions {
   "aria-autocomplete"?: MaybeReactive<string | undefined>;
   "aria-haspopup"?: MaybeReactive<string | undefined>;
   "aria-controls"?: MaybeReactive<string | undefined>;
+  onKeydown?: (event: KeyboardEvent) => void;
+  onKeyup?: (event: KeyboardEvent) => void;
   onChange?: (value: string) => void;
 }
 
@@ -188,6 +190,8 @@ export function useTextField(options: UseTextFieldOptions = {}): UseTextFieldRes
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
         setValue(target?.value ?? "");
       },
+      onKeydown: options.onKeydown,
+      onKeyup: options.onKeyup,
     };
 
     if (inputElementType.value === "input") {

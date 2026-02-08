@@ -25,6 +25,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/label/test/useLabel.test.ts",
   "packages/@vue-aria/label/test/useField.test.ts",
   "packages/@vue-aria/textfield/test/useTextField.test.ts",
+  "packages/@vue-aria/searchfield/test/useSearchField.test.ts",
   "packages/@vue-aria/separator/test/useSeparator.test.ts",
   "packages/@vue-aria/visually-hidden/test/useVisuallyHidden.test.ts",
 ];

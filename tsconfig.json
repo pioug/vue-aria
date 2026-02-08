@@ -16,6 +16,7 @@
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
       "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],
+      "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
       "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"],
       "@vue-aria/visually-hidden": ["packages/@vue-aria/visually-hidden/src/index.ts"],
       "@vue-aria/vue-aria": ["packages/@vue-aria/vue-aria/src/index.ts"]
