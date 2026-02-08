@@ -16,6 +16,7 @@ export type {
   UseVirtualizerItemResult,
 } from "./useVirtualizerItem";
 export { ScrollView } from "./ScrollView";
+export { Virtualizer } from "./Virtualizer";
 export { VirtualizerItem, layoutInfoToStyle } from "./VirtualizerItem";
 export { useScrollView } from "./useScrollView";
 export { useVirtualizer } from "./useVirtualizer";

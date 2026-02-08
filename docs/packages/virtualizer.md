@@ -4,6 +4,7 @@ Composable helpers aligned with React Aria virtualizer behavior.
 
 ## Exports
 
+- `Virtualizer`
 - `ScrollView`
 - `VirtualizerItem`
 - `useVirtualizer`

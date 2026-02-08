@@ -4,7 +4,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `130 / 143` (about `90.9%`)
+- Tracked items completed: `131 / 144` (about `91.0%`)
 - Tracked items remaining: `13`
 - Current parity focus: drag/drop + virtualizer parity
 
@@ -52,6 +52,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - React Aria virtualizer scroll container baseline: `useScrollView`
 - React Aria virtualizer composition baseline: `useVirtualizer`
 - Vue virtualizer component adapters baseline: `ScrollView`, `VirtualizerItem`
+- Vue virtualizer orchestration component baseline: `Virtualizer`
 
 ## What Is Left (By Area)
 

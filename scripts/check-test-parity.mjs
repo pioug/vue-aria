@@ -112,6 +112,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/tree/test/useTree.test.ts",
   "packages/@vue-aria/tree/test/useTreeItem.test.ts",
   "packages/@vue-aria/tree-state/test/useTreeState.test.ts",
+  "packages/@vue-aria/virtualizer/test/Virtualizer.component.test.ts",
   "packages/@vue-aria/virtualizer/test/components.test.ts",
   "packages/@vue-aria/virtualizer/test/VirtualizerItem.test.ts",
   "packages/@vue-aria/virtualizer/test/useScrollView.test.ts",
