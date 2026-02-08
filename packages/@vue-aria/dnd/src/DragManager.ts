@@ -1,4 +1,4 @@
-import { shallowRef } from "vue";
+import { shallowRef, toValue } from "vue";
 import { announce } from "@vue-aria/live-announcer";
 import { nodeContains } from "@vue-aria/utils";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
@@ -107,6 +107,16 @@ function toDropItems(items: Array<Record<string, string>>): DropItem[] {
   }));
 }
 
+function resolveActivateButtonRef(
+  elementRef?: MaybeReactive<HTMLElement | null | undefined>
+): HTMLElement | null {
+  if (elementRef == null) {
+    return null;
+  }
+
+  return toValue(elementRef) ?? null;
+}
+
 function setCurrentDropTarget(
   session: ManagedDragSession,
   target: RegisteredDropTarget | null,
@@ -142,10 +152,12 @@ function setCurrentDropTarget(
     }
   }
 
-  if (item != null && item !== session.currentDropItem) {
-    session.currentDropTarget?.onDropTargetEnter?.(item.target);
-    item.element.focus();
-    session.currentDropItem = item;
+  const nextItem =
+    target && item == null ? getValidDropItemsForTarget(session, target)[0] : item;
+  if (nextItem != null && nextItem !== session.currentDropItem) {
+    session.currentDropTarget?.onDropTargetEnter?.(nextItem.target);
+    nextItem.element.focus();
+    session.currentDropItem = nextItem;
   }
 }
 
@@ -223,6 +235,55 @@ function resolveDropOperation(
   }
 
   return session.dragTarget.allowedDropOperations[0] ?? "cancel";
+}
+
+function getValidDropItemsForTarget(
+  session: ManagedDragSession,
+  target: RegisteredDropTarget
+): RegisteredDropItem[] {
+  const types = getTypes(session.dragTarget.items);
+  return Array.from(dropItems.values()).filter((item) => {
+    if (!nodeContains(target.element, item.element)) {
+      return false;
+    }
+
+    if (isHiddenFromAccessibility(item.element)) {
+      return false;
+    }
+
+    if (typeof item.getDropOperation === "function") {
+      return (
+        item.getDropOperation(types, session.dragTarget.allowedDropOperations) !==
+        "cancel"
+      );
+    }
+
+    return true;
+  });
+}
+
+function activateManagedSession(session: ManagedDragSession): void {
+  const target = session.currentDropTarget;
+  if (!target || typeof target.onDropActivate !== "function") {
+    return;
+  }
+
+  const { x, y } = getCenter(target.element);
+  target.onDropActivate(
+    {
+      type: "dropactivate",
+      x,
+      y,
+    },
+    session.currentDropItem?.target ?? null
+  );
+}
+
+function getCurrentActivateButton(session: ManagedDragSession): HTMLElement | null {
+  return (
+    resolveActivateButtonRef(session.currentDropItem?.activateButtonRef) ??
+    resolveActivateButtonRef(session.currentDropTarget?.activateButtonRef)
+  );
 }
 
 function teardownManagedSession(): void {
@@ -319,6 +380,13 @@ function handleManagedKeyDown(event: KeyboardEvent): void {
   if (event.key === "Enter") {
     event.preventDefault();
     event.stopPropagation();
+
+    const activateButton = getCurrentActivateButton(session);
+    if (event.altKey || (activateButton && nodeContains(activateButton, event.target))) {
+      activateManagedSession(session);
+      return;
+    }
+
     dropManagedSession(session);
     return;
   }

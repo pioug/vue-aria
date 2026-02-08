@@ -163,7 +163,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - In progress baseline: edge auto-scroll utility (`useAutoScroll`)
 - In progress baseline: draggable collection state bridge (`useDraggableCollection`)
 - In progress baseline: explicit drag/drop button affordances (`hasDragButton`, `hasDropButton`)
-- In progress hardening: Drag manager keyboard session flow (`Tab` target navigation, `Enter` drop, `Escape` cancel) and `isValidDropTarget` checks
+- In progress hardening: Drag manager keyboard session flow (`Tab` target navigation, `Enter` drop, `Escape` cancel), drop-item targeting/activation (`onDropTargetEnter`, `onDropActivate`), and `isValidDropTarget` checks
 - [ ] Drag source hooks parity
 - [ ] Drop target hooks parity
 - [ ] Keyboard drag and drop parity

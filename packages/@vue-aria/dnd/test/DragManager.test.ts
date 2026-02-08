@@ -211,4 +211,105 @@ describe("DragManager", () => {
 
     unregister();
   });
+
+  it("uses registered drop items as active targets when available", () => {
+    const dragElement = document.createElement("button");
+    const dropElement = document.createElement("button");
+    const dropItemElement = document.createElement("button");
+    dropElement.append(dropItemElement);
+    document.body.append(dragElement, dropElement);
+    setRect(dragElement, { x: 0, y: 0, width: 40, height: 20 });
+    setRect(dropElement, { x: 50, y: 0, width: 40, height: 20 });
+    setRect(dropItemElement, { x: 55, y: 2, width: 36, height: 16 });
+
+    const onDropTargetEnter = vi.fn();
+    const onDrop = vi.fn();
+    const onDragEnd = vi.fn();
+
+    registerDropTarget({
+      element: dropElement,
+      onDropTargetEnter,
+      onDrop,
+      getDropOperation: () => "copy",
+    });
+
+    registerDropItem({
+      element: dropItemElement,
+      target: { type: "item", key: "a", dropPosition: "on" },
+      getDropOperation: () => "copy",
+    });
+
+    beginDragging({
+      dragTarget: {
+        element: dragElement,
+        items: [{ "text/plain": "hello" }],
+        allowedDropOperations: ["copy"],
+        onDragEnd,
+      },
+    });
+
+    expect(onDropTargetEnter).toHaveBeenCalledWith({
+      type: "item",
+      key: "a",
+      dropPosition: "on",
+    });
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+
+    expect(onDrop).toHaveBeenCalledWith(
+      expect.objectContaining({ type: "drop", dropOperation: "copy" }),
+      { type: "item", key: "a", dropPosition: "on" }
+    );
+    expect(onDragEnd).toHaveBeenCalledWith(
+      expect.objectContaining({ dropOperation: "copy" })
+    );
+  });
+
+  it("supports activating the current drop target with Alt+Enter", () => {
+    const dragElement = document.createElement("button");
+    const dropElement = document.createElement("button");
+    const activateButton = document.createElement("button");
+    dropElement.append(activateButton);
+    document.body.append(dragElement, dropElement);
+    setRect(dragElement, { x: 0, y: 0, width: 40, height: 20 });
+    setRect(dropElement, { x: 50, y: 0, width: 40, height: 20 });
+    setRect(activateButton, { x: 55, y: 2, width: 36, height: 16 });
+
+    const onDropActivate = vi.fn();
+    const onDrop = vi.fn();
+    const onDragEnd = vi.fn();
+
+    registerDropTarget({
+      element: dropElement,
+      activateButtonRef: activateButton,
+      onDropActivate,
+      onDrop,
+      getDropOperation: () => "copy",
+    });
+
+    beginDragging({
+      dragTarget: {
+        element: dragElement,
+        items: [{ "text/plain": "hello" }],
+        allowedDropOperations: ["copy"],
+        onDragEnd,
+      },
+    });
+
+    document.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Enter", altKey: true, bubbles: true })
+    );
+
+    expect(onDropActivate).toHaveBeenCalledTimes(1);
+    expect(onDrop).not.toHaveBeenCalled();
+    expect(isVirtualDragging()).toBe(true);
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+
+    expect(onDrop).toHaveBeenCalledTimes(1);
+    expect(onDragEnd).toHaveBeenCalledWith(
+      expect.objectContaining({ dropOperation: "copy" })
+    );
+    expect(isVirtualDragging()).toBe(false);
+  });
 });
