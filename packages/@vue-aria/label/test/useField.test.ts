@@ -50,4 +50,14 @@ describe("useField", () => {
 
     expect(fieldProps.value["aria-describedby"]).toBe(`${descriptionProps.value.id}`);
   });
+
+  it("includes error message id when validationState is invalid", () => {
+    const { fieldProps, errorMessageProps } = useField({
+      label: "Test",
+      errorMessage: "Validation error",
+      validationState: "invalid",
+    });
+
+    expect(fieldProps.value["aria-describedby"]).toBe(`${errorMessageProps.value.id}`);
+  });
 });

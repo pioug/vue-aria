@@ -1,5 +1,6 @@
 import { computed, toValue } from "vue";
 import { useId } from "@vue-aria/ssr";
+import { useErrorMessage } from "@vue-aria/utils";
 import { useLabel } from "./useLabel";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 
@@ -27,7 +28,11 @@ export function useField(options: UseFieldOptions = {}): UseFieldResult {
   const { labelProps, fieldProps: baseFieldProps } = useLabel(options);
 
   const descriptionId = useId(undefined, "v-aria-description");
-  const errorMessageId = useId(undefined, "v-aria-error");
+  const { errorMessageProps, errorMessageId, isInvalid } = useErrorMessage({
+    errorMessage: options.errorMessage,
+    isInvalid: options.isInvalid,
+    validationState: options.validationState,
+  });
 
   const descriptionProps = computed<Record<string, unknown>>(() => {
     const description =
@@ -37,34 +42,15 @@ export function useField(options: UseFieldOptions = {}): UseFieldResult {
     };
   });
 
-  const errorMessageProps = computed<Record<string, unknown>>(() => {
-    const errorMessage =
-      options.errorMessage === undefined ? undefined : toValue(options.errorMessage);
-    return {
-      id: errorMessage ? errorMessageId.value : undefined,
-    };
-  });
-
   const fieldProps = computed<Record<string, unknown>>(() => {
     const describedBy =
       options["aria-describedby"] === undefined
         ? undefined
         : toValue(options["aria-describedby"]);
-    const isInvalid =
-      options.isInvalid === undefined ? false : Boolean(toValue(options.isInvalid));
-    const validationState =
-      options.validationState === undefined
-        ? undefined
-        : toValue(options.validationState);
-    const errorMessage =
-      options.errorMessage === undefined ? undefined : toValue(options.errorMessage);
     const description =
       options.description === undefined ? undefined : toValue(options.description);
 
-    const errorId =
-      (isInvalid || validationState === "invalid") && errorMessage
-        ? errorMessageId.value
-        : undefined;
+    const errorId = isInvalid.value ? errorMessageId.value : undefined;
     const descriptionIdValue = description ? descriptionId.value : undefined;
 
     const ariaDescribedBy = [descriptionIdValue, errorId, describedBy]

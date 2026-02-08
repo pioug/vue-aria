@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `21 / 133` tracked items
-- Remaining: `112`
+- Completed: `22 / 133` tracked items
+- Remaining: `111`
 - Current stage: closing remaining interaction edge cases before form/control and overlay systems
 
 ## 0) Dependency baseline
@@ -54,7 +54,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useLabel`
 - [x] `useSeparator`
 - [x] `VisuallyHidden` helper/component
-- [ ] `useDescription` + `useErrorMessage` helpers (`useDescription` ported; `useErrorMessage` pending)
+- [x] `useDescription` + `useErrorMessage` helpers
 
 ## 4) Text and number inputs
 

@@ -19,7 +19,7 @@ export {
   visuallyHiddenStyles,
   VisuallyHidden,
 } from "@vue-aria/visually-hidden";
-export { mergeProps, useDescription } from "@vue-aria/utils";
+export { mergeProps, useDescription, useErrorMessage } from "@vue-aria/utils";
 
 export type {
   HoverEvent,

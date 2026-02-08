@@ -21,3 +21,26 @@ const props = mergeProps(
 - `class` values are merged into an array.
 - `style` objects are shallow-merged.
 - `undefined` values are ignored.
+
+## `useDescription`
+
+Provides hidden assistive text and returns `aria-describedby`.
+
+```ts
+import { useDescription } from "@vue-aria/utils";
+
+const { descriptionProps } = useDescription("Long press to open menu");
+```
+
+## `useErrorMessage`
+
+Provides shared error-message id and invalid-state derivation used by field hooks.
+
+```ts
+import { useErrorMessage } from "@vue-aria/utils";
+
+const { errorMessageProps, errorMessageId, isInvalid } = useErrorMessage({
+  errorMessage: "Email is required",
+  validationState: "invalid",
+});
+```

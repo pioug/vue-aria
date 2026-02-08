@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `21 / 133` (about `15.8%`)
-- Tracked items remaining: `112`
+- Tracked items completed: `22 / 133` (about `16.5%`)
+- Tracked items remaining: `111`
 - Current parity focus: foundational interactions + core semantics
 
 ## Done So Far
@@ -13,13 +13,13 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Foundation primitives: `mergeProps`, `useId`
 - Focus and interactions: `useFocusVisible`, `useFocusRing`, `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`, `useLongPress`, `useMove`, `useInteractOutside`
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
-- Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`
+- Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
 
 ## What Is Left (By Area)
 
 - Foundation: `7` remaining
 - Interactions: `2` remaining
-- Core semantics: `1` remaining
+- Core semantics: `0` remaining
 - Text/number inputs: `6` remaining
 - Selection controls: `8` remaining
 - Date/time: `9` remaining
@@ -37,7 +37,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ### Phase 1: Finish Interaction Baseline
 
-- `useErrorMessage` helper and final field-description/error wiring cleanup
 - Press edge-case parity (cancel on scroll/pointer-capture nuances)
 - Virtual click/screen-reader parity tests
 
@@ -68,6 +67,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Complete Phase 1 (`useErrorMessage` + interaction edge-case parity).
+1. Complete Phase 1 interaction edge-case parity.
 2. Ship corresponding parity tests in the same commits.
 3. Only then start Phase 2 form-control migration.
