@@ -37,6 +37,9 @@ export default defineConfig({
       "@vue-aria/progress": fileURLToPath(
         new URL("./packages/@vue-aria/progress/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/meter": fileURLToPath(
+        new URL("./packages/@vue-aria/meter/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

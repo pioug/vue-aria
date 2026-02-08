@@ -20,6 +20,7 @@ export { useRadioGroup, useRadio } from "@vue-aria/radio";
 export { useSwitch } from "@vue-aria/switch";
 export { useSlider, useSliderThumb, useSliderState } from "@vue-aria/slider";
 export { useProgressBar } from "@vue-aria/progress";
+export { useMeter } from "@vue-aria/meter";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";

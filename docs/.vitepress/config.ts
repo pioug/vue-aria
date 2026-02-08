@@ -33,6 +33,7 @@ export default defineConfig({
           { text: "@vue-aria/switch", link: "/packages/switch" },
           { text: "@vue-aria/slider", link: "/packages/slider" },
           { text: "@vue-aria/progress", link: "/packages/progress" },
+          { text: "@vue-aria/meter", link: "/packages/meter" },
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },

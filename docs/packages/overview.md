@@ -54,6 +54,10 @@ This port follows React Aria's package-first structure.
 
 - `useProgressBar`
 
+### `@vue-aria/meter`
+
+- `useMeter`
+
 ### `@vue-aria/link`
 
 - `useLink`

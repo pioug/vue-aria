@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `40 / 133` (about `30.1%`)
-- Tracked items remaining: `93`
+- Tracked items completed: `41 / 133` (about `30.8%`)
+- Tracked items remaining: `92`
 - Current parity focus: selection controls after text/number control baseline completion
 
 ## Done So Far
@@ -16,7 +16,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
 - Form controls: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`
 - Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`
-- Feedback/status: `useProgressBar`
+- Feedback/status: `useProgressBar`, `useMeter`
 
 ## What Is Left (By Area)
 
@@ -32,7 +32,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Overlays/dialogs: `11` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
-- Feedback/status: `4` remaining
+- Feedback/status: `3` remaining
 - Stately parity layer: `14` remaining
 - Quality gates: `7` remaining
 

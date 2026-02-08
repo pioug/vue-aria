@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `40 / 133` tracked items
-- Remaining: `93`
+- Completed: `41 / 133` tracked items
+- Remaining: `92`
 - Current stage: moving into date/time hooks after completing selection-control baseline
 
 ## 0) Dependency baseline
@@ -161,7 +161,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 - [x] `useProgressBar`
 - [ ] `useProgressCircle`
-- [ ] `useMeter`
+- [x] `useMeter`
 - [ ] `useToast` / `useToastRegion`
 - [ ] Live region status updates parity
 
