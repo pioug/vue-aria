@@ -47,6 +47,10 @@ Current test files:
 - `packages/@vue-aria/meter/test/useMeter.test.ts`
 - `packages/@vue-aria/datefield/test/useDateField.test.ts`
 - `packages/@vue-aria/datefield/test/useDateSegment.test.ts`
+- `packages/@vue-aria/datepicker/test/useDatePickerGroup.test.ts`
+- `packages/@vue-aria/datepicker/test/useDatePicker.test.ts`
+- `packages/@vue-aria/datepicker/test/useDateRangePicker.test.ts`
+- `packages/@vue-aria/datepicker/test/useTimeField.test.ts`
 - `packages/@vue-aria/link/test/useLink.test.ts`
 - `packages/@vue-aria/label/test/useLabel.test.ts`
 - `packages/@vue-aria/label/test/useField.test.ts`

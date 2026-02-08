@@ -20,6 +20,7 @@
       "@vue-aria/progress": ["packages/@vue-aria/progress/src/index.ts"],
       "@vue-aria/meter": ["packages/@vue-aria/meter/src/index.ts"],
       "@vue-aria/datefield": ["packages/@vue-aria/datefield/src/index.ts"],
+      "@vue-aria/datepicker": ["packages/@vue-aria/datepicker/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
       "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],

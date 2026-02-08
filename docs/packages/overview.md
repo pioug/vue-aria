@@ -63,6 +63,13 @@ This port follows React Aria's package-first structure.
 - `useDateField`
 - `useDateSegment`
 
+### `@vue-aria/datepicker`
+
+- `useDatePickerGroup`
+- `useDatePicker`
+- `useDateRangePicker`
+- `useTimeField`
+
 ### `@vue-aria/link`
 
 - `useLink`

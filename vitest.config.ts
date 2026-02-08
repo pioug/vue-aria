@@ -43,6 +43,9 @@ export default defineConfig({
       "@vue-aria/datefield": fileURLToPath(
         new URL("./packages/@vue-aria/datefield/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/datepicker": fileURLToPath(
+        new URL("./packages/@vue-aria/datepicker/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

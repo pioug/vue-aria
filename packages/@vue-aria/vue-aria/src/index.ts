@@ -22,6 +22,13 @@ export { useSlider, useSliderThumb, useSliderState } from "@vue-aria/slider";
 export { useProgressBar } from "@vue-aria/progress";
 export { useMeter } from "@vue-aria/meter";
 export { useDateField, useDateSegment } from "@vue-aria/datefield";
+export {
+  useDatePicker,
+  useDatePickerGroup,
+  useDateRangePicker,
+  useTimeField,
+  privateValidationStateSymbol,
+} from "@vue-aria/datepicker";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
