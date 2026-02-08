@@ -175,6 +175,11 @@ This port follows React Aria's package-first structure.
 - `useListState`
 - `useSingleSelectListState`
 
+### `@vue-aria/tree`
+
+- `useTree`
+- `useTreeItem`
+
 ### `@vue-aria/tree-state`
 
 - `useTreeState`

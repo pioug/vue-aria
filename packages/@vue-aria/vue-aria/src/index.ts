@@ -82,6 +82,7 @@ export {
   useListBoxSection,
 } from "@vue-aria/listbox";
 export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
+export { useTree, useTreeItem } from "@vue-aria/tree";
 export { useTreeState } from "@vue-aria/tree-state";
 export { useTableState } from "@vue-aria/table-state";
 export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
@@ -182,6 +183,12 @@ export type {
   UseTooltipTriggerOptions,
   UseTooltipTriggerResult,
 } from "@vue-aria/tooltip";
+export type {
+  UseTreeOptions,
+  UseTreeResult,
+  UseTreeItemOptions,
+  UseTreeItemResult,
+} from "@vue-aria/tree";
 export type {
   TreeCollection,
   TreeCollectionNode,

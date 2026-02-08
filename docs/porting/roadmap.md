@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `106 / 133` (about `79.7%`)
-- Tracked items remaining: `27`
-- Current parity focus: stately + date/time hardening
+- Tracked items completed: `108 / 133` (about `81.2%`)
+- Tracked items remaining: `25`
+- Current parity focus: tree/table/grid aria parity
 
 ## Done So Far
 
@@ -31,6 +31,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Listbox: `useListBoxState`, `useListBox`, `useOption`, `useListBoxSection`
+- Tree ARIA: `useTree`, `useTreeItem`
 - Selection primitives: `useListKeyboardDelegate`, `useTypeSelect`
 - Select: `useSelectState`, `useSelect`
 - ComboBox: `useComboBoxState`, `useComboBox`
@@ -48,7 +49,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Menus/actions: `0` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
-- Grids/tables/trees: `11` remaining
+- Grids/tables/trees: `9` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
 - Stately parity layer: `0` remaining
@@ -83,6 +84,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Start table/tree/grid aria hooks.
+1. Continue table/grid aria hooks.
 2. Close remaining date/time parity gaps (international calendar + timezone behavior).
 3. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).
