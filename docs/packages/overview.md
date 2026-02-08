@@ -132,6 +132,14 @@ This port follows React Aria's package-first structure.
 
 - `useOverlayTrigger`
 - `useOverlay`
+- `useOverlayPosition`
+- `useModal`
+- `useModalOverlay`
+- `usePopover`
+
+### `@vue-aria/dialog`
+
+- `useDialog`
 
 ### `@vue-aria/listbox`
 

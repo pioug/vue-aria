@@ -67,6 +67,7 @@ export {
   usePopover,
   usePreventScroll,
 } from "@vue-aria/overlays";
+export { useDialog } from "@vue-aria/dialog";
 export {
   useListBoxState,
   useListBox,
@@ -148,6 +149,10 @@ export type {
   UsePopoverResult,
   UsePreventScrollOptions,
 } from "@vue-aria/overlays";
+export type {
+  UseDialogOptions,
+  UseDialogResult,
+} from "@vue-aria/dialog";
 export type {
   Href,
   LinkDOMProps,

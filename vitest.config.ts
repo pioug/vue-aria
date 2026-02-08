@@ -76,6 +76,9 @@ export default defineConfig({
       "@vue-aria/overlays": fileURLToPath(
         new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/dialog": fileURLToPath(
+        new URL("./packages/@vue-aria/dialog/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/listbox": fileURLToPath(
         new URL("./packages/@vue-aria/listbox/src/index.ts", import.meta.url)
       ),
