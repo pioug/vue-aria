@@ -2,6 +2,7 @@ export { useClipboard } from "./useClipboard";
 export { useDrag } from "./useDrag";
 export { useDrop } from "./useDrop";
 export { useVirtualDrop } from "./useVirtualDrop";
+export { useAutoScroll } from "./useAutoScroll";
 export { navigate } from "./DropTargetKeyboardNavigation";
 export { ListDropTargetDelegate } from "./ListDropTargetDelegate";
 export {
@@ -70,3 +71,4 @@ export type {
 } from "./useDrop";
 export type { DragSession } from "./DragManager";
 export type { VirtualDropResult } from "./useVirtualDrop";
+export type { AutoScrollAria } from "./useAutoScroll";

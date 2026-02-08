@@ -18,6 +18,10 @@ Provides native drop target lifecycle wiring (`dragenter`/`dragover`/`dragleave`
 
 Provides keyboard/virtual drop affordance props, including `aria-describedby` guidance during active drag sessions.
 
+## `useAutoScroll`
+
+Provides edge-triggered scrolling logic for scrollable containers while dragging.
+
 ## Utilities
 
 - `writeToDataTransfer`

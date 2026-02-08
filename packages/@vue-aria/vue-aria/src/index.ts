@@ -17,6 +17,7 @@ export {
   useDrag,
   useDrop,
   useVirtualDrop,
+  useAutoScroll,
   beginDragging,
   endDragging,
   useDragSession,
@@ -189,6 +190,7 @@ export type {
   DropActivateEvent,
   DropExitEvent,
   DropEvent,
+  AutoScrollAria,
   FileDropItem,
   TextDropItem,
 } from "@vue-aria/dnd";
