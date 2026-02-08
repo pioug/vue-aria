@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `62 / 133` (about `46.6%`)
-- Tracked items remaining: `71`
-- Current parity focus: accordion parity plus collection/listbox/select stack
+- Tracked items completed: `63 / 133` (about `47.4%`)
+- Tracked items remaining: `70`
+- Current parity focus: collection/listbox/select stack and overlay infrastructure
 
 ## Done So Far
 
@@ -22,6 +22,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Navigation: `useBreadcrumbItem`
 - Disclosure: `useDisclosure`, `useDisclosureState`
 - Disclosure groups: `useDisclosureGroupState`
+- Accordion item behavior: `useAccordionItem`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`
 
@@ -35,7 +36,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Date/time: `1` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
-- Tabs/disclosure/navigation: `1` remaining
+- Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `11` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining

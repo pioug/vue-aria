@@ -1,6 +1,7 @@
 export { useDisclosure } from "./useDisclosure";
 export { useDisclosureState } from "./useDisclosureState";
 export { useDisclosureGroupState } from "./useDisclosureGroupState";
+export { useAccordionItem } from "./useAccordionItem";
 
 export type {
   DisclosurePressEvent,
@@ -15,3 +16,7 @@ export type {
   UseDisclosureGroupStateOptions,
   UseDisclosureGroupStateResult,
 } from "./useDisclosureGroupState";
+export type {
+  UseAccordionItemOptions,
+  UseAccordionItemResult,
+} from "./useAccordionItem";

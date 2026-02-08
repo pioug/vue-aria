@@ -44,6 +44,7 @@ export {
   useDisclosure,
   useDisclosureState,
   useDisclosureGroupState,
+  useAccordionItem,
 } from "@vue-aria/disclosure";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";

@@ -109,6 +109,7 @@ This port follows React Aria's package-first structure.
 
 - `useDisclosureState`
 - `useDisclosureGroupState`
+- `useAccordionItem`
 - `useDisclosure`
 
 ### `@vue-aria/link`

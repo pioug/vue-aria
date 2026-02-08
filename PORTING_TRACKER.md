@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `62 / 133` tracked items
-- Remaining: `71`
-- Current stage: accordion parity and collection/list infrastructure migration
+- Completed: `63 / 133` tracked items
+- Remaining: `70`
+- Current stage: collection/list and overlay infrastructure migration
 
 ## 0) Dependency baseline
 
@@ -117,7 +117,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useTabPanel`
 - [x] `useDisclosure`
 - [x] `useDisclosureGroup`
-- [ ] `useAccordion`-style behavior parity
+- [x] `useAccordion`-style behavior parity
 - [x] `useBreadcrumbItem`
 
 ## 10) Overlays and dialogs

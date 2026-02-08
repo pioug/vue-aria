@@ -68,6 +68,7 @@ Current test files:
 - `packages/@vue-aria/breadcrumbs/test/useBreadcrumbItem.test.ts`
 - `packages/@vue-aria/disclosure/test/useDisclosureState.test.ts`
 - `packages/@vue-aria/disclosure/test/useDisclosureGroupState.test.ts`
+- `packages/@vue-aria/disclosure/test/useAccordionItem.test.ts`
 - `packages/@vue-aria/disclosure/test/useDisclosure.test.ts`
 - `packages/@vue-aria/link/test/useLink.test.ts`
 - `packages/@vue-aria/label/test/useLabel.test.ts`
