@@ -2,6 +2,12 @@
 
 This is the master checklist for parity with React Aria behavior in Vue.
 
+## Progress Snapshot
+
+- Completed: `17 / 133` tracked items
+- Remaining: `116`
+- Current stage: finishing interaction baseline before form/control and overlay systems
+
 ## 0) Dependency baseline
 
 - [x] Added upstream i18n/date primitives:
