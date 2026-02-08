@@ -169,6 +169,10 @@ This port follows React Aria's package-first structure.
 - `useListKeyboardDelegate`
 - `useTypeSelect`
 
+### `@vue-aria/selection-state`
+
+- `useMultipleSelectionState`
+
 ### `@vue-aria/link`
 
 - `useLink`

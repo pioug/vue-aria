@@ -79,6 +79,7 @@ export {
 } from "@vue-aria/listbox";
 export { useListState, useSingleSelectListState } from "@vue-aria/list-state";
 export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
+export { useMultipleSelectionState } from "@vue-aria/selection-state";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
@@ -176,6 +177,14 @@ export type {
   UseSingleSelectListStateOptions,
   UseSingleSelectListStateResult,
 } from "@vue-aria/list-state";
+export type {
+  DisabledBehavior,
+  FocusStrategy,
+  SelectionBehavior,
+  SelectionMode,
+  UseMultipleSelectionStateOptions,
+  UseMultipleSelectionStateResult,
+} from "@vue-aria/selection-state";
 export type {
   Href,
   LinkDOMProps,

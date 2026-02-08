@@ -52,6 +52,7 @@ export default defineConfig({
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
           { text: "@vue-aria/list-state", link: "/packages/list-state" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
+          { text: "@vue-aria/selection-state", link: "/packages/selection-state" },
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },

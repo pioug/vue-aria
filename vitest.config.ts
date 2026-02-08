@@ -94,6 +94,9 @@ export default defineConfig({
       "@vue-aria/selection": fileURLToPath(
         new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/selection-state": fileURLToPath(
+        new URL("./packages/@vue-aria/selection-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),
