@@ -35,6 +35,12 @@ function isA11yHidden(element: HTMLElement): boolean {
   return element.getAttribute("aria-hidden") === "true" || element.hasAttribute("inert");
 }
 
+function flushMutationObserver(): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+}
+
 describe("DragManager", () => {
   afterEach(() => {
     endDragging();
@@ -344,5 +350,47 @@ describe("DragManager", () => {
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
     expect(isA11yHidden(otherElement)).toBe(false);
+  });
+
+  it("updates the active drop target when a target becomes aria-hidden", async () => {
+    const dragElement = document.createElement("button");
+    const firstTarget = document.createElement("button");
+    const secondTarget = document.createElement("button");
+    document.body.append(dragElement, firstTarget, secondTarget);
+    setRect(dragElement, { x: 0, y: 0, width: 40, height: 20 });
+    setRect(firstTarget, { x: 50, y: 0, width: 40, height: 20 });
+    setRect(secondTarget, { x: 100, y: 0, width: 40, height: 20 });
+
+    const onFirstEnter = vi.fn();
+    const onFirstExit = vi.fn();
+    const onSecondEnter = vi.fn();
+
+    registerDropTarget({
+      element: firstTarget,
+      onDropEnter: onFirstEnter,
+      onDropExit: onFirstExit,
+      getDropOperation: () => "copy",
+    });
+    registerDropTarget({
+      element: secondTarget,
+      onDropEnter: onSecondEnter,
+      getDropOperation: () => "copy",
+    });
+
+    beginDragging({
+      dragTarget: {
+        element: dragElement,
+        items: [{ "text/plain": "hello" }],
+        allowedDropOperations: ["copy"],
+      },
+    });
+
+    expect(onFirstEnter).toHaveBeenCalledTimes(1);
+
+    firstTarget.setAttribute("aria-hidden", "true");
+    await flushMutationObserver();
+
+    expect(onFirstExit).toHaveBeenCalledTimes(1);
+    expect(onSecondEnter).toHaveBeenCalledTimes(1);
   });
 });

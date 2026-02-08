@@ -79,6 +79,7 @@ interface ManagedDragSession extends DragSession {
   currentDropItem: RegisteredDropItem | null;
   dropOperation: DropOperation | null;
   restoreAriaHidden: (() => void) | null;
+  mutationObserver: MutationObserver | null;
 }
 
 function isManagedDragSession(session: DragSession | null): session is ManagedDragSession {
@@ -353,7 +354,12 @@ function getCurrentActivateButton(session: ManagedDragSession): HTMLElement | nu
   );
 }
 
-function teardownManagedSession(): void {
+function teardownManagedSession(session?: ManagedDragSession | null): void {
+  session?.mutationObserver?.disconnect();
+  if (session) {
+    session.mutationObserver = null;
+  }
+
   cleanupActiveSession?.();
   cleanupActiveSession = null;
 }
@@ -362,7 +368,7 @@ function endManagedSession(session: ManagedDragSession, focusElement: HTMLElemen
   setCurrentDropTarget(session, null);
   session.restoreAriaHidden?.();
   session.restoreAriaHidden = null;
-  teardownManagedSession();
+  teardownManagedSession(session);
   dragSession.value = null;
 
   const onDragEnd = session.dragTarget.onDragEnd;
@@ -477,6 +483,7 @@ export function beginDragging(session: DragSession = {}): void {
       currentDropItem: null,
       dropOperation: null,
       restoreAriaHidden: null,
+      mutationObserver: null,
     };
 
     dragSession.value = managedSession;
@@ -490,6 +497,20 @@ export function beginDragging(session: DragSession = {}): void {
       document.removeEventListener("keydown", handleManagedKeyDown, true);
     };
 
+    if (typeof MutationObserver !== "undefined" && document.body) {
+      managedSession.mutationObserver = new MutationObserver(() => {
+        if (dragSession.value === managedSession) {
+          updateValidDropTargets(managedSession);
+        }
+      });
+      managedSession.mutationObserver.observe(document.body, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ["aria-hidden", "inert"],
+      });
+    }
+
     announce("Drag started.");
     return;
   }
@@ -501,6 +522,7 @@ export function endDragging(): void {
   if (isManagedDragSession(dragSession.value)) {
     dragSession.value.restoreAriaHidden?.();
     dragSession.value.restoreAriaHidden = null;
+    teardownManagedSession(dragSession.value);
   }
   teardownManagedSession();
   dragSession.value = null;
