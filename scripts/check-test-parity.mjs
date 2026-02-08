@@ -10,6 +10,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/utils/test/nodeContains.test.ts",
   "packages/@vue-aria/utils/test/router.test.ts",
   "packages/@vue-aria/utils/test/useLoadMore.test.ts",
+  "packages/@vue-aria/utils/test/useLoadMoreSentinel.test.ts",
   "packages/@vue-aria/utils/test/useDescription.test.ts",
   "packages/@vue-aria/utils/test/useErrorMessage.test.ts",
   "packages/@vue-aria/ssr/test/useId.test.ts",

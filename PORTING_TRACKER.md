@@ -4,7 +4,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `128 / 141` tracked items
+- Completed: `129 / 142` tracked items
 - Remaining: `13`
 - Current stage: drag/drop + virtualizer parity
 
@@ -31,6 +31,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Keyboard delegate infrastructure
 - [x] Router integration abstraction (link navigation)
 - [x] Incremental load-more helper (`useLoadMore`)
+- [x] Sentinel-based load-more + scroll parent helpers (`useLoadMoreSentinel`, `isScrollable`, `getScrollParent`)
 
 ## 2) Interactions (`@react-aria/interactions` + focus)
 

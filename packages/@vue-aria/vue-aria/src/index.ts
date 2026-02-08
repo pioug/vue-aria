@@ -187,7 +187,10 @@ export {
 } from "@vue-aria/visually-hidden";
 export {
   mergeProps,
+  isScrollable,
+  getScrollParent,
   useLoadMore,
+  useLoadMoreSentinel,
   useDescription,
   useErrorMessage,
   provideRouter,
@@ -493,4 +496,5 @@ export type {
   Router,
   RouterOptions,
   UseLoadMoreOptions,
+  UseLoadMoreSentinelOptions,
 } from "@vue-aria/utils";

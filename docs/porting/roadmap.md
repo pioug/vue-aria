@@ -4,7 +4,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `128 / 141` (about `90.8%`)
+- Tracked items completed: `129 / 142` (about `90.8%`)
 - Tracked items remaining: `13`
 - Current parity focus: drag/drop + virtualizer parity
 
@@ -12,6 +12,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - Foundation primitives: `mergeProps`, `useId`, `provideSSR`, `useIsSSR`, `filterDOMProps`, `provideI18n`, `useLocale`, `announce`, `provideRouter`, `useRouter`
 - Shared utility baseline: `useLoadMore`
+- Shared utility baseline: `useLoadMoreSentinel`, `isScrollable`, `getScrollParent`
 - Focus and interactions: `useFocusVisible`, `useFocusRing`, `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`, `useLongPress`, `useMove`, `useInteractOutside`
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`

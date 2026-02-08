@@ -40,6 +40,30 @@ useLoadMore(
 );
 ```
 
+## `useLoadMoreSentinel`
+
+Triggers incremental loading using an `IntersectionObserver` sentinel.
+
+```ts
+import { useLoadMoreSentinel } from "@vue-aria/utils";
+
+useLoadMoreSentinel(
+  {
+    collection,
+    onLoadMore: () => fetchNextPage(),
+    scrollOffset: 1,
+  },
+  sentinelRef
+);
+```
+
+## `isScrollable` and `getScrollParent`
+
+Scroll utility helpers used by virtualized and drag/drop flows:
+
+- `isScrollable(node, checkForOverflow?)`
+- `getScrollParent(node, checkForOverflow?)`
+
 ## `filterDOMProps`
 
 Filters arbitrary props down to DOM-safe props (`aria-*`, `data-*`, and known DOM attributes).

@@ -315,7 +315,10 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/utils`
 
 - `mergeProps`
+- `isScrollable`
+- `getScrollParent`
 - `useLoadMore`
+- `useLoadMoreSentinel`
 - `filterDOMProps`
 - `nodeContains`
 - `provideRouter`
