@@ -44,6 +44,53 @@ interface FileSystemDirectoryEntryLike extends FileSystemEntryLike {
 }
 
 export const DIRECTORY_DRAG_TYPE: symbol = Symbol("DIRECTORY_DRAG_TYPE");
+const DROPPABLE_COLLECTION_ERROR = "Droppable item outside a droppable collection";
+
+interface DroppableCollectionRegistration {
+  id: string;
+  ref: MaybeReactive<HTMLElement | null | undefined>;
+}
+
+const droppableCollectionMap = new WeakMap<object, DroppableCollectionRegistration>();
+
+export function registerDroppableCollection(
+  state: object,
+  id: string,
+  ref: MaybeReactive<HTMLElement | null | undefined>
+): void {
+  droppableCollectionMap.set(state, { id, ref });
+}
+
+export function getDroppableCollectionId(state: object): string {
+  const registration = droppableCollectionMap.get(state);
+  if (!registration) {
+    throw new Error(DROPPABLE_COLLECTION_ERROR);
+  }
+
+  return registration.id;
+}
+
+export function getDroppableCollectionRef(
+  state: object
+): MaybeReactive<HTMLElement | null | undefined> {
+  const registration = droppableCollectionMap.get(state);
+  if (!registration) {
+    throw new Error(DROPPABLE_COLLECTION_ERROR);
+  }
+
+  return registration.ref;
+}
+
+export function getTypes(items: DragItem[]): Set<string> {
+  const types = new Set<string>();
+  for (const item of items) {
+    for (const type of Object.keys(item)) {
+      types.add(type);
+    }
+  }
+
+  return types;
+}
 
 function getDataTransferItems(dataTransfer: DataTransfer): DataTransferItemLike[] {
   return Array.from(dataTransfer.items as unknown as Iterable<DataTransferItemLike>);

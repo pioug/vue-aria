@@ -1,5 +1,5 @@
 import { readonly, shallowRef } from "vue";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { DropOperation, DropTarget, DragTypes } from "./types";
 
 export interface DragSession {
@@ -9,6 +9,7 @@ export interface DragSession {
 export interface RegisteredDropTarget {
   element: HTMLElement;
   preventFocusOnDrop?: boolean;
+  activateButtonRef?: MaybeReactive<HTMLElement | null | undefined>;
   getDropOperation?: (
     types: Set<string> | DragTypes,
     allowedOperations: DropOperation[]
@@ -18,6 +19,7 @@ export interface RegisteredDropTarget {
 export interface RegisteredDropItem {
   element: HTMLElement;
   target: DropTarget;
+  activateButtonRef?: MaybeReactive<HTMLElement | null | undefined>;
   getDropOperation?: (
     types: Set<string> | DragTypes,
     allowedOperations: DropOperation[]

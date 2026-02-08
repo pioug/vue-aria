@@ -1,6 +1,7 @@
 export { useClipboard } from "./useClipboard";
 export { useDrag } from "./useDrag";
 export { useDrop } from "./useDrop";
+export { useDroppableItem } from "./useDroppableItem";
 export { useVirtualDrop } from "./useVirtualDrop";
 export { useAutoScroll } from "./useAutoScroll";
 export { useDraggableCollection } from "./useDraggableCollection";
@@ -33,6 +34,10 @@ export {
   readFromDataTransfer,
   writeToDataTransfer,
   globalDndState,
+  registerDroppableCollection,
+  getDroppableCollectionId,
+  getDroppableCollectionRef,
+  getTypes,
   setDraggingCollectionRef,
   setDraggingKeys,
   setDropCollectionRef,
@@ -82,6 +87,12 @@ export type {
   DraggableItemResult,
   DraggableItemState,
 } from "./useDraggableItem";
+export type {
+  DroppableItemGetOperationOptions,
+  DroppableItemOptions,
+  DroppableItemResult,
+  DroppableItemState,
+} from "./useDroppableItem";
 export type {
   DropActivateEvent,
   DropEnterEvent,
