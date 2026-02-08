@@ -28,6 +28,7 @@ export interface DragOptions {
   onDragMove?: (event: DragMoveEvent) => void;
   onDragEnd?: (event: DragEndEvent) => void;
   getItems: () => DragItem[];
+  preview?: unknown;
   getAllowedDropOperations?: () => DropOperation[];
   hasDragButton?: boolean;
   isDisabled?: MaybeReactive<boolean>;

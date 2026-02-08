@@ -1,4 +1,5 @@
 import { CUSTOM_DRAG_TYPE, GENERIC_TYPE, NATIVE_DRAG_TYPES } from "./constants";
+import { toValue } from "vue";
 import type {
   DirectoryDropItem,
   DragItem,
@@ -299,6 +300,8 @@ export function useDragModality(): DragModality {
 
 export const globalDndState: GlobalDndState = {
   draggingCollectionRef: null,
+  draggingKeys: new Set(),
+  dropCollectionRef: null,
 };
 
 export function setDraggingCollectionRef(
@@ -307,6 +310,45 @@ export function setDraggingCollectionRef(
   globalDndState.draggingCollectionRef = collectionRef;
 }
 
+export function setDraggingKeys(keys: Set<string | number>): void {
+  globalDndState.draggingKeys = keys;
+}
+
+export function setDropCollectionRef(
+  collectionRef?: MaybeReactive<HTMLElement | null | undefined> | null
+): void {
+  globalDndState.dropCollectionRef = collectionRef ?? null;
+}
+
+export function clearGlobalDnDState(): void {
+  globalDndState.draggingCollectionRef = null;
+  globalDndState.draggingKeys = new Set();
+  globalDndState.dropCollectionRef = null;
+}
+
 export function setGlobalDnDState(state: GlobalDndState): void {
   globalDndState.draggingCollectionRef = state.draggingCollectionRef;
+  globalDndState.draggingKeys = state.draggingKeys ?? new Set();
+  globalDndState.dropCollectionRef = state.dropCollectionRef ?? null;
+}
+
+function resolveCollectionElement(
+  collectionRef?: MaybeReactive<HTMLElement | null | undefined> | null
+): HTMLElement | null {
+  if (collectionRef == null) {
+    return null;
+  }
+
+  return toValue(collectionRef) ?? null;
+}
+
+export function isInternalDropOperation(
+  collectionRef?: MaybeReactive<HTMLElement | null | undefined> | null
+): boolean {
+  const draggingCollection = resolveCollectionElement(globalDndState.draggingCollectionRef);
+  const dropCollection = resolveCollectionElement(
+    collectionRef ?? globalDndState.dropCollectionRef
+  );
+
+  return draggingCollection != null && draggingCollection === dropCollection;
 }

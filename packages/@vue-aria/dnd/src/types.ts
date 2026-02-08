@@ -90,4 +90,6 @@ export interface DraggableCollectionStateLike {
 
 export interface GlobalDndState {
   draggingCollectionRef: MaybeReactive<HTMLElement | null | undefined> | null;
+  draggingKeys?: Set<Key>;
+  dropCollectionRef?: MaybeReactive<HTMLElement | null | undefined> | null;
 }
