@@ -61,6 +61,7 @@ This port follows React Aria's package-first structure.
 
 ### `@vue-aria/tabs`
 
+- `useTabs`
 - `useTabListState`
 - `useTabList`
 - `useTab`

@@ -35,6 +35,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/tabs/test/useTabList.test.ts",
   "packages/@vue-aria/tabs/test/useTab.test.ts",
   "packages/@vue-aria/tabs/test/useTabPanel.test.ts",
+  "packages/@vue-aria/tabs/test/useTabs.test.ts",
   "packages/@vue-aria/slider/test/useSlider.test.ts",
   "packages/@vue-aria/slider/test/useSliderThumb.test.ts",
   "packages/@vue-aria/slider/test/useSliderState.test.ts",
