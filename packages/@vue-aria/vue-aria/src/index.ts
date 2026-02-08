@@ -138,6 +138,12 @@ export {
   Size as VirtualizerSize,
   Rect as VirtualizerRect,
   LayoutInfo as VirtualizerLayoutInfo,
+  Layout as VirtualizerLayout,
+  Virtualizer as VirtualizerEngine,
+  OverscanManager as VirtualizerOverscanManager,
+  ReusableView as VirtualizerReusableView,
+  RootView as VirtualizerRootView,
+  ChildView as VirtualizerChildView,
 } from "@vue-aria/virtualizer-state";
 export {
   useTable,
@@ -375,7 +381,14 @@ export type {
   UseTreeStateOptions,
   UseTreeStateResult,
 } from "@vue-aria/tree-state";
-export type { RectCorner as VirtualizerRectCorner } from "@vue-aria/virtualizer-state";
+export type {
+  RectCorner as VirtualizerRectCorner,
+  InvalidationContext as VirtualizerInvalidationContext,
+  VirtualizerCollection,
+  VirtualizerDelegate,
+  VirtualizerRenderOptions,
+  VirtualizerItemDropTarget,
+} from "@vue-aria/virtualizer-state";
 export type {
   SortDescriptor as TableSortDescriptor,
   SortDirection as TableSortDirection,

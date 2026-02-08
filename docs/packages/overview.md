@@ -228,6 +228,10 @@ This port follows React Aria's package-first structure.
 - `Size`
 - `Rect`
 - `LayoutInfo`
+- `Layout`
+- `Virtualizer`
+- `OverscanManager`
+- `ReusableView`
 
 ### `@vue-aria/table`
 

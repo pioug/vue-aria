@@ -8,6 +8,10 @@ Foundational geometry/layout primitives for virtualized collections.
 - `Size`
 - `Rect`
 - `LayoutInfo`
+- `Layout`
+- `Virtualizer`
+- `OverscanManager`
+- `ReusableView`
 
 ```ts
 import { LayoutInfo, Rect } from "@vue-aria/virtualizer-state";

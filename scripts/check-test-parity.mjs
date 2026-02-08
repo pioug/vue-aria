@@ -111,6 +111,8 @@ const requiredTestFiles = [
   "packages/@vue-aria/tree/test/useTreeItem.test.ts",
   "packages/@vue-aria/tree-state/test/useTreeState.test.ts",
   "packages/@vue-aria/virtualizer-state/test/LayoutInfo.test.ts",
+  "packages/@vue-aria/virtualizer-state/test/OverscanManager.test.ts",
+  "packages/@vue-aria/virtualizer-state/test/utils.test.ts",
   "packages/@vue-aria/table/test/useTable.test.ts",
   "packages/@vue-aria/table/test/useTableRow.test.ts",
   "packages/@vue-aria/table/test/useTableCell.test.ts",
