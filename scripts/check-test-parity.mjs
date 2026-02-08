@@ -33,6 +33,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/dnd/test/useDraggableCollection.test.ts",
   "packages/@vue-aria/dnd/test/useDraggableItem.test.ts",
   "packages/@vue-aria/dnd/test/useDropIndicator.test.ts",
+  "packages/@vue-aria/dnd/test/useDroppableCollection.test.ts",
   "packages/@vue-aria/dnd/test/useDroppableItem.test.ts",
   "packages/@vue-aria/dnd/test/DropTargetKeyboardNavigation.test.ts",
   "packages/@vue-aria/dnd/test/ListDropTargetDelegate.test.ts",

@@ -156,6 +156,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - In progress baseline: drag preview renderer primitive (`createDragPreviewRenderer`)
 - In progress baseline: draggable item primitive (`useDraggableItem`)
 - In progress baseline: droppable item primitive (`useDroppableItem`)
+- In progress baseline: droppable collection primitive (`useDroppableCollection`)
 - In progress baseline: drop indicator primitive (`useDropIndicator`)
 - In progress baseline: virtual drop affordance primitive (`useVirtualDrop`)
 - In progress baseline: native drop target primitive (`useDrop`)

@@ -3,6 +3,7 @@ export { useDrag } from "./useDrag";
 export { createDragPreviewRenderer } from "./DragPreview";
 export { useDrop } from "./useDrop";
 export { useDropIndicator } from "./useDropIndicator";
+export { useDroppableCollection } from "./useDroppableCollection";
 export { useDroppableItem } from "./useDroppableItem";
 export { useVirtualDrop } from "./useVirtualDrop";
 export { useAutoScroll } from "./useAutoScroll";
@@ -95,6 +96,14 @@ export type {
   DraggableItemResult,
   DraggableItemState,
 } from "./useDraggableItem";
+export type {
+  DroppableCollectionActivateEvent,
+  DroppableCollectionDropEvent,
+  DroppableCollectionGetOperationOptions,
+  DroppableCollectionOptions,
+  DroppableCollectionResult,
+  DroppableCollectionState,
+} from "./useDroppableCollection";
 export type {
   DropIndicatorAria,
   DropIndicatorProps,

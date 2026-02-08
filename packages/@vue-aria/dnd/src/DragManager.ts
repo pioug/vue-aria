@@ -1,8 +1,26 @@
-import { readonly, shallowRef } from "vue";
+import { shallowRef } from "vue";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
-import type { DropOperation, DropTarget, DragTypes } from "./types";
+import type {
+  DropItem,
+  DropOperation,
+  DropTarget,
+  DragTypes,
+} from "./types";
+
+export interface DragTargetSession {
+  element?: unknown;
+  items: Array<Record<string, string>>;
+  allowedDropOperations: DropOperation[];
+  onDragEnd?: (event: {
+    type: "dragend";
+    x: number;
+    y: number;
+    dropOperation: DropOperation;
+  }) => void;
+}
 
 export interface DragSession {
+  dragTarget?: DragTargetSession;
   [key: string]: unknown;
 }
 
@@ -14,6 +32,21 @@ export interface RegisteredDropTarget {
     types: Set<string> | DragTypes,
     allowedOperations: DropOperation[]
   ) => DropOperation;
+  onDropEnter?: (
+    event: { type: "dropenter"; x: number; y: number },
+    dragTarget: DragTargetSession
+  ) => void;
+  onDropExit?: (event: { type: "dropexit"; x: number; y: number }) => void;
+  onDropTargetEnter?: (target: DropTarget | null) => void;
+  onDropActivate?: (
+    event: { type: "dropactivate"; x: number; y: number },
+    target: DropTarget | null
+  ) => void;
+  onDrop?: (
+    event: { type: "drop"; x: number; y: number; items: DropItem[]; dropOperation: DropOperation },
+    target: DropTarget | null
+  ) => void;
+  onKeyDown?: (event: KeyboardEvent, dragTarget: DragTargetSession) => void;
 }
 
 export interface RegisteredDropItem {
@@ -39,7 +72,7 @@ export function endDragging(): void {
 }
 
 export function useDragSession(): ReadonlyRef<DragSession | null> {
-  return readonly(dragSession);
+  return dragSession as ReadonlyRef<DragSession | null>;
 }
 
 export function isVirtualDragging(): boolean {
