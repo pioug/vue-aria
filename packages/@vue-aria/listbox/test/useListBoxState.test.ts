@@ -29,6 +29,22 @@ describe("useListBoxState", () => {
     expect(state.selectedKeys.value.has("a")).toBe(false);
   });
 
+  it("does not allow empty selection when disallowEmptySelection is true", () => {
+    const state = useListBoxState({
+      collection: items,
+      selectionMode: "multiple",
+      disallowEmptySelection: true,
+      defaultSelectedKeys: ["a"],
+    });
+
+    state.selectKey("a", "toggle");
+    expect(state.selectedKeys.value).toEqual(new Set(["a"]));
+
+    state.setSelectedKeys(new Set());
+    expect(state.selectedKeys.value).toEqual(new Set(["a"]));
+    expect(state.disallowEmptySelection.value).toBe(true);
+  });
+
   it("does not select disabled keys", () => {
     const state = useListBoxState({
       collection: items,

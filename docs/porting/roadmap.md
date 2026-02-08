@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `100 / 133` (about `75.2%`)
-- Tracked items remaining: `33`
-- Current parity focus: selection-mode hardening + stately hardening
+- Tracked items completed: `101 / 133` (about `75.9%`)
+- Tracked items remaining: `32`
+- Current parity focus: stately + date/time hardening
 
 ## Done So Far
 
@@ -44,7 +44,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Text/number inputs: `0` remaining
 - Selection controls: `0` remaining
 - Date/time: `1` remaining
-- Collections/lists: `1` remaining
+- Collections/lists: `0` remaining
 - Menus/actions: `0` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
@@ -68,17 +68,13 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Date/time baseline is in place across field, picker, and calendar hooks: `useDateField`, `useDateSegment`, `useDatePickerGroup`, `useDatePicker`, `useDateRangePicker`, `useTimeField`, `useCalendarBase`, `useCalendar`, `useCalendarCell`, `useRangeCalendar`.
 - Remaining date/time gap: international calendar and timezone behavior parity hardening.
 
-### Phase 3: Overlay + Navigation Systems
-
-- Single vs multi-select behavior parity hardening
-
-### Phase 4: Data + Advanced Interaction
+### Phase 3: Data + Advanced Interaction
 
 - Table/grid/tree hooks (`useGrid`, `useTable`, `useTree` families)
 - DnD and keyboard DnD parity
 - Virtualizer infrastructure parity
 
-### Phase 5: State + Hardening
+### Phase 4: State + Hardening
 
 - React Stately parity layer (or equivalent Vue state packages)
 - SSR hydration and id consistency tests
@@ -87,6 +83,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Close single vs multi-select behavior parity across collection hooks.
-2. Continue stately hardening with tree/table + calendar/date state primitives.
-3. Start table/tree/grid aria hooks after selection-mode hardening lands.
+1. Continue stately hardening with tree/table + calendar/date state primitives.
+2. Start table/tree/grid aria hooks.
+3. Close remaining date/time parity gaps (international calendar + timezone behavior).

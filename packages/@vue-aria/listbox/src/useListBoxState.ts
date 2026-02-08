@@ -13,6 +13,7 @@ export interface ListBoxItem {
 export interface UseListBoxStateOptions<T extends ListBoxItem = ListBoxItem> {
   collection?: MaybeReactive<Iterable<T> | undefined>;
   selectionMode?: MaybeReactive<SelectionMode | undefined>;
+  disallowEmptySelection?: MaybeReactive<boolean | undefined>;
   selectedKeys?: MaybeReactive<Iterable<Key> | undefined>;
   defaultSelectedKeys?: MaybeReactive<Iterable<Key> | undefined>;
   disabledKeys?: MaybeReactive<Iterable<Key> | undefined>;
@@ -23,6 +24,7 @@ export interface UseListBoxStateOptions<T extends ListBoxItem = ListBoxItem> {
 export interface UseListBoxStateResult<T extends ListBoxItem = ListBoxItem> {
   collection: ReadonlyRef<T[]>;
   selectionMode: ReadonlyRef<SelectionMode>;
+  disallowEmptySelection: ReadonlyRef<boolean>;
   selectedKeys: ReadonlyRef<Set<Key>>;
   disabledKeys: ReadonlyRef<Set<Key>>;
   isDisabled: ReadonlyRef<boolean>;
@@ -124,6 +126,9 @@ export function useListBoxState<T extends ListBoxItem>(
     return toCollectionArray(toValue(options.collection));
   });
   const selectionMode = computed(() => resolveSelectionMode(options.selectionMode));
+  const disallowEmptySelection = computed(() =>
+    resolveBoolean(options.disallowEmptySelection)
+  );
   const disabledKeys = computed(() => resolveSelectedKeys(options.disabledKeys));
   const isDisabled = computed(() => resolveBoolean(options.isDisabled));
   const isControlled = computed(() => options.selectedKeys !== undefined);
@@ -185,6 +190,14 @@ export function useListBoxState<T extends ListBoxItem>(
 
   const setSelectedKeys = (keys: Set<Key>) => {
     const normalized = normalizeSelectedKeys(keys, selectionMode.value);
+    if (
+      disallowEmptySelection.value &&
+      normalized.size === 0 &&
+      selectedKeys.value.size > 0
+    ) {
+      return;
+    }
+
     if (!isControlled.value) {
       uncontrolledSelectedKeys.value = normalized;
     }
@@ -204,6 +217,9 @@ export function useListBoxState<T extends ListBoxItem>(
 
     const next = new Set(selectedKeys.value);
     if (next.has(key)) {
+      if (disallowEmptySelection.value && next.size === 1) {
+        return;
+      }
       next.delete(key);
     } else {
       next.add(key);
@@ -257,6 +273,7 @@ export function useListBoxState<T extends ListBoxItem>(
   return {
     collection,
     selectionMode,
+    disallowEmptySelection,
     selectedKeys,
     disabledKeys,
     isDisabled,
