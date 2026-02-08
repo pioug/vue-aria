@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `82 / 133` (about `61.7%`)
-- Tracked items remaining: `51`
-- Current parity focus: combobox + overlay/dialog hardening and stately hardening
+- Tracked items completed: `84 / 133` (about `63.2%`)
+- Tracked items remaining: `49`
+- Current parity focus: combobox + popover/dialog hardening and stately hardening
 
 ## Done So Far
 
@@ -25,7 +25,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Accordion item behavior: `useAccordionItem`
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`
-- Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`
+- Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Listbox: `useListBoxState`, `useListBox`, `useOption`, `useListBoxSection`
 - Selection primitives: `useListKeyboardDelegate`, `useTypeSelect`
@@ -43,7 +43,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections/lists: `3` remaining
 - Menus/actions: `3` remaining
 - Tabs/disclosure/navigation: `0` remaining
-- Overlays/dialogs: `8` remaining
+- Overlays/dialogs: `6` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
@@ -68,7 +68,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - `useComboBox`
 - Menu hardening: submenu trigger behavior, context menu behavior, action-vs-selection semantics
-- Overlay stack: `useModal`, `useModalOverlay`, `usePopover`, `useDialog`, `useTooltip`
+- Overlay stack: `usePopover`, `useDialog`, `useTooltip`
 
 ### Phase 4: Data + Advanced Interaction
 
@@ -87,4 +87,4 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 1. Port `useComboBox` and associated autocomplete behavior.
 2. Close menu hardening gaps (submenu, context menu, action-vs-selection semantics).
-3. Continue overlay stack (`useModal`, `useModalOverlay`, `usePopover`) plus focus/scroll hardening.
+3. Continue overlay stack (`usePopover`, `useDialog`, `useTooltip`) plus focus/scroll hardening.

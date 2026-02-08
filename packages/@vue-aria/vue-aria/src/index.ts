@@ -55,7 +55,17 @@ export {
   useMenuItem,
   useMenuSection,
 } from "@vue-aria/menu";
-export { useOverlayTrigger, useOverlay, useOverlayPosition } from "@vue-aria/overlays";
+export {
+  useOverlayTrigger,
+  useOverlay,
+  useOverlayPosition,
+  provideModalProvider,
+  provideOverlayProvider,
+  useModalProvider,
+  useModal,
+  useModalOverlay,
+  usePreventScroll,
+} from "@vue-aria/overlays";
 export {
   useListBoxState,
   useListBox,
@@ -128,6 +138,12 @@ export type {
   UseOverlayPositionOptions,
   Placement,
   PlacementAxis,
+  UseModalProviderResult,
+  UseModalOptions,
+  UseModalResult,
+  UseModalOverlayOptions,
+  UseModalOverlayResult,
+  UsePreventScrollOptions,
 } from "@vue-aria/overlays";
 export type {
   Href,

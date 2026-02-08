@@ -16,6 +16,16 @@ optional blur-dismiss semantics.
 Positions overlays relative to a trigger, supports flip/cross-offset behavior,
 and exposes arrow positioning metadata.
 
+## `useModal`
+
+Provides modal semantics (`data-ismodal`) and parent-provider `aria-hidden`
+coordination for nested modal stacks.
+
+## `useModalOverlay`
+
+Composes overlay dismissal, scroll locking, and outside-content hiding for modal
+underlay/content pairs.
+
 ```ts
 import { useOverlayPosition, useOverlayTrigger } from "@vue-aria/overlays";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
