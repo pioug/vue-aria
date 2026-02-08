@@ -14,6 +14,7 @@
       "@vue-aria/focus": ["packages/@vue-aria/focus/src/index.ts"],
       "@vue-aria/i18n": ["packages/@vue-aria/i18n/src/index.ts"],
       "@vue-aria/interactions": ["packages/@vue-aria/interactions/src/index.ts"],
+      "@vue-aria/dnd": ["packages/@vue-aria/dnd/src/index.ts"],
       "@vue-aria/button": ["packages/@vue-aria/button/src/index.ts"],
       "@vue-aria/checkbox": ["packages/@vue-aria/checkbox/src/index.ts"],
       "@vue-aria/radio": ["packages/@vue-aria/radio/src/index.ts"],

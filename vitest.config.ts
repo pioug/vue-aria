@@ -25,6 +25,9 @@ export default defineConfig({
       "@vue-aria/interactions": fileURLToPath(
         new URL("./packages/@vue-aria/interactions/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/dnd": fileURLToPath(
+        new URL("./packages/@vue-aria/dnd/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/button": fileURLToPath(
         new URL("./packages/@vue-aria/button/src/index.ts", import.meta.url)
       ),

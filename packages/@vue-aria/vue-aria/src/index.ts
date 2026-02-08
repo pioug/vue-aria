@@ -12,6 +12,16 @@ export {
   useMove,
   useInteractOutside,
 } from "@vue-aria/interactions";
+export {
+  useClipboard,
+  DIRECTORY_DRAG_TYPE,
+  DragTypes,
+  readFromDataTransfer,
+  writeToDataTransfer,
+  isDirectoryDropItem,
+  isFileDropItem,
+  isTextDropItem,
+} from "@vue-aria/dnd";
 export { useButton, useToggleButton } from "@vue-aria/button";
 export {
   useCheckbox,
@@ -136,6 +146,16 @@ export type {
   PressEvent,
   ReadonlyRef,
 } from "@vue-aria/types";
+export type {
+  ClipboardProps,
+  ClipboardResult,
+  DirectoryDropItem,
+  DragItem,
+  IDragTypes,
+  DropItem,
+  FileDropItem,
+  TextDropItem,
+} from "@vue-aria/dnd";
 export type { KeyboardDelegate } from "@vue-aria/selection";
 export type {
   GridKeyboardCollectionItem,

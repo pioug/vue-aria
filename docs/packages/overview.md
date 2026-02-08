@@ -39,6 +39,13 @@ This port follows React Aria's package-first structure.
 - `useMove`
 - `useInteractOutside`
 
+### `@vue-aria/dnd`
+
+- `useClipboard`
+- `writeToDataTransfer`
+- `readFromDataTransfer`
+- `DragTypes`
+
 ### `@vue-aria/button`
 
 - `useButton`
