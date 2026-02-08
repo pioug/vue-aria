@@ -97,6 +97,9 @@ export default defineConfig({
       "@vue-aria/selection-state": fileURLToPath(
         new URL("./packages/@vue-aria/selection-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/combobox-state": fileURLToPath(
+        new URL("./packages/@vue-aria/combobox-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `95 / 133` (about `71.4%`)
-- Tracked items remaining: `38`
+- Tracked items completed: `96 / 133` (about `72.2%`)
+- Tracked items remaining: `37`
 - Current parity focus: combobox + menu hardening and stately hardening
 
 ## Done So Far
@@ -26,7 +26,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useSubmenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`, `useSubmenuTrigger`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
-- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`
+- Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
@@ -50,7 +50,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
-- Stately parity layer: `6` remaining
+- Stately parity layer: `5` remaining
 - Quality gates: `7` remaining
 
 ## Critical Path To Parity

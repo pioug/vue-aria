@@ -84,6 +84,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/selection/test/useListKeyboardDelegate.test.ts",
   "packages/@vue-aria/selection/test/useTypeSelect.test.ts",
   "packages/@vue-aria/selection-state/test/useMultipleSelectionState.test.ts",
+  "packages/@vue-aria/combobox-state/test/useComboBoxState.test.ts",
   "packages/@vue-aria/link/test/useLink.test.ts",
   "packages/@vue-aria/label/test/useLabel.test.ts",
   "packages/@vue-aria/label/test/useField.test.ts",
