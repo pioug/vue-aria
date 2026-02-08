@@ -67,6 +67,9 @@ export default defineConfig({
       "@vue-aria/collections": fileURLToPath(
         new URL("./packages/@vue-aria/collections/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/menu": fileURLToPath(
+        new URL("./packages/@vue-aria/menu/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/listbox": fileURLToPath(
         new URL("./packages/@vue-aria/listbox/src/index.ts", import.meta.url)
       ),

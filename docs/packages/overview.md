@@ -116,6 +116,14 @@ This port follows React Aria's package-first structure.
 
 - `buildCollection`
 
+### `@vue-aria/menu`
+
+- `useMenuTriggerState`
+- `useMenuTrigger`
+- `useMenu`
+- `useMenuItem`
+- `useMenuSection`
+
 ### `@vue-aria/listbox`
 
 - `useListBoxState`

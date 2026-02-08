@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `72 / 133` tracked items
-- Remaining: `61`
-- Current stage: collection/list keyboard parity and overlay infrastructure migration
+- Completed: `78 / 133` tracked items
+- Remaining: `55`
+- Current stage: menu parity and overlay infrastructure migration
 
 ## 0) Dependency baseline
 
@@ -101,10 +101,10 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## 8) Menus and actions
 
-- [ ] `useMenu`
-- [ ] `useMenuItem`
-- [ ] `useMenuSection`
-- [ ] `useMenuTrigger`
+- [x] `useMenu`
+- [x] `useMenuItem`
+- [x] `useMenuSection`
+- [x] `useMenuTrigger`
 - [ ] Submenu trigger/placement behavior parity
 - [ ] Context menu behavior parity
 - [ ] Action vs selection menu item semantics
@@ -176,7 +176,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] Table state
 - [ ] ComboBox state
 - [x] Select state
-- [ ] Menu trigger state
+- [x] Menu trigger state
 - [x] Tabs state
 - [ ] Calendar state
 - [ ] Date picker state

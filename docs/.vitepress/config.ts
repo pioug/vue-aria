@@ -43,6 +43,7 @@ export default defineConfig({
           { text: "@vue-aria/breadcrumbs", link: "/packages/breadcrumbs" },
           { text: "@vue-aria/disclosure", link: "/packages/disclosure" },
           { text: "@vue-aria/collections", link: "/packages/collections" },
+          { text: "@vue-aria/menu", link: "/packages/menu" },
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/link", link: "/packages/link" },

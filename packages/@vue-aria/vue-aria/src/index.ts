@@ -48,6 +48,13 @@ export {
 } from "@vue-aria/disclosure";
 export { buildCollection } from "@vue-aria/collections";
 export {
+  useMenuTriggerState,
+  useMenuTrigger,
+  useMenu,
+  useMenuItem,
+  useMenuSection,
+} from "@vue-aria/menu";
+export {
   useListBoxState,
   useListBox,
   useOption,
@@ -94,6 +101,18 @@ export type {
   CollectionItem,
   CollectionSection,
 } from "@vue-aria/collections";
+export type {
+  UseMenuTriggerStateResult,
+  UseMenuTriggerStateOptions,
+  UseMenuTriggerResult,
+  UseMenuTriggerOptions,
+  UseMenuResult,
+  UseMenuOptions,
+  UseMenuItemResult,
+  UseMenuItemOptions,
+  UseMenuSectionResult,
+  UseMenuSectionOptions,
+} from "@vue-aria/menu";
 export type {
   Href,
   LinkDOMProps,
