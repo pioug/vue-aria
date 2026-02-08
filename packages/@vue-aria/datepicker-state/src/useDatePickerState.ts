@@ -136,7 +136,29 @@ function resolveShouldCloseOnSelect<T extends DateValue>(
   return Boolean(resolved);
 }
 
-function commitDateTime(date: DateValue, time: TimeValue): DateValue {
+function commitDateTime(
+  date: DateValue,
+  time: TimeValue,
+  template?: DateValue | null
+): DateValue {
+  if (
+    template &&
+    typeof template.set === "function" &&
+    typeof template.timeZone === "string" &&
+    template.timeZone.length > 0
+  ) {
+    return template.set({
+      era: date.era,
+      year: date.year,
+      month: date.month,
+      day: date.day,
+      hour: time.hour,
+      minute: time.minute,
+      second: time.second,
+      millisecond: time.millisecond,
+    });
+  }
+
   const maybeSet = (time as { set?: (value: unknown) => unknown }).set;
   if (
     typeof maybeSet === "function" &&
@@ -211,7 +233,10 @@ export function useDatePickerState<T extends DateValue = DateValue>(
   });
 
   const commitValue = (date: T, time: TimeValue): void => {
-    const nextValue = commitDateTime(date, time) as T;
+    const template = (value.value ??
+      resolveDate(options.defaultValue) ??
+      resolveDate(options.placeholderValue)) as DateValue | null;
+    const nextValue = commitDateTime(date, time, template) as T;
     setValue(nextValue);
     selectedDate.value = null;
     selectedTime.value = null;

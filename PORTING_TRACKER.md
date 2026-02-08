@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `119 / 133` tracked items
-- Remaining: `14`
+- Completed: `120 / 133` tracked items
+- Remaining: `13`
 - Current stage: drag/drop + virtualizer parity
 
 ## 0) Dependency baseline
@@ -86,7 +86,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useCalendarCell`
 - [x] `useRangeCalendar`
 - [x] `useTimeField`
-- [ ] International calendar + timezone behavior parity
+- [x] International calendar + timezone behavior parity
 
 ## 7) Collections and lists
 

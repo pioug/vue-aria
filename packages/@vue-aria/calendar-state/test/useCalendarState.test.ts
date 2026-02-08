@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { parseDate } from "@internationalized/date";
+import { parseDate, parseZonedDateTime } from "@internationalized/date";
 import { ref } from "vue";
 import { useCalendarState } from "../src";
 
@@ -83,5 +83,32 @@ describe("useCalendarState", () => {
     const week = state.getDatesInWeek(0);
     expect(week).toHaveLength(7);
     expect(week.some((date) => date?.toString() === "2026-02-11")).toBe(true);
+  });
+
+  it("supports international calendar display locales", () => {
+    const state = useCalendarState({
+      locale: "fa-IR-u-ca-persian",
+      defaultValue: parseDate("2026-02-08"),
+    });
+
+    expect(state.value.value?.calendar.identifier).toBe("persian");
+    expect(state.focusedDate.value.calendar.identifier).toBe("persian");
+  });
+
+  it("preserves timezone-aware values when selecting dates", () => {
+    const onChange = vi.fn();
+    const state = useCalendarState({
+      defaultValue: parseZonedDateTime("2026-02-08T10:45[America/New_York]"),
+      onChange,
+    });
+
+    expect(state.timeZone.value).toBe("America/New_York");
+
+    state.selectDate(parseDate("2026-02-10"));
+    const nextValue = onChange.mock.calls.at(-1)?.[0];
+
+    expect(nextValue?.timeZone).toBe("America/New_York");
+    expect(nextValue?.hour).toBe(10);
+    expect(nextValue?.minute).toBe(45);
   });
 });
