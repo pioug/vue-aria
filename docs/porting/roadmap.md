@@ -42,6 +42,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - ComboBox: `useComboBoxState`, `useComboBox`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`, `useToast`, `useToastRegion`
 - Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `createDragPreviewRenderer`, `useDrop`, `useDropIndicator`, `useDroppableCollection`, `useDroppableItem`, `useVirtualDrop`, `useAutoScroll`, `useDraggableCollection`, `useDraggableItem`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate` (with `hasDragButton`/`hasDropButton` affordances)
+- Drag/drop manager hardening baseline: keyboard session flow (`Tab` navigation, `Enter` drop, `Escape` cancel) + `isValidDropTarget` utility
 
 ## What Is Left (By Area)
 
@@ -78,6 +79,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ### Phase 3: Data + Advanced Interaction
 
 - Drag/drop clipboard + keyboard target baselines in place (`@vue-aria/dnd` `useClipboard`, `useDrag`, `useDrop`, `useVirtualDrop`, `useAutoScroll`, `useDraggableCollection`, `navigate`)
+- Drag manager keyboard baseline in place (`Tab` target cycling, `Enter` drop, `Escape` cancel)
 - Table/grid/tree hooks completed
 - DnD and keyboard DnD parity
 - Virtualizer infrastructure parity
