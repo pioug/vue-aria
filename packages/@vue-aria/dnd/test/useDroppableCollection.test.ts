@@ -575,4 +575,107 @@ describe("useDroppableCollection", () => {
     registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "PageUp" }), drag);
     expect(state.target).toEqual({ type: "root" });
   });
+
+  it("emits pointer drop enter/move/exit callbacks with target context", () => {
+    const element = setupCollectionElement();
+    const target: DropTarget = { type: "item", key: "a", dropPosition: "before" };
+    const state = createState("copy");
+    const onDropEnter = vi.fn();
+    const onDropMove = vi.fn();
+    const onDropExit = vi.fn();
+
+    const { collectionProps } = useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate(target),
+        onDropEnter,
+        onDropMove,
+        onDropExit,
+      },
+      state,
+      ref(element)
+    );
+
+    const handlers = collectionProps.value as unknown as DropHandlers;
+    const dataTransfer = new DataTransferMock();
+    dataTransfer.items.add("hello world", "text/plain");
+
+    handlers.onDragenter(
+      new DragEventMock("dragenter", {
+        dataTransfer,
+        clientX: 1,
+        clientY: 1,
+      }) as unknown as DragEvent
+    );
+    expect(onDropEnter).toHaveBeenCalledWith({
+      type: "dropenter",
+      x: 1,
+      y: 1,
+      target,
+    });
+
+    handlers.onDragover(
+      new DragEventMock("dragover", {
+        dataTransfer,
+        clientX: 2,
+        clientY: 2,
+      }) as unknown as DragEvent
+    );
+    expect(onDropMove).toHaveBeenCalledWith({
+      type: "dropmove",
+      x: 2,
+      y: 2,
+      target,
+    });
+
+    handlers.onDragleave(
+      new DragEventMock("dragleave", {
+        dataTransfer,
+        clientX: 3,
+        clientY: 3,
+      }) as unknown as DragEvent
+    );
+    expect(onDropExit).toHaveBeenCalledWith({
+      type: "dropexit",
+      x: 0,
+      y: 0,
+      target,
+    });
+  });
+
+  it("emits virtual drop enter and exit callbacks from drag manager target events", () => {
+    const element = setupCollectionElement();
+    const state = createState("copy");
+    const onDropEnter = vi.fn();
+    const onDropExit = vi.fn();
+
+    useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate({ type: "root" }),
+        onDropEnter,
+        onDropExit,
+      },
+      state,
+      ref(element)
+    );
+
+    const registered = getRegisteredDropTargets().get(element);
+    expect(registered).toBeDefined();
+
+    const virtualTarget: DropTarget = { type: "item", key: "a", dropPosition: "on" };
+    registered?.onDropTargetEnter?.(virtualTarget);
+    expect(onDropEnter).toHaveBeenCalledWith({
+      type: "dropenter",
+      x: 0,
+      y: 0,
+      target: virtualTarget,
+    });
+
+    registered?.onDropExit?.({ type: "dropexit", x: 0, y: 0 });
+    expect(onDropExit).toHaveBeenCalledWith({
+      type: "dropexit",
+      x: 0,
+      y: 0,
+      target: virtualTarget,
+    });
+  });
 });

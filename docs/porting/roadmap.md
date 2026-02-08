@@ -4,7 +4,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `120 / 133` (about `90.2%`)
+- Tracked items completed: `121 / 134` (about `90.3%`)
 - Tracked items remaining: `13`
 - Current parity focus: drag/drop + virtualizer parity
 
@@ -27,6 +27,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Menu stack: `useMenuTriggerState`, `useSubmenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`, `useSubmenuTrigger`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
 - Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`, `useComboBoxState`, `useCalendarState`, `useRangeCalendarState`, `useDatePickerState`, `useTreeState`, `useTableState`
+- Drag/drop stately primitives: `useDraggableCollectionState`, `useDroppableCollectionState`
 - Toast state primitive: `useToastState`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`

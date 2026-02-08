@@ -31,6 +31,8 @@ The code is organized to mirror React Aria package boundaries:
 - `packages/@vue-aria/focus`
 - `packages/@vue-aria/interactions`
 - `packages/@vue-aria/button`
+- `packages/@vue-aria/dnd`
+- `packages/@vue-aria/dnd-state`
 - `packages/@vue-aria/link`
 - `packages/@vue-aria/label`
 - `packages/@vue-aria/separator`

@@ -55,6 +55,10 @@ export {
   isFileDropItem,
   isTextDropItem,
 } from "@vue-aria/dnd";
+export {
+  useDraggableCollectionState,
+  useDroppableCollectionState,
+} from "@vue-aria/dnd-state";
 export { useButton, useToggleButton } from "@vue-aria/button";
 export {
   useCheckbox,
@@ -195,6 +199,9 @@ export type {
   DropTargetDelegate,
   DroppableCollectionActivateEvent,
   DroppableCollectionDropEvent,
+  DroppableCollectionEnterEvent,
+  DroppableCollectionMoveEvent,
+  DroppableCollectionExitEvent,
   DroppableCollectionGetOperationOptions,
   DroppableCollectionOptions,
   DroppableCollectionResult,
@@ -246,6 +253,17 @@ export type {
   FileDropItem,
   TextDropItem,
 } from "@vue-aria/dnd";
+export type {
+  DraggableCollectionSelectionManager,
+  DraggableCollectionStateOptions,
+  DraggableCollectionState,
+  DraggableCollectionStartEvent,
+  DraggableCollectionMoveEvent,
+  DraggableCollectionEndEvent,
+  DropOperationEvent,
+  DroppableCollectionSelectionManager,
+  DroppableCollectionStateOptions,
+} from "@vue-aria/dnd-state";
 export type { KeyboardDelegate } from "@vue-aria/selection";
 export type {
   GridKeyboardCollectionItem,

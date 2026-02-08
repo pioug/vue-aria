@@ -52,6 +52,27 @@ export interface DroppableCollectionActivateEvent {
   target: DropTarget;
 }
 
+export interface DroppableCollectionEnterEvent {
+  type: "dropenter";
+  x: number;
+  y: number;
+  target: DropTarget;
+}
+
+export interface DroppableCollectionMoveEvent {
+  type: "dropmove";
+  x: number;
+  y: number;
+  target: DropTarget;
+}
+
+export interface DroppableCollectionExitEvent {
+  type: "dropexit";
+  x: number;
+  y: number;
+  target: DropTarget;
+}
+
 export interface RootDropEvent {
   items: DropItem[];
   dropOperation: DropOperation;
@@ -92,6 +113,9 @@ export interface DroppableCollectionOptions {
   collection?: Collection;
   acceptedDragTypes?: AcceptedDragTypes;
   shouldAcceptItemDrop?: (target: DropTarget, types: Set<string | symbol>) => boolean;
+  onDropEnter?: (event: DroppableCollectionEnterEvent) => void;
+  onDropMove?: (event: DroppableCollectionMoveEvent) => void;
+  onDropExit?: (event: DroppableCollectionExitEvent) => void;
   onRootDrop?: (event: RootDropEvent) => void | Promise<void>;
   onItemDrop?: (event: CollectionItemDropEvent) => void | Promise<void>;
   onInsert?: (event: CollectionInsertEvent) => void | Promise<void>;
@@ -132,6 +156,45 @@ function toDropEvent(
     target,
     items: event.items,
     dropOperation: event.dropOperation,
+  };
+}
+
+function createDropEnterEvent(
+  x: number,
+  y: number,
+  target: DropTarget
+): DroppableCollectionEnterEvent {
+  return {
+    type: "dropenter",
+    x,
+    y,
+    target,
+  };
+}
+
+function createDropMoveEvent(
+  x: number,
+  y: number,
+  target: DropTarget
+): DroppableCollectionMoveEvent {
+  return {
+    type: "dropmove",
+    x,
+    y,
+    target,
+  };
+}
+
+function createDropExitEvent(
+  x: number,
+  y: number,
+  target: DropTarget
+): DroppableCollectionExitEvent {
+  return {
+    type: "dropexit",
+    x,
+    y,
+    target,
   };
 }
 
@@ -492,14 +555,18 @@ export function useDroppableCollection(
 
   const { dropProps } = useDrop({
     ref,
-    onDropEnter() {
-      if (localState.nextTarget != null) {
-        state.setTarget(localState.nextTarget);
+    onDropEnter(event) {
+      const target = localState.nextTarget;
+      if (target != null) {
+        state.setTarget(target);
+        props.onDropEnter?.(createDropEnterEvent(event.x, event.y, target));
       }
     },
     onDropMove(event) {
-      if (localState.nextTarget != null) {
-        state.setTarget(localState.nextTarget);
+      const target = localState.nextTarget;
+      if (target != null) {
+        state.setTarget(target);
+        props.onDropMove?.(createDropMoveEvent(event.x, event.y, target));
       }
       autoScroll.move(event.x, event.y);
     },
@@ -557,6 +624,10 @@ export function useDroppableCollection(
       return operation;
     },
     onDropExit() {
+      const target = state.target ?? localState.nextTarget;
+      if (target != null) {
+        props.onDropExit?.(createDropExitEvent(0, 0, target));
+      }
       setDropCollectionRef(null);
       state.setTarget(null);
       autoScroll.stop();
@@ -638,13 +709,22 @@ export function useDroppableCollection(
           })();
 
         state.setTarget(target);
+        if (target != null) {
+          props.onDropEnter?.(createDropEnterEvent(0, 0, target));
+        }
       },
       onDropExit() {
+        if (state.target != null) {
+          props.onDropExit?.(createDropExitEvent(0, 0, state.target));
+        }
         setDropCollectionRef(null);
         state.setTarget(null);
       },
       onDropTargetEnter(target) {
         state.setTarget(target);
+        if (target != null) {
+          props.onDropEnter?.(createDropEnterEvent(0, 0, target));
+        }
       },
       onDropActivate(event: DropActivateEvent, target) {
         if (target?.type === "item") {

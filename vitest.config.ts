@@ -28,6 +28,9 @@ export default defineConfig({
       "@vue-aria/dnd": fileURLToPath(
         new URL("./packages/@vue-aria/dnd/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/dnd-state": fileURLToPath(
+        new URL("./packages/@vue-aria/dnd-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/button": fileURLToPath(
         new URL("./packages/@vue-aria/button/src/index.ts", import.meta.url)
       ),

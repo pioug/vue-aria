@@ -53,6 +53,11 @@ This port follows React Aria's package-first structure.
 - `navigate`
 - `ListDropTargetDelegate`
 
+### `@vue-aria/dnd-state`
+
+- `useDraggableCollectionState`
+- `useDroppableCollectionState`
+
 ### `@vue-aria/button`
 
 - `useButton`

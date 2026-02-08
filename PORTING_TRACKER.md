@@ -4,7 +4,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `120 / 133` tracked items
+- Completed: `121 / 134` tracked items
 - Remaining: `13`
 - Current stage: drag/drop + virtualizer parity
 
@@ -195,6 +195,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Date picker state
 - [x] Range calendar state
 - [x] Slider state
+- [x] Drag and drop state (`useDraggableCollectionState`, `useDroppableCollectionState`)
 
 ## 15) Quality gates
 

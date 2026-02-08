@@ -30,6 +30,7 @@ export default defineConfig({
           { text: "@vue-aria/focus", link: "/packages/focus" },
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
           { text: "@vue-aria/dnd", link: "/packages/dnd" },
+          { text: "@vue-aria/dnd-state", link: "/packages/dnd-state" },
           { text: "@vue-aria/button", link: "/packages/button" },
           { text: "@vue-aria/checkbox", link: "/packages/checkbox" },
           { text: "@vue-aria/radio", link: "/packages/radio" },
