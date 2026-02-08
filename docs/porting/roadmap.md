@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `41 / 133` (about `30.8%`)
-- Tracked items remaining: `92`
-- Current parity focus: selection controls after text/number control baseline completion
+- Tracked items completed: `43 / 133` (about `32.3%`)
+- Tracked items remaining: `90`
+- Current parity focus: date/time hooks after selection-control baseline completion
 
 ## Done So Far
 
@@ -16,6 +16,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
 - Form controls: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`
 - Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`
+- Date/time: `useDateField`, `useDateSegment`
 - Feedback/status: `useProgressBar`, `useMeter`
 
 ## What Is Left (By Area)
@@ -25,7 +26,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
 - Selection controls: `0` remaining
-- Date/time: `9` remaining
+- Date/time: `7` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
 - Tabs/disclosure/navigation: `8` remaining
@@ -47,7 +48,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - Text and number baseline complete: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`, textarea behavior parity, validation wiring parity.
 - Selection controls complete baseline: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`, `useSliderState`.
-- Next major area: date/time hooks (`useDateField`, `useDateSegment`, picker/calendar hooks)
+- Date-field baseline is in place: `useDateField`, `useDateSegment`.
+- Next major area: picker/calendar date/time hooks (`useDatePicker`, `useDateRangePicker`, calendar families).
 
 ### Phase 3: Overlay + Navigation Systems
 
@@ -71,6 +73,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Start date/time hooks with `useDateField` and `useDateSegment`.
-2. Continue with picker/calendar hooks once segment behavior is stable.
+1. Continue date/time with `useDatePicker` and `useDateRangePicker`.
+2. Add calendar hooks (`useCalendar`, `useCalendarCell`, `useRangeCalendar`) after picker wiring is stable.
 3. Revisit shared i18n/date infrastructure gaps as date/time work expands.

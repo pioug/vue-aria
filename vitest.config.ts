@@ -40,6 +40,9 @@ export default defineConfig({
       "@vue-aria/meter": fileURLToPath(
         new URL("./packages/@vue-aria/meter/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/datefield": fileURLToPath(
+        new URL("./packages/@vue-aria/datefield/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

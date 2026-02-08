@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `41 / 133` tracked items
-- Remaining: `92`
-- Current stage: moving into date/time hooks after completing selection-control baseline
+- Completed: `43 / 133` tracked items
+- Remaining: `90`
+- Current stage: date/time baseline migration in progress after adding date field segments
 
 ## 0) Dependency baseline
 
@@ -78,8 +78,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## 6) Date and time
 
-- [ ] `useDateField`
-- [ ] `useDateSegment`
+- [x] `useDateField`
+- [x] `useDateSegment`
 - [ ] `useDatePicker`
 - [ ] `useDateRangePicker`
 - [ ] `useCalendar`

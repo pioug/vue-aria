@@ -58,6 +58,11 @@ This port follows React Aria's package-first structure.
 
 - `useMeter`
 
+### `@vue-aria/datefield`
+
+- `useDateField`
+- `useDateSegment`
+
 ### `@vue-aria/link`
 
 - `useLink`
