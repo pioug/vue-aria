@@ -284,3 +284,13 @@ export function isFileDropItem(item: DropItem): item is FileDropItem {
 export function isDirectoryDropItem(item: DropItem): item is DirectoryDropItem {
   return item.kind === "directory";
 }
+
+export type DragModality = "keyboard" | "touch" | "virtual";
+
+export function getDragModality(): DragModality {
+  return "virtual";
+}
+
+export function useDragModality(): DragModality {
+  return getDragModality();
+}

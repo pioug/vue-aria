@@ -43,6 +43,7 @@ This port follows React Aria's package-first structure.
 
 - `useClipboard`
 - `useDrag`
+- `useVirtualDrop`
 - `writeToDataTransfer`
 - `readFromDataTransfer`
 - `DragTypes`

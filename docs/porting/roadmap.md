@@ -40,7 +40,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Select: `useSelectState`, `useSelect`
 - ComboBox: `useComboBoxState`, `useComboBox`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`, `useToast`, `useToastRegion`
-- Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate`
+- Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `useVirtualDrop`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate`
 
 ## What Is Left (By Area)
 
@@ -76,7 +76,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ### Phase 3: Data + Advanced Interaction
 
-- Drag/drop clipboard + keyboard target baselines in place (`@vue-aria/dnd` `useClipboard`, `useDrag`, `navigate`)
+- Drag/drop clipboard + keyboard target baselines in place (`@vue-aria/dnd` `useClipboard`, `useDrag`, `useVirtualDrop`, `navigate`)
 - Table/grid/tree hooks completed
 - DnD and keyboard DnD parity
 - Virtualizer infrastructure parity

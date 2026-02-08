@@ -1,7 +1,14 @@
 export { useClipboard } from "./useClipboard";
 export { useDrag } from "./useDrag";
+export { useVirtualDrop } from "./useVirtualDrop";
 export { navigate } from "./DropTargetKeyboardNavigation";
 export { ListDropTargetDelegate } from "./ListDropTargetDelegate";
+export {
+  beginDragging,
+  endDragging,
+  useDragSession,
+  isVirtualDragging,
+} from "./DragManager";
 export {
   DROP_OPERATION,
   DROP_OPERATION_ALLOWED,
@@ -17,6 +24,8 @@ export {
   DragTypes,
   readFromDataTransfer,
   writeToDataTransfer,
+  getDragModality,
+  useDragModality,
   isDirectoryDropItem,
   isFileDropItem,
   isTextDropItem,
@@ -49,3 +58,5 @@ export type {
   DragResult,
   DragStartEvent,
 } from "./useDrag";
+export type { DragSession } from "./DragManager";
+export type { VirtualDropResult } from "./useVirtualDrop";
