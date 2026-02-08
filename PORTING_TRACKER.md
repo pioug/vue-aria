@@ -4,7 +4,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `125 / 138` tracked items
+- Completed: `126 / 139` tracked items
 - Remaining: `13`
 - Current stage: drag/drop + virtualizer parity
 
@@ -167,6 +167,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Virtualizer core engine primitives (`Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`)
 - [x] Virtualizer state hook baseline (`useVirtualizerState`)
 - [x] React Aria virtualizer item/scroll helpers (`useVirtualizerItem`, `layoutInfoToStyle`, `getRTLOffsetType`, `getScrollLeft`, `setScrollLeft`)
+- [x] React Aria virtualizer scroll container hook baseline (`useScrollView`)
 - In progress hardening: Drag manager keyboard session flow (`Tab` target navigation, `Enter` drop, `Escape` cancel), click-driven cancel/drop flow, drop-item targeting/activation (`onDropTargetEnter`, `onDropActivate`), screen-reader isolation (hide non-drop content while dragging), mutation-driven target updates, and `isValidDropTarget` checks
 - [ ] Drag source hooks parity
 - [ ] Drop target hooks parity

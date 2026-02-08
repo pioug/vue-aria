@@ -224,6 +224,7 @@ This port follows React Aria's package-first structure.
 
 ### `@vue-aria/virtualizer`
 
+- `useScrollView`
 - `useVirtualizerItem`
 - `layoutInfoToStyle`
 - `getRTLOffsetType`

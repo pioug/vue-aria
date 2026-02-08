@@ -138,6 +138,7 @@ export {
   getScrollLeft,
   setScrollLeft,
   layoutInfoToStyle,
+  useScrollView,
   useVirtualizerItem,
 } from "@vue-aria/virtualizer";
 export {
@@ -390,6 +391,9 @@ export type {
   UseTreeStateResult,
 } from "@vue-aria/tree-state";
 export type {
+  ScrollDirection,
+  UseScrollViewOptions,
+  UseScrollViewResult,
   Direction as VirtualizerDirection,
   RTLOffsetType as VirtualizerRTLOffsetType,
   VirtualizerItemOptions,
