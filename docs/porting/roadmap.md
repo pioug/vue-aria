@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `32 / 133` (about `24.1%`)
-- Tracked items remaining: `101`
+- Tracked items completed: `34 / 133` (about `25.6%`)
+- Tracked items remaining: `99`
 - Current parity focus: selection controls after text/number control baseline completion
 
 ## Done So Far
@@ -15,7 +15,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Core semantics: `useButton`, `useToggleButton`, `useLink`, `useLabel`, `useField`, `useSeparator`
 - Accessibility utility/component: `useVisuallyHidden`, `VisuallyHidden`, `useDescription`, `useErrorMessage`
 - Form controls: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`
-- Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`
+- Selection controls: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`
 
 ## What Is Left (By Area)
 
@@ -23,7 +23,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
-- Selection controls: `6` remaining
+- Selection controls: `4` remaining
 - Date/time: `9` remaining
 - Collections/lists: `8` remaining
 - Menus/actions: `7` remaining
@@ -45,8 +45,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ### Phase 2: Form Controls (Text/Number Completed)
 
 - Text and number baseline complete: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`, textarea behavior parity, validation wiring parity.
-- Checkbox baseline complete: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`.
-- Remaining selection controls: `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`
+- Checkbox/radio baseline complete: `useCheckbox`, `useCheckboxGroup`, `useCheckboxGroupItem`, `useRadio`, `useRadioGroup`.
+- Remaining selection controls: `useSwitch`, `useSlider`, `useSliderThumb`
 
 ### Phase 3: Overlay + Navigation Systems
 
@@ -70,6 +70,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Continue selection controls with `useRadio` and `useRadioGroup`.
-2. Move to `useSwitch` and slider hooks after radio-group controls are stable.
+1. Continue selection controls with `useSwitch`.
+2. Move to slider hooks (`useSlider`, `useSliderThumb`) after switch parity lands.
 3. Add slider state adapters after base slider hooks are in place.

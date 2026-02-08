@@ -16,6 +16,7 @@ export {
   useCheckboxGroup,
   useCheckboxGroupItem,
 } from "@vue-aria/checkbox";
+export { useRadioGroup, useRadio } from "@vue-aria/radio";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";

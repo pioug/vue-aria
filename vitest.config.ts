@@ -25,6 +25,9 @@ export default defineConfig({
       "@vue-aria/checkbox": fileURLToPath(
         new URL("./packages/@vue-aria/checkbox/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/radio": fileURLToPath(
+        new URL("./packages/@vue-aria/radio/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/link": fileURLToPath(
         new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
       ),

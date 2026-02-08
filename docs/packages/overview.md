@@ -35,6 +35,11 @@ This port follows React Aria's package-first structure.
 - `useCheckboxGroup`
 - `useCheckboxGroupItem`
 
+### `@vue-aria/radio`
+
+- `useRadioGroup`
+- `useRadio`
+
 ### `@vue-aria/link`
 
 - `useLink`
