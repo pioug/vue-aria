@@ -214,4 +214,102 @@ describe("useModalOverlay", () => {
       cleanup();
     });
   });
+
+  it("contains focus with Tab and Shift+Tab inside the overlay", () => {
+    const previouslyFocused = document.createElement("button");
+    previouslyFocused.textContent = "outside";
+    document.body.appendChild(previouslyFocused);
+    previouslyFocused.focus();
+
+    const underlay = document.createElement("div");
+    const overlay = document.createElement("div");
+    const first = document.createElement("button");
+    const last = document.createElement("button");
+    first.textContent = "first";
+    last.textContent = "last";
+    overlay.append(first, last);
+    underlay.appendChild(overlay);
+    document.body.appendChild(underlay);
+
+    const scope = effectScope();
+    scope.run(() => {
+      const state = useOverlayTriggerState({
+        isOpen: true,
+      });
+
+      useModalOverlay(
+        {
+          isDismissable: true,
+        },
+        state,
+        overlay
+      );
+    });
+
+    expect(document.activeElement).toBe(first);
+
+    last.focus();
+    last.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(document.activeElement).toBe(first);
+
+    first.focus();
+    first.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(document.activeElement).toBe(last);
+
+    scope.stop();
+    underlay.remove();
+    previouslyFocused.remove();
+  });
+
+  it("restores focus to the previously focused element on cleanup", () => {
+    const previouslyFocused = document.createElement("button");
+    previouslyFocused.textContent = "outside";
+    document.body.appendChild(previouslyFocused);
+    previouslyFocused.focus();
+
+    const underlay = document.createElement("div");
+    const overlay = document.createElement("div");
+    const first = document.createElement("button");
+    first.textContent = "first";
+    overlay.appendChild(first);
+    underlay.appendChild(overlay);
+    document.body.appendChild(underlay);
+
+    const scope = effectScope();
+    scope.run(() => {
+      const state = useOverlayTriggerState({
+        isOpen: true,
+      });
+
+      useModalOverlay(
+        {
+          isDismissable: true,
+        },
+        state,
+        overlay
+      );
+    });
+
+    expect(document.activeElement).toBe(first);
+
+    scope.stop();
+
+    expect(document.activeElement).toBe(previouslyFocused);
+
+    underlay.remove();
+    previouslyFocused.remove();
+  });
 });

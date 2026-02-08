@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `88 / 133` (about `66.2%`)
-- Tracked items remaining: `45`
-- Current parity focus: combobox + overlay hardening and stately hardening
+- Tracked items completed: `90 / 133` (about `67.7%`)
+- Tracked items remaining: `43`
+- Current parity focus: combobox + menu hardening and stately hardening
 
 ## Done So Far
 
@@ -25,7 +25,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Accordion item behavior: `useAccordionItem`
 - Collections foundation: `buildCollection`
 - Menu stack: `useMenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`
-- Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `usePopover`
+- Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
 - Dialog: `useDialog`
 - Tooltip: `useTooltip`, `useTooltipTrigger`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
@@ -45,7 +45,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Collections/lists: `3` remaining
 - Menus/actions: `3` remaining
 - Tabs/disclosure/navigation: `0` remaining
-- Overlays/dialogs: `2` remaining
+- Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
 - Feedback/status: `2` remaining
@@ -70,7 +70,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - `useComboBox`
 - Menu hardening: submenu trigger behavior, context menu behavior, action-vs-selection semantics
-- Overlay hardening: focus containment/restore and scroll-lock parity
 
 ### Phase 4: Data + Advanced Interaction
 
@@ -89,4 +88,4 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 1. Port `useComboBox` and associated autocomplete behavior.
 2. Close menu hardening gaps (submenu, context menu, action-vs-selection semantics).
-3. Finish overlay hardening (focus containment/restore + scroll-lock parity).
+3. Start stately hardening with `useToggleState`, `useListState`, and selection state primitives.

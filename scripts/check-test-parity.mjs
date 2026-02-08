@@ -69,6 +69,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/overlays/test/useOverlayPosition.test.ts",
   "packages/@vue-aria/overlays/test/useModal.test.ts",
   "packages/@vue-aria/overlays/test/useModalOverlay.test.ts",
+  "packages/@vue-aria/overlays/test/usePreventScroll.test.ts",
   "packages/@vue-aria/overlays/test/usePopover.test.ts",
   "packages/@vue-aria/dialog/test/useDialog.test.ts",
   "packages/@vue-aria/tooltip/test/useTooltip.test.ts",

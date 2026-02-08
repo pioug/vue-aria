@@ -5,6 +5,7 @@ import { mergeProps } from "@vue-aria/utils";
 import { useOverlay } from "./useOverlay";
 import { usePreventScroll } from "./usePreventScroll";
 import { ariaHideOutside } from "./ariaHideOutside";
+import { useOverlayFocusContain } from "./useOverlayFocusContain";
 
 export interface UseModalOverlayOptions {
   isDismissable?: MaybeReactive<boolean | undefined>;
@@ -32,6 +33,10 @@ export function useModalOverlay(
   );
 
   usePreventScroll({
+    isDisabled: computed(() => !state.isOpen.value),
+  });
+
+  useOverlayFocusContain(ref, {
     isDisabled: computed(() => !state.isOpen.value),
   });
 

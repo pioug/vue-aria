@@ -4,6 +4,7 @@ export { useOverlayPosition } from "./useOverlayPosition";
 export { calculatePosition } from "./calculatePosition";
 export { provideModalProvider, provideOverlayProvider, useModalProvider, useModal } from "./useModal";
 export { useModalOverlay } from "./useModalOverlay";
+export { useOverlayFocusContain } from "./useOverlayFocusContain";
 export { usePopover } from "./usePopover";
 export { usePreventScroll } from "./usePreventScroll";
 
@@ -29,6 +30,9 @@ export type {
   UseModalOverlayOptions,
   UseModalOverlayResult,
 } from "./useModalOverlay";
+export type {
+  UseOverlayFocusContainOptions,
+} from "./useOverlayFocusContain";
 export type {
   UsePopoverOptions,
   UsePopoverResult,

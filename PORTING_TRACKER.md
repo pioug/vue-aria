@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `88 / 133` tracked items
-- Remaining: `45`
-- Current stage: overlay/dialog stack hardening and combobox baseline
+- Completed: `90 / 133` tracked items
+- Remaining: `43`
+- Current stage: combobox baseline with menu/stately hardening
 
 ## 0) Dependency baseline
 
@@ -131,8 +131,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useDialog`
 - [x] `useTooltip`
 - [x] `useTooltipTrigger`
-- [ ] Focus containment/restore parity
-- [ ] Scroll locking parity (`usePreventScroll` equivalent)
+- [x] Focus containment/restore parity
+- [x] Scroll locking parity (`usePreventScroll` equivalent)
 
 ## 11) Grids, tables, trees
 
