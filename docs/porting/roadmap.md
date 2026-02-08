@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `28 / 133` (about `21.1%`)
-- Tracked items remaining: `105`
-- Current parity focus: form controls after baseline interaction/core semantics completion
+- Tracked items completed: `30 / 133` (about `22.6%`)
+- Tracked items remaining: `103`
+- Current parity focus: selection controls after text/number control baseline completion
 
 ## Done So Far
 
@@ -21,7 +21,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Foundation: `7` remaining
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
-- Text/number inputs: `2` remaining
+- Text/number inputs: `0` remaining
 - Selection controls: `8` remaining
 - Date/time: `9` remaining
 - Collections/lists: `8` remaining
@@ -41,9 +41,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Long press, move, and interact-outside hooks are ported with parity tests.
 - Press edge-case baseline parity is in place (touch scroll cancel + virtual click tests).
 
-### Phase 2: Form Controls
+### Phase 2: Form Controls (Text/Number Completed)
 
-- Text inputs: `useTextArea`
+- Text and number baseline complete: `useTextField`, `useSearchField`, `useNumberField`, `useSpinButton`, textarea behavior parity, validation wiring parity.
 - Selection controls: `useCheckbox`, `useCheckboxGroup`, `useRadio`, `useRadioGroup`, `useSwitch`, `useSlider`, `useSliderThumb`
 
 ### Phase 3: Overlay + Navigation Systems
@@ -68,6 +68,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Finish text-area behavior parity.
-2. Harden number-field localization/format behavior against upstream edge cases.
-3. Move into selection controls once text/number hooks are stable.
+1. Start selection controls with `useCheckbox` and `useCheckboxGroup`.
+2. Continue with `useRadio` and `useRadioGroup`.
+3. Move to `useSwitch` and slider hooks after group controls are stable.

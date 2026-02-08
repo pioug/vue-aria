@@ -88,6 +88,19 @@ describe("useTextField", () => {
     expect(valid.inputProps.value["aria-invalid"]).toBeUndefined();
   });
 
+  it("wires error message id into aria-describedby when invalid", () => {
+    const { inputProps, errorMessageProps } = useTextField({
+      label: "Email",
+      errorMessage: "Email is required",
+      validationState: "invalid",
+    });
+
+    expect(inputProps.value["aria-invalid"]).toBe(true);
+    expect(inputProps.value["aria-describedby"]).toContain(
+      String(errorMessageProps.value.id)
+    );
+  });
+
   it("forwards autoCapitalize", () => {
     const on = useTextField({ autoCapitalize: "on", "aria-label": "mandatory label" });
     expect(on.inputProps.value.autoCapitalize).toBe("on");
@@ -121,5 +134,20 @@ describe("useTextField", () => {
 
     expect(inputProps.value.type).toBeUndefined();
     expect(inputProps.value.pattern).toBeUndefined();
+  });
+
+  it("supports textarea value updates", () => {
+    const onChange = vi.fn();
+    const { inputProps } = useTextField({
+      inputElementType: "textarea",
+      onChange,
+      "aria-label": "Notes",
+    });
+    const handlers = inputProps.value as TextFieldHandlers;
+
+    handlers.onChange?.({ target: { value: "line 1\nline 2" } } as unknown as Event);
+
+    expect(onChange).toHaveBeenCalledWith("line 1\nline 2");
+    expect(inputProps.value.value).toBe("line 1\nline 2");
   });
 });
