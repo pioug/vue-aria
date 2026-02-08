@@ -141,6 +141,11 @@ This port follows React Aria's package-first structure.
 
 - `useDialog`
 
+### `@vue-aria/tooltip`
+
+- `useTooltip`
+- `useTooltipTrigger`
+
 ### `@vue-aria/listbox`
 
 - `useListBoxState`

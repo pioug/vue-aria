@@ -68,6 +68,7 @@ export {
   usePreventScroll,
 } from "@vue-aria/overlays";
 export { useDialog } from "@vue-aria/dialog";
+export { useTooltip, useTooltipTrigger } from "@vue-aria/tooltip";
 export {
   useListBoxState,
   useListBox,
@@ -153,6 +154,13 @@ export type {
   UseDialogOptions,
   UseDialogResult,
 } from "@vue-aria/dialog";
+export type {
+  TooltipTriggerStateLike,
+  UseTooltipOptions,
+  UseTooltipResult,
+  UseTooltipTriggerOptions,
+  UseTooltipTriggerResult,
+} from "@vue-aria/tooltip";
 export type {
   Href,
   LinkDOMProps,

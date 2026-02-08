@@ -71,6 +71,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/overlays/test/useModalOverlay.test.ts",
   "packages/@vue-aria/overlays/test/usePopover.test.ts",
   "packages/@vue-aria/dialog/test/useDialog.test.ts",
+  "packages/@vue-aria/tooltip/test/useTooltip.test.ts",
   "packages/@vue-aria/listbox/test/useListBoxState.test.ts",
   "packages/@vue-aria/listbox/test/useListBox.test.ts",
   "packages/@vue-aria/listbox/test/useOption.test.ts",

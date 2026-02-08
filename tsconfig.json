@@ -32,6 +32,7 @@
       "@vue-aria/overlays-state": ["packages/@vue-aria/overlays-state/src/index.ts"],
       "@vue-aria/overlays": ["packages/@vue-aria/overlays/src/index.ts"],
       "@vue-aria/dialog": ["packages/@vue-aria/dialog/src/index.ts"],
+      "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
       "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
