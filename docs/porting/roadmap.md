@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `94 / 133` (about `70.7%`)
-- Tracked items remaining: `39`
+- Tracked items completed: `95 / 133` (about `71.4%`)
+- Tracked items remaining: `38`
 - Current parity focus: combobox + menu hardening and stately hardening
 
 ## Done So Far
@@ -24,7 +24,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Disclosure groups: `useDisclosureGroupState`
 - Accordion item behavior: `useAccordionItem`
 - Collections foundation: `buildCollection`
-- Menu stack: `useMenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`
+- Menu stack: `useMenuTriggerState`, `useSubmenuTriggerState`, `useMenuTrigger`, `useMenu`, `useMenuItem`, `useMenuSection`, `useSubmenuTrigger`
 - Overlay primitives: `useOverlayTriggerState`, `useOverlayTrigger`, `useOverlay`, `useOverlayPosition`, `useModal`, `useModalOverlay`, `useOverlayFocusContain`, `usePreventScroll`, `usePopover`
 - Stately primitives: `useToggleState`, `useListState`, `useSingleSelectListState`, `useMultipleSelectionState`
 - Dialog: `useDialog`
@@ -44,7 +44,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Selection controls: `0` remaining
 - Date/time: `1` remaining
 - Collections/lists: `3` remaining
-- Menus/actions: `3` remaining
+- Menus/actions: `2` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `11` remaining

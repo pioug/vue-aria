@@ -1,14 +1,20 @@
 export { useMenuTriggerState } from "./useMenuTriggerState";
+export { useSubmenuTriggerState } from "./useSubmenuTriggerState";
 export { useMenuTrigger } from "./useMenuTrigger";
 export { useMenu } from "./useMenu";
 export { useMenuItem } from "./useMenuItem";
 export { useMenuSection } from "./useMenuSection";
+export { useSubmenuTrigger } from "./useSubmenuTrigger";
 
 export type {
   FocusStrategy,
   UseMenuTriggerStateOptions,
   UseMenuTriggerStateResult,
 } from "./useMenuTriggerState";
+export type {
+  UseSubmenuTriggerStateOptions,
+  UseSubmenuTriggerStateResult,
+} from "./useSubmenuTriggerState";
 export type {
   MenuTriggerType,
   UseMenuTriggerOptions,
@@ -23,3 +29,7 @@ export type {
   UseMenuSectionOptions,
   UseMenuSectionResult,
 } from "./useMenuSection";
+export type {
+  UseSubmenuTriggerOptions,
+  UseSubmenuTriggerResult,
+} from "./useSubmenuTrigger";

@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `94 / 133` tracked items
-- Remaining: `39`
+- Completed: `95 / 133` tracked items
+- Remaining: `38`
 - Current stage: combobox baseline with menu/stately hardening
 
 ## 0) Dependency baseline
@@ -105,7 +105,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useMenuItem`
 - [x] `useMenuSection`
 - [x] `useMenuTrigger`
-- [ ] Submenu trigger/placement behavior parity
+- [x] Submenu trigger/placement behavior parity
 - [ ] Context menu behavior parity
 - [ ] Action vs selection menu item semantics
 

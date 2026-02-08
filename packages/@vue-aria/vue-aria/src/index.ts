@@ -51,10 +51,12 @@ export { useOverlayTriggerState } from "@vue-aria/overlays-state";
 export { useToggleState } from "@vue-aria/toggle-state";
 export {
   useMenuTriggerState,
+  useSubmenuTriggerState,
   useMenuTrigger,
   useMenu,
   useMenuItem,
   useMenuSection,
+  useSubmenuTrigger,
 } from "@vue-aria/menu";
 export {
   useOverlayTrigger,
@@ -123,6 +125,8 @@ export type {
 export type {
   UseMenuTriggerStateResult,
   UseMenuTriggerStateOptions,
+  UseSubmenuTriggerStateResult,
+  UseSubmenuTriggerStateOptions,
   UseMenuTriggerResult,
   UseMenuTriggerOptions,
   UseMenuResult,
@@ -131,6 +135,8 @@ export type {
   UseMenuItemOptions,
   UseMenuSectionResult,
   UseMenuSectionOptions,
+  UseSubmenuTriggerResult,
+  UseSubmenuTriggerOptions,
 } from "@vue-aria/menu";
 export type {
   UseOverlayTriggerStateResult,
