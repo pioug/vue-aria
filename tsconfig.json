@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@vue-aria/types": ["packages/@vue-aria/types/src/index.ts"],
+      "@vue-aria/utils": ["packages/@vue-aria/utils/src/index.ts"],
+      "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"],
+      "@vue-aria/focus": ["packages/@vue-aria/focus/src/index.ts"],
+      "@vue-aria/interactions": ["packages/@vue-aria/interactions/src/index.ts"],
+      "@vue-aria/button": ["packages/@vue-aria/button/src/index.ts"],
+      "@vue-aria/vue-aria": ["packages/@vue-aria/vue-aria/src/index.ts"]
+    },
+    "strict": true,
+    "declaration": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["packages/**/*.ts", "tests/**/*.ts", "vitest.config.ts"]
+}

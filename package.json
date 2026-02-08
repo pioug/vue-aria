@@ -1,0 +1,41 @@
+{
+  "name": "vue-aria-port",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/@vue-aria/*"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:parity": "node scripts/check-test-parity.mjs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.11.0",
+    "@internationalized/message": "^3.1.8",
+    "@internationalized/number": "^3.6.5",
+    "@internationalized/string": "^3.2.7",
+    "aria-hidden": "^1.2.3",
+    "clsx": "^2.1.1"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/vue": "^8.1.0",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
+    "vitepress": "^1.6.3",
+    "vitest": "^2.1.8",
+    "vue": "^3.5.13"
+  }
+}
