@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `49 / 133` tracked items
-- Remaining: `84`
+- Completed: `50 / 133` tracked items
+- Remaining: `83`
 - Current stage: date/time core migration with calendar baseline in progress
 
 ## 0) Dependency baseline
@@ -118,7 +118,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] `useDisclosure`
 - [ ] `useDisclosureGroup`
 - [ ] `useAccordion`-style behavior parity
-- [ ] `useBreadcrumbItem`
+- [x] `useBreadcrumbItem`
 
 ## 10) Overlays and dialogs
 

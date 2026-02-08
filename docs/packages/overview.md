@@ -77,6 +77,10 @@ This port follows React Aria's package-first structure.
 - `useRangeCalendar`
 - `useCalendarCell`
 
+### `@vue-aria/breadcrumbs`
+
+- `useBreadcrumbItem`
+
 ### `@vue-aria/link`
 
 - `useLink`
