@@ -6,6 +6,7 @@ const root = process.cwd();
 
 const requiredTestFiles = [
   "packages/@vue-aria/utils/test/mergeProps.test.ts",
+  "packages/@vue-aria/utils/test/useDescription.test.ts",
   "packages/@vue-aria/ssr/test/useId.test.ts",
   "packages/@vue-aria/focus/test/useFocusVisible.test.ts",
   "packages/@vue-aria/focus/test/useFocusRing.test.ts",
@@ -14,6 +15,9 @@ const requiredTestFiles = [
   "packages/@vue-aria/interactions/test/useFocus.test.ts",
   "packages/@vue-aria/interactions/test/useFocusWithin.test.ts",
   "packages/@vue-aria/interactions/test/useHover.test.ts",
+  "packages/@vue-aria/interactions/test/useLongPress.test.ts",
+  "packages/@vue-aria/interactions/test/useMove.test.ts",
+  "packages/@vue-aria/interactions/test/useInteractOutside.test.ts",
   "packages/@vue-aria/button/test/useButton.test.ts",
   "packages/@vue-aria/link/test/useLink.test.ts",
   "packages/@vue-aria/label/test/useLabel.test.ts",

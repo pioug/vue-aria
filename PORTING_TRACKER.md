@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `17 / 133` tracked items
-- Remaining: `116`
-- Current stage: finishing interaction baseline before form/control and overlay systems
+- Completed: `20 / 133` tracked items
+- Remaining: `113`
+- Current stage: closing remaining interaction edge cases before form/control and overlay systems
 
 ## 0) Dependency baseline
 
@@ -40,9 +40,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useFocus`
 - [x] `useFocusWithin`
 - [x] `useKeyboard`
-- [ ] `useLongPress`
-- [ ] `useMove`
-- [ ] `useInteractOutside`
+- [x] `useLongPress`
+- [x] `useMove`
+- [x] `useInteractOutside`
 - [ ] Press responder edge cases (cancel on scroll, pointer capture nuances)
 - [ ] Virtual click/screen-reader interaction parity tests
 
@@ -54,7 +54,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useLabel`
 - [x] `useSeparator`
 - [x] `VisuallyHidden` helper/component
-- [ ] `useDescription` + `useErrorMessage` helpers
+- [ ] `useDescription` + `useErrorMessage` helpers (`useDescription` ported; `useErrorMessage` pending)
 
 ## 4) Text and number inputs
 

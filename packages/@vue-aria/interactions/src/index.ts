@@ -11,3 +11,11 @@ export type {
 } from "./useFocusWithin";
 export { useHover } from "./useHover";
 export type { UseHoverOptions, UseHoverResult } from "./useHover";
+export { useLongPress } from "./useLongPress";
+export type { UseLongPressOptions, UseLongPressResult } from "./useLongPress";
+export { useMove } from "./useMove";
+export type { UseMoveOptions, UseMoveResult } from "./useMove";
+export { useInteractOutside } from "./useInteractOutside";
+export type {
+  UseInteractOutsideOptions,
+} from "./useInteractOutside";

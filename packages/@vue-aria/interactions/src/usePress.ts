@@ -69,7 +69,13 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
     if (event.button !== 0) {
       return;
     }
-    startPress(event, event.pointerType === "touch" ? "touch" : "mouse");
+    const pointerType =
+      event.pointerType === "touch"
+        ? "touch"
+        : event.pointerType === "pen"
+          ? "pen"
+          : "mouse";
+    startPress(event, pointerType);
   };
 
   const onPointerup = (event: PointerEvent) => {

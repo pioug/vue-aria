@@ -19,3 +19,22 @@ export interface HoverEvent {
   target: EventTarget | null;
   originalEvent: Event;
 }
+
+export interface LongPressEvent {
+  type: "longpressstart" | "longpressend" | "longpress";
+  pointerType: PointerType;
+  target: EventTarget | null;
+  originalEvent: Event;
+}
+
+export interface MoveEvent {
+  type: "movestart" | "move" | "moveend";
+  pointerType: PointerType;
+  deltaX?: number;
+  deltaY?: number;
+  shiftKey: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
+  altKey: boolean;
+  originalEvent: Event;
+}
