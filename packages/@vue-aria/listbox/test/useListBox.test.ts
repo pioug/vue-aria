@@ -78,6 +78,114 @@ describe("useListBox", () => {
     optionB.remove();
   });
 
+  it("skips disabled options during keyboard navigation", () => {
+    const scope = effectScope();
+    const optionA = document.createElement("div");
+    const optionB = document.createElement("div");
+    const optionC = document.createElement("div");
+    document.body.append(optionA, optionB, optionC);
+
+    let listBox!: ReturnType<typeof useListBox>;
+    let state!: ReturnType<typeof useListBoxState>;
+
+    scope.run(() => {
+      state = useListBoxState({
+        collection: [{ key: "a" }, { key: "b", isDisabled: true }, { key: "c" }],
+        selectionMode: "single",
+      });
+
+      state.registerOption("a", optionA);
+      state.registerOption("b", optionB);
+      state.registerOption("c", optionC);
+
+      listBox = useListBox(
+        {
+          "aria-label": "Options",
+        },
+        state,
+        ref(null)
+      );
+    });
+
+    state.setFocusedKey("a");
+
+    const preventDefault = vi.fn();
+    (
+      listBox.listBoxProps.value.onKeydown as (event: KeyboardEvent) => void
+    )({
+      key: "ArrowDown",
+      preventDefault,
+    } as unknown as KeyboardEvent);
+
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(state.focusedKey.value).toBe("c");
+    expect(state.selectedKeys.value.has("c")).toBe(true);
+
+    scope.stop();
+    optionA.remove();
+    optionB.remove();
+    optionC.remove();
+  });
+
+  it("supports typeahead focus behavior through listbox props", () => {
+    const scope = effectScope();
+    let listBox!: ReturnType<typeof useListBox>;
+    let state!: ReturnType<typeof useListBoxState>;
+
+    scope.run(() => {
+      state = useListBoxState({
+        collection: [
+          { key: "apple", textValue: "Apple" },
+          { key: "banana", textValue: "Banana", isDisabled: true },
+          { key: "cherry", textValue: "Cherry" },
+        ],
+        selectionMode: "single",
+      });
+
+      listBox = useListBox(
+        {
+          "aria-label": "Options",
+        },
+        state,
+        ref(null)
+      );
+    });
+
+    const currentTarget = document.createElement("div");
+    const target = document.createElement("span");
+    currentTarget.appendChild(target);
+
+    (
+      listBox.listBoxProps.value.onKeydownCapture as (event: KeyboardEvent) => void
+    )({
+      key: "c",
+      ctrlKey: false,
+      metaKey: false,
+      currentTarget,
+      target,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(state.focusedKey.value).toBe("cherry");
+
+    (
+      listBox.listBoxProps.value.onKeydownCapture as (event: KeyboardEvent) => void
+    )({
+      key: "b",
+      ctrlKey: false,
+      metaKey: false,
+      currentTarget,
+      target,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(state.focusedKey.value).toBe("cherry");
+
+    scope.stop();
+  });
+
   it("forwards focus callbacks", () => {
     const scope = effectScope();
     const onFocus = vi.fn();

@@ -1,6 +1,10 @@
 import { computed, toValue, watchEffect } from "vue";
 import { useId } from "@vue-aria/ssr";
 import { useLabel } from "@vue-aria/label";
+import {
+  useListKeyboardDelegate,
+  useTypeSelect,
+} from "@vue-aria/selection";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { Key, MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type {
@@ -10,89 +14,16 @@ import type {
 } from "./useListBoxState";
 import { listData } from "./utils";
 
-function findNextEnabledKey<T extends ListBoxItem>(
-  state: UseListBoxStateResult<T>,
-  startKey: Key
-): Key | null {
-  const total = state.collection.value.length;
-  if (total === 0) {
-    return null;
-  }
-
-  let key: Key = startKey;
-  for (let index = 0; index < total; index += 1) {
-    const next = state.getKeyAfter(key) ?? state.getFirstKey();
-    if (next === null) {
-      return null;
-    }
-    if (!state.isDisabledKey(next)) {
-      return next;
-    }
-    key = next;
-  }
-
-  return null;
-}
-
-function findPreviousEnabledKey<T extends ListBoxItem>(
-  state: UseListBoxStateResult<T>,
-  startKey: Key
-): Key | null {
-  const total = state.collection.value.length;
-  if (total === 0) {
-    return null;
-  }
-
-  let key: Key = startKey;
-  for (let index = 0; index < total; index += 1) {
-    const previous = state.getKeyBefore(key) ?? state.getLastKey();
-    if (previous === null) {
-      return null;
-    }
-    if (!state.isDisabledKey(previous)) {
-      return previous;
-    }
-    key = previous;
-  }
-
-  return null;
-}
-
-function findFirstEnabledKey<T extends ListBoxItem>(
-  state: UseListBoxStateResult<T>
-): Key | null {
-  const first = state.getFirstKey();
-  if (first === null) {
-    return null;
-  }
-
-  if (!state.isDisabledKey(first)) {
-    return first;
-  }
-
-  return findNextEnabledKey(state, first);
-}
-
-function findLastEnabledKey<T extends ListBoxItem>(
-  state: UseListBoxStateResult<T>
-): Key | null {
-  const last = state.getLastKey();
-  if (last === null) {
-    return null;
-  }
-
-  if (!state.isDisabledKey(last)) {
-    return last;
-  }
-
-  return findPreviousEnabledKey(state, last);
-}
+type Orientation = "vertical" | "horizontal";
+type Direction = "ltr" | "rtl";
 
 export interface UseListBoxOptions {
   id?: MaybeReactive<string | undefined>;
   label?: MaybeReactive<string | undefined>;
   "aria-label"?: MaybeReactive<string | undefined>;
   "aria-labelledby"?: MaybeReactive<string | undefined>;
+  orientation?: MaybeReactive<Orientation | undefined>;
+  direction?: MaybeReactive<Direction | undefined>;
   selectionBehavior?: MaybeReactive<SelectionBehavior | undefined>;
   shouldSelectOnPressUp?: MaybeReactive<boolean | undefined>;
   shouldFocusOnHover?: MaybeReactive<boolean | undefined>;
@@ -158,6 +89,12 @@ export function useListBox<T extends ListBoxItem>(
     "aria-label": options["aria-label"],
     "aria-labelledby": options["aria-labelledby"],
   });
+  const keyboardDelegate = useListKeyboardDelegate<T>({
+    collection: state.collection,
+    disabledKeys: state.disabledKeys,
+    orientation: options.orientation,
+    direction: options.direction,
+  });
 
   const focusKey = (key: Key | null) => {
     if (key === null) {
@@ -166,13 +103,20 @@ export function useListBox<T extends ListBoxItem>(
     state.setFocusedKey(key);
     state.getOptionElement(key)?.focus();
   };
+  const { typeSelectProps } = useTypeSelect({
+    keyboardDelegate,
+    focusedKey: state.focusedKey,
+    setFocusedKey: (key) => {
+      focusKey(key);
+    },
+  });
 
   const onKeydown = (event: KeyboardEvent) => {
     if (state.isDisabled.value) {
       return;
     }
 
-    const currentKey = state.focusedKey.value ?? findFirstEnabledKey(state);
+    const currentKey = state.focusedKey.value ?? keyboardDelegate.getFirstKey?.() ?? null;
     if (currentKey === null) {
       return;
     }
@@ -180,16 +124,22 @@ export function useListBox<T extends ListBoxItem>(
     let nextKey: Key | null = null;
     switch (event.key) {
       case "ArrowDown":
-        nextKey = findNextEnabledKey(state, currentKey);
+        nextKey = keyboardDelegate.getKeyBelow?.(currentKey) ?? null;
         break;
       case "ArrowUp":
-        nextKey = findPreviousEnabledKey(state, currentKey);
+        nextKey = keyboardDelegate.getKeyAbove?.(currentKey) ?? null;
+        break;
+      case "ArrowRight":
+        nextKey = keyboardDelegate.getKeyRightOf?.(currentKey) ?? null;
+        break;
+      case "ArrowLeft":
+        nextKey = keyboardDelegate.getKeyLeftOf?.(currentKey) ?? null;
         break;
       case "Home":
-        nextKey = findFirstEnabledKey(state);
+        nextKey = keyboardDelegate.getFirstKey?.() ?? null;
         break;
       case "End":
-        nextKey = findLastEnabledKey(state);
+        nextKey = keyboardDelegate.getLastKey?.() ?? null;
         break;
       case "Enter":
       case " ":
@@ -222,7 +172,7 @@ export function useListBox<T extends ListBoxItem>(
     options.onFocus?.(event);
 
     if (state.focusedKey.value === null) {
-      focusKey(findFirstEnabledKey(state));
+      focusKey(keyboardDelegate.getFirstKey?.() ?? null);
     }
   };
 
@@ -233,16 +183,21 @@ export function useListBox<T extends ListBoxItem>(
   };
 
   const listBoxProps = computed<Record<string, unknown>>(() =>
-    mergeProps(domProps, fieldProps.value, {
-      id: id.value,
-      role: "listbox",
-      tabIndex: 0,
-      onKeydown,
-      onFocus,
-      onBlur,
-      "aria-multiselectable":
-        state.selectionMode.value === "multiple" ? "true" : undefined,
-    })
+    mergeProps(
+      domProps,
+      fieldProps.value,
+      typeSelectProps,
+      {
+        id: id.value,
+        role: "listbox",
+        tabIndex: 0,
+        onKeydown,
+        onFocus,
+        onBlur,
+        "aria-multiselectable":
+          state.selectionMode.value === "multiple" ? "true" : undefined,
+      }
+    )
   );
 
   return {

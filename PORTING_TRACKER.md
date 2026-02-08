@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `68 / 133` tracked items
-- Remaining: `65`
-- Current stage: collection/list and overlay infrastructure migration
+- Completed: `70 / 133` tracked items
+- Remaining: `63`
+- Current stage: collection/list keyboard parity and overlay infrastructure migration
 
 ## 0) Dependency baseline
 
@@ -28,7 +28,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Locale + direction provider (`I18nProvider` equivalent)
 - [x] Announcer/live region infrastructure
 - [ ] Collection builder helpers (nodes, sections, keys)
-- [ ] Keyboard delegate infrastructure
+- [x] Keyboard delegate infrastructure
 - [ ] Router integration abstraction (link navigation)
 
 ## 2) Interactions (`@react-aria/interactions` + focus)
@@ -96,7 +96,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useSelect`
 - [ ] `useComboBox`
 - [ ] `useAutocomplete`-style behavior parity
-- [ ] Typeahead behavior parity
+- [x] Typeahead behavior parity
 - [ ] Single vs multi-select behavior parity
 
 ## 8) Menus and actions

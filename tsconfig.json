@@ -28,6 +28,7 @@
       "@vue-aria/breadcrumbs": ["packages/@vue-aria/breadcrumbs/src/index.ts"],
       "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
+      "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
       "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],

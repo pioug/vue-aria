@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `68 / 133` (about `51.1%`)
-- Tracked items remaining: `65`
-- Current parity focus: combobox + overlay infrastructure and stately hardening
+- Tracked items completed: `70 / 133` (about `52.6%`)
+- Tracked items remaining: `63`
+- Current parity focus: combobox + menu/overlay infrastructure and stately hardening
 
 ## Done So Far
 
@@ -25,18 +25,19 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Accordion item behavior: `useAccordionItem`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Listbox: `useListBoxState`, `useListBox`, `useOption`, `useListBoxSection`
+- Selection primitives: `useListKeyboardDelegate`, `useTypeSelect`
 - Select: `useSelectState`, `useSelect`
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`
 
 ## What Is Left (By Area)
 
-- Foundation: `3` remaining
+- Foundation: `2` remaining
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
 - Selection controls: `0` remaining
 - Date/time: `1` remaining
-- Collections/lists: `4` remaining
+- Collections/lists: `3` remaining
 - Menus/actions: `7` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `11` remaining
@@ -81,6 +82,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Harden date/time i18n and timezone behavior parity.
-2. Move into collection/listbox/select stack after date/time baseline closes.
-3. Add state-layer equivalents for calendar/date-picker state where needed.
+1. Port `useComboBox` and associated autocomplete behavior.
+2. Port menu trigger stack: `useMenu`, `useMenuItem`, `useMenuSection`, `useMenuTrigger`.
+3. Start overlay core (`useOverlay`, `useOverlayTrigger`, `usePopover`) plus state-layer adapters.

@@ -74,6 +74,8 @@ Current test files:
 - `packages/@vue-aria/listbox/test/useListBox.test.ts`
 - `packages/@vue-aria/listbox/test/useOption.test.ts`
 - `packages/@vue-aria/listbox/test/useListBoxSection.test.ts`
+- `packages/@vue-aria/selection/test/useListKeyboardDelegate.test.ts`
+- `packages/@vue-aria/selection/test/useTypeSelect.test.ts`
 - `packages/@vue-aria/link/test/useLink.test.ts`
 - `packages/@vue-aria/label/test/useLabel.test.ts`
 - `packages/@vue-aria/label/test/useField.test.ts`

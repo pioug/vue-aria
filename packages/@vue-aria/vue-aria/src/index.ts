@@ -52,6 +52,7 @@ export {
   useOption,
   useListBoxSection,
 } from "@vue-aria/listbox";
+export { useListKeyboardDelegate, useTypeSelect } from "@vue-aria/selection";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
@@ -77,3 +78,4 @@ export type {
   PressEvent,
   ReadonlyRef,
 } from "@vue-aria/types";
+export type { KeyboardDelegate } from "@vue-aria/selection";
