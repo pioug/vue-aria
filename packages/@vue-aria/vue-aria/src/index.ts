@@ -46,6 +46,7 @@ export {
   useDisclosureGroupState,
   useAccordionItem,
 } from "@vue-aria/disclosure";
+export { buildCollection } from "@vue-aria/collections";
 export {
   useListBoxState,
   useListBox,
@@ -87,6 +88,12 @@ export type {
   ReadonlyRef,
 } from "@vue-aria/types";
 export type { KeyboardDelegate } from "@vue-aria/selection";
+export type {
+  BuiltCollection,
+  CollectionInput,
+  CollectionItem,
+  CollectionSection,
+} from "@vue-aria/collections";
 export type {
   Href,
   LinkDOMProps,

@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `71 / 133` tracked items
-- Remaining: `62`
+- Completed: `72 / 133` tracked items
+- Remaining: `61`
 - Current stage: collection/list keyboard parity and overlay infrastructure migration
 
 ## 0) Dependency baseline
@@ -27,7 +27,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] DOM prop filtering utilities (`filterDOMProps` equivalent)
 - [x] Locale + direction provider (`I18nProvider` equivalent)
 - [x] Announcer/live region infrastructure
-- [ ] Collection builder helpers (nodes, sections, keys)
+- [x] Collection builder helpers (nodes, sections, keys)
 - [x] Keyboard delegate infrastructure
 - [x] Router integration abstraction (link navigation)
 

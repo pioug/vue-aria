@@ -71,6 +71,7 @@ Current test files:
 - `packages/@vue-aria/disclosure/test/useDisclosureGroupState.test.ts`
 - `packages/@vue-aria/disclosure/test/useAccordionItem.test.ts`
 - `packages/@vue-aria/disclosure/test/useDisclosure.test.ts`
+- `packages/@vue-aria/collections/test/buildCollection.test.ts`
 - `packages/@vue-aria/listbox/test/useListBoxState.test.ts`
 - `packages/@vue-aria/listbox/test/useListBox.test.ts`
 - `packages/@vue-aria/listbox/test/useOption.test.ts`

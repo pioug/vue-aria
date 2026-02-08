@@ -27,6 +27,7 @@
       "@vue-aria/calendar": ["packages/@vue-aria/calendar/src/index.ts"],
       "@vue-aria/breadcrumbs": ["packages/@vue-aria/breadcrumbs/src/index.ts"],
       "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
+      "@vue-aria/collections": ["packages/@vue-aria/collections/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
       "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],

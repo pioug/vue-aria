@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `71 / 133` (about `53.4%`)
-- Tracked items remaining: `62`
+- Tracked items completed: `72 / 133` (about `54.1%`)
+- Tracked items remaining: `61`
 - Current parity focus: combobox + menu/overlay infrastructure and stately hardening
 
 ## Done So Far
@@ -23,6 +23,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Disclosure: `useDisclosure`, `useDisclosureState`
 - Disclosure groups: `useDisclosureGroupState`
 - Accordion item behavior: `useAccordionItem`
+- Collections foundation: `buildCollection`
 - Tabs: `useTabs`, `useTabListState`, `useTabList`, `useTab`, `useTabPanel`
 - Listbox: `useListBoxState`, `useListBox`, `useOption`, `useListBoxSection`
 - Selection primitives: `useListKeyboardDelegate`, `useTypeSelect`
@@ -31,7 +32,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## What Is Left (By Area)
 
-- Foundation: `1` remaining
+- Foundation: `0` remaining
 - Interactions: `0` remaining
 - Core semantics: `0` remaining
 - Text/number inputs: `0` remaining
