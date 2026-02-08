@@ -312,6 +312,168 @@ function nextValidTarget(
   return null;
 }
 
+function isValidTarget(
+  state: DroppableCollectionState,
+  ref: MaybeReactive<HTMLElement | null | undefined>,
+  target: DropTarget,
+  types: Set<string>,
+  allowedOperations: DropOperation[]
+): boolean {
+  return (
+    getDropOperation(state, ref, target, types, allowedOperations) !== "cancel"
+  );
+}
+
+function resolvePageTarget(
+  props: DroppableCollectionOptions,
+  state: DroppableCollectionState,
+  ref: MaybeReactive<HTMLElement | null | undefined>,
+  types: Set<string>,
+  allowedOperations: DropOperation[],
+  rtl: boolean,
+  direction: "up" | "down"
+): DropTarget | null {
+  if (!props.keyboardDelegate || !props.collection) {
+    return null;
+  }
+
+  if (direction === "down") {
+    if (!props.keyboardDelegate.getKeyPageBelow) {
+      return null;
+    }
+
+    const lastKey = props.keyboardDelegate.getLastKey?.() ?? null;
+    const baseKey =
+      state.target?.type === "item"
+        ? state.target.key
+        : props.keyboardDelegate.getFirstKey?.() ?? null;
+
+    if (baseKey == null) {
+      return null;
+    }
+
+    let pageKey = props.keyboardDelegate.getKeyPageBelow(baseKey);
+    let dropPosition: "before" | "on" | "after" =
+      state.target?.type === "item" ? state.target.dropPosition : "after";
+    if (pageKey == null || (lastKey != null && baseKey === lastKey)) {
+      pageKey = lastKey;
+      dropPosition = "after";
+    }
+
+    if (pageKey == null) {
+      return null;
+    }
+
+    const candidate: DropTarget = {
+      type: "item",
+      key: pageKey,
+      dropPosition,
+    };
+
+    if (isValidTarget(state, ref, candidate, types, allowedOperations)) {
+      return candidate;
+    }
+
+    return (
+      nextValidTarget(
+        props,
+        state,
+        ref,
+        types,
+        allowedOperations,
+        (target, wrap) =>
+          getNextTarget(props, "down", target, rtl, wrap),
+        false,
+        candidate
+      ) ??
+      nextValidTarget(
+        props,
+        state,
+        ref,
+        types,
+        allowedOperations,
+        (target, wrap) =>
+          getNextTarget(props, "up", target, rtl, wrap),
+        false,
+        candidate
+      )
+    );
+  }
+
+  if (!props.keyboardDelegate.getKeyPageAbove) {
+    return null;
+  }
+
+  if (!state.target) {
+    return nextValidTarget(
+      props,
+      state,
+      ref,
+      types,
+      allowedOperations,
+      (target, wrap) => getNextTarget(props, "up", target, rtl, wrap),
+      true,
+      null
+    );
+  }
+
+  const firstKey = props.keyboardDelegate.getFirstKey?.() ?? null;
+  if (state.target.type === "item" && firstKey != null && state.target.key === firstKey) {
+    const rootTarget: DropTarget = { type: "root" };
+    if (isValidTarget(state, ref, rootTarget, types, allowedOperations)) {
+      return rootTarget;
+    }
+  }
+
+  if (state.target.type !== "item") {
+    return null;
+  }
+
+  let pageKey = props.keyboardDelegate.getKeyPageAbove(state.target.key);
+  let dropPosition = state.target.dropPosition;
+  if (pageKey == null) {
+    pageKey = firstKey;
+    dropPosition = "before";
+  }
+
+  if (pageKey == null) {
+    return null;
+  }
+
+  const candidate: DropTarget = {
+    type: "item",
+    key: pageKey,
+    dropPosition,
+  };
+
+  if (isValidTarget(state, ref, candidate, types, allowedOperations)) {
+    return candidate;
+  }
+
+  return (
+    nextValidTarget(
+      props,
+      state,
+      ref,
+      types,
+      allowedOperations,
+      (target, wrap) => getNextTarget(props, "up", target, rtl, wrap),
+      false,
+      candidate
+    ) ??
+    nextValidTarget(
+      props,
+      state,
+      ref,
+      types,
+      allowedOperations,
+      (target, wrap) => getNextTarget(props, "down", target, rtl, wrap),
+      false,
+      candidate
+    )
+  );
+}
+
 export function useDroppableCollection(
   props: DroppableCollectionOptions,
   state: DroppableCollectionState,
@@ -603,6 +765,36 @@ export function useDroppableCollection(
                 if (target) {
                   state.setTarget(target);
                 }
+              }
+              break;
+            }
+            case "PageDown": {
+              const target = resolvePageTarget(
+                props,
+                state,
+                ref,
+                types,
+                drag.allowedDropOperations,
+                rtl,
+                "down"
+              );
+              if (target) {
+                state.setTarget(target);
+              }
+              break;
+            }
+            case "PageUp": {
+              const target = resolvePageTarget(
+                props,
+                state,
+                ref,
+                types,
+                drag.allowedDropOperations,
+                rtl,
+                "up"
+              );
+              if (target) {
+                state.setTarget(target);
               }
               break;
             }

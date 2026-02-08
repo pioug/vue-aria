@@ -133,6 +133,65 @@ function createKeyboardDelegate(): KeyboardDelegate {
   };
 }
 
+function createPagedCollection(size = 6): Collection {
+  const nodes = new Map<string, CollectionNode>();
+  for (let i = 0; i < size; i += 1) {
+    const key = `${i}`;
+    nodes.set(key, {
+      type: "item",
+      key,
+      value: null,
+      level: 0,
+      hasChildNodes: false,
+      childNodes: [],
+      rendered: key,
+      textValue: key,
+      index: i,
+      parentKey: null,
+      nextKey: i + 1 < size ? `${i + 1}` : null,
+      prevKey: i > 0 ? `${i - 1}` : null,
+    });
+  }
+
+  return {
+    getItem(key) {
+      return nodes.get(String(key)) ?? null;
+    },
+    getKeyAfter(key) {
+      return nodes.get(String(key))?.nextKey ?? null;
+    },
+    getKeyBefore(key) {
+      return nodes.get(String(key))?.prevKey ?? null;
+    },
+    [Symbol.iterator]() {
+      return nodes.values();
+    },
+  };
+}
+
+function createPagedKeyboardDelegate(size = 6): KeyboardDelegate {
+  return {
+    getFirstKey: () => "0",
+    getLastKey: () => `${size - 1}`,
+    getKeyBelow: (key) => {
+      const value = Number(key);
+      return value + 1 < size ? `${value + 1}` : null;
+    },
+    getKeyAbove: (key) => {
+      const value = Number(key);
+      return value > 0 ? `${value - 1}` : null;
+    },
+    getKeyPageBelow: (key) => {
+      const value = Number(key);
+      return value + 2 < size ? `${value + 2}` : null;
+    },
+    getKeyPageAbove: (key) => {
+      const value = Number(key);
+      return value - 2 >= 0 ? `${value - 2}` : null;
+    },
+  };
+}
+
 describe("useDroppableCollection", () => {
   afterEach(() => {
     (getRegisteredDropTargets() as Map<HTMLElement, unknown>).clear();
@@ -474,5 +533,46 @@ describe("useDroppableCollection", () => {
 
     expect(shouldAcceptItemDrop).toHaveBeenCalledTimes(1);
     expect(onItemDrop).not.toHaveBeenCalled();
+  });
+
+  it("supports PageUp and PageDown keyboard navigation", () => {
+    const element = setupCollectionElement();
+    const state = createState("copy");
+
+    useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate({ type: "root" }),
+        collection: createPagedCollection(),
+        keyboardDelegate: createPagedKeyboardDelegate(),
+      },
+      state,
+      ref(element)
+    );
+
+    const registered = getRegisteredDropTargets().get(element);
+    expect(registered).toBeDefined();
+
+    const drag = {
+      items: [{ "text/plain": "value" }],
+      allowedDropOperations: ["copy"] as DropOperation[],
+    };
+
+    registered?.onDropEnter?.({ type: "dropenter", x: 0, y: 0 }, drag);
+    expect(state.target).toEqual({ type: "root" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "PageDown" }), drag);
+    expect(state.target).toEqual({ type: "item", key: "2", dropPosition: "after" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "PageDown" }), drag);
+    expect(state.target).toEqual({ type: "item", key: "4", dropPosition: "after" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "PageUp" }), drag);
+    expect(state.target).toEqual({ type: "item", key: "2", dropPosition: "after" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "PageUp" }), drag);
+    expect(state.target).toEqual({ type: "item", key: "0", dropPosition: "after" });
+
+    registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "PageUp" }), drag);
+    expect(state.target).toEqual({ type: "root" });
   });
 });

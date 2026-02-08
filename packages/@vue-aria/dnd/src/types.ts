@@ -71,6 +71,8 @@ export interface KeyboardDelegate {
   getKeyBelow?: (key: Key) => Key | null;
   getKeyLeftOf?: (key: Key) => Key | null;
   getKeyRightOf?: (key: Key) => Key | null;
+  getKeyPageAbove?: (key: Key) => Key | null;
+  getKeyPageBelow?: (key: Key) => Key | null;
 }
 
 export type Orientation = "horizontal" | "vertical";
