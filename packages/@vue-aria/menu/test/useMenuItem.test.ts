@@ -157,4 +157,151 @@ describe("useMenuItem", () => {
     scope.stop();
     itemElement.remove();
   });
+
+  it("closes on Enter in multiple selection mode", () => {
+    const scope = effectScope();
+    const itemElement = document.createElement("li");
+    document.body.appendChild(itemElement);
+
+    const onClose = vi.fn();
+    let menuItem!: ReturnType<typeof useMenuItem>;
+
+    scope.run(() => {
+      const state = useListBoxState({
+        collection: [{ key: "copy" }, { key: "paste" }],
+        selectionMode: "multiple",
+      });
+
+      useMenu(
+        {
+          "aria-label": "Actions",
+          onClose,
+        },
+        state,
+        ref(null)
+      );
+      menuItem = useMenuItem({ key: "copy" }, state, ref(itemElement));
+    });
+
+    (
+      menuItem.menuItemProps.value.onKeydown as (event: KeyboardEvent) => void
+    )({
+      key: "Enter",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    itemElement.remove();
+  });
+
+  it("does not close on Space in multiple selection mode", () => {
+    const scope = effectScope();
+    const itemElement = document.createElement("li");
+    document.body.appendChild(itemElement);
+
+    const onClose = vi.fn();
+    let menuItem!: ReturnType<typeof useMenuItem>;
+
+    scope.run(() => {
+      const state = useListBoxState({
+        collection: [{ key: "copy" }, { key: "paste" }],
+        selectionMode: "multiple",
+      });
+
+      useMenu(
+        {
+          "aria-label": "Actions",
+          onClose,
+        },
+        state,
+        ref(null)
+      );
+      menuItem = useMenuItem({ key: "copy" }, state, ref(itemElement));
+    });
+
+    (
+      menuItem.menuItemProps.value.onKeydown as (event: KeyboardEvent) => void
+    )({
+      key: " ",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(onClose).not.toHaveBeenCalled();
+
+    scope.stop();
+    itemElement.remove();
+  });
+
+  it("always closes link items even in multiple selection mode", () => {
+    const scope = effectScope();
+    const itemElement = document.createElement("li");
+    document.body.appendChild(itemElement);
+
+    const onClose = vi.fn();
+    let menuItem!: ReturnType<typeof useMenuItem>;
+
+    scope.run(() => {
+      const state = useListBoxState({
+        collection: [{ key: "docs", href: "/docs" }],
+        selectionMode: "multiple",
+      });
+
+      useMenu(
+        {
+          "aria-label": "Actions",
+          onClose,
+        },
+        state,
+        ref(null)
+      );
+      menuItem = useMenuItem({ key: "docs" }, state, ref(itemElement));
+    });
+
+    (menuItem.menuItemProps.value.onClick as () => void)();
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    itemElement.remove();
+  });
+
+  it("does not invoke onAction for submenu trigger items", () => {
+    const scope = effectScope();
+    const itemElement = document.createElement("li");
+    document.body.appendChild(itemElement);
+
+    const onAction = vi.fn();
+    let menuItem!: ReturnType<typeof useMenuItem>;
+
+    scope.run(() => {
+      const state = useListBoxState({
+        collection: [{ key: "more", onAction }],
+      });
+
+      useMenu(
+        {
+          "aria-label": "Actions",
+        },
+        state,
+        ref(null)
+      );
+      menuItem = useMenuItem(
+        {
+          key: "more",
+          "aria-haspopup": "menu",
+        },
+        state,
+        ref(itemElement)
+      );
+    });
+
+    (menuItem.menuItemProps.value.onClick as () => void)();
+
+    expect(onAction).not.toHaveBeenCalled();
+
+    scope.stop();
+    itemElement.remove();
+  });
 });

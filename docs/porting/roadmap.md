@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `97 / 133` (about `72.9%`)
-- Tracked items remaining: `36`
-- Current parity focus: combobox + menu hardening and stately hardening
+- Tracked items completed: `98 / 133` (about `73.7%`)
+- Tracked items remaining: `35`
+- Current parity focus: combobox + stately hardening
 
 ## Done So Far
 
@@ -44,7 +44,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Selection controls: `0` remaining
 - Date/time: `1` remaining
 - Collections/lists: `3` remaining
-- Menus/actions: `1` remaining
+- Menus/actions: `0` remaining
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `11` remaining
@@ -70,7 +70,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ### Phase 3: Overlay + Navigation Systems
 
 - `useComboBox`
-- Menu hardening: submenu trigger behavior, context menu behavior, action-vs-selection semantics
 
 ### Phase 4: Data + Advanced Interaction
 
@@ -88,5 +87,5 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ## Immediate Next Milestone
 
 1. Port `useComboBox` and associated autocomplete behavior.
-2. Close menu hardening gaps (submenu, context menu, action-vs-selection semantics).
-3. Continue stately hardening with tree/table/combobox + calendar/date state primitives.
+2. Continue stately hardening with tree/table + calendar/date state primitives.
+3. Start table/tree/grid aria hooks after combobox baseline lands.

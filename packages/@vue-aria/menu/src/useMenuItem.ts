@@ -117,6 +117,8 @@ export function useMenuItem<T extends MenuItem>(
     return state.selectionMode.value !== "multiple";
   });
 
+  const isLink = computed(() => Boolean(item.value?.href));
+
   const performAction = (): void => {
     if (isDisabled.value) {
       return;
@@ -124,22 +126,47 @@ export function useMenuItem<T extends MenuItem>(
 
     state.setFocusedKey(options.key);
 
-    if (!isTrigger.value) {
-      if (state.selectionMode.value === "single") {
-        state.selectKey(options.key, "replace");
-      } else if (state.selectionMode.value === "multiple") {
-        state.selectKey(options.key, "toggle");
-      }
+    if (isTrigger.value) {
+      return;
+    }
+
+    if (state.selectionMode.value === "single") {
+      state.selectKey(options.key, "replace");
+    } else if (state.selectionMode.value === "multiple") {
+      state.selectKey(options.key, "toggle");
     }
 
     item.value?.onAction?.();
     options.onAction?.(options.key);
     data.value?.onAction?.(options.key);
+  };
 
-    if (!isTrigger.value && shouldCloseOnSelect.value) {
-      options.onClose?.();
-      data.value?.onClose?.();
+  const closeMenu = (): void => {
+    options.onClose?.();
+    data.value?.onClose?.();
+  };
+
+  const shouldCloseForInteraction = (
+    pointerType: "keyboard" | "mouse" | "touch",
+    key?: "Enter" | " "
+  ): boolean => {
+    if (options.shouldCloseOnSelect !== undefined || options.closeOnSelect !== undefined) {
+      return shouldCloseOnSelect.value;
     }
+
+    if (isLink.value) {
+      return true;
+    }
+
+    if (pointerType === "keyboard" && key === "Enter") {
+      return true;
+    }
+
+    if (state.selectionMode.value === "none") {
+      return true;
+    }
+
+    return state.selectionMode.value !== "multiple";
   };
 
   watchEffect((onCleanup) => {
@@ -206,11 +233,20 @@ export function useMenuItem<T extends MenuItem>(
       onClick: () => {
         isPressed.value = false;
         performAction();
+
+        if (!isTrigger.value && shouldCloseForInteraction("mouse")) {
+          closeMenu();
+        }
       },
       onKeydown: (event: KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           performAction();
+
+          const interactionKey = event.key as "Enter" | " ";
+          if (!isTrigger.value && shouldCloseForInteraction("keyboard", interactionKey)) {
+            closeMenu();
+          }
           return;
         }
 
