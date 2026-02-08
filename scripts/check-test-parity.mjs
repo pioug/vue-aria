@@ -29,6 +29,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/dnd/test/useDrag.test.ts",
   "packages/@vue-aria/dnd/test/useDrop.test.ts",
   "packages/@vue-aria/dnd/test/useAutoScroll.test.ts",
+  "packages/@vue-aria/dnd/test/useDraggableCollection.test.ts",
   "packages/@vue-aria/dnd/test/DropTargetKeyboardNavigation.test.ts",
   "packages/@vue-aria/dnd/test/ListDropTargetDelegate.test.ts",
   "packages/@vue-aria/dnd/test/DragManager.test.ts",

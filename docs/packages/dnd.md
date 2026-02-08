@@ -22,6 +22,10 @@ Provides keyboard/virtual drop affordance props, including `aria-describedby` gu
 
 Provides edge-triggered scrolling logic for scrollable containers while dragging.
 
+## `useDraggableCollection`
+
+Tracks the currently dragged collection reference in shared DnD state when collection dragging keys are active.
+
 ## Utilities
 
 - `writeToDataTransfer`

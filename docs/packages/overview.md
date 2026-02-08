@@ -46,6 +46,7 @@ This port follows React Aria's package-first structure.
 - `useDrop`
 - `useVirtualDrop`
 - `useAutoScroll`
+- `useDraggableCollection`
 - `writeToDataTransfer`
 - `readFromDataTransfer`
 - `DragTypes`

@@ -1,4 +1,4 @@
-import type { Key } from "@vue-aria/types";
+import type { Key, MaybeReactive } from "@vue-aria/types";
 
 export type DragItem = Record<string, string>;
 
@@ -82,4 +82,12 @@ export interface DropTargetDelegate {
     y: number,
     isValidDropTarget: (target: DropTarget) => boolean
   ) => DropTarget;
+}
+
+export interface DraggableCollectionStateLike {
+  draggingKeys: Set<Key>;
+}
+
+export interface GlobalDndState {
+  draggingCollectionRef: MaybeReactive<HTMLElement | null | undefined> | null;
 }

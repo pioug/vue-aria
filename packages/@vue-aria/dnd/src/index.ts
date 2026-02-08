@@ -3,6 +3,7 @@ export { useDrag } from "./useDrag";
 export { useDrop } from "./useDrop";
 export { useVirtualDrop } from "./useVirtualDrop";
 export { useAutoScroll } from "./useAutoScroll";
+export { useDraggableCollection } from "./useDraggableCollection";
 export { navigate } from "./DropTargetKeyboardNavigation";
 export { ListDropTargetDelegate } from "./ListDropTargetDelegate";
 export {
@@ -26,6 +27,9 @@ export {
   DragTypes,
   readFromDataTransfer,
   writeToDataTransfer,
+  globalDndState,
+  setDraggingCollectionRef,
+  setGlobalDnDState,
   getDragModality,
   useDragModality,
   isDirectoryDropItem,
@@ -37,6 +41,7 @@ export type {
   Collection,
   CollectionNode,
   Direction,
+  DraggableCollectionStateLike,
   DirectoryDropItem,
   DragItem,
   DragTypes as IDragTypes,
@@ -46,6 +51,7 @@ export type {
   DropTarget,
   DropTargetDelegate,
   FileDropItem,
+  GlobalDndState,
   ItemDropTarget,
   KeyboardDelegate,
   Orientation,
@@ -60,6 +66,7 @@ export type {
   DragResult,
   DragStartEvent,
 } from "./useDrag";
+export type { DraggableCollectionOptions } from "./useDraggableCollection";
 export type {
   DropActivateEvent,
   DropEnterEvent,

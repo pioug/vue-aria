@@ -5,8 +5,10 @@ import type {
   DragTypes as IDragTypes,
   DropItem,
   FileDropItem,
+  GlobalDndState,
   TextDropItem,
 } from "./types";
+import type { MaybeReactive } from "@vue-aria/types";
 
 interface DataTransferItemLike {
   kind: string;
@@ -293,4 +295,18 @@ export function getDragModality(): DragModality {
 
 export function useDragModality(): DragModality {
   return getDragModality();
+}
+
+export const globalDndState: GlobalDndState = {
+  draggingCollectionRef: null,
+};
+
+export function setDraggingCollectionRef(
+  collectionRef: MaybeReactive<HTMLElement | null | undefined>
+): void {
+  globalDndState.draggingCollectionRef = collectionRef;
+}
+
+export function setGlobalDnDState(state: GlobalDndState): void {
+  globalDndState.draggingCollectionRef = state.draggingCollectionRef;
 }
