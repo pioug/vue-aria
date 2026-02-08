@@ -393,4 +393,70 @@ describe("DragManager", () => {
     expect(onFirstExit).toHaveBeenCalledTimes(1);
     expect(onSecondEnter).toHaveBeenCalledTimes(1);
   });
+
+  it("cancels managed dragging when clicking the original drag target", () => {
+    const dragElement = document.createElement("button");
+    const dropElement = document.createElement("button");
+    document.body.append(dragElement, dropElement);
+    setRect(dragElement, { x: 0, y: 0, width: 40, height: 20 });
+    setRect(dropElement, { x: 50, y: 0, width: 40, height: 20 });
+
+    registerDropTarget({
+      element: dropElement,
+      getDropOperation: () => "copy",
+    });
+
+    const onDragEnd = vi.fn();
+    beginDragging({
+      dragTarget: {
+        element: dragElement,
+        items: [{ "text/plain": "hello" }],
+        allowedDropOperations: ["copy"],
+        onDragEnd,
+      },
+    });
+
+    dragElement.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    expect(onDragEnd).toHaveBeenCalledWith(
+      expect.objectContaining({ dropOperation: "cancel" })
+    );
+    expect(isVirtualDragging()).toBe(false);
+  });
+
+  it("drops on a valid target when clicked during managed dragging", () => {
+    const dragElement = document.createElement("button");
+    const dropElement = document.createElement("button");
+    document.body.append(dragElement, dropElement);
+    setRect(dragElement, { x: 0, y: 0, width: 40, height: 20 });
+    setRect(dropElement, { x: 50, y: 0, width: 40, height: 20 });
+
+    const onDrop = vi.fn();
+    const onDragEnd = vi.fn();
+    registerDropTarget({
+      element: dropElement,
+      onDrop,
+      getDropOperation: () => "copy",
+    });
+
+    beginDragging({
+      dragTarget: {
+        element: dragElement,
+        items: [{ "text/plain": "hello" }],
+        allowedDropOperations: ["copy"],
+        onDragEnd,
+      },
+    });
+
+    dropElement.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    expect(onDrop).toHaveBeenCalledWith(
+      expect.objectContaining({ type: "drop", dropOperation: "copy" }),
+      null
+    );
+    expect(onDragEnd).toHaveBeenCalledWith(
+      expect.objectContaining({ dropOperation: "copy" })
+    );
+    expect(isVirtualDragging()).toBe(false);
+  });
 });

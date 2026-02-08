@@ -432,6 +432,43 @@ function dropManagedSession(session: ManagedDragSession): void {
   announce("Drop complete.");
 }
 
+function handleManagedClick(event: MouseEvent): void {
+  const session = dragSession.value;
+  if (!isManagedDragSession(session)) {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  if (
+    session.dragTarget.element instanceof HTMLElement &&
+    nodeContains(session.dragTarget.element, event.target)
+  ) {
+    cancelManagedSession(session);
+    return;
+  }
+
+  const dropTarget =
+    event.target instanceof HTMLElement
+      ? session.validDropTargets.find((target) =>
+          nodeContains(target.element, event.target)
+        ) ?? null
+      : null;
+  if (!dropTarget) {
+    return;
+  }
+
+  const validItems = getValidDropItemsForTarget(session, dropTarget);
+  const dropItem =
+    event.target instanceof HTMLElement
+      ? validItems.find((item) => nodeContains(item.element, event.target))
+      : undefined;
+
+  setCurrentDropTarget(session, dropTarget, dropItem);
+  dropManagedSession(session);
+}
+
 function handleManagedKeyDown(event: KeyboardEvent): void {
   const session = dragSession.value;
   if (!isManagedDragSession(session)) {
@@ -493,8 +530,10 @@ export function beginDragging(session: DragSession = {}): void {
     }
 
     document.addEventListener("keydown", handleManagedKeyDown, true);
+    document.addEventListener("click", handleManagedClick, true);
     cleanupActiveSession = () => {
       document.removeEventListener("keydown", handleManagedKeyDown, true);
+      document.removeEventListener("click", handleManagedClick, true);
     };
 
     if (typeof MutationObserver !== "undefined" && document.body) {
