@@ -18,6 +18,45 @@ export interface UseLongPressResult {
   longPressProps: Record<string, unknown>;
 }
 
+function dispatchPointerCancel(target: EventTarget | null): void {
+  if (!target || typeof target.dispatchEvent !== "function") {
+    return;
+  }
+
+  const cancelEvent =
+    typeof PointerEvent !== "undefined"
+      ? new PointerEvent("pointercancel", { bubbles: true })
+      : new Event("pointercancel", { bubbles: true });
+  target.dispatchEvent(cancelEvent);
+}
+
+function preventTouchContextMenu(target: EventTarget | null): void {
+  if (
+    !target ||
+    typeof target.addEventListener !== "function" ||
+    typeof target.removeEventListener !== "function" ||
+    typeof window === "undefined"
+  ) {
+    return;
+  }
+
+  const onContextMenu = (event: Event) => {
+    event.preventDefault();
+  };
+
+  target.addEventListener("contextmenu", onContextMenu, { once: true });
+  window.addEventListener(
+    "pointerup",
+    () => {
+      // If no contextmenu event fires quickly after pointerup, release this guard.
+      setTimeout(() => {
+        target.removeEventListener("contextmenu", onContextMenu);
+      }, 30);
+    },
+    { once: true }
+  );
+}
+
 function isDisabled(options: UseLongPressOptions): boolean {
   return options.isDisabled ? Boolean(toValue(options.isDisabled)) : false;
 }
@@ -32,7 +71,6 @@ export function useLongPress(
 ): UseLongPressResult {
   let timer: ReturnType<typeof setTimeout> | undefined;
   let startedEvent: LongPressEvent | null = null;
-  let hasTriggered = false;
 
   const cancelTimer = () => {
     if (timer) {
@@ -52,7 +90,6 @@ export function useLongPress(
         return;
       }
 
-      hasTriggered = false;
       startedEvent = {
         type: "longpressstart",
         pointerType: event.pointerType,
@@ -61,26 +98,25 @@ export function useLongPress(
       };
       options.onLongPressStart?.(startedEvent);
 
+      if (event.pointerType === "touch") {
+        preventTouchContextMenu(event.target);
+      }
+
       timer = setTimeout(() => {
-        if (!startedEvent) {
+        const longPressStartEvent = startedEvent;
+        if (!longPressStartEvent) {
           return;
         }
 
-        hasTriggered = true;
-        const endEvent: LongPressEvent = {
-          type: "longpressend",
-          pointerType: startedEvent.pointerType,
-          target: startedEvent.target,
-          originalEvent: startedEvent.originalEvent,
-        };
-        options.onLongPressEnd?.(endEvent);
+        timer = undefined;
+        // Match React Aria: canceling the press prevents merged press handlers from firing.
+        dispatchPointerCancel(longPressStartEvent.target);
         options.onLongPress?.({
           type: "longpress",
-          pointerType: startedEvent.pointerType,
-          target: startedEvent.target,
-          originalEvent: startedEvent.originalEvent,
+          pointerType: longPressStartEvent.pointerType,
+          target: longPressStartEvent.target,
+          originalEvent: longPressStartEvent.originalEvent,
         });
-        timer = undefined;
       }, resolveThreshold(options));
     },
     onPressEnd: (event) => {
@@ -96,17 +132,14 @@ export function useLongPress(
         cancelTimer();
       }
 
-      if (!hasTriggered) {
-        options.onLongPressEnd?.({
-          type: "longpressend",
-          pointerType: event.pointerType,
-          target: event.target,
-          originalEvent: event.originalEvent,
-        });
-      }
+      options.onLongPressEnd?.({
+        type: "longpressend",
+        pointerType: event.pointerType,
+        target: event.target,
+        originalEvent: event.originalEvent,
+      });
 
       startedEvent = null;
-      hasTriggered = false;
     },
   });
 

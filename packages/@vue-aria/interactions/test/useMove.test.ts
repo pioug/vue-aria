@@ -101,6 +101,115 @@ describe("useMove", () => {
     expect(onMove).not.toHaveBeenCalled();
   });
 
+  it("ends a pointer interaction on pointercancel", () => {
+    const onMoveEnd = vi.fn();
+    const { moveProps } = useMove({ onMoveEnd });
+    const handlers = moveProps as MoveHandlers;
+
+    handlers.onPointerdown?.(
+      createPointerEvent("pointerdown", {
+        pointerType: "pen",
+        pointerId: 7,
+        pageX: 2,
+        pageY: 2,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerType: "pen",
+        pointerId: 7,
+        pageX: 4,
+        pageY: 8,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointercancel", {
+        pointerType: "pen",
+        pointerId: 7,
+        pageX: 4,
+        pageY: 8,
+      })
+    );
+
+    expect(onMoveEnd).toHaveBeenCalledTimes(1);
+    expect(onMoveEnd.mock.calls[0]?.[0]).toMatchObject({
+      type: "moveend",
+      pointerType: "pen",
+    });
+  });
+
+  it("ignores additional pointers while one is active", () => {
+    const events: MoveEvent[] = [];
+    const addEvent = (event: MoveEvent) => events.push(event);
+    const { moveProps } = useMove({
+      onMoveStart: addEvent,
+      onMove: addEvent,
+      onMoveEnd: addEvent,
+    });
+    const handlers = moveProps as MoveHandlers;
+
+    handlers.onPointerdown?.(
+      createPointerEvent("pointerdown", {
+        pointerType: "pen",
+        pointerId: 1,
+        pageX: 1,
+        pageY: 30,
+      })
+    );
+    handlers.onPointerdown?.(
+      createPointerEvent("pointerdown", {
+        pointerType: "pen",
+        pointerId: 3,
+        pageX: 1,
+        pageY: 30,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerType: "pen",
+        pointerId: 3,
+        pageX: 1,
+        pageY: 40,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerType: "pen",
+        pointerId: 3,
+        pageX: 1,
+        pageY: 40,
+      })
+    );
+    expect(events).toEqual([]);
+
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerType: "pen",
+        pointerId: 1,
+        pageX: 10,
+        pageY: 25,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerType: "pen",
+        pointerId: 1,
+        pageX: 10,
+        pageY: 25,
+      })
+    );
+
+    expect(events).toHaveLength(3);
+    expect(events[0]).toMatchObject({ type: "movestart", pointerType: "pen" });
+    expect(events[1]).toMatchObject({
+      type: "move",
+      pointerType: "pen",
+      deltaX: 9,
+      deltaY: -5,
+    });
+    expect(events[2]).toMatchObject({ type: "moveend", pointerType: "pen" });
+  });
+
   it("does not fire move events when tapping without movement", () => {
     const onMoveStart = vi.fn();
     const onMoveEnd = vi.fn();

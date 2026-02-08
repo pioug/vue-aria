@@ -53,7 +53,7 @@ export function useInteractOutside(options: UseInteractOutsideOptions): void {
 
     if (typeof PointerEvent !== "undefined") {
       const onPointerDown = (event: PointerEvent) => {
-        if (isValidEvent(event, target)) {
+        if (options.onInteractOutside && isValidEvent(event, target)) {
           options.onInteractOutsideStart?.(event);
           state.isPointerDown = true;
         }
@@ -76,7 +76,7 @@ export function useInteractOutside(options: UseInteractOutsideOptions): void {
     }
 
     const onMouseDown = (event: MouseEvent) => {
-      if (isValidEvent(event, target)) {
+      if (options.onInteractOutside && isValidEvent(event, target)) {
         options.onInteractOutsideStart?.(event);
         state.isPointerDown = true;
       }
@@ -92,7 +92,7 @@ export function useInteractOutside(options: UseInteractOutsideOptions): void {
     };
 
     const onTouchStart = (event: TouchEvent) => {
-      if (isValidEvent(event, target)) {
+      if (options.onInteractOutside && isValidEvent(event, target)) {
         options.onInteractOutsideStart?.(event);
         state.isPointerDown = true;
       }
