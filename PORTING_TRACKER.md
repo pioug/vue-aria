@@ -46,8 +46,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] `useToggleButton`
 - [x] `useLink`
 - [x] `useLabel`
-- [ ] `useSeparator`
-- [ ] `VisuallyHidden` helper/component
+- [x] `useSeparator`
+- [x] `VisuallyHidden` helper/component
 - [ ] `useDescription` + `useErrorMessage` helpers
 
 ## 4) Text and number inputs

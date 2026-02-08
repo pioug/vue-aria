@@ -34,6 +34,15 @@ This port follows React Aria's package-first structure.
 - `useLabel`
 - `useField`
 
+### `@vue-aria/separator`
+
+- `useSeparator`
+
+### `@vue-aria/visually-hidden`
+
+- `useVisuallyHidden`
+- `VisuallyHidden`
+
 ### `@vue-aria/utils`
 
 - `mergeProps`

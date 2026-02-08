@@ -17,6 +17,8 @@ The goal is not a 1:1 API clone yet. The goal is to preserve behavior and access
 - `useButton`: button semantics for native and non-native elements.
 - `useLink`: link semantics for native and non-native elements.
 - `useLabel` / `useField`: label and field description/error wiring.
+- `useSeparator`: accessible separator semantics.
+- `useVisuallyHidden` + `VisuallyHidden`: visually hide content while preserving a11y visibility.
 - `mergeProps`: utility to merge prop objects and chain event handlers.
 
 ## Repository layout
@@ -31,6 +33,8 @@ The code is organized to mirror React Aria package boundaries:
 - `packages/@vue-aria/button`
 - `packages/@vue-aria/link`
 - `packages/@vue-aria/label`
+- `packages/@vue-aria/separator`
+- `packages/@vue-aria/visually-hidden`
 - `packages/@vue-aria/vue-aria` (umbrella exports)
 
 ## Install

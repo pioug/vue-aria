@@ -17,13 +17,16 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - `useLink`
 - `useLabel`
 - `useField`
+- `useSeparator`
+- `useVisuallyHidden`
+- `VisuallyHidden`
 
 ## Next Priority
 
 1. `useLongPress`
 2. `useMove`
 3. `useInteractOutside`
-4. `useSeparator`
+4. `useDescription` / `useErrorMessage`
 5. `useCheckbox` and `useTextField`
 
 ## Major Workstreams

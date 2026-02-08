@@ -38,6 +38,8 @@ Implemented packages and hooks:
 - `@vue-aria/button`: `useButton`
 - `@vue-aria/link`: `useLink`
 - `@vue-aria/label`: `useLabel`, `useField`
+- `@vue-aria/separator`: `useSeparator`
+- `@vue-aria/visually-hidden`: `useVisuallyHidden`, `VisuallyHidden`
 - `@vue-aria/utils`: `mergeProps`
 
 ## Upstream Reference
