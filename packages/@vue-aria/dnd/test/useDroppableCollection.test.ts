@@ -288,4 +288,191 @@ describe("useDroppableCollection", () => {
     registered?.onKeyDown?.(new KeyboardEvent("keydown", { key: "Home" }), drag);
     expect(state.target).toEqual({ type: "root" });
   });
+
+  it("uses default root drop handler when onDrop is not provided", () => {
+    const element = setupCollectionElement();
+    const rootTarget: DropTarget = { type: "root" };
+    const state = createState("copy");
+    const onRootDrop = vi.fn();
+
+    const { collectionProps } = useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate(rootTarget),
+        onRootDrop,
+      },
+      state,
+      ref(element)
+    );
+
+    const handlers = collectionProps.value as unknown as DropHandlers;
+    const dataTransfer = new DataTransferMock();
+    dataTransfer.items.add("hello world", "text/plain");
+
+    handlers.onDragenter(
+      new DragEventMock("dragenter", {
+        dataTransfer,
+        clientX: 1,
+        clientY: 1,
+      }) as unknown as DragEvent
+    );
+    handlers.onDrop(
+      new DragEventMock("drop", {
+        dataTransfer,
+        clientX: 2,
+        clientY: 3,
+      }) as unknown as DragEvent
+    );
+
+    expect(onRootDrop).toHaveBeenCalledTimes(1);
+    expect(onRootDrop).toHaveBeenCalledWith({
+      items: [
+        {
+          kind: "text",
+          types: new Set(["text/plain"]),
+          getText: expect.any(Function),
+        },
+      ],
+      dropOperation: "copy",
+    });
+  });
+
+  it("filters default handlers with acceptedDragTypes", () => {
+    const element = setupCollectionElement();
+    const rootTarget: DropTarget = { type: "root" };
+    const state = createState("copy");
+    const onRootDrop = vi.fn();
+
+    const { collectionProps } = useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate(rootTarget),
+        acceptedDragTypes: ["application/json"],
+        onRootDrop,
+      },
+      state,
+      ref(element)
+    );
+
+    const handlers = collectionProps.value as unknown as DropHandlers;
+    const dataTransfer = new DataTransferMock();
+    dataTransfer.items.add("hello world", "text/plain");
+
+    handlers.onDragenter(
+      new DragEventMock("dragenter", {
+        dataTransfer,
+        clientX: 1,
+        clientY: 1,
+      }) as unknown as DragEvent
+    );
+    handlers.onDrop(
+      new DragEventMock("drop", {
+        dataTransfer,
+        clientX: 2,
+        clientY: 3,
+      }) as unknown as DragEvent
+    );
+
+    expect(onRootDrop).not.toHaveBeenCalled();
+  });
+
+  it("runs default internal move/reorder handlers for item drop positions", async () => {
+    const element = setupCollectionElement();
+    const elementRef = ref(element);
+    const itemTarget: DropTarget = { type: "item", key: "b", dropPosition: "before" };
+    const state = createState("move");
+    const onMove = vi.fn();
+    const onReorder = vi.fn();
+    const onInsert = vi.fn();
+
+    setGlobalDnDState({
+      draggingCollectionRef: elementRef,
+      draggingKeys: new Set(["a"]),
+      dropCollectionRef: null,
+    });
+
+    const { collectionProps } = useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate(itemTarget),
+        onMove,
+        onReorder,
+        onInsert,
+      },
+      state,
+      elementRef
+    );
+
+    const handlers = collectionProps.value as unknown as DropHandlers;
+    const dataTransfer = new DataTransferMock();
+    dataTransfer.items.add("hello world", "text/plain");
+
+    handlers.onDragenter(
+      new DragEventMock("dragenter", {
+        dataTransfer,
+        clientX: 1,
+        clientY: 1,
+      }) as unknown as DragEvent
+    );
+    handlers.onDrop(
+      new DragEventMock("drop", {
+        dataTransfer,
+        clientX: 2,
+        clientY: 3,
+      }) as unknown as DragEvent
+    );
+
+    await Promise.resolve();
+
+    expect(onMove).toHaveBeenCalledTimes(1);
+    expect(onMove).toHaveBeenCalledWith({
+      keys: new Set(["a"]),
+      dropOperation: "move",
+      target: itemTarget,
+    });
+    expect(onReorder).toHaveBeenCalledTimes(1);
+    expect(onReorder).toHaveBeenCalledWith({
+      keys: new Set(["a"]),
+      dropOperation: "move",
+      target: itemTarget,
+    });
+    expect(onInsert).not.toHaveBeenCalled();
+  });
+
+  it("respects shouldAcceptItemDrop for on-item default drops", () => {
+    const element = setupCollectionElement();
+    const itemTarget: DropTarget = { type: "item", key: "b", dropPosition: "on" };
+    const state = createState("copy");
+    const onItemDrop = vi.fn();
+    const shouldAcceptItemDrop = vi.fn(() => false);
+
+    const { collectionProps } = useDroppableCollection(
+      {
+        dropTargetDelegate: createDropTargetDelegate(itemTarget),
+        onItemDrop,
+        shouldAcceptItemDrop,
+      },
+      state,
+      ref(element)
+    );
+
+    const handlers = collectionProps.value as unknown as DropHandlers;
+    const dataTransfer = new DataTransferMock();
+    dataTransfer.items.add("hello world", "text/plain");
+
+    handlers.onDragenter(
+      new DragEventMock("dragenter", {
+        dataTransfer,
+        clientX: 1,
+        clientY: 1,
+      }) as unknown as DragEvent
+    );
+    handlers.onDrop(
+      new DragEventMock("drop", {
+        dataTransfer,
+        clientX: 2,
+        clientY: 3,
+      }) as unknown as DragEvent
+    );
+
+    expect(shouldAcceptItemDrop).toHaveBeenCalledTimes(1);
+    expect(onItemDrop).not.toHaveBeenCalled();
+  });
 });

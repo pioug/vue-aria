@@ -14,6 +14,7 @@ import type {
 } from "./types";
 import {
   clearGlobalDnDState,
+  DIRECTORY_DRAG_TYPE,
   getTypes,
   globalDndState,
   isInternalDropOperation,
@@ -51,6 +52,30 @@ export interface DroppableCollectionActivateEvent {
   target: DropTarget;
 }
 
+export interface RootDropEvent {
+  items: DropItem[];
+  dropOperation: DropOperation;
+}
+
+export interface CollectionItemDropEvent {
+  items: DropItem[];
+  dropOperation: DropOperation;
+  isInternal: boolean;
+  target: DropTarget;
+}
+
+export interface CollectionInsertEvent {
+  items: DropItem[];
+  dropOperation: DropOperation;
+  target: DropTarget;
+}
+
+export interface CollectionMoveEvent {
+  keys: Set<Key>;
+  dropOperation: DropOperation;
+  target: DropTarget;
+}
+
 export interface DroppableCollectionState {
   target: DropTarget | null;
   setTarget: (target: DropTarget | null) => void;
@@ -59,10 +84,19 @@ export interface DroppableCollectionState {
   ) => DropOperation;
 }
 
+export type AcceptedDragTypes = "all" | Array<string | symbol>;
+
 export interface DroppableCollectionOptions {
   dropTargetDelegate: DropTargetDelegate;
   keyboardDelegate?: KeyboardDelegate;
   collection?: Collection;
+  acceptedDragTypes?: AcceptedDragTypes;
+  shouldAcceptItemDrop?: (target: DropTarget, types: Set<string | symbol>) => boolean;
+  onRootDrop?: (event: RootDropEvent) => void | Promise<void>;
+  onItemDrop?: (event: CollectionItemDropEvent) => void | Promise<void>;
+  onInsert?: (event: CollectionInsertEvent) => void | Promise<void>;
+  onMove?: (event: CollectionMoveEvent) => void | Promise<void>;
+  onReorder?: (event: CollectionMoveEvent) => void | Promise<void>;
   onDrop?: (event: DroppableCollectionDropEvent) => void | Promise<void>;
   onDropActivate?: (event: DroppableCollectionActivateEvent) => void;
   onKeyDown?: (event: KeyboardEvent) => void;
@@ -99,6 +133,107 @@ function toDropEvent(
     items: event.items,
     dropOperation: event.dropOperation,
   };
+}
+
+function getItemTypes(item: DropItem): Set<string | symbol> {
+  if (item.kind === "directory") {
+    return new Set([DIRECTORY_DRAG_TYPE]);
+  }
+
+  if (item.kind === "file") {
+    return new Set([item.type]);
+  }
+
+  return item.types;
+}
+
+function filterDropItems(
+  props: DroppableCollectionOptions,
+  target: DropTarget,
+  items: DropItem[]
+): DropItem[] {
+  const acceptedDragTypes = props.acceptedDragTypes ?? "all";
+  const shouldAcceptItemDrop = props.shouldAcceptItemDrop;
+  if (acceptedDragTypes === "all" && !shouldAcceptItemDrop) {
+    return items;
+  }
+
+  return items.filter((item) => {
+    const itemTypes = getItemTypes(item);
+
+    const acceptsType =
+      acceptedDragTypes === "all"
+        ? true
+        : acceptedDragTypes.some((type) => itemTypes.has(type));
+    if (!acceptsType) {
+      return false;
+    }
+
+    if (
+      target.type === "item" &&
+      target.dropPosition === "on" &&
+      typeof shouldAcceptItemDrop === "function"
+    ) {
+      return shouldAcceptItemDrop(target, itemTypes);
+    }
+
+    return true;
+  });
+}
+
+async function defaultOnDrop(
+  props: DroppableCollectionOptions,
+  ref: MaybeReactive<HTMLElement | null | undefined>,
+  event: DroppableCollectionDropEvent
+): Promise<void> {
+  const filteredItems = filterDropItems(props, event.target, event.items);
+  if (filteredItems.length === 0) {
+    return;
+  }
+
+  const draggingKeys = getDraggingKeys();
+  const isInternal = isInternalDropOperation(ref);
+
+  if (event.target.type === "root") {
+    await props.onRootDrop?.({
+      items: filteredItems,
+      dropOperation: event.dropOperation,
+    });
+    return;
+  }
+
+  if (event.target.dropPosition === "on") {
+    await props.onItemDrop?.({
+      items: filteredItems,
+      dropOperation: event.dropOperation,
+      isInternal,
+      target: event.target,
+    });
+  }
+
+  if (isInternal) {
+    await props.onMove?.({
+      keys: draggingKeys,
+      dropOperation: event.dropOperation,
+      target: event.target,
+    });
+  }
+
+  if (event.target.dropPosition !== "on") {
+    if (isInternal) {
+      await props.onReorder?.({
+        keys: draggingKeys,
+        dropOperation: event.dropOperation,
+        target: event.target,
+      });
+    } else {
+      await props.onInsert?.({
+        items: filteredItems,
+        dropOperation: event.dropOperation,
+        target: event.target,
+      });
+    }
+  }
 }
 
 function getDropOperation(
@@ -237,8 +372,22 @@ export function useDroppableCollection(
       });
 
       if (operation === "cancel") {
-        localState.nextTarget = null;
-        return "cancel";
+        const rootTarget: DropTarget = { type: "root" };
+        const rootOperation = state.getDropOperation({
+          target: rootTarget,
+          types,
+          allowedOperations,
+          isInternal,
+          draggingKeys,
+        });
+        if (rootOperation === "cancel") {
+          localState.nextTarget = null;
+          return "cancel";
+        }
+
+        localState.nextTarget = rootTarget;
+        setDropCollectionRef(ref);
+        return rootOperation;
       }
 
       localState.nextTarget = target;
@@ -264,7 +413,12 @@ export function useDroppableCollection(
       setDropCollectionRef(ref);
       const target = state.target ?? localState.nextTarget;
       if (target) {
-        props.onDrop?.(toDropEvent(event, target));
+        const dropEvent = toDropEvent(event, target);
+        if (props.onDrop) {
+          props.onDrop(dropEvent);
+        } else {
+          void defaultOnDrop(props, ref, dropEvent);
+        }
       }
 
       if (globalDndState.draggingCollectionRef == null) {
@@ -344,7 +498,12 @@ export function useDroppableCollection(
         setDropCollectionRef(ref);
         const nextTarget = target ?? state.target;
         if (nextTarget) {
-          props.onDrop?.(toDropEvent(event, nextTarget));
+          const dropEvent = toDropEvent(event, nextTarget);
+          if (props.onDrop) {
+            props.onDrop(dropEvent);
+          } else {
+            void defaultOnDrop(props, ref, dropEvent);
+          }
         }
       },
       onKeyDown(event, drag) {

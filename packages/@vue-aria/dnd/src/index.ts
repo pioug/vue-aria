@@ -97,6 +97,11 @@ export type {
   DraggableItemState,
 } from "./useDraggableItem";
 export type {
+  AcceptedDragTypes,
+  CollectionInsertEvent,
+  CollectionItemDropEvent,
+  CollectionMoveEvent,
+  RootDropEvent,
   DroppableCollectionActivateEvent,
   DroppableCollectionDropEvent,
   DroppableCollectionGetOperationOptions,
