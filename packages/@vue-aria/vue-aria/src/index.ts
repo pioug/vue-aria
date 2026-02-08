@@ -134,6 +134,12 @@ export { useGridList, useGridListItem } from "@vue-aria/gridlist";
 export { useTree, useTreeItem } from "@vue-aria/tree";
 export { useTreeState } from "@vue-aria/tree-state";
 export {
+  Point as VirtualizerPoint,
+  Size as VirtualizerSize,
+  Rect as VirtualizerRect,
+  LayoutInfo as VirtualizerLayoutInfo,
+} from "@vue-aria/virtualizer-state";
+export {
   useTable,
   useTableRow,
   useTableCell,
@@ -369,6 +375,7 @@ export type {
   UseTreeStateOptions,
   UseTreeStateResult,
 } from "@vue-aria/tree-state";
+export type { RectCorner as VirtualizerRectCorner } from "@vue-aria/virtualizer-state";
 export type {
   SortDescriptor as TableSortDescriptor,
   SortDirection as TableSortDirection,

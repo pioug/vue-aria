@@ -4,7 +4,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `121 / 134` (about `90.3%`)
+- Tracked items completed: `122 / 135` (about `90.4%`)
 - Tracked items remaining: `13`
 - Current parity focus: drag/drop + virtualizer parity
 
@@ -43,6 +43,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`, `useToast`, `useToastRegion`
 - Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `createDragPreviewRenderer`, `useDrop`, `useDropIndicator`, `useDroppableCollection`, `useDroppableItem`, `useVirtualDrop`, `useAutoScroll`, `useDraggableCollection`, `useDraggableItem`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate` (with `hasDragButton`/`hasDropButton` affordances)
 - Drag/drop manager hardening baseline: keyboard session flow (`Tab` navigation, `Enter` drop, `Escape` cancel), click-driven cancel/drop flow, drop-item targeting/activation (`onDropTargetEnter`, `onDropActivate`), screen-reader isolation for non-drop content while dragging, mutation-driven target updates, and `isValidDropTarget` utility
+- Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 
 ## What Is Left (By Area)
 
