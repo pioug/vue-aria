@@ -112,6 +112,10 @@ This port follows React Aria's package-first structure.
 - `useAccordionItem`
 - `useDisclosure`
 
+### `@vue-aria/listbox`
+
+- `useListBoxSection`
+
 ### `@vue-aria/link`
 
 - `useLink`

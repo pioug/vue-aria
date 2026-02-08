@@ -46,6 +46,7 @@ export {
   useDisclosureGroupState,
   useAccordionItem,
 } from "@vue-aria/disclosure";
+export { useListBoxSection } from "@vue-aria/listbox";
 export { useLink } from "@vue-aria/link";
 export { useLabel, useField } from "@vue-aria/label";
 export { useTextField } from "@vue-aria/textfield";
