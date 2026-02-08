@@ -9,8 +9,13 @@ The goal is not a 1:1 API clone yet. The goal is to preserve behavior and access
 - `useId`: stable id generation for aria relationships.
 - `useFocusVisible`: global keyboard/pointer modality tracking.
 - `useFocusRing`: focus + focus-visible state and event props.
+- `useFocus`: focus handling on immediate target.
+- `useFocusWithin`: focus handling for target and descendants.
 - `usePress`: unified mouse/touch/keyboard/virtual press interactions.
+- `useHover`: hover handling with touch-emulation suppression.
+- `useKeyboard`: keyboard handling with opt-in propagation.
 - `useButton`: button semantics for native and non-native elements.
+- `useLink`: link semantics for native and non-native elements.
 - `mergeProps`: utility to merge prop objects and chain event handlers.
 
 ## Repository layout
@@ -23,6 +28,7 @@ The code is organized to mirror React Aria package boundaries:
 - `packages/@vue-aria/focus`
 - `packages/@vue-aria/interactions`
 - `packages/@vue-aria/button`
+- `packages/@vue-aria/link`
 - `packages/@vue-aria/vue-aria` (umbrella exports)
 
 ## Install

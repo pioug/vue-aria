@@ -22,6 +22,9 @@ export default defineConfig({
       "@vue-aria/button": fileURLToPath(
         new URL("./packages/@vue-aria/button/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/link": fileURLToPath(
+        new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/vue-aria": fileURLToPath(
         new URL("./packages/@vue-aria/vue-aria/src/index.ts", import.meta.url)
       ),

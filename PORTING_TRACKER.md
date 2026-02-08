@@ -30,10 +30,10 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] `useFocusVisible`
 - [x] `useFocusRing`
 - [x] `usePress`
-- [ ] `useHover`
-- [ ] `useFocus`
-- [ ] `useFocusWithin`
-- [ ] `useKeyboard`
+- [x] `useHover`
+- [x] `useFocus`
+- [x] `useFocusWithin`
+- [x] `useKeyboard`
 - [ ] `useLongPress`
 - [ ] `useMove`
 - [ ] `useInteractOutside`
@@ -44,7 +44,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 - [x] `useButton`
 - [ ] `useToggleButton`
-- [ ] `useLink`
+- [x] `useLink`
 - [ ] `useLabel`
 - [ ] `useSeparator`
 - [ ] `VisuallyHidden` helper/component

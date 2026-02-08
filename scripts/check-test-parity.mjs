@@ -10,7 +10,12 @@ const requiredTestFiles = [
   "packages/@vue-aria/focus/test/useFocusVisible.test.ts",
   "packages/@vue-aria/focus/test/useFocusRing.test.ts",
   "packages/@vue-aria/interactions/test/usePress.test.ts",
+  "packages/@vue-aria/interactions/test/useKeyboard.test.ts",
+  "packages/@vue-aria/interactions/test/useFocus.test.ts",
+  "packages/@vue-aria/interactions/test/useFocusWithin.test.ts",
+  "packages/@vue-aria/interactions/test/useHover.test.ts",
   "packages/@vue-aria/button/test/useButton.test.ts",
+  "packages/@vue-aria/link/test/useLink.test.ts",
 ];
 
 const missing = requiredTestFiles.filter((file) => {

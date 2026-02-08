@@ -28,6 +28,7 @@ export default defineConfig({
           { text: "@vue-aria/focus", link: "/packages/focus" },
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
           { text: "@vue-aria/button", link: "/packages/button" },
+          { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/utils", link: "/packages/utils" },
         ],
       },

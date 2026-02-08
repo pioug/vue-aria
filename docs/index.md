@@ -34,8 +34,9 @@ Implemented packages and hooks:
 
 - `@vue-aria/ssr`: `useId`
 - `@vue-aria/focus`: `useFocusVisible`, `useFocusRing`
-- `@vue-aria/interactions`: `usePress`
+- `@vue-aria/interactions`: `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`
 - `@vue-aria/button`: `useButton`
+- `@vue-aria/link`: `useLink`
 - `@vue-aria/utils`: `mergeProps`
 
 ## Upstream Reference

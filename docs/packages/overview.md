@@ -16,10 +16,18 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/interactions`
 
 - `usePress`
+- `useKeyboard`
+- `useFocus`
+- `useFocusWithin`
+- `useHover`
 
 ### `@vue-aria/button`
 
 - `useButton`
+
+### `@vue-aria/link`
+
+- `useLink`
 
 ### `@vue-aria/utils`
 

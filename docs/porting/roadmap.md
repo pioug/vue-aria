@@ -9,13 +9,18 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - `useFocusVisible`
 - `useFocusRing`
 - `usePress`
+- `useKeyboard`
+- `useFocus`
+- `useFocusWithin`
+- `useHover`
 - `useButton`
+- `useLink`
 
 ## Next Priority
 
-1. `useHover`
-2. `useFocus` / `useFocusWithin`
-3. `useLink`
+1. `useLongPress`
+2. `useMove`
+3. `useInteractOutside`
 4. `useLabel`
 5. `useCheckbox` and `useTextField`
 
