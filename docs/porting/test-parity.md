@@ -70,6 +70,9 @@ Current test files:
 - `packages/@vue-aria/disclosure/test/useDisclosureGroupState.test.ts`
 - `packages/@vue-aria/disclosure/test/useAccordionItem.test.ts`
 - `packages/@vue-aria/disclosure/test/useDisclosure.test.ts`
+- `packages/@vue-aria/listbox/test/useListBoxState.test.ts`
+- `packages/@vue-aria/listbox/test/useListBox.test.ts`
+- `packages/@vue-aria/listbox/test/useOption.test.ts`
 - `packages/@vue-aria/listbox/test/useListBoxSection.test.ts`
 - `packages/@vue-aria/link/test/useLink.test.ts`
 - `packages/@vue-aria/label/test/useLabel.test.ts`

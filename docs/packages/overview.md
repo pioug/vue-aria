@@ -114,6 +114,9 @@ This port follows React Aria's package-first structure.
 
 ### `@vue-aria/listbox`
 
+- `useListBoxState`
+- `useListBox`
+- `useOption`
 - `useListBoxSection`
 
 ### `@vue-aria/link`
