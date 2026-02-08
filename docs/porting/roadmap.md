@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `51 / 133` (about `38.3%`)
-- Tracked items remaining: `82`
+- Tracked items completed: `52 / 133` (about `39.1%`)
+- Tracked items remaining: `81`
 - Current parity focus: date/time i18n/timezone hardening after calendar baseline
 
 ## Done So Far
@@ -20,7 +20,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Date/time pickers: `useDatePickerGroup`, `useDatePicker`, `useDateRangePicker`, `useTimeField`
 - Calendar: `useCalendarBase`, `useCalendar`, `useCalendarCell`, `useRangeCalendar`
 - Navigation: `useBreadcrumbItem`
-- Feedback/status: `useProgressBar`, `useMeter`
+- Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`
 
 ## What Is Left (By Area)
 
@@ -36,7 +36,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Overlays/dialogs: `11` remaining
 - Grids/tables/trees: `11` remaining
 - Drag/drop + virtualizer: `6` remaining
-- Feedback/status: `3` remaining
+- Feedback/status: `2` remaining
 - Stately parity layer: `14` remaining
 - Quality gates: `7` remaining
 

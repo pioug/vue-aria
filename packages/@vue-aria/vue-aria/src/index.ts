@@ -19,7 +19,7 @@ export {
 export { useRadioGroup, useRadio } from "@vue-aria/radio";
 export { useSwitch } from "@vue-aria/switch";
 export { useSlider, useSliderThumb, useSliderState } from "@vue-aria/slider";
-export { useProgressBar } from "@vue-aria/progress";
+export { useProgressBar, useProgressCircle } from "@vue-aria/progress";
 export { useMeter } from "@vue-aria/meter";
 export { useDateField, useDateSegment } from "@vue-aria/datefield";
 export {

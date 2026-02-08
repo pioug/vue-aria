@@ -46,6 +46,7 @@ Current test files:
 - `packages/@vue-aria/slider/test/useSliderThumb.test.ts`
 - `packages/@vue-aria/slider/test/useSliderState.test.ts`
 - `packages/@vue-aria/progress/test/useProgressBar.test.ts`
+- `packages/@vue-aria/progress/test/useProgressCircle.test.ts`
 - `packages/@vue-aria/meter/test/useMeter.test.ts`
 - `packages/@vue-aria/datefield/test/useDateField.test.ts`
 - `packages/@vue-aria/datefield/test/useDateSegment.test.ts`
