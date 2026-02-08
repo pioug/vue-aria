@@ -97,6 +97,11 @@ This port follows React Aria's package-first structure.
 
 - `useBreadcrumbItem`
 
+### `@vue-aria/disclosure`
+
+- `useDisclosureState`
+- `useDisclosure`
+
 ### `@vue-aria/link`
 
 - `useLink`
