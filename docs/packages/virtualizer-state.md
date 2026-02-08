@@ -12,6 +12,7 @@ Foundational geometry/layout primitives for virtualized collections.
 - `Virtualizer`
 - `OverscanManager`
 - `ReusableView`
+- `useVirtualizerState`
 
 ```ts
 import { LayoutInfo, Rect } from "@vue-aria/virtualizer-state";

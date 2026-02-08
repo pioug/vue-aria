@@ -232,6 +232,7 @@ This port follows React Aria's package-first structure.
 - `Virtualizer`
 - `OverscanManager`
 - `ReusableView`
+- `useVirtualizerState`
 
 ### `@vue-aria/table`
 

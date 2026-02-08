@@ -144,6 +144,7 @@ export {
   ReusableView as VirtualizerReusableView,
   RootView as VirtualizerRootView,
   ChildView as VirtualizerChildView,
+  useVirtualizerState,
 } from "@vue-aria/virtualizer-state";
 export {
   useTable,
@@ -388,6 +389,8 @@ export type {
   VirtualizerDelegate,
   VirtualizerRenderOptions,
   VirtualizerItemDropTarget,
+  UseVirtualizerStateOptions,
+  UseVirtualizerStateResult,
 } from "@vue-aria/virtualizer-state";
 export type {
   SortDescriptor as TableSortDescriptor,
