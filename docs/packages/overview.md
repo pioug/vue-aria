@@ -42,6 +42,7 @@ This port follows React Aria's package-first structure.
 ### `@vue-aria/dnd`
 
 - `useClipboard`
+- `useDrag`
 - `writeToDataTransfer`
 - `readFromDataTransfer`
 - `DragTypes`

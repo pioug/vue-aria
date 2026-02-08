@@ -14,6 +14,7 @@ export {
 } from "@vue-aria/interactions";
 export {
   useClipboard,
+  useDrag,
   navigate,
   ListDropTargetDelegate,
   DIRECTORY_DRAG_TYPE,
@@ -166,6 +167,11 @@ export type {
   KeyboardDelegate as DropKeyboardDelegate,
   Orientation as DndOrientation,
   RootDropTarget,
+  DragOptions,
+  DragResult,
+  DragStartEvent,
+  DragMoveEvent,
+  DragEndEvent,
   FileDropItem,
   TextDropItem,
 } from "@vue-aria/dnd";

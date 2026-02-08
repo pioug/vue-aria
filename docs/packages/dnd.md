@@ -6,6 +6,10 @@ Drag-and-drop clipboard primitives aligned with React Aria's `@react-aria/dnd` d
 
 Handles focused copy/cut/paste interactions and normalizes clipboard payloads for multi-type and multi-item transfers.
 
+## `useDrag`
+
+Provides native drag lifecycle wiring (`dragstart`/`drag`/`dragend`) with data transfer population and allowed drop operation mapping.
+
 ## Utilities
 
 - `writeToDataTransfer`

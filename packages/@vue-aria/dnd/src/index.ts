@@ -1,4 +1,5 @@
 export { useClipboard } from "./useClipboard";
+export { useDrag } from "./useDrag";
 export { navigate } from "./DropTargetKeyboardNavigation";
 export { ListDropTargetDelegate } from "./ListDropTargetDelegate";
 export {
@@ -41,3 +42,10 @@ export type {
   TextDropItem,
 } from "./types";
 export type { ClipboardProps, ClipboardResult } from "./useClipboard";
+export type {
+  DragEndEvent,
+  DragMoveEvent,
+  DragOptions,
+  DragResult,
+  DragStartEvent,
+} from "./useDrag";

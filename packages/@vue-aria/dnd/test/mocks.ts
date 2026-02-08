@@ -199,3 +199,21 @@ export class ClipboardEventMock extends Event {
     this.clipboardData = init.clipboardData as unknown as DataTransfer;
   }
 }
+
+export class DragEventMock extends MouseEvent {
+  readonly dataTransfer: DataTransfer;
+
+  constructor(
+    type: string,
+    init: { dataTransfer: DataTransferMock; clientX?: number; clientY?: number }
+  ) {
+    super(type, {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      clientX: init.clientX ?? 0,
+      clientY: init.clientY ?? 0,
+    });
+    this.dataTransfer = init.dataTransfer as unknown as DataTransfer;
+  }
+}
