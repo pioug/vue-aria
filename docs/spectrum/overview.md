@@ -35,3 +35,12 @@ npm run test:cross-browser
 - Checklist: `/SPECTRUM_PORTING_TRACKER.md`
 - Strategy and phases: `/docs/porting/spectrum-roadmap.md`
 - Cross-browser demos: `/docs/spectrum/cross-browser-demos.md`
+- Theming baseline: `/docs/spectrum/theming-baseline.md`
+
+## Scaffolding Helper
+
+Create new package/docs/test stubs with:
+
+```bash
+npm run scaffold:spectrum-package -- <package-name>
+```

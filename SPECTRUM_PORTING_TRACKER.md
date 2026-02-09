@@ -6,7 +6,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 - Completed packages: `0 / 64`
 - Remaining packages: `64`
-- Current stage: phase-0 foundation scaffolding
+- Current stage: phase-1 foundation migration
 
 ## Upstream Source of Truth
 
@@ -30,8 +30,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [x] Add npm script `test:spectrum-parity` and wire into CI.
 - [x] Add shared Spectrum docs section (`docs/spectrum/*`) and overview page.
 - [x] Add cross-browser component harness pages for Spectrum components.
-- [ ] Define visual/theming baseline (tokens, scales, color schemes).
-- [ ] Add package scaffolding generator for one-package-per-upstream parity.
+- [x] Define visual/theming baseline (tokens, scales, color schemes).
+- [x] Add package scaffolding generator for one-package-per-upstream parity.
 
 ## Foundation, Theme, and Infrastructure
 

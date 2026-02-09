@@ -138,6 +138,7 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/spectrum/overview" },
           { text: "Cross-Browser Demos", link: "/spectrum/cross-browser-demos" },
+          { text: "Theming Baseline", link: "/spectrum/theming-baseline" },
           { text: "@vue-spectrum/provider", link: "/spectrum/provider" },
           { text: "@vue-spectrum/icon", link: "/spectrum/icon" },
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },

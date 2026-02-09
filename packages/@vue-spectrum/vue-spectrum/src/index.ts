@@ -5,6 +5,9 @@ export {
   useSpectrumProviderContext,
   useSpectrumProviderProps,
   useSpectrumProviderDOMProps,
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  SPECTRUM_COLOR_SCHEMES,
+  SPECTRUM_SCALES,
   useColorScheme,
   useScale,
   useMediaQuery,
@@ -24,6 +27,8 @@ export type {
   ProvideSpectrumProviderOptions,
   SpectrumProviderDOMProps,
   UseSpectrumProviderDOMPropsOptions,
+  SpectrumColorSchemeName,
+  SpectrumScaleName,
 } from "@vue-spectrum/provider";
 export type {
   BaseSpectrumIconProps,

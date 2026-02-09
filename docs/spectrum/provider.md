@@ -12,6 +12,9 @@ Provider-level context baseline for the Vue Spectrum migration.
 - `useColorScheme`
 - `useScale`
 - `useMediaQuery`
+- `SPECTRUM_COLOR_SCHEMES`
+- `SPECTRUM_SCALES`
+- `DEFAULT_SPECTRUM_THEME_CLASS_MAP`
 
 ## Example
 
