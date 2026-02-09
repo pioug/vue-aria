@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `138 / 144` tracked items
-- Remaining: `6`
+- Completed: `139 / 144` tracked items
+- Remaining: `5`
 - Current stage: quality-gate hardening
 
 ## 0) Dependency baseline
@@ -210,7 +210,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## 15) Quality gates
 
-- [ ] Hook-level unit tests
+- [x] Hook-level unit tests
 - [ ] Keyboard interaction tests
 - [ ] Screen reader behavior checks
 - [x] SSR hydration tests
@@ -220,3 +220,4 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - In progress baseline: SSR smoke coverage added for `@vue-aria/dnd` (`dnd.ssr.test.ts`)
 - [x] Hydration id parity coverage added for `@vue-aria/ssr` (`hydration.test.ts`)
 - [x] Overlay placement RTL mapping coverage added for `@vue-aria/overlays` (`useOverlayPosition.test.ts`)
+- [x] Parity script enforces at least one unit test suite per runtime package (`check-test-parity.mjs`)

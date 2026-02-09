@@ -163,4 +163,67 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
+function collectTestFiles(directory) {
+  if (!fs.existsSync(directory)) {
+    return [];
+  }
+
+  const tests = [];
+  const stack = [directory];
+
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (!current) {
+      continue;
+    }
+
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const next = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(next);
+        continue;
+      }
+
+      if (entry.isFile() && entry.name.endsWith(".test.ts")) {
+        tests.push(next);
+      }
+    }
+  }
+
+  return tests;
+}
+
+const packageRoot = path.join(root, "packages", "@vue-aria");
+const testAuditExclusions = new Set(["types", "vue-aria"]);
+const packagesMissingHookTests = [];
+
+for (const entry of fs.readdirSync(packageRoot, { withFileTypes: true })) {
+  if (!entry.isDirectory()) {
+    continue;
+  }
+
+  if (testAuditExclusions.has(entry.name)) {
+    continue;
+  }
+
+  const packageDir = path.join(packageRoot, entry.name);
+  const runtimeEntry = path.join(packageDir, "src", "index.ts");
+  if (!fs.existsSync(runtimeEntry)) {
+    continue;
+  }
+
+  const tests = collectTestFiles(path.join(packageDir, "test"));
+  if (tests.length === 0) {
+    packagesMissingHookTests.push(path.relative(root, packageDir));
+  }
+}
+
+if (packagesMissingHookTests.length > 0) {
+  console.error("Parity check failed. Packages missing test coverage:");
+  for (const packageDir of packagesMissingHookTests) {
+    console.error(`- ${packageDir}`);
+  }
+  process.exit(1);
+}
+
 console.log("Parity check passed for currently ported modules.");
