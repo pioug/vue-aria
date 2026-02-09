@@ -14,6 +14,14 @@ export { useMediaQuery } from "./useMediaQuery";
 export { useIsMobileDevice, MOBILE_SCREEN_WIDTH } from "./useIsMobileDevice";
 export { useHasChild } from "./useHasChild";
 export {
+  createDOMRef,
+  createFocusableRef,
+  useDOMRef,
+  useFocusableRef,
+  unwrapDOMRef,
+  useUnwrapDOMRef,
+} from "./useDOMRef";
+export {
   BreakpointProvider,
   useMatchedBreakpoints,
   useBreakpoint,

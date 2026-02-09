@@ -8,6 +8,28 @@ export type PointerType = "mouse" | "touch" | "pen" | "keyboard" | "virtual";
 
 export type ReadonlyRef<T> = Readonly<Ref<T>>;
 
+export interface DOMRefValue<T extends HTMLElement = HTMLElement> {
+  UNSAFE_getDOMNode(): T | null;
+}
+
+export type DOMRef<T extends HTMLElement = HTMLElement> = Ref<DOMRefValue<T> | null>;
+
+export type FocusableElement =
+  | HTMLElement
+  | SVGElement
+  | {
+      focus: () => void;
+    };
+
+export interface FocusableRefValue<T extends HTMLElement = HTMLElement>
+  extends DOMRefValue<T> {
+  focus(): void;
+}
+
+export type FocusableRef<T extends HTMLElement = HTMLElement> = Ref<
+  FocusableRefValue<T> | null
+>;
+
 export interface PressEvent {
   type: "press";
   pointerType: PointerType;
