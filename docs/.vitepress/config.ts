@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import { fileURLToPath, URL } from "node:url";
 
 function normalizeBase(value: string | undefined): string {
   if (!value) {
@@ -22,6 +23,24 @@ function normalizeBase(value: string | undefined): string {
 }
 
 export default defineConfig({
+  vite: {
+    resolve: {
+      alias: {
+        "@vue-spectrum/provider": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/provider/src/index.ts", import.meta.url)
+        ),
+        "@vue-spectrum/icon": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/icon/src/index.ts", import.meta.url)
+        ),
+        "@vue-spectrum/utils": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/utils/src/index.ts", import.meta.url)
+        ),
+        "@vue-spectrum/vue-spectrum": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
+        ),
+      },
+    },
+  },
   base: normalizeBase(process.env.VITEPRESS_BASE),
   title: "vue-aria",
   description: "Vue port of React Aria interaction and accessibility hooks.",
@@ -118,6 +137,7 @@ export default defineConfig({
         text: "Spectrum",
         items: [
           { text: "Overview", link: "/spectrum/overview" },
+          { text: "Cross-Browser Demos", link: "/spectrum/cross-browser-demos" },
           { text: "@vue-spectrum/provider", link: "/spectrum/provider" },
           { text: "@vue-spectrum/icon", link: "/spectrum/icon" },
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },

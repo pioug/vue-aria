@@ -29,7 +29,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [x] Add parity gate script `scripts/check-spectrum-parity.mjs` (tests + docs + exports coverage).
 - [x] Add npm script `test:spectrum-parity` and wire into CI.
 - [x] Add shared Spectrum docs section (`docs/spectrum/*`) and overview page.
-- [ ] Add cross-browser component harness pages for Spectrum components.
+- [x] Add cross-browser component harness pages for Spectrum components.
 - [ ] Define visual/theming baseline (tokens, scales, color schemes).
 - [ ] Add package scaffolding generator for one-package-per-upstream parity.
 

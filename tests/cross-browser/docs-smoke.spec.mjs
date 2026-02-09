@@ -7,6 +7,7 @@ const routes = [
   "/packages/overlays.html",
   "/packages/dnd.html",
   "/porting/cross-browser-demos.html",
+  "/spectrum/cross-browser-demos.html",
 ];
 
 for (const route of routes) {
