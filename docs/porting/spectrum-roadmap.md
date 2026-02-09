@@ -15,6 +15,26 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 
+## Progress Breakdown
+
+- Program setup tasks: `5 / 8` completed.
+- Foundation/theme/infrastructure packages: `0 / 16` completed.
+- Actions/navigation packages: `0 / 12` completed.
+- Inputs/selection packages: `0 / 13` completed.
+- Lists/tables/trees packages: `0 / 4` completed.
+- Overlays/messaging packages: `0 / 7` completed.
+- Drag/drop packages: `0 / 2` completed.
+- Display/status packages: `0 / 10` completed.
+- Dependency-baseline tasks: `0 / 4` completed.
+
+## Current Critical Path
+
+1. Finish Phase 0 remaining tasks (`3` items): cross-browser harness pages, theming baseline definition, and scaffolding generator.
+2. Move in-progress foundation packages from baseline to complete parity: `provider`, `icon`, and `utils`.
+3. Complete foundation dependencies for broad component work: `form`, `label`, `text`, `layout`, `view`.
+4. Lock theme layer strategy and implement `theme-default`, `theme-light`, `theme-dark`, and `theme-express`.
+5. Start high-volume controls only after the above are stable and parity-gated.
+
 ## Scope
 
 - In scope: component packages under `references/react-spectrum/packages/@react-spectrum/*`.
@@ -108,7 +128,7 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 
 ## Immediate Next Steps
 
-1. Expand `@vue-spectrum/provider` toward deeper parity (`Provider` wrapper behaviors, breakpoint plumbing, and SSR-focused coverage).
-2. Start Phase 1 package ports with `@react-spectrum/icon` and `@react-spectrum/form` dependencies needed by high-level components.
-3. Add Spectrum cross-browser harness pages and Playwright assertions for provider/theme flows.
-4. Wire `npm run test:spectrum-parity` into CI.
+1. Add Spectrum cross-browser harness pages and Playwright assertions for provider/theme/icon rendering flows.
+2. Add CI workflow gate for `npm run test:spectrum-parity`.
+3. Deepen `@vue-spectrum/provider` parity (`Provider` wrapper behavior, slot/context behavior, and SSR-focused coverage).
+4. Deepen `@vue-spectrum/icon` parity (slot behavior and class/style integration edge cases), then begin `@vue-spectrum/form`.
