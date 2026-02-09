@@ -112,6 +112,35 @@ const { errorMessageProps, errorMessageId, isInvalid } = useErrorMessage({
 });
 ```
 
+## `useResizeObserver`
+
+Tracks element size changes and triggers a callback with browser `ResizeObserver` support (with a window `resize` fallback).
+
+```ts
+import { useResizeObserver } from "@vue-aria/utils";
+
+useResizeObserver({
+  ref: elementRef,
+  onResize: () => {
+    // measure layout
+  },
+});
+```
+
+## `useValueEffect`
+
+Queues generator-driven state transitions to run in sequence across render ticks.
+
+```ts
+import { useValueEffect } from "@vue-aria/utils";
+
+const [value, queue] = useValueEffect(0);
+queue(function* () {
+  yield 1;
+  yield 2;
+});
+```
+
 ## Router Utilities
 
 - `provideRouter`

@@ -33,6 +33,8 @@ Shared utility baseline for the Spectrum component migration.
 - `useStyleProps`
 - `passthroughStyle`
 - `getResponsiveProp`
+- `useValueEffect`
+- `useResizeObserver`
 
 ## `classNames`
 
@@ -113,6 +115,14 @@ Style conversion primitives from React Spectrum utils are now available for Vue 
 import { convertStyleProps, useStyleProps, viewStyleProps } from "@vue-spectrum/utils";
 ```
 
+## `useValueEffect` and `useResizeObserver`
+
+These utilities are re-exported from `@vue-aria/utils` to match React Spectrum utility layering.
+
+```ts
+import { useValueEffect, useResizeObserver } from "@vue-spectrum/utils";
+```
+
 ## Notes
 
-- Class-name, slot-prop, media/device, breakpoint, DOM-ref, and style-prop conversion primitives are ported; broader `@react-spectrum/utils` surfaces remain in progress.
+- Class-name, slot-prop, media/device, breakpoint, DOM-ref, style-prop conversion primitives, and `@react-aria/utils` state/observer re-exports are ported; broader `@react-spectrum/utils` surfaces remain in progress.

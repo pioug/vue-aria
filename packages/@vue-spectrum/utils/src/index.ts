@@ -36,6 +36,7 @@ export {
   passthroughStyle,
   getResponsiveProp,
 } from "./styleProps";
+export { useValueEffect, useResizeObserver } from "@vue-aria/utils";
 
 export type { ClassValue } from "clsx";
 export type { SlotMap, SlotProps } from "./Slots";

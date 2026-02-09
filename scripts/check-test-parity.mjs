@@ -13,6 +13,8 @@ const requiredTestFiles = [
   "packages/@vue-aria/utils/test/useLoadMoreSentinel.test.ts",
   "packages/@vue-aria/utils/test/useDescription.test.ts",
   "packages/@vue-aria/utils/test/useErrorMessage.test.ts",
+  "packages/@vue-aria/utils/test/useResizeObserver.test.ts",
+  "packages/@vue-aria/utils/test/useValueEffect.test.ts",
   "packages/@vue-aria/ssr/test/useId.test.ts",
   "packages/@vue-aria/ssr/test/ssrProvider.test.ts",
   "packages/@vue-aria/ssr/test/hydration.test.ts",

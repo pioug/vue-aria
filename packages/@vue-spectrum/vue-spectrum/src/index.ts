@@ -48,6 +48,8 @@ export {
   useStyleProps,
   passthroughStyle,
   getResponsiveProp,
+  useValueEffect,
+  useResizeObserver,
 } from "@vue-spectrum/utils";
 export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 export { Label, HelpText, Field } from "@vue-spectrum/label";
