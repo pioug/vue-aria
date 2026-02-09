@@ -167,7 +167,11 @@ export function useScrollView(
         !isUpdatingSize.value &&
         (lastContentSize.value == null || !contentSize.equals(lastContentSize.value))
       ) {
-        queueMicrotask(updateSize);
+        if (typeof queueMicrotask === "function") {
+          queueMicrotask(updateSize);
+        } else {
+          Promise.resolve().then(updateSize);
+        }
       }
       lastContentSize.value = contentSize;
     },
@@ -177,14 +181,22 @@ export function useScrollView(
   watch(
     () => toValue(scrollRef),
     (dom, _, onCleanup) => {
-      if (!dom || typeof ResizeObserver === "undefined") {
+      if (!dom) {
+        return;
+      }
+
+      updateSize();
+
+      if (typeof ResizeObserver === "undefined") {
         return;
       }
 
       const observer = new ResizeObserver(() => {
         updateSize();
       });
-      observer.observe(dom);
+      observer.observe(dom, {
+        box: "border-box",
+      });
       onCleanup(() => {
         observer.disconnect();
       });

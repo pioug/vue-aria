@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `135 / 144` tracked items
-- Remaining: `9`
-- Current stage: virtualizer parity + quality-gate hardening
+- Completed: `136 / 144` tracked items
+- Remaining: `8`
+- Current stage: virtualizer windowing parity + quality-gate hardening
 
 ## 0) Dependency baseline
 
@@ -178,7 +178,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Drop target hooks parity
 - [x] Keyboard drag and drop parity
 - [x] Announcements for drag/drop accessibility
-- [ ] Virtualizer infrastructure parity
+- [x] Virtualizer infrastructure parity
 - [ ] Windowing + measurement + keyboard nav parity
 
 ## 13) Feedback and status

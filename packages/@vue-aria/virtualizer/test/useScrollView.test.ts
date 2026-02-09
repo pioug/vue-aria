@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { effectScope, ref } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { Rect, Size } from "@vue-aria/virtualizer-state";
 import { useScrollView } from "../src/useScrollView";
 
@@ -165,5 +165,71 @@ describe("useScrollView", () => {
     expect(verticalApi.scrollViewProps.value.style.overflowX).toBe("hidden");
 
     scope.stop();
+  });
+
+  it("measures immediately when the scroll ref is assigned later", async () => {
+    const scrollRef = ref<HTMLElement | null>(null);
+    const onVisibleRectChange = vi.fn();
+    const scope = effectScope();
+
+    scope.run(() => {
+      useScrollView(
+        {
+          contentSize: new Size(240, 180),
+          onVisibleRectChange,
+        },
+        scrollRef
+      );
+    });
+
+    scrollRef.value = createContainer(90, 60);
+    await nextTick();
+
+    expect(onVisibleRectChange).toHaveBeenCalledWith(
+      expect.objectContaining({ x: 0, y: 0, width: 90, height: 60 })
+    );
+
+    scope.stop();
+  });
+
+  it("uses border-box resize observation", () => {
+    const originalResizeObserver = globalThis.ResizeObserver;
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+
+    class ResizeObserverMock {
+      callback: ResizeObserverCallback;
+
+      constructor(callback: ResizeObserverCallback) {
+        this.callback = callback;
+      }
+
+      observe = observe;
+      disconnect = disconnect;
+      unobserve = vi.fn();
+    }
+
+    globalThis.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+
+    try {
+      const container = createContainer(80, 50);
+      const scope = effectScope();
+
+      scope.run(() => {
+        useScrollView(
+          {
+            contentSize: new Size(200, 150),
+            onVisibleRectChange: (_rect: Rect) => {},
+          },
+          ref(container)
+        );
+      });
+
+      expect(observe).toHaveBeenCalledWith(container, { box: "border-box" });
+      scope.stop();
+      expect(disconnect).toHaveBeenCalled();
+    } finally {
+      globalThis.ResizeObserver = originalResizeObserver;
+    }
   });
 });

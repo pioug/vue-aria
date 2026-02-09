@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `135 / 144` (about `93.8%`)
-- Tracked items remaining: `9`
-- Current parity focus: virtualizer parity + quality gates
+- Tracked items completed: `136 / 144` (about `94.4%`)
+- Tracked items remaining: `8`
+- Current parity focus: virtualizer windowing parity + quality gates
 
 ## Done So Far
 
@@ -52,6 +52,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Virtualizer state baseline: `useVirtualizerState`
 - React Aria virtualizer item/scroll helpers baseline: `useVirtualizerItem`, `layoutInfoToStyle`, `getRTLOffsetType`, `getScrollLeft`, `setScrollLeft`
 - React Aria virtualizer scroll container baseline: `useScrollView`
+- Virtualizer scroll infrastructure hardening: immediate ref-attach measurement and border-box resize observation parity in `useScrollView`
 - React Aria virtualizer composition baseline: `useVirtualizer`
 - Vue virtualizer component adapters baseline: `ScrollView`, `VirtualizerItem`
 - Vue virtualizer orchestration component baseline: `Virtualizer`
@@ -69,7 +70,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `0` remaining
-- Drag/drop + virtualizer: `2` remaining
+- Drag/drop + virtualizer: `1` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
 - Quality gates: `7` remaining
@@ -105,6 +106,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Finish virtualizer infrastructure parity and windowing/measurement/keyboard-nav parity.
+1. Finish windowing/measurement/keyboard-nav parity for virtualized collections.
 2. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).
 3. Expand documentation/examples coverage for the remaining parity gaps.

@@ -15,6 +15,8 @@ Composable helpers aligned with React Aria virtualizer behavior.
 - `getScrollLeft`
 - `setScrollLeft`
 
+`useScrollView` includes scroll lifecycle hooks, immediate measurement when refs attach, and border-box resize observation to keep visible-rect updates aligned with React Aria behavior.
+
 ```ts
 import { getScrollLeft, useVirtualizerItem } from "@vue-aria/virtualizer";
 
