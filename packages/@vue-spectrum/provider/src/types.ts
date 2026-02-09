@@ -50,6 +50,24 @@ export interface ProvideSpectrumProviderOptions {
   validationState?: MaybeReactive<SpectrumValidationState | undefined>;
 }
 
+export interface SpectrumProviderProps {
+  theme?: SpectrumTheme | undefined;
+  defaultColorScheme?: SpectrumColorScheme | undefined;
+  colorScheme?: string | undefined;
+  scale?: string | undefined;
+  locale?: string | undefined;
+  direction?: LocaleDirection | undefined;
+  breakpoints?: SpectrumBreakpoints | undefined;
+  isQuiet?: boolean | undefined;
+  isEmphasized?: boolean | undefined;
+  isDisabled?: boolean | undefined;
+  isRequired?: boolean | undefined;
+  isReadOnly?: boolean | undefined;
+  validationState?: SpectrumValidationState | undefined;
+  UNSAFE_className?: string | undefined;
+  UNSAFE_style?: Record<string, string | number> | undefined;
+}
+
 export interface UseSpectrumProviderDOMPropsOptions {
   UNSAFE_className?: MaybeReactive<string | undefined>;
   UNSAFE_style?: MaybeReactive<Record<string, string | number> | undefined>;

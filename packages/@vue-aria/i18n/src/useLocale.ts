@@ -54,19 +54,20 @@ export function provideI18n(
   const parentLocale = useLocale();
 
   const value = computed<LocaleValue>(() => {
-    const locale =
-      options.locale === undefined
-        ? parentLocale.value.locale
-        : (toValue(options.locale) ?? parentLocale.value.locale);
+    const explicitLocale =
+      options.locale === undefined ? undefined : toValue(options.locale);
+    const explicitDirection =
+      options.direction === undefined ? undefined : toValue(options.direction);
+    const locale = explicitLocale ?? parentLocale.value.locale;
 
-    if (options.direction !== undefined) {
+    if (explicitDirection !== undefined) {
       return {
         locale,
-        direction: toValue(options.direction) ?? parentLocale.value.direction,
+        direction: explicitDirection,
       };
     }
 
-    if (options.locale !== undefined) {
+    if (explicitLocale !== undefined) {
       return {
         locale,
         direction: isRTL(locale) ? "rtl" : "ltr",

@@ -14,6 +14,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
+- `@vue-spectrum/provider` now includes a `Provider` component surface, React Spectrum-style alias exports (`useProvider*`), and component-level parity tests (package still in-progress for full parity).
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
 - CI now runs `npm run test:spectrum-parity` on pull requests and pushes to `main`.

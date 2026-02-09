@@ -1,6 +1,11 @@
+export { Provider } from "./Provider";
 export {
   DEFAULT_BREAKPOINTS,
   provideSpectrumProvider,
+  useSpectrumProvider as useProvider,
+  useSpectrumProviderContext as useProviderContext,
+  useSpectrumProviderProps as useProviderProps,
+  useSpectrumProviderDOMProps as useProviderDOMProps,
   useSpectrumProvider,
   useSpectrumProviderContext,
   useSpectrumProviderProps,
@@ -22,6 +27,7 @@ export type {
   SpectrumThemeSection,
   SpectrumValidationState,
   ProvideSpectrumProviderOptions,
+  SpectrumProviderProps,
   SpectrumProviderDOMProps,
   UseSpectrumProviderDOMPropsOptions,
 } from "./types";

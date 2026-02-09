@@ -35,7 +35,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Foundation, Theme, and Infrastructure
 
-- In progress baseline: `@react-spectrum/provider`, `@react-spectrum/icon`, `@react-spectrum/utils`
+- In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, and component-level tests now ported), `@react-spectrum/icon`, `@react-spectrum/utils`
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
 - [ ] `@react-spectrum/icon` -> `@vue-spectrum/icon`
