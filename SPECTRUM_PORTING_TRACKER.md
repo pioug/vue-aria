@@ -4,8 +4,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Progress Snapshot
 
-- Completed packages: `4 / 64`
-- Remaining packages: `60`
+- Completed packages: `5 / 64`
+- Remaining packages: `59`
 - Current stage: phase-1 foundation migration
 
 ## Upstream Source of Truth
@@ -41,7 +41,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `@react-spectrum/icon` -> `@vue-spectrum/icon`
 - [x] `@react-spectrum/form` -> `@vue-spectrum/form`
 - [x] `@react-spectrum/label` -> `@vue-spectrum/label`
-- [ ] `@react-spectrum/layout` -> `@vue-spectrum/layout`
+- [x] `@react-spectrum/layout` -> `@vue-spectrum/layout`
 - [x] `@react-spectrum/text` -> `@vue-spectrum/text`
 - [x] `@react-spectrum/view` -> `@vue-spectrum/view`
 - [ ] `@react-spectrum/theme-default` -> `@vue-spectrum/theme-default`

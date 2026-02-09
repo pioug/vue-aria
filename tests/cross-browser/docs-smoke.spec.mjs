@@ -12,6 +12,7 @@ const routes = [
   "/spectrum/label.html",
   "/spectrum/text.html",
   "/spectrum/view.html",
+  "/spectrum/layout.html",
 ];
 
 for (const route of routes) {

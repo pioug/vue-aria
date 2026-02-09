@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration (`@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, and `@vue-spectrum/view` complete)
+- Current stage: phase-1 foundation migration (`@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, and `@vue-spectrum/layout` complete)
 
 ## Current Baseline
 
@@ -17,6 +17,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/label`: field/label/help text primitives (`Field`, `Label`, `HelpText`)
 - `@vue-spectrum/text`: typography primitives (`Text`, `Heading`, `Keyboard`)
 - `@vue-spectrum/view`: semantic container primitives (`View`, `Content`, `Header`, `Footer`)
+- `@vue-spectrum/layout`: grid/flex layout primitives (`Grid`, `Flex`, helper functions)
 - `@vue-spectrum/vue-spectrum`: umbrella export package for the component layer
 
 ## Rules For Marking A Package Complete

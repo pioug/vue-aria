@@ -71,6 +71,7 @@
       "@vue-spectrum/label": ["packages/@vue-spectrum/label/src/index.ts"],
       "@vue-spectrum/text": ["packages/@vue-spectrum/text/src/index.ts"],
       "@vue-spectrum/view": ["packages/@vue-spectrum/view/src/index.ts"],
+      "@vue-spectrum/layout": ["packages/@vue-spectrum/layout/src/index.ts"],
       "@vue-spectrum/vue-spectrum": ["packages/@vue-spectrum/vue-spectrum/src/index.ts"]
     },
     "strict": true,

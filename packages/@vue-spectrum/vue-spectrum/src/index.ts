@@ -19,6 +19,7 @@ export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form"
 export { Label, HelpText, Field } from "@vue-spectrum/label";
 export { Text, Heading, Keyboard } from "@vue-spectrum/text";
 export { View, Content, Header, Footer } from "@vue-spectrum/view";
+export { Flex, Grid, repeat, minmax, fitContent } from "@vue-spectrum/layout";
 
 export type {
   FormContextValue,
@@ -48,6 +49,15 @@ export type {
   ViewElementType,
   ViewProps,
 } from "@vue-spectrum/view";
+export type {
+  DimensionValue,
+  FlexAlign,
+  FlexDirection,
+  FlexProps,
+  FlexWrap,
+  GridProps,
+  GridTemplateValue,
+} from "@vue-spectrum/layout";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,
