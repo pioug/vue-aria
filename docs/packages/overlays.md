@@ -21,6 +21,16 @@ and exposes arrow positioning metadata.
 Provides modal semantics (`data-ismodal`) and parent-provider `aria-hidden`
 coordination for nested modal stacks.
 
+## `useModalProvider`
+
+Provides top-layer modal context for nested overlay trees and parent/child modal coordination.
+
+```ts
+import { useModalProvider } from "@vue-aria/overlays";
+
+const { modalProviderProps } = useModalProvider();
+```
+
 ## `useModalOverlay`
 
 Composes overlay dismissal, scroll locking, and outside-content hiding for modal

@@ -96,3 +96,41 @@ const { hoverProps, isHovered } = useHover({
 - Ignores touch pointer hover.
 - Ignores emulated mouse hover immediately after touch interactions.
 - Ends hover when the tracked element stops containing the current pointer target.
+
+## `useLongPress`
+
+Fires long-press lifecycle callbacks with configurable delay and movement threshold.
+
+```ts
+import { useLongPress } from "@vue-aria/interactions";
+
+const { longPressProps } = useLongPress({
+  onLongPress: () => console.log("long press"),
+  threshold: 500,
+});
+```
+
+## `useMove`
+
+Normalizes drag-like directional movement across pointer and keyboard input.
+
+```ts
+import { useMove } from "@vue-aria/interactions";
+
+const { moveProps } = useMove({
+  onMove: ({ deltaX, deltaY }) => console.log(deltaX, deltaY),
+});
+```
+
+## `useInteractOutside`
+
+Detects interactions outside a target subtree for overlay dismissal and focus-management flows.
+
+```ts
+import { useInteractOutside } from "@vue-aria/interactions";
+
+useInteractOutside({
+  ref: overlayRef,
+  onInteractOutside: () => close(),
+});
+```

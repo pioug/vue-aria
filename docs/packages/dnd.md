@@ -14,6 +14,30 @@ Provides native drag lifecycle wiring (`dragstart`/`drag`/`dragend`) with data t
 
 Provides native drop target lifecycle wiring (`dragenter`/`dragover`/`dragleave`/`drop`) with operation negotiation, parsed dropped items, and keyboard registration for managed drag sessions.
 
+## `useDropIndicator`
+
+Provides keyboard drop-indicator semantics used between items in list/grid collection layouts.
+
+## `useDroppableCollection`
+
+Coordinates collection-level drop behavior, including virtual/keyboard target traversal and drop event normalization.
+
+## `useDroppableItem`
+
+Adds per-item drop target behavior for collection rows/cells with before/after/on targeting.
+
+## `useDraggableItem`
+
+Provides item-level draggable wiring (including drag handle patterns) on top of collection drag state.
+
+```ts
+import { useDraggableItem, useDroppableItem, useDropIndicator } from "@vue-aria/dnd";
+
+const draggable = useDraggableItem({ key: "row-1" }, state, itemRef);
+const droppable = useDroppableItem({ key: "row-1" }, state, itemRef);
+const indicator = useDropIndicator({ target: { type: "item", key: "row-1", dropPosition: "before" } }, state, indicatorRef);
+```
+
 ## `useVirtualDrop`
 
 Provides keyboard/virtual drop affordance props, including modality-specific `aria-describedby` guidance (`Press Enter`, `Double tap`, or `Click`) during active drag sessions.
@@ -25,6 +49,21 @@ Provides edge-triggered scrolling logic for scrollable containers while dragging
 ## `useDraggableCollection`
 
 Tracks the currently dragged collection reference in shared DnD state when collection dragging keys are active.
+
+## `useDragSession`
+
+Exposes shared managed drag-session state for overlays/components that need drag lifecycle context.
+
+## `useDragModality`
+
+Exposes the current drag modality (`pointer`, `keyboard`, or `virtual`) for adaptive guidance text and interactions.
+
+```ts
+import { useDragSession, useDragModality } from "@vue-aria/dnd";
+
+const session = useDragSession();
+const modality = useDragModality();
+```
 
 ## Utilities
 

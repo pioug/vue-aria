@@ -233,6 +233,27 @@ function toPackageName(specifier) {
   return name ?? specifier;
 }
 
+function extractUseExports(indexContent) {
+  const useExports = [];
+  const exportListPattern = /export\s+\{([^}]+)\}/g;
+
+  for (const match of indexContent.matchAll(exportListPattern)) {
+    const symbols = match[1]
+      .split(",")
+      .map((symbol) => symbol.trim())
+      .filter(Boolean)
+      .map((symbol) => symbol.split(" as ")[0]?.trim() ?? symbol);
+
+    for (const symbol of symbols) {
+      if (/^use[A-Z]/.test(symbol)) {
+        useExports.push(symbol);
+      }
+    }
+  }
+
+  return [...new Set(useExports)];
+}
+
 const packageRoot = path.join(root, "packages", "@vue-aria");
 const testAuditExclusions = new Set(["types", "vue-aria"]);
 const packagesMissingHookTests = [];
@@ -399,6 +420,55 @@ if (undeclaredRuntimeDeps.length > 0) {
   console.error("Parity check failed. Runtime imports are missing from package.json:");
   for (const dep of undeclaredRuntimeDeps) {
     console.error(`- ${dep}`);
+  }
+  process.exit(1);
+}
+
+const docsRoot = path.join(root, "docs", "packages");
+const docsCoverageExclusions = new Set(["types", "vue-aria"]);
+const packagesMissingDocs = [];
+const docsMissingHooks = [];
+
+for (const entry of fs.readdirSync(packageRoot, { withFileTypes: true })) {
+  if (!entry.isDirectory() || docsCoverageExclusions.has(entry.name)) {
+    continue;
+  }
+
+  const runtimeEntry = path.join(packageRoot, entry.name, "src", "index.ts");
+  if (!fs.existsSync(runtimeEntry)) {
+    continue;
+  }
+
+  const docFile = path.join(docsRoot, `${entry.name}.md`);
+  if (!fs.existsSync(docFile)) {
+    packagesMissingDocs.push(path.relative(root, docFile));
+    continue;
+  }
+
+  const useExports = extractUseExports(fs.readFileSync(runtimeEntry, "utf8"));
+  const docContent = fs.readFileSync(docFile, "utf8");
+  const missing = useExports.filter((name) => !docContent.includes(name));
+
+  if (missing.length > 0) {
+    docsMissingHooks.push({
+      packageName: entry.name,
+      missing,
+    });
+  }
+}
+
+if (packagesMissingDocs.length > 0) {
+  console.error("Parity check failed. Missing package documentation pages:");
+  for (const file of packagesMissingDocs) {
+    console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
+if (docsMissingHooks.length > 0) {
+  console.error("Parity check failed. Docs missing hook mentions:");
+  for (const item of docsMissingHooks) {
+    console.error(`- ${item.packageName}: ${item.missing.join(", ")}`);
   }
   process.exit(1);
 }

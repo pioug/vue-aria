@@ -117,7 +117,12 @@ const { errorMessageProps, errorMessageId, isInvalid } = useErrorMessage({
 - `provideRouter`
 - `useRouter`
 - `useLinkProps`
+- `useSyntheticLinkProps`
 - `handleLinkClick`
 
 These helpers mirror React Aria's router abstraction so hooks like `useLink` can
 do framework-level client navigation while preserving native link semantics.
+
+## `useSyntheticLinkProps`
+
+Adds keyboard/click normalization for non-anchor elements that should behave like links.
