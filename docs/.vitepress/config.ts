@@ -32,7 +32,7 @@ export default defineConfig({
       { text: "Guide", link: "/getting-started" },
       { text: "Packages", link: "/packages/overview" },
       { text: "Porting", link: "/porting/roadmap" },
-      { text: "GitHub", link: "https://github.com/adobe/react-spectrum" },
+      { text: "GitHub", link: "https://github.com/pioug/vue-aria/" },
     ],
     sidebar: [
       {
@@ -114,10 +114,10 @@ export default defineConfig({
       },
     ],
     socialLinks: [
-      { icon: "github", link: "https://github.com/adobe/react-spectrum" },
+      { icon: "github", link: "https://github.com/pioug/vue-aria/" },
     ],
     editLink: {
-      pattern: "https://github.com/your-org/vue-aria/edit/main/docs/:path",
+      pattern: "https://github.com/pioug/vue-aria/edit/main/docs/:path",
       text: "Edit this page",
     },
     outline: {
