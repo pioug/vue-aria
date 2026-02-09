@@ -28,6 +28,14 @@ export {
   SlotProvider,
   ClearSlots,
   getWrappedElement,
+  baseStyleProps,
+  viewStyleProps,
+  dimensionValue,
+  responsiveDimensionValue,
+  convertStyleProps,
+  useStyleProps,
+  passthroughStyle,
+  getResponsiveProp,
 } from "@vue-spectrum/utils";
 export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 export { Label, HelpText, Field } from "@vue-spectrum/label";
@@ -97,3 +105,11 @@ export type {
 } from "@vue-spectrum/icon";
 export type { ClassValue } from "@vue-spectrum/utils";
 export type { SlotMap, SlotProps } from "@vue-spectrum/utils";
+export type {
+  Breakpoint,
+  Direction,
+  Responsive,
+  ResponsiveProp,
+  StyleHandlers,
+  StyleProps,
+} from "@vue-spectrum/utils";

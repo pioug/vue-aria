@@ -12,6 +12,14 @@ Shared utility baseline for the Spectrum component migration.
 - `SlotProvider`
 - `ClearSlots`
 - `getWrappedElement`
+- `baseStyleProps`
+- `viewStyleProps`
+- `dimensionValue`
+- `responsiveDimensionValue`
+- `convertStyleProps`
+- `useStyleProps`
+- `passthroughStyle`
+- `getResponsiveProp`
 
 ## `classNames`
 
@@ -54,6 +62,14 @@ import { SlotProvider, useSlotProps } from "@vue-spectrum/utils";
 
 Normalizes text or vnode children into a single element vnode (wrapping strings in `span`), matching React Spectrum utility behavior used by link-like components.
 
+## Style Props
+
+Style conversion primitives from React Spectrum utils are now available for Vue ports:
+
+```ts
+import { convertStyleProps, useStyleProps, viewStyleProps } from "@vue-spectrum/utils";
+```
+
 ## Notes
 
-- Class-name and slot-prop compatibility behavior are ported; broader `@react-spectrum/utils` surfaces remain in progress.
+- Class-name, slot-prop, and style-prop conversion primitives are ported; broader `@react-spectrum/utils` surfaces remain in progress.
