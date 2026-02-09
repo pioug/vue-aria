@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `137 / 144` (about `95.1%`)
-- Tracked items remaining: `7`
+- Tracked items completed: `138 / 144` (about `95.8%`)
+- Tracked items remaining: `6`
 - Current parity focus: quality gates
 
 ## Done So Far
@@ -48,6 +48,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop parity hardening: modality-aware drag/drop descriptions, modality-specific start/cancel/complete announcements, global drop-effect + allowed-operation synchronization, and standalone `useDrop` keyboard-target registration for managed dragging
 - Drag/drop SSR baseline: server-render smoke test for `useDrag` + `useDrop`
 - SSR hydration parity baseline: deterministic nested `useId` generation across server render + client hydration in `@vue-aria/ssr`
+- RTL/i18n parity hardening: `useOverlayPosition` now verifies `start` placement mapping for LTR vs RTL locale providers
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -75,7 +76,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop + virtualizer: `0` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
-- Quality gates: `6` remaining
+- Quality gates: `5` remaining
 
 ## Critical Path To Parity
 
@@ -103,11 +104,12 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - React Stately parity layer (or equivalent Vue state packages)
 - SSR hydration and id consistency tests (baseline complete)
-- RTL/i18n and screen-reader validation passes
+- RTL/i18n validation passes (baseline complete)
+- Screen-reader validation passes
 - Cross-browser validation (Chromium/WebKit/Firefox)
 
 ## Immediate Next Milestone
 
-1. Continue quality-gate hardening (RTL/screen reader/cross-browser).
+1. Continue quality-gate hardening (screen reader/cross-browser).
 2. Expand documentation/examples coverage for remaining hooks/packages.
 3. Keep parity checks aligned with any newly added migration tests.

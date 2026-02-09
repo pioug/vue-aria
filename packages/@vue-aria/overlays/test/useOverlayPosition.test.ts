@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { effectScope, ref } from "vue";
+import { effectScope, ref, defineComponent, h } from "vue";
+import { mount } from "@vue/test-utils";
+import { provideI18n } from "@vue-aria/i18n";
 import { useOverlayPosition } from "../src";
 
 interface Scenario {
@@ -402,6 +404,70 @@ describe("useOverlayPosition", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
 
     scope.stop();
+  });
+
+  it("maps start placement to left for ltr locale", () => {
+    const { target, overlay } = createScenario();
+    let result!: ReturnType<typeof useOverlayPosition>;
+    const Child = defineComponent({
+      setup() {
+        result = useOverlayPosition({
+          targetRef: target,
+          overlayRef: overlay,
+          placement: "start",
+          shouldFlip: false,
+          isOpen: true,
+        });
+        return () => h("div");
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        provideI18n({ locale: "en-US" });
+        return () => h(Child);
+      },
+    });
+
+    const wrapper = mount(App);
+    const style = result.overlayProps.value.style as Record<string, unknown>;
+
+    expect(result.placement.value).toBe("left");
+    expect(style.right).toBeTypeOf("number");
+    expect(style.left).toBeUndefined();
+
+    wrapper.unmount();
+  });
+
+  it("maps start placement to right for rtl locale", () => {
+    const { target, overlay } = createScenario();
+    let result!: ReturnType<typeof useOverlayPosition>;
+    const Child = defineComponent({
+      setup() {
+        result = useOverlayPosition({
+          targetRef: target,
+          overlayRef: overlay,
+          placement: "start",
+          shouldFlip: false,
+          isOpen: true,
+        });
+        return () => h("div");
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        provideI18n({ locale: "ar-EG" });
+        return () => h(Child);
+      },
+    });
+
+    const wrapper = mount(App);
+    const style = result.overlayProps.value.style as Record<string, unknown>;
+
+    expect(result.placement.value).toBe("right");
+    expect(style.left).toBeTypeOf("number");
+    expect(style.right).toBeUndefined();
+
+    wrapper.unmount();
   });
 
   it("hides arrow from assistive technologies", () => {
