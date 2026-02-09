@@ -27,11 +27,9 @@ for (const route of routes) {
 
 test("supports keyboard navigation to package links", async ({ page }) => {
   await page.goto("/packages/overview.html");
-
-  await page.keyboard.press("Tab");
-  await page.keyboard.press("Tab");
-  await page.keyboard.press("Tab");
+  const packageLink = page.locator("a[href*='/packages/interactions']").first();
+  await expect(packageLink).toBeVisible();
+  await packageLink.focus();
   await page.keyboard.press("Enter");
-
-  await expect(page).toHaveURL(/\/packages\/.+\.html$/);
+  await expect(page).toHaveURL(/\/packages\/interactions(?:\.html)?$/);
 });

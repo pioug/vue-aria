@@ -4,9 +4,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `143 / 144` tracked items
-- Remaining: `1`
-- Current stage: quality-gate hardening
+- Completed: `144 / 144` tracked items
+- Remaining: `0`
+- Current stage: parity-complete maintenance
 
 ## 0) Dependency baseline
 
@@ -216,7 +216,7 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Screen reader behavior checks
 - [x] SSR hydration tests
 - [x] RTL/i18n tests
-- [ ] Cross-browser checks (Chromium, WebKit, Firefox)
+- [x] Cross-browser checks (Chromium, WebKit, Firefox)
 - [x] Documentation + examples for each hook
 - In progress baseline: SSR smoke coverage added for `@vue-aria/dnd` (`dnd.ssr.test.ts`)
 - [x] Hydration id parity coverage added for `@vue-aria/ssr` (`hydration.test.ts`)
@@ -225,4 +225,5 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Parity script enforces keyboard interaction suite coverage (`check-test-parity.mjs`)
 - [x] Parity script enforces screen-reader accessibility suite coverage (`check-test-parity.mjs`)
 - [x] Parity script enforces docs coverage for every exported `use*` hook (`check-test-parity.mjs`)
-- In progress baseline: Playwright cross-browser smoke suite scaffolded (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`)
+- [x] Playwright cross-browser smoke suite scaffolded (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`)
+- [x] Playwright cross-browser smoke suite passes in Chromium/Firefox/WebKit (`npm run test:cross-browser`, February 9, 2026)

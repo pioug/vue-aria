@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `143 / 144` (about `99.3%`)
-- Tracked items remaining: `1`
-- Current parity focus: quality gates
+- Tracked items completed: `144 / 144` (about `100%`)
+- Tracked items remaining: `0`
+- Current parity focus: parity complete
 
 ## Done So Far
 
@@ -54,7 +54,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Screen-reader gate hardening: parity script now enforces accessibility-focused suites across announcements, labeling, toast, drag/drop, and progress semantics
 - Dependency baseline hardening: parity script audits runtime imports across `packages/@vue-aria/*/src` and verifies declared dependencies
 - Docs gate hardening: package docs now cover every exported `use*` hook and parity checks enforce ongoing docs coverage
-- Cross-browser baseline: Playwright Chromium/Firefox/WebKit docs-smoke suite scaffolded (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`)
+- Cross-browser baseline: Playwright Chromium/Firefox/WebKit docs-smoke suite scaffolded and passing (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`, `npm run test:cross-browser`)
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -82,7 +82,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop + virtualizer: `0` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
-- Quality gates: `1` remaining
+- Quality gates: `0` remaining
 
 ## Critical Path To Parity
 
@@ -112,10 +112,10 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - SSR hydration and id consistency tests (baseline complete)
 - RTL/i18n validation passes (baseline complete)
 - Screen-reader validation passes (baseline complete)
-- Cross-browser validation (Chromium/WebKit/Firefox)
+- Cross-browser validation (Chromium/WebKit/Firefox) (baseline complete)
 
 ## Immediate Next Milestone
 
-1. Continue quality-gate hardening (cross-browser).
-2. Expand documentation/examples coverage for remaining hooks/packages.
-3. Keep parity checks aligned with any newly added migration tests.
+1. Expand cross-browser scenarios beyond docs smoke and add assertions for component-level interactions.
+2. Add CI automation for `npm run test:cross-browser` so parity gates stay continuously enforced.
+3. Keep parity checks aligned with any newly added migration tests and package docs changes.
