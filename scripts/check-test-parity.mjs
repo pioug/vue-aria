@@ -122,6 +122,7 @@ const requiredTestFiles = [
   "packages/@vue-aria/virtualizer/test/utils.test.ts",
   "packages/@vue-aria/virtualizer-state/test/LayoutInfo.test.ts",
   "packages/@vue-aria/virtualizer-state/test/OverscanManager.test.ts",
+  "packages/@vue-aria/virtualizer-state/test/Virtualizer.test.ts",
   "packages/@vue-aria/virtualizer-state/test/useVirtualizerState.test.ts",
   "packages/@vue-aria/virtualizer-state/test/utils.test.ts",
   "packages/@vue-aria/table/test/useTable.test.ts",

@@ -50,6 +50,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
+- Virtualizer state hardening: `Virtualizer` coverage for point hit-testing, persisted-key ancestry, clamped offsets, and item-size invalidation
 - React Aria virtualizer item/scroll helpers baseline: `useVirtualizerItem`, `layoutInfoToStyle`, `getRTLOffsetType`, `getScrollLeft`, `setScrollLeft`
 - React Aria virtualizer scroll container baseline: `useScrollView`
 - Virtualizer scroll infrastructure hardening: immediate ref-attach measurement and border-box resize observation parity in `useScrollView`
