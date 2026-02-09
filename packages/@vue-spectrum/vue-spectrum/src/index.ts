@@ -56,6 +56,7 @@ export { Label, HelpText, Field } from "@vue-spectrum/label";
 export { Text, Heading, Keyboard } from "@vue-spectrum/text";
 export { View, Content, Header, Footer } from "@vue-spectrum/view";
 export { Flex, Grid, repeat, minmax, fitContent } from "@vue-spectrum/layout";
+export { Divider } from "@vue-spectrum/divider";
 
 export type {
   FormContextValue,
@@ -94,6 +95,11 @@ export type {
   GridProps,
   GridTemplateValue,
 } from "@vue-spectrum/layout";
+export type {
+  DividerOrientation,
+  DividerSize,
+  SpectrumDividerProps,
+} from "@vue-spectrum/divider";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,
