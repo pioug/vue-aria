@@ -15,7 +15,19 @@ export {
 
 export { Icon, UIIcon, Illustration } from "@vue-spectrum/icon";
 export { classNames } from "@vue-spectrum/utils";
+export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 
+export type {
+  FormContextValue,
+  FormValidationErrors,
+  LabelAlign,
+  LabelPosition,
+  NecessityIndicator,
+  SpectrumFormProps,
+  SpectrumLabelableProps,
+  ValidationBehavior,
+  ValidationState,
+} from "@vue-spectrum/form";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,

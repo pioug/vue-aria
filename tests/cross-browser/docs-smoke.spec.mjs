@@ -8,6 +8,7 @@ const routes = [
   "/packages/dnd.html",
   "/porting/cross-browser-demos.html",
   "/spectrum/cross-browser-demos.html",
+  "/spectrum/form.html",
 ];
 
 for (const route of routes) {
