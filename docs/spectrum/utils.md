@@ -12,6 +12,13 @@ Shared utility baseline for the Spectrum component migration.
 - `SlotProvider`
 - `ClearSlots`
 - `getWrappedElement`
+- `useMediaQuery`
+- `useIsMobileDevice`
+- `MOBILE_SCREEN_WIDTH`
+- `useHasChild`
+- `BreakpointProvider`
+- `useMatchedBreakpoints`
+- `useBreakpoint`
 - `baseStyleProps`
 - `viewStyleProps`
 - `dimensionValue`
@@ -62,6 +69,21 @@ import { SlotProvider, useSlotProps } from "@vue-spectrum/utils";
 
 Normalizes text or vnode children into a single element vnode (wrapping strings in `span`), matching React Spectrum utility behavior used by link-like components.
 
+## Media + Device Utilities
+
+Utilities for responsive and device-aware behavior:
+
+```ts
+import {
+  useMediaQuery,
+  useIsMobileDevice,
+  useHasChild,
+  BreakpointProvider,
+  useMatchedBreakpoints,
+  useBreakpoint,
+} from "@vue-spectrum/utils";
+```
+
 ## Style Props
 
 Style conversion primitives from React Spectrum utils are now available for Vue ports:
@@ -72,4 +94,4 @@ import { convertStyleProps, useStyleProps, viewStyleProps } from "@vue-spectrum/
 
 ## Notes
 
-- Class-name, slot-prop, and style-prop conversion primitives are ported; broader `@react-spectrum/utils` surfaces remain in progress.
+- Class-name, slot-prop, media/device, breakpoint, and style-prop conversion primitives are ported; broader `@react-spectrum/utils` surfaces remain in progress.

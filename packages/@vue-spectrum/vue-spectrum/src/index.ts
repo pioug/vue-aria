@@ -28,6 +28,12 @@ export {
   SlotProvider,
   ClearSlots,
   getWrappedElement,
+  useIsMobileDevice,
+  MOBILE_SCREEN_WIDTH,
+  useHasChild,
+  BreakpointProvider,
+  useMatchedBreakpoints,
+  useBreakpoint,
   baseStyleProps,
   viewStyleProps,
   dimensionValue,
@@ -106,6 +112,8 @@ export type {
 export type { ClassValue } from "@vue-spectrum/utils";
 export type { SlotMap, SlotProps } from "@vue-spectrum/utils";
 export type {
+  BreakpointContextValue,
+  Breakpoints,
   Breakpoint,
   Direction,
   Responsive,

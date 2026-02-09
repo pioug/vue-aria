@@ -1,5 +1,6 @@
 import type { CSSProperties } from "vue";
 import { useLocale } from "@vue-aria/i18n";
+import { useBreakpoint } from "./BreakpointProvider";
 
 export type Direction = "ltr" | "rtl";
 export type Breakpoint = "base" | "S" | "M" | "L" | string;
@@ -285,7 +286,11 @@ export function useStyleProps<T extends StyleProps>(
   options: StylePropsOptions = {}
 ): { styleProps: { style: CSSProperties; class?: string; hidden?: true } } {
   const { direction } = useLocale().value;
-  const matchedBreakpoints = options.matchedBreakpoints ?? ["base"];
+  const breakpointProvider = useBreakpoint();
+  const matchedBreakpoints =
+    options.matchedBreakpoints ??
+    breakpointProvider?.value.matchedBreakpoints ??
+    ["base"];
   const styles = convertStyleProps(props, handlers, direction, matchedBreakpoints);
   const style = {
     ...(props.UNSAFE_style ?? {}),

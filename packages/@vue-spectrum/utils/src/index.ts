@@ -10,6 +10,14 @@ export {
   ClearSlots,
 } from "./Slots";
 export { getWrappedElement } from "./getWrappedElement";
+export { useMediaQuery } from "./useMediaQuery";
+export { useIsMobileDevice, MOBILE_SCREEN_WIDTH } from "./useIsMobileDevice";
+export { useHasChild } from "./useHasChild";
+export {
+  BreakpointProvider,
+  useMatchedBreakpoints,
+  useBreakpoint,
+} from "./BreakpointProvider";
 export {
   baseStyleProps,
   viewStyleProps,
@@ -23,6 +31,7 @@ export {
 
 export type { ClassValue } from "clsx";
 export type { SlotMap, SlotProps } from "./Slots";
+export type { BreakpointContextValue, Breakpoints } from "./BreakpointProvider";
 export type {
   Breakpoint,
   Direction,
