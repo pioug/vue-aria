@@ -1,6 +1,28 @@
 import { defineConfig } from "vitepress";
 
+function normalizeBase(value: string | undefined): string {
+  if (!value) {
+    return "/";
+  }
+
+  const trimmed = value.trim();
+  if (trimmed.length === 0) {
+    return "/";
+  }
+
+  let normalized = trimmed;
+  if (!normalized.startsWith("/")) {
+    normalized = `/${normalized}`;
+  }
+  if (!normalized.endsWith("/")) {
+    normalized = `${normalized}/`;
+  }
+
+  return normalized;
+}
+
 export default defineConfig({
+  base: normalizeBase(process.env.VITEPRESS_BASE),
   title: "vue-aria",
   description: "Vue port of React Aria interaction and accessibility hooks.",
   lastUpdated: true,
