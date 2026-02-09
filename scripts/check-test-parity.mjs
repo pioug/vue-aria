@@ -473,4 +473,38 @@ if (docsMissingHooks.length > 0) {
   process.exit(1);
 }
 
+const requiredCrossBrowserFiles = [
+  "playwright.config.mjs",
+  "tests/cross-browser/docs-smoke.spec.mjs",
+  "tests/cross-browser/interactive-demos.spec.mjs",
+  "docs/porting/cross-browser-demos.md",
+];
+
+const missingCrossBrowserFiles = requiredCrossBrowserFiles.filter(
+  (file) => !fs.existsSync(path.join(root, file))
+);
+
+if (missingCrossBrowserFiles.length > 0) {
+  console.error("Parity check failed. Missing cross-browser coverage files:");
+  for (const file of missingCrossBrowserFiles) {
+    console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
+const interactiveCrossBrowserSuite = path.join(
+  root,
+  "tests/cross-browser/interactive-demos.spec.mjs"
+);
+const interactiveCrossBrowserContent = fs.readFileSync(interactiveCrossBrowserSuite, "utf8");
+const crossBrowserInteractionSignalPattern =
+  /ArrowRight|Home|End|keyboard\.press|click\(\)|aria-selected|press-pointer-type/;
+
+if (!crossBrowserInteractionSignalPattern.test(interactiveCrossBrowserContent)) {
+  console.error(
+    "Parity check failed. Interactive cross-browser suite is missing keyboard/pointer interaction assertions."
+  );
+  process.exit(1);
+}
+
 console.log("Parity check passed for currently ported modules.");

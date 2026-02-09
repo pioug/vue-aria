@@ -227,3 +227,4 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Parity script enforces docs coverage for every exported `use*` hook (`check-test-parity.mjs`)
 - [x] Playwright cross-browser smoke suite scaffolded (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`)
 - [x] Playwright cross-browser smoke suite passes in Chromium/Firefox/WebKit (`npm run test:cross-browser`, February 9, 2026)
+- [x] Playwright cross-browser interaction demos validate hook-driven press + tabs keyboard behavior (`tests/cross-browser/interactive-demos.spec.mjs`, `docs/porting/cross-browser-demos.md`)
