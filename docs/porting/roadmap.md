@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `141 / 144` (about `97.9%`)
-- Tracked items remaining: `3`
+- Tracked items completed: `142 / 144` (about `98.6%`)
+- Tracked items remaining: `2`
 - Current parity focus: quality gates
 
 ## Done So Far
@@ -52,6 +52,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Hook-level test gate hardening: parity script now fails if any runtime package lacks a unit-test suite
 - Keyboard gate hardening: parity script now enforces dedicated keyboard interaction suites across key packages
 - Screen-reader gate hardening: parity script now enforces accessibility-focused suites across announcements, labeling, toast, drag/drop, and progress semantics
+- Dependency baseline hardening: parity script audits runtime imports across `packages/@vue-aria/*/src` and verifies declared dependencies
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -113,6 +114,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Continue quality-gate hardening (cross-browser).
+1. Continue quality-gate hardening (cross-browser + documentation examples).
 2. Expand documentation/examples coverage for remaining hooks/packages.
 3. Keep parity checks aligned with any newly added migration tests.

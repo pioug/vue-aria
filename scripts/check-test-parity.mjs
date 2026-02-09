@@ -193,6 +193,46 @@ function collectTestFiles(directory) {
   return tests;
 }
 
+function collectSourceFiles(directory) {
+  if (!fs.existsSync(directory)) {
+    return [];
+  }
+
+  const sources = [];
+  const stack = [directory];
+
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (!current) {
+      continue;
+    }
+
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const next = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(next);
+        continue;
+      }
+
+      if (entry.isFile() && entry.name.endsWith(".ts") && !entry.name.endsWith(".d.ts")) {
+        sources.push(next);
+      }
+    }
+  }
+
+  return sources;
+}
+
+function toPackageName(specifier) {
+  if (specifier.startsWith("@")) {
+    const [scope, name] = specifier.split("/");
+    return scope && name ? `${scope}/${name}` : specifier;
+  }
+
+  const [name] = specifier.split("/");
+  return name ?? specifier;
+}
+
 const packageRoot = path.join(root, "packages", "@vue-aria");
 const testAuditExclusions = new Set(["types", "vue-aria"]);
 const packagesMissingHookTests = [];
@@ -308,6 +348,57 @@ if (weakScreenReaderSuites.length > 0) {
   );
   for (const file of weakScreenReaderSuites) {
     console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
+const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+const declaredRuntimeDeps = new Set([
+  ...Object.keys(packageJson.dependencies ?? {}),
+  ...Object.keys(packageJson.peerDependencies ?? {}),
+]);
+const externalRuntimeImports = new Set();
+
+for (const entry of fs.readdirSync(packageRoot, { withFileTypes: true })) {
+  if (!entry.isDirectory()) {
+    continue;
+  }
+
+  const srcDir = path.join(packageRoot, entry.name, "src");
+  const sourceFiles = collectSourceFiles(srcDir);
+
+  for (const file of sourceFiles) {
+    const content = fs.readFileSync(file, "utf8");
+    const importPattern = /from\s+["']([^"']+)["']|import\(\s*["']([^"']+)["']\s*\)/g;
+
+    for (const match of content.matchAll(importPattern)) {
+      const specifier = match[1] ?? match[2];
+      if (!specifier) {
+        continue;
+      }
+
+      if (
+        specifier.startsWith(".") ||
+        specifier.startsWith("@vue-aria/") ||
+        specifier.startsWith("node:") ||
+        specifier === "vue"
+      ) {
+        continue;
+      }
+
+      externalRuntimeImports.add(toPackageName(specifier));
+    }
+  }
+}
+
+const undeclaredRuntimeDeps = [...externalRuntimeImports]
+  .filter((name) => !declaredRuntimeDeps.has(name))
+  .sort();
+
+if (undeclaredRuntimeDeps.length > 0) {
+  console.error("Parity check failed. Runtime imports are missing from package.json:");
+  for (const dep of undeclaredRuntimeDeps) {
+    console.error(`- ${dep}`);
   }
   process.exit(1);
 }

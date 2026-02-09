@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `141 / 144` tracked items
-- Remaining: `3`
+- Completed: `142 / 144` tracked items
+- Remaining: `2`
 - Current stage: quality-gate hardening
 
 ## 0) Dependency baseline
@@ -17,7 +17,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
   `aria-hidden`, `clsx`
 - [x] Added test parity tooling:
   `@testing-library/vue`, `@testing-library/user-event`, `vitest`, `jsdom`
-- [ ] Add package-specific deps only when a ported hook actually needs them
+- [x] Add package-specific deps only when a ported hook actually needs them
+- [x] Parity script audits runtime imports against declared dependencies (`check-test-parity.mjs`)
 
 ## 1) Foundation
 
