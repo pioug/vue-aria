@@ -23,6 +23,10 @@ export {
   classNames,
   keepSpectrumClassNames,
   shouldKeepSpectrumClassNames,
+  useSlotProps,
+  cssModuleToSlots,
+  SlotProvider,
+  ClearSlots,
 } from "@vue-spectrum/utils";
 export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 export { Label, HelpText, Field } from "@vue-spectrum/label";
@@ -91,3 +95,4 @@ export type {
   UIIconProps,
 } from "@vue-spectrum/icon";
 export type { ClassValue } from "@vue-spectrum/utils";
+export type { SlotMap, SlotProps } from "@vue-spectrum/utils";

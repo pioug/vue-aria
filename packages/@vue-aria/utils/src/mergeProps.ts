@@ -29,8 +29,24 @@ export function mergeProps<T extends Props>(...allProps: T[]): T {
         continue;
       }
 
+      if (key === "UNSAFE_className" && existing && value) {
+        merged[key] = `${String(existing)} ${String(value)}`.trim();
+        continue;
+      }
+
       if (
         key === "style" &&
+        existing &&
+        value &&
+        typeof existing === "object" &&
+        typeof value === "object"
+      ) {
+        merged[key] = { ...(existing as Props), ...(value as Props) };
+        continue;
+      }
+
+      if (
+        key === "UNSAFE_style" &&
         existing &&
         value &&
         typeof existing === "object" &&

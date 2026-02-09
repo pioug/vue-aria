@@ -7,6 +7,10 @@ Shared utility baseline for the Spectrum component migration.
 - `classNames`
 - `keepSpectrumClassNames`
 - `shouldKeepSpectrumClassNames`
+- `useSlotProps`
+- `cssModuleToSlots`
+- `SlotProvider`
+- `ClearSlots`
 
 ## `classNames`
 
@@ -37,6 +41,14 @@ import { keepSpectrumClassNames } from "@vue-spectrum/utils";
 keepSpectrumClassNames();
 ```
 
+## Slots Utilities
+
+`useSlotProps` and `SlotProvider` bring the React Spectrum slot-prop merge pattern to Vue package ports.
+
+```ts
+import { SlotProvider, useSlotProps } from "@vue-spectrum/utils";
+```
+
 ## Notes
 
-- Class-name compatibility behavior is ported; broader `@react-spectrum/utils` surfaces remain in progress.
+- Class-name and slot-prop compatibility behavior are ported; broader `@react-spectrum/utils` surfaces remain in progress.

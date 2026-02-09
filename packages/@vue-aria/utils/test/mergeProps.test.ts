@@ -29,6 +29,15 @@ describe("mergeProps", () => {
     expect(merged.class).toEqual(["base", "active"]);
   });
 
+  it("merges UNSAFE_className values", () => {
+    const merged = mergeProps(
+      { UNSAFE_className: "base" },
+      { UNSAFE_className: "active" }
+    ) as { UNSAFE_className: string };
+
+    expect(merged.UNSAFE_className).toBe("base active");
+  });
+
   it("merges style objects", () => {
     const merged = mergeProps(
       { style: { color: "red", opacity: 0.8 } },
@@ -36,6 +45,15 @@ describe("mergeProps", () => {
     ) as { style: Record<string, unknown> };
 
     expect(merged.style).toEqual({ color: "red", opacity: 1 });
+  });
+
+  it("merges UNSAFE_style objects", () => {
+    const merged = mergeProps(
+      { UNSAFE_style: { color: "red", opacity: 0.8 } },
+      { UNSAFE_style: { opacity: 1 } }
+    ) as { UNSAFE_style: Record<string, unknown> };
+
+    expect(merged.UNSAFE_style).toEqual({ color: "red", opacity: 1 });
   });
 
   it("ignores undefined values from later props", () => {

@@ -3,5 +3,12 @@ export {
   keepSpectrumClassNames,
   shouldKeepSpectrumClassNames,
 } from "./classNames";
+export {
+  useSlotProps,
+  cssModuleToSlots,
+  SlotProvider,
+  ClearSlots,
+} from "./Slots";
 
 export type { ClassValue } from "clsx";
+export type { SlotMap, SlotProps } from "./Slots";
