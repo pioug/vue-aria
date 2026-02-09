@@ -217,3 +217,4 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] RTL/i18n tests
 - [ ] Cross-browser checks (Chromium, WebKit, Firefox)
 - [ ] Documentation + examples for each hook
+- In progress baseline: SSR smoke coverage added for `@vue-aria/dnd` (`dnd.ssr.test.ts`)
