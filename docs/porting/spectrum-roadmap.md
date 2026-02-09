@@ -10,10 +10,10 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `13 / 76` completed.
+- Task progress: `14 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
-- Foundation packages marked complete: `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
+- Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
 - `@vue-spectrum/provider` now includes a `Provider` component surface, React Spectrum-style alias exports (`useProvider*`), and component-level parity tests (package still in-progress for full parity).
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
@@ -22,7 +22,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 ## Progress Breakdown
 
 - Program setup tasks: `8 / 8` completed.
-- Foundation/theme/infrastructure packages: `5 / 16` completed.
+- Foundation/theme/infrastructure packages: `6 / 16` completed.
 - Actions/navigation packages: `0 / 12` completed.
 - Inputs/selection packages: `0 / 13` completed.
 - Lists/tables/trees packages: `0 / 4` completed.

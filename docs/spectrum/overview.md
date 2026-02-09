@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration (`@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, and `@vue-spectrum/layout` complete)
+- Current stage: phase-1 foundation migration (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, and `@vue-spectrum/layout` complete)
 
 ## Current Baseline
 

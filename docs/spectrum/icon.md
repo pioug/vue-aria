@@ -1,6 +1,85 @@
 # @vue-spectrum/icon
 
-Baseline Vue port for React Spectrum icon wrappers.
+Vue port for React Spectrum icon wrappers.
+
+<script setup lang="ts">
+import { Icon, Illustration, Provider, UIIcon } from "@vue-spectrum/vue-spectrum";
+import { defineComponent, h } from "vue";
+
+const previewTheme = {
+  global: { spectrum: "spectrum" },
+  light: { "spectrum--light": "spectrum--light" },
+  dark: { "spectrum--dark": "spectrum--dark" },
+  medium: { "spectrum--medium": "spectrum--medium" },
+  large: { "spectrum--large": "spectrum--large" },
+};
+
+function renderCircleIcon() {
+  return h("svg", { viewBox: "0 0 20 20" }, [
+    h("circle", { cx: 10, cy: 10, r: 7 }),
+  ]);
+}
+
+function renderCrossIcon() {
+  return h("svg", { viewBox: "0 0 20 20" }, [
+    h("path", { d: "M4 10h12" }),
+    h("path", { d: "M10 4v12" }),
+  ]);
+}
+
+function renderTriangleIcon() {
+  return h("svg", { viewBox: "0 0 20 20" }, [
+    h("polygon", { points: "10,3 17,17 3,17" }),
+  ]);
+}
+
+const IconPreview = defineComponent({
+  name: "IconPreview",
+  setup() {
+    return () =>
+      h("div", { class: "spectrum-preview" }, [
+        h(
+          Provider,
+          {
+            theme: previewTheme,
+            colorScheme: "light",
+            scale: "medium",
+          },
+          {
+            default: () =>
+              h(
+                "div",
+                {
+                  style: "display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;",
+                },
+                [
+                  h(
+                    Icon,
+                    { ariaLabel: "Workflow icon" },
+                    { default: () => [renderCircleIcon()] }
+                  ),
+                  h(
+                    UIIcon,
+                    { ariaLabel: "UI icon" },
+                    { default: () => [renderCrossIcon()] }
+                  ),
+                  h(
+                    Illustration,
+                    { ariaLabel: "Triangle illustration" },
+                    { default: () => [renderTriangleIcon()] }
+                  ),
+                ]
+              ),
+          }
+        ),
+      ]);
+  },
+});
+</script>
+
+## Preview
+
+<IconPreview />
 
 ## Exports
 
@@ -22,5 +101,5 @@ Clones a custom illustration vnode and applies accessible labeling semantics whe
 
 ## Status
 
-- Initial migration baseline is implemented and tested.
-- Package remains in-progress until broader parity behaviors and styling integration are complete.
+- Runtime behavior and upstream-equivalent test scenarios are ported.
+- Package is tracker-complete for the current migration phase.
