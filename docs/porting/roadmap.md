@@ -2,6 +2,8 @@
 
 The full tracker lives in `/PORTING_TRACKER.md`.
 
+React Spectrum component migration roadmap lives in `/docs/porting/spectrum-roadmap.md` with the package checklist in `/SPECTRUM_PORTING_TRACKER.md`.
+
 ## Snapshot
 
 - Tracked items completed: `144 / 144` (about `100%`)

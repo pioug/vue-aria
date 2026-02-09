@@ -1,0 +1,108 @@
+# React Spectrum Components Roadmap
+
+This roadmap defines how to port the `@react-spectrum/*` UI component layer to Vue with parity goals.
+
+The React Aria hook layer is already complete; this is the next phase on top of that foundation.
+
+## Master Tracker
+
+The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
+
+## Scope
+
+- In scope: component packages under `references/react-spectrum/packages/@react-spectrum/*`.
+- Target: package structure close to upstream (`one Vue package per upstream package`).
+- Goal: behavior, accessibility, testing, and docs parity.
+
+## Parity Strategy (Same As React Aria)
+
+1. Port behavior from upstream package sources first.
+2. Port/replicate upstream test scenarios for each package.
+3. Document each component package with examples and accessibility notes.
+4. Keep exports and package boundaries aligned with upstream naming.
+5. Gate completion on automated checks and cross-browser validation.
+
+## Proposed Repository Structure
+
+```text
+packages/
+  @vue-aria/*                # already ported hooks/state primitives
+  @vue-spectrum/provider
+  @vue-spectrum/button
+  ...                        # one package per @react-spectrum/* package
+  @vue-spectrum/vue-spectrum # umbrella exports for component layer
+
+docs/
+  spectrum/
+    overview.md
+    button.md
+    ...
+```
+
+## Quality Gates
+
+- Unit/integration tests for every component package.
+- Keyboard and screen-reader semantics verified for every interactive component.
+- Cross-browser checks in Chromium, Firefox, and WebKit for critical component flows.
+- Docs page for every exported component package.
+- Parity script for Spectrum layer coverage (tests + docs + export checks).
+
+## Phased Execution Plan
+
+### Phase 0: Program Setup
+
+- Scaffold `@vue-spectrum/*` workspace and umbrella exports.
+- Add `SPECTRUM_PORTING_TRACKER.md`-driven parity checks to CI.
+- Stand up docs section at `docs/spectrum/*`.
+- Lock dependency baseline (icons, theme/tokens, package-specific additions only when needed).
+
+### Phase 1: Foundation and Theming
+
+- Port core infra packages first: provider, utils, icon, form/label/text/layout/view.
+- Port theme packages: `theme-default`, `theme-light`, `theme-dark`, `theme-express`.
+- Validate global concerns: scale, color scheme, locale/direction, disabled state, overlays root.
+
+### Phase 2: High-Leverage Controls
+
+- Port high-volume controls first: button families, text/number/search, checkbox/radio/switch, slider.
+- Port navigation/action controls: tabs, menu, picker, breadcrumbs, link, action groups.
+- Ensure parity for focus management, press semantics, validation behavior, and labeling.
+
+### Phase 3: Complex Data and Overlay Components
+
+- Port collections/components with richer state models: list, listbox, table, tree, combobox/autocomplete.
+- Port overlay/messaging stack: overlays, dialog, tooltip, contextual help, toast, inline alert.
+- Port drag-and-drop UI layer: dnd and dropzone.
+
+### Phase 4: Remaining Display and Long-Tail Components
+
+- Port display/status components: card, avatar, image, divider, badge, status light, meter, progress, well, labeled value.
+- Port date/color/file entry components with full interaction parity: datepicker/calendar, color, filetrigger.
+- Evaluate `s2` and internal support packages (`style-macro-s1`, `test-utils`, `story-utils`) for Vue equivalents needed for parity tooling and docs.
+
+### Phase 5: Hardening and Sign-off
+
+- Close parity gaps found via cross-browser and accessibility audits.
+- Freeze package API surfaces and docs completeness.
+- Reach tracker state `64 / 64` completed.
+- Publish stable parity baseline for building a Vue Spectrum-style component library on top.
+
+## Dependency Plan
+
+Dependency additions should stay incremental and justified by an actively ported package.
+
+Baseline expected to be needed during Spectrum component migration:
+
+- `@spectrum-icons/ui`
+- `@spectrum-icons/workflow`
+- Existing React Aria-port dependencies already present in this repo
+
+Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipeline) should be decided in Phase 1 and documented before broad component porting starts.
+
+## Immediate Next Steps
+
+1. Scaffold `packages/@vue-spectrum/provider`, `packages/@vue-spectrum/utils`, and `packages/@vue-spectrum/vue-spectrum`.
+2. Implement `scripts/check-spectrum-parity.mjs` and wire a new `npm run test:spectrum-parity` script.
+3. Create `docs/spectrum/overview.md` plus first component docs pages (`provider`, `button`).
+4. Start Phase 1 package ports and update `/SPECTRUM_PORTING_TRACKER.md` per completed package.
+

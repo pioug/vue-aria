@@ -107,6 +107,7 @@ export default defineConfig({
         text: "Porting",
         items: [
           { text: "Roadmap", link: "/porting/roadmap" },
+          { text: "Spectrum Components Roadmap", link: "/porting/spectrum-roadmap" },
           { text: "Cross-Browser Demos", link: "/porting/cross-browser-demos" },
           { text: "Test Parity", link: "/porting/test-parity" },
           { text: "Workflow", link: "/porting/workflow" },
