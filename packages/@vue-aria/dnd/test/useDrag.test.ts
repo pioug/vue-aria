@@ -1,5 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { useDrag } from "../src";
+import { endDragging, isVirtualDragging } from "../src/DragManager";
+import { setGlobalDropEffect } from "../src/utils";
 import {
   DataTransferItemMock,
   DataTransferMock,
@@ -14,6 +16,11 @@ interface DragHandlers {
 }
 
 describe("useDrag", () => {
+  afterEach(() => {
+    endDragging();
+    setGlobalDropEffect(undefined);
+  });
+
   it("writes drag items and fires drag start callback", () => {
     const onDragStart = vi.fn();
     const { dragProps, isDragging } = useDrag({
@@ -155,6 +162,41 @@ describe("useDrag", () => {
     });
   });
 
+  it("prefers global drop effect when ending native drag", () => {
+    const onDragEnd = vi.fn();
+    const { dragProps } = useDrag({
+      getItems: () => [{ "text/plain": "hello world" }],
+      onDragEnd,
+    });
+
+    const handlers = dragProps as unknown as DragHandlers;
+    const dataTransfer = new DataTransferMock();
+    handlers.onDragstart(
+      new DragEventMock("dragstart", {
+        dataTransfer,
+        clientX: 1,
+        clientY: 2,
+      }) as unknown as DragEvent
+    );
+
+    dataTransfer.dropEffect = "none";
+    setGlobalDropEffect("move");
+    handlers.onDragend(
+      new DragEventMock("dragend", {
+        dataTransfer,
+        clientX: 3,
+        clientY: 4,
+      }) as unknown as DragEvent
+    );
+
+    expect(onDragEnd).toHaveBeenCalledWith({
+      type: "dragend",
+      x: 3,
+      y: 4,
+      dropOperation: "move",
+    });
+  });
+
   it("does not start dragging when disabled", () => {
     const onDragStart = vi.fn();
     const { dragProps, isDragging } = useDrag({
@@ -293,5 +335,60 @@ describe("useDrag", () => {
       y: 6,
     });
     expect(previewElement.style.height).toBe("10px");
+  });
+
+  it("starts managed dragging from Enter key interactions", () => {
+    const onDragStart = vi.fn();
+    const onDragEnd = vi.fn();
+    const { dragProps, isDragging } = useDrag({
+      getItems: () => [{ "text/plain": "hello world" }],
+      onDragStart,
+      onDragEnd,
+    });
+
+    const target = document.createElement("button");
+    document.body.appendChild(target);
+    Object.defineProperty(target, "getBoundingClientRect", {
+      configurable: true,
+      value: () => ({
+        x: 10,
+        y: 20,
+        left: 10,
+        top: 20,
+        width: 100,
+        height: 40,
+        right: 110,
+        bottom: 60,
+        toJSON: () => ({}),
+      }),
+    });
+
+    const keydown = new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
+    Object.defineProperty(keydown, "target", { configurable: true, value: target });
+    Object.defineProperty(keydown, "currentTarget", { configurable: true, value: target });
+    const keyup = new KeyboardEvent("keyup", { key: "Enter", bubbles: true });
+    Object.defineProperty(keyup, "target", { configurable: true, value: target });
+    Object.defineProperty(keyup, "currentTarget", { configurable: true, value: target });
+
+    const handlers = dragProps as Record<string, (event: KeyboardEvent) => void>;
+    handlers.onKeydownCapture?.(keydown);
+    handlers.onKeyupCapture?.(keyup);
+
+    expect(onDragStart).toHaveBeenCalledWith({
+      type: "dragstart",
+      x: 60,
+      y: 40,
+    });
+    expect(isDragging.value).toBe(true);
+    expect(isVirtualDragging()).toBe(true);
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(onDragEnd).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "dragend",
+        dropOperation: "cancel",
+      })
+    );
+    expect(isDragging.value).toBe(false);
   });
 });

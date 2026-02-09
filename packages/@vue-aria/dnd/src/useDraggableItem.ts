@@ -154,6 +154,9 @@ export function useDraggableItem(
     });
     delete dragProps.onClick;
   } else {
+    if (!props.hasDragButton) {
+      delete dragProps["aria-describedby"];
+    }
     const itemText = state.collection.getTextValue?.(props.key) ?? item?.textValue ?? "";
     dragButtonLabel = getDragButtonLabel({
       itemText,

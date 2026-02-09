@@ -41,7 +41,7 @@ describe("useVirtualDrop", () => {
     expect(describedBy?.length).toBeGreaterThan(0);
 
     const descriptionNode = describedBy ? document.getElementById(describedBy) : null;
-    expect(descriptionNode?.textContent).toBe("Activate to drop.");
+    expect(descriptionNode?.textContent).toBe("Click to drop.");
 
     scope.stop();
     await nextTick();

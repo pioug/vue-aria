@@ -1,6 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useDrop } from "../src";
+import {
+  beginDragging,
+  endDragging,
+  getRegisteredDropItems,
+  getRegisteredDropTargets,
+} from "../src/DragManager";
 import {
   DataTransferItemMock,
   DataTransferMock,
@@ -37,6 +43,13 @@ function setupTarget(): HTMLElement {
 describe("useDrop", () => {
   beforeEach(() => {
     vi.useRealTimers();
+  });
+
+  afterEach(() => {
+    endDragging();
+    (getRegisteredDropTargets() as Map<HTMLElement, unknown>).clear();
+    (getRegisteredDropItems() as Map<HTMLElement, unknown>).clear();
+    document.body.innerHTML = "";
   });
 
   it("performs basic drop lifecycle", async () => {
@@ -123,20 +136,15 @@ describe("useDrop", () => {
     const target = setupTarget();
     const onDropEnter = vi.fn();
 
-    const { dropProps, isDropTarget } = useDrop({
+    const { dropProps, dropButtonProps, isDropTarget } = useDrop({
       ref: ref(target),
       isDisabled: true,
       onDropEnter,
     });
 
-    const handlers = dropProps as unknown as DropHandlers;
-    const dataTransfer = new DataTransferMock();
-
-    handlers.onDragenter(
-      new DragEventMock("dragenter", { dataTransfer }) as unknown as DragEvent
-    );
-
     expect(isDropTarget.value).toBe(false);
+    expect(dropProps).toEqual({});
+    expect(dropButtonProps?.isDisabled).toBe(true);
     expect(onDropEnter).not.toHaveBeenCalled();
   });
 
@@ -308,10 +316,57 @@ describe("useDrop", () => {
       hasDropButton: true,
     });
 
-    expect(typeof dropProps.onClick).toBe("function");
-    expect((dropProps as Record<string, unknown>).onDragenter).toBeUndefined();
-    expect(typeof dropButtonProps?.onDragenter).toBe("function");
-    expect(typeof dropButtonProps?.onDrop).toBe("function");
+    expect(typeof dropProps.onDragenter).toBe("function");
+    expect(typeof dropProps.onDrop).toBe("function");
+    expect((dropButtonProps as Record<string, unknown> | undefined)?.onDragenter).toBeUndefined();
+    expect(typeof dropButtonProps?.onClick).toBe("function");
+  });
+
+  it("registers keyboard drop target callbacks for managed dragging", () => {
+    const target = setupTarget();
+    const dragSource = document.createElement("button");
+    document.body.appendChild(dragSource);
+    Object.defineProperty(dragSource, "getBoundingClientRect", {
+      configurable: true,
+      value: () => ({
+        left: 0,
+        top: 0,
+        x: 0,
+        y: 0,
+        width: 40,
+        height: 20,
+        right: 40,
+        bottom: 20,
+        toJSON: () => ({}),
+      }),
+    });
+
+    const onDropEnter = vi.fn();
+    const onDrop = vi.fn();
+    useDrop({
+      ref: ref(target),
+      onDropEnter,
+      onDrop,
+    });
+
+    beginDragging({
+      dragTarget: {
+        element: dragSource,
+        items: [{ "text/plain": "hello world" }],
+        allowedDropOperations: ["move"],
+      },
+    });
+
+    expect(onDropEnter).toHaveBeenCalledTimes(1);
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(onDrop).toHaveBeenCalledTimes(1);
+    expect(onDrop).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "drop",
+        dropOperation: "move",
+      })
+    );
   });
 
   it("reads custom drag payloads on drop", async () => {

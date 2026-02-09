@@ -9,7 +9,19 @@ import type {
   DropTarget,
   DragTypes,
 } from "./types";
-import { getTypes } from "./utils";
+import { getDragModality, getTypes } from "./utils";
+
+const DRAG_STARTED_MESSAGES = {
+  keyboard:
+    "Started dragging. Press Tab to navigate to a drop target, then press Enter to drop, or press Escape to cancel.",
+  touch:
+    "Started dragging. Navigate to a drop target, then double tap to drop.",
+  virtual:
+    "Started dragging. Navigate to a drop target, then click or press Enter to drop.",
+} as const;
+
+const DROP_CANCELED_MESSAGE = "Drop canceled.";
+const DROP_COMPLETE_MESSAGE = "Drop complete.";
 
 export interface DragTargetSession {
   element?: unknown;
@@ -400,7 +412,7 @@ function cancelManagedSession(session: ManagedDragSession): void {
   if (dragElement && !isHiddenFromAccessibility(dragElement)) {
     dragElement.focus();
   }
-  announce("Drop canceled.");
+  announce(DROP_CANCELED_MESSAGE);
 }
 
 function dropManagedSession(session: ManagedDragSession): void {
@@ -429,7 +441,7 @@ function dropManagedSession(session: ManagedDragSession): void {
   }
 
   endManagedSession(session, target.element);
-  announce("Drop complete.");
+  announce(DROP_COMPLETE_MESSAGE);
 }
 
 function handleManagedClick(event: MouseEvent): void {
@@ -550,7 +562,7 @@ export function beginDragging(session: DragSession = {}): void {
       });
     }
 
-    announce("Drag started.");
+    announce(DRAG_STARTED_MESSAGES[getDragModality()]);
     return;
   }
 

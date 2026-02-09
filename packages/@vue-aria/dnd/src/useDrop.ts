@@ -1,13 +1,21 @@
-import { ref, toValue } from "vue";
+import { ref, toValue, watchEffect } from "vue";
 import { mergeProps } from "@vue-aria/utils";
-import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
+import type { Key, MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import {
   DROP_EFFECT_TO_DROP_OPERATION,
   DROP_OPERATION,
   DROP_OPERATION_ALLOWED,
   DROP_OPERATION_TO_DROP_EFFECT,
 } from "./constants";
-import { DragTypes, readFromDataTransfer } from "./utils";
+import { registerDropTarget } from "./DragManager";
+import {
+  DragTypes,
+  globalAllowedDropOperations,
+  globalDndState,
+  readFromDataTransfer,
+  setGlobalDnDState,
+  setGlobalDropEffect,
+} from "./utils";
 import { useVirtualDrop } from "./useVirtualDrop";
 import type {
   DragTypes as IDragTypes,
@@ -126,21 +134,70 @@ function allowedOperationsToArray(bits: DropOperationBits): DropOperation[] {
     operations.push("link");
   }
 
-  if (operations.length === 0) {
-    return ["cancel"];
+  return operations;
+}
+
+function isMac(): boolean {
+  if (typeof navigator === "undefined") {
+    return false;
   }
 
-  return operations;
+  const platform = navigator.platform ?? "";
+  return /mac/i.test(platform);
+}
+
+function isIPad(): boolean {
+  if (typeof navigator === "undefined") {
+    return false;
+  }
+
+  if (/ipad/i.test(navigator.userAgent)) {
+    return true;
+  }
+
+  return /mac/i.test(navigator.platform) && navigator.maxTouchPoints > 1;
 }
 
 function getAllowedOperations(event: DragEvent): DropOperationBits {
   const effectAllowed = event.dataTransfer?.effectAllowed ?? "all";
-  const allowed = DROP_OPERATION_ALLOWED[effectAllowed as keyof typeof DROP_OPERATION_ALLOWED];
-  if (typeof allowed === "number") {
-    return allowed;
+  let allowedOperations =
+    DROP_OPERATION_ALLOWED[effectAllowed as keyof typeof DROP_OPERATION_ALLOWED];
+  if (typeof allowedOperations !== "number") {
+    allowedOperations = DROP_OPERATION.all;
   }
 
-  return DROP_OPERATION.all;
+  if (globalAllowedDropOperations) {
+    allowedOperations &= globalAllowedDropOperations;
+  }
+
+  let allowedModifiers = DROP_OPERATION.none;
+  if (isMac()) {
+    if (event.altKey) {
+      allowedModifiers |= DROP_OPERATION.copy;
+    }
+    if (event.ctrlKey && !isIPad()) {
+      allowedModifiers |= DROP_OPERATION.link;
+    }
+    if (event.metaKey) {
+      allowedModifiers |= DROP_OPERATION.move;
+    }
+  } else {
+    if (event.altKey) {
+      allowedModifiers |= DROP_OPERATION.link;
+    }
+    if (event.shiftKey) {
+      allowedModifiers |= DROP_OPERATION.move;
+    }
+    if (event.ctrlKey) {
+      allowedModifiers |= DROP_OPERATION.copy;
+    }
+  }
+
+  if (allowedModifiers) {
+    return allowedOperations & allowedModifiers;
+  }
+
+  return allowedOperations;
 }
 
 function getDropOperation(
@@ -165,6 +222,18 @@ function resolveDropOperation(dropEffect: string | undefined): DropOperation {
   }
 
   return "cancel";
+}
+
+function normalizeDragTypes(types: Set<string> | IDragTypes): IDragTypes {
+  if (!(types instanceof Set)) {
+    return types;
+  }
+
+  return {
+    has(type: string | symbol) {
+      return typeof type === "string" && types.has(type);
+    },
+  };
 }
 
 export function useDrop(options: DropOptions): DropResult {
@@ -281,20 +350,24 @@ export function useDrop(options: DropOptions): DropResult {
     state.y = event.clientY;
 
     const previousDropEffect = state.dropEffect;
-    let dropOperation = allowedOperationsToArray(allowedOperations)[0] ?? "cancel";
 
-    if (typeof options.getDropOperation === "function" && event.dataTransfer) {
-      const types = new DragTypes(event.dataTransfer);
-      dropOperation = getDropOperation(
-        allowedOperations,
-        options.getDropOperation(types, allowedOperationsToArray(allowedOperations))
-      );
+    if (allowedOperations !== state.allowedOperations) {
+      const allowedOps = allowedOperationsToArray(allowedOperations);
+      let nextOperation = allowedOps[0] ?? "cancel";
+      if (typeof options.getDropOperation === "function" && event.dataTransfer) {
+        const types = new DragTypes(event.dataTransfer);
+        nextOperation = getDropOperation(
+          allowedOperations,
+          options.getDropOperation(types, allowedOps)
+        );
+      }
+      state.dropEffect = DROP_OPERATION_TO_DROP_EFFECT[nextOperation] ?? "none";
     }
 
     if (typeof options.getDropOperationForPoint === "function" && event.dataTransfer) {
       const types = new DragTypes(event.dataTransfer);
       const point = resolveRelativePoint(options, event);
-      dropOperation = getDropOperation(
+      const nextOperation = getDropOperation(
         allowedOperations,
         options.getDropOperationForPoint(
           types,
@@ -303,11 +376,10 @@ export function useDrop(options: DropOptions): DropResult {
           point.y
         )
       );
+      state.dropEffect = DROP_OPERATION_TO_DROP_EFFECT[nextOperation] ?? "none";
     }
 
     state.allowedOperations = allowedOperations;
-    state.dropEffect = DROP_OPERATION_TO_DROP_EFFECT[dropOperation] ?? "none";
-
     if (event.dataTransfer) {
       event.dataTransfer.dropEffect = state.dropEffect;
     }
@@ -383,6 +455,7 @@ export function useDrop(options: DropOptions): DropResult {
 
     event.preventDefault();
     event.stopPropagation();
+    setGlobalDropEffect(state.dropEffect);
 
     if (options.onDrop) {
       const point = resolveRelativePoint(options, event);
@@ -395,13 +468,70 @@ export function useDrop(options: DropOptions): DropResult {
       });
     }
 
+    const snapshot = {
+      draggingCollectionRef: globalDndState.draggingCollectionRef,
+      draggingKeys: new Set<Key>(globalDndState.draggingKeys ?? new Set<Key>()),
+      dropCollectionRef: globalDndState.dropCollectionRef ?? null,
+    };
+
     state.dragOverElements.clear();
     if (state.dropEffect !== "none" || isDropTarget.value) {
       fireDropExit(event);
     }
     clearDropActivateTimer();
     state.dropEffect = "none";
+
+    if (snapshot.draggingCollectionRef == null) {
+      setGlobalDropEffect(undefined);
+    } else {
+      setGlobalDnDState(snapshot);
+    }
   };
+
+  watchEffect((onCleanup) => {
+    const element = toValue(options.ref);
+    if (!element || isDisabled(options)) {
+      return;
+    }
+
+    const unregister = registerDropTarget({
+      element,
+      getDropOperation(types, allowedOperations) {
+        if (typeof options.getDropOperation === "function") {
+          return options.getDropOperation(
+            normalizeDragTypes(types),
+            allowedOperations
+          );
+        }
+
+        return allowedOperations[0] ?? "cancel";
+      },
+      onDropEnter(event) {
+        isDropTarget.value = true;
+        options.onDropEnter?.(event);
+      },
+      onDropExit(event) {
+        isDropTarget.value = false;
+        options.onDropExit?.(event);
+      },
+      onDrop(event) {
+        options.onDrop?.(event);
+      },
+      onDropActivate(event) {
+        options.onDropActivate?.(event);
+      },
+    });
+
+    onCleanup(unregister);
+  });
+
+  if (isDisabled(options)) {
+    return {
+      dropProps: {},
+      dropButtonProps: { isDisabled: true },
+      isDropTarget,
+    };
+  }
 
   const baseDropProps: Record<string, unknown> = {
     onDragenter,
@@ -414,8 +544,8 @@ export function useDrop(options: DropOptions): DropResult {
 
   if (options.hasDropButton) {
     return {
-      dropProps: virtualDropProps.value,
-      dropButtonProps: mergeProps(baseDropProps, virtualDropProps.value),
+      dropProps: baseDropProps,
+      dropButtonProps: virtualDropProps.value,
       isDropTarget,
     };
   }

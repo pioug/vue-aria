@@ -4,9 +4,9 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `131 / 144` (about `91.0%`)
-- Tracked items remaining: `13`
-- Current parity focus: drag/drop + virtualizer parity
+- Tracked items completed: `135 / 144` (about `93.8%`)
+- Tracked items remaining: `9`
+- Current parity focus: virtualizer parity + quality gates
 
 ## Done So Far
 
@@ -45,6 +45,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Feedback/status: `useProgressBar`, `useProgressCircle`, `useMeter`, `useToast`, `useToastRegion`
 - Drag/drop clipboard + keyboard target baseline: `useClipboard`, `useDrag`, `createDragPreviewRenderer`, `useDrop`, `useDropIndicator`, `useDroppableCollection`, `useDroppableItem`, `useVirtualDrop`, `useAutoScroll`, `useDraggableCollection`, `useDraggableItem`, `writeToDataTransfer`, `readFromDataTransfer`, `DragTypes`, `navigate`, `ListDropTargetDelegate` (with `hasDragButton`/`hasDropButton` affordances)
 - Drag/drop manager hardening baseline: keyboard session flow (`Tab` navigation, `Enter` drop, `Escape` cancel), click-driven cancel/drop flow, drop-item targeting/activation (`onDropTargetEnter`, `onDropActivate`), screen-reader isolation for non-drop content while dragging, mutation-driven target updates, and `isValidDropTarget` utility
+- Drag/drop parity hardening: modality-aware drag/drop descriptions, modality-specific start/cancel/complete announcements, global drop-effect + allowed-operation synchronization, and standalone `useDrop` keyboard-target registration for managed dragging
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -67,7 +68,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `0` remaining
-- Drag/drop + virtualizer: `6` remaining
+- Drag/drop + virtualizer: `2` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
 - Quality gates: `7` remaining
@@ -103,6 +104,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Implement drag/drop + keyboard drag parity and announcements.
+1. Finish virtualizer infrastructure parity and windowing/measurement/keyboard-nav parity.
 2. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).
-3. Add first virtualizer parity primitives after initial drag/drop hooks.
+3. Expand documentation/examples coverage for the remaining parity gaps.

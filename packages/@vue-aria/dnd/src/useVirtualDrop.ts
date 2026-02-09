@@ -2,7 +2,7 @@ import { computed } from "vue";
 import { useDescription } from "@vue-aria/utils";
 import type { ReadonlyRef } from "@vue-aria/types";
 import { useDragSession } from "./DragManager";
-import { useDragModality } from "./utils";
+import { getDragModality } from "./utils";
 
 export interface VirtualDropResult {
   dropProps: ReadonlyRef<Record<string, unknown>>;
@@ -11,15 +11,14 @@ export interface VirtualDropResult {
 const MESSAGES = {
   keyboard: "Press Enter to drop.",
   touch: "Double tap to drop.",
-  virtual: "Activate to drop.",
+  virtual: "Click to drop.",
 } as const;
 
 export function useVirtualDrop(): VirtualDropResult {
-  const modality = useDragModality();
   const dragSession = useDragSession();
 
   const description = computed(() =>
-    dragSession.value ? MESSAGES[modality] : undefined
+    dragSession.value ? MESSAGES[getDragModality()] : undefined
   );
   const { descriptionProps } = useDescription(description);
 

@@ -1,4 +1,9 @@
-import { CUSTOM_DRAG_TYPE, GENERIC_TYPE, NATIVE_DRAG_TYPES } from "./constants";
+import {
+  CUSTOM_DRAG_TYPE,
+  DROP_OPERATION,
+  GENERIC_TYPE,
+  NATIVE_DRAG_TYPES,
+} from "./constants";
 import { toValue } from "vue";
 import type {
   DirectoryDropItem,
@@ -337,8 +342,38 @@ export function isDirectoryDropItem(item: DropItem): item is DirectoryDropItem {
 
 export type DragModality = "keyboard" | "touch" | "virtual";
 
-export function getDragModality(): DragModality {
+let currentDragModality: DragModality = "virtual";
+
+function mapModality(modality: string | null | undefined): DragModality {
+  if (!modality || modality === "pointer" || modality === "mouse" || modality === "pen") {
+    modality = "virtual";
+  }
+
+  if (modality === "keyboard") {
+    return "keyboard";
+  }
+
+  if (modality === "touch") {
+    return "touch";
+  }
+
+  if (
+    modality === "virtual" &&
+    typeof window !== "undefined" &&
+    "ontouchstart" in window
+  ) {
+    return "touch";
+  }
+
   return "virtual";
+}
+
+export function setDragModality(modality: string | null | undefined): void {
+  currentDragModality = mapModality(modality);
+}
+
+export function getDragModality(): DragModality {
+  return currentDragModality;
 }
 
 export function useDragModality(): DragModality {
@@ -398,4 +433,17 @@ export function isInternalDropOperation(
   );
 
   return draggingCollection != null && draggingCollection === dropCollection;
+}
+
+export type DropEffect = "none" | "copy" | "link" | "move";
+export let globalDropEffect: DropEffect | undefined = undefined;
+
+export function setGlobalDropEffect(dropEffect: DropEffect | undefined): void {
+  globalDropEffect = dropEffect;
+}
+
+export let globalAllowedDropOperations: number = DROP_OPERATION.none;
+
+export function setGlobalAllowedDropOperations(operations: number): void {
+  globalAllowedDropOperations = operations;
 }
