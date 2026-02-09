@@ -6,7 +6,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 - Tracked items completed: `136 / 144` (about `94.4%`)
 - Tracked items remaining: `8`
-- Current parity focus: virtualizer windowing parity + quality gates
+- Current parity focus: quality gates
 
 ## Done So Far
 
@@ -71,7 +71,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Tabs/disclosure/navigation: `0` remaining
 - Overlays/dialogs: `0` remaining
 - Grids/tables/trees: `0` remaining
-- Drag/drop + virtualizer: `1` remaining
+- Drag/drop + virtualizer: `0` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
 - Quality gates: `7` remaining
@@ -107,6 +107,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Finish windowing/measurement/keyboard-nav parity for virtualized collections.
-2. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).
-3. Expand documentation/examples coverage for the remaining parity gaps.
+1. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).
+2. Expand documentation/examples coverage for remaining hooks/packages.
+3. Keep parity checks aligned with any newly added migration tests.
