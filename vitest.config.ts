@@ -193,6 +193,9 @@ export default defineConfig({
       "@vue-spectrum/text": fileURLToPath(
         new URL("./packages/@vue-spectrum/text/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/view": fileURLToPath(
+        new URL("./packages/@vue-spectrum/view/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),

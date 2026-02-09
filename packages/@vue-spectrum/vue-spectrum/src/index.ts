@@ -18,6 +18,7 @@ export { classNames } from "@vue-spectrum/utils";
 export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 export { Label, HelpText, Field } from "@vue-spectrum/label";
 export { Text, Heading, Keyboard } from "@vue-spectrum/text";
+export { View, Content, Header, Footer } from "@vue-spectrum/view";
 
 export type {
   FormContextValue,
@@ -40,6 +41,13 @@ export type {
   KeyboardProps,
   TextProps,
 } from "@vue-spectrum/text";
+export type {
+  ContentProps,
+  FooterProps,
+  HeaderProps,
+  ViewElementType,
+  ViewProps,
+} from "@vue-spectrum/view";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,
