@@ -175,6 +175,15 @@ export default defineConfig({
       "@vue-aria/vue-aria": fileURLToPath(
         new URL("./packages/@vue-aria/vue-aria/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/provider": fileURLToPath(
+        new URL("./packages/@vue-spectrum/provider/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/utils": fileURLToPath(
+        new URL("./packages/@vue-spectrum/utils/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/vue-spectrum": fileURLToPath(
+        new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
+      ),
     },
   },
   test: {

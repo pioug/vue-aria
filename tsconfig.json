@@ -63,7 +63,10 @@
       "@vue-aria/spinbutton": ["packages/@vue-aria/spinbutton/src/index.ts"],
       "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"],
       "@vue-aria/visually-hidden": ["packages/@vue-aria/visually-hidden/src/index.ts"],
-      "@vue-aria/vue-aria": ["packages/@vue-aria/vue-aria/src/index.ts"]
+      "@vue-aria/vue-aria": ["packages/@vue-aria/vue-aria/src/index.ts"],
+      "@vue-spectrum/provider": ["packages/@vue-spectrum/provider/src/index.ts"],
+      "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
+      "@vue-spectrum/vue-spectrum": ["packages/@vue-spectrum/vue-spectrum/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

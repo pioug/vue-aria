@@ -6,7 +6,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 - Completed packages: `0 / 64`
 - Remaining packages: `64`
-- Current stage: planning
+- Current stage: phase-0 foundation scaffolding
 
 ## Upstream Source of Truth
 
@@ -24,11 +24,11 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Program Setup (Not Counted In 64 Packages)
 
-- [ ] Create workspace scope `packages/@vue-spectrum/*` and monorepo TS references.
-- [ ] Add umbrella package `packages/@vue-spectrum/vue-spectrum`.
-- [ ] Add parity gate script `scripts/check-spectrum-parity.mjs` (tests + docs + exports coverage).
-- [ ] Add npm script `test:spectrum-parity` and wire into CI.
-- [ ] Add shared Spectrum docs section (`docs/spectrum/*`) and overview page.
+- [x] Create workspace scope `packages/@vue-spectrum/*` and monorepo TS references.
+- [x] Add umbrella package `packages/@vue-spectrum/vue-spectrum`.
+- [x] Add parity gate script `scripts/check-spectrum-parity.mjs` (tests + docs + exports coverage).
+- [x] Add npm script `test:spectrum-parity` and wire into CI.
+- [x] Add shared Spectrum docs section (`docs/spectrum/*`) and overview page.
 - [ ] Add cross-browser component harness pages for Spectrum components.
 - [ ] Define visual/theming baseline (tokens, scales, color schemes).
 - [ ] Add package scaffolding generator for one-package-per-upstream parity.
@@ -49,7 +49,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `@react-spectrum/theme-express` -> `@vue-spectrum/theme-express`
 - [ ] `@react-spectrum/style-macro-s1` -> `@vue-spectrum/style-macro-s1`
 - [ ] `@react-spectrum/test-utils` -> `@vue-spectrum/test-utils`
-- [ ] `@react-spectrum/story-utils` (internal) -> Vue internal story utils
+- [ ] `@react-spectrum/story-utils` -> `@vue-spectrum/story-utils` (internal)
 - [ ] `@react-spectrum/s2` -> `@vue-spectrum/s2`
 
 ## Actions and Navigation
@@ -124,4 +124,3 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] Add icon dependencies for component parity: `@spectrum-icons/ui`, `@spectrum-icons/workflow`.
 - [ ] Evaluate theme/token source strategy (`@adobe/spectrum-css-temp` parity vs Vue-native token pipeline).
 - [ ] Add only package-specific dependencies when first required by a ported package.
-

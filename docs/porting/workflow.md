@@ -28,6 +28,7 @@ Use this process for each new hook/component.
 npm run check
 npm run test
 npm run test:parity
+npm run test:spectrum-parity
 ```
 
 ## 6. Update Docs

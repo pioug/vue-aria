@@ -31,6 +31,7 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/getting-started" },
       { text: "Packages", link: "/packages/overview" },
+      { text: "Spectrum", link: "/spectrum/overview" },
       { text: "Porting", link: "/porting/roadmap" },
       { text: "GitHub", link: "https://github.com/pioug/vue-aria/" },
     ],
@@ -111,6 +112,14 @@ export default defineConfig({
           { text: "Cross-Browser Demos", link: "/porting/cross-browser-demos" },
           { text: "Test Parity", link: "/porting/test-parity" },
           { text: "Workflow", link: "/porting/workflow" },
+        ],
+      },
+      {
+        text: "Spectrum",
+        items: [
+          { text: "Overview", link: "/spectrum/overview" },
+          { text: "@vue-spectrum/provider", link: "/spectrum/provider" },
+          { text: "@vue-spectrum/utils", link: "/spectrum/utils" },
         ],
       },
     ],

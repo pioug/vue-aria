@@ -8,6 +8,12 @@ The React Aria hook layer is already complete; this is the next phase on top of 
 
 The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
+## Current Status
+
+- Phase 0 is in progress with workspace scaffolding complete.
+- Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
+- Spectrum parity gate script is available at `npm run test:spectrum-parity`.
+
 ## Scope
 
 - In scope: component packages under `references/react-spectrum/packages/@react-spectrum/*`.
@@ -101,8 +107,7 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 
 ## Immediate Next Steps
 
-1. Scaffold `packages/@vue-spectrum/provider`, `packages/@vue-spectrum/utils`, and `packages/@vue-spectrum/vue-spectrum`.
-2. Implement `scripts/check-spectrum-parity.mjs` and wire a new `npm run test:spectrum-parity` script.
-3. Create `docs/spectrum/overview.md` plus first component docs pages (`provider`, `button`).
-4. Start Phase 1 package ports and update `/SPECTRUM_PORTING_TRACKER.md` per completed package.
-
+1. Expand `@vue-spectrum/provider` toward deeper parity (`Provider` wrapper behaviors, breakpoint plumbing, and SSR-focused coverage).
+2. Start Phase 1 package ports with `@react-spectrum/icon` and `@react-spectrum/form` dependencies needed by high-level components.
+3. Add Spectrum cross-browser harness pages and Playwright assertions for provider/theme flows.
+4. Wire `npm run test:spectrum-parity` into CI.
