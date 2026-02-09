@@ -10,10 +10,10 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `9 / 76` completed.
+- Task progress: `10 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
-- First foundation package marked complete: `@vue-spectrum/form`.
+- Foundation packages marked complete: `@vue-spectrum/form`, `@vue-spectrum/label`.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
 - CI now runs `npm run test:spectrum-parity` on pull requests and pushes to `main`.
@@ -21,7 +21,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 ## Progress Breakdown
 
 - Program setup tasks: `8 / 8` completed.
-- Foundation/theme/infrastructure packages: `1 / 16` completed.
+- Foundation/theme/infrastructure packages: `2 / 16` completed.
 - Actions/navigation packages: `0 / 12` completed.
 - Inputs/selection packages: `0 / 13` completed.
 - Lists/tables/trees packages: `0 / 4` completed.
@@ -33,7 +33,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 ## Current Critical Path
 
 1. Move in-progress foundation packages from baseline to complete parity: `provider`, `icon`, and `utils`.
-2. Complete remaining foundation dependencies for broad component work: `label`, `text`, `layout`, `view`.
+2. Complete remaining foundation dependencies for broad component work: `text`, `layout`, `view`.
 3. Lock theme layer strategy and implement `theme-default`, `theme-light`, `theme-dark`, and `theme-express`.
 4. Start high-volume controls only after the above are stable and parity-gated.
 
@@ -132,5 +132,5 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 
 1. Deepen `@vue-spectrum/provider` parity (`Provider` wrapper behavior, slot/context behavior, and SSR-focused coverage).
 2. Deepen `@vue-spectrum/icon` parity (slot behavior and class/style integration edge cases), then move it from baseline to complete.
-3. Continue with `@vue-spectrum/label`, then `@vue-spectrum/text`, `@vue-spectrum/layout`, and `@vue-spectrum/view`.
+3. Continue with `@vue-spectrum/text`, `@vue-spectrum/layout`, and `@vue-spectrum/view`.
 4. Begin theme package track (`theme-default` first) once form/label wiring is stable.

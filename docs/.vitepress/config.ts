@@ -38,6 +38,9 @@ export default defineConfig({
         "@vue-spectrum/form": fileURLToPath(
           new URL("../../packages/@vue-spectrum/form/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/label": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/label/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/vue-spectrum": fileURLToPath(
           new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
         ),
@@ -146,6 +149,7 @@ export default defineConfig({
           { text: "@vue-spectrum/icon", link: "/spectrum/icon" },
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },
           { text: "@vue-spectrum/form", link: "/spectrum/form" },
+          { text: "@vue-spectrum/label", link: "/spectrum/label" },
         ],
       },
     ],
