@@ -11,6 +11,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 ## Current Baseline
 
 - `@vue-spectrum/provider`: provider context primitives and media query helpers
+- `@vue-spectrum/icon`: icon wrapper component primitives (`Icon`, `UIIcon`, `Illustration`)
 - `@vue-spectrum/utils`: shared class-name utility baseline
 - `@vue-spectrum/vue-spectrum`: umbrella export package for the component layer
 

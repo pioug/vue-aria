@@ -1,0 +1,86 @@
+import { mount } from "@vue/test-utils";
+import { defineComponent, h, type PropType } from "vue";
+import { describe, expect, it } from "vitest";
+import { Illustration } from "../src";
+
+function renderCustomIllustration() {
+  return h("svg", [h("path", { d: "M 10,150 L 70,10 L 130,150 z" })]);
+}
+
+const IllustrationHarness = defineComponent({
+  name: "IllustrationHarness",
+  props: {
+    label: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    labelledby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaHidden: {
+      type: [Boolean, String] as PropType<boolean | "true" | "false" | undefined>,
+      default: undefined,
+    },
+  },
+  setup(props) {
+    return () =>
+      h(
+        Illustration,
+        {
+          ariaLabel: props.label,
+          ariaLabelledby: props.labelledby,
+          ariaHidden: props.ariaHidden,
+        },
+        {
+          default: () => [renderCustomIllustration()],
+        }
+      );
+  },
+});
+
+describe("Illustration", () => {
+  it("handles aria label", () => {
+    const wrapper = mount(IllustrationHarness, {
+      props: {
+        label: "custom illustration",
+      },
+    });
+
+    const illustration = wrapper.get("svg");
+    expect(illustration.attributes("focusable")).toBe("false");
+    expect(illustration.attributes("aria-label")).toBe("custom illustration");
+    expect(illustration.attributes("role")).toBe("img");
+  });
+
+  it("does not force role or aria-hidden without accessible labels", () => {
+    const wrapper = mount(IllustrationHarness);
+
+    const illustration = wrapper.get("svg");
+    expect(illustration.attributes("aria-label")).toBeUndefined();
+    expect(illustration.attributes("aria-hidden")).toBeUndefined();
+    expect(illustration.attributes("role")).toBeUndefined();
+  });
+
+  it("supports aria-hidden override", async () => {
+    const wrapper = mount(IllustrationHarness, {
+      props: {
+        label: "explicitly hidden aria-label",
+        ariaHidden: true,
+      },
+    });
+
+    let illustration = wrapper.get("svg");
+    expect(illustration.attributes("aria-label")).toBe("explicitly hidden aria-label");
+    expect(illustration.attributes("aria-hidden")).toBe("true");
+
+    await wrapper.setProps({
+      label: "explicitly not hidden aria-label",
+      ariaHidden: false,
+    });
+
+    illustration = wrapper.get("svg");
+    expect(illustration.attributes("aria-label")).toBe("explicitly not hidden aria-label");
+    expect(illustration.attributes("aria-hidden")).toBeUndefined();
+  });
+});
