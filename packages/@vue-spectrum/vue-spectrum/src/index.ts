@@ -27,6 +27,7 @@ export {
   cssModuleToSlots,
   SlotProvider,
   ClearSlots,
+  getWrappedElement,
 } from "@vue-spectrum/utils";
 export { Form, useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 export { Label, HelpText, Field } from "@vue-spectrum/label";

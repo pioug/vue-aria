@@ -11,6 +11,7 @@ Shared utility baseline for the Spectrum component migration.
 - `cssModuleToSlots`
 - `SlotProvider`
 - `ClearSlots`
+- `getWrappedElement`
 
 ## `classNames`
 
@@ -48,6 +49,10 @@ keepSpectrumClassNames();
 ```ts
 import { SlotProvider, useSlotProps } from "@vue-spectrum/utils";
 ```
+
+## `getWrappedElement`
+
+Normalizes text or vnode children into a single element vnode (wrapping strings in `span`), matching React Spectrum utility behavior used by link-like components.
 
 ## Notes
 
