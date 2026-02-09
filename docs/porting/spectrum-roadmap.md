@@ -10,6 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
+- Task progress: `5 / 76` completed (`71 / 76` left).
 - Phase 0 is in progress with workspace scaffolding complete.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
