@@ -4,8 +4,8 @@ This is the master checklist for parity with React Aria behavior in Vue.
 
 ## Progress Snapshot
 
-- Completed: `136 / 144` tracked items
-- Remaining: `8`
+- Completed: `137 / 144` tracked items
+- Remaining: `7`
 - Current stage: quality-gate hardening
 
 ## 0) Dependency baseline
@@ -213,8 +213,9 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [ ] Hook-level unit tests
 - [ ] Keyboard interaction tests
 - [ ] Screen reader behavior checks
-- [ ] SSR hydration tests
+- [x] SSR hydration tests
 - [ ] RTL/i18n tests
 - [ ] Cross-browser checks (Chromium, WebKit, Firefox)
 - [ ] Documentation + examples for each hook
 - In progress baseline: SSR smoke coverage added for `@vue-aria/dnd` (`dnd.ssr.test.ts`)
+- [x] Hydration id parity coverage added for `@vue-aria/ssr` (`hydration.test.ts`)

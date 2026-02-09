@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `136 / 144` (about `94.4%`)
-- Tracked items remaining: `8`
+- Tracked items completed: `137 / 144` (about `95.1%`)
+- Tracked items remaining: `7`
 - Current parity focus: quality gates
 
 ## Done So Far
@@ -47,6 +47,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop manager hardening baseline: keyboard session flow (`Tab` navigation, `Enter` drop, `Escape` cancel), click-driven cancel/drop flow, drop-item targeting/activation (`onDropTargetEnter`, `onDropActivate`), screen-reader isolation for non-drop content while dragging, mutation-driven target updates, and `isValidDropTarget` utility
 - Drag/drop parity hardening: modality-aware drag/drop descriptions, modality-specific start/cancel/complete announcements, global drop-effect + allowed-operation synchronization, and standalone `useDrop` keyboard-target registration for managed dragging
 - Drag/drop SSR baseline: server-render smoke test for `useDrag` + `useDrop`
+- SSR hydration parity baseline: deterministic nested `useId` generation across server render + client hydration in `@vue-aria/ssr`
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -74,7 +75,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop + virtualizer: `0` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
-- Quality gates: `7` remaining
+- Quality gates: `6` remaining
 
 ## Critical Path To Parity
 
@@ -101,12 +102,12 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 ### Phase 4: State + Hardening
 
 - React Stately parity layer (or equivalent Vue state packages)
-- SSR hydration and id consistency tests
+- SSR hydration and id consistency tests (baseline complete)
 - RTL/i18n and screen-reader validation passes
 - Cross-browser validation (Chromium/WebKit/Firefox)
 
 ## Immediate Next Milestone
 
-1. Continue quality-gate hardening (SSR/RTL/screen reader/cross-browser).
+1. Continue quality-gate hardening (RTL/screen reader/cross-browser).
 2. Expand documentation/examples coverage for remaining hooks/packages.
 3. Keep parity checks aligned with any newly added migration tests.
