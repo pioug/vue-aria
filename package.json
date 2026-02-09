@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:parity": "node scripts/check-test-parity.mjs",
+    "test:cross-browser": "playwright test",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.1",
+    "@playwright/test": "^1.51.1",
     "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@vue/test-utils": "^2.4.6",

@@ -225,3 +225,4 @@ This is the master checklist for parity with React Aria behavior in Vue.
 - [x] Parity script enforces keyboard interaction suite coverage (`check-test-parity.mjs`)
 - [x] Parity script enforces screen-reader accessibility suite coverage (`check-test-parity.mjs`)
 - [x] Parity script enforces docs coverage for every exported `use*` hook (`check-test-parity.mjs`)
+- In progress baseline: Playwright cross-browser smoke suite scaffolded (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`)

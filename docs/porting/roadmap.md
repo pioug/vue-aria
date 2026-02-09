@@ -54,6 +54,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Screen-reader gate hardening: parity script now enforces accessibility-focused suites across announcements, labeling, toast, drag/drop, and progress semantics
 - Dependency baseline hardening: parity script audits runtime imports across `packages/@vue-aria/*/src` and verifies declared dependencies
 - Docs gate hardening: package docs now cover every exported `use*` hook and parity checks enforce ongoing docs coverage
+- Cross-browser baseline: Playwright Chromium/Firefox/WebKit docs-smoke suite scaffolded (`playwright.config.mjs`, `tests/cross-browser/docs-smoke.spec.mjs`)
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`

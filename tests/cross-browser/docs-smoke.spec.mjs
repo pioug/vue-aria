@@ -1,0 +1,37 @@
+import { expect, test } from "@playwright/test";
+
+const routes = [
+  "/",
+  "/packages/overview.html",
+  "/packages/interactions.html",
+  "/packages/overlays.html",
+  "/packages/dnd.html",
+];
+
+for (const route of routes) {
+  test(`loads ${route} without console errors`, async ({ page }) => {
+    const errors = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        errors.push(message.text());
+      }
+    });
+
+    await page.goto(route);
+    await expect(page.locator("h1").first()).toBeVisible();
+    await page.waitForLoadState("networkidle");
+
+    expect(errors).toEqual([]);
+  });
+}
+
+test("supports keyboard navigation to package links", async ({ page }) => {
+  await page.goto("/packages/overview.html");
+
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Enter");
+
+  await expect(page).toHaveURL(/\/packages\/.+\.html$/);
+});
