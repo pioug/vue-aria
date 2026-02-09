@@ -226,4 +226,51 @@ if (packagesMissingHookTests.length > 0) {
   process.exit(1);
 }
 
+const requiredKeyboardTestFiles = [
+  "packages/@vue-aria/interactions/test/usePress.test.ts",
+  "packages/@vue-aria/interactions/test/useKeyboard.test.ts",
+  "packages/@vue-aria/interactions/test/useMove.test.ts",
+  "packages/@vue-aria/menu/test/useMenu.test.ts",
+  "packages/@vue-aria/menu/test/useMenuTrigger.test.ts",
+  "packages/@vue-aria/menu/test/useSubmenuTrigger.test.ts",
+  "packages/@vue-aria/tabs/test/useTabList.test.ts",
+  "packages/@vue-aria/listbox/test/useListBox.test.ts",
+  "packages/@vue-aria/table/test/useTable.test.ts",
+  "packages/@vue-aria/dnd/test/DragManager.test.ts",
+  "packages/@vue-aria/dnd/test/useDrag.test.ts",
+  "packages/@vue-aria/dnd/test/useDrop.test.ts",
+  "packages/@vue-aria/selection/test/useListKeyboardDelegate.test.ts",
+  "packages/@vue-aria/selection/test/useGridKeyboardDelegate.test.ts",
+  "packages/@vue-aria/datepicker/test/useDatePickerGroup.test.ts",
+];
+
+const missingKeyboardSuites = requiredKeyboardTestFiles.filter(
+  (file) => !fs.existsSync(path.join(root, file))
+);
+
+if (missingKeyboardSuites.length > 0) {
+  console.error("Parity check failed. Missing keyboard coverage suites:");
+  for (const file of missingKeyboardSuites) {
+    console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
+const keyboardSignalPattern =
+  /KeyboardEvent|onKeydown|onKeyDown|key:\s*["'](?:Arrow|Enter|Space|Escape|Tab|Home|End|PageUp|PageDown)|getKey(?:Above|Below|LeftOf|RightOf|ForSearch)/;
+const weakKeyboardSuites = requiredKeyboardTestFiles.filter((file) => {
+  const content = fs.readFileSync(path.join(root, file), "utf8");
+  return !keyboardSignalPattern.test(content);
+});
+
+if (weakKeyboardSuites.length > 0) {
+  console.error(
+    "Parity check failed. Keyboard suites do not contain keyboard interaction signals:"
+  );
+  for (const file of weakKeyboardSuites) {
+    console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
 console.log("Parity check passed for currently ported modules.");

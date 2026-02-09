@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `139 / 144` (about `96.5%`)
-- Tracked items remaining: `5`
+- Tracked items completed: `140 / 144` (about `97.2%`)
+- Tracked items remaining: `4`
 - Current parity focus: quality gates
 
 ## Done So Far
@@ -50,6 +50,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - SSR hydration parity baseline: deterministic nested `useId` generation across server render + client hydration in `@vue-aria/ssr`
 - RTL/i18n parity hardening: `useOverlayPosition` now verifies `start` placement mapping for LTR vs RTL locale providers
 - Hook-level test gate hardening: parity script now fails if any runtime package lacks a unit-test suite
+- Keyboard gate hardening: parity script now enforces dedicated keyboard interaction suites across key packages
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -77,7 +78,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop + virtualizer: `0` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
-- Quality gates: `4` remaining
+- Quality gates: `3` remaining
 
 ## Critical Path To Parity
 
@@ -111,6 +112,6 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Immediate Next Milestone
 
-1. Continue quality-gate hardening (keyboard/screen reader/cross-browser).
+1. Continue quality-gate hardening (screen reader/cross-browser).
 2. Expand documentation/examples coverage for remaining hooks/packages.
 3. Keep parity checks aligned with any newly added migration tests.
