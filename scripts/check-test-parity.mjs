@@ -273,4 +273,43 @@ if (weakKeyboardSuites.length > 0) {
   process.exit(1);
 }
 
+const requiredScreenReaderTestFiles = [
+  "packages/@vue-aria/live-announcer/test/liveAnnouncer.test.ts",
+  "packages/@vue-aria/toast/test/useToastRegion.test.ts",
+  "packages/@vue-aria/toast/test/useToast.test.ts",
+  "packages/@vue-aria/dnd/test/DragManager.test.ts",
+  "packages/@vue-aria/calendar/test/useCalendar.test.ts",
+  "packages/@vue-aria/label/test/useLabel.test.ts",
+  "packages/@vue-aria/progress/test/useProgressBar.test.ts",
+];
+
+const missingScreenReaderSuites = requiredScreenReaderTestFiles.filter(
+  (file) => !fs.existsSync(path.join(root, file))
+);
+
+if (missingScreenReaderSuites.length > 0) {
+  console.error("Parity check failed. Missing screen-reader coverage suites:");
+  for (const file of missingScreenReaderSuites) {
+    console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
+const screenReaderSignalPattern =
+  /aria-|announce|screen reader|a11y|live-announcer|role:\s*["'](?:alert|alertdialog|status|region|dialog)/i;
+const weakScreenReaderSuites = requiredScreenReaderTestFiles.filter((file) => {
+  const content = fs.readFileSync(path.join(root, file), "utf8");
+  return !screenReaderSignalPattern.test(content);
+});
+
+if (weakScreenReaderSuites.length > 0) {
+  console.error(
+    "Parity check failed. Screen-reader suites do not contain accessibility interaction signals:"
+  );
+  for (const file of weakScreenReaderSuites) {
+    console.error(`- ${file}`);
+  }
+  process.exit(1);
+}
+
 console.log("Parity check passed for currently ported modules.");

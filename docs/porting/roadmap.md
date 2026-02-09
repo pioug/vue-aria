@@ -4,8 +4,8 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 
 ## Snapshot
 
-- Tracked items completed: `140 / 144` (about `97.2%`)
-- Tracked items remaining: `4`
+- Tracked items completed: `141 / 144` (about `97.9%`)
+- Tracked items remaining: `3`
 - Current parity focus: quality gates
 
 ## Done So Far
@@ -51,6 +51,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - RTL/i18n parity hardening: `useOverlayPosition` now verifies `start` placement mapping for LTR vs RTL locale providers
 - Hook-level test gate hardening: parity script now fails if any runtime package lacks a unit-test suite
 - Keyboard gate hardening: parity script now enforces dedicated keyboard interaction suites across key packages
+- Screen-reader gate hardening: parity script now enforces accessibility-focused suites across announcements, labeling, toast, drag/drop, and progress semantics
 - Virtualizer geometry primitives baseline: `Point`, `Size`, `Rect`, `LayoutInfo`
 - Virtualizer core engine primitives baseline: `Layout`, `Virtualizer`, `OverscanManager`, `ReusableView`
 - Virtualizer state baseline: `useVirtualizerState`
@@ -78,7 +79,7 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - Drag/drop + virtualizer: `0` remaining
 - Feedback/status: `0` remaining
 - Stately parity layer: `0` remaining
-- Quality gates: `3` remaining
+- Quality gates: `2` remaining
 
 ## Critical Path To Parity
 
@@ -107,11 +108,11 @@ The full tracker lives in `/PORTING_TRACKER.md`.
 - React Stately parity layer (or equivalent Vue state packages)
 - SSR hydration and id consistency tests (baseline complete)
 - RTL/i18n validation passes (baseline complete)
-- Screen-reader validation passes
+- Screen-reader validation passes (baseline complete)
 - Cross-browser validation (Chromium/WebKit/Firefox)
 
 ## Immediate Next Milestone
 
-1. Continue quality-gate hardening (screen reader/cross-browser).
+1. Continue quality-gate hardening (cross-browser).
 2. Expand documentation/examples coverage for remaining hooks/packages.
 3. Keep parity checks aligned with any newly added migration tests.
