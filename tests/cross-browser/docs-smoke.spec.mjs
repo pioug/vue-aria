@@ -10,6 +10,7 @@ const routes = [
   "/spectrum/cross-browser-demos.html",
   "/spectrum/form.html",
   "/spectrum/label.html",
+  "/spectrum/text.html",
 ];
 
 for (const route of routes) {

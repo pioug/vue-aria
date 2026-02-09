@@ -41,6 +41,9 @@ export default defineConfig({
         "@vue-spectrum/label": fileURLToPath(
           new URL("../../packages/@vue-spectrum/label/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/text": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/text/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/vue-spectrum": fileURLToPath(
           new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
         ),
@@ -150,6 +153,7 @@ export default defineConfig({
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },
           { text: "@vue-spectrum/form", link: "/spectrum/form" },
           { text: "@vue-spectrum/label", link: "/spectrum/label" },
+          { text: "@vue-spectrum/text", link: "/spectrum/text" },
         ],
       },
     ],

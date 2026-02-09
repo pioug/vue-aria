@@ -69,6 +69,7 @@
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/form": ["packages/@vue-spectrum/form/src/index.ts"],
       "@vue-spectrum/label": ["packages/@vue-spectrum/label/src/index.ts"],
+      "@vue-spectrum/text": ["packages/@vue-spectrum/text/src/index.ts"],
       "@vue-spectrum/vue-spectrum": ["packages/@vue-spectrum/vue-spectrum/src/index.ts"]
     },
     "strict": true,
