@@ -97,6 +97,19 @@ export { NumberField } from "@vue-spectrum/numberfield";
 export { ComboBox } from "@vue-spectrum/combobox";
 export { SearchAutocomplete } from "@vue-spectrum/autocomplete";
 export { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
+export {
+  ColorArea,
+  ColorWheel,
+  ColorSlider,
+  ColorField,
+  ColorSwatch,
+  ColorPicker,
+  ColorEditor,
+  ColorSwatchPicker,
+  ColorThumb,
+  parseColor,
+  getColorChannels,
+} from "@vue-spectrum/color";
 export { DateField, TimeField, DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 export { FileTrigger } from "@vue-spectrum/filetrigger";
 export { StepList, StepListItem } from "@vue-spectrum/steplist";
@@ -305,6 +318,21 @@ export type {
   SpectrumCalendarProps,
   SpectrumRangeCalendarProps,
 } from "@vue-spectrum/calendar";
+export type {
+  Color,
+  ColorSpace,
+  ColorFormat,
+  SpectrumColorAreaProps,
+  SpectrumColorFieldProps,
+  SpectrumColorSliderProps,
+  SpectrumColorWheelProps,
+  SpectrumColorSwatchProps,
+  SpectrumColorPickerProps,
+  SpectrumColorEditorProps,
+  SpectrumColorSwatchPickerItem,
+  SpectrumColorSwatchPickerProps,
+  SpectrumColorThumbProps,
+} from "@vue-spectrum/color";
 export type {
   SpectrumDateFieldBaseProps,
   SpectrumDateFieldProps,
