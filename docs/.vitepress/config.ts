@@ -125,6 +125,9 @@ export default defineConfig({
         "@vue-spectrum/image": fileURLToPath(
           new URL("../../packages/@vue-spectrum/image/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/illustratedmessage": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/illustratedmessage/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/progress": fileURLToPath(
           new URL("../../packages/@vue-spectrum/progress/src/index.ts", import.meta.url)
         ),
@@ -277,6 +280,7 @@ export default defineConfig({
           { text: "@vue-spectrum/badge", link: "/spectrum/badge" },
           { text: "@vue-spectrum/avatar", link: "/spectrum/avatar" },
           { text: "@vue-spectrum/image", link: "/spectrum/image" },
+          { text: "@vue-spectrum/illustratedmessage", link: "/spectrum/illustratedmessage" },
           { text: "@vue-spectrum/progress", link: "/spectrum/progress" },
           { text: "@vue-spectrum/meter", link: "/spectrum/meter" },
           { text: "@vue-spectrum/labeledvalue", link: "/spectrum/labeledvalue" },
