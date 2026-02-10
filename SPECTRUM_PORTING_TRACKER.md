@@ -99,6 +99,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Lists, Tables, and Trees
 
+- In progress baseline: `@react-spectrum/listbox` now has Vue `ListBox`, `ListBoxBase`, `ListBoxOption`, and `ListBoxSection` primitives with baseline grouped-option semantics (`group` + heading + divider behavior), keyboard navigation coverage (including optional wrap focus), controlled/uncontrolled single and multiple selection behavior, disabled-key handling, and starter/SSR tests plus docs/umbrella wiring; advanced virtualizer and full visual/theming parity remain.
 - [ ] `@react-spectrum/list` -> `@vue-spectrum/list`
 - [ ] `@react-spectrum/listbox` -> `@vue-spectrum/listbox`
 - [ ] `@react-spectrum/table` -> `@vue-spectrum/table`
