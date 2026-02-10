@@ -78,6 +78,7 @@
       "@vue-spectrum/badge": ["packages/@vue-spectrum/badge/src/index.ts"],
       "@vue-spectrum/avatar": ["packages/@vue-spectrum/avatar/src/index.ts"],
       "@vue-spectrum/image": ["packages/@vue-spectrum/image/src/index.ts"],
+      "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
       "@vue-spectrum/vue-spectrum": ["packages/@vue-spectrum/vue-spectrum/src/index.ts"]
     },
     "strict": true,

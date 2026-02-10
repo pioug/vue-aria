@@ -62,6 +62,7 @@ export { StatusLight } from "@vue-spectrum/statuslight";
 export { Badge } from "@vue-spectrum/badge";
 export { Avatar } from "@vue-spectrum/avatar";
 export { Image } from "@vue-spectrum/image";
+export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 
 export type {
   FormContextValue,
@@ -113,6 +114,13 @@ export type {
 export type { BadgeVariant, SpectrumBadgeProps } from "@vue-spectrum/badge";
 export type { AvatarSize, SpectrumAvatarProps } from "@vue-spectrum/avatar";
 export type { ImageCrossOrigin, SpectrumImageProps } from "@vue-spectrum/image";
+export type {
+  ProgressBarLabelPosition,
+  ProgressBarSize,
+  SpectrumProgressBarBaseProps,
+  SpectrumProgressBarProps,
+  SpectrumProgressCircleProps,
+} from "@vue-spectrum/progress";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,

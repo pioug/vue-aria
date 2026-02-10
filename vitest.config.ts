@@ -217,6 +217,9 @@ export default defineConfig({
       "@vue-spectrum/image": fileURLToPath(
         new URL("./packages/@vue-spectrum/image/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/progress": fileURLToPath(
+        new URL("./packages/@vue-spectrum/progress/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),
