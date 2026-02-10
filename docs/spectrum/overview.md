@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration plus initial display/action packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/link`, `@vue-spectrum/buttongroup`, `@vue-spectrum/accordion`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, `@vue-spectrum/labeledvalue`, `@vue-spectrum/checkbox`, and `@vue-spectrum/switch` complete) with active controls baseline work (`@vue-spectrum/button`).
+- Current stage: phase-1 foundation migration plus initial display/action packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/link`, `@vue-spectrum/buttongroup`, `@vue-spectrum/accordion`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, `@vue-spectrum/labeledvalue`, `@vue-spectrum/checkbox`, `@vue-spectrum/radio`, and `@vue-spectrum/switch` complete) with active controls baseline work (`@vue-spectrum/button`).
 
 ## Current Baseline
 
@@ -22,6 +22,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/buttongroup`: button-group primitive (`ButtonGroup`) with overflow-to-vertical behavior and disabled-context propagation
 - `@vue-spectrum/accordion`: disclosure-group primitives (`Accordion`, `Disclosure`, `DisclosureTitle`, `DisclosurePanel`) with keyboard, controlled/uncontrolled expansion, and SSR parity coverage
 - `@vue-spectrum/checkbox`: checkbox primitives (`Checkbox`, `CheckboxGroup`) with standalone/group state handling and validation semantics
+- `@vue-spectrum/radio`: radio primitives (`Radio`, `RadioGroup`) with controlled/uncontrolled behavior, orientation, and group validation semantics
 - `@vue-spectrum/switch`: switch field primitive (`Switch`) with controlled/uncontrolled behavior, read-only/disabled support, and ARIA labeling parity
 - `@vue-spectrum/link`: navigation link primitive (`Link`)
 - `@vue-spectrum/divider`: divider primitive (`Divider`)

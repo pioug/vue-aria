@@ -72,6 +72,7 @@ export {
   DisclosureTitle,
 } from "@vue-spectrum/accordion";
 export { Checkbox, CheckboxGroup } from "@vue-spectrum/checkbox";
+export { Radio, RadioGroup } from "@vue-spectrum/radio";
 export { Switch } from "@vue-spectrum/switch";
 export { Link } from "@vue-spectrum/link";
 export { Divider } from "@vue-spectrum/divider";
@@ -156,6 +157,12 @@ export type {
   SpectrumCheckboxProps,
   SpectrumCheckboxValidationBehavior,
 } from "@vue-spectrum/checkbox";
+export type {
+  SpectrumRadioGroupOrientation,
+  SpectrumRadioGroupProps,
+  SpectrumRadioProps,
+  SpectrumRadioValidationBehavior,
+} from "@vue-spectrum/radio";
 export type { SpectrumSwitchProps } from "@vue-spectrum/switch";
 export type { LinkVariant, SpectrumLinkProps } from "@vue-spectrum/link";
 export type {
