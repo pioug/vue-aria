@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/divider`, and `@vue-spectrum/well` complete)
+- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/divider`, `@vue-spectrum/well`, and `@vue-spectrum/statuslight` complete)
 
 ## Current Baseline
 
@@ -20,6 +20,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/layout`: grid/flex layout primitives (`Grid`, `Flex`, helper functions)
 - `@vue-spectrum/divider`: divider primitive (`Divider`)
 - `@vue-spectrum/well`: content well primitive (`Well`)
+- `@vue-spectrum/statuslight`: status indicator primitive (`StatusLight`)
 - `@vue-spectrum/vue-spectrum`: umbrella export package for the component layer
 
 ## Rules For Marking A Package Complete

@@ -56,6 +56,9 @@ export default defineConfig({
         "@vue-spectrum/well": fileURLToPath(
           new URL("../../packages/@vue-spectrum/well/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/statuslight": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/statuslight/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/vue-spectrum": fileURLToPath(
           new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
         ),
@@ -170,6 +173,7 @@ export default defineConfig({
           { text: "@vue-spectrum/layout", link: "/spectrum/layout" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
           { text: "@vue-spectrum/well", link: "/spectrum/well" },
+          { text: "@vue-spectrum/statuslight", link: "/spectrum/statuslight" },
         ],
       },
     ],

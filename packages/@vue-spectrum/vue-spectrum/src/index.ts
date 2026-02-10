@@ -58,6 +58,7 @@ export { View, Content, Header, Footer } from "@vue-spectrum/view";
 export { Flex, Grid, repeat, minmax, fitContent } from "@vue-spectrum/layout";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
+export { StatusLight } from "@vue-spectrum/statuslight";
 
 export type {
   FormContextValue,
@@ -102,6 +103,10 @@ export type {
   SpectrumDividerProps,
 } from "@vue-spectrum/divider";
 export type { SpectrumWellProps } from "@vue-spectrum/well";
+export type {
+  SpectrumStatusLightProps,
+  StatusLightVariant,
+} from "@vue-spectrum/statuslight";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,

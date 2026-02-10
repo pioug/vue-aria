@@ -4,8 +4,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Progress Snapshot
 
-- Completed packages: `8 / 64`
-- Remaining packages: `56`
+- Completed packages: `9 / 64`
+- Remaining packages: `55`
 - Current stage: phase-1 foundation migration
 
 ## Upstream Source of Truth
@@ -116,7 +116,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `@react-spectrum/labeledvalue` -> `@vue-spectrum/labeledvalue`
 - [ ] `@react-spectrum/meter` -> `@vue-spectrum/meter`
 - [ ] `@react-spectrum/progress` -> `@vue-spectrum/progress`
-- [ ] `@react-spectrum/statuslight` -> `@vue-spectrum/statuslight`
+- [x] `@react-spectrum/statuslight` -> `@vue-spectrum/statuslight`
 - [x] `@react-spectrum/well` -> `@vue-spectrum/well`
 
 ## Initial Dependency Baseline To Confirm During Setup

@@ -74,6 +74,7 @@
       "@vue-spectrum/layout": ["packages/@vue-spectrum/layout/src/index.ts"],
       "@vue-spectrum/divider": ["packages/@vue-spectrum/divider/src/index.ts"],
       "@vue-spectrum/well": ["packages/@vue-spectrum/well/src/index.ts"],
+      "@vue-spectrum/statuslight": ["packages/@vue-spectrum/statuslight/src/index.ts"],
       "@vue-spectrum/vue-spectrum": ["packages/@vue-spectrum/vue-spectrum/src/index.ts"]
     },
     "strict": true,
