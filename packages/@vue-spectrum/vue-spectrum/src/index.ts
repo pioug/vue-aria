@@ -78,6 +78,7 @@ export { Slider, RangeSlider } from "@vue-spectrum/slider";
 export { Link } from "@vue-spectrum/link";
 export { Breadcrumbs, BreadcrumbItem } from "@vue-spectrum/breadcrumbs";
 export { Tabs, TabList, TabPanels } from "@vue-spectrum/tabs";
+export { TextField, TextArea } from "@vue-spectrum/textfield";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
@@ -190,6 +191,13 @@ export type {
   TabsKeyboardActivation,
   TabsOrientation,
 } from "@vue-spectrum/tabs";
+export type {
+  SpectrumTextAreaProps,
+  SpectrumTextFieldBaseProps,
+  SpectrumTextFieldProps,
+  SpectrumTextFieldValidationBehavior,
+  SpectrumTextFieldValidationState,
+} from "@vue-spectrum/textfield";
 export type {
   DividerOrientation,
   DividerSize,

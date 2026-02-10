@@ -26,6 +26,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/switch`: switch field primitive (`Switch`) with controlled/uncontrolled behavior, read-only/disabled support, and ARIA labeling parity
 - `@vue-spectrum/slider` (in progress): slider primitives (`Slider`, `RangeSlider`) with controlled/uncontrolled value handling, output label behavior, and baseline interaction coverage
 - `@vue-spectrum/tabs` (in progress): tabs primitives (`Tabs`, `TabList`, `TabPanels`) with keyboard navigation and controlled/uncontrolled selection behavior
+- `@vue-spectrum/textfield` (in progress): text input primitives (`TextField`, `TextArea`) with label/help/error semantics and controlled/uncontrolled value behavior
 - `@vue-spectrum/link`: navigation link primitive (`Link`)
 - `@vue-spectrum/breadcrumbs`: breadcrumb primitives (`Breadcrumbs`, `BreadcrumbItem`) with overflow/menu collapsing and link/action semantics
 - `@vue-spectrum/divider`: divider primitive (`Divider`)

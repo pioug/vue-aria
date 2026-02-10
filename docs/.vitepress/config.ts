@@ -77,6 +77,9 @@ export default defineConfig({
         "@vue-spectrum/tabs": fileURLToPath(
           new URL("../../packages/@vue-spectrum/tabs/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/textfield": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/textfield/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/divider": fileURLToPath(
           new URL("../../packages/@vue-spectrum/divider/src/index.ts", import.meta.url)
         ),
@@ -231,6 +234,7 @@ export default defineConfig({
           { text: "@vue-spectrum/link", link: "/spectrum/link" },
           { text: "@vue-spectrum/breadcrumbs", link: "/spectrum/breadcrumbs" },
           { text: "@vue-spectrum/tabs", link: "/spectrum/tabs" },
+          { text: "@vue-spectrum/textfield", link: "/spectrum/textfield" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
           { text: "@vue-spectrum/well", link: "/spectrum/well" },
           { text: "@vue-spectrum/statuslight", link: "/spectrum/statuslight" },
