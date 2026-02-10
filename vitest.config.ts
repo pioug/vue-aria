@@ -205,6 +205,9 @@ export default defineConfig({
       "@vue-spectrum/buttongroup": fileURLToPath(
         new URL("./packages/@vue-spectrum/buttongroup/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/accordion": fileURLToPath(
+        new URL("./packages/@vue-spectrum/accordion/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/link": fileURLToPath(
         new URL("./packages/@vue-spectrum/link/src/index.ts", import.meta.url)
       ),
