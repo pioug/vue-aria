@@ -66,6 +66,7 @@ export {
 } from "@vue-spectrum/button";
 export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
 export { ActionGroup } from "@vue-spectrum/actiongroup";
+export { TagGroup, Tag } from "@vue-spectrum/tag";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
@@ -164,6 +165,12 @@ export type {
   SpectrumActionGroupItemData,
   SpectrumActionGroupProps,
 } from "@vue-spectrum/actiongroup";
+export type {
+  SpectrumTagGroupProps,
+  SpectrumTagItemData,
+  SpectrumTagProps,
+  TagKey,
+} from "@vue-spectrum/tag";
 export type {
   ButtonGroupAlign,
   ButtonGroupOrientation,
