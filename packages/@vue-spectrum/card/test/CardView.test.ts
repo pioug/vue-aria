@@ -223,6 +223,43 @@ describe("CardView", () => {
     expect(document.activeElement).toBe(cells[1].element);
   });
 
+  it("moves focus to first and last cells via Home/End", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        layout: new GridLayout(),
+        items: dynamicItems,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[1].element);
+    expect(document.activeElement).toBe(cells[1].element);
+
+    await user.keyboard("{Home}");
+    expect(document.activeElement).toBe(cells[0].element);
+
+    await user.keyboard("{End}");
+    expect(document.activeElement).toBe(cells[2].element);
+  });
+
   it("supports uncontrolled multiple selection and emits selected keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = mount(CardView, {
@@ -361,6 +398,46 @@ describe("CardView", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("selectionMode none hides checkboxes and omits aria-selected", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "none",
+        onSelectionChange,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+
+    expect(wrapper.findAll("input[type=\"checkbox\"][aria-label=\"select\"]")).toHaveLength(
+      0
+    );
+    expect(cells[0].attributes("aria-selected")).toBeUndefined();
+
+    await user.click(cells[0].element);
+    expect(wrapper.findAll(".spectrum-Card")[0].classes()).not.toContain("is-selected");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("toggles selection with Enter key", async () => {
     const wrapper = mount(CardView, {
       attachTo: document.body,
@@ -396,6 +473,44 @@ describe("CardView", () => {
     expect(cards[0].classes()).toContain("is-selected");
 
     await user.keyboard("{Enter}");
+    expect(cards[0].classes()).not.toContain("is-selected");
+  });
+
+  it("toggles selection with Space key", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const cards = wrapper.findAll(".spectrum-Card");
+
+    (cells[0].element as HTMLElement).focus();
+    await user.keyboard("{Space}");
+    expect(cards[0].classes()).toContain("is-selected");
+
+    await user.keyboard("{Space}");
     expect(cards[0].classes()).not.toContain("is-selected");
   });
 

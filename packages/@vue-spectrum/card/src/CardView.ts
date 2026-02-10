@@ -72,6 +72,10 @@ function clampIndex(value: number, length: number): number {
   return Math.min(length - 1, Math.max(0, value));
 }
 
+function isSelectionToggleKey(key: string): boolean {
+  return key === "Enter" || key === " " || key === "Space" || key === "Spacebar";
+}
+
 function toKeySet(keys: Iterable<unknown> | undefined): Set<unknown> {
   if (!keys) {
     return new Set();
@@ -232,6 +236,8 @@ export const CardView = defineComponent({
           return;
         case "Enter":
         case " ":
+        case "Space":
+        case "Spacebar":
           event.preventDefault();
           return;
         default:
@@ -290,7 +296,8 @@ export const CardView = defineComponent({
                   toggleSelection(entry.itemKey);
                 },
                 onKeydown: (event: KeyboardEvent) => {
-                  if (event.key === "Enter" || event.key === " ") {
+                  if (isSelectionToggleKey(event.key)) {
+                    event.preventDefault();
                     toggleSelection(entry.itemKey);
                     return;
                   }
