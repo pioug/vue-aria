@@ -82,6 +82,7 @@ export { TextField, TextArea } from "@vue-spectrum/textfield";
 export { SearchField } from "@vue-spectrum/searchfield";
 export { NumberField } from "@vue-spectrum/numberfield";
 export { FileTrigger } from "@vue-spectrum/filetrigger";
+export { StepList, StepListItem } from "@vue-spectrum/steplist";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
@@ -204,6 +205,11 @@ export type {
 export type { SpectrumSearchFieldProps } from "@vue-spectrum/searchfield";
 export type { SpectrumNumberFieldProps } from "@vue-spectrum/numberfield";
 export type { SpectrumFileTriggerProps } from "@vue-spectrum/filetrigger";
+export type {
+  SpectrumStepListProps,
+  SpectrumStepListItemData,
+  StepKey,
+} from "@vue-spectrum/steplist";
 export type {
   DividerOrientation,
   DividerSize,

@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration plus initial display/action packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/link`, `@vue-spectrum/breadcrumbs`, `@vue-spectrum/buttongroup`, `@vue-spectrum/accordion`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, `@vue-spectrum/labeledvalue`, `@vue-spectrum/checkbox`, `@vue-spectrum/radio`, and `@vue-spectrum/switch` complete) with active controls baseline work (`@vue-spectrum/button`, `@vue-spectrum/slider`, `@vue-spectrum/textfield`, `@vue-spectrum/tabs`, `@vue-spectrum/searchfield`, `@vue-spectrum/numberfield`, and `@vue-spectrum/filetrigger`).
+- Current stage: phase-1 foundation migration plus initial display/action packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/link`, `@vue-spectrum/breadcrumbs`, `@vue-spectrum/buttongroup`, `@vue-spectrum/accordion`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, `@vue-spectrum/labeledvalue`, `@vue-spectrum/checkbox`, `@vue-spectrum/radio`, and `@vue-spectrum/switch` complete) with active controls baseline work (`@vue-spectrum/button`, `@vue-spectrum/slider`, `@vue-spectrum/textfield`, `@vue-spectrum/tabs`, `@vue-spectrum/searchfield`, `@vue-spectrum/numberfield`, `@vue-spectrum/filetrigger`, and `@vue-spectrum/steplist`).
 
 ## Current Baseline
 
@@ -30,6 +30,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/searchfield` (in progress): search input primitive (`SearchField`) with Enter submit behavior, Escape/clear-button clearing semantics, and controlled/uncontrolled value behavior
 - `@vue-spectrum/numberfield` (in progress): numeric input primitive (`NumberField`) with controlled/uncontrolled value support, clamped min/max behavior, and baseline stepper interactions
 - `@vue-spectrum/filetrigger` (in progress): file selection trigger primitive (`FileTrigger`) with pressable-child integration, hidden input behavior, and file-selection callbacks
+- `@vue-spectrum/steplist` (in progress): step navigation primitives (`StepList`, `StepListItem`) with baseline progression and selection state behavior
 - `@vue-spectrum/link`: navigation link primitive (`Link`)
 - `@vue-spectrum/breadcrumbs`: breadcrumb primitives (`Breadcrumbs`, `BreadcrumbItem`) with overflow/menu collapsing and link/action semantics
 - `@vue-spectrum/divider`: divider primitive (`Divider`)
