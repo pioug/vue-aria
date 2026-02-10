@@ -32,6 +32,26 @@ function normalizeRenderable(
   return [value];
 }
 
+function resolveItemKey(item: unknown, index: number): string | number {
+  if (item !== null && typeof item === "object" && "id" in item) {
+    const key = (item as Record<string, unknown>).id;
+
+    if (typeof key === "string" || typeof key === "number") {
+      return key;
+    }
+
+    if (typeof key === "boolean") {
+      return `bool-${String(key)}-${index}`;
+    }
+
+    if (key === null) {
+      return `null-${index}`;
+    }
+  }
+
+  return index;
+}
+
 export const CardView = defineComponent({
   name: "CardView",
   inheritAttrs: false,
@@ -94,7 +114,7 @@ export const CardView = defineComponent({
             h(
               "div",
               {
-                key: index,
+                key: resolveItemKey(item, index),
                 role: "row",
                 "aria-rowindex": String(index + 1),
                 class: classNames("spectrum-CardView-row"),
