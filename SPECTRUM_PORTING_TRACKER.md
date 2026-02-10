@@ -111,6 +111,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - In progress baseline: `@react-spectrum/illustratedmessage` now has Vue `IllustratedMessage` primitive with baseline root rendering behavior, slot-based heading/content styling wiring, and starter/SSR tests plus docs/umbrella wiring; advanced visual/theming parity remains.
 - In progress baseline: `@react-spectrum/inlinealert` now has Vue `InlineAlert` primitive with baseline alert semantics, variant class behavior, autofocus handling, and starter/SSR tests plus docs/umbrella wiring; advanced icon/theming parity remains.
 - In progress baseline: `@react-spectrum/tooltip` now has Vue `Tooltip` and `TooltipTrigger` primitives with baseline focus/hover trigger behavior, Escape/press close handling, and starter/SSR tests plus docs/umbrella wiring; advanced positioning and full overlay parity remains.
+- In progress baseline: `@react-spectrum/contextualhelp` now has Vue `ContextualHelp` primitive with baseline quiet-trigger popover behavior, default/custom ARIA label handling, and starter/SSR tests plus docs/umbrella wiring; advanced icon/placement parity remains.
 - [ ] `@react-spectrum/overlays` -> `@vue-spectrum/overlays`
 - [ ] `@react-spectrum/dialog` -> `@vue-spectrum/dialog`
 - [ ] `@react-spectrum/tooltip` -> `@vue-spectrum/tooltip`

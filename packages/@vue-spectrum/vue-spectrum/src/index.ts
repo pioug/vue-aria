@@ -104,6 +104,7 @@ export {
   DialogContainer,
   useDialogContainer,
 } from "@vue-spectrum/dialog";
+export { ContextualHelp } from "@vue-spectrum/contextualhelp";
 export { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
@@ -286,6 +287,7 @@ export type {
   SpectrumDialogProps,
   SpectrumDialogTriggerProps,
 } from "@vue-spectrum/dialog";
+export type { SpectrumContextualHelpProps } from "@vue-spectrum/contextualhelp";
 export type {
   SpectrumTooltipProps,
   SpectrumTooltipTriggerProps,

@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `44 / 76` completed.
+- Task progress: `45 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -28,6 +28,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/inlinealert` baseline is now in progress with initial `InlineAlert` port, including alert role semantics, variant class behavior (`neutral`/`info`/`positive`/`notice`/`negative`), and autofocus handling with starter/SSR tests plus docs/umbrella wiring; advanced icon/theming parity remains.
 - `@vue-spectrum/overlays` baseline is now in progress with initial `Overlay` and `OpenTransition` ports, including portal mounting behavior, transition lifecycle callback wiring, and starter/SSR tests with docs and umbrella wiring; `Modal`/`Popover`/`Tray` parity remains.
 - `@vue-spectrum/dialog` baseline is now in progress with initial `Dialog`, `AlertDialog`, `DialogTrigger`, and `DialogContainer` ports, including baseline trigger/container overlay wiring, dismiss/escape handling, and alert-dialog action behavior with starter/SSR tests plus docs/umbrella wiring; advanced context/overlay integration parity remains.
+- `@vue-spectrum/contextualhelp` baseline is now in progress with initial `ContextualHelp` port, including quiet-trigger popover wiring, default and custom ARIA label behavior, and starter/SSR tests plus docs/umbrella wiring; advanced icon/placement parity remains.
 - `@vue-spectrum/tooltip` baseline is now in progress with initial `Tooltip` and `TooltipTrigger` ports, including focus/hover trigger behavior, Escape/press close handling, and starter/SSR tests with docs and umbrella wiring; advanced placement/overlay parity remains.
 - `@vue-spectrum/tabs` baseline is now in progress with initial `Tabs`, `TabList`, and `TabPanels` ports, including keyboard navigation coverage (horizontal/vertical, automatic/manual activation, disabled-key behavior), controlled/uncontrolled selection behavior, and docs/umbrella wiring; overflow/collapse-to-picker parity remains.
 - `@vue-spectrum/textfield` baseline is now in progress with initial `TextField` and `TextArea` ports, including label/help/error wiring, controlled/uncontrolled value handling, native/ARIA validation behavior, and docs/umbrella wiring; advanced upstream icon/loading/auto-resize behavior remains.

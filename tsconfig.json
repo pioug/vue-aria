@@ -101,6 +101,7 @@
       "@vue-spectrum/inlinealert": ["packages/@vue-spectrum/inlinealert/src/index.ts"],
       "@vue-spectrum/overlays": ["packages/@vue-spectrum/overlays/src/index.ts"],
       "@vue-spectrum/dialog": ["packages/@vue-spectrum/dialog/src/index.ts"],
+      "@vue-spectrum/contextualhelp": ["packages/@vue-spectrum/contextualhelp/src/index.ts"],
       "@vue-spectrum/tooltip": ["packages/@vue-spectrum/tooltip/src/index.ts"],
       "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
       "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],

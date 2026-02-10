@@ -137,6 +137,9 @@ export default defineConfig({
         "@vue-spectrum/dialog": fileURLToPath(
           new URL("../../packages/@vue-spectrum/dialog/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/contextualhelp": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/contextualhelp/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/tooltip": fileURLToPath(
           new URL("../../packages/@vue-spectrum/tooltip/src/index.ts", import.meta.url)
         ),
@@ -296,6 +299,7 @@ export default defineConfig({
           { text: "@vue-spectrum/inlinealert", link: "/spectrum/inlinealert" },
           { text: "@vue-spectrum/overlays", link: "/spectrum/overlays" },
           { text: "@vue-spectrum/dialog", link: "/spectrum/dialog" },
+          { text: "@vue-spectrum/contextualhelp", link: "/spectrum/contextualhelp" },
           { text: "@vue-spectrum/tooltip", link: "/spectrum/tooltip" },
           { text: "@vue-spectrum/progress", link: "/spectrum/progress" },
           { text: "@vue-spectrum/meter", link: "/spectrum/meter" },
