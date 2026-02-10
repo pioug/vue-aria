@@ -97,6 +97,7 @@ export { NumberField } from "@vue-spectrum/numberfield";
 export { ComboBox } from "@vue-spectrum/combobox";
 export { SearchAutocomplete } from "@vue-spectrum/autocomplete";
 export { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
+export { DateField, TimeField, DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 export { FileTrigger } from "@vue-spectrum/filetrigger";
 export { StepList, StepListItem } from "@vue-spectrum/steplist";
 export { Divider } from "@vue-spectrum/divider";
@@ -304,6 +305,14 @@ export type {
   SpectrumCalendarProps,
   SpectrumRangeCalendarProps,
 } from "@vue-spectrum/calendar";
+export type {
+  SpectrumDateFieldBaseProps,
+  SpectrumDateFieldProps,
+  SpectrumTimeFieldProps,
+  SpectrumDatePickerProps,
+  SpectrumDateRangePickerProps,
+  SpectrumDateRangeValue,
+} from "@vue-spectrum/datepicker";
 export type { SpectrumFileTriggerProps } from "@vue-spectrum/filetrigger";
 export type {
   SpectrumStepListProps,

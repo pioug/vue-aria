@@ -116,6 +116,9 @@ export default defineConfig({
         "@vue-spectrum/calendar": fileURLToPath(
           new URL("../../packages/@vue-spectrum/calendar/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/datepicker": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/datepicker/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/filetrigger": fileURLToPath(
           new URL("../../packages/@vue-spectrum/filetrigger/src/index.ts", import.meta.url)
         ),
@@ -316,6 +319,7 @@ export default defineConfig({
           { text: "@vue-spectrum/combobox", link: "/spectrum/combobox" },
           { text: "@vue-spectrum/autocomplete", link: "/spectrum/autocomplete" },
           { text: "@vue-spectrum/calendar", link: "/spectrum/calendar" },
+          { text: "@vue-spectrum/datepicker", link: "/spectrum/datepicker" },
           { text: "@vue-spectrum/filetrigger", link: "/spectrum/filetrigger" },
           { text: "@vue-spectrum/steplist", link: "/spectrum/steplist" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
