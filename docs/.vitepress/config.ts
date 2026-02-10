@@ -83,6 +83,9 @@ export default defineConfig({
         "@vue-spectrum/searchfield": fileURLToPath(
           new URL("../../packages/@vue-spectrum/searchfield/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/numberfield": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/numberfield/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/divider": fileURLToPath(
           new URL("../../packages/@vue-spectrum/divider/src/index.ts", import.meta.url)
         ),
@@ -239,6 +242,7 @@ export default defineConfig({
           { text: "@vue-spectrum/tabs", link: "/spectrum/tabs" },
           { text: "@vue-spectrum/textfield", link: "/spectrum/textfield" },
           { text: "@vue-spectrum/searchfield", link: "/spectrum/searchfield" },
+          { text: "@vue-spectrum/numberfield", link: "/spectrum/numberfield" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
           { text: "@vue-spectrum/well", link: "/spectrum/well" },
           { text: "@vue-spectrum/statuslight", link: "/spectrum/statuslight" },

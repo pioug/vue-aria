@@ -75,6 +75,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 - In progress baseline: `@react-spectrum/slider` now has Vue `Slider`, `RangeSlider`, `SliderBase`, and `SliderThumb` primitives with baseline parity-style tests/docs and umbrella wiring (controlled/uncontrolled behavior, value output semantics, localized range-thumb labels, min/max/step clamping normalization, keyboard page/home/end coverage, track-click behavior, and SSR coverage); advanced interaction and formatting parity remains.
 - In progress baseline: `@react-spectrum/searchfield` now has Vue `SearchField` primitive with baseline parity-style tests/docs and umbrella wiring (search input semantics, Enter submit behavior, Escape and clear-button clear semantics, custom/default icon support, controlled/uncontrolled value behavior, description/error wiring, and SSR coverage); advanced upstream visual polish and theming parity remains.
+- In progress baseline: `@react-spectrum/numberfield` now has Vue `NumberField` primitive with baseline parity-style tests/docs and umbrella wiring (numeric input semantics, min/max clamping, controlled/uncontrolled value handling, stepper increment/decrement behavior, hide-stepper support, hidden form-input support, and SSR coverage); advanced upstream locale/inputMode and wheel/long-press interaction parity remains.
 - [x] `@react-spectrum/checkbox` -> `@vue-spectrum/checkbox`
 - [x] `@react-spectrum/radio` -> `@vue-spectrum/radio`
 - [x] `@react-spectrum/switch` -> `@vue-spectrum/switch`

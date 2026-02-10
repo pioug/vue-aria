@@ -32,6 +32,7 @@ export interface UseNumberFieldResult {
   descriptionProps: ReadonlyRef<Record<string, unknown>>;
   errorMessageProps: ReadonlyRef<Record<string, unknown>>;
   isInvalid: ReadonlyRef<boolean>;
+  numberValue: ReadonlyRef<number | undefined>;
 }
 
 function toResolvedNumber(
@@ -118,14 +119,22 @@ export function useNumberField(
     return value;
   };
 
+  const normalizeNumber = (value: number | undefined): number | undefined => {
+    if (value === undefined) {
+      return undefined;
+    }
+
+    return clamp(value);
+  };
+
   const uncontrolledNumberValue = ref<number | undefined>(
-    toResolvedNumber(options.defaultValue)
+    normalizeNumber(toResolvedNumber(options.defaultValue))
   );
   const inputValue = ref(formatNumber(uncontrolledNumberValue.value));
 
   const currentNumberValue = computed<number | undefined>(() => {
     if (options.value !== undefined) {
-      return toResolvedNumber(options.value);
+      return normalizeNumber(toResolvedNumber(options.value));
     }
     return uncontrolledNumberValue.value;
   });
@@ -137,10 +146,11 @@ export function useNumberField(
   });
 
   const commitNumberValue = (value: number | undefined) => {
+    const normalized = normalizeNumber(value);
     if (options.value === undefined) {
-      uncontrolledNumberValue.value = value;
+      uncontrolledNumberValue.value = normalized;
     }
-    options.onChange?.(value);
+    options.onChange?.(normalized);
   };
 
   const commit = (rawValue?: string) => {
@@ -367,5 +377,6 @@ export function useNumberField(
     descriptionProps,
     errorMessageProps,
     isInvalid,
+    numberValue: currentNumberValue,
   };
 }
