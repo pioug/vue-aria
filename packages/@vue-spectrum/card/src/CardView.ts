@@ -7,6 +7,7 @@ import {
   type VNodeChild,
   type VNodeRef,
 } from "vue";
+import { useLocale } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { BaseLayout } from "./BaseLayout";
@@ -149,6 +150,8 @@ export const CardView = defineComponent({
     const elementRef = ref<HTMLElement | null>(null);
     const activeCellIndex = ref(0);
     const cellRefs = ref<Array<HTMLElement | null>>([]);
+    const locale = useLocale();
+    const isRTL = computed(() => locale.value.direction === "rtl");
     const internalSelectedKeys = ref<Set<unknown>>(
       toKeySet(props.defaultSelectedKeys)
     );
@@ -235,14 +238,20 @@ export const CardView = defineComponent({
     const handleCellKeyDown = (event: KeyboardEvent, index: number, totalRows: number) => {
       switch (event.key) {
         case "ArrowDown":
-        case "ArrowRight":
           event.preventDefault();
           focusCell(index + 1, totalRows);
           return;
         case "ArrowUp":
-        case "ArrowLeft":
           event.preventDefault();
           focusCell(index - 1, totalRows);
+          return;
+        case "ArrowRight":
+          event.preventDefault();
+          focusCell(isRTL.value ? index - 1 : index + 1, totalRows);
+          return;
+        case "ArrowLeft":
+          event.preventDefault();
+          focusCell(isRTL.value ? index + 1 : index - 1, totalRows);
           return;
         case "Home":
           event.preventDefault();

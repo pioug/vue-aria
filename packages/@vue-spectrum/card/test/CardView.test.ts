@@ -1,7 +1,8 @@
 import { mount } from "@vue/test-utils";
-import { h } from "vue";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { provideI18n } from "@vue-aria/i18n";
 import { Image } from "@vue-spectrum/image";
 import { Heading, Text } from "@vue-spectrum/text";
 import { Content } from "@vue-spectrum/view";
@@ -51,6 +52,42 @@ function createCardNode(index: number) {
       ],
     }
   );
+}
+
+function mountRTLCardView() {
+  const RTLCardView = defineComponent({
+    name: "RTLCardViewTest",
+    setup() {
+      provideI18n({ locale: "ar-AE" });
+
+      return () =>
+        h(
+          CardView,
+          {
+            layout: new GridLayout(),
+            items: dynamicItems,
+            ariaLabel: "Test CardView",
+          },
+          {
+            default: ({ item }: { item: DynamicCardItem }) =>
+              h(
+                Card,
+                { itemKey: toCardItemKey(item) },
+                {
+                  default: () => [
+                    h(Image, { src: item.src }),
+                    h(Heading, () => item.title),
+                    h(Text, { slot: "detail" }, () => "PNG"),
+                    h(Content, () => "Description"),
+                  ],
+                }
+              ),
+          }
+        );
+    },
+  });
+
+  return mount(RTLCardView, { attachTo: document.body });
 }
 
 const layoutCases = [
@@ -338,6 +375,28 @@ describe("CardView", () => {
 
     await user.keyboard("{ArrowRight}");
     expect(document.activeElement).toBe(cells[1].element);
+  });
+
+  it("moves focus via ArrowLeft in RTL", async () => {
+    const wrapper = mountRTLCardView();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[0].element);
+    expect(document.activeElement).toBe(cells[0].element);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(cells[1].element);
+  });
+
+  it("moves focus via ArrowRight in RTL", async () => {
+    const wrapper = mountRTLCardView();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[1].element);
+    expect(document.activeElement).toBe(cells[1].element);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(cells[0].element);
   });
 
   it("moves focus via PageDown", async () => {
