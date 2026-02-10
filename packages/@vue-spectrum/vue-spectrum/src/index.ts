@@ -79,6 +79,7 @@ export { Link } from "@vue-spectrum/link";
 export { Breadcrumbs, BreadcrumbItem } from "@vue-spectrum/breadcrumbs";
 export { Tabs, TabList, TabPanels } from "@vue-spectrum/tabs";
 export { TextField, TextArea } from "@vue-spectrum/textfield";
+export { SearchField } from "@vue-spectrum/searchfield";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
@@ -198,6 +199,7 @@ export type {
   SpectrumTextFieldValidationBehavior,
   SpectrumTextFieldValidationState,
 } from "@vue-spectrum/textfield";
+export type { SpectrumSearchFieldProps } from "@vue-spectrum/searchfield";
 export type {
   DividerOrientation,
   DividerSize,

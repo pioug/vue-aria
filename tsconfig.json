@@ -81,6 +81,7 @@
       "@vue-spectrum/breadcrumbs": ["packages/@vue-spectrum/breadcrumbs/src/index.ts"],
       "@vue-spectrum/tabs": ["packages/@vue-spectrum/tabs/src/index.ts"],
       "@vue-spectrum/textfield": ["packages/@vue-spectrum/textfield/src/index.ts"],
+      "@vue-spectrum/searchfield": ["packages/@vue-spectrum/searchfield/src/index.ts"],
       "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"],
       "@vue-spectrum/divider": ["packages/@vue-spectrum/divider/src/index.ts"],
       "@vue-spectrum/well": ["packages/@vue-spectrum/well/src/index.ts"],

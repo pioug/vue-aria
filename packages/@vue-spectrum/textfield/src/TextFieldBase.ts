@@ -1,11 +1,15 @@
 import {
+  cloneVNode,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   onMounted,
   ref,
   type PropType,
+  type Ref,
+  type VNode,
 } from "vue";
 import { useFocusRing } from "@vue-aria/focus";
 import { useHover } from "@vue-aria/interactions";
@@ -30,7 +34,10 @@ export interface SpectrumTextFieldBaseRenderProps {
   descriptionProps?: Record<string, unknown> | undefined;
   errorMessageProps?: Record<string, unknown> | undefined;
   inputProps: Record<string, unknown>;
+  inputRef?: Ref<HTMLInputElement | HTMLTextAreaElement | null> | undefined;
   inputClassName?: string | undefined;
+  icon?: unknown;
+  wrapperChildren?: VNode | VNode[] | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
   multiLine?: boolean | undefined;
@@ -105,8 +112,22 @@ export const TextFieldBase = defineComponent({
       type: Object as PropType<Record<string, unknown>>,
       required: true,
     },
+    inputRef: {
+      type: Object as PropType<
+        Ref<HTMLInputElement | HTMLTextAreaElement | null> | undefined
+      >,
+      default: undefined,
+    },
     inputClassName: {
       type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    icon: {
+      type: null as unknown as PropType<unknown>,
+      default: undefined,
+    },
+    wrapperChildren: {
+      type: null as unknown as PropType<VNode | VNode[] | undefined>,
       default: undefined,
     },
     UNSAFE_className: {
@@ -128,6 +149,13 @@ export const TextFieldBase = defineComponent({
   },
   setup(props, { expose }) {
     const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
+
+    const setInputRef = (value: HTMLInputElement | HTMLTextAreaElement | null) => {
+      inputRef.value = value;
+      if (props.inputRef) {
+        props.inputRef.value = value;
+      }
+    };
 
     const { hoverProps, isHovered } = useHover({
       isDisabled: computed(() => Boolean(props.isDisabled)),
@@ -160,6 +188,49 @@ export const TextFieldBase = defineComponent({
       const isInvalid =
         Boolean(props.isInvalid) || props.validationState === "invalid";
       const elementType = props.multiLine ? "textarea" : "input";
+      let iconNode: VNode | undefined;
+      if (isVNode(props.icon)) {
+        const iconProps = (props.icon as VNode).props as
+          | Record<string, unknown>
+          | null
+          | undefined;
+        iconNode = cloneVNode(props.icon as VNode, {
+          class: classNames(
+            "spectrum-Textfield-icon",
+            iconProps?.class as ClassValue | undefined
+          ),
+        });
+      }
+      const wrapperChildren = Array.isArray(props.wrapperChildren)
+        ? props.wrapperChildren
+        : props.wrapperChildren
+          ? [props.wrapperChildren]
+          : [];
+      const textFieldChildren: VNode[] = [
+        h(
+          elementType,
+          mergeProps(inputInteractionProps, hoverProps, focusRing.focusProps, {
+            ref: (value: unknown) => {
+              setInputRef(
+                value as HTMLInputElement | HTMLTextAreaElement | null
+              );
+            },
+            rows: props.multiLine ? (props.rows ?? 1) : undefined,
+            class: classNames(
+              "spectrum-Textfield-input",
+              {
+                "spectrum-Textfield-inputIcon": isVNode(props.icon),
+                "is-hovered": isHovered.value,
+              },
+              props.inputClassName as ClassValue | undefined
+            ),
+          })
+        ) as VNode,
+      ];
+      if (iconNode) {
+        textFieldChildren.push(iconNode);
+      }
+      textFieldChildren.push(...wrapperChildren);
 
       const textField = h(
         "div",
@@ -173,24 +244,7 @@ export const TextFieldBase = defineComponent({
             "focus-ring": focusRing.isFocusVisible.value,
           }),
         },
-        [
-          h(
-            elementType,
-            mergeProps(inputInteractionProps, hoverProps, focusRing.focusProps, {
-              ref: (value: unknown) => {
-                inputRef.value = value as HTMLInputElement | HTMLTextAreaElement | null;
-              },
-              rows: props.multiLine ? (props.rows ?? 1) : undefined,
-              class: classNames(
-                "spectrum-Textfield-input",
-                {
-                  "is-hovered": isHovered.value,
-                },
-                props.inputClassName as ClassValue | undefined
-              ),
-            })
-          ),
-        ]
+        textFieldChildren
       );
 
       return h(
