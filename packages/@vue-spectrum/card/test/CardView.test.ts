@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { h } from "vue";
 import { describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { Image } from "@vue-spectrum/image";
 import { Heading, Text } from "@vue-spectrum/text";
 import { Content } from "@vue-spectrum/view";
@@ -151,5 +152,73 @@ describe("CardView", () => {
       expect(cell.text()).toContain("PNG");
       expect(cell.text()).toContain("Title");
     }
+  });
+
+  it("moves focus via ArrowDown", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        layout: new GridLayout(),
+        items: dynamicItems,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            {},
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[1].element);
+    expect(document.activeElement).toBe(cells[1].element);
+
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toBe(cells[2].element);
+  });
+
+  it("moves focus via ArrowUp", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        layout: new GridLayout(),
+        items: dynamicItems,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            {},
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[2].element);
+    expect(document.activeElement).toBe(cells[2].element);
+
+    await user.keyboard("{ArrowUp}");
+    expect(document.activeElement).toBe(cells[1].element);
   });
 });

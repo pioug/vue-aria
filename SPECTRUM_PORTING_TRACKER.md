@@ -108,7 +108,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Display and Status
 
-- In progress baseline: `@react-spectrum/card` now has Vue `Card`, `CardView`, and layout class primitives with baseline tests/docs; advanced layout and interaction parity is still pending.
+- In progress baseline: `@react-spectrum/card` now has Vue `Card`, `CardView`, and layout class primitives with baseline tests/docs plus initial keyboard navigation and falsy-id coverage; advanced layout and interaction parity is still pending.
 - [x] `@react-spectrum/avatar` -> `@vue-spectrum/avatar`
 - [x] `@react-spectrum/badge` -> `@vue-spectrum/badge`
 - [ ] `@react-spectrum/card` -> `@vue-spectrum/card`
