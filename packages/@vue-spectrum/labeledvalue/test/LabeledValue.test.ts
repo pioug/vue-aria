@@ -226,8 +226,9 @@ describe("LabeledValue", () => {
     });
 
     const staticField = wrapper.get("[data-testid=\"test-id\"]");
-    expect(staticField.text()).toContain("February 3, 2020 at 12:23 PM");
-    expect(staticField.text()).toContain("March 3, 2020 at 12:23 PM");
+    const normalizedText = staticField.text().replace(/\s+/gu, " ");
+    expect(normalizedText).toContain("February 3, 2020 at 12:23 PM");
+    expect(normalizedText).toContain("March 3, 2020 at 12:23 PM");
   });
 
   it("renders correctly with RangeValue<CalendarDate>", () => {
