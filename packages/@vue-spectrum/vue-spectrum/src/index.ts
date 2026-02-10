@@ -64,6 +64,7 @@ export { Avatar } from "@vue-spectrum/avatar";
 export { Image } from "@vue-spectrum/image";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
+export { LabeledValue } from "@vue-spectrum/labeledvalue";
 
 export type {
   FormContextValue,
@@ -123,6 +124,11 @@ export type {
   SpectrumProgressCircleProps,
 } from "@vue-spectrum/progress";
 export type { MeterVariant, SpectrumMeterProps } from "@vue-spectrum/meter";
+export type {
+  DateTime,
+  SpectrumLabeledValueProps,
+  SpectrumLabeledValueValue,
+} from "@vue-spectrum/labeledvalue";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,

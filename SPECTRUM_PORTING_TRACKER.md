@@ -4,8 +4,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Progress Snapshot
 
-- Completed packages: `14 / 64`
-- Remaining packages: `50`
+- Completed packages: `15 / 64`
+- Remaining packages: `49`
 - Current stage: phase-1 foundation migration
 
 ## Upstream Source of Truth
@@ -113,7 +113,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `@react-spectrum/card` -> `@vue-spectrum/card`
 - [x] `@react-spectrum/divider` -> `@vue-spectrum/divider`
 - [x] `@react-spectrum/image` -> `@vue-spectrum/image`
-- [ ] `@react-spectrum/labeledvalue` -> `@vue-spectrum/labeledvalue`
+- [x] `@react-spectrum/labeledvalue` -> `@vue-spectrum/labeledvalue`
 - [x] `@react-spectrum/meter` -> `@vue-spectrum/meter`
 - [x] `@react-spectrum/progress` -> `@vue-spectrum/progress`
 - [x] `@react-spectrum/statuslight` -> `@vue-spectrum/statuslight`

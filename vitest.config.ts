@@ -223,6 +223,9 @@ export default defineConfig({
       "@vue-spectrum/meter": fileURLToPath(
         new URL("./packages/@vue-spectrum/meter/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/labeledvalue": fileURLToPath(
+        new URL("./packages/@vue-spectrum/labeledvalue/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),

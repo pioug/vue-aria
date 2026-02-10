@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, and `@vue-spectrum/meter` complete)
+- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` complete)
 
 ## Current Baseline
 
@@ -26,6 +26,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/image`: image primitive (`Image`)
 - `@vue-spectrum/progress`: progress primitives (`ProgressBar`, `ProgressCircle`)
 - `@vue-spectrum/meter`: meter primitive (`Meter`)
+- `@vue-spectrum/labeledvalue`: labeled read-only value primitive (`LabeledValue`)
 - `@vue-spectrum/vue-spectrum`: umbrella export package for the component layer
 
 ## Rules For Marking A Package Complete
