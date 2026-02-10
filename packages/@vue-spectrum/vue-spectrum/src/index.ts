@@ -95,6 +95,7 @@ export { TextField, TextArea } from "@vue-spectrum/textfield";
 export { SearchField } from "@vue-spectrum/searchfield";
 export { NumberField } from "@vue-spectrum/numberfield";
 export { ComboBox } from "@vue-spectrum/combobox";
+export { SearchAutocomplete } from "@vue-spectrum/autocomplete";
 export { FileTrigger } from "@vue-spectrum/filetrigger";
 export { StepList, StepListItem } from "@vue-spectrum/steplist";
 export { Divider } from "@vue-spectrum/divider";
@@ -292,6 +293,11 @@ export type {
   SpectrumComboBoxFilterFn,
   SpectrumComboBoxProps,
 } from "@vue-spectrum/combobox";
+export type {
+  SpectrumSearchAutocompleteItemData,
+  SpectrumSearchAutocompleteLoadingState,
+  SpectrumSearchAutocompleteProps,
+} from "@vue-spectrum/autocomplete";
 export type { SpectrumFileTriggerProps } from "@vue-spectrum/filetrigger";
 export type {
   SpectrumStepListProps,
