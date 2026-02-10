@@ -99,6 +99,7 @@
       "@vue-spectrum/image": ["packages/@vue-spectrum/image/src/index.ts"],
       "@vue-spectrum/illustratedmessage": ["packages/@vue-spectrum/illustratedmessage/src/index.ts"],
       "@vue-spectrum/inlinealert": ["packages/@vue-spectrum/inlinealert/src/index.ts"],
+      "@vue-spectrum/overlays": ["packages/@vue-spectrum/overlays/src/index.ts"],
       "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
       "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],
       "@vue-spectrum/labeledvalue": ["packages/@vue-spectrum/labeledvalue/src/index.ts"],

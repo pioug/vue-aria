@@ -96,6 +96,7 @@ export { Avatar } from "@vue-spectrum/avatar";
 export { Image } from "@vue-spectrum/image";
 export { IllustratedMessage } from "@vue-spectrum/illustratedmessage";
 export { InlineAlert } from "@vue-spectrum/inlinealert";
+export { Overlay, OpenTransition } from "@vue-spectrum/overlays";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
 export { LabeledValue } from "@vue-spectrum/labeledvalue";
@@ -266,6 +267,7 @@ export type { AvatarSize, SpectrumAvatarProps } from "@vue-spectrum/avatar";
 export type { ImageCrossOrigin, SpectrumImageProps } from "@vue-spectrum/image";
 export type { SpectrumIllustratedMessageProps } from "@vue-spectrum/illustratedmessage";
 export type { InlineAlertVariant, SpectrumInlineAlertProps } from "@vue-spectrum/inlinealert";
+export type { OpenTransitionProps, SpectrumOverlayProps } from "@vue-spectrum/overlays";
 export type {
   ProgressBarLabelPosition,
   ProgressBarSize,
