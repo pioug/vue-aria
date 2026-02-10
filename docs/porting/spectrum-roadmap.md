@@ -10,11 +10,12 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `23 / 76` completed.
+- Task progress: `24 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
 - Display/status package progress: `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` are now complete.
+- Actions/navigation package progress: `@vue-spectrum/link` is now complete.
 - `@vue-spectrum/card` baseline is now in progress with initial `Card`, `CardView`, and layout class ports plus parity-aligned starter tests (including keyboard-nav, `Home`/`End`, single/multiple selection handling, controlled/falsy-key selection behavior, checkbox interaction, `selectionMode="none"` behavior, focusable-child warning behavior, and falsy-id coverage); advanced interaction/layout parity remains.
 - `@vue-spectrum/provider` now includes a `Provider` component surface, React Spectrum-style alias exports (`useProvider*`), and component-level parity tests (package still in-progress for full parity).
 - `@vue-spectrum/utils` now includes React Spectrum-style `classNames` CSS-module mapping plus compatibility toggles (`keepSpectrumClassNames`/`shouldKeepSpectrumClassNames`), slot utilities (`useSlotProps`, `SlotProvider`, `ClearSlots`), `getWrappedElement`, media/device helpers (`useMediaQuery`, `useIsMobileDevice`, `useHasChild`), breakpoint utilities (`BreakpointProvider`, `useMatchedBreakpoints`, `useBreakpoint`), DOM-ref helpers (`createDOMRef`, `useDOMRef`, `useFocusableRef`, unwrap helpers), style-prop conversion primitives (`convertStyleProps`/`useStyleProps`), and `@react-aria/utils` parity re-exports (`useValueEffect`, `useResizeObserver`); remaining utility surfaces stay in progress.
@@ -26,7 +27,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 - Program setup tasks: `8 / 8` completed.
 - Foundation/theme/infrastructure packages: `6 / 16` completed.
-- Actions/navigation packages: `0 / 12` completed.
+- Actions/navigation packages: `1 / 12` completed.
 - Inputs/selection packages: `0 / 13` completed.
 - Lists/tables/trees packages: `0 / 4` completed.
 - Overlays/messaging packages: `0 / 7` completed.

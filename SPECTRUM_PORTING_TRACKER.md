@@ -4,8 +4,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Progress Snapshot
 
-- Completed packages: `15 / 64`
-- Remaining packages: `49`
+- Completed packages: `16 / 64`
+- Remaining packages: `48`
 - Current stage: phase-1 foundation migration
 
 ## Upstream Source of Truth
@@ -59,7 +59,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `@react-spectrum/actionbar` -> `@vue-spectrum/actionbar`
 - [ ] `@react-spectrum/actiongroup` -> `@vue-spectrum/actiongroup`
 - [ ] `@react-spectrum/buttongroup` -> `@vue-spectrum/buttongroup`
-- [ ] `@react-spectrum/link` -> `@vue-spectrum/link`
+- [x] `@react-spectrum/link` -> `@vue-spectrum/link`
 - [ ] `@react-spectrum/breadcrumbs` -> `@vue-spectrum/breadcrumbs`
 - [ ] `@react-spectrum/tabs` -> `@vue-spectrum/tabs`
 - [ ] `@react-spectrum/accordion` -> `@vue-spectrum/accordion`
