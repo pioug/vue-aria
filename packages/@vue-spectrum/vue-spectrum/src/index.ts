@@ -97,6 +97,13 @@ export { Image } from "@vue-spectrum/image";
 export { IllustratedMessage } from "@vue-spectrum/illustratedmessage";
 export { InlineAlert } from "@vue-spectrum/inlinealert";
 export { Overlay, OpenTransition } from "@vue-spectrum/overlays";
+export {
+  Dialog,
+  AlertDialog,
+  DialogTrigger,
+  DialogContainer,
+  useDialogContainer,
+} from "@vue-spectrum/dialog";
 export { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
@@ -269,6 +276,16 @@ export type { ImageCrossOrigin, SpectrumImageProps } from "@vue-spectrum/image";
 export type { SpectrumIllustratedMessageProps } from "@vue-spectrum/illustratedmessage";
 export type { InlineAlertVariant, SpectrumInlineAlertProps } from "@vue-spectrum/inlinealert";
 export type { OpenTransitionProps, SpectrumOverlayProps } from "@vue-spectrum/overlays";
+export type {
+  AlertDialogVariant,
+  DialogContainerValue,
+  DialogSize,
+  DialogType,
+  SpectrumAlertDialogProps,
+  SpectrumDialogContainerProps,
+  SpectrumDialogProps,
+  SpectrumDialogTriggerProps,
+} from "@vue-spectrum/dialog";
 export type {
   SpectrumTooltipProps,
   SpectrumTooltipTriggerProps,
