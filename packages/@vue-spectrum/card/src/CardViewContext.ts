@@ -20,7 +20,6 @@ export function provideCardViewContext(
   provide(CARD_VIEW_CONTEXT_SYMBOL, value);
 }
 
-export function useCardViewContext(): CardViewContextValue | null {
-  const value = inject(CARD_VIEW_CONTEXT_SYMBOL, null);
-  return value?.value ?? null;
+export function useCardViewContext(): ComputedRef<CardViewContextValue> | null {
+  return inject(CARD_VIEW_CONTEXT_SYMBOL, null);
 }

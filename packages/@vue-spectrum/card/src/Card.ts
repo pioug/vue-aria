@@ -138,13 +138,14 @@ export const Card = defineComponent({
     const elementRef = ref<HTMLElement | null>(null);
     const fallbackHeadingId = useId(undefined, "v-spectrum-card-heading");
     const fallbackDescriptionId = useId(undefined, "v-spectrum-card-description");
+    const contextRef = useCardViewContext();
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
     });
 
     return () => {
-      const context = useCardViewContext();
+      const context = contextRef?.value ?? null;
       const domProps = filterDOMProps(attrs as Record<string, unknown>);
       const resolvedProps = useProviderProps({
         isQuiet: props.isQuiet,
@@ -371,8 +372,6 @@ export const Card = defineComponent({
                     tabIndex: -1,
                     onClick: (event: MouseEvent) => {
                       event.stopPropagation();
-                    },
-                    onChange: () => {
                       if (isDisabledInView) {
                         return;
                       }

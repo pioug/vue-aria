@@ -398,4 +398,91 @@ describe("CardView", () => {
     await user.keyboard("{Enter}");
     expect(cards[0].classes()).not.toContain("is-selected");
   });
+
+  it("supports single selection mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "single",
+        onSelectionChange,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const cards = wrapper.findAll(".spectrum-Card");
+
+    await user.click(cells[0].element);
+    expect(cards[0].classes()).toContain("is-selected");
+    expect(cards[1].classes()).not.toContain("is-selected");
+    expect(
+      new Set(Array.from(onSelectionChange.mock.calls[0][0] as Set<unknown>))
+    ).toEqual(new Set(["card-1"]));
+
+    await user.click(cells[1].element);
+    expect(cards[0].classes()).not.toContain("is-selected");
+    expect(cards[1].classes()).toContain("is-selected");
+    expect(
+      new Set(Array.from(onSelectionChange.mock.calls[1][0] as Set<unknown>))
+    ).toEqual(new Set(["card-2"]));
+  });
+
+  it("checkbox interaction toggles selection once", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        onSelectionChange,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const checkbox = wrapper.get("input[type=\"checkbox\"][aria-label=\"select\"]");
+
+    await user.click(checkbox.element);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll(".spectrum-Card")[0].classes()).toContain("is-selected");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+
+    await user.click(checkbox.element);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll(".spectrum-Card")[0].classes()).not.toContain("is-selected");
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+  });
 });
