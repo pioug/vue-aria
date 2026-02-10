@@ -855,6 +855,13 @@ describe("CardView", () => {
     expect(
       new Set(Array.from(onSelectionChange.mock.calls[1][0] as Set<unknown>))
     ).toEqual(new Set(["card-2"]));
+
+    await user.click(cells[1].element);
+    expect(cards[0].classes()).not.toContain("is-selected");
+    expect(cards[1].classes()).not.toContain("is-selected");
+    expect(
+      new Set(Array.from(onSelectionChange.mock.calls[2][0] as Set<unknown>))
+    ).toEqual(new Set());
   });
 
   it("checkbox interaction toggles selection once", async () => {

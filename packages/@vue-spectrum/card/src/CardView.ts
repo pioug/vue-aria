@@ -183,8 +183,11 @@ export const CardView = defineComponent({
 
       const next = new Set(selectedKeys.value);
       if (selectionMode.value === "single") {
+        const shouldClearSelection = next.size === 1 && next.has(key);
         next.clear();
-        next.add(key);
+        if (!shouldClearSelection) {
+          next.add(key);
+        }
       } else if (next.has(key)) {
         next.delete(key);
       } else {
