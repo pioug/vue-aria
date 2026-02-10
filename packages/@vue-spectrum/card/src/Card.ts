@@ -17,6 +17,8 @@ import { useCardViewContext } from "./CardViewContext";
 export type CardOrientation = "vertical" | "horizontal";
 
 export interface SpectrumCardProps {
+  itemKey?: string | number | boolean | null | undefined;
+  isDisabled?: boolean | undefined;
   isQuiet?: boolean | undefined;
   orientation?: CardOrientation | undefined;
   role?: string | undefined;
@@ -85,6 +87,16 @@ export const Card = defineComponent({
   name: "Card",
   inheritAttrs: false,
   props: {
+    itemKey: {
+      type: [String, Number, Boolean] as PropType<
+        string | number | boolean | null | undefined
+      >,
+      default: undefined,
+    },
+    isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     isQuiet: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -137,10 +149,26 @@ export const Card = defineComponent({
       const resolvedProps = useProviderProps({
         isQuiet: props.isQuiet,
         orientation: props.orientation,
+        isDisabled: props.isDisabled,
       });
       const orientation =
         (resolvedProps.orientation as CardOrientation | undefined) ?? "vertical";
       const isQuiet = Boolean(resolvedProps.isQuiet);
+      const itemKey = props.itemKey;
+      const isSelectedInView =
+        itemKey !== undefined &&
+        itemKey !== null &&
+        Boolean(context?.isSelected(itemKey));
+      const isDisabledInView =
+        Boolean(resolvedProps.isDisabled) ||
+        (itemKey !== undefined &&
+          itemKey !== null &&
+          Boolean(context?.isDisabled(itemKey)));
+      const showsSelectionControl =
+        context?.selectionMode !== undefined &&
+        context.selectionMode !== "none" &&
+        itemKey !== undefined &&
+        itemKey !== null;
 
       let headingId: string | undefined;
       let descriptionId: string | undefined;
@@ -300,6 +328,8 @@ export const Card = defineComponent({
           "spectrum-Card--gallery": context?.layout === "gallery",
           "spectrum-Card--waterfall": context?.layout === "waterfall",
           "spectrum-Card--noLayout": context?.layout == null,
+          "is-selected": isSelectedInView,
+          "is-disabled": isDisabledInView,
         },
         props.UNSAFE_className as ClassValue | undefined,
         domProps.class as ClassValue | undefined
@@ -330,6 +360,28 @@ export const Card = defineComponent({
         }),
         [
           h("div", { class: classNames("spectrum-Card-grid") }, [
+            showsSelectionControl
+              ? h("div", { class: classNames("spectrum-Card-checkboxWrapper") }, [
+                  h("input", {
+                    type: "checkbox",
+                    "aria-label": "select",
+                    class: classNames("spectrum-Card-checkbox"),
+                    checked: isSelectedInView,
+                    disabled: isDisabledInView,
+                    tabIndex: -1,
+                    onClick: (event: MouseEvent) => {
+                      event.stopPropagation();
+                    },
+                    onChange: () => {
+                      if (isDisabledInView) {
+                        return;
+                      }
+
+                      context?.toggleSelection(itemKey);
+                    },
+                  }),
+                ])
+              : null,
             ...processedChildren,
             h("div", { class: classNames("spectrum-Card-decoration") }),
           ]),

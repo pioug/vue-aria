@@ -64,6 +64,6 @@ const layout = new GridLayout();
 
 ## Notes
 
-- `Card` currently ports core labeling/description semantics, quiet variant classing, focusability, and image-alt handling parity.
-- `CardView` currently ports baseline grid rendering for static/dynamic card collections with layout class selection.
-- Additional React Spectrum parity cases (advanced layout behavior, selection interactions, keyboard model, and virtualization) remain planned.
+- `Card` currently ports core labeling/description semantics, quiet variant classing, focusability, image-alt handling parity, and baseline selected/disabled card states.
+- `CardView` currently ports baseline grid rendering for static/dynamic card collections with layout class selection plus baseline keyboard navigation and selection state handling (`selectedKeys`, `defaultSelectedKeys`, `disabledKeys`, `onSelectionChange`).
+- Additional React Spectrum parity cases (advanced layout behavior details, virtualization, and deeper interaction semantics) remain planned.

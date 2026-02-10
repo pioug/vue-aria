@@ -27,7 +27,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/progress`: progress primitives (`ProgressBar`, `ProgressCircle`)
 - `@vue-spectrum/meter`: meter primitive (`Meter`)
 - `@vue-spectrum/labeledvalue`: labeled read-only value primitive (`LabeledValue`)
-- `@vue-spectrum/card` (in progress): card primitives (`Card`, `CardView`, `GridLayout`, `GalleryLayout`, `WaterfallLayout`)
+- `@vue-spectrum/card` (in progress): card primitives (`Card`, `CardView`, `GridLayout`, `GalleryLayout`, `WaterfallLayout`) with baseline keyboard and selection-state support
 - `@vue-spectrum/vue-spectrum`: umbrella export package for the component layer
 
 ## Rules For Marking A Package Complete

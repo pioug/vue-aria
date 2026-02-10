@@ -10,7 +10,7 @@ import {
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { BaseLayout } from "./BaseLayout";
-import { provideCardViewContext } from "./CardViewContext";
+import { provideCardViewContext, type CardViewContextValue } from "./CardViewContext";
 
 export type SpectrumCardSelectionMode = "none" | "single" | "multiple";
 
@@ -18,6 +18,10 @@ export interface SpectrumCardViewProps<T = unknown> {
   items?: T[] | undefined;
   layout?: BaseLayout | undefined;
   selectionMode?: SpectrumCardSelectionMode | undefined;
+  selectedKeys?: Iterable<unknown> | undefined;
+  defaultSelectedKeys?: Iterable<unknown> | undefined;
+  disabledKeys?: Iterable<unknown> | undefined;
+  onSelectionChange?: ((keys: Set<unknown>) => void) | undefined;
   width?: string | number | undefined;
   height?: string | number | undefined;
   ariaLabel?: string | undefined;
@@ -68,6 +72,14 @@ function clampIndex(value: number, length: number): number {
   return Math.min(length - 1, Math.max(0, value));
 }
 
+function toKeySet(keys: Iterable<unknown> | undefined): Set<unknown> {
+  if (!keys) {
+    return new Set();
+  }
+
+  return new Set(Array.from(keys));
+}
+
 export const CardView = defineComponent({
   name: "CardView",
   inheritAttrs: false,
@@ -82,6 +94,22 @@ export const CardView = defineComponent({
     },
     selectionMode: {
       type: String as PropType<SpectrumCardSelectionMode | undefined>,
+      default: undefined,
+    },
+    selectedKeys: {
+      type: [Array, Set] as unknown as PropType<Iterable<unknown> | undefined>,
+      default: undefined,
+    },
+    defaultSelectedKeys: {
+      type: [Array, Set] as unknown as PropType<Iterable<unknown> | undefined>,
+      default: undefined,
+    },
+    disabledKeys: {
+      type: [Array, Set] as unknown as PropType<Iterable<unknown> | undefined>,
+      default: undefined,
+    },
+    onSelectionChange: {
+      type: Function as PropType<((keys: Set<unknown>) => void) | undefined>,
       default: undefined,
     },
     width: {
@@ -113,9 +141,57 @@ export const CardView = defineComponent({
     const elementRef = ref<HTMLElement | null>(null);
     const activeCellIndex = ref(0);
     const cellRefs = ref<Array<HTMLElement | null>>([]);
-    const context = computed(() => ({
+    const internalSelectedKeys = ref<Set<unknown>>(
+      toKeySet(props.defaultSelectedKeys)
+    );
+    const selectedKeys = computed<Set<unknown>>(() =>
+      props.selectedKeys !== undefined
+        ? toKeySet(props.selectedKeys)
+        : internalSelectedKeys.value
+    );
+    const disabledKeys = computed<Set<unknown>>(() => toKeySet(props.disabledKeys));
+    const selectionMode = computed<SpectrumCardSelectionMode>(
+      () => props.selectionMode ?? "none"
+    );
+
+    const applySelection = (next: Set<unknown>) => {
+      if (props.selectedKeys === undefined) {
+        internalSelectedKeys.value = next;
+      }
+      props.onSelectionChange?.(next);
+    };
+
+    const toggleSelection = (key: unknown) => {
+      if (selectionMode.value === "none" || key === undefined || key === null) {
+        return;
+      }
+
+      if (disabledKeys.value.has(key)) {
+        return;
+      }
+
+      const next = new Set(selectedKeys.value);
+      if (selectionMode.value === "single") {
+        next.clear();
+        next.add(key);
+      } else if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+
+      applySelection(next);
+    };
+
+    const context = computed<CardViewContextValue>(() => ({
       inCardView: true,
       layout: props.layout?.type ?? null,
+      selectionMode: selectionMode.value,
+      isSelected: (key: unknown) =>
+        key !== undefined && key !== null ? selectedKeys.value.has(key) : false,
+      isDisabled: (key: unknown) =>
+        key !== undefined && key !== null ? disabledKeys.value.has(key) : false,
+      toggleSelection,
     }));
 
     provideCardViewContext(context);
@@ -154,6 +230,10 @@ export const CardView = defineComponent({
           event.preventDefault();
           focusCell(totalRows - 1, totalRows);
           return;
+        case "Enter":
+        case " ":
+          event.preventDefault();
+          return;
         default:
           return;
       }
@@ -165,12 +245,14 @@ export const CardView = defineComponent({
       const rowEntries = items
         ? items.map((item, index) => ({
             key: resolveItemKey(item, index),
+            itemKey: resolveItemKey(item, index),
             children: normalizeRenderable(
               slots.default?.({ item, index }) as VNodeChild[] | undefined
             ),
           }))
         : normalizeRenderable(slots.default?.()).map((child, index) => ({
             key: index,
+            itemKey: index,
             children: [child],
           }));
       const rowCount = rowEntries.length;
@@ -192,6 +274,10 @@ export const CardView = defineComponent({
               "div",
               {
                 role: "gridcell",
+                "aria-selected":
+                  selectionMode.value === "none"
+                    ? undefined
+                    : context.value.isSelected(entry.itemKey),
                 tabIndex: index === activeCellIndex.value ? 0 : -1,
                 class: classNames("spectrum-CardView-cell"),
                 ref: ((element: Element | null) => setCellRef(index, element)) as VNodeRef,
@@ -201,9 +287,15 @@ export const CardView = defineComponent({
                 onClick: (event: MouseEvent) => {
                   activeCellIndex.value = index;
                   (event.currentTarget as HTMLElement | null)?.focus();
+                  toggleSelection(entry.itemKey);
                 },
-                onKeydown: (event: KeyboardEvent) =>
-                  handleCellKeyDown(event, index, rowCount),
+                onKeydown: (event: KeyboardEvent) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    toggleSelection(entry.itemKey);
+                    return;
+                  }
+                  handleCellKeyDown(event, index, rowCount);
+                },
               },
               entry.children
             ),

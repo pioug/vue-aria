@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { h } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { Image } from "@vue-spectrum/image";
 import { Heading, Text } from "@vue-spectrum/text";
@@ -8,14 +8,15 @@ import { Content } from "@vue-spectrum/view";
 import { Card, CardView, GalleryLayout, GridLayout, WaterfallLayout } from "../src";
 
 interface DynamicCardItem {
+  id?: string | number | boolean | null;
   src: string;
   title: string;
 }
 
 const dynamicItems: DynamicCardItem[] = [
-  { src: "https://i.imgur.com/Z7AzH2c.jpg", title: "Title 1" },
-  { src: "https://i.imgur.com/DhygPot.jpg", title: "Title 2" },
-  { src: "https://i.imgur.com/L7RTlvI.png", title: "Title 3" },
+  { id: "card-1", src: "https://i.imgur.com/Z7AzH2c.jpg", title: "Title 1" },
+  { id: "card-2", src: "https://i.imgur.com/DhygPot.jpg", title: "Title 2" },
+  { id: "card-3", src: "https://i.imgur.com/L7RTlvI.png", title: "Title 3" },
 ];
 
 const falsyIdItems = [
@@ -86,7 +87,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            {},
+            { itemKey: item.id ?? undefined },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -127,7 +128,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            {},
+            { itemKey: item.id ?? undefined },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -166,7 +167,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            {},
+            { itemKey: item.id ?? undefined },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -200,7 +201,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            {},
+            { itemKey: item.id ?? undefined },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -220,5 +221,181 @@ describe("CardView", () => {
 
     await user.keyboard("{ArrowUp}");
     expect(document.activeElement).toBe(cells[1].element);
+  });
+
+  it("supports uncontrolled multiple selection and emits selected keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        onSelectionChange,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const cards = wrapper.findAll(".spectrum-Card");
+    const checkboxes = wrapper.findAll("input[type=\"checkbox\"][aria-label=\"select\"]");
+
+    expect(checkboxes).toHaveLength(dynamicItems.length);
+    expect(cards[0].classes()).not.toContain("is-selected");
+    expect(cells[0].attributes("aria-selected")).toBe("false");
+
+    await user.click(cells[0].element);
+    expect(cards[0].classes()).toContain("is-selected");
+    expect(cells[0].attributes("aria-selected")).toBe("true");
+    expect((checkboxes[0].element as HTMLInputElement).checked).toBe(true);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(Array.from(onSelectionChange.mock.calls[0][0] as Set<unknown>)).toEqual([
+      "card-1",
+    ]);
+
+    await user.click(cells[0].element);
+    expect(cards[0].classes()).not.toContain("is-selected");
+    expect(cells[0].attributes("aria-selected")).toBe("false");
+    expect((checkboxes[0].element as HTMLInputElement).checked).toBe(false);
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(Array.from(onSelectionChange.mock.calls[1][0] as Set<unknown>)).toEqual([]);
+  });
+
+  it("supports controlled selectedKeys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        selectedKeys: new Set(["card-2"]),
+        onSelectionChange,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const cards = wrapper.findAll(".spectrum-Card");
+
+    expect(cards[1].classes()).toContain("is-selected");
+    expect(cells[1].attributes("aria-selected")).toBe("true");
+    expect(cards[0].classes()).not.toContain("is-selected");
+
+    await user.click(cells[0].element);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(
+      new Set(Array.from(onSelectionChange.mock.calls[0][0] as Set<unknown>))
+    ).toEqual(new Set(["card-1", "card-2"]));
+
+    // controlled: visual selection remains driven by selectedKeys prop
+    expect(cards[1].classes()).toContain("is-selected");
+    expect(cards[0].classes()).not.toContain("is-selected");
+  });
+
+  it("does not select disabled card keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        disabledKeys: ["card-2"],
+        onSelectionChange,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cards = wrapper.findAll(".spectrum-Card");
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+
+    expect(cards[1].classes()).toContain("is-disabled");
+    await user.click(cells[1].element);
+    expect(cards[1].classes()).not.toContain("is-selected");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("toggles selection with Enter key", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: item.id ?? undefined },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const user = userEvent.setup();
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const cards = wrapper.findAll(".spectrum-Card");
+
+    (cells[0].element as HTMLElement).focus();
+    await user.keyboard("{Enter}");
+    expect(cards[0].classes()).toContain("is-selected");
+
+    await user.keyboard("{Enter}");
+    expect(cards[0].classes()).not.toContain("is-selected");
   });
 });
