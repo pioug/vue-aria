@@ -68,6 +68,9 @@ export default defineConfig({
         "@vue-spectrum/menu": fileURLToPath(
           new URL("../../packages/@vue-spectrum/menu/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/list": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/list/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/listbox": fileURLToPath(
           new URL("../../packages/@vue-spectrum/listbox/src/index.ts", import.meta.url)
         ),
@@ -288,6 +291,7 @@ export default defineConfig({
           { text: "@vue-spectrum/tag", link: "/spectrum/tag" },
           { text: "@vue-spectrum/picker", link: "/spectrum/picker" },
           { text: "@vue-spectrum/menu", link: "/spectrum/menu" },
+          { text: "@vue-spectrum/list", link: "/spectrum/list" },
           { text: "@vue-spectrum/listbox", link: "/spectrum/listbox" },
           { text: "@vue-spectrum/buttongroup", link: "/spectrum/buttongroup" },
           { text: "@vue-spectrum/accordion", link: "/spectrum/accordion" },

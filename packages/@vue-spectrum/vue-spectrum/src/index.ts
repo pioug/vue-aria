@@ -69,6 +69,7 @@ export { ActionGroup } from "@vue-spectrum/actiongroup";
 export { TagGroup, Tag } from "@vue-spectrum/tag";
 export { Picker } from "@vue-spectrum/picker";
 export { Menu, MenuItem, MenuTrigger, ActionMenu } from "@vue-spectrum/menu";
+export { ListView, ListViewItem } from "@vue-spectrum/list";
 export {
   ListBox,
   ListBoxBase,
@@ -209,6 +210,13 @@ export type {
   SpectrumMenuTriggerProps,
   SpectrumActionMenuProps,
 } from "@vue-spectrum/menu";
+export type {
+  ListViewKey,
+  SpectrumListViewSelectionMode,
+  SpectrumListViewLoadingState,
+  SpectrumListViewItemData,
+  SpectrumListViewProps,
+} from "@vue-spectrum/list";
 export type {
   ListBoxKey,
   SpectrumListBoxSelectionMode,
