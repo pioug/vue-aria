@@ -44,24 +44,28 @@ function normalizeRenderable(
   return [value];
 }
 
-function resolveItemKey(item: unknown, index: number): string | number {
+function extractItemKey(item: unknown, index: number): unknown {
   if (item !== null && typeof item === "object" && "id" in item) {
-    const key = (item as Record<string, unknown>).id;
-
-    if (typeof key === "string" || typeof key === "number") {
-      return key;
-    }
-
-    if (typeof key === "boolean") {
-      return `bool-${String(key)}-${index}`;
-    }
-
-    if (key === null) {
-      return `null-${index}`;
-    }
+    return (item as Record<string, unknown>).id;
   }
 
   return index;
+}
+
+function toVNodeKey(itemKey: unknown, index: number): string | number {
+  if (typeof itemKey === "string" || typeof itemKey === "number") {
+    return itemKey;
+  }
+
+  if (typeof itemKey === "boolean") {
+    return `bool-${String(itemKey)}-${index}`;
+  }
+
+  if (itemKey === null) {
+    return `null-${index}`;
+  }
+
+  return `idx-${index}`;
 }
 
 function clampIndex(value: number, length: number): number {
@@ -166,7 +170,7 @@ export const CardView = defineComponent({
     };
 
     const toggleSelection = (key: unknown) => {
-      if (selectionMode.value === "none" || key === undefined || key === null) {
+      if (selectionMode.value === "none" || key === undefined) {
         return;
       }
 
@@ -191,10 +195,8 @@ export const CardView = defineComponent({
       inCardView: true,
       layout: props.layout?.type ?? null,
       selectionMode: selectionMode.value,
-      isSelected: (key: unknown) =>
-        key !== undefined && key !== null ? selectedKeys.value.has(key) : false,
-      isDisabled: (key: unknown) =>
-        key !== undefined && key !== null ? disabledKeys.value.has(key) : false,
+      isSelected: (key: unknown) => (key !== undefined ? selectedKeys.value.has(key) : false),
+      isDisabled: (key: unknown) => (key !== undefined ? disabledKeys.value.has(key) : false),
       toggleSelection,
     }));
 
@@ -249,13 +251,16 @@ export const CardView = defineComponent({
       const domProps = filterDOMProps(attrs as Record<string, unknown>);
       const items = props.items;
       const rowEntries = items
-        ? items.map((item, index) => ({
-            key: resolveItemKey(item, index),
-            itemKey: resolveItemKey(item, index),
-            children: normalizeRenderable(
-              slots.default?.({ item, index }) as VNodeChild[] | undefined
-            ),
-          }))
+        ? items.map((item, index) => {
+            const itemKey = extractItemKey(item, index);
+            return {
+              key: toVNodeKey(itemKey, index),
+              itemKey,
+              children: normalizeRenderable(
+                slots.default?.({ item, index }) as VNodeChild[] | undefined
+              ),
+            };
+          })
         : normalizeRenderable(slots.default?.()).map((child, index) => ({
             key: index,
             itemKey: index,

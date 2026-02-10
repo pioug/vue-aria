@@ -26,6 +26,12 @@ const falsyIdItems = [
   { id: null, src: "https://i.imgur.com/1nScMIH.jpg", title: "Title 4" },
 ];
 
+function toCardItemKey(
+  item: DynamicCardItem
+): string | number | boolean | null | undefined {
+  return Object.prototype.hasOwnProperty.call(item, "id") ? item.id : undefined;
+}
+
 function createCardNode(index: number) {
   return h(
     Card,
@@ -87,7 +93,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -128,7 +134,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -167,7 +173,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -201,7 +207,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -235,7 +241,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -274,7 +280,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -328,7 +334,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -358,6 +364,42 @@ describe("CardView", () => {
     // controlled: visual selection remains driven by selectedKeys prop
     expect(cards[1].classes()).toContain("is-selected");
     expect(cards[0].classes()).not.toContain("is-selected");
+
+    await wrapper.setProps({ selectedKeys: new Set(["card-1"]) });
+    expect(cards[0].classes()).toContain("is-selected");
+    expect(cards[1].classes()).not.toContain("is-selected");
+  });
+
+  it("supports controlled selection with falsy keys", () => {
+    const wrapper = mount(CardView, {
+      props: {
+        items: falsyIdItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        selectedKeys: new Set([false, null]),
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: toCardItemKey(item) },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const cards = wrapper.findAll(".spectrum-Card");
+    // id false and id null should both resolve as selected keys
+    expect(cards[2].classes()).toContain("is-selected");
+    expect(cards[3].classes()).toContain("is-selected");
   });
 
   it("does not select disabled card keys", async () => {
@@ -375,7 +417,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -391,8 +433,10 @@ describe("CardView", () => {
     const user = userEvent.setup();
     const cards = wrapper.findAll(".spectrum-Card");
     const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const checkboxes = wrapper.findAll("input[type=\"checkbox\"][aria-label=\"select\"]");
 
     expect(cards[1].classes()).toContain("is-disabled");
+    expect((checkboxes[1].element as HTMLInputElement).disabled).toBe(true);
     await user.click(cells[1].element);
     expect(cards[1].classes()).not.toContain("is-selected");
     expect(onSelectionChange).not.toHaveBeenCalled();
@@ -412,7 +456,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -451,7 +495,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -489,7 +533,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -528,7 +572,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),
@@ -574,7 +618,7 @@ describe("CardView", () => {
         default: ({ item }: { item: DynamicCardItem }) =>
           h(
             Card,
-            { itemKey: item.id ?? undefined },
+            { itemKey: toCardItemKey(item) },
             {
               default: () => [
                 h(Image, { src: item.src }),

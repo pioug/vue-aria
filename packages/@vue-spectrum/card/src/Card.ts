@@ -88,9 +88,7 @@ export const Card = defineComponent({
   inheritAttrs: false,
   props: {
     itemKey: {
-      type: [String, Number, Boolean] as PropType<
-        string | number | boolean | null | undefined
-      >,
+      type: null as unknown as PropType<string | number | boolean | null | undefined>,
       default: undefined,
     },
     isDisabled: {
@@ -157,19 +155,14 @@ export const Card = defineComponent({
       const isQuiet = Boolean(resolvedProps.isQuiet);
       const itemKey = props.itemKey;
       const isSelectedInView =
-        itemKey !== undefined &&
-        itemKey !== null &&
-        Boolean(context?.isSelected(itemKey));
+        itemKey !== undefined && Boolean(context?.isSelected(itemKey));
       const isDisabledInView =
         Boolean(resolvedProps.isDisabled) ||
-        (itemKey !== undefined &&
-          itemKey !== null &&
-          Boolean(context?.isDisabled(itemKey)));
+        (itemKey !== undefined && Boolean(context?.isDisabled(itemKey)));
       const showsSelectionControl =
         context?.selectionMode !== undefined &&
         context.selectionMode !== "none" &&
-        itemKey !== undefined &&
-        itemKey !== null;
+        itemKey !== undefined;
 
       let headingId: string | undefined;
       let descriptionId: string | undefined;
