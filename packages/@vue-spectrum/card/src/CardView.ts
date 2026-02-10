@@ -9,11 +9,17 @@ import {
 } from "vue";
 import { useLocale } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
+import { ProgressCircle } from "@vue-spectrum/progress";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { BaseLayout } from "./BaseLayout";
 import { provideCardViewContext, type CardViewContextValue } from "./CardViewContext";
 
 export type SpectrumCardSelectionMode = "none" | "single" | "multiple";
+export type SpectrumCardViewLoadingState =
+  | "idle"
+  | "loading"
+  | "loadingMore"
+  | "filtering";
 
 export interface SpectrumCardViewProps<T = unknown> {
   items?: T[] | undefined;
@@ -24,6 +30,8 @@ export interface SpectrumCardViewProps<T = unknown> {
   disabledKeys?: Iterable<unknown> | undefined;
   onSelectionChange?: ((keys: Set<unknown>) => void) | undefined;
   onLoadMore?: (() => void) | undefined;
+  loadingState?: SpectrumCardViewLoadingState | undefined;
+  renderEmptyState?: (() => VNodeChild | VNodeChild[] | null | undefined) | undefined;
   width?: string | number | undefined;
   height?: string | number | undefined;
   ariaLabel?: string | undefined;
@@ -124,6 +132,16 @@ export const CardView = defineComponent({
     },
     onLoadMore: {
       type: Function as PropType<(() => void) | undefined>,
+      default: undefined,
+    },
+    loadingState: {
+      type: String as PropType<SpectrumCardViewLoadingState | undefined>,
+      default: undefined,
+    },
+    renderEmptyState: {
+      type: Function as PropType<
+        (() => VNodeChild | VNodeChild[] | null | undefined) | undefined
+      >,
       default: undefined,
     },
     width: {
@@ -291,7 +309,8 @@ export const CardView = defineComponent({
     return () => {
       const domProps = filterDOMProps(attrs as Record<string, unknown>);
       const items = props.items;
-      const rowEntries = items
+      const loadingState = props.loadingState ?? "idle";
+      const baseRowEntries = items
         ? items.map((item, index) => {
             const itemKey = extractItemKey(item, index);
             return {
@@ -307,12 +326,12 @@ export const CardView = defineComponent({
             itemKey: index,
             children: [child],
           }));
-      const rowCount = rowEntries.length;
+      const rowCount = baseRowEntries.length;
       if (activeCellIndex.value >= rowCount && rowCount > 0) {
         activeCellIndex.value = rowCount - 1;
       }
 
-      const rows = rowEntries.map((entry, index) =>
+      const rows = baseRowEntries.map((entry, index) =>
         h(
           "div",
           {
@@ -356,6 +375,58 @@ export const CardView = defineComponent({
         )
       );
 
+      const pushCenteredRow = (key: string, content: VNodeChild[]) => {
+        rows.push(
+          h(
+            "div",
+            {
+              key,
+              role: "row",
+              "aria-rowindex": String(rowCount + 1),
+              class: classNames(
+                "spectrum-CardView-row",
+                "spectrum-CardView-centeredWrapper"
+              ),
+            },
+            [
+              h(
+                "div",
+                {
+                  role: "gridcell",
+                  class: classNames("spectrum-CardView-cell"),
+                },
+                content
+              ),
+            ]
+          )
+        );
+      };
+
+      if (loadingState === "loading" && rowCount === 0) {
+        pushCenteredRow("loading", [
+          h(ProgressCircle, {
+            isIndeterminate: true,
+            ariaLabel: "Loading…",
+          }),
+        ]);
+      } else {
+        if (loadingState === "loadingMore") {
+          pushCenteredRow("loading-more", [
+            h(ProgressCircle, {
+              isIndeterminate: true,
+              ariaLabel: rowCount > 0 ? "Loading more…" : "Loading…",
+            }),
+          ]);
+        }
+
+        if (rowCount === 0 && loadingState !== "loading") {
+          const emptyState = normalizeRenderable(props.renderEmptyState?.());
+          if (emptyState.length > 0) {
+            pushCenteredRow("empty", emptyState);
+          }
+        }
+      }
+
       const className = classNames(
         "spectrum-CardView",
         {
@@ -383,6 +454,9 @@ export const CardView = defineComponent({
           class: className,
           onScroll: (event: Event) => {
             if (!props.onLoadMore) {
+              return;
+            }
+            if (loadingState === "loading" || loadingState === "loadingMore") {
               return;
             }
 

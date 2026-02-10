@@ -144,6 +144,7 @@ export type {
   CardOrientation,
   SpectrumCardViewProps,
   SpectrumCardSelectionMode,
+  SpectrumCardViewLoadingState,
   BaseLayoutOptions,
   GridLayoutOptions,
   GalleryLayoutOptions,

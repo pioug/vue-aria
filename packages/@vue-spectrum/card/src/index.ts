@@ -6,7 +6,11 @@ export { GalleryLayout } from "./GalleryLayout";
 export { WaterfallLayout } from "./WaterfallLayout";
 
 export type { SpectrumCardProps, CardOrientation } from "./Card";
-export type { SpectrumCardViewProps, SpectrumCardSelectionMode } from "./CardView";
+export type {
+  SpectrumCardViewProps,
+  SpectrumCardSelectionMode,
+  SpectrumCardViewLoadingState,
+} from "./CardView";
 export type { BaseLayoutOptions } from "./BaseLayout";
 export type { GridLayoutOptions } from "./GridLayout";
 export type { GalleryLayoutOptions } from "./GalleryLayout";

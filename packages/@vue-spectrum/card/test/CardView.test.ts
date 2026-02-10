@@ -54,6 +54,21 @@ function createCardNode(index: number) {
   );
 }
 
+function createDynamicCard(item: DynamicCardItem) {
+  return h(
+    Card,
+    { itemKey: toCardItemKey(item) },
+    {
+      default: () => [
+        h(Image, { src: item.src }),
+        h(Heading, () => item.title),
+        h(Text, { slot: "detail" }, () => "PNG"),
+        h(Content, () => "Description"),
+      ],
+    }
+  );
+}
+
 function mountRTLCardView() {
   const RTLCardView = defineComponent({
     name: "RTLCardViewTest",
@@ -917,6 +932,95 @@ describe("CardView", () => {
       scrollHeightSpy.mockRestore();
       clientHeightSpy.mockRestore();
     }
+  });
+
+  it("renders a loading row when loading with no items", async () => {
+    const wrapper = mount(CardView, {
+      props: {
+        items: [],
+        layout: new GridLayout(),
+        loadingState: "loading",
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+      },
+    });
+
+    const loadingRow = wrapper.get("[role=\"row\"]");
+    expect(loadingRow.attributes("aria-rowindex")).toBe("1");
+
+    const loadingSpinner = wrapper.get("[role=\"progressbar\"]");
+    expect(loadingSpinner.attributes("aria-label")).toBe("Loading…");
+
+    await wrapper.setProps({
+      items: dynamicItems,
+      loadingState: "idle",
+    });
+
+    expect(wrapper.find("[role=\"progressbar\"]").exists()).toBe(false);
+    expect(wrapper.get("[role=\"grid\"]").attributes("aria-rowcount")).toBe(
+      String(dynamicItems.length)
+    );
+  });
+
+  it("renders loading more row when loading more", () => {
+    const wrapper = mount(CardView, {
+      props: {
+        items: longDynamicItems,
+        layout: new GridLayout(),
+        loadingState: "loadingMore",
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+      },
+    });
+
+    const grid = wrapper.get("[role=\"grid\"]");
+    expect(grid.attributes("aria-rowcount")).toBe(String(longDynamicItems.length));
+
+    const loadingSpinner = wrapper.get("[role=\"progressbar\"]");
+    expect(loadingSpinner.attributes("aria-label")).toBe("Loading more…");
+
+    const allRows = wrapper.findAll("[role=\"row\"]");
+    expect(allRows[allRows.length - 1].attributes("aria-rowindex")).toBe(
+      String(longDynamicItems.length + 1)
+    );
+  });
+
+  it("does not render loading row when filtering", () => {
+    const wrapper = mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        loadingState: "filtering",
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+      },
+    });
+
+    expect(wrapper.find("[role=\"progressbar\"]").exists()).toBe(false);
+  });
+
+  it("renders empty state when there are no items", () => {
+    const wrapper = mount(CardView, {
+      props: {
+        items: [],
+        layout: new GridLayout(),
+        renderEmptyState: () => h("div", "empty"),
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+      },
+    });
+
+    const row = wrapper.get("[role=\"row\"]");
+    expect(row.attributes("aria-rowindex")).toBe("1");
+    expect(wrapper.get("[role=\"gridcell\"]").text()).toContain("empty");
   });
 
   it("checkbox interaction toggles selection once", async () => {
