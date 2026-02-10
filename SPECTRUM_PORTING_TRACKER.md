@@ -55,6 +55,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Actions and Navigation
 
+- In progress baseline: `@react-spectrum/button` now has Vue `Button`, `ActionButton`, `ClearButton`, `LogicButton`, and `ToggleButton` primitives with baseline press/disabled/focus behavior plus starter tests for DOM passthrough, aria labels, class/style passthrough, anchor rendering, and toggle state changes; pending parity includes pending-state/spinner behavior and deeper icon-slot/interaction edge cases.
 - [ ] `@react-spectrum/button` -> `@vue-spectrum/button`
 - [ ] `@react-spectrum/actionbar` -> `@vue-spectrum/actionbar`
 - [ ] `@react-spectrum/actiongroup` -> `@vue-spectrum/actiongroup`

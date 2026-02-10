@@ -50,6 +50,9 @@ export default defineConfig({
         "@vue-spectrum/layout": fileURLToPath(
           new URL("../../packages/@vue-spectrum/layout/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/button": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/button/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/link": fileURLToPath(
           new URL("../../packages/@vue-spectrum/link/src/index.ts", import.meta.url)
         ),
@@ -195,6 +198,7 @@ export default defineConfig({
           { text: "@vue-spectrum/text", link: "/spectrum/text" },
           { text: "@vue-spectrum/view", link: "/spectrum/view" },
           { text: "@vue-spectrum/layout", link: "/spectrum/layout" },
+          { text: "@vue-spectrum/button", link: "/spectrum/button" },
           { text: "@vue-spectrum/link", link: "/spectrum/link" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
           { text: "@vue-spectrum/well", link: "/spectrum/well" },

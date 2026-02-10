@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/link`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` complete)
+- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/link`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` complete) with active controls baseline work (`@vue-spectrum/button`).
 
 ## Current Baseline
 
@@ -18,6 +18,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/text`: typography primitives (`Text`, `Heading`, `Keyboard`)
 - `@vue-spectrum/view`: semantic container primitives (`View`, `Content`, `Header`, `Footer`)
 - `@vue-spectrum/layout`: grid/flex layout primitives (`Grid`, `Flex`, helper functions)
+- `@vue-spectrum/button` (in progress): button primitives (`Button`, `ActionButton`, `ClearButton`, `LogicButton`, `ToggleButton`) with baseline press/focus/disabled behavior
 - `@vue-spectrum/link`: navigation link primitive (`Link`)
 - `@vue-spectrum/divider`: divider primitive (`Divider`)
 - `@vue-spectrum/well`: content well primitive (`Well`)
