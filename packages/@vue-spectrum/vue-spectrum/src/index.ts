@@ -67,6 +67,7 @@ export {
 export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
 export { ActionGroup } from "@vue-spectrum/actiongroup";
 export { TagGroup, Tag } from "@vue-spectrum/tag";
+export { Picker } from "@vue-spectrum/picker";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
@@ -171,6 +172,11 @@ export type {
   SpectrumTagProps,
   TagKey,
 } from "@vue-spectrum/tag";
+export type {
+  PickerKey,
+  SpectrumPickerItemData,
+  SpectrumPickerProps,
+} from "@vue-spectrum/picker";
 export type {
   ButtonGroupAlign,
   ButtonGroupOrientation,

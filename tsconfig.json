@@ -76,6 +76,7 @@
       "@vue-spectrum/actionbar": ["packages/@vue-spectrum/actionbar/src/index.ts"],
       "@vue-spectrum/actiongroup": ["packages/@vue-spectrum/actiongroup/src/index.ts"],
       "@vue-spectrum/tag": ["packages/@vue-spectrum/tag/src/index.ts"],
+      "@vue-spectrum/picker": ["packages/@vue-spectrum/picker/src/index.ts"],
       "@vue-spectrum/buttongroup": ["packages/@vue-spectrum/buttongroup/src/index.ts"],
       "@vue-spectrum/accordion": ["packages/@vue-spectrum/accordion/src/index.ts"],
       "@vue-spectrum/checkbox": ["packages/@vue-spectrum/checkbox/src/index.ts"],
