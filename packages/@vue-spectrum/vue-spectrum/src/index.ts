@@ -71,6 +71,7 @@ export {
   DisclosurePanel,
   DisclosureTitle,
 } from "@vue-spectrum/accordion";
+export { Switch } from "@vue-spectrum/switch";
 export { Link } from "@vue-spectrum/link";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
@@ -148,6 +149,7 @@ export type {
   SpectrumDisclosurePanelProps,
   SpectrumDisclosureTitleProps,
 } from "@vue-spectrum/accordion";
+export type { SpectrumSwitchProps } from "@vue-spectrum/switch";
 export type { LinkVariant, SpectrumLinkProps } from "@vue-spectrum/link";
 export type {
   DividerOrientation,

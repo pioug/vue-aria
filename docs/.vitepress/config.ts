@@ -92,6 +92,9 @@ export default defineConfig({
         "@vue-spectrum/card": fileURLToPath(
           new URL("../../packages/@vue-spectrum/card/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/switch": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/switch/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/vue-spectrum": fileURLToPath(
           new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
         ),
@@ -218,6 +221,7 @@ export default defineConfig({
           { text: "@vue-spectrum/meter", link: "/spectrum/meter" },
           { text: "@vue-spectrum/labeledvalue", link: "/spectrum/labeledvalue" },
           { text: "@vue-spectrum/card", link: "/spectrum/card" },
+          { text: "@vue-spectrum/switch", link: "/spectrum/switch" },
         ],
       },
     ],

@@ -10,12 +10,13 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `26 / 76` completed.
+- Task progress: `27 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
 - Display/status package progress: `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` are now complete.
 - Actions/navigation package progress: `@vue-spectrum/link`, `@vue-spectrum/buttongroup`, and `@vue-spectrum/accordion` are now complete.
+- Inputs/selection package progress: `@vue-spectrum/switch` is now complete.
 - `@vue-spectrum/button` baseline is now in progress with `Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, and `ToggleButton` ports plus expanded parity-style tests (press lifecycle callbacks, pending-state spinner behavior, disabled/focus behavior, anchor rendering, toggle state, and SSR coverage including `FieldButton`); pending parity includes locale-specific pending announcements and deeper interaction edge cases.
 - `@vue-spectrum/card` baseline is now in progress with initial `Card`, `CardView`, and layout class ports plus parity-aligned starter tests (including keyboard-nav with `Arrow*`, `Home`/`End`, `PageUp`/`PageDown`, and RTL left/right mapping, single/multiple selection handling with single-mode deselection behavior, controlled/falsy-key selection behavior, loading/empty-state behavior (`loading`, `loadingMore`, `filtering`, `renderEmptyState`), scroll-bottom `onLoadMore` callback behavior with loading-state suppression, checkbox interaction, `selectionMode="none"` behavior, focusable-child warning behavior, and falsy-id coverage); advanced interaction/layout parity remains.
 - `@vue-spectrum/provider` now includes a `Provider` component surface, React Spectrum-style alias exports (`useProvider*`), and component-level parity tests (package still in-progress for full parity).
@@ -29,7 +30,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - Program setup tasks: `8 / 8` completed.
 - Foundation/theme/infrastructure packages: `6 / 16` completed.
 - Actions/navigation packages: `3 / 12` completed.
-- Inputs/selection packages: `0 / 13` completed.
+- Inputs/selection packages: `1 / 13` completed.
 - Lists/tables/trees packages: `0 / 4` completed.
 - Overlays/messaging packages: `0 / 7` completed.
 - Drag/drop packages: `0 / 2` completed.

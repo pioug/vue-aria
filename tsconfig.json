@@ -86,6 +86,7 @@
       "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],
       "@vue-spectrum/labeledvalue": ["packages/@vue-spectrum/labeledvalue/src/index.ts"],
       "@vue-spectrum/card": ["packages/@vue-spectrum/card/src/index.ts"],
+      "@vue-spectrum/switch": ["packages/@vue-spectrum/switch/src/index.ts"],
       "@vue-spectrum/vue-spectrum": ["packages/@vue-spectrum/vue-spectrum/src/index.ts"]
     },
     "strict": true,

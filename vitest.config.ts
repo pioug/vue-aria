@@ -241,6 +241,9 @@ export default defineConfig({
       "@vue-spectrum/card": fileURLToPath(
         new URL("./packages/@vue-spectrum/card/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/switch": fileURLToPath(
+        new URL("./packages/@vue-spectrum/switch/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),

@@ -4,8 +4,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Progress Snapshot
 
-- Completed packages: `18 / 64`
-- Remaining packages: `46`
+- Completed packages: `19 / 64`
+- Remaining packages: `45`
 - Current stage: phase-1 foundation migration
 
 ## Upstream Source of Truth
@@ -73,7 +73,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 - [ ] `@react-spectrum/checkbox` -> `@vue-spectrum/checkbox`
 - [ ] `@react-spectrum/radio` -> `@vue-spectrum/radio`
-- [ ] `@react-spectrum/switch` -> `@vue-spectrum/switch`
+- [x] `@react-spectrum/switch` -> `@vue-spectrum/switch`
 - [ ] `@react-spectrum/slider` -> `@vue-spectrum/slider`
 - [ ] `@react-spectrum/textfield` -> `@vue-spectrum/textfield`
 - [ ] `@react-spectrum/searchfield` -> `@vue-spectrum/searchfield`
