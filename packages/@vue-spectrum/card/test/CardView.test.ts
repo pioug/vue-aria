@@ -864,6 +864,61 @@ describe("CardView", () => {
     ).toEqual(new Set());
   });
 
+  it("calls onLoadMore when scrolling to the bottom", async () => {
+    const onLoadMore = vi.fn();
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 3000;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 500;
+        }
+        return 0;
+      });
+
+    try {
+      const wrapper = mount(CardView, {
+        props: {
+          items: longDynamicItems,
+          layout: new GridLayout(),
+          onLoadMore,
+          ariaLabel: "Test CardView",
+        },
+        slots: {
+          default: ({ item }: { item: DynamicCardItem }) =>
+            h(
+              Card,
+              { itemKey: toCardItemKey(item) },
+              {
+                default: () => [
+                  h(Image, { src: item.src }),
+                  h(Heading, () => item.title),
+                  h(Text, { slot: "detail" }, () => "PNG"),
+                  h(Content, () => "Description"),
+                ],
+              }
+            ),
+        },
+      });
+
+      const grid = wrapper.get("[role=\"grid\"]");
+      (grid.element as HTMLElement).scrollTop = 3000;
+      await grid.trigger("scroll");
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("checkbox interaction toggles selection once", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = mount(CardView, {

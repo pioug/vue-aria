@@ -23,6 +23,7 @@ export interface SpectrumCardViewProps<T = unknown> {
   defaultSelectedKeys?: Iterable<unknown> | undefined;
   disabledKeys?: Iterable<unknown> | undefined;
   onSelectionChange?: ((keys: Set<unknown>) => void) | undefined;
+  onLoadMore?: (() => void) | undefined;
   width?: string | number | undefined;
   height?: string | number | undefined;
   ariaLabel?: string | undefined;
@@ -119,6 +120,10 @@ export const CardView = defineComponent({
     },
     onSelectionChange: {
       type: Function as PropType<((keys: Set<unknown>) => void) | undefined>,
+      default: undefined,
+    },
+    onLoadMore: {
+      type: Function as PropType<(() => void) | undefined>,
       default: undefined,
     },
     width: {
@@ -376,6 +381,22 @@ export const CardView = defineComponent({
           "aria-rowcount": String(rowCount),
           "aria-colcount": "1",
           class: className,
+          onScroll: (event: Event) => {
+            if (!props.onLoadMore) {
+              return;
+            }
+
+            const target = event.currentTarget as HTMLElement | null;
+            if (!target) {
+              return;
+            }
+
+            const reachedBottom =
+              target.scrollTop + target.clientHeight >= target.scrollHeight;
+            if (reachedBottom) {
+              props.onLoadMore();
+            }
+          },
           style: {
             ...(typeof domProps.style === "object" && domProps.style !== null
               ? (domProps.style as Record<string, unknown>)

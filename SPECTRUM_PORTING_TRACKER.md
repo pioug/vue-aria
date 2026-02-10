@@ -108,7 +108,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Display and Status
 
-- In progress baseline: `@react-spectrum/card` now has Vue `Card`, `CardView`, and layout class primitives with baseline tests/docs plus keyboard navigation (`Arrow*`, `Home`/`End`, `PageUp`/`PageDown`, and RTL-aware left/right navigation), selection state handling (`selectedKeys`/`defaultSelectedKeys`/`disabledKeys`/`onSelectionChange`) including controlled updates and falsy-key support, single/multiple selection coverage (including single-mode deselection on re-activate), checkbox interaction behavior, `selectionMode="none"` behavior checks, focusable-child warnings (excluding internal checkbox), and falsy-id coverage; advanced layout and interaction parity is still pending.
+- In progress baseline: `@react-spectrum/card` now has Vue `Card`, `CardView`, and layout class primitives with baseline tests/docs plus keyboard navigation (`Arrow*`, `Home`/`End`, `PageUp`/`PageDown`, and RTL-aware left/right navigation), selection state handling (`selectedKeys`/`defaultSelectedKeys`/`disabledKeys`/`onSelectionChange`) including controlled updates and falsy-key support, single/multiple selection coverage (including single-mode deselection on re-activate), scroll-bottom `onLoadMore` callback behavior, checkbox interaction behavior, `selectionMode="none"` behavior checks, focusable-child warnings (excluding internal checkbox), and falsy-id coverage; advanced layout and interaction parity is still pending.
 - [x] `@react-spectrum/avatar` -> `@vue-spectrum/avatar`
 - [x] `@react-spectrum/badge` -> `@vue-spectrum/badge`
 - [ ] `@react-spectrum/card` -> `@vue-spectrum/card`
