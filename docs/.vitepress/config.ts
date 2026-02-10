@@ -146,6 +146,9 @@ export default defineConfig({
         "@vue-spectrum/toast": fileURLToPath(
           new URL("../../packages/@vue-spectrum/toast/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/dnd": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/dnd/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/dropzone": fileURLToPath(
           new URL("../../packages/@vue-spectrum/dropzone/src/index.ts", import.meta.url)
         ),
@@ -308,6 +311,7 @@ export default defineConfig({
           { text: "@vue-spectrum/contextualhelp", link: "/spectrum/contextualhelp" },
           { text: "@vue-spectrum/tooltip", link: "/spectrum/tooltip" },
           { text: "@vue-spectrum/toast", link: "/spectrum/toast" },
+          { text: "@vue-spectrum/dnd", link: "/spectrum/dnd" },
           { text: "@vue-spectrum/dropzone", link: "/spectrum/dropzone" },
           { text: "@vue-spectrum/progress", link: "/spectrum/progress" },
           { text: "@vue-spectrum/meter", link: "/spectrum/meter" },
