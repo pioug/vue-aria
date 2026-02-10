@@ -71,6 +71,7 @@ export {
   DisclosurePanel,
   DisclosureTitle,
 } from "@vue-spectrum/accordion";
+export { Checkbox, CheckboxGroup } from "@vue-spectrum/checkbox";
 export { Switch } from "@vue-spectrum/switch";
 export { Link } from "@vue-spectrum/link";
 export { Divider } from "@vue-spectrum/divider";
@@ -149,6 +150,12 @@ export type {
   SpectrumDisclosurePanelProps,
   SpectrumDisclosureTitleProps,
 } from "@vue-spectrum/accordion";
+export type {
+  SpectrumCheckboxGroupOrientation,
+  SpectrumCheckboxGroupProps,
+  SpectrumCheckboxProps,
+  SpectrumCheckboxValidationBehavior,
+} from "@vue-spectrum/checkbox";
 export type { SpectrumSwitchProps } from "@vue-spectrum/switch";
 export type { LinkVariant, SpectrumLinkProps } from "@vue-spectrum/link";
 export type {
