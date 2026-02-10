@@ -113,6 +113,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - In progress baseline: `@react-spectrum/tooltip` now has Vue `Tooltip` and `TooltipTrigger` primitives with baseline focus/hover trigger behavior, Escape/press close handling, and starter/SSR tests plus docs/umbrella wiring; advanced positioning and full overlay parity remains.
 - In progress baseline: `@react-spectrum/contextualhelp` now has Vue `ContextualHelp` primitive with baseline quiet-trigger popover behavior, default/custom ARIA label handling, and starter/SSR tests plus docs/umbrella wiring; advanced icon/placement parity remains.
 - In progress baseline: `@react-spectrum/toast` now has Vue `ToastContainer` and `ToastQueue` primitives with baseline global queue helpers, timeout and action/close behavior, single-active-container rendering, and starter/SSR tests plus docs/umbrella wiring; advanced icon/transition/focus-management parity remains.
+- In progress baseline: `@react-spectrum/dropzone` now has Vue `DropZone` primitive with baseline drag/drop lifecycle wiring (`@vue-aria/dnd`), filled-state banner behavior, and starter/SSR tests plus docs/umbrella wiring; advanced heading-context and full visual parity remain.
 - [ ] `@react-spectrum/overlays` -> `@vue-spectrum/overlays`
 - [ ] `@react-spectrum/dialog` -> `@vue-spectrum/dialog`
 - [ ] `@react-spectrum/tooltip` -> `@vue-spectrum/tooltip`

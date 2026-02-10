@@ -107,6 +107,7 @@ export {
 export { ContextualHelp } from "@vue-spectrum/contextualhelp";
 export { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 export { ToastContainer, ToastQueue, clearToastQueue } from "@vue-spectrum/toast";
+export { DropZone } from "@vue-spectrum/dropzone";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
 export { LabeledValue } from "@vue-spectrum/labeledvalue";
@@ -303,6 +304,7 @@ export type {
   SpectrumToastValue,
   ToastPlacement,
 } from "@vue-spectrum/toast";
+export type { SpectrumDropZoneProps } from "@vue-spectrum/dropzone";
 export type {
   ProgressBarLabelPosition,
   ProgressBarSize,
