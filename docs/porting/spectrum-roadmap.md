@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `32 / 76` completed.
+- Task progress: `33 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -22,6 +22,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/textfield` baseline is now in progress with initial `TextField` and `TextArea` ports, including label/help/error wiring, controlled/uncontrolled value handling, native/ARIA validation behavior, and docs/umbrella wiring; advanced upstream icon/loading/auto-resize behavior remains.
 - `@vue-spectrum/searchfield` baseline is now in progress with initial `SearchField` port, including Enter-submit and Escape/clear-button behavior parity, controlled/uncontrolled value handling, custom/default icon behavior, and docs/umbrella wiring; advanced upstream visual/theming parity remains.
 - `@vue-spectrum/numberfield` baseline is now in progress with initial `NumberField` port, including min/max clamping, controlled/uncontrolled value behavior, stepper increment/decrement handling, hide-stepper and hidden-input support, and docs/umbrella wiring; advanced upstream locale/inputMode and wheel/long-press parity remains.
+- `@vue-spectrum/filetrigger` baseline is now in progress with initial `FileTrigger` port, including pressable-child trigger behavior, hidden file-input wiring, accepted-file/multiple/capture/directory options, and docs/umbrella wiring; advanced upstream interoperability edge cases remain.
 - `@vue-spectrum/button` baseline is now in progress with `Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, and `ToggleButton` ports plus expanded parity-style tests (press lifecycle callbacks, pending-state spinner behavior, disabled/focus behavior, anchor rendering, toggle state, and SSR coverage including `FieldButton`), including localized pending announcements; pending parity still includes deeper interaction edge cases.
 - `@vue-spectrum/card` baseline is now in progress with initial `Card`, `CardView`, and layout class ports plus parity-aligned starter tests (including keyboard-nav with `Arrow*`, `Home`/`End`, `PageUp`/`PageDown`, and RTL left/right mapping, single/multiple selection handling with single-mode deselection behavior, controlled/falsy-key selection behavior, loading/empty-state behavior (`loading`, `loadingMore`, `filtering`, `renderEmptyState`), scroll-bottom `onLoadMore` callback behavior with loading-state suppression, checkbox interaction, `selectionMode="none"` behavior, focusable-child warning behavior, and falsy-id coverage); advanced interaction/layout parity remains.
 - `@vue-spectrum/provider` now includes a `Provider` component surface, React Spectrum-style alias exports (`useProvider*`), and component-level parity tests (package still in-progress for full parity).
