@@ -65,6 +65,14 @@ export { Image } from "@vue-spectrum/image";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
 export { LabeledValue } from "@vue-spectrum/labeledvalue";
+export {
+  Card,
+  CardView,
+  BaseLayout,
+  GridLayout,
+  GalleryLayout,
+  WaterfallLayout,
+} from "@vue-spectrum/card";
 
 export type {
   FormContextValue,
@@ -129,6 +137,16 @@ export type {
   SpectrumLabeledValueProps,
   SpectrumLabeledValueValue,
 } from "@vue-spectrum/labeledvalue";
+export type {
+  SpectrumCardProps,
+  CardOrientation,
+  SpectrumCardViewProps,
+  SpectrumCardSelectionMode,
+  BaseLayoutOptions,
+  GridLayoutOptions,
+  GalleryLayoutOptions,
+  WaterfallLayoutOptions,
+} from "@vue-spectrum/card";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,

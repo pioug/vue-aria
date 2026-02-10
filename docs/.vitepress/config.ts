@@ -77,6 +77,9 @@ export default defineConfig({
         "@vue-spectrum/labeledvalue": fileURLToPath(
           new URL("../../packages/@vue-spectrum/labeledvalue/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/card": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/card/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/vue-spectrum": fileURLToPath(
           new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
         ),
@@ -198,6 +201,7 @@ export default defineConfig({
           { text: "@vue-spectrum/progress", link: "/spectrum/progress" },
           { text: "@vue-spectrum/meter", link: "/spectrum/meter" },
           { text: "@vue-spectrum/labeledvalue", link: "/spectrum/labeledvalue" },
+          { text: "@vue-spectrum/card", link: "/spectrum/card" },
         ],
       },
     ],
