@@ -1,0 +1,51 @@
+# @vue-spectrum/actiongroup
+
+Vue port baseline of `@react-spectrum/actiongroup`.
+
+<script setup lang="ts">
+import { ActionGroup } from "@vue-spectrum/vue-spectrum";
+
+const items = [
+  { key: "edit", label: "Edit" },
+  { key: "duplicate", label: "Duplicate" },
+  { key: "share", label: "Share" },
+];
+</script>
+
+## Preview
+
+<div class="spectrum-preview">
+  <div class="spectrum-preview-panel" style="display: grid; gap: 16px; max-width: 560px;">
+    <ActionGroup
+      aria-label="Item actions"
+      :items="items"
+      selectionMode="single"
+      :defaultSelectedKeys="['edit']" />
+  </div>
+</div>
+
+## Exports
+
+- `ActionGroup`
+
+## Example
+
+```ts
+import { h } from "vue";
+import { ActionGroup } from "@vue-spectrum/actiongroup";
+
+const component = h(ActionGroup, {
+  "aria-label": "Item actions",
+  selectionMode: "single",
+  items: [
+    { key: "edit", label: "Edit" },
+    { key: "duplicate", label: "Duplicate" },
+    { key: "share", label: "Share" },
+  ],
+});
+```
+
+## Notes
+
+- Baseline includes item rendering, single/multiple selection state handling, disabled-key behavior, and arrow-key roving focus (including RTL behavior).
+- Overflow collapse/menu integration and icon-only label-collapse behavior are still in progress.

@@ -64,6 +64,7 @@ export {
   LogicButton,
   ToggleButton,
 } from "@vue-spectrum/button";
+export { ActionGroup } from "@vue-spectrum/actiongroup";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
@@ -148,6 +149,16 @@ export type {
   SpectrumLogicButtonProps,
   SpectrumToggleButtonProps,
 } from "@vue-spectrum/button";
+export type {
+  ActionGroupButtonLabelBehavior,
+  ActionGroupDensity,
+  ActionGroupKey,
+  ActionGroupOrientation,
+  ActionGroupOverflowMode,
+  ActionGroupSelectionMode,
+  SpectrumActionGroupItemData,
+  SpectrumActionGroupProps,
+} from "@vue-spectrum/actiongroup";
 export type {
   ButtonGroupAlign,
   ButtonGroupOrientation,
