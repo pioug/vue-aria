@@ -107,6 +107,9 @@ export default defineConfig({
         "@vue-spectrum/numberfield": fileURLToPath(
           new URL("../../packages/@vue-spectrum/numberfield/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/combobox": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/combobox/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/filetrigger": fileURLToPath(
           new URL("../../packages/@vue-spectrum/filetrigger/src/index.ts", import.meta.url)
         ),
@@ -304,6 +307,7 @@ export default defineConfig({
           { text: "@vue-spectrum/textfield", link: "/spectrum/textfield" },
           { text: "@vue-spectrum/searchfield", link: "/spectrum/searchfield" },
           { text: "@vue-spectrum/numberfield", link: "/spectrum/numberfield" },
+          { text: "@vue-spectrum/combobox", link: "/spectrum/combobox" },
           { text: "@vue-spectrum/filetrigger", link: "/spectrum/filetrigger" },
           { text: "@vue-spectrum/steplist", link: "/spectrum/steplist" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },

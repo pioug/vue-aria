@@ -90,6 +90,7 @@
       "@vue-spectrum/textfield": ["packages/@vue-spectrum/textfield/src/index.ts"],
       "@vue-spectrum/searchfield": ["packages/@vue-spectrum/searchfield/src/index.ts"],
       "@vue-spectrum/numberfield": ["packages/@vue-spectrum/numberfield/src/index.ts"],
+      "@vue-spectrum/combobox": ["packages/@vue-spectrum/combobox/src/index.ts"],
       "@vue-spectrum/filetrigger": ["packages/@vue-spectrum/filetrigger/src/index.ts"],
       "@vue-spectrum/steplist": ["packages/@vue-spectrum/steplist/src/index.ts"],
       "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"],
