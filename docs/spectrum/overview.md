@@ -6,7 +6,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 - Upstream source: `references/react-spectrum/packages/@react-spectrum/*`
 - Local target scope: `packages/@vue-spectrum/*`
-- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, and `@vue-spectrum/badge` complete)
+- Current stage: phase-1 foundation migration plus initial display packages (`@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`, `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, and `@vue-spectrum/avatar` complete)
 
 ## Current Baseline
 
@@ -22,6 +22,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/well`: content well primitive (`Well`)
 - `@vue-spectrum/statuslight`: status indicator primitive (`StatusLight`)
 - `@vue-spectrum/badge`: metadata badge primitive (`Badge`)
+- `@vue-spectrum/avatar`: avatar primitive (`Avatar`)
 - `@vue-spectrum/vue-spectrum`: umbrella export package for the component layer
 
 ## Rules For Marking A Package Complete

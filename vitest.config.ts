@@ -211,6 +211,9 @@ export default defineConfig({
       "@vue-spectrum/badge": fileURLToPath(
         new URL("./packages/@vue-spectrum/badge/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/avatar": fileURLToPath(
+        new URL("./packages/@vue-spectrum/avatar/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),

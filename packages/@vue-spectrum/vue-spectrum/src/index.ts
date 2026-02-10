@@ -60,6 +60,7 @@ export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
 export { Badge } from "@vue-spectrum/badge";
+export { Avatar } from "@vue-spectrum/avatar";
 
 export type {
   FormContextValue,
@@ -109,6 +110,7 @@ export type {
   StatusLightVariant,
 } from "@vue-spectrum/statuslight";
 export type { BadgeVariant, SpectrumBadgeProps } from "@vue-spectrum/badge";
+export type { AvatarSize, SpectrumAvatarProps } from "@vue-spectrum/avatar";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,

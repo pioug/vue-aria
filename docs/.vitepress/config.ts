@@ -62,6 +62,9 @@ export default defineConfig({
         "@vue-spectrum/badge": fileURLToPath(
           new URL("../../packages/@vue-spectrum/badge/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/avatar": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/avatar/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/vue-spectrum": fileURLToPath(
           new URL("../../packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
         ),
@@ -178,6 +181,7 @@ export default defineConfig({
           { text: "@vue-spectrum/well", link: "/spectrum/well" },
           { text: "@vue-spectrum/statuslight", link: "/spectrum/statuslight" },
           { text: "@vue-spectrum/badge", link: "/spectrum/badge" },
+          { text: "@vue-spectrum/avatar", link: "/spectrum/avatar" },
         ],
       },
     ],
