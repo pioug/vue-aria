@@ -2,6 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref, type Component } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import {
   ActionButton,
   Button,
@@ -340,5 +341,28 @@ describe("Button package", () => {
     });
 
     expect(wrapper.get("a").attributes("href")).toBeUndefined();
+  });
+
+  it("Button localizes pending aria label", () => {
+    const Harness = defineComponent({
+      name: "ButtonPendingLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+        return () =>
+          h(
+            Button,
+            {
+              isPending: true,
+              "aria-label": "Save",
+            },
+            {
+              default: () => "Save",
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(Harness);
+    expect(wrapper.get("button").attributes("aria-label")).toBe("Save En attente");
   });
 });

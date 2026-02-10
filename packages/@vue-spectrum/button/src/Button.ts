@@ -10,6 +10,7 @@ import {
   type PropType,
 } from "vue";
 import { useButton } from "@vue-aria/button";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useHover } from "@vue-aria/interactions";
 import type { PressEvent } from "@vue-aria/types";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
@@ -29,6 +30,7 @@ import {
   type BaseButtonProps,
   type ButtonElementType,
 } from "./shared";
+import { buttonMessages } from "./intlMessages";
 
 const SPINNER_VISIBILITY_DELAY_MS = 1000;
 let nextButtonId = 0;
@@ -139,6 +141,7 @@ export const Button = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const elementRef = ref<HTMLElement | null>(null);
+    const stringFormatter = useLocalizedStringFormatter(buttonMessages);
     const isDisabled = computed(() => Boolean(props.isDisabled));
     const isPending = computed(() => Boolean(props.isPending));
     const isProgressVisible = ref(false);
@@ -302,9 +305,11 @@ export const Button = defineComponent({
       const children = wrapTextChildren(normalizeChildren(slots.default?.()));
 
       const ariaLabel = domProps["aria-label"] as string | undefined;
-      const pendingAriaLiveLabel = `${ariaLabel ?? ""} pending`.trim();
+      const ariaLabelledby = domProps["aria-labelledby"] as string | undefined;
+      const hasAriaLabel = ariaLabel !== undefined || ariaLabelledby !== undefined;
+      const pendingAriaLiveLabel = `${ariaLabel ?? ""} ${stringFormatter.value.format("pending")}`.trim();
       const pendingAriaLiveLabelledby =
-        ariaLabel !== undefined
+        hasAriaLabel
           ? spinnerId
           : `${hasIcon.value ? iconId : ""} ${hasLabel.value ? textId : ""} ${spinnerId}`.trim();
 
