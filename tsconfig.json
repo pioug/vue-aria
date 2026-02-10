@@ -73,6 +73,7 @@
       "@vue-spectrum/view": ["packages/@vue-spectrum/view/src/index.ts"],
       "@vue-spectrum/layout": ["packages/@vue-spectrum/layout/src/index.ts"],
       "@vue-spectrum/button": ["packages/@vue-spectrum/button/src/index.ts"],
+      "@vue-spectrum/buttongroup": ["packages/@vue-spectrum/buttongroup/src/index.ts"],
       "@vue-spectrum/link": ["packages/@vue-spectrum/link/src/index.ts"],
       "@vue-spectrum/divider": ["packages/@vue-spectrum/divider/src/index.ts"],
       "@vue-spectrum/well": ["packages/@vue-spectrum/well/src/index.ts"],

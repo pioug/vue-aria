@@ -64,6 +64,7 @@ export {
   LogicButton,
   ToggleButton,
 } from "@vue-spectrum/button";
+export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export { Link } from "@vue-spectrum/link";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
@@ -130,6 +131,11 @@ export type {
   SpectrumLogicButtonProps,
   SpectrumToggleButtonProps,
 } from "@vue-spectrum/button";
+export type {
+  ButtonGroupAlign,
+  ButtonGroupOrientation,
+  SpectrumButtonGroupProps,
+} from "@vue-spectrum/buttongroup";
 export type { LinkVariant, SpectrumLinkProps } from "@vue-spectrum/link";
 export type {
   DividerOrientation,
