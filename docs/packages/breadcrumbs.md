@@ -2,12 +2,25 @@
 
 Breadcrumb accessibility primitives.
 
+## `useBreadcrumbs`
+
+Provides navigation-level ARIA semantics for breadcrumb containers.
+
+```ts
+import { useBreadcrumbs } from "@vue-aria/breadcrumbs";
+```
+
+### Behavior
+
+- Returns `navProps` with a localized default `aria-label` ("Breadcrumbs").
+- Preserves custom `aria-label` and other supported DOM attributes.
+
 ## `useBreadcrumbItem`
 
 Provides link/current-item semantics for breadcrumb items.
 
 ```ts
-import { useBreadcrumbItem } from "@vue-aria/breadcrumbs";
+import { useBreadcrumbItem, useBreadcrumbs } from "@vue-aria/breadcrumbs";
 ```
 
 ### Behavior

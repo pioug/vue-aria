@@ -71,6 +71,9 @@ export default defineConfig({
         "@vue-spectrum/link": fileURLToPath(
           new URL("../../packages/@vue-spectrum/link/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/breadcrumbs": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/breadcrumbs/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/divider": fileURLToPath(
           new URL("../../packages/@vue-spectrum/divider/src/index.ts", import.meta.url)
         ),
@@ -223,6 +226,7 @@ export default defineConfig({
           { text: "@vue-spectrum/radio", link: "/spectrum/radio" },
           { text: "@vue-spectrum/slider", link: "/spectrum/slider" },
           { text: "@vue-spectrum/link", link: "/spectrum/link" },
+          { text: "@vue-spectrum/breadcrumbs", link: "/spectrum/breadcrumbs" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
           { text: "@vue-spectrum/well", link: "/spectrum/well" },
           { text: "@vue-spectrum/statuslight", link: "/spectrum/statuslight" },

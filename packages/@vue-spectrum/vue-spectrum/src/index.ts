@@ -76,6 +76,7 @@ export { Radio, RadioGroup } from "@vue-spectrum/radio";
 export { Switch } from "@vue-spectrum/switch";
 export { Slider, RangeSlider } from "@vue-spectrum/slider";
 export { Link } from "@vue-spectrum/link";
+export { Breadcrumbs, BreadcrumbItem } from "@vue-spectrum/breadcrumbs";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
@@ -174,6 +175,11 @@ export type {
   SpectrumSliderProps,
 } from "@vue-spectrum/slider";
 export type { LinkVariant, SpectrumLinkProps } from "@vue-spectrum/link";
+export type {
+  SpectrumBreadcrumbItemProps,
+  SpectrumBreadcrumbsProps,
+  SpectrumBreadcrumbsSize,
+} from "@vue-spectrum/breadcrumbs";
 export type {
   DividerOrientation,
   DividerSize,

@@ -10,12 +10,12 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `29 / 76` completed.
+- Task progress: `30 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
 - Display/status package progress: `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` are now complete.
-- Actions/navigation package progress: `@vue-spectrum/link`, `@vue-spectrum/buttongroup`, and `@vue-spectrum/accordion` are now complete.
+- Actions/navigation package progress: `@vue-spectrum/link`, `@vue-spectrum/buttongroup`, `@vue-spectrum/accordion`, and `@vue-spectrum/breadcrumbs` are now complete.
 - Inputs/selection package progress: `@vue-spectrum/checkbox`, `@vue-spectrum/radio`, and `@vue-spectrum/switch` are now complete.
 - `@vue-spectrum/slider` baseline is now in progress with initial `Slider`, `RangeSlider`, `SliderBase`, and `SliderThumb` ports, localized range-thumb labels, min/max/step clamping normalization for initial and controlled values, parity-style starter tests (single/range controlled/uncontrolled behavior, form/reset flows, label/value output behavior, keyboard page/home/end coverage, track-click handling, and SSR coverage), plus docs and umbrella wiring; advanced interaction and formatting parity remains.
 - `@vue-spectrum/button` baseline is now in progress with `Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, and `ToggleButton` ports plus expanded parity-style tests (press lifecycle callbacks, pending-state spinner behavior, disabled/focus behavior, anchor rendering, toggle state, and SSR coverage including `FieldButton`), including localized pending announcements; pending parity still includes deeper interaction edge cases.
@@ -30,7 +30,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 - Program setup tasks: `8 / 8` completed.
 - Foundation/theme/infrastructure packages: `6 / 16` completed.
-- Actions/navigation packages: `3 / 12` completed.
+- Actions/navigation packages: `4 / 12` completed.
 - Inputs/selection packages: `3 / 13` completed.
 - Lists/tables/trees packages: `0 / 4` completed.
 - Overlays/messaging packages: `0 / 7` completed.

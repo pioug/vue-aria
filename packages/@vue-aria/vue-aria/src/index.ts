@@ -88,7 +88,7 @@ export {
 export { useDatePickerState } from "@vue-aria/datepicker-state";
 export { useCalendarBase, useCalendar, useRangeCalendar, useCalendarCell } from "@vue-aria/calendar";
 export { useCalendarState, useRangeCalendarState } from "@vue-aria/calendar-state";
-export { useBreadcrumbItem } from "@vue-aria/breadcrumbs";
+export { useBreadcrumbItem, useBreadcrumbs } from "@vue-aria/breadcrumbs";
 export {
   useDisclosure,
   useDisclosureState,
