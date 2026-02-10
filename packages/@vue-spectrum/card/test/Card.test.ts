@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { mount } from "@vue/test-utils";
 import { h } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Image } from "@vue-spectrum/image";
 import { Heading, Text } from "@vue-spectrum/text";
 import { Content } from "@vue-spectrum/view";
@@ -97,5 +97,23 @@ describe("Card", () => {
     const user = userEvent.setup();
     await user.tab();
     expect(document.activeElement).toBe(card.element);
+  });
+
+  it("warns when card contains additional focusable elements", () => {
+    const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    mount(Card, {
+      slots: {
+        default: () => [
+          ...createCardContent(),
+          h("a", { href: "https://example.com" }, "Focusable"),
+        ],
+      },
+    });
+
+    expect(spyWarn).toHaveBeenCalledWith(
+      "Card does not support focusable elements, please contact the team regarding your use case."
+    );
+    spyWarn.mockRestore();
   });
 });

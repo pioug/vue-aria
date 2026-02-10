@@ -644,4 +644,37 @@ describe("CardView", () => {
     expect(wrapper.findAll(".spectrum-Card")[0].classes()).not.toContain("is-selected");
     expect(onSelectionChange).toHaveBeenCalledTimes(2);
   });
+
+  it("does not warn for internal checkbox focusable control", () => {
+    const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    mount(CardView, {
+      props: {
+        items: dynamicItems,
+        layout: new GridLayout(),
+        selectionMode: "multiple",
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: toCardItemKey(item) },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    expect(spyWarn).not.toHaveBeenCalledWith(
+      "Card does not support focusable elements, please contact the team regarding your use case."
+    );
+    spyWarn.mockRestore();
+  });
 });

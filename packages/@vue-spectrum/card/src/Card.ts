@@ -3,6 +3,8 @@ import {
   defineComponent,
   h,
   isVNode,
+  onMounted,
+  onUpdated,
   ref,
   type PropType,
   type VNode,
@@ -137,6 +139,45 @@ export const Card = defineComponent({
     const fallbackHeadingId = useId(undefined, "v-spectrum-card-heading");
     const fallbackDescriptionId = useId(undefined, "v-spectrum-card-description");
     const contextRef = useCardViewContext();
+    const isProduction =
+      typeof process !== "undefined" && process.env.NODE_ENV === "production";
+
+    const warnFocusableChildren = () => {
+      if (isProduction || !elementRef.value) {
+        return;
+      }
+
+      const focusableNodes = elementRef.value.querySelectorAll<HTMLElement>(
+        "a[href], button, input, select, textarea, [contenteditable='true'], [tabindex]"
+      );
+
+      for (const node of Array.from(focusableNodes)) {
+        if (
+          node.closest(".spectrum-Card-checkboxWrapper") ||
+          node.classList.contains("spectrum-Card-checkbox")
+        ) {
+          continue;
+        }
+
+        const tabIndex = node.getAttribute("tabindex");
+        if (tabIndex === "-1") {
+          continue;
+        }
+
+        console.warn(
+          "Card does not support focusable elements, please contact the team regarding your use case."
+        );
+        break;
+      }
+    };
+
+    onMounted(() => {
+      warnFocusableChildren();
+    });
+
+    onUpdated(() => {
+      warnFocusableChildren();
+    });
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
