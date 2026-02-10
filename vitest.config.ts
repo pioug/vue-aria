@@ -214,6 +214,9 @@ export default defineConfig({
       "@vue-spectrum/radio": fileURLToPath(
         new URL("./packages/@vue-spectrum/radio/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/slider": fileURLToPath(
+        new URL("./packages/@vue-spectrum/slider/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/link": fileURLToPath(
         new URL("./packages/@vue-spectrum/link/src/index.ts", import.meta.url)
       ),

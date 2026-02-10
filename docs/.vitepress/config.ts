@@ -65,6 +65,9 @@ export default defineConfig({
         "@vue-spectrum/radio": fileURLToPath(
           new URL("../../packages/@vue-spectrum/radio/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/slider": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/slider/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/link": fileURLToPath(
           new URL("../../packages/@vue-spectrum/link/src/index.ts", import.meta.url)
         ),
@@ -218,6 +221,7 @@ export default defineConfig({
           { text: "@vue-spectrum/accordion", link: "/spectrum/accordion" },
           { text: "@vue-spectrum/checkbox", link: "/spectrum/checkbox" },
           { text: "@vue-spectrum/radio", link: "/spectrum/radio" },
+          { text: "@vue-spectrum/slider", link: "/spectrum/slider" },
           { text: "@vue-spectrum/link", link: "/spectrum/link" },
           { text: "@vue-spectrum/divider", link: "/spectrum/divider" },
           { text: "@vue-spectrum/well", link: "/spectrum/well" },

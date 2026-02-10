@@ -74,6 +74,7 @@ export {
 export { Checkbox, CheckboxGroup } from "@vue-spectrum/checkbox";
 export { Radio, RadioGroup } from "@vue-spectrum/radio";
 export { Switch } from "@vue-spectrum/switch";
+export { Slider, RangeSlider } from "@vue-spectrum/slider";
 export { Link } from "@vue-spectrum/link";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
@@ -164,6 +165,14 @@ export type {
   SpectrumRadioValidationBehavior,
 } from "@vue-spectrum/radio";
 export type { SpectrumSwitchProps } from "@vue-spectrum/switch";
+export type {
+  NumberRangeValue,
+  SpectrumRangeSliderProps,
+  SpectrumSliderBaseProps,
+  SpectrumSliderLabelPosition,
+  SpectrumSliderOrientation,
+  SpectrumSliderProps,
+} from "@vue-spectrum/slider";
 export type { LinkVariant, SpectrumLinkProps } from "@vue-spectrum/link";
 export type {
   DividerOrientation,

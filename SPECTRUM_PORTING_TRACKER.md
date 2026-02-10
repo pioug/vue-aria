@@ -71,6 +71,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Inputs and Selection
 
+- In progress baseline: `@react-spectrum/slider` now has Vue `Slider`, `RangeSlider`, `SliderBase`, and `SliderThumb` primitives with baseline parity-style tests/docs and umbrella wiring (controlled/uncontrolled behavior, value output semantics, localized range-thumb labels, keyboard page/home/end coverage, track-click behavior, and SSR coverage); advanced interaction and formatting parity remains.
 - [x] `@react-spectrum/checkbox` -> `@vue-spectrum/checkbox`
 - [x] `@react-spectrum/radio` -> `@vue-spectrum/radio`
 - [x] `@react-spectrum/switch` -> `@vue-spectrum/switch`
