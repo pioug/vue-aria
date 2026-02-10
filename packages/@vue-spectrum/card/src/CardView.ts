@@ -216,6 +216,22 @@ export const CardView = defineComponent({
       cellRefs.value[nextIndex]?.focus();
     };
 
+    const getPageStep = (index: number): number => {
+      const grid = elementRef.value;
+      const cell = cellRefs.value[index];
+      if (!grid || !cell) {
+        return 1;
+      }
+
+      const containerHeight = grid.clientHeight || grid.offsetHeight;
+      const cellHeight = cell.offsetHeight;
+      if (containerHeight <= 0 || cellHeight <= 0) {
+        return 1;
+      }
+
+      return Math.max(1, Math.floor(containerHeight / cellHeight));
+    };
+
     const handleCellKeyDown = (event: KeyboardEvent, index: number, totalRows: number) => {
       switch (event.key) {
         case "ArrowDown":
@@ -235,6 +251,14 @@ export const CardView = defineComponent({
         case "End":
           event.preventDefault();
           focusCell(totalRows - 1, totalRows);
+          return;
+        case "PageUp":
+          event.preventDefault();
+          focusCell(index - getPageStep(index), totalRows);
+          return;
+        case "PageDown":
+          event.preventDefault();
+          focusCell(index + getPageStep(index), totalRows);
           return;
         case "Enter":
         case " ":

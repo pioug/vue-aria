@@ -19,6 +19,12 @@ const dynamicItems: DynamicCardItem[] = [
   { id: "card-3", src: "https://i.imgur.com/L7RTlvI.png", title: "Title 3" },
 ];
 
+const longDynamicItems: DynamicCardItem[] = Array.from({ length: 12 }, (_, index) => ({
+  id: `card-${index + 1}`,
+  src: dynamicItems[index % dynamicItems.length].src,
+  title: `Title ${index + 1}`,
+}));
+
 const falsyIdItems = [
   { id: 0, src: "https://i.imgur.com/Z7AzH2c.jpg", title: "Title 1" },
   { id: "", src: "https://i.imgur.com/DhygPot.jpg", title: "Title 2" },
@@ -264,6 +270,194 @@ describe("CardView", () => {
 
     await user.keyboard("{End}");
     expect(document.activeElement).toBe(cells[2].element);
+  });
+
+  it("moves focus via ArrowLeft", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        layout: new GridLayout(),
+        items: dynamicItems,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: toCardItemKey(item) },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[2].element);
+    expect(document.activeElement).toBe(cells[2].element);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(cells[1].element);
+  });
+
+  it("moves focus via ArrowRight", async () => {
+    const wrapper = mount(CardView, {
+      attachTo: document.body,
+      props: {
+        layout: new GridLayout(),
+        items: dynamicItems,
+        ariaLabel: "Test CardView",
+      },
+      slots: {
+        default: ({ item }: { item: DynamicCardItem }) =>
+          h(
+            Card,
+            { itemKey: toCardItemKey(item) },
+            {
+              default: () => [
+                h(Image, { src: item.src }),
+                h(Heading, () => item.title),
+                h(Text, { slot: "detail" }, () => "PNG"),
+                h(Content, () => "Description"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const cells = wrapper.findAll("[role=\"gridcell\"]");
+    const user = userEvent.setup();
+    await user.click(cells[0].element);
+    expect(document.activeElement).toBe(cells[0].element);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(cells[1].element);
+  });
+
+  it("moves focus via PageDown", async () => {
+    const offsetHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        const role = this.getAttribute("role");
+        if (role === "grid") {
+          return 120;
+        }
+        if (role === "gridcell") {
+          return 20;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 120;
+        }
+        return 0;
+      });
+
+    try {
+      const wrapper = mount(CardView, {
+        attachTo: document.body,
+        props: {
+          layout: new GridLayout(),
+          items: longDynamicItems,
+          ariaLabel: "Test CardView",
+        },
+        slots: {
+          default: ({ item }: { item: DynamicCardItem }) =>
+            h(
+              Card,
+              { itemKey: toCardItemKey(item) },
+              {
+                default: () => [
+                  h(Image, { src: item.src }),
+                  h(Heading, () => item.title),
+                  h(Text, { slot: "detail" }, () => "PNG"),
+                  h(Content, () => "Description"),
+                ],
+              }
+            ),
+        },
+      });
+
+      const cells = wrapper.findAll("[role=\"gridcell\"]");
+      const user = userEvent.setup();
+      await user.click(cells[0].element);
+      expect(document.activeElement).toBe(cells[0].element);
+
+      await user.keyboard("{PageDown}");
+      expect(document.activeElement).toBe(cells[6].element);
+    } finally {
+      offsetHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
+  it("moves focus via PageUp", async () => {
+    const offsetHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        const role = this.getAttribute("role");
+        if (role === "grid") {
+          return 120;
+        }
+        if (role === "gridcell") {
+          return 20;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 120;
+        }
+        return 0;
+      });
+
+    try {
+      const wrapper = mount(CardView, {
+        attachTo: document.body,
+        props: {
+          layout: new GridLayout(),
+          items: longDynamicItems,
+          ariaLabel: "Test CardView",
+        },
+        slots: {
+          default: ({ item }: { item: DynamicCardItem }) =>
+            h(
+              Card,
+              { itemKey: toCardItemKey(item) },
+              {
+                default: () => [
+                  h(Image, { src: item.src }),
+                  h(Heading, () => item.title),
+                  h(Text, { slot: "detail" }, () => "PNG"),
+                  h(Content, () => "Description"),
+                ],
+              }
+            ),
+        },
+      });
+
+      const cells = wrapper.findAll("[role=\"gridcell\"]");
+      const user = userEvent.setup();
+      await user.click(cells[8].element);
+      expect(document.activeElement).toBe(cells[8].element);
+
+      await user.keyboard("{PageUp}");
+      expect(document.activeElement).toBe(cells[2].element);
+    } finally {
+      offsetHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
   });
 
   it("supports uncontrolled multiple selection and emits selected keys", async () => {
