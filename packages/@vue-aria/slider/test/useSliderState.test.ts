@@ -69,6 +69,29 @@ describe("useSliderState", () => {
     expect(state.values.value).toEqual([40]);
   });
 
+  it("clamps defaultValue and controlled value to min/max/step", () => {
+    const clampedDefault = useSliderState({
+      defaultValue: [20],
+      minValue: 50,
+      step: 3,
+    });
+
+    expect(clampedDefault.defaultValues.value).toEqual([50]);
+    expect(clampedDefault.values.value).toEqual([50]);
+
+    const controlled = ref([20]);
+    const clampedControlled = useSliderState({
+      value: controlled,
+      maxValue: 10,
+      step: 3,
+    });
+
+    expect(clampedControlled.values.value).toEqual([9]);
+
+    controlled.value = [100];
+    expect(clampedControlled.values.value).toEqual([9]);
+  });
+
   it("emits changeEnd when dragging transitions from true to false", () => {
     const onChangeEnd = vi.fn();
     const state = useSliderState({

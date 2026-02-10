@@ -72,14 +72,47 @@ export function useSliderState(
   );
   const isControlled = computed(() => options.value !== undefined);
 
+  const roundToStep = (value: number): number => {
+    const min = minValue.value;
+    const max = maxValue.value;
+    const stepValue = step.value;
+    const clampedValue = clamp(value, min, max);
+    const nearestStep = Math.round((clampedValue - min) / stepValue);
+    let snapped = min + nearestStep * stepValue;
+
+    if (snapped > max) {
+      const maxSteps = Math.floor((max - min) / stepValue);
+      snapped = min + maxSteps * stepValue;
+    }
+
+    return round(clamp(snapped, min, max));
+  };
+
+  const normalizeValues = (value: number[] | undefined): number[] => {
+    const resolved = resolveArray(value, [minValue.value]);
+    const normalized = resolved.map((entry) =>
+      clamp(roundToStep(entry), minValue.value, maxValue.value)
+    );
+
+    for (let index = 1; index < normalized.length; index += 1) {
+      normalized[index] = Math.max(normalized[index], normalized[index - 1]);
+    }
+
+    for (let index = normalized.length - 2; index >= 0; index -= 1) {
+      normalized[index] = Math.min(normalized[index], normalized[index + 1]);
+    }
+
+    return normalized;
+  };
+
   const initialValues = (() => {
     if (options.defaultValue !== undefined) {
-      return resolveArray(toValue(options.defaultValue), [minValue.value]);
+      return normalizeValues(toValue(options.defaultValue));
     }
     if (options.value !== undefined) {
-      return resolveArray(toValue(options.value), [minValue.value]);
+      return normalizeValues(toValue(options.value));
     }
-    return [minValue.value];
+    return normalizeValues(undefined);
   })();
 
   const uncontrolledValues = ref<number[]>([...initialValues]);
@@ -92,7 +125,7 @@ export function useSliderState(
     if (!isControlled.value) {
       return uncontrolledValues.value;
     }
-    return resolveArray(toValue(options.value), [minValue.value]);
+    return normalizeValues(toValue(options.value));
   });
 
   watchEffect(() => {
@@ -112,7 +145,7 @@ export function useSliderState(
   });
 
   const updateValues = (nextValues: number[]) => {
-    const normalized = [...nextValues];
+    const normalized = normalizeValues(nextValues);
     if (!isControlled.value) {
       uncontrolledValues.value = normalized;
     }
@@ -131,12 +164,6 @@ export function useSliderState(
       return maxValue.value;
     }
     return values.value[index + 1];
-  };
-
-  const roundToStep = (value: number): number => {
-    const aligned =
-      Math.round((value - minValue.value) / step.value) * step.value + minValue.value;
-    return round(aligned);
   };
 
   const setThumbValue = (index: number, value: number) => {
