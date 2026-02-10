@@ -106,6 +106,7 @@ export {
 } from "@vue-spectrum/dialog";
 export { ContextualHelp } from "@vue-spectrum/contextualhelp";
 export { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
+export { ToastContainer, ToastQueue, clearToastQueue } from "@vue-spectrum/toast";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
 export { LabeledValue } from "@vue-spectrum/labeledvalue";
@@ -294,6 +295,14 @@ export type {
   TooltipPlacement,
   TooltipVariant,
 } from "@vue-spectrum/tooltip";
+export type {
+  CloseFunction as ToastCloseFunction,
+  SpectrumToastContainerProps,
+  SpectrumToastOptions,
+  SpectrumToastProps,
+  SpectrumToastValue,
+  ToastPlacement,
+} from "@vue-spectrum/toast";
 export type {
   ProgressBarLabelPosition,
   ProgressBarSize,

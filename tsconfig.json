@@ -103,6 +103,7 @@
       "@vue-spectrum/dialog": ["packages/@vue-spectrum/dialog/src/index.ts"],
       "@vue-spectrum/contextualhelp": ["packages/@vue-spectrum/contextualhelp/src/index.ts"],
       "@vue-spectrum/tooltip": ["packages/@vue-spectrum/tooltip/src/index.ts"],
+      "@vue-spectrum/toast": ["packages/@vue-spectrum/toast/src/index.ts"],
       "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
       "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],
       "@vue-spectrum/labeledvalue": ["packages/@vue-spectrum/labeledvalue/src/index.ts"],
