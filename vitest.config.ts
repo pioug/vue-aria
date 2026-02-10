@@ -208,6 +208,9 @@ export default defineConfig({
       "@vue-spectrum/statuslight": fileURLToPath(
         new URL("./packages/@vue-spectrum/statuslight/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/badge": fileURLToPath(
+        new URL("./packages/@vue-spectrum/badge/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),

@@ -59,6 +59,7 @@ export { Flex, Grid, repeat, minmax, fitContent } from "@vue-spectrum/layout";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
+export { Badge } from "@vue-spectrum/badge";
 
 export type {
   FormContextValue,
@@ -107,6 +108,7 @@ export type {
   SpectrumStatusLightProps,
   StatusLightVariant,
 } from "@vue-spectrum/statuslight";
+export type { BadgeVariant, SpectrumBadgeProps } from "@vue-spectrum/badge";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,
