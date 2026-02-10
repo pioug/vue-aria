@@ -53,6 +53,9 @@ export default defineConfig({
         "@vue-spectrum/button": fileURLToPath(
           new URL("../../packages/@vue-spectrum/button/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/actionbar": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/actionbar/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/actiongroup": fileURLToPath(
           new URL("../../packages/@vue-spectrum/actiongroup/src/index.ts", import.meta.url)
         ),
@@ -241,6 +244,7 @@ export default defineConfig({
           { text: "@vue-spectrum/view", link: "/spectrum/view" },
           { text: "@vue-spectrum/layout", link: "/spectrum/layout" },
           { text: "@vue-spectrum/button", link: "/spectrum/button" },
+          { text: "@vue-spectrum/actionbar", link: "/spectrum/actionbar" },
           { text: "@vue-spectrum/actiongroup", link: "/spectrum/actiongroup" },
           { text: "@vue-spectrum/buttongroup", link: "/spectrum/buttongroup" },
           { text: "@vue-spectrum/accordion", link: "/spectrum/accordion" },

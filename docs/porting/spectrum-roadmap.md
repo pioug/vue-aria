@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `35 / 76` completed.
+- Task progress: `36 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -20,6 +20,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/slider` baseline is now in progress with initial `Slider`, `RangeSlider`, `SliderBase`, and `SliderThumb` ports, localized range-thumb labels, min/max/step clamping normalization for initial and controlled values, parity-style starter tests (single/range controlled/uncontrolled behavior, form/reset flows, label/value output behavior, keyboard page/home/end coverage, track-click handling, and SSR coverage), plus docs and umbrella wiring; advanced interaction and formatting parity remains.
 - `@vue-spectrum/steplist` baseline is now in progress with initial `StepList` and `StepListItem` ports, including baseline progression and selection-state behavior (completed-step gating, controlled/uncontrolled selected step handling, and disabled/read-only behavior) with docs and umbrella wiring; advanced upstream collection integration and localized state-message parity remain.
 - `@vue-spectrum/actiongroup` baseline is now in progress with initial `ActionGroup` port, including baseline item rendering, single/multiple selection state handling, disabled-key behavior, and arrow-key roving focus semantics (LTR/RTL) with docs and umbrella wiring; overflow-collapse/menu parity and icon-label collapse behavior remain.
+- `@vue-spectrum/actionbar` baseline is now in progress with initial `ActionBar` and `ActionBarContainer` ports, including selection-count-driven open/close behavior, clear-selection handling (button + Escape), and `ActionGroup` action wiring with docs and umbrella wiring; transition/announcement parity remains.
 - `@vue-spectrum/tabs` baseline is now in progress with initial `Tabs`, `TabList`, and `TabPanels` ports, including keyboard navigation coverage (horizontal/vertical, automatic/manual activation, disabled-key behavior), controlled/uncontrolled selection behavior, and docs/umbrella wiring; overflow/collapse-to-picker parity remains.
 - `@vue-spectrum/textfield` baseline is now in progress with initial `TextField` and `TextArea` ports, including label/help/error wiring, controlled/uncontrolled value handling, native/ARIA validation behavior, and docs/umbrella wiring; advanced upstream icon/loading/auto-resize behavior remains.
 - `@vue-spectrum/searchfield` baseline is now in progress with initial `SearchField` port, including Enter-submit and Escape/clear-button behavior parity, controlled/uncontrolled value handling, custom/default icon behavior, and docs/umbrella wiring; advanced upstream visual/theming parity remains.

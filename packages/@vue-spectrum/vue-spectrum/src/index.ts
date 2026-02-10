@@ -64,6 +64,7 @@ export {
   LogicButton,
   ToggleButton,
 } from "@vue-spectrum/button";
+export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
 export { ActionGroup } from "@vue-spectrum/actiongroup";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
@@ -149,6 +150,10 @@ export type {
   SpectrumLogicButtonProps,
   SpectrumToggleButtonProps,
 } from "@vue-spectrum/button";
+export type {
+  SpectrumActionBarContainerProps,
+  SpectrumActionBarProps,
+} from "@vue-spectrum/actionbar";
 export type {
   ActionGroupButtonLabelBehavior,
   ActionGroupDensity,

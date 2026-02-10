@@ -73,6 +73,7 @@
       "@vue-spectrum/view": ["packages/@vue-spectrum/view/src/index.ts"],
       "@vue-spectrum/layout": ["packages/@vue-spectrum/layout/src/index.ts"],
       "@vue-spectrum/button": ["packages/@vue-spectrum/button/src/index.ts"],
+      "@vue-spectrum/actionbar": ["packages/@vue-spectrum/actionbar/src/index.ts"],
       "@vue-spectrum/actiongroup": ["packages/@vue-spectrum/actiongroup/src/index.ts"],
       "@vue-spectrum/buttongroup": ["packages/@vue-spectrum/buttongroup/src/index.ts"],
       "@vue-spectrum/accordion": ["packages/@vue-spectrum/accordion/src/index.ts"],
