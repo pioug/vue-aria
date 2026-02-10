@@ -934,6 +934,94 @@ describe("CardView", () => {
     }
   });
 
+  it("does not call onLoadMore while loading", async () => {
+    const onLoadMore = vi.fn();
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 3000;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 500;
+        }
+        return 0;
+      });
+
+    try {
+      const wrapper = mount(CardView, {
+        props: {
+          items: longDynamicItems,
+          layout: new GridLayout(),
+          loadingState: "loading",
+          onLoadMore,
+          ariaLabel: "Test CardView",
+        },
+        slots: {
+          default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+        },
+      });
+
+      const grid = wrapper.get("[role=\"grid\"]");
+      (grid.element as HTMLElement).scrollTop = 3000;
+      await grid.trigger("scroll");
+
+      expect(onLoadMore).not.toHaveBeenCalled();
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
+  it("does not call onLoadMore while loadingMore", async () => {
+    const onLoadMore = vi.fn();
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 3000;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "grid") {
+          return 500;
+        }
+        return 0;
+      });
+
+    try {
+      const wrapper = mount(CardView, {
+        props: {
+          items: longDynamicItems,
+          layout: new GridLayout(),
+          loadingState: "loadingMore",
+          onLoadMore,
+          ariaLabel: "Test CardView",
+        },
+        slots: {
+          default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+        },
+      });
+
+      const grid = wrapper.get("[role=\"grid\"]");
+      (grid.element as HTMLElement).scrollTop = 3000;
+      await grid.trigger("scroll");
+
+      expect(onLoadMore).not.toHaveBeenCalled();
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("renders a loading row when loading with no items", async () => {
     const wrapper = mount(CardView, {
       props: {
