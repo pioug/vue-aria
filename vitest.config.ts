@@ -202,6 +202,9 @@ export default defineConfig({
       "@vue-spectrum/divider": fileURLToPath(
         new URL("./packages/@vue-spectrum/divider/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/well": fileURLToPath(
+        new URL("./packages/@vue-spectrum/well/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/vue-spectrum": fileURLToPath(
         new URL("./packages/@vue-spectrum/vue-spectrum/src/index.ts", import.meta.url)
       ),
