@@ -107,6 +107,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 ## Overlays and Messaging
 
 - In progress baseline: `@react-spectrum/illustratedmessage` now has Vue `IllustratedMessage` primitive with baseline root rendering behavior, slot-based heading/content styling wiring, and starter/SSR tests plus docs/umbrella wiring; advanced visual/theming parity remains.
+- In progress baseline: `@react-spectrum/inlinealert` now has Vue `InlineAlert` primitive with baseline alert semantics, variant class behavior, autofocus handling, and starter/SSR tests plus docs/umbrella wiring; advanced icon/theming parity remains.
 - [ ] `@react-spectrum/overlays` -> `@vue-spectrum/overlays`
 - [ ] `@react-spectrum/dialog` -> `@vue-spectrum/dialog`
 - [ ] `@react-spectrum/tooltip` -> `@vue-spectrum/tooltip`

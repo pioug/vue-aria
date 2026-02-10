@@ -128,6 +128,9 @@ export default defineConfig({
         "@vue-spectrum/illustratedmessage": fileURLToPath(
           new URL("../../packages/@vue-spectrum/illustratedmessage/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/inlinealert": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/inlinealert/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/progress": fileURLToPath(
           new URL("../../packages/@vue-spectrum/progress/src/index.ts", import.meta.url)
         ),
@@ -281,6 +284,7 @@ export default defineConfig({
           { text: "@vue-spectrum/avatar", link: "/spectrum/avatar" },
           { text: "@vue-spectrum/image", link: "/spectrum/image" },
           { text: "@vue-spectrum/illustratedmessage", link: "/spectrum/illustratedmessage" },
+          { text: "@vue-spectrum/inlinealert", link: "/spectrum/inlinealert" },
           { text: "@vue-spectrum/progress", link: "/spectrum/progress" },
           { text: "@vue-spectrum/meter", link: "/spectrum/meter" },
           { text: "@vue-spectrum/labeledvalue", link: "/spectrum/labeledvalue" },

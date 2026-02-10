@@ -1,0 +1,124 @@
+import { mount } from "@vue/test-utils";
+import { Content, Header } from "@vue-spectrum/view";
+import { nextTick } from "vue";
+import { describe, expect, it } from "vitest";
+import { InlineAlert } from "../src";
+
+describe("InlineAlert", () => {
+  it("has alert role", () => {
+    const wrapper = mount(InlineAlert, {
+      slots: {
+        default: [
+          "<Header>Title</Header>",
+          "<Content>Content</Content>",
+        ],
+      },
+      global: {
+        components: {
+          Header,
+          Content,
+        },
+      },
+    });
+
+    const alert = wrapper.get("[role=\"alert\"]");
+    expect(alert.attributes("role")).toBe("alert");
+  });
+
+  it("has a header", () => {
+    const wrapper = mount(InlineAlert, {
+      slots: {
+        default: [
+          "<Header data-testid=\"testid1\">Test Title</Header>",
+          "<Content>Content</Content>",
+        ],
+      },
+      global: {
+        components: {
+          Header,
+          Content,
+        },
+      },
+    });
+
+    const header = wrapper.get("[data-testid=\"testid1\"]");
+    expect(header.text()).toBe("Test Title");
+  });
+
+  it("has body content", () => {
+    const wrapper = mount(InlineAlert, {
+      slots: {
+        default: [
+          "<Header>Title</Header>",
+          "<Content data-testid=\"testid1\">Test Content</Content>",
+        ],
+      },
+      global: {
+        components: {
+          Header,
+          Content,
+        },
+      },
+    });
+
+    const content = wrapper.get("[data-testid=\"testid1\"]");
+    expect(content.text()).toBe("Test Content");
+  });
+
+  it.each(["neutral", "info", "positive", "notice", "negative"] as const)(
+    "%s variant renders correctly",
+    (variant) => {
+      const wrapper = mount(InlineAlert, {
+        props: {
+          variant,
+          "data-testid": "testid1",
+        } as Record<string, unknown>,
+        slots: {
+          default: [
+            "<Header>Title</Header>",
+            "<Content>Content</Content>",
+          ],
+        },
+        global: {
+          components: {
+            Header,
+            Content,
+          },
+        },
+      });
+
+      const alert = wrapper.get("[data-testid=\"testid1\"]");
+      expect(alert.classes()).toContain(`spectrum-InLineAlert--${variant}`);
+    }
+  );
+
+  it("supports autoFocus", async () => {
+    const wrapper = mount(InlineAlert, {
+      attachTo: document.body,
+      props: {
+        autoFocus: true,
+      },
+      slots: {
+        default: [
+          "<Header>Title</Header>",
+          "<Content>Content</Content>",
+        ],
+      },
+      global: {
+        components: {
+          Header,
+          Content,
+        },
+      },
+    });
+
+    await nextTick();
+    await Promise.resolve();
+
+    const alert = wrapper.get("[role=\"alert\"]").element as HTMLElement;
+    expect(alert.getAttribute("tabindex")).toBe("-1");
+    expect(document.activeElement).toBe(alert);
+
+    wrapper.unmount();
+  });
+});

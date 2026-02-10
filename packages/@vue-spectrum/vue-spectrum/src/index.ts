@@ -95,6 +95,7 @@ export { Badge } from "@vue-spectrum/badge";
 export { Avatar } from "@vue-spectrum/avatar";
 export { Image } from "@vue-spectrum/image";
 export { IllustratedMessage } from "@vue-spectrum/illustratedmessage";
+export { InlineAlert } from "@vue-spectrum/inlinealert";
 export { ProgressBar, ProgressCircle, ProgressBarBase } from "@vue-spectrum/progress";
 export { Meter } from "@vue-spectrum/meter";
 export { LabeledValue } from "@vue-spectrum/labeledvalue";
@@ -264,6 +265,7 @@ export type { BadgeVariant, SpectrumBadgeProps } from "@vue-spectrum/badge";
 export type { AvatarSize, SpectrumAvatarProps } from "@vue-spectrum/avatar";
 export type { ImageCrossOrigin, SpectrumImageProps } from "@vue-spectrum/image";
 export type { SpectrumIllustratedMessageProps } from "@vue-spectrum/illustratedmessage";
+export type { InlineAlertVariant, SpectrumInlineAlertProps } from "@vue-spectrum/inlinealert";
 export type {
   ProgressBarLabelPosition,
   ProgressBarSize,
