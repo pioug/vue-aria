@@ -16,6 +16,8 @@ export interface UseButtonOptions {
   rel?: MaybeReactive<string | undefined>;
   onPressStart?: (event: PressEvent) => void;
   onPressEnd?: (event: PressEvent) => void;
+  onPressChange?: (isPressed: boolean) => void;
+  onPressUp?: (event: PressEvent) => void;
   onPress?: (event: PressEvent) => void;
 }
 
@@ -46,6 +48,8 @@ export function useButton(options: UseButtonOptions = {}): UseButtonResult {
     disableKeyboard: isNativeButton,
     onPressStart: options.onPressStart,
     onPressEnd: options.onPressEnd,
+    onPressChange: options.onPressChange,
+    onPressUp: options.onPressUp,
     onPress: options.onPress,
   });
 

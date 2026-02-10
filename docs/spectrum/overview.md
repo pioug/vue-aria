@@ -18,7 +18,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/text`: typography primitives (`Text`, `Heading`, `Keyboard`)
 - `@vue-spectrum/view`: semantic container primitives (`View`, `Content`, `Header`, `Footer`)
 - `@vue-spectrum/layout`: grid/flex layout primitives (`Grid`, `Flex`, helper functions)
-- `@vue-spectrum/button` (in progress): button primitives (`Button`, `ActionButton`, `ClearButton`, `LogicButton`, `ToggleButton`) with baseline press/focus/disabled behavior
+- `@vue-spectrum/button` (in progress): button primitives (`Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, `ToggleButton`) with pending-state and expanded press lifecycle behavior
 - `@vue-spectrum/link`: navigation link primitive (`Link`)
 - `@vue-spectrum/divider`: divider primitive (`Divider`)
 - `@vue-spectrum/well`: content well primitive (`Well`)

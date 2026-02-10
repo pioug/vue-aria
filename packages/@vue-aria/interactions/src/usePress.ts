@@ -11,6 +11,8 @@ export interface UsePressOptions {
   disableKeyboard?: MaybeReactive<boolean>;
   onPressStart?: (event: PressEvent) => void;
   onPressEnd?: (event: PressEvent) => void;
+  onPressChange?: (isPressed: boolean) => void;
+  onPressUp?: (event: PressEvent) => void;
   onPress?: (event: PressEvent) => void;
 }
 
@@ -55,6 +57,15 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
     removeScrollListener = null;
   };
 
+  const setPressed = (next: boolean) => {
+    if (isPressed.value === next) {
+      return;
+    }
+
+    isPressed.value = next;
+    options.onPressChange?.(next);
+  };
+
   const startPress = (event: Event, pointerType: PointerType) => {
     if (isDisabled()) {
       return;
@@ -62,7 +73,7 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
 
     activePointerType.value = pointerType;
     activePressTarget.value = event.currentTarget ?? event.target;
-    isPressed.value = true;
+    setPressed(true);
 
     clearScrollListener();
     if (pointerType === "touch" && typeof window !== "undefined") {
@@ -89,7 +100,7 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
     }
 
     const pointerType = activePointerType.value ?? "virtual";
-    isPressed.value = false;
+    setPressed(false);
     activePointerType.value = null;
     activePressTarget.value = null;
     clearScrollListener();
@@ -97,6 +108,7 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
     const pressEvent = toPressEvent(event, pointerType);
     options.onPressEnd?.(pressEvent);
     if (shouldTrigger) {
+      options.onPressUp?.(pressEvent);
       options.onPress?.(pressEvent);
     }
   };
@@ -170,7 +182,7 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
 
   watchEffect(() => {
     if (isDisabled()) {
-      isPressed.value = false;
+      setPressed(false);
       activePointerType.value = null;
       activePressTarget.value = null;
       clearScrollListener();

@@ -19,10 +19,13 @@ export interface SpectrumClearButtonProps {
   variant?: "overBackground" | undefined;
   inset?: boolean | undefined;
   preventFocus?: boolean | undefined;
+  focusClassName?: string | undefined;
   isDisabled?: boolean | undefined;
   autoFocus?: boolean | undefined;
   onPressStart?: ((event: PressEvent) => void) | undefined;
   onPressEnd?: ((event: PressEvent) => void) | undefined;
+  onPressChange?: ((isPressed: boolean) => void) | undefined;
+  onPressUp?: ((event: PressEvent) => void) | undefined;
   onPress?: ((event: PressEvent) => void) | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
@@ -48,6 +51,10 @@ export const ClearButton = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    focusClassName: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     isDisabled: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -61,6 +68,14 @@ export const ClearButton = defineComponent({
       default: undefined,
     },
     onPressEnd: {
+      type: Function as PropType<((event: PressEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onPressChange: {
+      type: Function as PropType<((isPressed: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onPressUp: {
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
     },
@@ -91,6 +106,10 @@ export const ClearButton = defineComponent({
         (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event),
       onPressEnd: (event) =>
         (props.onPressEnd as ((value: PressEvent) => void) | undefined)?.(event),
+      onPressChange: (value) =>
+        (props.onPressChange as ((next: boolean) => void) | undefined)?.(value),
+      onPressUp: (event) =>
+        (props.onPressUp as ((value: PressEvent) => void) | undefined)?.(event),
       onPress: (event) =>
         (props.onPress as ((value: PressEvent) => void) | undefined)?.(event),
     });
@@ -111,6 +130,9 @@ export const ClearButton = defineComponent({
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
+      focus: () => {
+        elementRef.value?.focus();
+      },
     });
 
     return () => {
@@ -120,10 +142,13 @@ export const ClearButton = defineComponent({
         variant: props.variant,
         inset: props.inset,
         preventFocus: props.preventFocus,
+        focusClassName: props.focusClassName,
         isDisabled: props.isDisabled,
         autoFocus: props.autoFocus,
         onPressStart: props.onPressStart,
         onPressEnd: props.onPressEnd,
+        onPressChange: props.onPressChange,
+        onPressUp: props.onPressUp,
         onPress: props.onPress,
         UNSAFE_className: props.UNSAFE_className,
         UNSAFE_style: props.UNSAFE_style,
@@ -162,6 +187,8 @@ export const ClearButton = defineComponent({
               "is-active": button.isPressed.value,
               "is-hovered": isHovered.value,
               "focus-ring": button.isFocusVisible.value,
+              [String(resolvedProps.focusClassName)]:
+                Boolean(resolvedProps.focusClassName) && button.isFocusVisible.value,
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined,

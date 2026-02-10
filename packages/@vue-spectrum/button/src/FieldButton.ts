@@ -11,44 +11,55 @@ import { useButton } from "@vue-aria/button";
 import { useHover } from "@vue-aria/interactions";
 import type { PressEvent } from "@vue-aria/types";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
-import { useProviderProps } from "@vue-spectrum/provider";
 import {
   classNames,
-  ClearSlots,
   SlotProvider,
   useSlotProps,
   useStyleProps,
   type ClassValue,
 } from "@vue-spectrum/utils";
-import {
-  normalizeChildren,
-  wrapTextChildren,
-  type BaseButtonProps,
-  type ButtonElementType,
-} from "./shared";
+import { normalizeChildren } from "./shared";
 
-export interface SpectrumActionButtonProps extends BaseButtonProps {
+export interface SpectrumFieldButtonProps {
   isQuiet?: boolean | undefined;
-  staticColor?: "white" | "black" | undefined;
-  holdAffordance?: boolean | undefined;
-  hideButtonText?: boolean | undefined;
+  isActive?: boolean | undefined;
+  validationState?: "valid" | "invalid" | undefined;
+  isInvalid?: boolean | undefined;
+  focusRingClass?: string | undefined;
+  isDisabled?: boolean | undefined;
+  autoFocus?: boolean | undefined;
+  onPressStart?: ((event: PressEvent) => void) | undefined;
+  onPressEnd?: ((event: PressEvent) => void) | undefined;
+  onPressChange?: ((isPressed: boolean) => void) | undefined;
+  onPressUp?: ((event: PressEvent) => void) | undefined;
+  onPress?: ((event: PressEvent) => void) | undefined;
   slot?: string | undefined;
+  UNSAFE_className?: string | undefined;
+  UNSAFE_style?: Record<string, string | number> | undefined;
 }
 
-export const ActionButton = defineComponent({
-  name: "ActionButton",
+export const FieldButton = defineComponent({
+  name: "FieldButton",
   inheritAttrs: false,
   props: {
-    elementType: {
-      type: String as PropType<ButtonElementType | undefined>,
-      default: undefined,
-    },
     isQuiet: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
-    staticColor: {
-      type: String as PropType<"white" | "black" | undefined>,
+    isActive: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    validationState: {
+      type: String as PropType<"valid" | "invalid" | undefined>,
+      default: undefined,
+    },
+    isInvalid: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    focusRingClass: {
+      type: String as PropType<string | undefined>,
       default: undefined,
     },
     isDisabled: {
@@ -56,30 +67,6 @@ export const ActionButton = defineComponent({
       default: undefined,
     },
     autoFocus: {
-      type: Boolean as PropType<boolean | undefined>,
-      default: undefined,
-    },
-    href: {
-      type: String as PropType<string | undefined>,
-      default: undefined,
-    },
-    target: {
-      type: String as PropType<string | undefined>,
-      default: undefined,
-    },
-    rel: {
-      type: String as PropType<string | undefined>,
-      default: undefined,
-    },
-    type: {
-      type: String as PropType<"button" | "submit" | "reset" | undefined>,
-      default: undefined,
-    },
-    holdAffordance: {
-      type: Boolean as PropType<boolean | undefined>,
-      default: undefined,
-    },
-    hideButtonText: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
@@ -121,12 +108,7 @@ export const ActionButton = defineComponent({
     const isDisabled = computed(() => Boolean(props.isDisabled));
 
     const button = useButton({
-      elementType: () => (props.elementType ?? "button") as ButtonElementType,
       isDisabled,
-      href: () => props.href,
-      target: () => props.target,
-      rel: () => props.rel,
-      type: () => props.type ?? "button",
       onPressStart: (event) =>
         (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event),
       onPressEnd: (event) =>
@@ -139,9 +121,7 @@ export const ActionButton = defineComponent({
         (props.onPress as ((value: PressEvent) => void) | undefined)?.(event),
     });
 
-    const { hoverProps, isHovered } = useHover({
-      isDisabled,
-    });
+    const { hoverProps, isHovered } = useHover({ isDisabled });
 
     onMounted(() => {
       if (!props.autoFocus) {
@@ -164,17 +144,13 @@ export const ActionButton = defineComponent({
       const slotProps = useSlotProps(
         {
           ...(attrs as Record<string, unknown>),
-          elementType: props.elementType,
           isQuiet: props.isQuiet,
-          staticColor: props.staticColor,
+          isActive: props.isActive,
+          validationState: props.validationState,
+          isInvalid: props.isInvalid,
+          focusRingClass: props.focusRingClass,
           isDisabled: props.isDisabled,
           autoFocus: props.autoFocus,
-          href: props.href,
-          target: props.target,
-          rel: props.rel,
-          type: props.type,
-          holdAffordance: props.holdAffordance,
-          hideButtonText: props.hideButtonText,
           onPressStart: props.onPressStart,
           onPressEnd: props.onPressEnd,
           onPressChange: props.onPressChange,
@@ -184,14 +160,12 @@ export const ActionButton = defineComponent({
           UNSAFE_className: props.UNSAFE_className,
           UNSAFE_style: props.UNSAFE_style,
         } as Record<string, unknown> & { id?: string; slot?: string },
-        "actionButton"
+        "button"
       );
 
-      const resolvedProps = useProviderProps(slotProps);
-
-      const { styleProps } = useStyleProps(resolvedProps);
-      const domProps = filterDOMProps(resolvedProps as Record<string, unknown>);
-      const children = wrapTextChildren(normalizeChildren(slots.default?.()));
+      const { styleProps } = useStyleProps(slotProps);
+      const domProps = filterDOMProps(slotProps as Record<string, unknown>);
+      const children = normalizeChildren(slots.default?.());
 
       return h(
         "button",
@@ -200,60 +174,41 @@ export const ActionButton = defineComponent({
             elementRef.value = value as HTMLElement | null;
           },
           class: classNames(
-            "spectrum-ActionButton",
+            "spectrum-FieldButton",
             {
-              "spectrum-ActionButton--quiet": Boolean(resolvedProps.isQuiet),
-              "spectrum-ActionButton--staticColor": Boolean(resolvedProps.staticColor),
-              "spectrum-ActionButton--staticWhite": resolvedProps.staticColor === "white",
-              "spectrum-ActionButton--staticBlack": resolvedProps.staticColor === "black",
-              "is-disabled": Boolean(resolvedProps.isDisabled),
-              "is-active": button.isPressed.value,
+              "spectrum-FieldButton--quiet": Boolean(slotProps.isQuiet),
+              "is-active": Boolean(slotProps.isActive) || button.isPressed.value,
+              "is-disabled": Boolean(slotProps.isDisabled),
+              "spectrum-FieldButton--invalid":
+                Boolean(slotProps.isInvalid) || slotProps.validationState === "invalid",
               "is-hovered": isHovered.value,
               "focus-ring": button.isFocusVisible.value,
+              [String(slotProps.focusRingClass)]:
+                Boolean(slotProps.focusRingClass) && button.isFocusVisible.value,
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined,
-            resolvedProps.UNSAFE_className as ClassValue | undefined
+            slotProps.UNSAFE_className as ClassValue | undefined
           ),
           style: {
             ...(styleProps.style ?? {}),
-            ...((resolvedProps.UNSAFE_style as Record<string, string | number> | undefined) ??
+            ...((slotProps.UNSAFE_style as Record<string, string | number> | undefined) ??
               {}),
           },
         }),
         [
-          resolvedProps.holdAffordance
-            ? h("span", {
-                class: classNames("spectrum-ActionButton-hold"),
-                "aria-hidden": "true",
-              })
-            : null,
           h(
-            ClearSlots,
-            null,
+            SlotProvider,
             {
-              default: () =>
-                h(
-                  SlotProvider,
-                  {
-                    slots: {
-                      icon: {
-                        size: "S",
-                        UNSAFE_className: classNames("spectrum-Icon", {
-                          "spectrum-ActionGroup-itemIcon": Boolean(
-                            resolvedProps.hideButtonText
-                          ),
-                        }),
-                      },
-                      text: {
-                        UNSAFE_className: classNames("spectrum-ActionButton-label"),
-                      },
-                    },
-                  },
-                  {
-                    default: () => children,
-                  }
-                ),
+              slots: {
+                icon: {
+                  size: "S",
+                  UNSAFE_className: classNames("spectrum-Icon"),
+                },
+              },
+            },
+            {
+              default: () => children,
             }
           ),
         ]

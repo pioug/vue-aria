@@ -13,7 +13,11 @@ import type { PressEvent } from "@vue-aria/types";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
-import { normalizeChildren, type BaseButtonProps } from "./shared";
+import {
+  normalizeChildren,
+  type BaseButtonProps,
+  type ButtonElementType,
+} from "./shared";
 
 export interface SpectrumLogicButtonProps extends BaseButtonProps {
   variant?: "and" | "or" | undefined;
@@ -23,6 +27,10 @@ export const LogicButton = defineComponent({
   name: "LogicButton",
   inheritAttrs: false,
   props: {
+    elementType: {
+      type: String as PropType<ButtonElementType | undefined>,
+      default: undefined,
+    },
     variant: {
       type: String as PropType<"and" | "or" | undefined>,
       default: undefined,
@@ -35,11 +43,35 @@ export const LogicButton = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    href: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    target: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    rel: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    type: {
+      type: String as PropType<"button" | "submit" | "reset" | undefined>,
+      default: undefined,
+    },
     onPressStart: {
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
     },
     onPressEnd: {
+      type: Function as PropType<((event: PressEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onPressChange: {
+      type: Function as PropType<((isPressed: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onPressUp: {
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
     },
@@ -61,11 +93,20 @@ export const LogicButton = defineComponent({
     const isDisabled = computed(() => Boolean(props.isDisabled));
 
     const button = useButton({
+      elementType: () => (props.elementType ?? "button") as ButtonElementType,
       isDisabled,
+      href: () => props.href,
+      target: () => props.target,
+      rel: () => props.rel,
+      type: () => props.type ?? "button",
       onPressStart: (event) =>
         (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event),
       onPressEnd: (event) =>
         (props.onPressEnd as ((value: PressEvent) => void) | undefined)?.(event),
+      onPressChange: (value) =>
+        (props.onPressChange as ((next: boolean) => void) | undefined)?.(value),
+      onPressUp: (event) =>
+        (props.onPressUp as ((value: PressEvent) => void) | undefined)?.(event),
       onPress: (event) =>
         (props.onPress as ((value: PressEvent) => void) | undefined)?.(event),
     });
@@ -86,16 +127,26 @@ export const LogicButton = defineComponent({
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
+      focus: () => {
+        elementRef.value?.focus();
+      },
     });
 
     return () => {
       const resolvedProps = useProviderProps({
         ...(attrs as Record<string, unknown>),
+        elementType: props.elementType,
         variant: props.variant,
         isDisabled: props.isDisabled,
         autoFocus: props.autoFocus,
+        href: props.href,
+        target: props.target,
+        rel: props.rel,
+        type: props.type,
         onPressStart: props.onPressStart,
         onPressEnd: props.onPressEnd,
+        onPressChange: props.onPressChange,
+        onPressUp: props.onPressUp,
         onPress: props.onPress,
         UNSAFE_className: props.UNSAFE_className,
         UNSAFE_style: props.UNSAFE_style,

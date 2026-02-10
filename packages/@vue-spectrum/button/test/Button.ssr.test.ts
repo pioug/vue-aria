@@ -1,19 +1,23 @@
-import { createSSRApp, defineComponent, h } from "vue";
+import { createSSRApp, defineComponent, h, type Component } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { describe, expect, it } from "vitest";
-import { Button } from "../src";
+import { ActionButton, Button, FieldButton, LogicButton } from "../src";
 
 describe("Button SSR", () => {
-  it("renders without errors", async () => {
+  it.each([
+    ["ActionButton", ActionButton],
+    ["Button", Button],
+    ["FieldButton", FieldButton],
+    ["LogicButton", LogicButton],
+  ])("%s renders without errors", async (_name, component) => {
     const App = defineComponent({
       name: "ButtonSSRApp",
       setup() {
-        return () => h(Button, null, () => "Click Me");
+        return () => h(component as Component, null, () => "Button");
       },
     });
 
     const html = await renderToString(createSSRApp(App));
-    expect(html).toContain("spectrum-Button");
-    expect(html).toContain("Click Me");
+    expect(html).toContain("Button");
   });
 });

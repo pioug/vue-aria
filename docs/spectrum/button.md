@@ -5,7 +5,7 @@ Vue baseline port of `@react-spectrum/button`.
 > Status: in progress. Current baseline includes `Button`, `ActionButton`, `ClearButton`, `LogicButton`, and `ToggleButton` with core press/disabled/focus behavior and initial parity tests.
 
 <script setup lang="ts">
-import { ActionButton, Button, ClearButton, Flex, LogicButton, ToggleButton } from "@vue-spectrum/vue-spectrum";
+import { ActionButton, Button, ClearButton, FieldButton, Flex, LogicButton, ToggleButton } from "@vue-spectrum/vue-spectrum";
 </script>
 
 ## Preview
@@ -16,6 +16,7 @@ import { ActionButton, Button, ClearButton, Flex, LogicButton, ToggleButton } fr
       <Button variant="accent">Primary action</Button>
       <Button variant="secondary">Secondary action</Button>
       <ActionButton>Action</ActionButton>
+      <FieldButton>Field action</FieldButton>
       <LogicButton variant="and">AND</LogicButton>
       <ToggleButton>Toggle me</ToggleButton>
       <ClearButton aria-label="Clear" />
@@ -28,6 +29,7 @@ import { ActionButton, Button, ClearButton, Flex, LogicButton, ToggleButton } fr
 - `Button`
 - `ActionButton`
 - `ClearButton`
+- `FieldButton`
 - `LogicButton`
 - `ToggleButton`
 
@@ -44,5 +46,6 @@ const toggle = h(ToggleButton, { defaultSelected: true }, () => "Enabled");
 ## Notes
 
 - Uses `@vue-aria/button` and `@vue-aria/interactions` for core press and keyboard semantics.
-- Includes baseline wrappers for action/logic/clear/toggle button variants.
-- Pending parity work includes upstream pending-state behavior, icon slot behavior, and deeper cross-browser interaction edge cases.
+- Includes wrappers for action/field/logic/clear/toggle button variants.
+- `Button` now supports upstream-style pending state (`isPending`) with delayed spinner visibility and press suppression while pending.
+- Pending parity work includes locale-specific pending announcements and deeper cross-browser interaction edge cases.

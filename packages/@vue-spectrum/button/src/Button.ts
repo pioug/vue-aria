@@ -3,8 +3,10 @@ import {
   defineComponent,
   h,
   nextTick,
+  onBeforeUnmount,
   onMounted,
   ref,
+  watch,
   type PropType,
 } from "vue";
 import { useButton } from "@vue-aria/button";
@@ -12,8 +14,11 @@ import { useHover } from "@vue-aria/interactions";
 import type { PressEvent } from "@vue-aria/types";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
+import { ProgressCircle } from "@vue-spectrum/progress";
 import {
   classNames,
+  SlotProvider,
+  useHasChild,
   useSlotProps,
   useStyleProps,
   type ClassValue,
@@ -24,6 +29,14 @@ import {
   type BaseButtonProps,
   type ButtonElementType,
 } from "./shared";
+
+const SPINNER_VISIBILITY_DELAY_MS = 1000;
+let nextButtonId = 0;
+
+function createButtonId(prefix: string): string {
+  nextButtonId += 1;
+  return `${prefix}-${nextButtonId}`;
+}
 
 export type ButtonVariant =
   | "accent"
@@ -39,6 +52,7 @@ export interface SpectrumButtonProps extends BaseButtonProps {
   variant?: ButtonVariant | undefined;
   style?: ButtonStyle | undefined;
   staticColor?: "white" | "black" | undefined;
+  isPending?: boolean | undefined;
   slot?: string | undefined;
 }
 
@@ -63,6 +77,10 @@ export const Button = defineComponent({
       default: undefined,
     },
     isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    isPending: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
@@ -94,6 +112,14 @@ export const Button = defineComponent({
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
     },
+    onPressChange: {
+      type: Function as PropType<((isPressed: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onPressUp: {
+      type: Function as PropType<((event: PressEvent) => void) | undefined>,
+      default: undefined,
+    },
     onPress: {
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
@@ -114,24 +140,92 @@ export const Button = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const elementRef = ref<HTMLElement | null>(null);
     const isDisabled = computed(() => Boolean(props.isDisabled));
+    const isPending = computed(() => Boolean(props.isPending));
+    const isProgressVisible = ref(false);
+    let pendingTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const iconId = createButtonId("v-spectrum-button-icon");
+    const textId = createButtonId("v-spectrum-button-text");
+    const spinnerId = createButtonId("v-spectrum-button-spinner");
+
+    const hasLabel = useHasChild(".spectrum-Button-label", elementRef);
+    const hasIcon = useHasChild(".spectrum-Icon", elementRef);
+
+    const clearPendingTimeout = () => {
+      if (pendingTimeout !== null) {
+        clearTimeout(pendingTimeout);
+        pendingTimeout = null;
+      }
+    };
+
+    watch(
+      isPending,
+      (pending) => {
+        clearPendingTimeout();
+
+        if (pending) {
+          pendingTimeout = setTimeout(() => {
+            isProgressVisible.value = true;
+            pendingTimeout = null;
+          }, SPINNER_VISIBILITY_DELAY_MS);
+          return;
+        }
+
+        isProgressVisible.value = false;
+      },
+      { immediate: true }
+    );
+
+    onBeforeUnmount(() => {
+      clearPendingTimeout();
+    });
 
     const button = useButton({
       elementType: () => (props.elementType ?? "button") as ButtonElementType,
       isDisabled,
-      href: () => props.href,
+      href: () => (isPending.value ? undefined : props.href),
       target: () => props.target,
       rel: () => props.rel,
       type: () => props.type ?? "button",
-      onPressStart: (event) =>
-        (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event),
-      onPressEnd: (event) =>
-        (props.onPressEnd as ((value: PressEvent) => void) | undefined)?.(event),
-      onPress: (event) =>
-        (props.onPress as ((value: PressEvent) => void) | undefined)?.(event),
+      onPressStart: (event) => {
+        if (isPending.value) {
+          return;
+        }
+
+        (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event);
+      },
+      onPressEnd: (event) => {
+        if (isPending.value) {
+          return;
+        }
+
+        (props.onPressEnd as ((value: PressEvent) => void) | undefined)?.(event);
+      },
+      onPressChange: (value) => {
+        if (isPending.value) {
+          return;
+        }
+
+        (props.onPressChange as ((next: boolean) => void) | undefined)?.(value);
+      },
+      onPressUp: (event) => {
+        if (isPending.value) {
+          return;
+        }
+
+        (props.onPressUp as ((value: PressEvent) => void) | undefined)?.(event);
+      },
+      onPress: (event) => {
+        if (isPending.value) {
+          return;
+        }
+
+        (props.onPress as ((value: PressEvent) => void) | undefined)?.(event);
+      },
     });
 
     const { hoverProps, isHovered } = useHover({
-      isDisabled,
+      isDisabled: () => isDisabled.value || isPending.value,
     });
 
     onMounted(() => {
@@ -146,6 +240,9 @@ export const Button = defineComponent({
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
+      focus: () => {
+        elementRef.value?.focus();
+      },
     });
 
     return () => {
@@ -157,6 +254,7 @@ export const Button = defineComponent({
           style: props.style,
           staticColor: props.staticColor,
           isDisabled: props.isDisabled,
+          isPending: props.isPending,
           autoFocus: props.autoFocus,
           href: props.href,
           target: props.target,
@@ -164,6 +262,8 @@ export const Button = defineComponent({
           type: props.type,
           onPressStart: props.onPressStart,
           onPressEnd: props.onPressEnd,
+          onPressChange: props.onPressChange,
+          onPressUp: props.onPressUp,
           onPress: props.onPress,
           slot: props.slot,
           UNSAFE_className: props.UNSAFE_className,
@@ -188,10 +288,25 @@ export const Button = defineComponent({
         (variant === "accent" ? "fill" : "outline");
       const elementType =
         (resolvedProps.elementType as ButtonElementType | undefined) ?? "button";
+      const pending = Boolean(resolvedProps.isPending);
+
+      const domPropsInput = {
+        ...(resolvedProps as Record<string, unknown>),
+      };
+      if (pending) {
+        delete domPropsInput.href;
+      }
 
       const { styleProps } = useStyleProps(resolvedProps);
-      const domProps = filterDOMProps(resolvedProps as Record<string, unknown>);
+      const domProps = filterDOMProps(domPropsInput);
       const children = wrapTextChildren(normalizeChildren(slots.default?.()));
+
+      const ariaLabel = domProps["aria-label"] as string | undefined;
+      const pendingAriaLiveLabel = `${ariaLabel ?? ""} pending`.trim();
+      const pendingAriaLiveLabelledby =
+        ariaLabel !== undefined
+          ? spinnerId
+          : `${hasIcon.value ? iconId : ""} ${hasLabel.value ? textId : ""} ${spinnerId}`.trim();
 
       return h(
         elementType,
@@ -202,7 +317,9 @@ export const Button = defineComponent({
           class: classNames(
             "spectrum-Button",
             {
-              "is-disabled": Boolean(resolvedProps.isDisabled),
+              "spectrum-Button--iconOnly": hasIcon.value && !hasLabel.value,
+              "spectrum-Button--pending": isProgressVisible.value,
+              "is-disabled": Boolean(resolvedProps.isDisabled) || isProgressVisible.value,
               "is-active": button.isPressed.value,
               "is-hovered": isHovered.value,
               "focus-ring": button.isFocusVisible.value,
@@ -219,8 +336,81 @@ export const Button = defineComponent({
           "data-variant": variant,
           "data-style": style,
           "data-static-color": staticColor,
+          "aria-disabled": pending ? "true" : undefined,
+          "aria-label": pending ? pendingAriaLiveLabel : domProps["aria-label"],
+          "aria-labelledby": pending
+            ? pendingAriaLiveLabelledby
+            : domProps["aria-labelledby"],
+          onClick: pending
+            ? (event: MouseEvent) => {
+                if (event.currentTarget instanceof HTMLButtonElement) {
+                  event.preventDefault();
+                }
+              }
+            : undefined,
         }),
-        children
+        [
+          h(
+            SlotProvider,
+            {
+              slots: {
+                icon: {
+                  id: iconId,
+                  size: "S",
+                  UNSAFE_className: classNames("spectrum-Icon"),
+                },
+                text: {
+                  id: textId,
+                  UNSAFE_className: classNames("spectrum-Button-label"),
+                },
+              },
+            },
+            {
+              default: () => children,
+            }
+          ),
+          pending
+            ? h(
+                "div",
+                {
+                  "aria-hidden": "true",
+                  style: { visibility: isProgressVisible.value ? "visible" : "hidden" },
+                  class: classNames("spectrum-Button-circleLoader"),
+                },
+                [
+                  h(ProgressCircle, {
+                    ariaLabel: pendingAriaLiveLabel,
+                    isIndeterminate: true,
+                    size: "S",
+                    staticColor,
+                  }),
+                ]
+              )
+            : null,
+          pending
+            ? h(
+                "div",
+                {
+                  "aria-live": button.isFocused.value ? "polite" : "off",
+                },
+                isProgressVisible.value
+                  ? [
+                      h("div", {
+                        role: "img",
+                        "aria-labelledby": pendingAriaLiveLabelledby,
+                      }),
+                    ]
+                  : []
+              )
+            : null,
+          pending
+            ? h("div", {
+                id: spinnerId,
+                role: "img",
+                "aria-label": pendingAriaLiveLabel,
+              })
+            : null,
+        ]
       );
     };
   },

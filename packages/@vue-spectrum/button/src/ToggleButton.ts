@@ -15,6 +15,7 @@ import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
 import {
   classNames,
+  SlotProvider,
   useStyleProps,
   type ClassValue,
 } from "@vue-spectrum/utils";
@@ -77,6 +78,14 @@ export const ToggleButton = defineComponent({
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
     },
+    onPressChange: {
+      type: Function as PropType<((isPressed: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onPressUp: {
+      type: Function as PropType<((event: PressEvent) => void) | undefined>,
+      default: undefined,
+    },
     onPress: {
       type: Function as PropType<((event: PressEvent) => void) | undefined>,
       default: undefined,
@@ -110,13 +119,17 @@ export const ToggleButton = defineComponent({
     const toggleButton = useToggleButton(
       {
         isDisabled,
-        onPressStart: (event) =>
-          (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event),
-        onPressEnd: (event) =>
-          (props.onPressEnd as ((value: PressEvent) => void) | undefined)?.(event),
-        onPress: (event) =>
-          (props.onPress as ((value: PressEvent) => void) | undefined)?.(event),
-      },
+      onPressStart: (event) =>
+        (props.onPressStart as ((value: PressEvent) => void) | undefined)?.(event),
+      onPressEnd: (event) =>
+        (props.onPressEnd as ((value: PressEvent) => void) | undefined)?.(event),
+      onPressChange: (value) =>
+        (props.onPressChange as ((next: boolean) => void) | undefined)?.(value),
+      onPressUp: (event) =>
+        (props.onPressUp as ((value: PressEvent) => void) | undefined)?.(event),
+      onPress: (event) =>
+        (props.onPress as ((value: PressEvent) => void) | undefined)?.(event),
+    },
       toggleState
     );
 
@@ -136,6 +149,9 @@ export const ToggleButton = defineComponent({
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
+      focus: () => {
+        elementRef.value?.focus();
+      },
     });
 
     return () => {
@@ -151,6 +167,8 @@ export const ToggleButton = defineComponent({
         autoFocus: props.autoFocus,
         onPressStart: props.onPressStart,
         onPressEnd: props.onPressEnd,
+        onPressChange: props.onPressChange,
+        onPressUp: props.onPressUp,
         onPress: props.onPress,
         UNSAFE_className: props.UNSAFE_className,
         UNSAFE_style: props.UNSAFE_style,
@@ -190,7 +208,25 @@ export const ToggleButton = defineComponent({
               {}),
           },
         }),
-        children
+        [
+          h(
+            SlotProvider,
+            {
+              slots: {
+                icon: {
+                  size: "S",
+                  UNSAFE_className: classNames("spectrum-Icon"),
+                },
+                text: {
+                  UNSAFE_className: classNames("spectrum-ActionButton-label"),
+                },
+              },
+            },
+            {
+              default: () => children,
+            }
+          ),
+        ]
       );
     };
   },

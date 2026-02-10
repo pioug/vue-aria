@@ -20,6 +20,8 @@ export interface BaseButtonProps {
   type?: "button" | "submit" | "reset" | undefined;
   onPressStart?: ((event: unknown) => void) | undefined;
   onPressEnd?: ((event: unknown) => void) | undefined;
+  onPressChange?: ((isPressed: boolean) => void) | undefined;
+  onPressUp?: ((event: unknown) => void) | undefined;
   onPress?: ((event: unknown) => void) | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
