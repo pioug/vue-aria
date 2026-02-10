@@ -56,6 +56,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 ## Actions and Navigation
 
 - In progress baseline: `@react-spectrum/button` now has Vue `Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, and `ToggleButton` primitives with parity-aligned press lifecycle callbacks (`onPressStart`/`onPressEnd`/`onPressUp`/`onPressChange`/`onPress`), pending-state behavior (`isPending` delayed spinner visibility plus repeated-press suppression) including localized pending announcements, anchor-element edge-case behavior, and expanded upstream-style test coverage (`Button`, `ActionButton`, `ToggleButton`, `ClearButton`, and SSR scenarios including `FieldButton`); pending parity includes remaining edge-case interaction nuances.
+- In progress baseline: `@react-spectrum/tabs` now has Vue `Tabs`, `TabList`, and `TabPanels` primitives with keyboard navigation and selection-state coverage (horizontal/vertical orientation behavior, automatic/manual activation, disabled-key handling, controlled/uncontrolled selection, and SSR/docs/umbrella wiring); pending parity includes overflow/collapse-to-picker behavior and advanced visual indicator parity.
 - [ ] `@react-spectrum/button` -> `@vue-spectrum/button`
 - [ ] `@react-spectrum/actionbar` -> `@vue-spectrum/actionbar`
 - [ ] `@react-spectrum/actiongroup` -> `@vue-spectrum/actiongroup`

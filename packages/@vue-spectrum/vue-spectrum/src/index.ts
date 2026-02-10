@@ -77,6 +77,7 @@ export { Switch } from "@vue-spectrum/switch";
 export { Slider, RangeSlider } from "@vue-spectrum/slider";
 export { Link } from "@vue-spectrum/link";
 export { Breadcrumbs, BreadcrumbItem } from "@vue-spectrum/breadcrumbs";
+export { Tabs, TabList, TabPanels } from "@vue-spectrum/tabs";
 export { Divider } from "@vue-spectrum/divider";
 export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
@@ -180,6 +181,15 @@ export type {
   SpectrumBreadcrumbsProps,
   SpectrumBreadcrumbsSize,
 } from "@vue-spectrum/breadcrumbs";
+export type {
+  SpectrumTabItem,
+  SpectrumTabListProps,
+  SpectrumTabPanelsProps,
+  SpectrumTabsProps,
+  TabsDensity,
+  TabsKeyboardActivation,
+  TabsOrientation,
+} from "@vue-spectrum/tabs";
 export type {
   DividerOrientation,
   DividerSize,

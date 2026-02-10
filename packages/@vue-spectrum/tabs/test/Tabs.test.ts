@@ -1,0 +1,279 @@
+import userEvent from "@testing-library/user-event";
+import { fireEvent, render, within } from "@testing-library/vue";
+import { defineComponent, h, nextTick, type VNodeChild } from "vue";
+import { describe, expect, it, vi } from "vitest";
+import { TabList, TabPanels, Tabs, type SpectrumTabItem } from "../src";
+
+const defaultItems: SpectrumTabItem[] = [
+  { key: "tab-1", title: "Tab 1", children: "Tab 1 body" },
+  { key: "tab-2", title: "Tab 2", children: "Tab 2 body" },
+  { key: "tab-3", title: "Tab 3", children: "Tab 3 body" },
+];
+
+interface RenderTabsOptions {
+  tabListSlot?: ((scope: { item: SpectrumTabItem }) => VNodeChild) | undefined;
+  tabPanelsSlot?: ((scope: { item: SpectrumTabItem }) => VNodeChild) | undefined;
+}
+
+function renderTabs(
+  props: Record<string, unknown> = {},
+  items: SpectrumTabItem[] = defaultItems,
+  options: RenderTabsOptions = {}
+) {
+  return render(Tabs, {
+    props: {
+      "aria-label": "Tab Sample",
+      items,
+      ...props,
+    },
+    slots: {
+      default: () => [
+        h(
+          TabList,
+          null,
+          options.tabListSlot
+            ? {
+                default: options.tabListSlot,
+              }
+            : undefined
+        ),
+        h(
+          TabPanels,
+          null,
+          options.tabPanelsSlot
+            ? {
+                default: options.tabPanelsSlot,
+              }
+            : undefined
+        ),
+      ],
+    },
+  });
+}
+
+async function flush(): Promise<void> {
+  await nextTick();
+  await nextTick();
+}
+
+describe("Tabs", () => {
+  it("renders properly", async () => {
+    const { getByRole } = renderTabs();
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+
+    expect(tablist.getAttribute("aria-orientation")).toBe("horizontal");
+    expect(tabs).toHaveLength(3);
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+
+    const tabpanel = getByRole("tabpanel");
+    expect(tabpanel.textContent).toContain("Tab 1 body");
+    expect(tabpanel.getAttribute("aria-labelledby")).toBe(tabs[0]?.id ?? null);
+  });
+
+  it("supports vertical orientation keyboard navigation", async () => {
+    const { getByRole } = renderTabs({ orientation: "vertical" });
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    const firstTab = tabs[0] as HTMLElement;
+    const secondTab = tabs[1] as HTMLElement;
+
+    expect(tablist.getAttribute("aria-orientation")).toBe("vertical");
+
+    firstTab.focus();
+    fireEvent.keyDown(firstTab, { key: "ArrowDown" });
+    await flush();
+
+    expect(secondTab.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("supports horizontal arrow navigation and ignores vertical arrows", async () => {
+    const { getByRole } = renderTabs({ orientation: "horizontal" });
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    const firstTab = tabs[0] as HTMLElement;
+    const secondTab = tabs[1] as HTMLElement;
+
+    firstTab.focus();
+    fireEvent.keyDown(firstTab, { key: "ArrowRight" });
+    await flush();
+    expect(secondTab.getAttribute("aria-selected")).toBe("true");
+
+    fireEvent.keyDown(secondTab, { key: "ArrowUp" });
+    await flush();
+    expect(secondTab.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("supports manual keyboard activation", async () => {
+    const { getByRole } = renderTabs({
+      keyboardActivation: "manual",
+      defaultSelectedKey: "tab-1",
+    });
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    const firstTab = tabs[0] as HTMLElement;
+    const secondTab = tabs[1] as HTMLElement;
+
+    firstTab.focus();
+    fireEvent.keyDown(firstTab, { key: "ArrowRight" });
+    await flush();
+
+    expect(document.activeElement).toBe(secondTab);
+    expect(secondTab.getAttribute("aria-selected")).toBe("false");
+
+    fireEvent.keyDown(secondTab, { key: "Enter" });
+    await flush();
+    expect(secondTab.getAttribute("aria-selected")).toBe("true");
+
+    const tabpanel = getByRole("tabpanel");
+    expect(tabpanel.textContent).toContain("Tab 2 body");
+  });
+
+  it("supports click selection", async () => {
+    const user = userEvent.setup();
+    const { getByRole } = renderTabs();
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+
+    await user.click(tabs[2] as HTMLElement);
+    expect(tabs[2]?.getAttribute("aria-selected")).toBe("true");
+
+    const tabpanel = getByRole("tabpanel");
+    expect(tabpanel.textContent).toContain("Tab 3 body");
+  });
+
+  it("does not select disabled tabs and skips them on keyboard navigation", async () => {
+    const user = userEvent.setup();
+    const { getByRole } = renderTabs({
+      disabledKeys: ["tab-2"],
+      defaultSelectedKey: "tab-1",
+    });
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    const firstTab = tabs[0] as HTMLElement;
+    const secondTab = tabs[1] as HTMLElement;
+    const thirdTab = tabs[2] as HTMLElement;
+
+    await user.click(secondTab);
+    await flush();
+    expect(firstTab.getAttribute("aria-selected")).toBe("true");
+
+    firstTab.focus();
+    fireEvent.keyDown(firstTab, { key: "ArrowRight" });
+    await flush();
+    expect(thirdTab.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("supports controlled selected key", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const { getByRole } = renderTabs({
+      selectedKey: "tab-1",
+      onSelectionChange,
+    });
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+
+    await user.click(tabs[1] as HTMLElement);
+
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(tabs[1]?.getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("does not generate conflicting ids between multiple instances", async () => {
+    const App = defineComponent({
+      name: "TabsIdsApp",
+      setup() {
+        return () =>
+          h("div", null, [
+            h(
+              Tabs,
+              {
+                items: defaultItems,
+                "aria-label": "First tabs",
+              },
+              {
+                default: () => [h(TabList), h(TabPanels)],
+              }
+            ),
+            h(
+              Tabs,
+              {
+                items: defaultItems,
+                "aria-label": "Second tabs",
+              },
+              {
+                default: () => [h(TabList), h(TabPanels)],
+              }
+            ),
+          ]);
+      },
+    });
+
+    const { getAllByRole } = render(App);
+    await flush();
+
+    const tablists = getAllByRole("tablist");
+    const firstTabs = within(tablists[0] as HTMLElement).getAllByRole("tab");
+    const secondTabs = within(tablists[1] as HTMLElement).getAllByRole("tab");
+
+    expect(firstTabs).toHaveLength(secondTabs.length);
+    firstTabs.forEach((tab, index) => {
+      expect(tab.id).not.toBe((secondTabs[index] as HTMLElement).id);
+    });
+  });
+
+  it("supports scoped slots for tab labels and panels", async () => {
+    const { getByRole } = renderTabs(
+      {},
+      defaultItems,
+      {
+        tabListSlot: ({ item }) => h("span", null, `Label: ${item.title}`),
+        tabPanelsSlot: ({ item }) => h("div", null, `Panel: ${item.key}`),
+      }
+    );
+
+    await flush();
+
+    const tablist = getByRole("tablist");
+    expect(within(tablist).getByText("Label: Tab 1")).toBeTruthy();
+
+    const tabpanel = getByRole("tabpanel");
+    expect(tabpanel.textContent).toContain("Panel: tab-1");
+  });
+
+  it("applies root class and tablist appearance modifiers", async () => {
+    const { getByRole } = renderTabs({
+      isQuiet: true,
+      isEmphasized: true,
+      density: "compact",
+      UNSAFE_className: "custom-tabs",
+    });
+
+    await flush();
+
+    const tabpanelContainer = getByRole("tabpanel").parentElement;
+    expect(tabpanelContainer?.getAttribute("class") ?? "").toContain("custom-tabs");
+
+    const tablist = getByRole("tablist");
+    const className = tablist.getAttribute("class") ?? "";
+    expect(className).toContain("spectrum-Tabs--quiet");
+    expect(className).toContain("spectrum-Tabs--emphasized");
+    expect(className).toContain("spectrum-Tabs--compact");
+  });
+});
