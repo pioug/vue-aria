@@ -61,6 +61,7 @@ export { Well } from "@vue-spectrum/well";
 export { StatusLight } from "@vue-spectrum/statuslight";
 export { Badge } from "@vue-spectrum/badge";
 export { Avatar } from "@vue-spectrum/avatar";
+export { Image } from "@vue-spectrum/image";
 
 export type {
   FormContextValue,
@@ -111,6 +112,7 @@ export type {
 } from "@vue-spectrum/statuslight";
 export type { BadgeVariant, SpectrumBadgeProps } from "@vue-spectrum/badge";
 export type { AvatarSize, SpectrumAvatarProps } from "@vue-spectrum/avatar";
+export type { ImageCrossOrigin, SpectrumImageProps } from "@vue-spectrum/image";
 export type {
   SpectrumBreakpoints,
   SpectrumColorScheme,
