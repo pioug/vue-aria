@@ -68,6 +68,7 @@ export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
 export { ActionGroup } from "@vue-spectrum/actiongroup";
 export { TagGroup, Tag } from "@vue-spectrum/tag";
 export { Picker } from "@vue-spectrum/picker";
+export { Menu, MenuItem, MenuTrigger, ActionMenu } from "@vue-spectrum/menu";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
@@ -177,6 +178,15 @@ export type {
   SpectrumPickerItemData,
   SpectrumPickerProps,
 } from "@vue-spectrum/picker";
+export type {
+  MenuKey,
+  SpectrumMenuItemData,
+  SpectrumMenuSelectionMode,
+  SpectrumMenuProps,
+  SpectrumMenuItemProps,
+  SpectrumMenuTriggerProps,
+  SpectrumActionMenuProps,
+} from "@vue-spectrum/menu";
 export type {
   ButtonGroupAlign,
   ButtonGroupOrientation,
