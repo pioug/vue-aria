@@ -8,6 +8,7 @@ export interface SpectrumTagItemData {
   label: string;
   "aria-label"?: string | undefined;
   isDisabled?: boolean | undefined;
+  UNSAFE_className?: string | undefined;
   href?: string | undefined;
   target?: string | undefined;
   rel?: string | undefined;
@@ -104,6 +105,7 @@ export const Tag = defineComponent({
               "is-disabled": disabled,
               "spectrum-Tag--removable": removable,
             },
+            props.item.UNSAFE_className as ClassValue | undefined,
             props.UNSAFE_className as ClassValue | undefined
           ),
           onFocus: () => {

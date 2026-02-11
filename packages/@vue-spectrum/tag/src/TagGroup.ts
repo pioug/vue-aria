@@ -198,6 +198,10 @@ function parseTagSlotItems(nodes: VNode[] | undefined): SpectrumTagItemData[] {
       "aria-label":
         typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
       isDisabled: Boolean(nodeProps.isDisabled),
+      UNSAFE_className:
+        typeof nodeProps.UNSAFE_className === "string"
+          ? nodeProps.UNSAFE_className
+          : undefined,
       href: typeof nodeProps.href === "string" ? nodeProps.href : undefined,
       target: typeof nodeProps.target === "string" ? nodeProps.target : undefined,
       rel: typeof nodeProps.rel === "string" ? nodeProps.rel : undefined,
@@ -226,6 +230,7 @@ function areTagItemsEqual(
       current.label !== candidate.label ||
       current["aria-label"] !== candidate["aria-label"] ||
       current.isDisabled !== candidate.isDisabled ||
+      current.UNSAFE_className !== candidate.UNSAFE_className ||
       current.href !== candidate.href ||
       current.target !== candidate.target ||
       current.rel !== candidate.rel ||

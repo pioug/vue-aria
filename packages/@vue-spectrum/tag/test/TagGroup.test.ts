@@ -426,6 +426,29 @@ describe("TagGroup", () => {
     }
   });
 
+  it("supports UNSAFE_className passthrough on static tag items", () => {
+    const App = defineComponent({
+      name: "TagGroupClassNameHarness",
+      setup() {
+        return () =>
+          h(
+            TagGroup,
+            {
+              "aria-label": "tag group",
+            },
+            {
+              default: () => [h(Tag, { id: "one", UNSAFE_className: "test-class" }, () => "Tag 1")],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const row = tree.getByRole("row", { name: "Tag 1" });
+    expect(row.className).toContain("spectrum-Tag");
+    expect(row.className).toContain("test-class");
+  });
+
   it("exports Item alias", () => {
     expect(Item).toBe(Tag);
   });
