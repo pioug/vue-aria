@@ -658,12 +658,19 @@ export const ActionGroup = defineComponent({
       const domProps = filterDOMProps(attrsRecord);
       const isVertical = orientation.value === "vertical";
       const role = selectionMode.value === "single" ? "radiogroup" : "toolbar";
+      const propsRecord = props as unknown as Record<string, unknown>;
       const ariaLabel =
         props.ariaLabel ??
-        (attrsRecord["aria-label"] as string | undefined);
+        (propsRecord["aria-label"] as string | undefined) ??
+        (propsRecord.ariaLabel as string | undefined) ??
+        (attrsRecord["aria-label"] as string | undefined) ??
+        (attrsRecord.ariaLabel as string | undefined);
       const ariaLabelledby =
         props.ariaLabelledby ??
-        (attrsRecord["aria-labelledby"] as string | undefined);
+        (propsRecord["aria-labelledby"] as string | undefined) ??
+        (propsRecord.ariaLabelledby as string | undefined) ??
+        (attrsRecord["aria-labelledby"] as string | undefined) ??
+        (attrsRecord.ariaLabelledby as string | undefined);
       const hasOverflowMenu = overflowItems.value.length > 0;
       const collapseToMenuOnly =
         shouldOverflowCollapse.value && hasOverflowMenu && visibleItems.value.length === 0;
@@ -830,7 +837,11 @@ export const ActionGroup = defineComponent({
                     isDisabled: isDisabled.value,
                     triggerLabel: "More",
                     triggerAriaLabel:
-                      collapseToMenuOnly ? ariaLabel ?? "More actions" : "More actions",
+                      collapseToMenuOnly
+                        ? (ariaLabelledby ? undefined : ariaLabel ?? "More actions")
+                        : "More actions",
+                    triggerAriaLabelledby:
+                      collapseToMenuOnly ? ariaLabelledby : undefined,
                     UNSAFE_className: classNames(
                       "spectrum-ActionGroup-item",
                       "spectrum-ActionGroup-menu"

@@ -83,6 +83,10 @@ export const ActionMenu = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    triggerAriaLabelledby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     ariaLabel: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -123,12 +127,19 @@ export const ActionMenu = defineComponent({
   setup(props, { attrs, slots }) {
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
+      const triggerAriaLabelledby =
+        props.triggerAriaLabelledby ??
+        props.ariaLabelledby ??
+        props["aria-labelledby"] ??
+        (attrsRecord["aria-labelledby"] as string | undefined);
       const triggerAriaLabel =
         props.triggerAriaLabel ??
-        props.ariaLabel ??
-        props["aria-label"] ??
-        (attrsRecord["aria-label"] as string | undefined) ??
-        "More actions";
+        (triggerAriaLabelledby
+          ? undefined
+          : props.ariaLabel ??
+            props["aria-label"] ??
+            (attrsRecord["aria-label"] as string | undefined) ??
+            "More actions");
       const placement =
         props.placement ?? (props.align === "end" ? "bottom end" : "bottom start");
 
@@ -139,8 +150,10 @@ export const ActionMenu = defineComponent({
           ...props,
           triggerLabel: props.triggerLabel ?? "Actions",
           triggerAriaLabel,
+          triggerAriaLabelledby,
           placement,
           "aria-label": undefined,
+          "aria-labelledby": undefined,
           UNSAFE_className: classNames(
             "spectrum-ActionMenu",
             props.UNSAFE_className as ClassValue | undefined

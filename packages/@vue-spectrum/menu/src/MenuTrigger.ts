@@ -29,6 +29,7 @@ export interface SpectrumMenuTriggerProps
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
   triggerLabel?: string | undefined;
   triggerAriaLabel?: string | undefined;
+  triggerAriaLabelledby?: string | undefined;
   autoFocus?: boolean | undefined;
   placement?: Placement | undefined;
 }
@@ -106,6 +107,10 @@ export const MenuTrigger = defineComponent({
       default: undefined,
     },
     triggerAriaLabel: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    triggerAriaLabelledby: {
       type: String as PropType<string | undefined>,
       default: undefined,
     },
@@ -289,6 +294,7 @@ export const MenuTrigger = defineComponent({
               disabled: props.isDisabled,
               autofocus: props.autoFocus,
               "aria-label": props.triggerAriaLabel,
+              "aria-labelledby": props.triggerAriaLabelledby,
               "aria-haspopup": "menu",
               "aria-expanded": isOpen.value ? "true" : "false",
               "aria-controls": isOpen.value ? menuId.value : undefined,

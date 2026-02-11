@@ -50,4 +50,5 @@ const component = h(ActionGroup, {
 
 - Baseline includes item rendering, single/multiple selection state handling, disabled-key behavior, arrow-key roving focus (including RTL behavior), and static slot composition support via `ActionGroupItem`.
 - Baseline now includes overflow collapse/menu behavior (`overflowMode="collapse"`), including collapsing all items into the menu when selection mode is enabled and not all items fit.
+- When fully collapsed, aria labeling props are forwarded to the overflow menu trigger (`aria-label` / `aria-labelledby`).
 - Icon-only label-collapse behavior (`buttonLabelBehavior`) remains in progress.

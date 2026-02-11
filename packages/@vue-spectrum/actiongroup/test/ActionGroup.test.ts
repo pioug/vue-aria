@@ -216,7 +216,7 @@ describe("ActionGroup", () => {
       .spyOn(HTMLElement.prototype, "clientWidth", "get")
       .mockImplementation(function (this: HTMLElement) {
         if (this.classList.contains("spectrum-ActionGroup")) {
-          return 220;
+          return 120;
         }
 
         return 0;
@@ -259,6 +259,53 @@ describe("ActionGroup", () => {
       ]?.[0] as Set<string>;
       expect(Array.from(lastSelection)).toEqual(["three"]);
     } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
+  it("passes aria-labelledby to the overflow menu button when fully collapsed", async () => {
+    const externalLabel = document.createElement("span");
+    externalLabel.id = "external-actiongroup-label";
+    externalLabel.textContent = "External actiongroup";
+    document.body.append(externalLabel);
+
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return 220;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          return 100;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        overflowMode: "collapse",
+        selectionMode: "single",
+        ariaLabel: undefined,
+        ariaLabelledby: "external-actiongroup-label",
+      });
+      await nextTick();
+      await nextTick();
+
+      const menuButton = tree.getByRole("button");
+      expect(menuButton.getAttribute("aria-label")).toBeNull();
+      expect(menuButton.getAttribute("aria-labelledby")).toBe(
+        "external-actiongroup-label"
+      );
+    } finally {
+      externalLabel.remove();
       clientWidthSpy.mockRestore();
       offsetWidthSpy.mockRestore();
     }
