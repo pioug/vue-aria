@@ -148,6 +148,32 @@ function getSlotChildren(node: VNode): VNode[] {
   return [];
 }
 
+function getCollectionChildren(node: VNode): VNode[] {
+  if (!node.children || typeof node.children !== "object") {
+    return [];
+  }
+
+  const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+  const collectionItems = Array.isArray(nodeProps.items)
+    ? (nodeProps.items as unknown[])
+    : undefined;
+  const defaultSlot = (node.children as {
+    default?: ((scope?: { item: unknown; index: number }) => unknown) | undefined;
+  }).default;
+
+  if (typeof defaultSlot !== "function") {
+    return [];
+  }
+
+  if (!collectionItems || collectionItems.length === 0) {
+    return flattenVNodeChildren(defaultSlot());
+  }
+
+  return collectionItems.flatMap((item, index) =>
+    flattenVNodeChildren(defaultSlot({ item, index }))
+  );
+}
+
 function getSlotContent(node: VNode): VNodeChild | undefined {
   if (Array.isArray(node.children)) {
     return node.children as VNodeChild;
@@ -202,6 +228,44 @@ function extractTextContent(value: unknown): string {
   return "";
 }
 
+function collectTopLevelListBoxNodes(nodes: VNode[]): VNode[] {
+  const resolved: VNode[] = [];
+
+  for (const node of nodes) {
+    const componentName = getComponentName(node);
+
+    if (componentName === "ListBoxOption" || componentName === "ListBoxSection") {
+      resolved.push(node);
+      continue;
+    }
+
+    if (componentName === "Collection") {
+      resolved.push(...collectTopLevelListBoxNodes(getCollectionChildren(node)));
+    }
+  }
+
+  return resolved;
+}
+
+function collectSectionOptionNodes(nodes: VNode[]): VNode[] {
+  const resolved: VNode[] = [];
+
+  for (const node of nodes) {
+    const componentName = getComponentName(node);
+
+    if (componentName === "ListBoxOption") {
+      resolved.push(node);
+      continue;
+    }
+
+    if (componentName === "Collection") {
+      resolved.push(...collectSectionOptionNodes(getCollectionChildren(node)));
+    }
+  }
+
+  return resolved;
+}
+
 function parseListBoxOptionNode(node: VNode, fallback: ListBoxKey): SpectrumListBoxOptionData {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const key = normalizeListBoxKey(node.key ?? props.id, fallback);
@@ -226,7 +290,7 @@ function parseListBoxSlotItems(nodes: VNode[] | undefined): SpectrumListBoxItemD
     return [];
   }
 
-  const topLevelNodes = flattenVNodeChildren(nodes);
+  const topLevelNodes = collectTopLevelListBoxNodes(flattenVNodeChildren(nodes));
   const items: SpectrumListBoxItemData[] = [];
   let sectionIndex = 0;
   let itemIndex = 0;
@@ -242,9 +306,7 @@ function parseListBoxSlotItems(nodes: VNode[] | undefined): SpectrumListBoxItemD
 
     if (componentName === "ListBoxSection") {
       const sectionProps = (node.props ?? {}) as Record<string, unknown>;
-      const sectionChildren = getSlotChildren(node).filter(
-        (child) => getComponentName(child) === "ListBoxOption"
-      );
+      const sectionChildren = collectSectionOptionNodes(getSlotChildren(node));
 
       const sectionItems = sectionChildren.map((child) => {
         const parsed = parseListBoxOptionNode(child, `item-${itemIndex + 1}`);

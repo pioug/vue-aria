@@ -55,6 +55,7 @@ function onSelectionChange(keys: Set<string | number>) {
 - `ListBox`
 - `ListBoxBase`
 - `useListBoxLayout`
+- `Collection`
 - `ListBoxOption`
 - `ListBoxSection`
 - `Item` (alias of `ListBoxOption` for v1 compatibility)
@@ -88,6 +89,6 @@ const component = h(ListBox, {
 ## Notes
 
 - Baseline includes section rendering (`group` + heading semantics), keyboard navigation, wrap-focus support, single/multiple selection behavior, and static slot composition support via `ListBoxOption` and `ListBoxSection`.
-- Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style examples.
+- Package also exports `Collection` plus upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
 - Loading and empty-state rendering hooks are included via `isLoading`, `showLoadingSpinner`, `onLoadMore`, and `renderEmptyState`.
 - Advanced virtualizer layout/measurement parity and full visual/theming parity remain in progress.

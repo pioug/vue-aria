@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
+  Collection,
   Item,
   ListBox,
   ListBoxOption,
@@ -353,5 +354,65 @@ describe("ListBox", () => {
   it("exports Item and Section aliases", () => {
     expect(Item).toBe(ListBoxOption);
     expect(Section).toBe(ListBoxSection);
+  });
+
+  it("supports Collection wrappers with scoped options and sections", () => {
+    const topLevelItems = [
+      { id: "alpha", label: "Alpha" },
+      { id: "beta", label: "Beta" },
+    ];
+    const sectionItems = [
+      { id: "charlie", label: "Charlie" },
+      { id: "delta", label: "Delta" },
+    ];
+
+    const App = defineComponent({
+      name: "ListBoxCollectionHarness",
+      setup() {
+        return () =>
+          h(
+            ListBox,
+            {
+              "aria-label": "collection-listbox",
+            },
+            {
+              default: () => [
+                h(
+                  Collection,
+                  { items: topLevelItems },
+                  {
+                    default: ({ item }: { item: { id: string; label: string } }) =>
+                      h(Item, { id: item.id }, () => item.label),
+                  }
+                ),
+                h(
+                  Section,
+                  { id: "group-1", heading: "Group 1" },
+                  {
+                    default: () =>
+                      h(
+                        Collection,
+                        { items: sectionItems },
+                        {
+                          default: ({ item }: { item: { id: string; label: string } }) =>
+                            h(Item, { id: item.id }, () => item.label),
+                        }
+                      ),
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const listbox = tree.getByRole("listbox", { name: "collection-listbox" });
+    const options = within(listbox).getAllByRole("option");
+
+    expect(options).toHaveLength(4);
+    expect(findOptionByText(listbox, "Alpha")).toBeTruthy();
+    expect(findOptionByText(listbox, "Delta")).toBeTruthy();
+    expect(within(listbox).getAllByRole("group")).toHaveLength(1);
   });
 });

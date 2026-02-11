@@ -2,7 +2,13 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { Item, ListView, ListViewItem, type SpectrumListViewItemData } from "../src";
+import {
+  Collection,
+  Item,
+  ListView,
+  ListViewItem,
+  type SpectrumListViewItemData,
+} from "../src";
 
 const baseItems: SpectrumListViewItemData[] = [
   { key: "foo", label: "Foo" },
@@ -318,5 +324,44 @@ describe("ListView", () => {
 
   it("exports Item as a ListViewItem alias", () => {
     expect(Item).toBe(ListViewItem);
+  });
+
+  it("supports Collection wrapper with scoped items", () => {
+    const dynamicItems = [
+      { id: "one", label: "One" },
+      { id: "two", label: "Two" },
+      { id: "three", label: "Three" },
+    ];
+
+    const App = defineComponent({
+      name: "ListViewCollectionHarness",
+      setup() {
+        return () =>
+          h(
+            ListView,
+            {
+              "aria-label": "Collection list",
+            },
+            {
+              default: () =>
+                h(
+                  Collection,
+                  { items: dynamicItems },
+                  {
+                    default: ({ item }: { item: { id: string; label: string } }) =>
+                      h(Item, { id: item.id }, () => item.label),
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const rows = tree.getAllByRole("row");
+    expect(rows).toHaveLength(3);
+    expect(rows[0]?.textContent).toContain("One");
+    expect(rows[1]?.textContent).toContain("Two");
+    expect(rows[2]?.textContent).toContain("Three");
   });
 });

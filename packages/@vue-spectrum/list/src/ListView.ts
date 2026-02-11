@@ -122,6 +122,51 @@ function getSlotContent(node: VNode): VNodeChild | undefined {
   return undefined;
 }
 
+function getCollectionChildren(node: VNode): VNode[] {
+  if (!node.children || typeof node.children !== "object") {
+    return [];
+  }
+
+  const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+  const collectionItems = Array.isArray(nodeProps.items)
+    ? (nodeProps.items as unknown[])
+    : undefined;
+  const defaultSlot = (node.children as {
+    default?: ((scope?: { item: unknown; index: number }) => unknown) | undefined;
+  }).default;
+
+  if (typeof defaultSlot !== "function") {
+    return [];
+  }
+
+  if (!collectionItems || collectionItems.length === 0) {
+    return flattenVNodeChildren(defaultSlot());
+  }
+
+  return collectionItems.flatMap((item, index) =>
+    flattenVNodeChildren(defaultSlot({ item, index }))
+  );
+}
+
+function collectListViewItemNodes(nodes: VNode[]): VNode[] {
+  const resolved: VNode[] = [];
+
+  for (const node of nodes) {
+    const componentName = getComponentName(node);
+
+    if (componentName === "ListViewItem") {
+      resolved.push(node);
+      continue;
+    }
+
+    if (componentName === "Collection") {
+      resolved.push(...collectListViewItemNodes(getCollectionChildren(node)));
+    }
+  }
+
+  return resolved;
+}
+
 function extractTextContent(value: unknown): string {
   if (value === null || value === undefined) {
     return "";
@@ -161,15 +206,11 @@ function parseListViewSlotItems(nodes: VNode[] | undefined): SpectrumListViewIte
     return [];
   }
 
-  const flattened = flattenVNodeChildren(nodes);
+  const flattened = collectListViewItemNodes(flattenVNodeChildren(nodes));
   const parsedItems: SpectrumListViewItemData[] = [];
   let itemIndex = 0;
 
   for (const node of flattened) {
-    if (getComponentName(node) !== "ListViewItem") {
-      continue;
-    }
-
     const nodeProps = (node.props ?? {}) as Record<string, unknown>;
     const key = normalizeListViewKey(node.key ?? nodeProps.id, `item-${itemIndex + 1}`);
     const slotLabel = extractTextContent(getSlotContent(node)).trim();
@@ -335,9 +376,7 @@ export const ListView = defineComponent({
     const normalizedItems = computed<NormalizedListViewItemData[]>(() =>
       normalizeListViewItems(props.items ?? slotItems.value)
     );
-    const usesStaticItemComposition = computed(
-      () => props.items === undefined && slotItems.value.length > 0
-    );
+    const usesStaticItemComposition = computed(() => props.items === undefined);
     const selectionMode = computed<SpectrumListViewSelectionMode>(
       () => props.selectionMode ?? "none"
     );
@@ -528,14 +567,11 @@ export const ListView = defineComponent({
             density: props.density,
             overflowMode: props.overflowMode,
           },
-          {
-            default: slots.default
-              ? () =>
-                  usesStaticItemComposition.value
-                    ? undefined
-                    : slots.default?.({ item })
-              : undefined,
-          }
+          !usesStaticItemComposition.value && slots.default
+            ? {
+                default: () => slots.default?.({ item }),
+              }
+            : undefined
         )
       );
 
