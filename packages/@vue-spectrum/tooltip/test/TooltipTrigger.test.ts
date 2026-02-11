@@ -89,6 +89,98 @@ describe("TooltipTrigger", () => {
     wrapper.unmount();
   });
 
+  it("can be keyboard force closed from anywhere", async () => {
+    const onOpenChange = vi.fn();
+    const Root = {
+      render() {
+        return h("div", null, [
+          h(
+            TooltipTrigger,
+            {
+              onOpenChange,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "trigger" }, "Trigger"),
+                h(Tooltip, () => "Helpful information."),
+              ],
+            }
+          ),
+          h("input", { type: "text", "aria-label": "outside input" }),
+        ]);
+      },
+    };
+
+    const wrapper = mount(Root, {
+      attachTo: document.body,
+    });
+
+    const button = wrapper.get("button");
+    await button.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    const outsideInput = wrapper.get("input");
+    (outsideInput.element as HTMLInputElement).focus();
+    await flushOverlay();
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await flushOverlay();
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("hides when hover leaves even if focused", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+    });
+
+    const button = wrapper.get("button");
+    (button.element as HTMLButtonElement).focus();
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    await button.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    await button.trigger("pointerleave", { pointerType: "mouse" });
+    await flushOverlay();
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("hides when focus leaves even if hovered", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+    });
+
+    const button = wrapper.get("button");
+    (button.element as HTMLButtonElement).focus();
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    await button.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    (button.element as HTMLButtonElement).blur();
+    await flushOverlay();
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
   it("is closed if the trigger is clicked", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mountTooltipTrigger({
@@ -137,6 +229,28 @@ describe("TooltipTrigger", () => {
     expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
 
     await button.trigger("click");
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    expect(onOpenChange).not.toHaveBeenCalledWith(false);
+
+    wrapper.unmount();
+  });
+
+  it("does not close on keyboard press when shouldCloseOnPress is false", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+      shouldCloseOnPress: false,
+    });
+
+    const button = wrapper.get("button");
+    (button.element as HTMLButtonElement).focus();
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    await button.trigger("keydown", { key: "Enter" });
+    await button.trigger("keyup", { key: "Enter" });
     await flushOverlay();
 
     expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
