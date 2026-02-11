@@ -56,6 +56,6 @@ const tabs = h(
 - Baseline port includes keyboard navigation, selection state (controlled/uncontrolled), and tabpanel semantics.
 - Supports both automatic and manual keyboard activation behavior.
 - Includes baseline horizontal overflow collapse-to-picker behavior via `TabList` wrapper measurement.
-- Includes baseline selection-indicator positioning parity (`spectrum-Tabs-selectionIndicator`) for selected tabs.
+- Includes baseline selection-indicator positioning parity (`spectrum-Tabs-selectionIndicator`) for selected tabs, including RTL right-edge transform behavior.
 - Includes collapsed-mode tabpanel and picker aria-labeling composition parity (`aria-label` + external `aria-labelledby`).
 - Advanced visual/theming polish remains in progress.

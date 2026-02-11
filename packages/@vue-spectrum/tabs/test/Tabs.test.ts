@@ -2,6 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { fireEvent, render, within } from "@testing-library/vue";
 import { defineComponent, h, nextTick, type VNodeChild } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { TabList, TabPanels, Tabs, type SpectrumTabItem } from "../src";
 
 const defaultItems: SpectrumTabItem[] = [
@@ -322,6 +323,84 @@ describe("Tabs", () => {
       expect(indicator?.style.width).toBe("140px");
       expect(indicator?.style.transform).toBe("translateX(120px)");
     } finally {
+      offsetLeftSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
+  it("positions selection indicator from the right edge in RTL", async () => {
+    const user = userEvent.setup();
+    const offsetParentSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetParent", "get")
+      .mockReturnValue({ offsetWidth: 400 } as unknown as HTMLElement);
+    const offsetLeftSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetLeft", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        const key = this.getAttribute("data-v-aria-tab-key");
+        if (key === "tab-2") {
+          return 120;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        const key = this.getAttribute("data-v-aria-tab-key");
+        if (key === "tab-1") {
+          return 80;
+        }
+
+        if (key === "tab-2") {
+          return 140;
+        }
+
+        return 0;
+      });
+
+    try {
+      const App = defineComponent({
+        name: "TabsRTLIndicatorHarness",
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+                locale: "ar-AE",
+              },
+              {
+                default: () =>
+                  h(
+                    Tabs,
+                    {
+                      "aria-label": "Tab Sample",
+                      items: defaultItems,
+                    },
+                    {
+                      default: () => [h(TabList), h(TabPanels)],
+                    }
+                  ),
+              }
+            );
+        },
+      });
+
+      const { getByRole, container } = render(App);
+      await flush();
+
+      const indicator = container.querySelector(
+        ".spectrum-Tabs-selectionIndicator"
+      ) as HTMLElement | null;
+      expect(indicator).toBeTruthy();
+
+      await user.click(getByRole("tab", { name: "Tab 2" }));
+      await flush();
+
+      expect(indicator?.style.width).toBe("140px");
+      expect(indicator?.style.transform).toBe("translateX(-140px)");
+    } finally {
+      offsetParentSpy.mockRestore();
       offsetLeftSpy.mockRestore();
       offsetWidthSpy.mockRestore();
     }
