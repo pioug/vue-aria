@@ -443,6 +443,7 @@ export const ActionGroup = defineComponent({
     );
 
     const focusedKey = ref<string | null>(null);
+    const rovingFocusActive = ref(false);
     const visibleItemCount = ref<number>(items.value.length);
     const measuredItemWidths = ref<number[]>([]);
     const collapseButtonText = ref<boolean>(false);
@@ -633,6 +634,7 @@ export const ActionGroup = defineComponent({
       (keys) => {
         if (keys.length === 0) {
           focusedKey.value = null;
+          rovingFocusActive.value = false;
           return;
         }
 
@@ -849,7 +851,11 @@ export const ActionGroup = defineComponent({
                   selectionMode.value === "none" ? undefined : String(selected),
                 "aria-label":
                   item["aria-label"] ?? (hideButtonText.value ? item.label : undefined),
-                tabindex: focusedKey.value === itemKey ? 0 : -1,
+                tabindex: rovingFocusActive.value
+                  ? focusedKey.value === itemKey
+                    ? 0
+                    : -1
+                  : 0,
                 isDisabled: disabled,
                 isQuiet: isQuiet.value,
                 staticColor: props.staticColor,
@@ -863,6 +869,7 @@ export const ActionGroup = defineComponent({
                   }
                 ),
                 onFocus: () => {
+                  rovingFocusActive.value = true;
                   focusedKey.value = itemKey;
                 },
                 onPress: () => {

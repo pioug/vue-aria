@@ -49,7 +49,7 @@ const component = h(ActionGroup, {
 
 ## Notes
 
-- Baseline includes item rendering, single/multiple selection state handling, disabled-key behavior, arrow-key roving focus (including RTL behavior), and static slot composition support via `ActionGroupItem`.
+- Baseline includes item rendering, single/multiple selection state handling, disabled-key behavior, arrow-key roving focus (including RTL behavior), tab entry/exit behavior with remembered focused item (including reverse Shift+Tab entry), and static slot composition support via `ActionGroupItem`.
 - Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Baseline now includes overflow collapse/menu behavior (`overflowMode="collapse"`), including collapsing all items into the menu when selection mode is enabled and not all items fit.
 - When fully collapsed, aria labeling props are forwarded to the overflow menu trigger (`aria-label` / `aria-labelledby`).

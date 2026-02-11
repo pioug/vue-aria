@@ -1,4 +1,4 @@
-import { render } from "@testing-library/vue";
+import { render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
@@ -137,6 +137,94 @@ describe("ActionGroup", () => {
 
     await user.keyboard("{ArrowRight}");
     expect(document.activeElement).toBe(buttons[0]);
+  });
+
+  it("is focusable from Shift+Tab", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "ActionGroupShiftTabHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button", "aria-label": "Before" }, "Before"),
+            h(
+              Provider,
+              {
+                theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+              },
+              {
+                default: () =>
+                  h(ActionGroup, {
+                    items,
+                    "aria-label": "actiongroup-test",
+                  }),
+              }
+            ),
+            h("button", { type: "button", "aria-label": "After" }, "After"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const before = tree.getByRole("button", { name: "Before" });
+    const after = tree.getByRole("button", { name: "After" });
+    const group = tree.getByRole("toolbar", { name: "actiongroup-test" });
+    const actionButtons = within(group).getAllByRole("button");
+
+    (after as HTMLButtonElement).focus();
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(actionButtons[2]);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(before);
+  });
+
+  it("remembers the last focused item when tabbing away and back", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "ActionGroupRememberFocusHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button", "aria-label": "Before" }, "Before"),
+            h(
+              Provider,
+              {
+                theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+              },
+              {
+                default: () =>
+                  h(ActionGroup, {
+                    items,
+                    "aria-label": "actiongroup-test",
+                  }),
+              }
+            ),
+            h("button", { type: "button", "aria-label": "After" }, "After"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const before = tree.getByRole("button", { name: "Before" });
+    const after = tree.getByRole("button", { name: "After" });
+    const group = tree.getByRole("toolbar", { name: "actiongroup-test" });
+    const actionButtons = within(group).getAllByRole("button");
+
+    (before as HTMLButtonElement).focus();
+    await user.tab();
+    expect(document.activeElement).toBe(actionButtons[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(actionButtons[1]);
+
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(actionButtons[1]);
   });
 
   it("supports onAction and selection callbacks", async () => {
