@@ -158,6 +158,7 @@ export const DialogTrigger = defineComponent({
     const overlayRootRef = ref<HTMLElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
     const lastFocusedInOverlayRef = ref<HTMLElement | null>(null);
+    const pendingToggle = ref(false);
     const wasOpenRef = ref(false);
     const hiddenBodyElements = ref<Array<{
       element: HTMLElement;
@@ -477,7 +478,15 @@ export const DialogTrigger = defineComponent({
     };
 
     const toggle = (): void => {
+      if (pendingToggle.value) {
+        return;
+      }
+
+      pendingToggle.value = true;
       setOpen(!isOpen.value);
+      queueMicrotask(() => {
+        pendingToggle.value = false;
+      });
     };
 
     const close = (): void => {
