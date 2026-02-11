@@ -1,6 +1,8 @@
 export { Menu } from "./Menu";
 export { MenuSection } from "./Menu";
 export { MenuItem } from "./MenuItem";
+export { MenuItem as Item } from "./MenuItem";
+export { MenuSection as Section } from "./Menu";
 export { SubmenuTrigger } from "./SubmenuTrigger";
 export { MenuTrigger } from "./MenuTrigger";
 export { ActionMenu } from "./ActionMenu";

@@ -8,9 +8,11 @@ import {
   provideSpectrumProvider,
 } from "@vue-spectrum/provider";
 import {
+  Item,
   Picker,
   PickerItem,
   PickerSection,
+  Section,
   type SpectrumPickerItemData,
 } from "../src";
 
@@ -849,5 +851,10 @@ describe("Picker", () => {
     await user.click(tree.getByTestId("reset"));
     await nextTick();
     expect(trigger.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("exports Item and Section aliases", () => {
+    expect(Item).toBe(PickerItem);
+    expect(Section).toBe(PickerSection);
   });
 });

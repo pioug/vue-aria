@@ -1,7 +1,14 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Menu, type SpectrumMenuItemData } from "../src";
+import {
+  Item,
+  Menu,
+  MenuItem,
+  MenuSection,
+  Section,
+  type SpectrumMenuItemData,
+} from "../src";
 
 const items: SpectrumMenuItemData[] = [
   { key: "foo", label: "Foo" },
@@ -201,5 +208,10 @@ describe("Menu", () => {
     } finally {
       warnSpy.mockRestore();
     }
+  });
+
+  it("exports Item and Section aliases", () => {
+    expect(Item).toBe(MenuItem);
+    expect(Section).toBe(MenuSection);
   });
 });

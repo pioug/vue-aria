@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { provideI18n } from "@vue-aria/i18n";
-import { StepList, StepListItem, type SpectrumStepListItemData } from "../src";
+import { Item, StepList, StepListItem, type SpectrumStepListItemData } from "../src";
 
 const items: SpectrumStepListItemData[] = [
   { key: "step-one", label: "Step 1" },
@@ -258,5 +258,9 @@ describe("StepList", () => {
     expect(segments).toHaveLength(4);
     expect(chevrons[0]?.className).toContain("is-reversed");
     expect(segments[0]?.className).toContain("is-completed");
+  });
+
+  it("exports Item alias", () => {
+    expect(Item).toBe(StepListItem);
   });
 });

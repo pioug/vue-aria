@@ -1,4 +1,5 @@
 export { ActionGroup, ActionGroupItem } from "./ActionGroup";
+export { ActionGroupItem as Item } from "./ActionGroup";
 
 export type {
   ActionGroupButtonLabelBehavior,

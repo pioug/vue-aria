@@ -28,6 +28,7 @@ const steps = [
 
 - `StepList`
 - `StepListItem`
+- `Item` (alias of `StepListItem` for v1 compatibility)
 
 ## Example
 
@@ -50,5 +51,6 @@ const component = h(StepList, {
 ## Notes
 
 - Baseline includes selection progression rules, disabled/read-only handling, controlled/uncontrolled selection, SSR coverage, and static slot composition support via `StepListItem`.
+- Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Baseline includes localized step-state messages for screen readers (`current`, `completed`, `notCompleted`) via `@vue-aria/i18n`.
 - Baseline includes segment/chevron step visuals (including RTL chevron direction handling).

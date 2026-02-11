@@ -27,6 +27,8 @@ const options = [
 - `Picker`
 - `PickerItem`
 - `PickerSection`
+- `Item` (alias of `PickerItem` for v1 compatibility)
+- `Section` (alias of `PickerSection` for v1 compatibility)
 
 ## Example
 
@@ -50,6 +52,7 @@ const component = h(Picker, {
 ## Notes
 
 - Baseline includes trigger + listbox behavior (open/close, keyboard navigation, selection callbacks, controlled/uncontrolled selection, and trigger-anchored popover placement), plus static slot composition via `PickerItem` and `PickerSection`.
+- Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
 - Trigger autofocus baseline is included via `autoFocus`.
 - Mobile tray rendering is included when running on mobile screen widths.
 - Async loading baseline is included via `isLoading` spinner handling, `onLoadMore` scroll-threshold callbacks, loading-progress `aria-describedby` wiring on the trigger, and explicit loading labels (`Loading…`, `Loading more…`).

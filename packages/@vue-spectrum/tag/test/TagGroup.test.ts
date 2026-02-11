@@ -2,7 +2,7 @@ import { render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { Tag, TagGroup, type SpectrumTagItemData } from "../src";
+import { Item, Tag, TagGroup, type SpectrumTagItemData } from "../src";
 
 const items: SpectrumTagItemData[] = [
   { key: "1", label: "Tag 1", "aria-label": "Tag 1" },
@@ -164,5 +164,9 @@ describe("TagGroup", () => {
     expect(onRemove).toHaveBeenCalledTimes(1);
     const removedSet = onRemove.mock.calls[0]?.[0] as Set<string>;
     expect(Array.from(removedSet)).toEqual(["three"]);
+  });
+
+  it("exports Item alias", () => {
+    expect(Item).toBe(Tag);
   });
 });

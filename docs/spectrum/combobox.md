@@ -34,6 +34,8 @@ const items = [
 - `ComboBox`
 - `ComboBoxItem`
 - `ComboBoxSection`
+- `Item` (alias of `ComboBoxItem` for v1 compatibility)
+- `Section` (alias of `ComboBoxSection` for v1 compatibility)
 
 ## Example
 
@@ -57,6 +59,7 @@ const component = h(ComboBox, {
 ## Notes
 
 - Baseline includes combobox/input/listbox ARIA wiring, type-to-filter behavior, button-trigger opening, selection commit behavior, placeholder deprecation warning parity, native form wiring (`name`/`form`) plus `formValue="key"` hidden-input submission behavior, form reset behavior (including `defaultSelectedKey` reset), and static slot composition support via `ComboBoxItem` and `ComboBoxSection`.
+- Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
 - Controlled/uncontrolled `selectedKey`, `inputValue`, and open-state flows are wired through `@vue-aria/combobox-state`.
 - Baseline now includes grouped-section listbox semantics for slot-defined `ComboBoxSection` content (headings + `role="group"` containers) with filtering-aware section rendering.
 - Advanced popover positioning/mobile tray behavior, full async loading UX parity, and full visual/theming parity remain in progress.

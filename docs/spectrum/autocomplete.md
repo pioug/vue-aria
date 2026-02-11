@@ -34,6 +34,8 @@ const items = [
 - `SearchAutocomplete`
 - `SearchAutocompleteItem`
 - `SearchAutocompleteSection`
+- `Item` (alias of `SearchAutocompleteItem` for v1 compatibility)
+- `Section` (alias of `SearchAutocompleteSection` for v1 compatibility)
 
 ## Example
 
@@ -57,6 +59,7 @@ const component = h(SearchAutocomplete, {
 ## Notes
 
 - Baseline includes combobox/search input/listbox ARIA wiring, type-to-filter behavior, clear-button semantics, submit callbacks, grouped-section listbox semantics for slot-defined `SearchAutocompleteSection` content (headings + `role="group"` containers with filtering-aware section visibility), placeholder deprecation warning parity, native form wiring (`name`/`form`) with form-reset behavior (including `defaultInputValue` restore), and static slot composition support via `SearchAutocompleteItem` and `SearchAutocompleteSection`.
+- Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
 - Controlled/uncontrolled `selectedKey`, `inputValue`, and open-state flows are wired through `@vue-aria/combobox-state`.
 - Loading indicators and scroll-bottom `onLoadMore` behavior are included for async suggestion lists.
 - Advanced popover/mobile tray behavior and full visual/theming parity remain in progress.

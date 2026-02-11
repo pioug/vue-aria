@@ -1,4 +1,5 @@
 export { ComboBox, ComboBoxItem, ComboBoxSection } from "./ComboBox";
+export { ComboBoxItem as Item, ComboBoxSection as Section } from "./ComboBox";
 
 export type {
   SpectrumComboBoxProps,

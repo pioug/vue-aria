@@ -3,6 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
+  Item,
+  Section,
   SearchAutocomplete,
   SearchAutocompleteItem,
   SearchAutocompleteSection,
@@ -432,5 +434,10 @@ describe("SearchAutocomplete", () => {
     const group = within(listbox).getByRole("group");
     expect(group.getAttribute("aria-label")).toBe("Ungrouped items");
     expect(group.getAttribute("aria-labelledby")).toBeNull();
+  });
+
+  it("exports Item and Section aliases", () => {
+    expect(Item).toBe(SearchAutocompleteItem);
+    expect(Section).toBe(SearchAutocompleteSection);
   });
 });

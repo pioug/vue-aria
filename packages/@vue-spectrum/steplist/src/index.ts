@@ -1,5 +1,6 @@
 export { StepList } from "./StepList";
 export { StepListItem } from "./StepListItem";
+export { StepListItem as Item } from "./StepListItem";
 
 export type {
   SpectrumStepListProps,

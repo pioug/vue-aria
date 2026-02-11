@@ -6,6 +6,7 @@ import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provid
 import {
   ActionGroup,
   ActionGroupItem,
+  Item,
   type SpectrumActionGroupItemData,
 } from "../src";
 
@@ -402,5 +403,9 @@ describe("ActionGroup", () => {
 
     await user.click(buttons[2] as HTMLElement);
     expect(onAction).toHaveBeenCalledWith("third");
+  });
+
+  it("exports Item alias", () => {
+    expect(Item).toBe(ActionGroupItem);
   });
 });

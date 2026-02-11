@@ -6,6 +6,8 @@ import {
   ComboBox,
   ComboBoxItem,
   ComboBoxSection,
+  Item,
+  Section,
   type SpectrumComboBoxItemData,
 } from "../src";
 
@@ -441,5 +443,10 @@ describe("ComboBox", () => {
     const group = within(listbox).getByRole("group");
     expect(group.getAttribute("aria-label")).toBe("Ungrouped items");
     expect(group.getAttribute("aria-labelledby")).toBeNull();
+  });
+
+  it("exports Item and Section aliases", () => {
+    expect(Item).toBe(ComboBoxItem);
+    expect(Section).toBe(ComboBoxSection);
   });
 });

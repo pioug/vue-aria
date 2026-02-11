@@ -27,6 +27,7 @@ const tags = [
 
 - `TagGroup`
 - `Tag`
+- `Item` (alias of `Tag` for v1 compatibility)
 
 ## Example
 
@@ -51,4 +52,5 @@ const component = h(TagGroup, {
 ## Notes
 
 - Baseline includes keyboard roving focus, RTL/LTR arrow behavior, removable tags, grid semantics (`grid` / `row` / `gridcell`), and static slot composition support via `Tag`.
+- Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Full parity for advanced features (`maxRows`, action area, and field-label/validation integration) remains in progress.
