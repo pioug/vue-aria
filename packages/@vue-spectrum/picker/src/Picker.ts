@@ -385,6 +385,7 @@ export const Picker = defineComponent({
     const optionRefs = new Map<string, HTMLLIElement>();
 
     const listboxId = useId(undefined, "v-spectrum-picker-listbox");
+    const loadingIndicatorId = useId(undefined, "v-spectrum-picker-loading");
 
     const parsedSlotItems = computed<SpectrumPickerItemData[]>(() =>
       parsePickerSlotItems(slots.default?.() as VNode[] | undefined)
@@ -725,6 +726,13 @@ export const Picker = defineComponent({
         props.ariaLabelledby ??
         props["aria-labelledby"] ??
         (attrsRecord["aria-labelledby"] as string | undefined);
+      const describedByFromProps = attrsRecord["aria-describedby"] as string | undefined;
+      const triggerAriaDescribedby = [
+        describedByFromProps,
+        shouldShowTriggerLoading.value ? loadingIndicatorId.value : undefined,
+      ]
+        .filter((value): value is string => Boolean(value))
+        .join(" ");
 
       return h(
         "div",
@@ -762,6 +770,8 @@ export const Picker = defineComponent({
               disabled: isDisabled.value,
               "aria-label": ariaLabel,
               "aria-labelledby": ariaLabelledby,
+              "aria-describedby":
+                triggerAriaDescribedby.length > 0 ? triggerAriaDescribedby : undefined,
               "aria-invalid": isInvalid.value ? "true" : undefined,
               "aria-required": props.isRequired ? "true" : undefined,
               "aria-haspopup": "listbox",
@@ -810,6 +820,7 @@ export const Picker = defineComponent({
               ),
               shouldShowTriggerLoading.value
                 ? h(ProgressCircle, {
+                    id: loadingIndicatorId.value,
                     isIndeterminate: true,
                     size: "S",
                     "aria-label": "Loading",

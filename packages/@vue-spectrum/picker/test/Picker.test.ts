@@ -138,7 +138,31 @@ describe("Picker", () => {
       },
     });
 
-    expect(tree.getByRole("progressbar")).toBeTruthy();
+    const progressbar = tree.getByRole("progressbar");
+    expect(progressbar).toBeTruthy();
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    expect(trigger.getAttribute("aria-describedby")).toBe(progressbar.getAttribute("id"));
+  });
+
+  it("merges existing aria-describedby with loading progress indicator", () => {
+    const tree = render(Picker, {
+      props: {
+        "aria-label": "picker-test",
+        items: [],
+        isLoading: true,
+      },
+      attrs: {
+        "aria-describedby": "existing-description",
+      },
+    });
+
+    const progressbar = tree.getByRole("progressbar");
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    const describedby = trigger.getAttribute("aria-describedby");
+    expect(describedby).toBeTruthy();
+    expect((describedby ?? "").split(" ")).toEqual(
+      expect.arrayContaining(["existing-description", progressbar.getAttribute("id") ?? ""])
+    );
   });
 
   it("renders picker popover with placement positioning styles", async () => {
