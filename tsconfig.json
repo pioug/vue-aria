@@ -68,6 +68,7 @@
       "@vue-spectrum/theme-default": ["packages/@vue-spectrum/theme-default/src/index.ts"],
       "@vue-spectrum/theme-light": ["packages/@vue-spectrum/theme-light/src/index.ts"],
       "@vue-spectrum/theme-dark": ["packages/@vue-spectrum/theme-dark/src/index.ts"],
+      "@vue-spectrum/theme-express": ["packages/@vue-spectrum/theme-express/src/index.ts"],
       "@vue-spectrum/icon": ["packages/@vue-spectrum/icon/src/index.ts"],
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/form": ["packages/@vue-spectrum/form/src/index.ts"],

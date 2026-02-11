@@ -20,6 +20,7 @@ export {
 export { theme } from "@vue-spectrum/theme-default";
 export { theme as lightTheme } from "@vue-spectrum/theme-light";
 export { theme as darkTheme } from "@vue-spectrum/theme-dark";
+export { theme as expressTheme } from "@vue-spectrum/theme-express";
 
 export { Icon, UIIcon, Illustration } from "@vue-spectrum/icon";
 export {

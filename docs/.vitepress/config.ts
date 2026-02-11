@@ -38,6 +38,9 @@ export default defineConfig({
         "@vue-spectrum/theme-dark": fileURLToPath(
           new URL("../../packages/@vue-spectrum/theme-dark/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/theme-express": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/theme-express/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/icon": fileURLToPath(
           new URL("../../packages/@vue-spectrum/icon/src/index.ts", import.meta.url)
         ),
@@ -311,6 +314,7 @@ export default defineConfig({
           { text: "@vue-spectrum/theme-default", link: "/spectrum/theme-default" },
           { text: "@vue-spectrum/theme-light", link: "/spectrum/theme-light" },
           { text: "@vue-spectrum/theme-dark", link: "/spectrum/theme-dark" },
+          { text: "@vue-spectrum/theme-express", link: "/spectrum/theme-express" },
           { text: "@vue-spectrum/icon", link: "/spectrum/icon" },
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },
           { text: "@vue-spectrum/form", link: "/spectrum/form" },
