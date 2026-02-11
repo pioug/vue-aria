@@ -4,7 +4,7 @@ import { h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { theme as defaultTheme } from "@vue-spectrum/theme-default";
 import { Provider } from "../src/Provider";
-import { BreadcrumbItem, Breadcrumbs } from "../src/Breadcrumbs";
+import { Breadcrumb, BreadcrumbItem, Breadcrumbs } from "../src/Breadcrumbs";
 
 describe("@vue-spectrum/s2 Breadcrumbs", () => {
   it("renders baseline attrs and breadcrumb items", async () => {
@@ -22,7 +22,7 @@ describe("@vue-spectrum/s2 Breadcrumbs", () => {
             },
             {
               default: () => [
-                h(BreadcrumbItem, { key: "home" }, { default: () => "Home" }),
+                h(Breadcrumb, { key: "home" }, { default: () => "Home" }),
                 h(BreadcrumbItem, { key: "docs" }, { default: () => "Docs" }),
                 h(BreadcrumbItem, { key: "api" }, { default: () => "API" }),
               ],
@@ -38,6 +38,7 @@ describe("@vue-spectrum/s2 Breadcrumbs", () => {
     expect(wrapper.get(".s2-Breadcrumbs").classes()).toContain(
       "spectrum-Breadcrumbs--medium"
     );
+    expect(wrapper.findAll(".s2-Breadcrumb").length).toBe(1);
     expect(wrapper.findAll(".s2-BreadcrumbItem").length).toBeGreaterThan(0);
   });
 
@@ -59,7 +60,7 @@ describe("@vue-spectrum/s2 Breadcrumbs", () => {
             },
             {
               default: () => [
-                h(BreadcrumbItem, { key: "home" }, { default: () => "Home" }),
+                h(Breadcrumb, { key: "home" }, { default: () => "Home" }),
                 h(BreadcrumbItem, { key: "docs" }, { default: () => "Docs" }),
                 h(BreadcrumbItem, { key: "api" }, { default: () => "API" }),
               ],
@@ -69,7 +70,7 @@ describe("@vue-spectrum/s2 Breadcrumbs", () => {
     });
 
     await wrapper.vm.$nextTick();
-    await user.click(wrapper.get(".s2-BreadcrumbItem").element);
+    await user.click(wrapper.get(".s2-Breadcrumb").element);
     expect(onAction).toHaveBeenCalledWith("home");
   });
 });

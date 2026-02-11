@@ -32,6 +32,7 @@ export {
   DisclosureTitle as S2DisclosureTitle,
   ActionBar as S2ActionBar,
   ActionMenu as S2ActionMenu,
+  Breadcrumb as S2Breadcrumb,
   BreadcrumbItem as S2BreadcrumbItem,
   Breadcrumbs as S2Breadcrumbs,
   Button as S2Button,
