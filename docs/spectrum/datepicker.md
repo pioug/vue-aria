@@ -83,4 +83,5 @@ const component = h(DatePicker, {
 
 - Baseline includes native-input-backed `DateField` and `TimeField` plus popover-based `DatePicker` and `DateRangePicker` composed with `@vue-spectrum/calendar`.
 - Keyboard and screen-reader semantics are wired via `@vue-aria/datepicker` and `@vue-aria/datepicker-state`.
+- Baseline test coverage is split into upstream-style files for `DateField`, `TimeField`, `DatePickerBase`, and `DateRangePicker` (plus the package-level `DatePicker` and SSR suite).
 - Advanced parity still pending: segmented-field rendering, full range time support, and full Spectrum visual/theming alignment.
