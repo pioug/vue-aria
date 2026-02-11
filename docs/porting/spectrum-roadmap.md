@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `57 / 76` completed.
+- Task progress: `58 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -56,6 +56,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/theme-dark` baseline is now in progress with initial `theme` export wired to provider-compatible theme sections plus dark-biased class-variant coverage (`dark`/`darkest`) and starter integration tests/docs; full upstream token/CSS parity remains.
 - `@vue-spectrum/theme-express` baseline is now in progress with initial `theme` export layered on top of `@vue-spectrum/theme-default`, adding express global and scale class variants (`spectrum--express`, `spectrum--express-medium`, `spectrum--express-large`) plus starter integration tests/docs; full upstream token/CSS parity remains.
 - `@vue-spectrum/style-macro-s1` baseline is now in progress with upstream-compatible package layout (`index.ts`, `src/runtime.ts`, `src/style-macro.ts`, `src/spectrum-theme.ts`, `src/types.ts`), starter runtime/helper tests (`mergeStyles`, `baseColor`, `lightDark`, `focusRing`, `raw`, `keyframes`), docs, and umbrella wiring; full macro/token parity remains.
+- `@vue-spectrum/test-utils` baseline is now in progress with upstream-style package layout (`index.ts`, `src/index.ts`, `src/testSetup.ts`), mobile/desktop screen-width simulation helpers (`simulateMobile`, `simulateDesktop`) supporting global `jest`/`vi` spy APIs, starter tests, docs, and umbrella wiring; parity re-export coverage for `@react-aria/test-utils` remains.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
 - CI now runs `npm run test:spectrum-parity` on pull requests and pushes to `main`.
@@ -75,7 +76,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 ## Current Critical Path
 
 1. Move in-progress foundation packages from baseline to complete parity: `provider`, `icon`, and `utils`.
-2. Continue infrastructure support package migration needed for large-scale component work: `test-utils`, `story-utils`, and `s2` (with `style-macro-s1` baseline now in progress).
+2. Continue infrastructure support package migration needed for large-scale component work: `story-utils`, and `s2` (with `style-macro-s1` and `test-utils` baselines now in progress).
 3. Lock theme layer strategy and harden parity for `theme-default`, `theme-light`, `theme-dark`, and `theme-express`.
 4. Start high-volume controls only after the above are stable and parity-gated.
 
@@ -175,4 +176,4 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 1. Deepen `@vue-spectrum/provider` parity (`Provider` wrapper behavior, slot/context behavior, and SSR-focused coverage).
 2. Deepen `@vue-spectrum/icon` parity (slot behavior and class/style integration edge cases), then move it from baseline to complete.
 3. Continue support package track: `@vue-spectrum/style-macro-s1`, `@vue-spectrum/test-utils`, `@vue-spectrum/story-utils`, and `@vue-spectrum/s2`.
-4. Continue infrastructure track by porting `@vue-spectrum/test-utils` next.
+4. Continue infrastructure track by porting `@vue-spectrum/story-utils` next.

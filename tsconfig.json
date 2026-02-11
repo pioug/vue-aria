@@ -70,6 +70,7 @@
       "@vue-spectrum/theme-dark": ["packages/@vue-spectrum/theme-dark/src/index.ts"],
       "@vue-spectrum/theme-express": ["packages/@vue-spectrum/theme-express/src/index.ts"],
       "@vue-spectrum/style-macro-s1": ["packages/@vue-spectrum/style-macro-s1/src/index.ts"],
+      "@vue-spectrum/test-utils": ["packages/@vue-spectrum/test-utils/src/index.ts"],
       "@vue-spectrum/icon": ["packages/@vue-spectrum/icon/src/index.ts"],
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/form": ["packages/@vue-spectrum/form/src/index.ts"],
