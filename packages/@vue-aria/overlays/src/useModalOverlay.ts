@@ -10,6 +10,7 @@ import { useOverlayFocusContain } from "./useOverlayFocusContain";
 export interface UseModalOverlayOptions {
   isDismissable?: MaybeReactive<boolean | undefined>;
   isKeyboardDismissDisabled?: MaybeReactive<boolean | undefined>;
+  shouldCloseOnBlur?: MaybeReactive<boolean | undefined>;
   shouldCloseOnInteractOutside?: (element: Element) => boolean;
 }
 

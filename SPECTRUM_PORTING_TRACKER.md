@@ -139,6 +139,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [x] `ToggleButton` — `1 / 1` exported; missing: none
 - [x] `ToggleButtonGroup` — `1 / 1` exported; missing: none
 - [x] `Tooltip` — `2 / 2` exported; missing: none
+- [x] `Tray` — `1 / 1` exported; missing: none
 - [ ] `TreeView` — `0 / 4` exported; missing: `TreeView`, `TreeViewItem`, `TreeViewItemContent`, `TreeViewLoadMoreItem`
 - [x] `pressScale` — `1 / 1` exported; missing: none
 - [ ] `react-aria-components` — `0 / 5` exported; missing: `Autocomplete`, `Collection`, `FileTrigger`, `parseColor`, `useLocale`
@@ -206,7 +207,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Overlays and Messaging
 
-- In progress baseline: `@react-spectrum/overlays` now has Vue `Overlay`, `Popover`, `Modal`, and `OpenTransition` primitives with baseline portal-mount behavior, transition lifecycle callback wiring, Popover positioning/dismiss semantics (`Escape` close, modal underlay + non-modal mode, and arrow visibility toggles), and Modal overlay semantics (`Escape` close, optional outside-dismiss, underlay, and modal scroll-lock/focus-containment behavior) plus starter/SSR tests and docs/umbrella wiring; `Tray` parity remains.
+- In progress baseline: `@react-spectrum/overlays` now has Vue `Overlay`, `Popover`, `Modal`, `Tray`, and `OpenTransition` primitives with baseline portal-mount behavior, transition lifecycle callback wiring, Popover positioning/dismiss semantics (`Escape` close, modal underlay + non-modal mode, and arrow visibility toggles), Modal overlay semantics (`Escape` close, optional outside-dismiss, underlay, and modal scroll-lock/focus-containment behavior), and Tray semantics (always-dismissable outside click, `Escape` close, hidden dismiss buttons, and fixed-height class support) plus starter/SSR tests and docs/umbrella wiring; advanced visual/theming and mobile edge-case parity remains.
 - In progress baseline: `@react-spectrum/dialog` now has Vue `Dialog`, `AlertDialog`, `DialogTrigger`, and `DialogContainer` primitives with baseline trigger/container wiring, dismiss/escape behavior, and alert-dialog action flows plus starter/SSR tests and docs/umbrella wiring; advanced overlay/context parity remains.
 - In progress baseline: `@react-spectrum/illustratedmessage` now has Vue `IllustratedMessage` primitive with baseline root rendering behavior, slot-based heading/content styling wiring, and starter/SSR tests plus docs/umbrella wiring; advanced visual/theming parity remains.
 - In progress baseline: `@react-spectrum/inlinealert` now has Vue `InlineAlert` primitive with baseline alert semantics, variant class behavior, autofocus handling, and starter/SSR tests plus docs/umbrella wiring; advanced icon/theming parity remains.

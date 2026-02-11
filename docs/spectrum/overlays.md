@@ -4,7 +4,7 @@ Vue port baseline of `@react-spectrum/overlays`.
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Modal, Overlay, Popover } from "@vue-spectrum/vue-spectrum";
+import { Modal, Overlay, Popover, Tray } from "@vue-spectrum/vue-spectrum";
 
 const popoverTrigger = ref<HTMLElement | null>(null);
 </script>
@@ -36,6 +36,15 @@ const popoverTrigger = ref<HTMLElement | null>(null);
       Modal content with underlay + dismiss wiring.
     </div>
   </Modal>
+  <Tray :isOpen="true">
+    <div
+      class="spectrum-preview-panel"
+      role="dialog"
+      aria-label="Preview tray"
+      style="max-width: 320px; margin: 0 auto; text-align: center;">
+      Tray content with mobile-style dismiss behavior.
+    </div>
+  </Tray>
 </div>
 
 ## Exports
@@ -43,13 +52,14 @@ const popoverTrigger = ref<HTMLElement | null>(null);
 - `Overlay`
 - `Popover`
 - `Modal`
+- `Tray`
 - `OpenTransition`
 
 ## Example
 
 ```ts
 import { h } from "vue";
-import { Modal, Overlay, Popover } from "@vue-spectrum/overlays";
+import { Modal, Overlay, Popover, Tray } from "@vue-spectrum/overlays";
 
 const component = h(
   Overlay,
@@ -81,6 +91,17 @@ const modal = h(
     default: () => h("div", { role: "dialog" }, "Modal content"),
   }
 );
+
+const tray = h(
+  Tray,
+  {
+    isOpen: true,
+    isFixedHeight: true,
+  },
+  {
+    default: () => h("div", { role: "dialog" }, "Tray content"),
+  }
+);
 ```
 
 ## Notes
@@ -88,4 +109,4 @@ const modal = h(
 - Baseline includes portal mounting behavior and transition lifecycle callback wiring.
 - Baseline now includes `Popover` with `@vue-aria/overlays` positioning/dismiss wiring (`Escape` close, underlay for modal mode, optional non-modal mode, and arrow visibility toggle).
 - Baseline now includes `Modal` with `@vue-aria/overlays` modal semantics (`Escape` close, optional outside-dismiss, underlay, and scroll-lock/focus-containment behavior).
-- `Tray` parity remains in progress.
+- Baseline now includes `Tray` with dismissable modal-overlay semantics (outside-click close, `Escape` close, hidden dismiss buttons, fixed-height class support, and scroll-lock/focus-containment behavior).
