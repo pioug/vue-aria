@@ -1,6 +1,6 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   ComboBox,
@@ -210,6 +210,21 @@ describe("ComboBox", () => {
     expect(options[0]?.id).toContain("option");
   });
 
+  it("opens on focus when menuTrigger is focus", async () => {
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      menuTrigger: "focus",
+      onOpenChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+
+    const listbox = await tree.findByRole("listbox");
+    expect(listbox).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
+  });
+
   it("filters by input text", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
@@ -222,6 +237,23 @@ describe("ComboBox", () => {
     const options = within(listbox).getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]?.textContent).toContain("Three");
+  });
+
+  it("does not focus a disabled matching item on input", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      disabledKeys: ["2"],
+    });
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.type(input, "Two");
+
+    const listbox = await tree.findByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]?.textContent).toContain("Two");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
   });
 
   it("supports controlled selectedKey", () => {
@@ -448,5 +480,34 @@ describe("ComboBox", () => {
   it("exports Item and Section aliases", () => {
     expect(Item).toBe(ComboBoxItem);
     expect(Section).toBe(ComboBoxSection);
+  });
+
+  it("exposes UNSAFE_getDOMNode and focus through component refs", () => {
+    const comboBoxRef = ref<{
+      UNSAFE_getDOMNode?: () => HTMLElement | null;
+      focus?: () => void;
+    } | null>(null);
+
+    const App = defineComponent({
+      name: "ComboBoxRefApp",
+      setup() {
+        return () =>
+          h(ComboBox, {
+            ref: comboBoxRef,
+            label: "Test",
+            items,
+          });
+      },
+    });
+
+    const tree = render(App);
+    const combobox = tree.getByRole("combobox");
+    const root = combobox.closest(".react-spectrum-ComboBox");
+
+    expect(root).not.toBeNull();
+    expect(comboBoxRef.value?.UNSAFE_getDOMNode?.()).toBe(root);
+
+    comboBoxRef.value?.focus?.();
+    expect(document.activeElement).toBe(combobox);
   });
 });

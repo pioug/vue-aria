@@ -41,6 +41,7 @@ export interface SpectrumComboBoxProps {
   description?: string | undefined;
   errorMessage?: string | undefined;
   items?: SpectrumComboBoxItemData[] | undefined;
+  disabledKeys?: Iterable<Key> | undefined;
   selectedKey?: Key | null | undefined;
   defaultSelectedKey?: Key | null | undefined;
   onSelectionChange?: ((key: Key | null) => void) | undefined;
@@ -577,6 +578,10 @@ export const ComboBox = defineComponent({
       type: Array as PropType<SpectrumComboBoxItemData[] | undefined>,
       default: undefined,
     },
+    disabledKeys: {
+      type: null as unknown as PropType<Iterable<Key> | undefined>,
+      default: undefined,
+    },
     selectedKey: {
       type: [String, Number] as PropType<Key | null | undefined>,
       default: undefined,
@@ -765,6 +770,7 @@ export const ComboBox = defineComponent({
 
     const state = useComboBoxState<NormalizedComboBoxItem>({
       collection: normalizedItems,
+      disabledKeys: props.disabledKeys,
       selectedKey: props.selectedKey,
       defaultSelectedKey: props.defaultSelectedKey,
       onSelectionChange: props.onSelectionChange,
