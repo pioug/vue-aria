@@ -65,6 +65,7 @@ const component = h(DialogTrigger, null, {
 - Baseline `DialogTrigger` state parity now includes controlled/uncontrolled open flows (`isOpen`/`onOpenChange` and `defaultOpen`), keyboard-dismiss disabling (`isKeyboardDismissDisabled`), custom close-button wiring through injected close callbacks, and built-in `Dialog` dismiss-button close paths.
 - Baseline `DialogTrigger` now includes focus-restore parity when closing by trigger-toggle, hidden dismiss button, and `Escape`.
 - Baseline `DialogTrigger` now preserves nested popover interactivity by ignoring outside-dismiss logic for pointer events that originate inside another dialog overlay.
+- Baseline modal focus containment now tracks and restores the last in-overlay focused control, including nested modal stacks where outside focus attempts should remain in the inner dialog.
 - Baseline `DialogTrigger` and `DialogContainer` now include keyboard focus-containment loops (`Tab`/`Shift+Tab`) so focus stays trapped within the active dialog overlay.
 - Baseline modal/tray overlays now set `aria-hidden="true"` on non-overlay body content while open, and restore original values on close.
 - Baseline `DialogContainer` dismissal semantics now cover `Escape` handling, keyboard-dismiss disabling, and outside-click dismissal rules (`isDismissable` gated).

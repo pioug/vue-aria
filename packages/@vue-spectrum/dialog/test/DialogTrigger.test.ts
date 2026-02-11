@@ -743,4 +743,87 @@ describe("DialogTrigger", () => {
       wrapper.unmount();
     }
   });
+
+  it("keeps focus in the inner modal when nested dialogs are open", async () => {
+    const user = userEvent.setup();
+    const NestedModalHarness = defineComponent({
+      name: "NestedModalDialogTriggerHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("input", {
+              type: "text",
+              "aria-label": "outside input",
+            }),
+            h(DialogTrigger, null, {
+              default: () => [
+                h("button", { type: "button" }, "Outer trigger"),
+                h(Dialog, null, () => [
+                  h("input", {
+                    type: "text",
+                    "aria-label": "outer input",
+                    autofocus: true,
+                  }),
+                  h(DialogTrigger, null, {
+                    default: () => [
+                      h("button", { type: "button" }, "Inner trigger"),
+                      h(Dialog, null, () =>
+                        h("input", {
+                          type: "text",
+                          "aria-label": "inner input",
+                          autofocus: true,
+                        })
+                      ),
+                    ],
+                  }),
+                ]),
+              ],
+            }),
+          ]);
+      },
+    });
+
+    const wrapper = mount(NestedModalHarness, {
+      attachTo: document.body,
+    });
+
+    try {
+      await user.click(wrapper.get("button").element as HTMLElement);
+      await flushOverlay();
+
+      const outerInput = document.body.querySelector(
+        "input[aria-label=\"outer input\"]"
+      ) as HTMLInputElement | null;
+      expect(outerInput).not.toBeNull();
+      expect(document.activeElement).toBe(outerInput);
+
+      const innerTrigger = Array.from(document.body.querySelectorAll("button")).find(
+        (button) => button.textContent?.trim() === "Inner trigger"
+      ) as HTMLButtonElement | undefined;
+      expect(innerTrigger).toBeTruthy();
+
+      await user.click(innerTrigger as HTMLElement);
+      await flushOverlay();
+
+      const innerInput = document.body.querySelector(
+        "input[aria-label=\"inner input\"]"
+      ) as HTMLInputElement | null;
+      expect(innerInput).not.toBeNull();
+      expect(document.activeElement).toBe(innerInput);
+
+      await user.click(document.body);
+      await flushOverlay();
+      expect(document.activeElement).toBe(innerInput);
+
+      const outsideInput = document.body.querySelector(
+        "input[aria-label=\"outside input\"]"
+      ) as HTMLInputElement | null;
+      expect(outsideInput).not.toBeNull();
+      outsideInput?.focus();
+      await flushOverlay();
+      expect(document.activeElement).toBe(innerInput);
+    } finally {
+      wrapper.unmount();
+    }
+  });
 });

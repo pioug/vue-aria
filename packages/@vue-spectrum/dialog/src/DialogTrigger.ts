@@ -17,7 +17,7 @@ import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { mergeProps } from "@vue-aria/utils";
 import { classNames } from "@vue-spectrum/utils";
 import { Overlay } from "@vue-spectrum/overlays";
-import { trapFocusWithinOverlay } from "./focusTrap";
+import { getFocusableElements, trapFocusWithinOverlay } from "./focusTrap";
 import {
   provideDialogContext,
   type DialogContextValue,
@@ -157,6 +157,7 @@ export const DialogTrigger = defineComponent({
     const triggerRef = ref<HTMLElement | null>(null);
     const overlayRootRef = ref<HTMLElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
+    const lastFocusedInOverlayRef = ref<HTMLElement | null>(null);
     const wasOpenRef = ref(false);
     const hiddenBodyElements = ref<Array<{
       element: HTMLElement;
@@ -227,6 +228,9 @@ export const DialogTrigger = defineComponent({
 
       return Boolean(resolvedDismissable.value);
     });
+    const shouldContainFocus = computed<boolean>(
+      () => effectiveType.value !== "popover"
+    );
     const shouldUsePopoverPositioning = computed(
       () => effectiveType.value === "popover"
     );
@@ -255,7 +259,7 @@ export const DialogTrigger = defineComponent({
     };
 
     const onDocumentMouseDown = (event: MouseEvent): void => {
-      if (!isOpen.value || !shouldCloseOnInteractOutside.value) {
+      if (!isOpen.value) {
         return;
       }
 
@@ -275,7 +279,61 @@ export const DialogTrigger = defineComponent({
         }
       }
 
+      if (!shouldCloseOnInteractOutside.value) {
+        if (shouldContainFocus.value) {
+          event.preventDefault();
+        }
+        return;
+      }
+
       setOpen(false);
+    };
+
+    const onDocumentFocusIn = (event: FocusEvent): void => {
+      if (!isOpen.value || !shouldContainFocus.value) {
+        return;
+      }
+
+      const target = event.target as Node | null;
+      if (!target) {
+        return;
+      }
+
+      if (overlayRootRef.value?.contains(target)) {
+        if (target instanceof HTMLElement) {
+          lastFocusedInOverlayRef.value = target;
+        }
+        return;
+      }
+
+      if (target instanceof HTMLElement) {
+        const nestedOverlay = target.closest(".spectrum-DialogOverlay");
+        if (nestedOverlay && nestedOverlay !== overlayRootRef.value) {
+          return;
+        }
+      }
+
+      const root = overlayRootRef.value;
+      if (!root) {
+        return;
+      }
+
+      const dialog =
+        root.querySelector<HTMLElement>("[role=\"dialog\"], [role=\"alertdialog\"]") ??
+        root;
+      const preferredTarget = lastFocusedInOverlayRef.value;
+      if (preferredTarget && root.contains(preferredTarget)) {
+        if (document.activeElement !== preferredTarget) {
+          preferredTarget.focus();
+        }
+        return;
+      }
+
+      const firstFocusable = getFocusableElements(root)[0];
+      const fallbackTarget = firstFocusable ?? dialog;
+      if (document.activeElement !== fallbackTarget) {
+        fallbackTarget.focus();
+      }
     };
 
     const clearAriaHiddenOutsideContent = (): void => {
@@ -331,12 +389,14 @@ export const DialogTrigger = defineComponent({
     onMounted(() => {
       if (typeof document !== "undefined") {
         document.addEventListener("mousedown", onDocumentMouseDown, true);
+        document.addEventListener("focusin", onDocumentFocusIn, true);
       }
     });
 
     onBeforeUnmount(() => {
       if (typeof document !== "undefined") {
         document.removeEventListener("mousedown", onDocumentMouseDown, true);
+        document.removeEventListener("focusin", onDocumentFocusIn, true);
       }
       clearAriaHiddenOutsideContent();
 
@@ -355,6 +415,9 @@ export const DialogTrigger = defineComponent({
       isOpen,
       (nextIsOpen) => {
         wasOpenRef.value = nextIsOpen;
+        if (!nextIsOpen) {
+          lastFocusedInOverlayRef.value = null;
+        }
 
         if (nextIsOpen) {
           restoreFocusRef.value = triggerRef.value;
