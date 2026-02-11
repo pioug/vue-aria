@@ -31,6 +31,8 @@ export {
   DisclosurePanel as S2DisclosurePanel,
   DisclosureTitle as S2DisclosureTitle,
   ActionMenu as S2ActionMenu,
+  BreadcrumbItem as S2BreadcrumbItem,
+  Breadcrumbs as S2Breadcrumbs,
   Button as S2Button,
   LinkButton as S2LinkButton,
   ActionButton as S2ActionButton,
