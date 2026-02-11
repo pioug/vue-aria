@@ -129,6 +129,18 @@ describe("Picker", () => {
     expect(tree.getByText("Three")).toBeTruthy();
   });
 
+  it("renders loading indicator in trigger when loading with no items", () => {
+    const tree = render(Picker, {
+      props: {
+        "aria-label": "picker-test",
+        items: [],
+        isLoading: true,
+      },
+    });
+
+    expect(tree.getByRole("progressbar")).toBeTruthy();
+  });
+
   it("renders picker popover with placement positioning styles", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({ placement: "top end" });
@@ -147,6 +159,86 @@ describe("Picker", () => {
     const listbox = within(popover as HTMLElement).getByRole("listbox");
     const options = within(listbox).getAllByRole("option");
     expect(options).toHaveLength(3);
+  });
+
+  it("fires onLoadMore when listbox scrolls near the end", async () => {
+    const user = userEvent.setup();
+    const onLoadMore = vi.fn();
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 1200;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 300;
+        }
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        onLoadMore,
+      });
+
+      const trigger = tree.getByRole("button", { name: "picker-test" });
+      await user.click(trigger);
+
+      const listbox = tree.getByRole("listbox");
+      (listbox as HTMLElement).scrollTop = 2000;
+      fireEvent.scroll(listbox);
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
+  it("does not fire onLoadMore while loading", async () => {
+    const user = userEvent.setup();
+    const onLoadMore = vi.fn();
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 1200;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 300;
+        }
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        isLoading: true,
+        onLoadMore,
+      });
+
+      const trigger = tree.getByRole("button", { name: "picker-test" });
+      await user.click(trigger);
+
+      const listbox = tree.getByRole("listbox");
+      (listbox as HTMLElement).scrollTop = 2000;
+      fireEvent.scroll(listbox);
+
+      expect(onLoadMore).not.toHaveBeenCalled();
+      expect(tree.getAllByRole("progressbar").length).toBeGreaterThan(0);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
   });
 
   it("supports item key empty string with keyboard navigation", async () => {

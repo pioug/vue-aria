@@ -19,6 +19,7 @@ import { filterDOMProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
 import { Overlay } from "@vue-spectrum/overlays";
+import { ProgressCircle } from "@vue-spectrum/progress";
 
 export type PickerKey = string | number;
 
@@ -35,6 +36,8 @@ export interface SpectrumPickerProps {
   defaultSelectedKey?: PickerKey | undefined;
   isDisabled?: boolean | undefined;
   placeholder?: string | undefined;
+  isLoading?: boolean | undefined;
+  onLoadMore?: (() => void) | undefined;
   onSelectionChange?: ((key: PickerKey) => void) | undefined;
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
   placement?: Placement | undefined;
@@ -290,6 +293,14 @@ export const Picker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    isLoading: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    onLoadMore: {
+      type: Function as PropType<(() => void) | undefined>,
+      default: undefined,
+    },
     onSelectionChange: {
       type: Function as PropType<((key: PickerKey) => void) | undefined>,
       default: undefined,
@@ -339,6 +350,7 @@ export const Picker = defineComponent({
     const rootRef = ref<HTMLDivElement | null>(null);
     const triggerRef = ref<HTMLButtonElement | null>(null);
     const pickerOverlayRef = ref<HTMLElement | null>(null);
+    const loadMoreRequested = ref(false);
     const optionRefs = new Map<string, HTMLLIElement>();
 
     const listboxId = useId(undefined, "v-spectrum-picker-listbox");
@@ -374,6 +386,13 @@ export const Picker = defineComponent({
       selectedKey.value !== null
         ? itemByKey.value.get(selectedKey.value) ?? null
         : null
+    );
+    const isLoading = computed(() => Boolean(props.isLoading));
+    const shouldShowTriggerLoading = computed(
+      () => isLoading.value && items.value.length === 0
+    );
+    const shouldShowListLoading = computed(
+      () => isLoading.value && items.value.length > 0
     );
 
     const isDisabled = computed(() =>
@@ -494,6 +513,15 @@ export const Picker = defineComponent({
     };
 
     watch(
+      isLoading,
+      (loading) => {
+        if (!loading) {
+          loadMoreRequested.value = false;
+        }
+      }
+    );
+
+    watch(
       items,
       () => {
         const selected = selectedKey.value;
@@ -528,6 +556,27 @@ export const Picker = defineComponent({
       },
       { immediate: true }
     );
+
+    const onListboxScroll = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (!target || !props.onLoadMore || isLoading.value) {
+        loadMoreRequested.value = false;
+        return;
+      }
+
+      const distance = target.scrollHeight - target.scrollTop - target.clientHeight;
+      if (distance > 4) {
+        loadMoreRequested.value = false;
+        return;
+      }
+
+      if (loadMoreRequested.value) {
+        return;
+      }
+
+      loadMoreRequested.value = true;
+      props.onLoadMore();
+    };
 
     const onDocumentPointerDown = (event: MouseEvent) => {
       if (!isOpen.value) {
@@ -662,6 +711,14 @@ export const Picker = defineComponent({
                 },
                 selectedItem.value?.label ?? props.placeholder ?? "Select…"
               ),
+              shouldShowTriggerLoading.value
+                ? h(ProgressCircle, {
+                    isIndeterminate: true,
+                    size: "S",
+                    "aria-label": "Loading",
+                    UNSAFE_className: classNames("spectrum-Dropdown-progressCircle"),
+                  })
+                : null,
               h("span", { class: classNames("spectrum-Dropdown-chevron"), "aria-hidden": "true" }, "▾"),
             ]
           ),
@@ -698,6 +755,7 @@ export const Picker = defineComponent({
                             id: listboxId.value,
                             role: "listbox",
                             tabindex: -1,
+                            onScroll: onListboxScroll,
                             onKeydown: (event: KeyboardEvent) => {
                               switch (event.key) {
                                 case "ArrowDown":
@@ -780,7 +838,31 @@ export const Picker = defineComponent({
                               },
                               item.label
                             );
-                          })
+                          }).concat(
+                            shouldShowListLoading.value
+                              ? [
+                                  h(
+                                    "li",
+                                    {
+                                      key: "__picker-loading__",
+                                      role: "option",
+                                      class: classNames("spectrum-Menu-item", "is-loading"),
+                                      "aria-disabled": "true",
+                                    },
+                                    [
+                                      h(ProgressCircle, {
+                                        isIndeterminate: true,
+                                        size: "S",
+                                        "aria-label": "Loading more",
+                                        UNSAFE_className: classNames(
+                                          "spectrum-Dropdown-progressCircle"
+                                        ),
+                                      }),
+                                    ]
+                                  ),
+                                ]
+                              : []
+                          )
                         ),
                       ]
                     ),
