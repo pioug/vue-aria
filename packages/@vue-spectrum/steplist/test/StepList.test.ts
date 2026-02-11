@@ -217,4 +217,16 @@ describe("StepList", () => {
     expect(stepListItems[0].getAttribute("aria-current")).toBe("step");
     expect(onSelectionChange).toHaveBeenCalledWith("step-one");
   });
+
+  it("renders localized state messages", () => {
+    const tree = renderComponent({
+      defaultLastCompletedStep: "step-two",
+      defaultSelectedKey: "step-three",
+    });
+
+    const stepListItems = tree.getAllByRole("link");
+    expect(stepListItems[1].textContent).toContain("Completed:");
+    expect(stepListItems[2].textContent).toContain("Current:");
+    expect(stepListItems[3].textContent).toContain("Not completed:");
+  });
 });

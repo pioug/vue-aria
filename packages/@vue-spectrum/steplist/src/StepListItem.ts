@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, type PropType } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { VisuallyHidden } from "@vue-aria/visually-hidden";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
@@ -7,6 +8,7 @@ import {
   useStepListContext,
   type SpectrumStepListItemData,
 } from "./StepListContext";
+import { stepListMessages } from "./intlMessages";
 
 export interface SpectrumStepListItemProps {
   id?: StepKey | undefined;
@@ -39,6 +41,7 @@ export const StepListItem = defineComponent({
     }
 
     const state = useStepListContext();
+    const stringFormatter = useLocalizedStringFormatter(stepListMessages);
 
     const markerId = useId(undefined, "v-spectrum-step-marker");
     const labelId = useId(undefined, "v-spectrum-step-label");
@@ -58,14 +61,14 @@ export const StepListItem = defineComponent({
 
     const stateText = computed(() => {
       if (isSelected.value) {
-        return "Current";
+        return stringFormatter.value.format("current");
       }
 
       if (isCompleted.value) {
-        return "Completed";
+        return stringFormatter.value.format("completed");
       }
 
-      return "Not completed";
+      return stringFormatter.value.format("notCompleted");
     });
 
     const onSelect = () => {

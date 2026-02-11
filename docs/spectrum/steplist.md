@@ -50,4 +50,5 @@ const component = h(StepList, {
 ## Notes
 
 - Baseline includes selection progression rules, disabled/read-only handling, controlled/uncontrolled selection, SSR coverage, and static slot composition support via `StepListItem`.
-- Advanced upstream icon visuals and localized state messages remain in progress.
+- Baseline includes localized step-state messages for screen readers (`current`, `completed`, `notCompleted`) via `@vue-aria/i18n`.
+- Advanced upstream icon visuals remain in progress.
