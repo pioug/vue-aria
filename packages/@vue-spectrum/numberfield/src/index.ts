@@ -1,3 +1,7 @@
 export { NumberField } from "./NumberField";
 
-export type { SpectrumNumberFieldProps } from "./types";
+export type {
+  SpectrumNumberFieldProps,
+  SpectrumNumberFieldErrorMessageContext,
+  SpectrumNumberFieldErrorMessage,
+} from "./types";

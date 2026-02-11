@@ -457,7 +457,11 @@ export type {
   SpectrumTextFieldValidationState,
 } from "@vue-spectrum/textfield";
 export type { SpectrumSearchFieldProps } from "@vue-spectrum/searchfield";
-export type { SpectrumNumberFieldProps } from "@vue-spectrum/numberfield";
+export type {
+  SpectrumNumberFieldProps,
+  SpectrumNumberFieldErrorMessage,
+  SpectrumNumberFieldErrorMessageContext,
+} from "@vue-spectrum/numberfield";
 export type {
   ComboBoxKey,
   SpectrumComboBoxItemData,

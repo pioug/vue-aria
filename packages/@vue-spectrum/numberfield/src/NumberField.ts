@@ -1,13 +1,17 @@
-import { computed, defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref, watch, watchEffect } from "vue";
 import { useNumberField } from "@vue-aria/numberfield";
 import { useHover } from "@vue-aria/interactions";
 import { mergeProps } from "@vue-aria/utils";
-import { useFormProps } from "@vue-spectrum/form";
+import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
 import { Field } from "@vue-spectrum/label";
 import { useProviderContext } from "@vue-spectrum/provider";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { StepButton } from "./StepButton";
-import { numberFieldPropOptions, type SpectrumNumberFieldProps } from "./types";
+import {
+  numberFieldPropOptions,
+  type SpectrumNumberFieldErrorMessageContext,
+  type SpectrumNumberFieldProps,
+} from "./types";
 
 export const NumberField = defineComponent({
   name: "NumberField",
@@ -19,16 +23,42 @@ export const NumberField = defineComponent({
     const attrsRecord = attrs as Record<string, unknown>;
     const propsRecord = props as unknown as Record<string, unknown>;
     const provider = useProviderContext();
+    const formContext = useFormContext();
+    const formValidationErrors = useFormValidationErrors();
     const inputRef = ref<HTMLInputElement | null>(null);
-
-    const resolvedFormProps = computed(() =>
-      useFormProps({
-        labelPosition: props.labelPosition,
-        labelAlign: props.labelAlign,
-        necessityIndicator: props.necessityIndicator,
-        validationBehavior: props.validationBehavior,
-      })
+    const isServerErrorCleared = ref(false);
+    const currentValue = ref<number | undefined>(
+      props.value !== undefined ? props.value : props.defaultValue
     );
+    const nativeValidationMessage = ref<string | undefined>(undefined);
+    const nativeValidationDetails = ref<unknown>(undefined);
+
+    watch(
+      () => [formValidationErrors.value, props.name] as const,
+      () => {
+        isServerErrorCleared.value = false;
+      },
+      { deep: true }
+    );
+
+    watch(
+      () => props.value,
+      (nextValue) => {
+        if (nextValue !== undefined) {
+          currentValue.value = nextValue;
+        }
+      },
+      { immediate: true }
+    );
+
+    const resolvedFormProps = computed(() => ({
+      labelPosition: props.labelPosition ?? formContext?.value.labelPosition,
+      labelAlign: props.labelAlign ?? formContext?.value.labelAlign,
+      necessityIndicator:
+        props.necessityIndicator ?? formContext?.value.necessityIndicator,
+      validationBehavior:
+        props.validationBehavior ?? formContext?.value.validationBehavior,
+    }));
 
     const isDisabled = computed(
       () => props.isDisabled ?? provider?.value.isDisabled ?? false
@@ -52,6 +82,115 @@ export const NumberField = defineComponent({
         props.validationBehavior ??
         resolvedFormProps.value.validationBehavior ??
         "aria"
+    );
+    const serverErrorMessageFromForm = computed(() => {
+      if (!props.name) {
+        return undefined;
+      }
+
+      const formError = formValidationErrors.value[props.name];
+      if (typeof formError === "string") {
+        return formError;
+      }
+
+      if (Array.isArray(formError)) {
+        for (const entry of formError) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const serverErrorMessage = computed(() =>
+      isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
+    );
+    const validationErrorMessage = computed(() => {
+      if (typeof props.validate !== "function") {
+        return undefined;
+      }
+
+      const result = props.validate(currentValue.value);
+      if (typeof result === "string" && result.trim().length > 0) {
+        return result;
+      }
+
+      if (Array.isArray(result)) {
+        for (const entry of result) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const ariaValidationErrorMessage = computed(() =>
+      validationBehavior.value === "aria" ? validationErrorMessage.value : undefined
+    );
+    const baseValidationErrors = computed<string[]>(() => {
+      if (serverErrorMessage.value) {
+        return [serverErrorMessage.value];
+      }
+
+      if (ariaValidationErrorMessage.value) {
+        return [ariaValidationErrorMessage.value];
+      }
+
+      if (nativeValidationMessage.value) {
+        return [nativeValidationMessage.value];
+      }
+
+      return [];
+    });
+    const resolvedErrorMessageFromProp = computed<string | undefined>(() => {
+      if (typeof props.errorMessage === "string") {
+        return props.errorMessage;
+      }
+
+      if (typeof props.errorMessage !== "function") {
+        return undefined;
+      }
+
+      const context: SpectrumNumberFieldErrorMessageContext = {
+        isInvalid:
+          Boolean(props.isInvalid) ||
+          validationState.value === "invalid" ||
+          baseValidationErrors.value.length > 0,
+        validationErrors: baseValidationErrors.value,
+        validationDetails: nativeValidationDetails.value ?? {},
+      };
+      const value = props.errorMessage(context);
+      if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+      }
+
+      return undefined;
+    });
+    const resolvedErrorMessage = computed(
+      () =>
+        resolvedErrorMessageFromProp.value ??
+        serverErrorMessage.value ??
+        ariaValidationErrorMessage.value ??
+        nativeValidationMessage.value
+    );
+    const resolvedValidationState = computed(
+      () =>
+        validationState.value ??
+        (serverErrorMessage.value ||
+        ariaValidationErrorMessage.value ||
+        nativeValidationMessage.value
+          ? "invalid"
+          : undefined)
+    );
+    const resolvedInvalid = computed(
+      () =>
+        Boolean(props.isInvalid) ||
+        resolvedValidationState.value === "invalid" ||
+        Boolean(serverErrorMessage.value) ||
+        Boolean(ariaValidationErrorMessage.value) ||
+        Boolean(nativeValidationMessage.value)
     );
 
     const resolveStringProp = (
@@ -87,12 +226,9 @@ export const NumberField = defineComponent({
       id: computed(() => props.id),
       label: computed(() => props.label),
       description: computed(() => props.description),
-      errorMessage: computed(() => props.errorMessage),
-      isInvalid:
-        props.isInvalid !== undefined
-          ? computed(() => props.isInvalid)
-          : undefined,
-      validationState,
+      errorMessage: resolvedErrorMessage,
+      isInvalid: resolvedInvalid,
+      validationState: resolvedValidationState,
       validationBehavior,
       isDisabled,
       isReadOnly,
@@ -118,7 +254,18 @@ export const NumberField = defineComponent({
       onBlur: props.onBlur,
       onKeydown: props.onKeydown,
       onKeyup: props.onKeyup,
-      onChange: props.onChange,
+      onInput: () => {
+        if (serverErrorMessageFromForm.value) {
+          isServerErrorCleared.value = true;
+        }
+      },
+      onChange: (value) => {
+        currentValue.value = value;
+        if (serverErrorMessageFromForm.value) {
+          isServerErrorCleared.value = true;
+        }
+        props.onChange?.(value);
+      },
       inputRef,
     });
 
@@ -128,8 +275,10 @@ export const NumberField = defineComponent({
 
     const showStepper = computed(() => !props.hideStepper);
     const isMobile = computed(() => provider?.value.scale === "large");
-    const resolvedValidationState = computed(() =>
-      validationState.value ?? (numberField.isInvalid.value ? "invalid" : undefined)
+    const resolvedValidationStateForField = computed(
+      () =>
+        resolvedValidationState.value ??
+        (numberField.isInvalid.value ? "invalid" : undefined)
     );
     const hiddenInputValue = computed(() => {
       const value =
@@ -139,6 +288,74 @@ export const NumberField = defineComponent({
       }
 
       return "";
+    });
+
+    watchEffect(() => {
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      if (validationBehavior.value === "native") {
+        const customValidityMessage =
+          serverErrorMessage.value ?? (validationErrorMessage.value ?? "");
+        inputElement.setCustomValidity(customValidityMessage);
+        return;
+      }
+
+      inputElement.setCustomValidity("");
+    });
+
+    watch(
+      () => validationBehavior.value,
+      (nextBehavior) => {
+        if (nextBehavior !== "native") {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = undefined;
+        }
+      },
+      { immediate: true }
+    );
+
+    watchEffect((onCleanup) => {
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      const onNativeInvalid = () => {
+        if (validationBehavior.value !== "native") {
+          return;
+        }
+
+        nativeValidationMessage.value =
+          inputElement.validationMessage || "Constraints not satisfied";
+        nativeValidationDetails.value = inputElement.validity;
+      };
+      const onNativeBlur = () => {
+        if (validationBehavior.value !== "native") {
+          return;
+        }
+
+        if (inputElement.validity.valid) {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = inputElement.validity;
+        }
+      };
+      const onFormReset = () => {
+        nativeValidationMessage.value = undefined;
+        nativeValidationDetails.value = undefined;
+      };
+
+      inputElement.addEventListener("invalid", onNativeInvalid);
+      inputElement.addEventListener("blur", onNativeBlur);
+      inputElement.form?.addEventListener("reset", onFormReset);
+
+      onCleanup(() => {
+        inputElement.removeEventListener("invalid", onNativeInvalid);
+        inputElement.removeEventListener("blur", onNativeBlur);
+        inputElement.form?.removeEventListener("reset", onFormReset);
+      });
     });
 
     return () =>
@@ -153,11 +370,13 @@ export const NumberField = defineComponent({
           includeNecessityIndicatorInAccessibilityName:
             props.includeNecessityIndicatorInAccessibilityName,
           description: props.description,
-          errorMessage: props.errorMessage,
+          errorMessage: resolvedErrorMessage.value,
+          validationErrors: baseValidationErrors.value,
+          validationDetails: nativeValidationDetails.value ?? {},
           isRequired: isRequired.value,
           isDisabled: isDisabled.value,
-          isInvalid: numberField.isInvalid.value,
-          validationState: resolvedValidationState.value,
+          isInvalid: resolvedInvalid.value,
+          validationState: resolvedValidationStateForField.value,
           labelProps: numberField.labelProps.value,
           descriptionProps: numberField.descriptionProps.value,
           errorMessageProps: numberField.errorMessageProps.value,
@@ -180,7 +399,8 @@ export const NumberField = defineComponent({
                     "is-disabled": isDisabled.value,
                     "spectrum-Stepper--readonly": isReadOnly.value,
                     "is-invalid":
-                      resolvedValidationState.value === "invalid" && !isDisabled.value,
+                      resolvedValidationStateForField.value === "invalid" &&
+                      !isDisabled.value,
                     "spectrum-Stepper--showStepper": showStepper.value,
                     "spectrum-Stepper--isMobile": isMobile.value,
                     "is-hovered": isHovered.value,

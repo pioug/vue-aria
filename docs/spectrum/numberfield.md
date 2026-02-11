@@ -38,4 +38,5 @@ const field = h(NumberField, {
 
 - Baseline includes `useNumberField` semantics, clamped min/max handling, controlled/uncontrolled value support, increment/decrement step buttons, long-press auto-repeat stepping, upstream-style platform `inputMode` handling, and focused wheel stepping.
 - Description/error wiring, hidden form input (`name`), and SSR coverage are included.
+- Baseline now includes `validate(value)` support across ARIA/native validation modes, function-style native `errorMessage` customizers, and `Form.validationErrors` integration by field `name` with clear-on-input behavior.
 - Advanced locale edge cases remain in progress.

@@ -1,6 +1,12 @@
 import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
+import {
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  provideSpectrumProvider,
+} from "@vue-spectrum/provider";
 import { NumberField } from "../src";
 
 function renderNumberField(props: Record<string, unknown> = {}) {
@@ -10,6 +16,23 @@ function renderNumberField(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+function renderWithProvider(component: ReturnType<typeof defineComponent>) {
+  const ProviderHarness = defineComponent({
+    name: "NumberFieldProviderHarness",
+    setup() {
+      provideSpectrumProvider({
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        colorScheme: "light",
+        scale: "medium",
+      });
+
+      return () => h(component);
+    },
+  });
+
+  return render(ProviderHarness);
 }
 
 describe("NumberField", () => {
@@ -258,5 +281,92 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenCalledTimes(callCountAfterRelease);
 
     vi.useRealTimers();
+  });
+
+  it("supports validate function in aria behavior", async () => {
+    const tree = renderNumberField({
+      defaultValue: 2,
+      validate: (value: number | undefined) =>
+        value === 2 ? "Invalid value" : null,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(tree.getByText("Invalid value")).toBeTruthy();
+
+    await fireEvent.update(input, "4");
+    await fireEvent.blur(input);
+    await nextTick();
+
+    expect(tree.queryByText("Invalid value")).toBeNull();
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  it("supports custom native error message functions", async () => {
+    const Harness = defineComponent({
+      name: "NumberFieldNativeCustomMessageHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(NumberField, {
+              label: "Amount",
+              isRequired: true,
+              validationBehavior: "native",
+              errorMessage: (context) =>
+                (
+                  context.validationDetails as
+                    | { valueMissing?: boolean }
+                    | undefined
+                )?.valueMissing
+                  ? "Please enter a value"
+                  : null,
+            }),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(tree.getByText("Please enter a value")).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+  });
+
+  it("applies native Form.validationErrors to custom validity", async () => {
+    const App = defineComponent({
+      name: "NumberFieldNativeServerValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: {
+                amount: "Invalid value.",
+              },
+            },
+            {
+              default: () =>
+                h(NumberField, {
+                  label: "Amount",
+                  name: "amount",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(tree.getByText("Invalid value.")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await fireEvent.update(input, "4");
+    await nextTick();
+    expect(input.validity.valid).toBe(true);
   });
 });

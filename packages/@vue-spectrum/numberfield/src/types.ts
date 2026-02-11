@@ -7,6 +7,18 @@ import type {
   ValidationState,
 } from "@vue-spectrum/form";
 
+export interface SpectrumNumberFieldErrorMessageContext {
+  isInvalid: boolean;
+  validationErrors: string[];
+  validationDetails: unknown;
+}
+
+export type SpectrumNumberFieldErrorMessage =
+  | string
+  | ((
+      context: SpectrumNumberFieldErrorMessageContext
+    ) => string | null | undefined);
+
 export interface SpectrumNumberFieldProps {
   id?: string | undefined;
   label?: string | undefined;
@@ -15,7 +27,7 @@ export interface SpectrumNumberFieldProps {
   necessityIndicator?: NecessityIndicator | null | undefined;
   includeNecessityIndicatorInAccessibilityName?: boolean | undefined;
   description?: string | undefined;
-  errorMessage?: string | undefined;
+  errorMessage?: SpectrumNumberFieldErrorMessage | undefined;
   isDisabled?: boolean | undefined;
   isReadOnly?: boolean | undefined;
   isRequired?: boolean | undefined;
@@ -41,6 +53,9 @@ export interface SpectrumNumberFieldProps {
   "aria-labelledby"?: string | undefined;
   "aria-describedby"?: string | undefined;
   "aria-errormessage"?: string | undefined;
+  validate?:
+    | ((value: number | undefined) => string | string[] | boolean | null | undefined)
+    | undefined;
   onChange?: ((value: number | undefined) => void) | undefined;
   onFocus?: ((event: FocusEvent) => void) | undefined;
   onBlur?: ((event: FocusEvent) => void) | undefined;
@@ -81,7 +96,7 @@ export const numberFieldPropOptions = {
     default: undefined,
   },
   errorMessage: {
-    type: String as PropType<string | undefined>,
+    type: [String, Function] as PropType<SpectrumNumberFieldErrorMessage | undefined>,
     default: undefined,
   },
   isDisabled: {
@@ -182,6 +197,13 @@ export const numberFieldPropOptions = {
   },
   "aria-errormessage": {
     type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  validate: {
+    type: Function as PropType<
+      | ((value: number | undefined) => string | string[] | boolean | null | undefined)
+      | undefined
+    >,
     default: undefined,
   },
   onChange: {
