@@ -298,6 +298,7 @@ export const TagGroup = defineComponent({
   setup(props, { attrs, expose, slots }) {
     const locale = useLocale();
     const rootRef = ref<HTMLDivElement | null>(null);
+    const gridRef = ref<HTMLDivElement | null>(null);
     const rowRefs = new Map<string, HTMLDivElement>();
     const removedKeys = ref(new Set<string>());
     const focusedKey = ref<string | null>(null);
@@ -448,12 +449,38 @@ export const TagGroup = defineComponent({
     });
 
     const removeKey = (itemKey: string) => {
+      const currentItems = items.value;
+      const currentIndex = currentItems.findIndex(
+        (item) => String(item.key) === itemKey
+      );
+      const remainingEnabledKeys = currentItems
+        .filter((item) => String(item.key) !== itemKey)
+        .filter((item) => !isItemDisabled(item))
+        .map((item) => String(item.key));
+      const nextFocusKey =
+        remainingEnabledKeys.length > 0
+          ? remainingEnabledKeys[
+              Math.min(
+                Math.max(currentIndex, 0),
+                remainingEnabledKeys.length - 1
+              )
+            ] ?? null
+          : null;
+
       const originalKey = keyMap.value.get(itemKey) ?? itemKey;
       const next = new Set<TagKey>([originalKey]);
 
       props.onRemove?.(next);
 
       removedKeys.value = new Set([...removedKeys.value, itemKey]);
+      void nextTick(() => {
+        if (nextFocusKey) {
+          focusKey(nextFocusKey);
+          return;
+        }
+
+        gridRef.value?.focus();
+      });
     };
 
     return () => {
@@ -524,7 +551,11 @@ export const TagGroup = defineComponent({
             "div",
             {
               id: gridId.value,
+              ref: (value: unknown) => {
+                gridRef.value = value as HTMLDivElement | null;
+              },
               role: "grid",
+              tabIndex: visibleItems.length === 0 ? 0 : -1,
               class: classNames("spectrum-Tags"),
               "aria-label": ariaLabel,
               "aria-labelledby": ariaLabelledby,

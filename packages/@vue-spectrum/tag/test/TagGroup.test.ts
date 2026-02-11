@@ -107,6 +107,45 @@ describe("TagGroup", () => {
     expect(tree.getAllByRole("row")).toHaveLength(2);
   });
 
+  it("moves focus to the next available tag after removal", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      allowsRemoving: true,
+    });
+
+    let tags = tree.getAllByRole("row");
+    (tags[0] as HTMLElement).focus();
+    expect(document.activeElement).toBe(tags[0]);
+
+    await user.keyboard("{Delete}");
+    await nextTick();
+
+    tags = tree.getAllByRole("row");
+    expect(tags).toHaveLength(2);
+    expect(document.activeElement).toBe(tags[0]);
+    expect(tags[0]?.textContent).toContain("Tag 2");
+  });
+
+  it("focuses the tag grid when the last tag is removed", async () => {
+    const user = userEvent.setup();
+    const tree = render(TagGroup, {
+      props: {
+        items: [{ key: "only", label: "Only tag", "aria-label": "Only tag" }],
+        allowsRemoving: true,
+        "aria-label": "tag group",
+      },
+    });
+
+    const tag = tree.getByRole("row");
+    (tag as HTMLElement).focus();
+    await user.keyboard("{Delete}");
+    await nextTick();
+
+    expect(tree.queryAllByRole("row")).toHaveLength(0);
+    const grid = tree.getByRole("grid", { name: "tag group" });
+    expect(document.activeElement).toBe(grid);
+  });
+
   it("supports aria-label on each tag item", () => {
     const tree = renderComponent();
 
