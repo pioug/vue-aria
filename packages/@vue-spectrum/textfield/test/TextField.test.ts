@@ -2,7 +2,29 @@ import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
+import {
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  provideSpectrumProvider,
+} from "@vue-spectrum/provider";
 import { TextArea, TextField } from "../src";
+
+function renderWithProvider(component: ReturnType<typeof defineComponent>) {
+  const ProviderHarness = defineComponent({
+    name: "TextFieldProviderHarness",
+    setup() {
+      provideSpectrumProvider({
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        colorScheme: "light",
+        scale: "medium",
+      });
+
+      return () => h(component);
+    },
+  });
+
+  return render(ProviderHarness);
+}
 
 describe("TextField", () => {
   it("warns once when placeholder is provided", async () => {
@@ -272,6 +294,38 @@ describe("TextField", () => {
     await user.click(getByTestId("reset"));
     expect(input.value).toBe("Devon");
   });
+
+  it("shows form validationErrors message when field name matches", () => {
+    const App = defineComponent({
+      name: "TextFieldFormValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                username: "Invalid username.",
+              },
+            },
+            {
+              default: () =>
+                h(TextField, {
+                  label: "Username",
+                  name: "username",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox");
+    const message = tree.getByText("Invalid username.");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.getAttribute("aria-describedby")).toContain(
+      message.getAttribute("id") ?? ""
+    );
+  });
 });
 
 describe("TextArea", () => {
@@ -469,5 +523,37 @@ describe("TextArea", () => {
 
     await user.click(getByTestId("reset"));
     expect(input.value).toBe("Devon");
+  });
+
+  it("shows form validationErrors message when field name matches", () => {
+    const App = defineComponent({
+      name: "TextAreaFormValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                notes: "Invalid notes.",
+              },
+            },
+            {
+              default: () =>
+                h(TextArea, {
+                  label: "Notes",
+                  name: "notes",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox");
+    const message = tree.getByText("Invalid notes.");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.getAttribute("aria-describedby")).toContain(
+      message.getAttribute("id") ?? ""
+    );
   });
 });

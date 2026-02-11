@@ -62,6 +62,7 @@ export const TextArea = defineComponent({
     const {
       isDisabled,
       validationState,
+      errorMessage,
       textField,
       inputProps,
       inputRows,
@@ -111,6 +112,7 @@ export const TextArea = defineComponent({
         validationState:
           (validationState.value as "valid" | "invalid" | undefined) ??
           undefined,
+        errorMessage: errorMessage.value,
         inputRef,
         labelProps: textField.labelProps.value,
         descriptionProps: textField.descriptionProps.value,

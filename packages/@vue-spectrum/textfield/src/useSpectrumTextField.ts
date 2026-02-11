@@ -1,6 +1,6 @@
 import { computed, type Ref } from "vue";
 import { useTextField } from "@vue-aria/textfield";
-import { useFormProps } from "@vue-spectrum/form";
+import { useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
 import type {
   SpectrumTextAreaProps,
@@ -22,6 +22,7 @@ export function useSpectrumTextField(
   options: UseSpectrumTextFieldOptions = {}
 ) {
   const provider = useProviderContext();
+  const formValidationErrors = useFormValidationErrors();
 
   const resolvedFormProps = computed(() =>
     useFormProps({
@@ -44,6 +45,38 @@ export function useSpectrumTextField(
   const validationState = computed(
     () => props.validationState ?? provider?.value.validationState
   );
+  const serverErrorMessage = computed(() => {
+    if (!props.name) {
+      return undefined;
+    }
+
+    const formError = formValidationErrors.value[props.name];
+    if (typeof formError === "string") {
+      return formError;
+    }
+
+    if (Array.isArray(formError)) {
+      for (const entry of formError) {
+        if (typeof entry === "string" && entry.trim().length > 0) {
+          return entry;
+        }
+      }
+    }
+
+    return undefined;
+  });
+  const resolvedValidationState = computed(
+    () => validationState.value ?? (serverErrorMessage.value ? "invalid" : undefined)
+  );
+  const resolvedErrorMessage = computed(
+    () => props.errorMessage ?? serverErrorMessage.value
+  );
+  const resolvedInvalid = computed(
+    () =>
+      Boolean(props.isInvalid) ||
+      resolvedValidationState.value === "invalid" ||
+      Boolean(serverErrorMessage.value)
+  );
   const validationBehavior = computed<SpectrumTextFieldValidationBehavior>(
     () =>
       props.validationBehavior ??
@@ -60,12 +93,9 @@ export function useSpectrumTextField(
     id: computed(() => props.id),
     label: computed(() => props.label),
     description: computed(() => props.description),
-    errorMessage: computed(() => props.errorMessage),
-    isInvalid:
-      props.isInvalid !== undefined
-        ? computed(() => props.isInvalid)
-        : undefined,
-    validationState,
+    errorMessage: resolvedErrorMessage,
+    isInvalid: resolvedInvalid,
+    validationState: resolvedValidationState,
     validationBehavior,
     isDisabled,
     isReadOnly,
@@ -156,7 +186,8 @@ export function useSpectrumTextField(
     isDisabled,
     isReadOnly,
     isRequired,
-    validationState,
+    validationState: resolvedValidationState,
+    errorMessage: resolvedErrorMessage,
     validationBehavior,
     textField,
     inputProps,

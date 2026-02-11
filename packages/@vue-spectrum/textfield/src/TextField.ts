@@ -45,6 +45,7 @@ export const TextField = defineComponent({
     const {
       isDisabled,
       validationState,
+      errorMessage,
       textField,
       inputProps,
     } = useSpectrumTextField(props as SpectrumTextFieldProps, attrsRecord, {
@@ -64,6 +65,7 @@ export const TextField = defineComponent({
         validationState:
           (validationState.value as "valid" | "invalid" | undefined) ??
           undefined,
+        errorMessage: errorMessage.value,
         labelProps: textField.labelProps.value,
         descriptionProps: textField.descriptionProps.value,
         errorMessageProps: textField.errorMessageProps.value,

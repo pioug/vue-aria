@@ -67,6 +67,7 @@ const area = h(TextArea, {
 
 - Baseline includes `useTextField` accessibility semantics, validation wiring, controlled/uncontrolled value behavior, and passthrough ARIA/data attributes on the native input.
 - Baseline includes controlled form-reset parity (`<form><input type="reset" /></form>`) for both `TextField` and `TextArea`.
+- Baseline includes `Form.validationErrors` wiring by field `name`, including invalid-state and error message semantics.
 - `TextArea` baseline includes multiline rendering, row configuration, and auto-resize behavior driven by textarea `scrollHeight` updates.
 - Placeholder deprecation warning parity from upstream `TextField` and `TextArea` is included.
 - Baseline icon, loading-indicator, validation-icon, and `excludeFromTabOrder` behavior parity is now included for both `TextField` and `TextArea`.
