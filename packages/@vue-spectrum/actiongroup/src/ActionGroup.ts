@@ -1,9 +1,13 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useLocale } from "@vue-aria/i18n";
@@ -17,6 +21,12 @@ export type ActionGroupKey = string | number;
 export interface SpectrumActionGroupItemData {
   key: ActionGroupKey;
   label: string;
+  "aria-label"?: string | undefined;
+  isDisabled?: boolean | undefined;
+}
+
+export interface SpectrumActionGroupItemProps {
+  id?: ActionGroupKey | undefined;
   "aria-label"?: string | undefined;
   isDisabled?: boolean | undefined;
 }
@@ -85,6 +95,183 @@ function areSetsEqual(first: Set<string>, second: Set<string>): boolean {
 
   return true;
 }
+
+function normalizeActionGroupKey(value: unknown, fallback: ActionGroupKey): ActionGroupKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseActionGroupSlotItems(
+  nodes: VNode[] | undefined
+): SpectrumActionGroupItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const flattened = flattenVNodeChildren(nodes);
+  const parsedItems: SpectrumActionGroupItemData[] = [];
+  let itemIndex = 0;
+
+  for (const node of flattened) {
+    if (getComponentName(node) !== "ActionGroupItem") {
+      continue;
+    }
+
+    const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const slotLabel = extractTextContent(getSlotContent(node)).trim();
+    const key = normalizeActionGroupKey(node.key ?? nodeProps.id, `item-${itemIndex}`);
+
+    parsedItems.push({
+      key,
+      label: slotLabel || String(key),
+      "aria-label":
+        typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
+      isDisabled: Boolean(nodeProps.isDisabled),
+    });
+    itemIndex += 1;
+  }
+
+  return parsedItems;
+}
+
+function areItemArraysEqual(
+  left: SpectrumActionGroupItemData[],
+  right: SpectrumActionGroupItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.isDisabled !== candidate.isDisabled
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function createStaticActionGroupComponent(name: string, props: Record<string, unknown>) {
+  return defineComponent({
+    name,
+    props: props as any,
+    setup() {
+      return () => null;
+    },
+  });
+}
+
+export const ActionGroupItem = createStaticActionGroupComponent("ActionGroupItem", {
+  id: {
+    type: [String, Number] as PropType<ActionGroupKey | undefined>,
+    default: undefined,
+  },
+  "aria-label": {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  isDisabled: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+});
 
 export const ActionGroup = defineComponent({
   name: "ActionGroup",
@@ -179,16 +366,19 @@ export const ActionGroup = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const locale = useLocale();
     const rootRef = ref<HTMLElement | null>(null);
     const itemRefs = new Map<string, ActionButtonHandle | null>();
+    const slotItems = ref<SpectrumActionGroupItemData[]>([]);
 
     const resolvedProviderProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
 
-    const items = computed<SpectrumActionGroupItemData[]>(() => props.items ?? []);
+    const items = computed<SpectrumActionGroupItemData[]>(
+      () => props.items ?? slotItems.value
+    );
     const keyMap = computed(() => {
       const map = new Map<string, ActionGroupKey>();
       for (const item of items.value) {
@@ -325,6 +515,15 @@ export const ActionGroup = defineComponent({
     });
 
     return () => {
+      if (!props.items) {
+        const parsedItems = parseActionGroupSlotItems(
+          slots.default?.() as VNode[] | undefined
+        );
+        if (!areItemArraysEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const styleInput: Record<string, unknown> = {
         ...attrsRecord,

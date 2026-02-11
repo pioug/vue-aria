@@ -27,6 +27,7 @@ const items = [
 ## Exports
 
 - `ActionGroup`
+- `ActionGroupItem`
 
 ## Example
 
@@ -47,5 +48,5 @@ const component = h(ActionGroup, {
 
 ## Notes
 
-- Baseline includes item rendering, single/multiple selection state handling, disabled-key behavior, and arrow-key roving focus (including RTL behavior).
+- Baseline includes item rendering, single/multiple selection state handling, disabled-key behavior, arrow-key roving focus (including RTL behavior), and static slot composition support via `ActionGroupItem`.
 - Overflow collapse/menu integration and icon-only label-collapse behavior are still in progress.

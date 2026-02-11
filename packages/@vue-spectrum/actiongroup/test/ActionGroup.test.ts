@@ -3,7 +3,11 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
-import { ActionGroup, type SpectrumActionGroupItemData } from "../src";
+import {
+  ActionGroup,
+  ActionGroupItem,
+  type SpectrumActionGroupItemData,
+} from "../src";
 
 const items: SpectrumActionGroupItemData[] = [
   { key: "one", label: "One" },
@@ -186,5 +190,48 @@ describe("ActionGroup", () => {
 
     const group = tree.getByRole("toolbar", { name: "actiongroup-test" });
     expect(groupRef.value?.UNSAFE_getDOMNode()).toBe(group);
+  });
+
+  it("supports static slot syntax with ActionGroupItem", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "ActionGroupSlotHarness",
+      setup() {
+        return () =>
+          h(
+            Provider,
+            {
+              theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+            },
+            {
+              default: () =>
+                h(
+                  ActionGroup,
+                  {
+                    "aria-label": "actiongroup-test",
+                    onAction,
+                  },
+                  {
+                    default: () => [
+                      h(ActionGroupItem, { id: "first" }, () => "First"),
+                      h(ActionGroupItem, { id: "second", isDisabled: true }, () => "Second"),
+                      h(ActionGroupItem, { id: "third" }, () => "Third"),
+                    ],
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const buttons = tree.getAllByRole("button");
+    expect(buttons).toHaveLength(3);
+    expect(buttons[1]?.getAttribute("disabled")).not.toBeNull();
+
+    await user.click(buttons[2] as HTMLElement);
+    expect(onAction).toHaveBeenCalledWith("third");
   });
 });

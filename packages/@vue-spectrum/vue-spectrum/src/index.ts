@@ -159,7 +159,7 @@ export {
   ToggleButton,
 } from "@vue-spectrum/button";
 export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
-export { ActionGroup } from "@vue-spectrum/actiongroup";
+export { ActionGroup, ActionGroupItem } from "@vue-spectrum/actiongroup";
 export { TagGroup, Tag } from "@vue-spectrum/tag";
 export { Picker, PickerItem, PickerSection } from "@vue-spectrum/picker";
 export {
@@ -318,6 +318,7 @@ export type {
   ActionGroupButtonLabelBehavior,
   ActionGroupDensity,
   ActionGroupKey,
+  SpectrumActionGroupItemProps,
   ActionGroupOrientation,
   ActionGroupOverflowMode,
   ActionGroupSelectionMode,

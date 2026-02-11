@@ -1,4 +1,4 @@
-export { ActionGroup } from "./ActionGroup";
+export { ActionGroup, ActionGroupItem } from "./ActionGroup";
 
 export type {
   ActionGroupButtonLabelBehavior,
@@ -8,5 +8,6 @@ export type {
   ActionGroupOverflowMode,
   ActionGroupSelectionMode,
   SpectrumActionGroupItemData,
+  SpectrumActionGroupItemProps,
   SpectrumActionGroupProps,
 } from "./ActionGroup";
