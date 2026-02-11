@@ -3,6 +3,7 @@ export { MenuSection } from "./Menu";
 export { MenuItem } from "./MenuItem";
 export { MenuItem as Item } from "./MenuItem";
 export { MenuSection as Section } from "./Menu";
+export { ContextualHelpTrigger } from "./ContextualHelpTrigger";
 export { SubmenuTrigger } from "./SubmenuTrigger";
 export { MenuTrigger } from "./MenuTrigger";
 export { ActionMenu } from "./ActionMenu";
@@ -14,6 +15,9 @@ export type {
 export type {
   SpectrumMenuItemProps,
 } from "./MenuItem";
+export type {
+  SpectrumMenuDialogTriggerProps,
+} from "./ContextualHelpTrigger";
 export type {
   SpectrumSubmenuTriggerProps,
 } from "./SubmenuTrigger";
