@@ -61,6 +61,7 @@ export { StatusLight } from "./StatusLight";
 export { Switch } from "./Switch";
 export { Tag, TagGroup } from "./TagGroup";
 export { TextArea, TextField } from "./TextField";
+export { ToastContainer, ToastQueue } from "./Toast";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 export { Tooltip, TooltipTrigger } from "./Tooltip";
@@ -195,6 +196,12 @@ export type { S2StatusLightProps } from "./StatusLight";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
 export type { S2TagGroupProps, S2TagProps } from "./TagGroup";
 export type { S2TextAreaProps, S2TextFieldProps, TextFieldSize } from "./TextField";
+export type {
+  S2ToastCloseFunction,
+  S2ToastContainerProps,
+  S2ToastOptions,
+  S2ToastPlacement,
+} from "./Toast";
 export type { S2TooltipProps, S2TooltipTriggerProps } from "./Tooltip";
 export type { S2WellProps } from "./Well";
 export type {
