@@ -410,4 +410,89 @@ describe("SearchField", () => {
     expect(tree.queryByText("Invalid query.")).toBeNull();
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
   });
+
+  it("supports validate function in aria behavior", async () => {
+    const tree = renderComponent({
+      defaultValue: "Foo",
+      validate: (value: string) => (value === "Foo" ? "Invalid search" : null),
+    });
+
+    const input = tree.getByRole("searchbox") as HTMLInputElement;
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(tree.getByText("Invalid search")).toBeTruthy();
+
+    await fireEvent.update(input, "Vue");
+    await nextTick();
+
+    expect(tree.queryByText("Invalid search")).toBeNull();
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  it("supports custom native error message functions", async () => {
+    const Harness = defineComponent({
+      name: "SearchFieldNativeCustomMessageHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(SearchField, {
+              label: "Query",
+              isRequired: true,
+              validationBehavior: "native",
+              errorMessage: (context) =>
+                (
+                  context.validationDetails as
+                    | { valueMissing?: boolean }
+                    | undefined
+                )?.valueMissing
+                  ? "Please enter a query"
+                  : null,
+            }),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("searchbox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(tree.getByText("Please enter a query")).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+  });
+
+  it("applies native Form.validationErrors to custom validity", async () => {
+    const App = defineComponent({
+      name: "SearchFieldNativeServerValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: {
+                query: "Invalid query.",
+              },
+            },
+            {
+              default: () =>
+                h(SearchField, {
+                  label: "Query",
+                  name: "query",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("searchbox") as HTMLInputElement;
+    expect(tree.getByText("Invalid query.")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await fireEvent.update(input, "Vue");
+    await nextTick();
+    expect(input.validity.valid).toBe(true);
+  });
 });

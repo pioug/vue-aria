@@ -1,9 +1,10 @@
-import { computed, defineComponent, h, ref, watch } from "vue";
+import { computed, defineComponent, h, ref, watch, watchEffect } from "vue";
 import { useSearchField } from "@vue-aria/searchfield";
 import { ClearButton } from "@vue-spectrum/button";
 import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
 import {
+  type SpectrumTextFieldErrorMessageContext,
   TextFieldBase,
   type SpectrumTextFieldValidationBehavior,
   type SpectrumTextFieldValidationState,
@@ -44,6 +45,13 @@ export const SearchField = defineComponent({
     const inputRef = ref<HTMLInputElement | null>(null);
     const hasWarnedPlaceholder = ref(false);
     const isServerErrorCleared = ref(false);
+    const currentValue = ref(
+      (propsRecord.value.value as string | undefined) ??
+        (propsRecord.value.defaultValue as string | undefined) ??
+        ""
+    );
+    const nativeValidationMessage = ref<string | undefined>(undefined);
+    const nativeValidationDetails = ref<unknown>(undefined);
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
 
@@ -153,6 +161,15 @@ export const SearchField = defineComponent({
     const hasControlledValue = computed(
       () => propsRecord.value.value !== undefined
     );
+    watch(
+      () => propsRecord.value.value as string | undefined,
+      (nextValue) => {
+        if (nextValue !== undefined) {
+          currentValue.value = nextValue ?? "";
+        }
+      },
+      { immediate: true }
+    );
     const serverErrorMessageFromForm = computed(() => {
       const name = propsRecord.value.name as string | undefined;
       if (!name) {
@@ -177,23 +194,98 @@ export const SearchField = defineComponent({
     const serverErrorMessage = computed(() =>
       isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
     );
-    const resolvedErrorMessage = computed(() => {
+    const validationErrorMessage = computed(() => {
+      const validate = propsRecord.value.validate as
+        | ((value: string) => string | string[] | boolean | null | undefined)
+        | undefined;
+      if (typeof validate !== "function") {
+        return undefined;
+      }
+
+      const result = validate(currentValue.value);
+      if (typeof result === "string" && result.trim().length > 0) {
+        return result;
+      }
+
+      if (Array.isArray(result)) {
+        for (const entry of result) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const ariaValidationErrorMessage = computed(() =>
+      validationBehavior.value === "aria" ? validationErrorMessage.value : undefined
+    );
+    const baseValidationErrors = computed<string[]>(() => {
+      if (serverErrorMessage.value) {
+        return [serverErrorMessage.value];
+      }
+
+      if (ariaValidationErrorMessage.value) {
+        return [ariaValidationErrorMessage.value];
+      }
+
+      if (nativeValidationMessage.value) {
+        return [nativeValidationMessage.value];
+      }
+
+      return [];
+    });
+    const resolvedErrorMessageFromProp = computed<string | undefined>(() => {
       const explicitErrorMessage = propsRecord.value.errorMessage;
       if (typeof explicitErrorMessage === "string" && explicitErrorMessage.length > 0) {
         return explicitErrorMessage;
       }
 
-      return serverErrorMessage.value;
+      if (typeof explicitErrorMessage !== "function") {
+        return undefined;
+      }
+
+      const context: SpectrumTextFieldErrorMessageContext = {
+        isInvalid:
+          Boolean(propsRecord.value.isInvalid) ||
+          validationState.value === "invalid" ||
+          baseValidationErrors.value.length > 0,
+        validationErrors: baseValidationErrors.value,
+        validationDetails: nativeValidationDetails.value ?? {},
+      };
+      const value = explicitErrorMessage(context);
+      if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+      }
+
+      return undefined;
     });
+    const resolvedErrorMessage = computed(
+      () =>
+        resolvedErrorMessageFromProp.value ??
+        serverErrorMessage.value ??
+        ariaValidationErrorMessage.value ??
+        nativeValidationMessage.value
+    );
     const resolvedInvalid = computed(
       () =>
         Boolean(propsRecord.value.isInvalid) ||
         validationState.value === "invalid" ||
-        Boolean(serverErrorMessage.value)
+        Boolean(serverErrorMessage.value) ||
+        Boolean(ariaValidationErrorMessage.value) ||
+        Boolean(nativeValidationMessage.value)
     );
     const resolvedValidationStateForAria = computed<
       SpectrumTextFieldValidationState | undefined
-    >(() => validationState.value ?? (serverErrorMessage.value ? "invalid" : undefined));
+    >(
+      () =>
+        validationState.value ??
+        (serverErrorMessage.value ||
+        ariaValidationErrorMessage.value ||
+        nativeValidationMessage.value
+          ? "invalid"
+          : undefined)
+    );
 
     watch(
       () =>
@@ -266,6 +358,8 @@ export const SearchField = defineComponent({
       "aria-describedby": ariaDescribedBy,
       "aria-errormessage": ariaErrorMessage,
       onInput: (event: Event) => {
+        const inputTarget = event.target as HTMLInputElement | null;
+        currentValue.value = inputTarget?.value ?? "";
         if (serverErrorMessageFromForm.value) {
           isServerErrorCleared.value = true;
         }
@@ -322,6 +416,74 @@ export const SearchField = defineComponent({
       }
 
       return baseProps;
+    });
+
+    watchEffect(() => {
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      if (validationBehavior.value === "native") {
+        const customValidityMessage =
+          serverErrorMessage.value ?? (validationErrorMessage.value ?? "");
+        inputElement.setCustomValidity(customValidityMessage);
+        return;
+      }
+
+      inputElement.setCustomValidity("");
+    });
+
+    watch(
+      () => validationBehavior.value,
+      (nextBehavior) => {
+        if (nextBehavior !== "native") {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = undefined;
+        }
+      },
+      { immediate: true }
+    );
+
+    watchEffect((onCleanup) => {
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      const onNativeInvalid = () => {
+        if (validationBehavior.value !== "native") {
+          return;
+        }
+
+        nativeValidationMessage.value =
+          inputElement.validationMessage || "Constraints not satisfied";
+        nativeValidationDetails.value = inputElement.validity;
+      };
+      const onNativeBlur = () => {
+        if (validationBehavior.value !== "native") {
+          return;
+        }
+
+        if (inputElement.validity.valid) {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = inputElement.validity;
+        }
+      };
+      const onFormReset = () => {
+        nativeValidationMessage.value = undefined;
+        nativeValidationDetails.value = undefined;
+      };
+
+      inputElement.addEventListener("invalid", onNativeInvalid);
+      inputElement.addEventListener("blur", onNativeBlur);
+      inputElement.form?.addEventListener("reset", onFormReset);
+
+      onCleanup(() => {
+        inputElement.removeEventListener("invalid", onNativeInvalid);
+        inputElement.removeEventListener("blur", onNativeBlur);
+        inputElement.form?.removeEventListener("reset", onFormReset);
+      });
     });
 
     const showClearButton = computed(() => {

@@ -7,6 +7,7 @@ export type {
   SpectrumTextFieldBaseProps,
   SpectrumTextFieldProps,
   SpectrumTextAreaProps,
+  SpectrumTextFieldErrorMessageContext,
   SpectrumTextFieldValidationBehavior,
   SpectrumTextFieldValidationState,
 } from "./types";

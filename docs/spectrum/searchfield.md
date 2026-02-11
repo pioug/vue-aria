@@ -40,4 +40,5 @@ const field = h(SearchField, {
 - Includes parity placeholder deprecation warning behavior from upstream `@react-spectrum/searchfield`.
 - `excludeFromTabOrder`, description/error wiring, and SSR coverage are included.
 - Baseline now includes `Form.validationErrors` integration by field `name`, including invalid-state/error-message semantics and clear-on-input behavior.
+- Baseline now includes `validate(value)` support for ARIA-mode realtime validation and native custom-validity lifecycle behavior (including function-style native `errorMessage` customizers).
 - Advanced upstream visual polish and icon/theming parity remain in progress.
