@@ -70,6 +70,7 @@ const area = h(TextArea, {
 - Baseline includes `Form.validationErrors` wiring by field `name`, including invalid-state and error message semantics plus server-error clearing when the user edits the field.
 - Baseline includes `validate(value)` support for ARIA validation behavior, with realtime invalid state and error-message updates.
 - Baseline includes `validate(value)` custom validity wiring for native validation behavior (`validationBehavior="native"`).
+- Native required/invalid messaging now follows `checkValidity` + blur lifecycle semantics (invalid message shown after invalid submit/check and cleared after a valid blur).
 - `TextArea` baseline includes multiline rendering, row configuration, and auto-resize behavior driven by textarea `scrollHeight` updates.
 - Placeholder deprecation warning parity from upstream `TextField` and `TextArea` is included.
 - Baseline icon, loading-indicator, validation-icon, and `excludeFromTabOrder` behavior parity is now included for both `TextField` and `TextArea`.

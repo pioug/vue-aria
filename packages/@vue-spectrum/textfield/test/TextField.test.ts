@@ -163,6 +163,42 @@ describe("TextField", () => {
     expect(input.getAttribute("aria-required")).toBeNull();
   });
 
+  it("shows native required error after form validity check and clears on blur once valid", async () => {
+    const Harness = defineComponent({
+      name: "TextFieldNativeRequiredHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(TextField, {
+              label: "Name",
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+          ]);
+      },
+    });
+
+    const { getByRole, getByTestId } = render(Harness);
+    const input = getByRole("textbox") as HTMLInputElement;
+    const form = getByTestId("form") as HTMLFormElement;
+
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+    expect(input.validity.valid).toBe(true);
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+
+    await fireEvent.blur(input);
+    await nextTick();
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+  });
+
   it("supports disabled and readOnly states", () => {
     const { getByRole } = render(TextField, {
       props: {
@@ -520,6 +556,42 @@ describe("TextArea", () => {
     const textarea = getByRole("textbox") as HTMLTextAreaElement;
     expect(textarea.tagName).toBe("TEXTAREA");
     expect(textarea.getAttribute("rows")).toBe("4");
+  });
+
+  it("shows native required error after form validity check and clears on blur once valid", async () => {
+    const Harness = defineComponent({
+      name: "TextAreaNativeRequiredHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(TextArea, {
+              label: "Notes",
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+          ]);
+      },
+    });
+
+    const { getByRole, getByTestId } = render(Harness);
+    const input = getByRole("textbox") as HTMLTextAreaElement;
+    const form = getByTestId("form") as HTMLFormElement;
+
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+    expect(input.validity.valid).toBe(true);
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+
+    await fireEvent.blur(input);
+    await nextTick();
+    expect(input.getAttribute("aria-describedby")).toBeNull();
   });
 
   it("supports text updates", async () => {

@@ -27,6 +27,7 @@ export function useSpectrumTextField(
   const formValidationErrors = useFormValidationErrors();
   const isServerErrorCleared = ref(false);
   const currentValue = ref(props.value ?? props.defaultValue ?? "");
+  const nativeValidationMessage = ref<string | undefined>(undefined);
 
   watch(
     () => [formValidationErrors.value, props.name] as const,
@@ -124,7 +125,9 @@ export function useSpectrumTextField(
   const resolvedValidationState = computed(
     () =>
       validationState.value ??
-      (serverErrorMessage.value || ariaValidationErrorMessage.value
+      (serverErrorMessage.value ||
+      ariaValidationErrorMessage.value ||
+      nativeValidationMessage.value
         ? "invalid"
         : undefined)
   );
@@ -132,14 +135,16 @@ export function useSpectrumTextField(
     () =>
       props.errorMessage ??
       serverErrorMessage.value ??
-      ariaValidationErrorMessage.value
+      ariaValidationErrorMessage.value ??
+      nativeValidationMessage.value
   );
   const resolvedInvalid = computed(
     () =>
       Boolean(props.isInvalid) ||
       resolvedValidationState.value === "invalid" ||
       Boolean(serverErrorMessage.value) ||
-      Boolean(ariaValidationErrorMessage.value)
+      Boolean(ariaValidationErrorMessage.value) ||
+      Boolean(nativeValidationMessage.value)
   );
 
   const readAriaProp = (
@@ -268,6 +273,54 @@ export function useSpectrumTextField(
     }
 
     inputElement.setCustomValidity("");
+  });
+
+  watch(
+    () => validationBehavior.value,
+    (nextBehavior) => {
+      if (nextBehavior !== "native") {
+        nativeValidationMessage.value = undefined;
+      }
+    },
+    { immediate: true }
+  );
+
+  watchEffect((onCleanup) => {
+    const inputElement = options.inputRef?.value;
+    if (!inputElement) {
+      return;
+    }
+
+    const onNativeInvalid = () => {
+      if (validationBehavior.value !== "native") {
+        return;
+      }
+
+      nativeValidationMessage.value =
+        inputElement.validationMessage || "Constraints not satisfied";
+    };
+    const onNativeBlur = () => {
+      if (validationBehavior.value !== "native") {
+        return;
+      }
+
+      if (inputElement.validity.valid) {
+        nativeValidationMessage.value = undefined;
+      }
+    };
+    const onFormReset = () => {
+      nativeValidationMessage.value = undefined;
+    };
+
+    inputElement.addEventListener("invalid", onNativeInvalid);
+    inputElement.addEventListener("blur", onNativeBlur);
+    inputElement.form?.addEventListener("reset", onFormReset);
+
+    onCleanup(() => {
+      inputElement.removeEventListener("invalid", onNativeInvalid);
+      inputElement.removeEventListener("blur", onNativeBlur);
+      inputElement.form?.removeEventListener("reset", onFormReset);
+    });
   });
 
   return {
