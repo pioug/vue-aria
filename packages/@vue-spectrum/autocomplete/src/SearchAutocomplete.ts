@@ -565,6 +565,7 @@ export const SearchAutocomplete = defineComponent({
 
     const state = useComboBoxState<NormalizedSearchAutocompleteItem>({
       collection: normalizedItems,
+      disabledKeys: props.disabledKeys,
       selectedKey: props.selectedKey,
       defaultSelectedKey: props.defaultSelectedKey,
       onSelectionChange: (key) => {

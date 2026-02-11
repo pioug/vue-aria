@@ -11,6 +11,7 @@ export type CompletionMode = "none" | "list";
 
 export interface UseComboBoxStateOptions<T extends ListBoxItem = ListBoxItem> {
   collection?: MaybeReactive<Iterable<T> | undefined>;
+  disabledKeys?: MaybeReactive<Iterable<Key> | undefined>;
   selectedKey?: MaybeReactive<Key | null | undefined>;
   defaultSelectedKey?: MaybeReactive<Key | null | undefined>;
   onSelectionChange?: (key: Key | null) => void;
@@ -121,6 +122,14 @@ function getItemText<T extends ListBoxItem>(
   return item?.textValue ?? "";
 }
 
+function isItemDisabled<T extends ListBoxItem>(
+  collection: T[],
+  key: Key
+): boolean {
+  const item = collection.find((entry) => entry.key === key);
+  return Boolean(item?.isDisabled);
+}
+
 export function useComboBoxState<T extends ListBoxItem>(
   options: UseComboBoxStateOptions<T> = {}
 ): UseComboBoxStateResult<T> {
@@ -224,6 +233,7 @@ export function useComboBoxState<T extends ListBoxItem>(
 
   const listState = useListBoxState<T>({
     collection: displayedCollection,
+    disabledKeys: options.disabledKeys,
     selectionMode: "single",
     selectedKeys: computed(() => {
       if (selectedKey.value === null) {
@@ -432,6 +442,21 @@ export function useComboBoxState<T extends ListBoxItem>(
       close();
     }
   });
+
+  watch(
+    () => listState.focusedKey.value,
+    (nextFocusedKey) => {
+      if (
+        nextFocusedKey !== null &&
+        (listState.disabledKeys.value.has(nextFocusedKey) ||
+          isItemDisabled(filteredCollection.value, nextFocusedKey) ||
+          isItemDisabled(originalCollection.value, nextFocusedKey))
+      ) {
+        listState.setFocusedKey(null);
+      }
+    },
+    { immediate: true }
+  );
 
   return {
     ...listState,

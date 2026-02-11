@@ -38,6 +38,7 @@ export interface SpectrumSearchAutocompleteProps {
   errorMessage?: string | undefined;
   items?: SpectrumSearchAutocompleteItemData[] | undefined;
   defaultItems?: SpectrumSearchAutocompleteItemData[] | undefined;
+  disabledKeys?: Iterable<Key> | undefined;
   selectedKey?: Key | null | undefined;
   defaultSelectedKey?: Key | null | undefined;
   onSelectionChange?: ((key: Key | null) => void) | undefined;
@@ -109,6 +110,10 @@ export const searchAutocompletePropOptions = {
   },
   defaultItems: {
     type: Array as PropType<SpectrumSearchAutocompleteItemData[] | undefined>,
+    default: undefined,
+  },
+  disabledKeys: {
+    type: null as unknown as PropType<Iterable<Key> | undefined>,
     default: undefined,
   },
   selectedKey: {

@@ -181,8 +181,10 @@ export function useComboBox<T extends ListBoxItem>(
 
   const inputProps = computed<Record<string, unknown>>(() => {
     const focusedKey = state.focusedKey.value;
+    const isFocusedKeyDisabled =
+      focusedKey !== null && state.isDisabledKey(focusedKey);
     const activeDescendant =
-      state.isOpen.value && focusedKey !== null
+      state.isOpen.value && focusedKey !== null && !isFocusedKeyDisabled
         ? `${listBoxId.value}-option-${normalizeKey(focusedKey)}`
         : undefined;
 

@@ -1,6 +1,6 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_SPECTRUM_THEME_CLASS_MAP,
@@ -125,6 +125,21 @@ describe("SearchAutocomplete", () => {
 
     expect(options).toHaveLength(1);
     expect(options[0]?.textContent).toContain("Two");
+  });
+
+  it("opens on focus when menuTrigger is focus", async () => {
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      menuTrigger: "focus",
+      onOpenChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+
+    const listbox = await tree.findByRole("listbox");
+    expect(listbox).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
   });
 
   it("opens on ArrowDown and commits selection with Enter", async () => {
@@ -253,6 +268,23 @@ describe("SearchAutocomplete", () => {
     await user.keyboard("X");
 
     expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("does not focus a disabled matching item on input", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      disabledKeys: ["2"],
+    });
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.keyboard("Two");
+
+    const listbox = await tree.findByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]?.textContent).toContain("Two");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
   });
 
   it("keeps menu open when clearing input with menuTrigger focus", async () => {
@@ -556,5 +588,32 @@ describe("SearchAutocomplete", () => {
   it("exports Item and Section aliases", () => {
     expect(Item).toBe(SearchAutocompleteItem);
     expect(Section).toBe(SearchAutocompleteSection);
+  });
+
+  it("exposes UNSAFE_getDOMNode and focus through component refs", async () => {
+    const autocompleteRef = ref<{
+      UNSAFE_getDOMNode?: () => HTMLElement | null;
+      focus?: () => void;
+    } | null>(null);
+
+    const App = defineComponent({
+      name: "SearchAutocompleteRefApp",
+      setup() {
+        return () =>
+          h(SearchAutocomplete, {
+            ref: autocompleteRef,
+            label: "Test",
+            defaultItems: items,
+          });
+      },
+    });
+
+    const tree = render(App);
+    const root = tree.container.querySelector(".react-spectrum-SearchAutocomplete");
+    expect(root).not.toBeNull();
+    expect(autocompleteRef.value?.UNSAFE_getDOMNode?.()).toBe(root);
+
+    autocompleteRef.value?.focus?.();
+    expect(document.activeElement).toBe(tree.getByRole("combobox"));
   });
 });
