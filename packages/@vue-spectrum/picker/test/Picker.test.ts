@@ -15,12 +15,15 @@ import {
   Section,
   type SpectrumPickerItemData,
 } from "../src";
+import { states } from "./data";
 
-const items: SpectrumPickerItemData[] = [
-  { key: "1", label: "One" },
-  { key: "2", label: "Two" },
-  { key: "3", label: "Three" },
-];
+const items: SpectrumPickerItemData[] = states.slice(0, 3).map((state, index) => ({
+  key: String(index + 1),
+  label: state.name,
+}));
+const firstItemLabel = items[0]?.label ?? "";
+const secondItemLabel = items[1]?.label ?? "";
+const thirdItemLabel = items[2]?.label ?? "";
 
 function renderComponent(props: Record<string, unknown> = {}) {
   return render(Picker, {
@@ -146,7 +149,7 @@ describe("Picker", () => {
     expect(onSelectionChange).toHaveBeenCalledWith("2");
     expect(onOpenChange).toHaveBeenLastCalledWith(false);
     expect(tree.queryByRole("listbox")).toBeNull();
-    expect(tree.getByText("Two")).toBeTruthy();
+    expect(tree.getByText(secondItemLabel)).toBeTruthy();
   });
 
   it("supports controlled selectedKey updates", async () => {
@@ -154,7 +157,7 @@ describe("Picker", () => {
       selectedKey: "1",
     });
 
-    expect(tree.getByText("One")).toBeTruthy();
+    expect(tree.getByText(firstItemLabel)).toBeTruthy();
 
     await tree.rerender({
       "aria-label": "picker-test",
@@ -162,7 +165,7 @@ describe("Picker", () => {
       selectedKey: "3",
     });
 
-    expect(tree.getByText("Three")).toBeTruthy();
+    expect(tree.getByText(thirdItemLabel)).toBeTruthy();
   });
 
   it("renders loading indicator in trigger when loading with no items", () => {
@@ -528,13 +531,13 @@ describe("Picker", () => {
     await user.click(options[1] as Element);
 
     expect(hiddenInput.value).toBe("2");
-    expect(tree.getByText("Two")).toBeTruthy();
+    expect(tree.getByText(secondItemLabel)).toBeTruthy();
 
     await user.click(tree.getByTestId("reset"));
     await Promise.resolve();
 
     expect(hiddenInput.value).toBe("1");
-    expect(tree.getByText("One")).toBeTruthy();
+    expect(tree.getByText(firstItemLabel)).toBeTruthy();
   });
 
   it("supports static slot syntax with PickerItem and PickerSection", async () => {
