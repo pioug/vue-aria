@@ -369,4 +369,115 @@ describe("NumberField", () => {
     await nextTick();
     expect(input.validity.valid).toBe(true);
   });
+
+  it("supports required native validation lifecycle", async () => {
+    const Harness = defineComponent({
+      name: "NumberFieldNativeRequiredHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(NumberField, {
+              label: "Amount",
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+    expect(input.validity.valid).toBe(false);
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Constraints not satisfied")).toBeTruthy();
+
+    await fireEvent.update(input, "4");
+    await nextTick();
+    expect(input.validity.valid).toBe(true);
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+
+    await fireEvent.blur(input);
+    await nextTick();
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("supports validate function in native behavior", async () => {
+    const Harness = defineComponent({
+      name: "NumberFieldNativeValidateHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(NumberField, {
+              label: "Amount",
+              validationBehavior: "native",
+              defaultValue: 2,
+              validate: (value: number | undefined) =>
+                value === 4 ? null : "Invalid value",
+            }),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(input.validity.valid).toBe(false);
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(tree.getByText("Invalid value")).toBeTruthy();
+
+    await fireEvent.update(input, "4");
+    await nextTick();
+
+    expect(input.validity.valid).toBe(true);
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+
+    await fireEvent.blur(input);
+    await nextTick();
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("supports Form.validationErrors in aria behavior", async () => {
+    const App = defineComponent({
+      name: "NumberFieldAriaServerValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                amount: "Invalid value.",
+              },
+            },
+            {
+              default: () =>
+                h(NumberField, {
+                  label: "Amount",
+                  name: "amount",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(tree.getByText("Invalid value.")).toBeTruthy();
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+
+    await fireEvent.update(input, "4");
+    await fireEvent.blur(input);
+    await nextTick();
+    expect(tree.queryByText("Invalid value.")).toBeNull();
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
 });
