@@ -1,8 +1,15 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h, ref } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { MenuTrigger, type SpectrumMenuItemData } from "../src";
+import { Dialog } from "@vue-spectrum/dialog";
+import {
+  ContextualHelpTrigger,
+  Item,
+  Menu,
+  MenuTrigger,
+  type SpectrumMenuItemData,
+} from "../src";
 
 const items: SpectrumMenuItemData[] = [
   { key: "foo", label: "Foo" },
@@ -31,6 +38,11 @@ function renderComponent(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+async function flushOverlay(): Promise<void> {
+  await nextTick();
+  await nextTick();
 }
 
 describe("MenuTrigger", () => {
@@ -222,5 +234,114 @@ describe("MenuTrigger", () => {
     const menu = tree.getByRole("menu");
     expect(trigger.id).toBeTruthy();
     expect(menu.getAttribute("aria-labelledby")).toBe(trigger.id);
+  });
+
+  it("supports static trigger + menu composition syntax", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "MenuTriggerStaticCompositionHarness",
+      setup() {
+        return () =>
+          h(
+            MenuTrigger,
+            {
+              onAction,
+            },
+            {
+              default: () => [
+                h("button", { type: "button" }, "Composed trigger"),
+                h(
+                  Menu,
+                  {
+                    "aria-label": "Composed menu",
+                  },
+                  {
+                    default: () => [
+                      h(Item, { id: "alpha" }, () => "Alpha"),
+                      h(Item, { id: "beta" }, () => "Beta"),
+                    ],
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("button", { name: "Composed trigger" });
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    const menuItems = within(menu).getAllByRole("menuitem");
+    expect(menuItems).toHaveLength(2);
+    expect(menu.getAttribute("aria-label")).toBe("Composed menu");
+
+    await user.click(menuItems[0] as Element);
+    expect(onAction).toHaveBeenCalledWith("alpha");
+    expect(tree.queryByRole("menu")).toBeNull();
+  });
+
+  it("supports contextual help within slotted composed menus", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "MenuTriggerContextualHelpCompositionHarness",
+      setup() {
+        return () =>
+          h(
+            MenuTrigger,
+            {
+              onAction,
+            },
+            {
+              default: () => [
+                h("button", { type: "button" }, "Composed trigger"),
+                h(
+                  Menu,
+                  {
+                    "aria-label": "Composed contextual menu",
+                  },
+                  {
+                    default: () => [
+                      h(Item, { id: "alpha" }, () => "Alpha"),
+                      h(
+                        ContextualHelpTrigger,
+                        { isUnavailable: true },
+                        {
+                          default: () => [
+                            h(Item, { id: "blocked" }, () => "Blocked"),
+                            h(Dialog, null, {
+                              default: () => "Blocked composed help content",
+                            }),
+                          ],
+                        }
+                      ),
+                    ],
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("button", { name: "Composed trigger" });
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    const menuItems = within(menu).getAllByRole("menuitem");
+    expect(menu.getAttribute("aria-label")).toBe("Composed contextual menu");
+
+    await user.click(menuItems[1] as Element);
+    await flushOverlay();
+
+    expect(onAction).not.toHaveBeenCalledWith("blocked");
+    expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    expect(document.body.textContent).toContain("Blocked composed help content");
   });
 });
