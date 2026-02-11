@@ -400,6 +400,63 @@ describe("SubmenuTrigger", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("does not open when static trigger Item is disabled", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerDisabledStaticItemHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(
+                SubmenuTrigger,
+                null,
+                {
+                  default: () => [
+                    h(Item, { id: "more", isDisabled: true }, () => "More"),
+                    h(
+                      Menu,
+                      {
+                        "aria-label": "Composed nested menu",
+                      },
+                      {
+                        default: () => [
+                          h(Item, { id: "rename" }, () => "Rename"),
+                          h(Item, { id: "delete" }, () => "Delete"),
+                        ],
+                      }
+                    ),
+                  ],
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    expect(trigger.getAttribute("disabled")).not.toBeNull();
+    expect(trigger.getAttribute("aria-disabled")).toBe("true");
+
+    fireEvent.mouseEnter(trigger);
+    await Promise.resolve();
+    expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
+
+    await user.click(trigger);
+    expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
+
+    trigger.focus();
+    await user.keyboard("{Enter}");
+    expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
+  });
+
   it("keeps only one sibling submenu open at a time", async () => {
     const user = userEvent.setup();
 

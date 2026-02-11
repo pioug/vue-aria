@@ -332,6 +332,7 @@ export const SubmenuTrigger = defineComponent({
       const slottedTriggerNode = slottedMenuNode
         ? (flattenedDefaultSlotNodes.find((node) => node !== slottedMenuNode) ?? null)
         : null;
+      const slottedTriggerProps = (slottedTriggerNode?.props ?? {}) as Record<string, unknown>;
       const slottedTriggerLabel = slottedTriggerNode
         ? extractTextContent(slottedTriggerNode).trim()
         : "";
@@ -343,6 +344,7 @@ export const SubmenuTrigger = defineComponent({
       const ariaLabel =
         props.ariaLabel ??
         props["aria-label"] ??
+        (slottedTriggerProps["aria-label"] as string | undefined) ??
         (attrsRecord["aria-label"] as string | undefined);
       const ariaLabelledby =
         props.ariaLabelledby ??
@@ -359,6 +361,8 @@ export const SubmenuTrigger = defineComponent({
         ((slottedMenuProps.selectionMode as SpectrumMenuSelectionMode | undefined) ??
           props.selectionMode) !==
           "multiple";
+      const triggerDisabled =
+        props.isDisabled ?? Boolean(slottedTriggerProps.isDisabled);
 
       return h(
         "li",
@@ -403,14 +407,15 @@ export const SubmenuTrigger = defineComponent({
               type: "button",
               role: "menuitem",
               class: classNames("spectrum-Menu-item"),
-              disabled: props.isDisabled,
+              disabled: triggerDisabled,
+              "aria-disabled": triggerDisabled ? "true" : undefined,
               "aria-label": ariaLabel,
               "aria-labelledby": ariaLabelledby,
               "aria-haspopup": "menu",
               "aria-expanded": isOpen.value ? "true" : "false",
               "aria-controls": isOpen.value ? menuId.value : undefined,
               onClick: () => {
-                if (props.isDisabled) {
+                if (triggerDisabled) {
                   return;
                 }
                 if (!isOpen.value) {
@@ -426,7 +431,7 @@ export const SubmenuTrigger = defineComponent({
                 setOpen(false);
               },
               onMouseenter: () => {
-                if (props.isDisabled) {
+                if (triggerDisabled) {
                   return;
                 }
 
@@ -446,7 +451,7 @@ export const SubmenuTrigger = defineComponent({
                 closeMenu(false, false);
               },
               onKeydown: (event: KeyboardEvent) => {
-                if (props.isDisabled) {
+                if (triggerDisabled) {
                   return;
                 }
 
