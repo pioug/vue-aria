@@ -498,6 +498,65 @@ describe("SubmenuTrigger", () => {
     expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
   });
 
+  it("does not open when static trigger Item key is present in disabledKeys", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerDisabledKeysStaticItemHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(
+                SubmenuTrigger,
+                {
+                  disabledKeys: ["more"],
+                },
+                {
+                  default: () => [
+                    h(Item, { id: "more" }, () => "More"),
+                    h(
+                      Menu,
+                      {
+                        "aria-label": "Composed nested menu",
+                      },
+                      {
+                        default: () => [
+                          h(Item, { id: "rename" }, () => "Rename"),
+                          h(Item, { id: "delete" }, () => "Delete"),
+                        ],
+                      }
+                    ),
+                  ],
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    expect(trigger.getAttribute("disabled")).not.toBeNull();
+    expect(trigger.getAttribute("aria-disabled")).toBe("true");
+
+    fireEvent.mouseEnter(trigger);
+    await Promise.resolve();
+    expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
+
+    await user.click(trigger);
+    expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
+
+    trigger.focus();
+    await user.keyboard("{Enter}");
+    expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
+  });
+
   it("closes submenu when focus moves to a neighboring menu item", async () => {
     const user = userEvent.setup();
 

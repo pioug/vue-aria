@@ -357,6 +357,13 @@ export const SubmenuTrigger = defineComponent({
         slottedMenuNode && slottedMenuNode.children && !Array.isArray(slottedMenuNode.children)
           ? (slottedMenuNode.children as Record<string, unknown>)
           : undefined;
+      const triggerKey =
+        slottedTriggerNode?.key ??
+        (slottedTriggerProps.id as MenuKey | undefined) ??
+        undefined;
+      const disabledKeySet = new Set(
+        Array.from(props.disabledKeys ?? [], (key) => String(key))
+      );
       const closeOnSelect =
         (slottedMenuProps.closeOnSelect as boolean | undefined) ??
         props.closeOnSelect ??
@@ -364,7 +371,11 @@ export const SubmenuTrigger = defineComponent({
           props.selectionMode) !==
           "multiple";
       const triggerDisabled =
-        props.isDisabled ?? Boolean(slottedTriggerProps.isDisabled);
+        props.isDisabled ??
+        (Boolean(slottedTriggerProps.isDisabled) ||
+          (triggerKey !== undefined &&
+            triggerKey !== null &&
+            disabledKeySet.has(String(triggerKey))));
 
       return h(
         "li",
