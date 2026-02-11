@@ -85,4 +85,5 @@ h(TabList, null, {
 - Includes all-disabled fallback behavior parity (first-tab fallback selection callback) and tabpanel tabbable-child `tabIndex` parity updates.
 - Includes first-tab-entry focus parity (selected tab on initial Tab entry, tabpanel focus fallback when tabs are disabled) plus user-ref exposure via `UNSAFE_getDOMNode`.
 - Includes tabpanel child-subtree isolation parity so uncontrolled inputs do not leak values across tab switches.
+- Includes collapsed-picker parity for disabled tabs (disabled options do not trigger selection) and static fragment-sibling composition support in `TabList`/`TabPanels`.
 - Advanced visual/theming polish remains in progress.

@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { fireEvent, render, waitFor, within } from "@testing-library/vue";
-import { defineComponent, h, nextTick, ref, type VNodeChild } from "vue";
+import { Fragment, defineComponent, h, nextTick, ref, type VNodeChild } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Item, TabList, TabPanels, Tabs, type SpectrumTabItem } from "../src";
@@ -736,6 +736,57 @@ describe("Tabs", () => {
     }
   });
 
+  it("does not select disabled tabs via the collapsed picker", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-TabsPanel-collapseWrapper")) {
+          return 320;
+        }
+
+        return 0;
+      });
+    const scrollWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "tablist") {
+          return 1200;
+        }
+
+        return 0;
+      });
+
+    try {
+      const { getByRole, queryByRole } = renderTabs({
+        defaultSelectedKey: "tab-1",
+        disabledKeys: ["tab-3"],
+        onSelectionChange,
+      });
+      await flush();
+      expect(queryByRole("tablist")).toBeNull();
+
+      const picker = getByRole("button", { name: /Tab 1/i });
+      await user.click(picker);
+
+      const disabledOption = getByRole("option", { name: "Tab 3" });
+      expect(disabledOption.getAttribute("aria-disabled")).toBe("true");
+      await user.click(disabledOption);
+      expect(onSelectionChange).not.toHaveBeenCalled();
+
+      const enabledOption = getByRole("option", { name: "Tab 2" });
+      await user.click(enabledOption);
+      await flush();
+
+      expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
+      expect(getByRole("tabpanel").textContent).toContain("Tab 2 body");
+    } finally {
+      clientWidthSpy.mockRestore();
+      scrollWidthSpy.mockRestore();
+    }
+  });
+
   it("does not collapse when all tabs fit horizontally", async () => {
     const clientWidthSpy = vi
       .spyOn(HTMLElement.prototype, "clientWidth", "get")
@@ -936,5 +987,40 @@ describe("Tabs", () => {
 
     const secondInput = tree.getByTestId("panel2_input") as HTMLInputElement;
     expect(secondInput.value).toBe("");
+  });
+
+  it("supports static Item composition with fragment siblings", async () => {
+    const user = userEvent.setup();
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Fragment tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () => [
+              h(Fragment, null, [h(Item, { id: "first" }, () => "Tab 1")]),
+              h(Item, { id: "second" }, () => "Tab 2"),
+            ],
+          }),
+          h(TabPanels, null, {
+            default: () => [
+              h(Item, { id: "first" }, () => "Tab 1 content"),
+              h(Fragment, null, [h(Item, { id: "second" }, () => "Tab 2 content")]),
+            ],
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs).toHaveLength(2);
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 1 content");
+
+    await user.click(tabs[1] as HTMLElement);
+    await flush();
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 2 content");
   });
 });
