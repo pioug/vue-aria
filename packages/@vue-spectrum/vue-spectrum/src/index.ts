@@ -39,6 +39,8 @@ export {
   CloseButton as S2CloseButton,
   DateField as S2DateField,
   Divider as S2Divider,
+  Image as S2Image,
+  Link as S2Link,
   Meter as S2Meter,
   NumberField as S2NumberField,
   ProgressBar as S2ProgressBar,
