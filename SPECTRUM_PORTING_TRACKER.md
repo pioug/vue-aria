@@ -129,7 +129,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `SkeletonCollection` — `0 / 1` exported; missing: `SkeletonCollection`
 - [x] `StatusLight` — `1 / 1` exported; missing: none
 - [x] `Switch` — `1 / 1` exported; missing: none
-- [ ] `TableView` — `6 / 7` exported; missing: `EditableCell`
+- [x] `TableView` — `7 / 7` exported
 - [ ] `Tabs` — `0 / 4` exported; missing: `Tabs`, `TabList`, `Tab`, `TabPanel`
 - [x] `TagGroup` — `2 / 2` exported; missing: none
 - [x] `TextField` — `2 / 2` exported; missing: none
@@ -196,7 +196,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 - In progress baseline: `@react-spectrum/list` now has Vue `ListView` and `ListViewItem` primitives with baseline grid/list semantics (`grid` + `row` + `gridcell`), keyboard row navigation, controlled/uncontrolled single and multiple selection behavior, loading/empty-state rendering, and scroll-bottom `onLoadMore` behavior with starter/SSR tests plus docs/umbrella wiring; advanced child-action focus model and full drag-and-drop/visual parity remain.
 - In progress baseline: `@react-spectrum/listbox` now has Vue `ListBox`, `ListBoxBase`, `ListBoxOption`, and `ListBoxSection` primitives with baseline grouped-option semantics (`group` + heading + divider behavior), keyboard navigation coverage (including optional wrap focus), controlled/uncontrolled single and multiple selection behavior, disabled-key handling, and starter/SSR tests plus docs/umbrella wiring; advanced virtualizer and full visual/theming parity remain.
-- In progress baseline: `@react-spectrum/table` now has Vue `TableView`, `Column`, `TableHeader`, `TableBody`, `Section`, `Row`, and `Cell` primitives with baseline static table semantics (`grid` + `rowgroup` + `row` + `columnheader` + `rowheader` + `gridcell`), keyboard row navigation, controlled/uncontrolled selection behavior, sort-state handling, and starter/SSR tests plus docs/umbrella wiring; advanced upstream resizing/nested-row/virtualization and drag-and-drop parity remain.
+- In progress baseline: `@react-spectrum/table` now has Vue `TableView`, `Column`, `TableHeader`, `TableBody`, `Section`, `Row`, `Cell`, and `EditableCell` primitives with baseline static table semantics (`grid` + `rowgroup` + `row` + `columnheader` + `rowheader` + `gridcell`), keyboard row navigation, controlled/uncontrolled selection behavior, sort-state handling, and starter/SSR tests plus docs/umbrella wiring; advanced upstream resizing/nested-row/virtualization and drag-and-drop parity remain.
 - In progress baseline: `@react-spectrum/tree` now has Vue `TreeView`, `TreeViewItem`, and `TreeViewItemContent` primitives with baseline treegrid semantics (`treegrid` + `row` + `gridcell`), nested expansion-state handling, controlled/uncontrolled selection behavior, keyboard navigation, and starter/SSR tests plus docs/umbrella wiring; richer static-composition and advanced collection/drag-and-drop parity remain.
 - [ ] `@react-spectrum/list` -> `@vue-spectrum/list`
 - [ ] `@react-spectrum/listbox` -> `@vue-spectrum/listbox`

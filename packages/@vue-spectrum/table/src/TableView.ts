@@ -102,6 +102,8 @@ export interface SpectrumCellProps extends SpectrumTableCellData {
   id?: TableKey | undefined;
 }
 
+export interface SpectrumEditableCellProps extends SpectrumCellProps {}
+
 function createStaticTableComponent(name: string, props: Record<string, unknown>) {
   return defineComponent({
     name,
@@ -187,7 +189,7 @@ export const Row = createStaticTableComponent("Row", {
   },
 });
 
-export const Cell = createStaticTableComponent("Cell", {
+const cellPropOptions = {
   id: {
     type: [String, Number] as PropType<TableKey | undefined>,
     default: undefined,
@@ -200,7 +202,13 @@ export const Cell = createStaticTableComponent("Cell", {
     type: Number as PropType<number | undefined>,
     default: undefined,
   },
-});
+};
+
+export const Cell = createStaticTableComponent("Cell", cellPropOptions);
+export const EditableCell = createStaticTableComponent(
+  "EditableCell",
+  cellPropOptions
+);
 
 interface HeaderCellProps {
   state: UseTableStateResult<SpectrumTableRowData>;

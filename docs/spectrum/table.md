@@ -57,6 +57,7 @@ const selected = ref("none");
 - `Section`
 - `Row`
 - `Cell`
+- `EditableCell`
 
 ## Example
 
@@ -85,5 +86,5 @@ const component = h(TableView, {
 ## Notes
 
 - Baseline includes static table semantics (`grid`, `rowgroup`, `row`, `columnheader`, `rowheader`, `gridcell`), single/multiple selection, keyboard row navigation, and sortable header state wiring.
-- Supports both prop-driven tables (`columns` + `items`) and static slot composition (`TableHeader`/`Column` + `TableBody`/`Row`/`Cell`).
+- Supports both prop-driven tables (`columns` + `items`) and static slot composition (`TableHeader`/`Column` + `TableBody`/`Row`/`Cell`/`EditableCell`).
 - Advanced upstream parity such as resizing, virtualization, nested row expansion, and drag-and-drop integration remains in progress.

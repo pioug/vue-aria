@@ -6,6 +6,7 @@ export {
   Section,
   Row,
   Cell,
+  EditableCell,
 } from "./TableView";
 
 export type {
@@ -16,6 +17,7 @@ export type {
   SpectrumSectionProps,
   SpectrumRowProps,
   SpectrumCellProps,
+  SpectrumEditableCellProps,
 } from "./TableView";
 
 export type {

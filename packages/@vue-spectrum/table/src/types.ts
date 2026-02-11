@@ -176,6 +176,10 @@ function getComponentName(node: VNode): string | undefined {
   return componentType.name;
 }
 
+function isCellComponentName(name: string | undefined): boolean {
+  return name === "Cell" || name === "EditableCell";
+}
+
 function flattenVNodeChildren(input: unknown): VNode[] {
   if (input === null || input === undefined) {
     return [];
@@ -265,7 +269,7 @@ function parseCellNode(node: VNode, index: number): ParsedSpectrumTableCell {
 function parseRowNode(node: VNode, index: number): ParsedSpectrumTableRow {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const cells = getSlotChildren(node)
-    .filter((child) => getComponentName(child) === "Cell")
+    .filter((child) => isCellComponentName(getComponentName(child)))
     .map((child, cellIndex) => parseCellNode(child, cellIndex));
 
   return {

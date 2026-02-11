@@ -171,7 +171,16 @@ export {
   ListBoxSection,
   useListBoxLayout,
 } from "@vue-spectrum/listbox";
-export { TableView, Column, TableHeader, TableBody, Section, Row, Cell } from "@vue-spectrum/table";
+export {
+  TableView,
+  Column,
+  TableHeader,
+  TableBody,
+  Section,
+  Row,
+  Cell,
+  EditableCell,
+} from "@vue-spectrum/table";
 export { TreeView, TreeViewItem, TreeViewItemContent } from "@vue-spectrum/tree";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
@@ -355,6 +364,7 @@ export type {
   SpectrumSectionProps,
   SpectrumRowProps,
   SpectrumCellProps,
+  SpectrumEditableCellProps,
 } from "@vue-spectrum/table";
 export type {
   SpectrumTreeViewProps,

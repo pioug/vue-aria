@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   Cell,
   Column,
+  EditableCell,
   Row,
   TableBody,
   TableHeader,
@@ -104,7 +105,7 @@ describe("TableView", () => {
                     }),
                     h(Row, { id: "row-2" }, {
                       default: () => [
-                        h(Cell, () => "Foo 2"),
+                        h(EditableCell, () => "Foo 2"),
                         h(Cell, () => "Bar 2"),
                         h(Cell, () => "Baz 2"),
                       ],
@@ -123,6 +124,7 @@ describe("TableView", () => {
     const grid = tree.getByRole("grid", { name: "Slot table" });
     const rowGroups = within(grid).getAllByRole("rowgroup");
     const bodyRows = within(rowGroups[1] as HTMLElement).getAllByRole("row");
+    expect(bodyRows[1]?.textContent).toContain("Foo 2");
 
     await user.click(bodyRows[1] as HTMLElement);
     expect(bodyRows[1]?.getAttribute("aria-selected")).toBe("true");
