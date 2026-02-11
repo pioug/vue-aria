@@ -6,7 +6,9 @@ export { Button, LinkButton } from "./Button";
 export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
+export { ColorField } from "./ColorField";
 export { CloseButton } from "./CloseButton";
+export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
@@ -18,6 +20,8 @@ export type {
   S2ActionButtonProps,
 } from "./ActionButton";
 export type { S2CloseButtonProps } from "./CloseButton";
+export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
+export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
 export type {
   SelectBoxKey,
   SelectBoxGroupOrientation,
