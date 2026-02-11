@@ -40,10 +40,13 @@ export {
   useDialogContainer,
 } from "./Dialog";
 export { Divider } from "./Divider";
+export { DropZone } from "./DropZone";
+export { Form } from "./Form";
 export { Image } from "./Image";
 export { IllustratedMessage } from "./IllustratedMessage";
 export { InlineAlert } from "./InlineAlert";
 export { Link } from "./Link";
+export { ContextualHelp } from "./ContextualHelp";
 export { Meter } from "./Meter";
 export { Menu, MenuItem, MenuTrigger } from "./Menu";
 export { NumberField } from "./NumberField";
@@ -121,10 +124,13 @@ export type {
   S2DialogType,
 } from "./Dialog";
 export type { S2DividerProps } from "./Divider";
+export type { S2DropZoneProps } from "./DropZone";
+export type { S2FormProps } from "./Form";
 export type { S2ImageProps } from "./Image";
 export type { S2IllustratedMessageProps } from "./IllustratedMessage";
 export type { S2InlineAlertProps } from "./InlineAlert";
 export type { S2LinkProps } from "./Link";
+export type { S2ContextualHelpProps } from "./ContextualHelp";
 export type { S2MeterProps } from "./Meter";
 export type {
   MenuSize,
