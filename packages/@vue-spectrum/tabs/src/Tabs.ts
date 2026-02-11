@@ -76,6 +76,7 @@ interface TabsContextValue {
   state: UseTabListStateResult<SpectrumTabItem>;
   collection: ReadonlyRef<SpectrumTabItem[]>;
   orientation: ReadonlyRef<TabsOrientation>;
+  direction: ReadonlyRef<"ltr" | "rtl">;
   keyboardActivation: ReadonlyRef<TabsKeyboardActivation>;
   isQuiet: ReadonlyRef<boolean>;
   isEmphasized: ReadonlyRef<boolean>;
@@ -261,6 +262,9 @@ export const Tabs = defineComponent({
     const orientation = computed<TabsOrientation>(
       () => props.orientation ?? "horizontal"
     );
+    const direction = computed<"ltr" | "rtl">(
+      () => (provider?.value.direction as "ltr" | "rtl" | undefined) ?? "ltr"
+    );
     const keyboardActivation = computed<TabsKeyboardActivation>(
       () => props.keyboardActivation ?? "automatic"
     );
@@ -308,6 +312,7 @@ export const Tabs = defineComponent({
       state,
       collection,
       orientation,
+      direction,
       keyboardActivation,
       isQuiet,
       isEmphasized,
@@ -373,6 +378,11 @@ export const TabList = defineComponent({
     const elementRef = ref<HTMLElement | null>(null);
     const wrapperRef = ref<HTMLElement | null>(null);
     const isCollapsed = ref(false);
+    const selectionIndicatorStyle = ref<{
+      transform?: string | undefined;
+      width?: string | undefined;
+      height?: string | undefined;
+    }>({});
     const collapsePickerId = useId(undefined, "v-spectrum-tabs-picker");
     const shouldCollapse = computed(
       () => context.orientation.value !== "vertical" && isCollapsed.value
@@ -408,19 +418,66 @@ export const TabList = defineComponent({
       isCollapsed.value = tabListElement.scrollWidth > wrapperElement.clientWidth + 1;
     };
 
+    const updateSelectionIndicator = () => {
+      if (shouldCollapse.value) {
+        selectionIndicatorStyle.value = {};
+        return;
+      }
+
+      const selectedKey = context.state.selectedKey.value;
+      const tabListElement = elementRef.value;
+      if (!tabListElement || selectedKey === null) {
+        selectionIndicatorStyle.value = {};
+        return;
+      }
+
+      const selectedTab = Array.from(
+        tabListElement.querySelectorAll<HTMLElement>("[data-v-aria-tab-key]")
+      ).find(
+        (tab) => tab.getAttribute("data-v-aria-tab-key") === String(selectedKey)
+      );
+      if (!selectedTab) {
+        selectionIndicatorStyle.value = {};
+        return;
+      }
+
+      if (context.orientation.value === "vertical") {
+        selectionIndicatorStyle.value = {
+          transform: `translateY(${selectedTab.offsetTop}px)`,
+          height: `${selectedTab.offsetHeight}px`,
+        };
+        return;
+      }
+
+      const offsetParentWidth =
+        (selectedTab.offsetParent as HTMLElement | null)?.offsetWidth ?? 0;
+      const offset =
+        context.direction.value === "rtl"
+          ? -1 * (offsetParentWidth - selectedTab.offsetWidth - selectedTab.offsetLeft)
+          : selectedTab.offsetLeft;
+
+      selectionIndicatorStyle.value = {
+        transform: `translateX(${offset}px)`,
+        width: `${selectedTab.offsetWidth}px`,
+      };
+    };
+
     onMounted(() => {
       if (typeof window !== "undefined") {
         window.addEventListener("resize", checkShouldCollapse);
+        window.addEventListener("resize", updateSelectionIndicator);
       }
 
       void nextTick(() => {
         checkShouldCollapse();
+        updateSelectionIndicator();
       });
     });
 
     onBeforeUnmount(() => {
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", checkShouldCollapse);
+        window.removeEventListener("resize", updateSelectionIndicator);
       }
 
       context.collapsedPanelLabelledby.value = undefined;
@@ -428,7 +485,10 @@ export const TabList = defineComponent({
 
     useResizeObserver({
       ref: wrapperRef,
-      onResize: checkShouldCollapse,
+      onResize: () => {
+        checkShouldCollapse();
+        updateSelectionIndicator();
+      },
     });
 
     watch(
@@ -440,6 +500,7 @@ export const TabList = defineComponent({
       () => {
         void nextTick(() => {
           checkShouldCollapse();
+          updateSelectionIndicator();
         });
       },
       { immediate: true }
@@ -451,6 +512,21 @@ export const TabList = defineComponent({
         context.collapsedPanelLabelledby.value = collapsed
           ? collapsePickerId.value
           : undefined;
+      },
+      { immediate: true }
+    );
+
+    watch(
+      [
+        () => context.state.selectedKey.value,
+        shouldCollapse,
+        () => context.orientation.value,
+        () => context.direction.value,
+      ],
+      () => {
+        void nextTick(() => {
+          updateSelectionIndicator();
+        });
       },
       { immediate: true }
     );
@@ -513,6 +589,11 @@ export const TabList = defineComponent({
               }
             )
           ),
+          h("div", {
+            class: classNames("spectrum-Tabs-selectionIndicator"),
+            role: "presentation",
+            style: selectionIndicatorStyle.value,
+          }),
         ]
       );
 

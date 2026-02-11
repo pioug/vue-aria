@@ -277,6 +277,56 @@ describe("Tabs", () => {
     expect(className).toContain("spectrum-Tabs--compact");
   });
 
+  it("renders a selection indicator and repositions when selection changes", async () => {
+    const user = userEvent.setup();
+    const offsetLeftSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetLeft", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        const key = this.getAttribute("data-v-aria-tab-key");
+        if (key === "tab-2") {
+          return 120;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        const key = this.getAttribute("data-v-aria-tab-key");
+        if (key === "tab-1") {
+          return 80;
+        }
+
+        if (key === "tab-2") {
+          return 140;
+        }
+
+        return 0;
+      });
+
+    try {
+      const { getByRole, container } = renderTabs();
+      await flush();
+
+      const indicator = container.querySelector(
+        ".spectrum-Tabs-selectionIndicator"
+      ) as HTMLElement | null;
+      expect(indicator).toBeTruthy();
+      expect(indicator?.getAttribute("role")).toBe("presentation");
+      expect(indicator?.style.width).toBe("80px");
+      expect(indicator?.style.transform).toBe("translateX(0px)");
+
+      await user.click(getByRole("tab", { name: "Tab 2" }));
+      await flush();
+
+      expect(indicator?.style.width).toBe("140px");
+      expect(indicator?.style.transform).toBe("translateX(120px)");
+    } finally {
+      offsetLeftSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
   it("collapses to a picker when horizontal tabs overflow", async () => {
     const user = userEvent.setup();
     const clientWidthSpy = vi
