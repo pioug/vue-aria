@@ -27,6 +27,18 @@ interface OverlayStateLike {
   toggle: () => void;
 }
 
+const DISMISS_BUTTON_STYLE: Record<string, string> = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: "0",
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: "0",
+};
+
 export const Popover = defineComponent({
   name: "Popover",
   inheritAttrs: false,
@@ -176,6 +188,18 @@ export const Popover = defineComponent({
                   "data-testid": "popover",
                 }),
                 [
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      "aria-label": "Dismiss",
+                      style: DISMISS_BUTTON_STYLE,
+                      onClick: () => {
+                        state.close();
+                      },
+                    },
+                    "Dismiss"
+                  ),
                   slots.default?.(),
                   !props.hideArrow
                     ? h("span", {
@@ -184,6 +208,18 @@ export const Popover = defineComponent({
                         "data-testid": "popover-arrow",
                       })
                     : null,
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      "aria-label": "Dismiss",
+                      style: DISMISS_BUTTON_STYLE,
+                      onClick: () => {
+                        state.close();
+                      },
+                    },
+                    "Dismiss"
+                  ),
                 ]
               ),
             ]),

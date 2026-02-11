@@ -78,4 +78,30 @@ describe("Popover", () => {
       trigger.remove();
     }
   });
+
+  it("includes hidden dismiss buttons and closes on dismiss press", async () => {
+    const trigger = createTrigger();
+    const onOpenChange = vi.fn();
+
+    try {
+      const tree = render(Popover, {
+        props: {
+          isOpen: true,
+          triggerRef: trigger,
+          onOpenChange,
+        },
+        slots: {
+          default: () => "Popover content",
+        },
+      });
+
+      const dismissButtons = tree.getAllByRole("button", { name: "Dismiss" });
+      expect(dismissButtons).toHaveLength(2);
+
+      await fireEvent.click(dismissButtons[0] as Element);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    } finally {
+      trigger.remove();
+    }
+  });
 });
