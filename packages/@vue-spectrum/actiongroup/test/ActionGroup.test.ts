@@ -1,4 +1,4 @@
-import { render, within } from "@testing-library/vue";
+import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
@@ -248,6 +248,29 @@ describe("ActionGroup", () => {
     expect(onAction).toHaveBeenLastCalledWith("two");
     expect(Array.from(onSelectionChange.mock.calls[1][0] as Set<string>)).toEqual(["two"]);
     expect(options[1].getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("does not select all items on Cmd/Ctrl+A in multiple selection mode", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      selectionMode: "multiple",
+      onSelectionChange,
+    });
+
+    const options = tree.getAllByRole("checkbox");
+    await user.click(options[0] as Element);
+    expect(options[0].getAttribute("aria-checked")).toBe("true");
+
+    const callsBefore = onSelectionChange.mock.calls.length;
+    const group = tree.getByRole("toolbar", { name: "actiongroup-test" });
+    fireEvent.keyDown(group, { key: "a", metaKey: true, ctrlKey: true });
+    fireEvent.keyUp(group, { key: "a", metaKey: true, ctrlKey: true });
+
+    expect(onSelectionChange.mock.calls.length).toBe(callsBefore);
+    expect(options[0].getAttribute("aria-checked")).toBe("true");
+    expect(options[1].getAttribute("aria-checked")).toBe("false");
+    expect(options[2].getAttribute("aria-checked")).toBe("false");
   });
 
   it("supports buttonLabelBehavior=hide with icon-only class and aria-label fallback", () => {
