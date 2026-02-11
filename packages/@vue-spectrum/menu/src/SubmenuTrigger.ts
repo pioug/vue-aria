@@ -1,11 +1,14 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   onBeforeUnmount,
   onMounted,
   ref,
   type PropType,
+  type VNode,
 } from "vue";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
@@ -18,6 +21,93 @@ import type {
   SpectrumMenuSectionData,
   SpectrumMenuSelectionMode,
 } from "./types";
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (!isVNode(value)) {
+    return "";
+  }
+
+  if (typeof value.children === "string") {
+    return value.children;
+  }
+
+  if (Array.isArray(value.children)) {
+    return extractTextContent(value.children);
+  }
+
+  if (value.children && typeof value.children === "object") {
+    const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return extractTextContent(maybeDefault());
+    }
+  }
+
+  return "";
+}
+
+function callHandler(
+  handler: unknown,
+  ...args: readonly unknown[]
+): void {
+  if (typeof handler === "function") {
+    handler(...args);
+    return;
+  }
+
+  if (Array.isArray(handler)) {
+    for (const candidate of handler) {
+      if (typeof candidate === "function") {
+        candidate(...args);
+      }
+    }
+  }
+}
 
 export interface SpectrumSubmenuTriggerProps extends SpectrumMenuBaseProps {
   id?: string | undefined;
@@ -198,7 +288,22 @@ export const SubmenuTrigger = defineComponent({
       const { styleProps } = useStyleProps(styleInput);
       const domProps = filterDOMProps(attrsRecord, { labelable: false });
 
-      const label = slots.default?.() ?? props.label ?? "More";
+      const defaultSlotNodes = slots.default?.();
+      const flattenedDefaultSlotNodes = flattenVNodeChildren(defaultSlotNodes);
+      const slottedMenuNode =
+        flattenedDefaultSlotNodes.find((node) => getComponentName(node) === "Menu") ??
+        null;
+      const slottedTriggerNode = slottedMenuNode
+        ? (flattenedDefaultSlotNodes.find((node) => node !== slottedMenuNode) ?? null)
+        : null;
+      const slottedTriggerLabel = slottedTriggerNode
+        ? extractTextContent(slottedTriggerNode).trim()
+        : "";
+      const label =
+        slottedTriggerLabel ||
+        (!slottedMenuNode && defaultSlotNodes && defaultSlotNodes.length > 0
+          ? defaultSlotNodes
+          : props.label ?? "More");
       const ariaLabel =
         props.ariaLabel ??
         props["aria-label"] ??
@@ -207,7 +312,17 @@ export const SubmenuTrigger = defineComponent({
         props.ariaLabelledby ??
         props["aria-labelledby"] ??
         (attrsRecord["aria-labelledby"] as string | undefined);
-      const closeOnSelect = props.closeOnSelect ?? props.selectionMode !== "multiple";
+      const slottedMenuProps = (slottedMenuNode?.props ?? {}) as Record<string, unknown>;
+      const slottedMenuSlots =
+        slottedMenuNode && slottedMenuNode.children && !Array.isArray(slottedMenuNode.children)
+          ? (slottedMenuNode.children as Record<string, unknown>)
+          : undefined;
+      const closeOnSelect =
+        (slottedMenuProps.closeOnSelect as boolean | undefined) ??
+        props.closeOnSelect ??
+        ((slottedMenuProps.selectionMode as SpectrumMenuSelectionMode | undefined) ??
+          props.selectionMode) !==
+          "multiple";
 
       return h(
         "li",
@@ -288,30 +403,62 @@ export const SubmenuTrigger = defineComponent({
           ),
           isOpen.value
             ? h(Menu, {
-                id: menuId.value,
-                items: props.items,
-                sections: props.sections,
-                selectionMode: props.selectionMode,
-                selectedKeys: props.selectedKeys,
-                defaultSelectedKeys: props.defaultSelectedKeys,
-                disabledKeys: props.disabledKeys,
-                isDisabled: props.isDisabled,
-                closeOnSelect: props.closeOnSelect,
-                shouldFocusWrap: props.shouldFocusWrap,
-                ariaLabel: props.ariaLabel,
+                id:
+                  (slottedMenuProps.id as string | undefined) ??
+                  menuId.value,
+                items:
+                  (slottedMenuProps.items as SpectrumMenuItemData[] | undefined) ??
+                  props.items,
+                sections:
+                  (slottedMenuProps.sections as SpectrumMenuSectionData[] | undefined) ??
+                  props.sections,
+                selectionMode:
+                  (slottedMenuProps.selectionMode as SpectrumMenuSelectionMode | undefined) ??
+                  props.selectionMode,
+                selectedKeys:
+                  (slottedMenuProps.selectedKeys as Iterable<MenuKey> | undefined) ??
+                  props.selectedKeys,
+                defaultSelectedKeys:
+                  (slottedMenuProps.defaultSelectedKeys as Iterable<MenuKey> | undefined) ??
+                  props.defaultSelectedKeys,
+                disabledKeys:
+                  (slottedMenuProps.disabledKeys as Iterable<MenuKey> | undefined) ??
+                  props.disabledKeys,
+                isDisabled:
+                  (slottedMenuProps.isDisabled as boolean | undefined) ?? props.isDisabled,
+                closeOnSelect:
+                  (slottedMenuProps.closeOnSelect as boolean | undefined) ??
+                  props.closeOnSelect,
+                shouldFocusWrap:
+                  (slottedMenuProps.shouldFocusWrap as boolean | undefined) ??
+                  props.shouldFocusWrap,
+                ariaLabel:
+                  (slottedMenuProps.ariaLabel as string | undefined) ??
+                  (slottedMenuProps["aria-label"] as string | undefined) ??
+                  props.ariaLabel ??
+                  props["aria-label"],
                 ariaLabelledby:
-                  props.ariaLabelledby ?? props["aria-labelledby"] ?? triggerId.value,
+                  (slottedMenuProps.ariaLabelledby as string | undefined) ??
+                  (slottedMenuProps["aria-labelledby"] as string | undefined) ??
+                  props.ariaLabelledby ??
+                  props["aria-labelledby"] ??
+                  triggerId.value,
                 onAction: (key) => {
+                  callHandler(slottedMenuProps.onAction, key);
                   props.onAction?.(key);
                   if (closeOnSelect) {
                     closeMenu(true);
                   }
                 },
-                onSelectionChange: props.onSelectionChange,
+                onSelectionChange: (keys) => {
+                  callHandler(slottedMenuProps.onSelectionChange, keys);
+                  props.onSelectionChange?.(keys);
+                },
                 onClose: () => {
+                  callHandler(slottedMenuProps.onClose);
                   closeMenu(true);
                 },
-              })
+              }, slottedMenuSlots)
             : null,
         ]
       );

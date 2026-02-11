@@ -2,7 +2,7 @@ import { render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { SubmenuTrigger } from "../src";
+import { Item, Menu, SubmenuTrigger } from "../src";
 
 const items = [
   { key: "rename", label: "Rename" },
@@ -91,6 +91,66 @@ describe("SubmenuTrigger", () => {
     expect(submenu).toBeTruthy();
 
     await user.keyboard("{Escape}");
+    expect(tree.container.contains(submenu)).toBe(false);
+  });
+
+  it("supports static trigger + menu composition syntax", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    const menuOnAction = vi.fn();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerStaticCompositionHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(
+                SubmenuTrigger,
+                {
+                  onAction,
+                },
+                {
+                  default: () => [
+                    h(Item, { id: "more" }, () => "More"),
+                    h(
+                      Menu,
+                      {
+                        "aria-label": "Composed nested menu",
+                        onAction: menuOnAction,
+                      },
+                      {
+                        default: () => [
+                          h(Item, { id: "rename" }, () => "Rename"),
+                          h(Item, { id: "delete" }, () => "Delete"),
+                        ],
+                      }
+                    ),
+                  ],
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    const submenuItems = within(submenu).getAllByRole("menuitem");
+    expect(submenuItems).toHaveLength(2);
+    expect(submenu.getAttribute("aria-label")).toBe("Composed nested menu");
+
+    await user.click(submenuItems[1] as Element);
+    expect(onAction).toHaveBeenCalledWith("delete");
+    expect(menuOnAction).toHaveBeenCalledWith("delete");
     expect(tree.container.contains(submenu)).toBe(false);
   });
 });
