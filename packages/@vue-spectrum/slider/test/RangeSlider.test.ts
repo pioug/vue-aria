@@ -217,4 +217,56 @@ describe("RangeSlider", () => {
     expect(inputs[0].attributes("aria-label")).toBe("Minimum");
     expect(inputs[1].attributes("aria-label")).toBe("Maximum");
   });
+
+  it("snaps default page size to a step multiple for keyboard paging", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(RangeSlider, {
+      attachTo: document.body,
+      props: {
+        label: "The Label",
+        minValue: 0,
+        maxValue: 230,
+        defaultValue: {
+          start: 20,
+          end: 50,
+        },
+        step: 10,
+      },
+    });
+
+    const inputs = wrapper.findAll("input[type='range']");
+    const startInput = inputs[0];
+    (startInput.element as HTMLInputElement).focus();
+
+    await user.keyboard("{PageUp}");
+    expect((startInput.element as HTMLInputElement).value).toBe("40");
+    await user.keyboard("{PageDown}");
+    expect((startInput.element as HTMLInputElement).value).toBe("20");
+  });
+
+  it("applies snapped fractional default page size for keyboard paging", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(RangeSlider, {
+      attachTo: document.body,
+      props: {
+        label: "The Label",
+        minValue: -50,
+        maxValue: -15,
+        defaultValue: {
+          start: -40,
+          end: -20,
+        },
+        step: 2,
+      },
+    });
+
+    const inputs = wrapper.findAll("input[type='range']");
+    const startInput = inputs[0];
+    (startInput.element as HTMLInputElement).focus();
+
+    await user.keyboard("{PageUp}");
+    expect((startInput.element as HTMLInputElement).value).toBe("-36");
+    await user.keyboard("{PageDown}");
+    expect((startInput.element as HTMLInputElement).value).toBe("-40");
+  });
 });
