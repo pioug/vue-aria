@@ -25,6 +25,13 @@ export { CheckboxGroup } from "./CheckboxGroup";
 export { CloseButton } from "./CloseButton";
 export { DateField } from "./DateField";
 export { DatePicker, DateRangePicker, TimeField } from "./DatePicker";
+export {
+  AlertDialog,
+  Dialog,
+  DialogContainer,
+  DialogTrigger,
+  useDialogContainer,
+} from "./Dialog";
 export { Divider } from "./Divider";
 export { Image } from "./Image";
 export { IllustratedMessage } from "./IllustratedMessage";
@@ -91,6 +98,14 @@ export type {
   S2DateRangePickerProps,
   S2TimeFieldProps,
 } from "./DatePicker";
+export type {
+  S2AlertDialogProps,
+  S2DialogContainerProps,
+  S2DialogContainerValue,
+  S2DialogProps,
+  S2DialogTriggerProps,
+  S2DialogType,
+} from "./Dialog";
 export type { S2DividerProps } from "./Divider";
 export type { S2ImageProps } from "./Image";
 export type { S2IllustratedMessageProps } from "./IllustratedMessage";
