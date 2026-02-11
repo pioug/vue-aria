@@ -356,6 +356,7 @@ export type {
   SpectrumListViewSelectionMode,
   SpectrumListViewLoadingState,
   SpectrumListViewItemData,
+  SpectrumListViewItemProps,
   SpectrumListViewProps,
 } from "@vue-spectrum/list";
 export type {

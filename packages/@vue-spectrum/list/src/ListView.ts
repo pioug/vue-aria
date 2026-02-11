@@ -1,11 +1,15 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   onMounted,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useGridList } from "@vue-aria/gridlist";
@@ -20,6 +24,7 @@ import {
 } from "@vue-spectrum/utils";
 import { ListViewItem } from "./ListViewItem";
 import {
+  type ListViewKey,
   normalizeListViewItems,
   type NormalizedListViewItemData,
   type SpectrumListViewItemData,
@@ -54,6 +59,163 @@ export interface SpectrumListViewProps {
   isHidden?: boolean | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
+}
+
+function normalizeListViewKey(value: unknown, fallback: ListViewKey): ListViewKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseListViewSlotItems(nodes: VNode[] | undefined): SpectrumListViewItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const flattened = flattenVNodeChildren(nodes);
+  const parsedItems: SpectrumListViewItemData[] = [];
+  let itemIndex = 0;
+
+  for (const node of flattened) {
+    if (getComponentName(node) !== "ListViewItem") {
+      continue;
+    }
+
+    const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const key = normalizeListViewKey(node.key ?? nodeProps.id, `item-${itemIndex + 1}`);
+    const slotLabel = extractTextContent(getSlotContent(node)).trim();
+
+    parsedItems.push({
+      key,
+      label: slotLabel || String(key),
+      description:
+        typeof nodeProps.description === "string" ? nodeProps.description : undefined,
+      textValue:
+        typeof nodeProps.textValue === "string" ? nodeProps.textValue : undefined,
+      isDisabled: Boolean(nodeProps.isDisabled),
+      "aria-label":
+        typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
+    });
+    itemIndex += 1;
+  }
+
+  return parsedItems;
+}
+
+function areListItemsEqual(
+  left: SpectrumListViewItemData[],
+  right: SpectrumListViewItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.id !== candidate.id ||
+      current.label !== candidate.label ||
+      current.description !== candidate.description ||
+      current.textValue !== candidate.textValue ||
+      current.isDisabled !== candidate.isDisabled ||
+      current["aria-label"] !== candidate["aria-label"]
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export const ListView = defineComponent({
@@ -168,9 +330,13 @@ export const ListView = defineComponent({
   setup(props, { attrs, expose, slots }) {
     const rootRef = ref<HTMLElement | null>(null);
     const loadMoreRequested = ref(false);
+    const slotItems = ref<SpectrumListViewItemData[]>([]);
 
     const normalizedItems = computed<NormalizedListViewItemData[]>(() =>
-      normalizeListViewItems(props.items)
+      normalizeListViewItems(props.items ?? slotItems.value)
+    );
+    const usesStaticItemComposition = computed(
+      () => props.items === undefined && slotItems.value.length > 0
     );
     const selectionMode = computed<SpectrumListViewSelectionMode>(
       () => props.selectionMode ?? "none"
@@ -334,6 +500,13 @@ export const ListView = defineComponent({
     });
 
     return () => {
+      if (props.items === undefined) {
+        const parsedItems = parseListViewSlotItems(slots.default?.() as VNode[] | undefined);
+        if (!areListItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const domProps = filterDOMProps(attrs as Record<string, unknown>, {
         labelable: true,
       });
@@ -357,7 +530,10 @@ export const ListView = defineComponent({
           },
           {
             default: slots.default
-              ? () => slots.default?.({ item })
+              ? () =>
+                  usesStaticItemComposition.value
+                    ? undefined
+                    : slots.default?.({ item })
               : undefined,
           }
         )

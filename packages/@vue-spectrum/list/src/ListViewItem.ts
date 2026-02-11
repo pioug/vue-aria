@@ -7,8 +7,13 @@ import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import type { NormalizedListViewItemData, SpectrumListViewSelectionMode } from "./types";
 
 export interface SpectrumListViewItemProps {
-  item: NormalizedListViewItemData;
-  state: UseListBoxStateResult<NormalizedListViewItemData>;
+  item?: NormalizedListViewItemData | undefined;
+  state?: UseListBoxStateResult<NormalizedListViewItemData> | undefined;
+  id?: Key | undefined;
+  description?: string | undefined;
+  textValue?: string | undefined;
+  "aria-label"?: string | undefined;
+  isDisabled?: boolean | undefined;
   selectionMode?: SpectrumListViewSelectionMode | undefined;
   onAction?: ((key: Key) => void) | undefined;
   density?: "compact" | "regular" | "spacious" | undefined;
@@ -21,11 +26,31 @@ export const ListViewItem = defineComponent({
   props: {
     item: {
       type: Object as PropType<NormalizedListViewItemData>,
-      required: true,
+      default: undefined,
     },
     state: {
       type: Object as PropType<UseListBoxStateResult<NormalizedListViewItemData>>,
-      required: true,
+      default: undefined,
+    },
+    id: {
+      type: [String, Number] as PropType<Key | undefined>,
+      default: undefined,
+    },
+    description: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    textValue: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    "aria-label": {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
     },
     selectionMode: {
       type: String as PropType<SpectrumListViewSelectionMode | undefined>,
@@ -49,21 +74,25 @@ export const ListViewItem = defineComponent({
     },
   },
   setup(props, { slots }) {
+    if (!props.item || !props.state) {
+      return () => null;
+    }
+
     const rowRef = ref<HTMLElement | null>(null);
     const itemState = useGridListItem(
       {
-        node: props.item,
-        isDisabled: props.item.isDisabled,
-        "aria-label": props.item["aria-label"],
+        node: props.item!,
+        isDisabled: props.item!.isDisabled,
+        "aria-label": props.item!["aria-label"],
         isVirtualized: true,
         onAction: props.onAction,
       },
-      props.state,
+      props.state!,
       rowRef
     );
 
     const checkboxId = computed(() =>
-      `v-spectrum-listview-checkbox-${String(props.item.key)}`
+      `v-spectrum-listview-checkbox-${String(props.item!.key)}`
     );
 
     const toVueRowProps = (rowProps: Record<string, unknown>): Record<string, unknown> => {
@@ -100,15 +129,15 @@ export const ListViewItem = defineComponent({
           {
             class: classNames("react-spectrum-ListView-itemLabel"),
           },
-          props.item.label
+          props.item!.label
         ),
-        props.item.description
+        props.item!.description
           ? h(
             "span",
             mergeProps(itemState.descriptionProps.value, {
               class: classNames("react-spectrum-ListView-itemDescription"),
             }),
-            props.item.description
+            props.item!.description
           )
           : null,
       ];
@@ -133,7 +162,7 @@ export const ListViewItem = defineComponent({
             },
             props.UNSAFE_className as ClassValue | undefined
           ),
-          "aria-label": props.item.label,
+          "aria-label": props.item!.label,
         }),
         [
           h(
@@ -161,7 +190,7 @@ export const ListViewItem = defineComponent({
                     event.stopPropagation();
                   },
                 }),
-              slots.default?.({ item: props.item }) ?? fallbackContent,
+              slots.default?.({ item: props.item! }) ?? fallbackContent,
             ]
           ),
         ]

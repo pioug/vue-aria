@@ -1,7 +1,9 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { ListView, type SpectrumListViewItemData } from "../src";
+import { ListViewItem } from "../src";
 
 const baseItems: SpectrumListViewItemData[] = [
   { key: "foo", label: "Foo" },
@@ -256,6 +258,47 @@ describe("ListView", () => {
     });
 
     expect(emptyTree.getByText("No results")).toBeTruthy();
+  });
+
+  it("supports static slot syntax with ListViewItem", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "ListViewSlotHarness",
+      setup() {
+        return () =>
+          h(
+            ListView,
+            {
+              "aria-label": "List",
+              selectionMode: "single",
+              onSelectionChange,
+              onAction,
+            },
+            {
+              default: () => [
+                h(ListViewItem, { id: "first" }, () => "First"),
+                h(ListViewItem, { id: "second", isDisabled: true }, () => "Second"),
+                h(ListViewItem, { id: "third" }, () => "Third"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const grid = tree.getByRole("grid", { name: "List" });
+    const rows = within(grid).getAllByRole("row");
+
+    expect(rows).toHaveLength(3);
+    expect(rows[1]?.getAttribute("aria-disabled")).toBe("true");
+
+    await user.click(rows[0] as HTMLElement);
+    expect(rows[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(onAction).toHaveBeenCalledWith("first");
+    expect(Array.from(onSelectionChange.mock.calls[0][0] as Set<string>)).toEqual(["first"]);
   });
 
   it("supports custom data attributes", () => {

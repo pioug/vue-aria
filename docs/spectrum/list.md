@@ -62,6 +62,6 @@ const component = h(ListView, {
 
 ## Notes
 
-- Baseline includes grid/list semantics (`grid` + `row` + `gridcell`), keyboard row navigation, and single/multiple selection behavior.
+- Baseline includes grid/list semantics (`grid` + `row` + `gridcell`), keyboard row navigation, single/multiple selection behavior, and static slot composition support via `ListViewItem`.
 - Loading/empty-state rendering and scroll-bottom `onLoadMore` behavior are included.
 - Advanced upstream child-action focus model, full drag-and-drop integration, and complete visual/theming parity remain in progress.
