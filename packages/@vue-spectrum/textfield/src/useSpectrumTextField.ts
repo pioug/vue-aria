@@ -25,6 +25,7 @@ export function useSpectrumTextField(
   const provider = useProviderContext();
   const formValidationErrors = useFormValidationErrors();
   const isServerErrorCleared = ref(false);
+  const currentValue = ref(props.value ?? props.defaultValue ?? "");
 
   watch(
     () => [formValidationErrors.value, props.name] as const,
@@ -32,6 +33,16 @@ export function useSpectrumTextField(
       isServerErrorCleared.value = false;
     },
     { deep: true }
+  );
+
+  watch(
+    () => props.value,
+    (nextValue) => {
+      if (nextValue !== undefined) {
+        currentValue.value = nextValue ?? "";
+      }
+    },
+    { immediate: true }
   );
 
   const resolvedFormProps = computed(() =>
@@ -78,18 +89,6 @@ export function useSpectrumTextField(
   const serverErrorMessage = computed(() =>
     isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
   );
-  const resolvedValidationState = computed(
-    () => validationState.value ?? (serverErrorMessage.value ? "invalid" : undefined)
-  );
-  const resolvedErrorMessage = computed(
-    () => props.errorMessage ?? serverErrorMessage.value
-  );
-  const resolvedInvalid = computed(
-    () =>
-      Boolean(props.isInvalid) ||
-      resolvedValidationState.value === "invalid" ||
-      Boolean(serverErrorMessage.value)
-  );
   const validationBehavior = computed<SpectrumTextFieldValidationBehavior>(
     () =>
       props.validationBehavior ??
@@ -97,6 +96,49 @@ export function useSpectrumTextField(
         | SpectrumTextFieldValidationBehavior
         | undefined) ??
       "aria"
+  );
+  const validationErrorMessage = computed(() => {
+    if (typeof props.validate !== "function") {
+      return undefined;
+    }
+
+    const result = props.validate(currentValue.value);
+    if (typeof result === "string" && result.trim().length > 0) {
+      return result;
+    }
+
+    if (Array.isArray(result)) {
+      for (const entry of result) {
+        if (typeof entry === "string" && entry.trim().length > 0) {
+          return entry;
+        }
+      }
+    }
+
+    return undefined;
+  });
+  const ariaValidationErrorMessage = computed(() =>
+    validationBehavior.value === "aria" ? validationErrorMessage.value : undefined
+  );
+  const resolvedValidationState = computed(
+    () =>
+      validationState.value ??
+      (serverErrorMessage.value || ariaValidationErrorMessage.value
+        ? "invalid"
+        : undefined)
+  );
+  const resolvedErrorMessage = computed(
+    () =>
+      props.errorMessage ??
+      serverErrorMessage.value ??
+      ariaValidationErrorMessage.value
+  );
+  const resolvedInvalid = computed(
+    () =>
+      Boolean(props.isInvalid) ||
+      resolvedValidationState.value === "invalid" ||
+      Boolean(serverErrorMessage.value) ||
+      Boolean(ariaValidationErrorMessage.value)
   );
 
   const readAriaProp = (
@@ -155,6 +197,11 @@ export function useSpectrumTextField(
       readAriaProp("aria-errormessage", "ariaErrormessage")
     ),
     onInput: (event) => {
+      const inputTarget = event.target as
+        | HTMLInputElement
+        | HTMLTextAreaElement
+        | null;
+      currentValue.value = inputTarget?.value ?? "";
       if (serverErrorMessageFromForm.value) {
         isServerErrorCleared.value = true;
       }

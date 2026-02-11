@@ -53,6 +53,9 @@ export interface SpectrumTextFieldBaseProps {
   "aria-labelledby"?: string | undefined;
   "aria-describedby"?: string | undefined;
   "aria-errormessage"?: string | undefined;
+  validate?:
+    | ((value: string) => string | string[] | boolean | null | undefined)
+    | undefined;
   onChange?: ((value: string) => void) | undefined;
   onInput?: ((event: Event) => void) | undefined;
   onFocus?: ((event: FocusEvent) => void) | undefined;
@@ -225,6 +228,13 @@ export const textFieldBasePropOptions = {
   },
   "aria-errormessage": {
     type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  validate: {
+    type: Function as PropType<
+      | ((value: string) => string | string[] | boolean | null | undefined)
+      | undefined
+    >,
     default: undefined,
   },
   onChange: {

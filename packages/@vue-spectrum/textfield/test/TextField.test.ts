@@ -442,6 +442,26 @@ describe("TextField", () => {
     expect(tree.queryByText("Invalid username.")).toBeNull();
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
   });
+
+  it("supports validate function in aria behavior", async () => {
+    const tree = render(TextField, {
+      props: {
+        label: "Name",
+        defaultValue: "Foo",
+        validate: (value: string) => (value === "Foo" ? "Invalid name" : null),
+      },
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(tree.getByText("Invalid name")).toBeTruthy();
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+    expect(tree.queryByText("Invalid name")).toBeNull();
+  });
 });
 
 describe("TextArea", () => {
@@ -706,5 +726,25 @@ describe("TextArea", () => {
 
     expect(tree.queryByText("Invalid notes.")).toBeNull();
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  it("supports validate function in aria behavior", async () => {
+    const tree = render(TextArea, {
+      props: {
+        label: "Notes",
+        defaultValue: "Foo",
+        validate: (value: string) => (value === "Foo" ? "Invalid name" : null),
+      },
+    });
+
+    const input = tree.getByRole("textbox") as HTMLTextAreaElement;
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(tree.getByText("Invalid name")).toBeTruthy();
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+    expect(tree.queryByText("Invalid name")).toBeNull();
   });
 });
