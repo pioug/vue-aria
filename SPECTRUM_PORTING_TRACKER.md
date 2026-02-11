@@ -7,6 +7,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - Completed packages: `22 / 64`
 - Remaining packages: `42`
 - Current stage: phase-1 foundation migration
+- Priority mode: complete React Spectrum v1 package parity first; keep S2 on a secondary track until v1 reaches completion gates.
 
 ## Upstream Source of Truth
 
@@ -36,6 +37,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 ## Foundation, Theme, and Infrastructure
 
 - In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, and component-level tests now ported), `@react-spectrum/utils` (classNames compatibility flags, slot utilities, `getWrappedElement`, media/device hooks, breakpoint utilities, DOM-ref utilities, style-prop conversion helpers, and `@react-aria/utils` parity re-exports `useValueEffect`/`useResizeObserver` now ported), `@react-spectrum/theme-default` (baseline `theme` export now ported with provider-compatible theme sections and starter integration tests/docs), `@react-spectrum/theme-light` (baseline `theme` export now ported with provider-compatible sections and light/dark class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-dark` (baseline `theme` export now ported with provider-compatible sections and dark-biased class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-express` (baseline `theme` export now ported on top of `theme-default` with express global + scale class variants and starter integration tests/docs), `@react-spectrum/style-macro-s1` (baseline package layout/runtime helpers now ported with starter merge/helper tests and docs), `@react-spectrum/test-utils` (baseline package layout now ported with screen-width test helpers and starter docs/tests), `@react-spectrum/story-utils` (baseline package layout now ported with Vue `ErrorBoundary` + `generatePowerset` equivalents and starter docs/tests), `@react-spectrum/s2` (baseline package now includes shared utility exports `pressScale`/`isDocsEnv` and first component primitives `Provider`/`Accordion`/`Disclosure`/`DisclosurePanel`/`DisclosureTitle`/`ActionBar`/`ActionMenu`/`AlertDialog`/`Breadcrumbs`/`Breadcrumb`/`BreadcrumbItem`/`Button`/`LinkButton`/`ActionButton`/`ActionButtonGroup`/`Avatar`/`Badge`/`ButtonGroup`/`ComboBox`/`ColorArea`/`ColorField`/`ColorSlider`/`ColorSwatch`/`ColorSwatchPicker`/`ColorWheel`/`Heading`/`Header`/`Content`/`Text`/`Keyboard`/`Footer`/`Checkbox`/`CheckboxGroup`/`CloseButton`/`ContextualHelp`/`DateField`/`DatePicker`/`DateRangePicker`/`TimeField`/`Dialog`/`DialogTrigger`/`DialogContainer`/`useDialogContainer`/`Divider`/`DropZone`/`Form`/`Image`/`IllustratedMessage`/`InlineAlert`/`Link`/`Meter`/`Menu`/`MenuItem`/`MenuTrigger`/`NumberField`/`ProgressBar`/`ProgressCircle`/`SearchField`/`TableView`/`TableHeader`/`TableBody`/`Column`/`Row`/`Cell`/`Radio`/`RadioGroup`/`SelectBox`/`SelectBoxGroup`/`Slider`/`RangeSlider`/`StatusLight`/`Switch`/`TagGroup`/`Tag`/`TextField`/`TextArea`/`ToggleButton`/`ToggleButtonGroup`/`Tooltip`/`TooltipTrigger`/`Well`, plus starter docs/tests, keyboard parity hardening for `SelectBoxGroup` navigation/selection edge cases, sortable-header callback coverage for `TableView`, trigger/menu action-flow coverage for `MenuTrigger`, `isHidden` unmount coverage for content primitives, baseline date/time-range wrapper coverage, baseline tag-grid/removal coverage, baseline tooltip trigger coverage, baseline action-bar wrapper coverage, baseline breadcrumb export-name parity coverage, baseline dialog wrapper/hook coverage, baseline color wrapper coverage, and baseline form/contextual-help/dropzone coverage)
+- Priority note: `@react-spectrum/s2` remains secondary until v1 package parity (`64 / 64`) is complete and quality gates pass.
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
 - [x] `@react-spectrum/icon` -> `@vue-spectrum/icon`
@@ -57,6 +59,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 - Scope: runtime exports from `references/react-spectrum/packages/@react-spectrum/s2/src/index.ts`, excluding `*Context` and type-only exports.
 - Current export parity in `packages/@vue-spectrum/s2/src/index.ts`: `82 / 133`.
+- Priority lane: secondary/deferred while v1 package parity remains in progress.
 - Normalization note: this tracker checks exact upstream export names, so wrapper renames (for example `BreadcrumbItem` vs upstream `Breadcrumb`) remain visible as pending.
 - Local-only utility note: `isDocsEnv` exists in Vue S2 but is not part of the upstream runtime export set and is not counted below.
 
