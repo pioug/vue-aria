@@ -354,12 +354,13 @@ describe("Tabs", () => {
 
       expect(queryByRole("tablist")).toBeNull();
 
-      const picker = getByRole("button", { name: "Tab 1" });
+      const picker = getByRole("button", { name: /Tab 1/i });
       expect(picker).toBeTruthy();
       const pickerContainer = picker.closest(".spectrum-Tabs-picker");
       expect(pickerContainer).not.toBeNull();
       const pickerId = pickerContainer?.getAttribute("id");
       expect(pickerId).not.toBeNull();
+      expect(getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(pickerId);
       expect(getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(pickerId);
 
       await user.click(picker);
@@ -370,6 +371,63 @@ describe("Tabs", () => {
       const tabpanel = getByRole("tabpanel");
       expect(tabpanel.textContent).toContain("Tab 2 body");
     } finally {
+      clientWidthSpy.mockRestore();
+      scrollWidthSpy.mockRestore();
+    }
+  });
+
+  it("composes collapsed picker aria-labelledby from aria-label and external aria-labelledby", async () => {
+    const externalLabel = document.createElement("span");
+    externalLabel.id = "external-label";
+    externalLabel.textContent = "External label";
+    document.body.append(externalLabel);
+
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-TabsPanel-collapseWrapper")) {
+          return 320;
+        }
+
+        return 0;
+      });
+    const scrollWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "tablist") {
+          return 1200;
+        }
+
+        return 0;
+      });
+
+    try {
+      const { getByRole } = renderTabs({
+        "aria-label": "Test Tabs",
+        "aria-labelledby": "external-label",
+      });
+      await flush();
+
+      const picker = getByRole("button", { name: /Tab 1/i });
+      expect(picker.getAttribute("aria-label")).toBeNull();
+      const pickerContainer = picker.closest(".spectrum-Tabs-picker");
+      expect(pickerContainer).not.toBeNull();
+      const pickerId = pickerContainer?.getAttribute("id");
+      expect(pickerId).not.toBeNull();
+
+      const labelledby = picker.getAttribute("aria-labelledby");
+      expect(labelledby).toBeTruthy();
+      const labelledbyIds = (labelledby ?? "").split(" ");
+      expect(labelledbyIds).toContain("external-label");
+      expect(labelledbyIds).toContain(pickerId ?? "");
+
+      const hiddenLabelId = labelledbyIds.find(
+        (id) => id !== "external-label" && id !== pickerId
+      );
+      expect(hiddenLabelId).toBeTruthy();
+      expect(document.getElementById(hiddenLabelId ?? "")?.textContent).toBe("Test Tabs");
+    } finally {
+      externalLabel.remove();
       clientWidthSpy.mockRestore();
       scrollWidthSpy.mockRestore();
     }

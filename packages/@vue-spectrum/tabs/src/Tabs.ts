@@ -276,16 +276,26 @@ export const Tabs = defineComponent({
     const isDisabled = computed(
       () => props.isDisabled ?? provider?.value.isDisabled ?? false
     );
-    const ariaLabel = computed(
-      () =>
+    const ariaLabel = computed(() => {
+      const propsRecord = props as unknown as Record<string, unknown>;
+      const attrsRecord = attrs as Record<string, unknown>;
+      return (
         props["aria-label"] ??
-        (attrs["aria-label"] as string | undefined)
-    );
-    const ariaLabelledby = computed(
-      () =>
+        (propsRecord.ariaLabel as string | undefined) ??
+        (attrsRecord["aria-label"] as string | undefined) ??
+        (attrsRecord.ariaLabel as string | undefined)
+      );
+    });
+    const ariaLabelledby = computed(() => {
+      const propsRecord = props as unknown as Record<string, unknown>;
+      const attrsRecord = attrs as Record<string, unknown>;
+      return (
         props["aria-labelledby"] ??
-        (attrs["aria-labelledby"] as string | undefined)
-    );
+        (propsRecord.ariaLabelledby as string | undefined) ??
+        (attrsRecord["aria-labelledby"] as string | undefined) ??
+        (attrsRecord.ariaLabelledby as string | undefined)
+      );
+    });
     const collapsedPanelLabelledby = ref<string | undefined>(undefined);
 
     const state = useTabListState<SpectrumTabItem>({
@@ -384,9 +394,22 @@ export const TabList = defineComponent({
       height?: string | undefined;
     }>({});
     const collapsePickerId = useId(undefined, "v-spectrum-tabs-picker");
+    const collapsePickerLabelId = useId(undefined, "v-spectrum-tabs-picker-label");
     const shouldCollapse = computed(
       () => context.orientation.value !== "vertical" && isCollapsed.value
     );
+    const collapsePickerAriaLabelledby = computed(() => {
+      const ids: string[] = [];
+      if (context.ariaLabel.value) {
+        ids.push(collapsePickerLabelId.value);
+      }
+      ids.push(collapsePickerId.value);
+      if (context.ariaLabelledby.value) {
+        ids.push(context.ariaLabelledby.value);
+      }
+
+      return ids.join(" ");
+    });
 
     const { tabListProps } = useTabList(
       {
@@ -610,12 +633,30 @@ export const TabList = defineComponent({
           class: classNames("spectrum-TabsPanel-collapseWrapper"),
         },
         [
+          context.ariaLabel.value
+            ? h(
+                "span",
+                {
+                  id: collapsePickerLabelId.value,
+                  style: {
+                    position: "absolute",
+                    width: "1px",
+                    height: "1px",
+                    margin: "-1px",
+                    padding: "0",
+                    overflow: "hidden",
+                    clip: "rect(0, 0, 0, 0)",
+                    whiteSpace: "nowrap",
+                    border: "0",
+                  },
+                },
+                context.ariaLabel.value
+              )
+            : null,
           h(Picker, {
             id: collapsePickerId.value,
-            ariaLabel: context.ariaLabel.value,
-            "aria-label": context.ariaLabel.value,
-            ariaLabelledby: context.ariaLabelledby.value,
-            "aria-labelledby": context.ariaLabelledby.value,
+            ariaLabelledby: collapsePickerAriaLabelledby.value,
+            "aria-labelledby": collapsePickerAriaLabelledby.value,
             items: tabItems,
             selectedKey: selectedPickerKey as string | number | undefined,
             isDisabled: !shouldCollapse.value,
