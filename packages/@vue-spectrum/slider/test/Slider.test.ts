@@ -118,6 +118,92 @@ describe("Slider", () => {
     expect(wrapper.get("output").text()).toBe("55");
   });
 
+  it.each([
+    {
+      name: "defaultValue minValue",
+      props: {
+        defaultValue: 20,
+        minValue: 50,
+      },
+      expected: "50",
+    },
+    {
+      name: "defaultValue maxValue",
+      props: {
+        defaultValue: 20,
+        maxValue: 10,
+      },
+      expected: "10",
+    },
+    {
+      name: "defaultValue minValue step",
+      props: {
+        defaultValue: 20,
+        minValue: 50,
+        step: 3,
+      },
+      expected: "50",
+    },
+    {
+      name: "defaultValue maxValue step",
+      props: {
+        defaultValue: 20,
+        maxValue: 10,
+        step: 3,
+      },
+      expected: "9",
+    },
+    {
+      name: "value minValue",
+      props: {
+        value: 20,
+        minValue: 50,
+      },
+      expected: "50",
+    },
+    {
+      name: "value maxValue",
+      props: {
+        value: 20,
+        maxValue: 10,
+      },
+      expected: "10",
+    },
+    {
+      name: "value minValue step",
+      props: {
+        value: 20,
+        minValue: 50,
+        step: 3,
+      },
+      expected: "50",
+    },
+    {
+      name: "value maxValue step",
+      props: {
+        value: 20,
+        maxValue: 10,
+        step: 3,
+      },
+      expected: "9",
+    },
+  ])(
+    "clamps value/defaultValue to the allowed range ($name)",
+    ({ props, expected }) => {
+      const wrapper = mount(Slider, {
+        props: {
+          label: "The Label",
+          ...props,
+        },
+      });
+
+      const input = wrapper.get("input[type='range']");
+      expect((input.element as HTMLInputElement).value).toBe(expected);
+      expect(input.attributes("aria-valuetext")).toBe(expected);
+      expect(wrapper.get("output").text()).toBe(expected);
+    }
+  );
+
   it("supports custom getValueLabel", async () => {
     const wrapper = mount(Slider, {
       props: {
