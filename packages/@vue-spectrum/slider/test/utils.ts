@@ -35,11 +35,14 @@ export async function testKeypresses(
   commands: SliderCommand[]
 ): Promise<void> {
   for (const command of commands) {
-    const slider = "left" in command ? sliderLeft : sliderRight;
-    const action = "left" in command ? command.left : command.right;
+    const isLeftCommand = typeof command.left === "function";
+    const slider = isLeftCommand ? sliderLeft : sliderRight;
     const oldValue = Number(slider.value);
-
-    await action(slider);
+    if (isLeftCommand) {
+      await command.left(sliderLeft);
+    } else if (typeof command.right === "function") {
+      await command.right(sliderRight);
+    }
 
     if (typeof command.result === "string") {
       expect(slider.value).toBe(command.result);
