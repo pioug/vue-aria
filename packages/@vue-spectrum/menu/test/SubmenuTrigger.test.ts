@@ -184,6 +184,60 @@ describe("SubmenuTrigger", () => {
     expect(tree.container.contains(submenu)).toBe(false);
   });
 
+  it("fires submenu onClose when closed by selecting an item", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerOnCloseHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(
+                SubmenuTrigger,
+                null,
+                {
+                  default: () => [
+                    h(Item, { id: "more" }, () => "More"),
+                    h(
+                      Menu,
+                      {
+                        "aria-label": "Composed nested menu",
+                        onClose,
+                      },
+                      {
+                        default: () => [
+                          h(Item, { id: "rename" }, () => "Rename"),
+                          h(Item, { id: "delete" }, () => "Delete"),
+                        ],
+                      }
+                    ),
+                  ],
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    const submenuItems = within(submenu).getAllByRole("menuitem");
+    await user.click(submenuItems[0] as Element);
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(tree.container.contains(submenu)).toBe(false);
+  });
+
   it("keeps only one sibling submenu open at a time", async () => {
     const user = userEvent.setup();
 

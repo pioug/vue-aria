@@ -70,4 +70,5 @@ const component = h(MenuTrigger, {
 - Baseline submenu behavior includes Escape-key close without firing submenu `onClose` callbacks.
 - Baseline submenu behavior keeps only one sibling submenu open at a time.
 - Baseline submenu behavior does not fire `onAction` when activating submenu-trigger items.
+- Baseline submenu behavior fires submenu `onClose` callbacks when closing from item selection.
 - Advanced contextual-help parity (additional upstream submenu close edge-cases and icon/overlay visual parity) remains in progress.
