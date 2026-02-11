@@ -540,6 +540,36 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it("can be closed by the dismiss button rendered by Dialog", async () => {
+    const wrapper = mount(DialogTrigger, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Trigger"),
+          h(Dialog, { isDismissable: true }, () => "contents"),
+        ],
+      },
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+
+      const dismissButton = document.body.querySelector(
+        "button.spectrum-Dialog-closeButton"
+      ) as HTMLButtonElement | null;
+      expect(dismissButton).not.toBeNull();
+
+      dismissButton?.click();
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("restores focus to trigger when closed from hidden dismiss button", async () => {
     const wrapper = mountDialogTrigger({
       type: "popover",
@@ -582,6 +612,56 @@ describe("DialogTrigger", () => {
       const dialog = document.body.querySelector("[role=\"dialog\"]");
       expect(dialog).not.toBeNull();
       expect(dialog?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("renders modal overlays in a custom portal container", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-modal-container");
+    document.body.append(customContainer);
+
+    const wrapper = mountDialogTrigger({
+      type: "modal",
+      container: customContainer,
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-modal-container\"]")).toBe(
+        customContainer
+      );
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("renders tray overlays in a custom portal container", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-tray-container");
+    document.body.append(customContainer);
+
+    const wrapper = mountDialogTrigger({
+      type: "tray",
+      container: customContainer,
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-tray-container\"]")).toBe(
+        customContainer
+      );
     } finally {
       wrapper.unmount();
       customContainer.remove();
