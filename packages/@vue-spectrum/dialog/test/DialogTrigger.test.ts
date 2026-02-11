@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, nextTick, ref } from "vue";
+import { defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Dialog, DialogTrigger } from "../src";
 
@@ -364,6 +364,98 @@ describe("DialogTrigger", () => {
       await trigger.trigger("click");
       await flushOverlay();
       expect(onOpenChange).toHaveBeenLastCalledWith(false);
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("supports uncontrolled defaultOpen", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("does not close via escape when keyboard dismiss is disabled", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "modal",
+      defaultOpen: true,
+      isKeyboardDismissDisabled: true,
+    });
+
+    try {
+      await flushOverlay();
+      const overlay = document.body.querySelector("[data-testid=\"modal\"]");
+      expect(overlay).not.toBeNull();
+
+      overlay?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("can be closed by a custom button using injected close callback", async () => {
+    const ClosableDialog = defineComponent({
+      name: "ClosableDialog",
+      props: {
+        close: {
+          type: Function as PropType<(() => void) | undefined>,
+          default: undefined,
+        },
+      },
+      setup(props) {
+        return () =>
+          h(Dialog, null, () =>
+            h(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  props.close?.();
+                },
+              },
+              "Close"
+            )
+          );
+      },
+    });
+
+    const wrapper = mount(DialogTrigger, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Trigger"),
+          h(ClosableDialog),
+        ],
+      },
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+
+      const closeButton = Array.from(document.body.querySelectorAll("button")).find(
+        (button) => button.textContent?.trim() === "Close"
+      );
+      closeButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await flushOverlay();
+
       expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
     } finally {
       wrapper.unmount();
