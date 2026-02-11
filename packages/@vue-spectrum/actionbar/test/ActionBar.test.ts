@@ -129,6 +129,51 @@ describe("ActionBar", () => {
     expect(onAction).toHaveBeenCalledWith("edit");
   });
 
+  it("collapses actions into an overflow menu when action buttons do not fit", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return 220;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          return 100;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderWithProvider(
+        h(ActionBar, {
+          selectedItemCount: 1,
+          items,
+          onAction,
+        })
+      );
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      const moreButton = tree.getByRole("button", { name: "More actions" });
+      await user.click(moreButton);
+
+      await user.click(tree.getByRole("menuitem", { name: "Copy" }));
+      expect(onAction).toHaveBeenCalledWith("copy");
+    } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
   it("fires onClearSelection from clear button", async () => {
     const user = userEvent.setup();
     const onClearSelection = vi.fn();
