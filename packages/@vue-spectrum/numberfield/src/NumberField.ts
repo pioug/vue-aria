@@ -250,6 +250,7 @@ export const NumberField = defineComponent({
       maxValue: computed(() => props.maxValue),
       step: computed(() => props.step),
       formatOptions: computed(() => props.formatOptions),
+      locale: computed(() => provider?.value.locale),
       decrementAriaLabel: computed(() => props.decrementAriaLabel),
       incrementAriaLabel: computed(() => props.incrementAriaLabel),
       name: computed(() => props.name),

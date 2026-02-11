@@ -1,4 +1,5 @@
 import { computed, ref, toValue, watchEffect } from "vue";
+import { NumberParser } from "@internationalized/number";
 import { useTextField, type UseTextFieldOptions } from "@vue-aria/textfield";
 import { useSpinButton } from "@vue-aria/spinbutton";
 import { mergeProps } from "@vue-aria/utils";
@@ -15,6 +16,7 @@ export interface UseNumberFieldOptions
   maxValue?: MaybeReactive<number | undefined>;
   step?: MaybeReactive<number | undefined>;
   formatOptions?: MaybeReactive<Intl.NumberFormatOptions | undefined>;
+  locale?: MaybeReactive<string | undefined>;
   decrementAriaLabel?: MaybeReactive<string | undefined>;
   incrementAriaLabel?: MaybeReactive<string | undefined>;
   onChange?: (value: number | undefined) => void;
@@ -49,16 +51,6 @@ function toResolvedNumber(
   }
 
   return resolved;
-}
-
-function parseNumber(value: string): number | undefined {
-  const normalized = value.trim().replace(/,/g, "");
-  if (normalized === "") {
-    return undefined;
-  }
-
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : undefined;
 }
 
 function clampNumber(
@@ -199,6 +191,12 @@ export function useNumberField(
 
   const minValue = computed(() => toResolvedNumber(options.minValue));
   const maxValue = computed(() => toResolvedNumber(options.maxValue));
+  const resolvedLocale = computed(() =>
+    options.locale === undefined ? undefined : toValue(options.locale)
+  );
+  const resolvedFormatOptions = computed(() =>
+    options.formatOptions === undefined ? undefined : toValue(options.formatOptions)
+  );
   const explicitStep = computed(() => {
     const resolved = toResolvedNumber(options.step);
     return resolved === undefined || resolved === 0 ? undefined : resolved;
@@ -213,10 +211,32 @@ export function useNumberField(
   const numberFormatter = computed(
     () =>
       new Intl.NumberFormat(
-        undefined,
-        options.formatOptions === undefined ? undefined : toValue(options.formatOptions)
+        resolvedLocale.value,
+        resolvedFormatOptions.value
       )
   );
+  const numberParser = computed(
+    () =>
+      new NumberParser(
+        numberFormatter.value.resolvedOptions().locale,
+        resolvedFormatOptions.value
+      )
+  );
+
+  const parseNumber = (value: string): number | undefined => {
+    const trimmed = value.trim();
+    if (trimmed === "") {
+      return undefined;
+    }
+
+    const parsed = numberParser.value.parse(trimmed);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+
+    const fallback = Number(trimmed.replace(/,/g, ""));
+    return Number.isFinite(fallback) ? fallback : undefined;
+  };
 
   const step = computed(() => {
     if (explicitStep.value !== undefined) {
@@ -471,6 +491,21 @@ export function useNumberField(
     inputMode,
     value: inputValue,
     onChange: (value) => {
+      if (
+        !numberParser.value.isValidPartialNumber(
+          value,
+          minValue.value,
+          maxValue.value
+        )
+      ) {
+        const inputElement =
+          options.inputRef === undefined ? undefined : toValue(options.inputRef);
+        if (inputElement) {
+          inputElement.value = inputValue.value;
+        }
+        return;
+      }
+
       inputValue.value = value;
       const parsed = parseNumber(value);
       if (parsed !== undefined) {

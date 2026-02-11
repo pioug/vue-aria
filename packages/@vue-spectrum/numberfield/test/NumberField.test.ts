@@ -424,6 +424,75 @@ describe("NumberField", () => {
     uaSpy.mockRestore();
   });
 
+  it("switches to numeric inputMode for currencies without decimals", () => {
+    const tree = renderNumberField({
+      minValue: 0,
+      formatOptions: {
+        style: "currency",
+        currency: "JPY",
+      },
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.getAttribute("inputmode")).toBe("numeric");
+  });
+
+  it("formats currency defaults and parses currency input", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: 10,
+      formatOptions: {
+        style: "currency",
+        currency: "EUR",
+      },
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.value).toContain("10");
+    expect(input.value).toContain("€");
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "€12.83");
+    await fireEvent.blur(input);
+
+    expect(input.value).toContain("12.83");
+    expect(input.value).toContain("€");
+    expect(onChange).toHaveBeenLastCalledWith(12.83);
+  });
+
+  it("parses percent input as fractional values", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      formatOptions: {
+        style: "percent",
+      },
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "52");
+    await fireEvent.blur(input);
+
+    expect(input.value).toBe("52%");
+    expect(onChange).toHaveBeenLastCalledWith(0.52);
+  });
+
+  it("rejects invalid partial characters while typing", async () => {
+    const tree = renderNumberField({
+      onChange: vi.fn(),
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    await fireEvent.update(input, "1");
+    expect(input.value).toBe("1");
+
+    await fireEvent.update(input, "1acd");
+
+    expect(input.value).toBe("1");
+  });
+
   it("supports custom increment and decrement aria labels", () => {
     const tree = renderNumberField({
       label: "Count",
