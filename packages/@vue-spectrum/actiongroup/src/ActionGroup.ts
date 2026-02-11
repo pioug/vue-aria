@@ -32,6 +32,7 @@ export interface SpectrumActionGroupItemData {
   label: string;
   "aria-label"?: string | undefined;
   isDisabled?: boolean | undefined;
+  dataAttributes?: Record<string, string> | undefined;
 }
 
 export interface SpectrumActionGroupItemProps {
@@ -232,6 +233,20 @@ function parseActionGroupSlotItems(
     const nodeProps = (node.props ?? {}) as Record<string, unknown>;
     const slotLabel = extractTextContent(getSlotContent(node)).trim();
     const key = normalizeActionGroupKey(node.key ?? nodeProps.id, `item-${itemIndex}`);
+    const dataAttributes: Record<string, string> = {};
+    for (const [propName, propValue] of Object.entries(nodeProps)) {
+      if (!propName.startsWith("data-")) {
+        continue;
+      }
+
+      if (
+        typeof propValue === "string" ||
+        typeof propValue === "number" ||
+        typeof propValue === "boolean"
+      ) {
+        dataAttributes[propName] = String(propValue);
+      }
+    }
 
     parsedItems.push({
       key,
@@ -239,6 +254,8 @@ function parseActionGroupSlotItems(
       "aria-label":
         typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
       isDisabled: Boolean(nodeProps.isDisabled),
+      dataAttributes:
+        Object.keys(dataAttributes).length > 0 ? dataAttributes : undefined,
     });
     itemIndex += 1;
   }
@@ -261,7 +278,9 @@ function areItemArraysEqual(
       current.key !== candidate.key ||
       current.label !== candidate.label ||
       current["aria-label"] !== candidate["aria-label"] ||
-      current.isDisabled !== candidate.isDisabled
+      current.isDisabled !== candidate.isDisabled ||
+      JSON.stringify(current.dataAttributes ?? {}) !==
+        JSON.stringify(candidate.dataAttributes ?? {})
     ) {
       return false;
     }
@@ -841,6 +860,7 @@ export const ActionGroup = defineComponent({
 
                   itemRefs.set(itemKey, value as ActionButtonHandle);
                 },
+                ...(item.dataAttributes ?? {}),
                 role:
                   selectionMode.value === "single"
                     ? "radio"

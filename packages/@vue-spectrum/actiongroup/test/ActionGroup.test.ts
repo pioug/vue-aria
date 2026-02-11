@@ -672,6 +672,41 @@ describe("ActionGroup", () => {
     expect(onAction).toHaveBeenCalledWith("third");
   });
 
+  it("supports data attributes on static ActionGroupItem nodes", () => {
+    const App = defineComponent({
+      name: "ActionGroupItemDataAttributesHarness",
+      setup() {
+        return () =>
+          h(
+            Provider,
+            {
+              theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+            },
+            {
+              default: () =>
+                h(
+                  ActionGroup,
+                  {
+                    "aria-label": "actiongroup-test",
+                  },
+                  {
+                    default: () => [
+                      h(ActionGroupItem, { id: "one", "data-testid": "item-one" }, () => "One"),
+                      h(ActionGroupItem, { id: "two", "data-testid": "item-two" }, () => "Two"),
+                    ],
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const buttons = tree.getAllByRole("button");
+    expect(buttons[0]?.getAttribute("data-testid")).toBe("item-one");
+    expect(buttons[1]?.getAttribute("data-testid")).toBe("item-two");
+  });
+
   it("exports Item alias", () => {
     expect(Item).toBe(ActionGroupItem);
   });
