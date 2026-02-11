@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   Accordion,
   Disclosure,
+  DisclosureHeader,
   DisclosurePanel,
   DisclosureTitle,
 } from "../src";
@@ -208,5 +209,33 @@ describe("Accordion", () => {
         expect(button.attributes("disabled")).toBeUndefined();
       }
     }
+  });
+
+  it("supports DisclosureHeader alias export", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(Accordion, {
+      attachTo: document.body,
+      slots: {
+        default: () =>
+          items.map((item) =>
+            h(
+              Disclosure,
+              { id: item.id },
+              {
+                default: () => [
+                  h(DisclosureHeader, () => item.title),
+                  h(DisclosurePanel, () => item.renderChildren()),
+                ],
+              }
+            )
+          ),
+      },
+    });
+
+    const buttons = wrapper.findAll("button");
+    expect(buttons).toHaveLength(items.length);
+
+    await user.click(buttons[0]!.element);
+    expect(buttons[0]!.attributes("aria-expanded")).toBe("true");
   });
 });

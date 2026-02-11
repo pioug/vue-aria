@@ -92,7 +92,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [x] `DateField` — `1 / 1` exported; missing: none
 - [x] `DatePicker` — `1 / 1` exported; missing: none
 - [x] `DateRangePicker` — `1 / 1` exported; missing: none
-- [ ] `Disclosure` — `3 / 4` exported; missing: `DisclosureHeader`
+- [x] `Disclosure` — `4 / 4` exported
 - [x] `Content` — `6 / 6` exported; missing: none
 - [x] `Dialog` — `1 / 1` exported; missing: none
 - [ ] `CustomDialog` — `0 / 1` exported; missing: `CustomDialog`

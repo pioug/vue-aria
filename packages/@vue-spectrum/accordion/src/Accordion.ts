@@ -81,6 +81,8 @@ export interface SpectrumDisclosureTitleProps {
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
 
+export type SpectrumDisclosureHeaderProps = SpectrumDisclosureTitleProps;
+
 interface AccordionContextValue {
   groupState: UseDisclosureGroupStateResult;
   isQuiet: ReadonlyRef<boolean>;
@@ -547,3 +549,5 @@ export const DisclosureTitle = defineComponent({
     };
   },
 });
+
+export const DisclosureHeader = DisclosureTitle;

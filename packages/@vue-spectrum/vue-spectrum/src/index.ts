@@ -186,6 +186,7 @@ export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
   Disclosure,
+  DisclosureHeader,
   DisclosurePanel,
   DisclosureTitle,
 } from "@vue-spectrum/accordion";
@@ -382,6 +383,7 @@ export type {
 export type {
   SpectrumAccordionProps,
   SpectrumDisclosureProps,
+  SpectrumDisclosureHeaderProps,
   SpectrumDisclosurePanelProps,
   SpectrumDisclosureTitleProps,
 } from "@vue-spectrum/accordion";

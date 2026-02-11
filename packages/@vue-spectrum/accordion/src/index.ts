@@ -1,6 +1,7 @@
 export {
   Accordion,
   Disclosure,
+  DisclosureHeader,
   DisclosurePanel,
   DisclosureTitle,
 } from "./Accordion";
@@ -8,6 +9,7 @@ export {
 export type {
   SpectrumAccordionProps,
   SpectrumDisclosureProps,
+  SpectrumDisclosureHeaderProps,
   SpectrumDisclosurePanelProps,
   SpectrumDisclosureTitleProps,
 } from "./Accordion";

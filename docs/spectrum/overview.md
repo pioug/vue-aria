@@ -47,7 +47,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/dnd` (in progress): collection dnd hooks (`useDragAndDrop`) with baseline drag/drop hook composition over `@vue-aria/dnd` and `@vue-aria/dnd-state`
 - `@vue-spectrum/dropzone` (in progress): dropzone primitive (`DropZone`) with baseline drop-target lifecycle, filled banner behavior, and starter drag/drop coverage
 - `@vue-spectrum/buttongroup`: button-group primitive (`ButtonGroup`) with overflow-to-vertical behavior and disabled-context propagation
-- `@vue-spectrum/accordion`: disclosure-group primitives (`Accordion`, `Disclosure`, `DisclosureTitle`, `DisclosurePanel`) with keyboard, controlled/uncontrolled expansion, and SSR parity coverage
+- `@vue-spectrum/accordion`: disclosure-group primitives (`Accordion`, `Disclosure`, `DisclosureHeader`, `DisclosureTitle`, `DisclosurePanel`) with keyboard, controlled/uncontrolled expansion, and SSR parity coverage
 - `@vue-spectrum/checkbox`: checkbox primitives (`Checkbox`, `CheckboxGroup`) with standalone/group state handling and validation semantics
 - `@vue-spectrum/radio`: radio primitives (`Radio`, `RadioGroup`) with controlled/uncontrolled behavior, orientation, and group validation semantics
 - `@vue-spectrum/switch`: switch field primitive (`Switch`) with controlled/uncontrolled behavior, read-only/disabled support, and ARIA labeling parity

@@ -8,6 +8,7 @@ Vue port of `@react-spectrum/accordion`.
 import {
   Accordion,
   Disclosure,
+  DisclosureHeader,
   DisclosurePanel,
   DisclosureTitle,
   Flex,
@@ -39,6 +40,7 @@ import {
 
 - `Accordion`
 - `Disclosure`
+- `DisclosureHeader`
 - `DisclosureTitle`
 - `DisclosurePanel`
 
@@ -74,3 +76,4 @@ const component = h(Accordion, null, {
 - Supports uncontrolled and controlled expansion with `defaultExpandedKeys`/`expandedKeys`.
 - Supports accordion-level and item-level disabled behavior via `isDisabled`.
 - Preserves disclosure relationships (`aria-expanded`, `aria-controls`, `aria-labelledby`, region role) in line with upstream behavior.
+- `DisclosureHeader` is available as an upstream-compatible alias for `DisclosureTitle`.
