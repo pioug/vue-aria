@@ -50,6 +50,9 @@ export default defineConfig({
         "@vue-spectrum/story-utils": fileURLToPath(
           new URL("../../packages/@vue-spectrum/story-utils/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/s2": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/s2/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/icon": fileURLToPath(
           new URL("../../packages/@vue-spectrum/icon/src/index.ts", import.meta.url)
         ),
@@ -327,6 +330,7 @@ export default defineConfig({
           { text: "@vue-spectrum/style-macro-s1", link: "/spectrum/style-macro-s1" },
           { text: "@vue-spectrum/test-utils", link: "/spectrum/test-utils" },
           { text: "@vue-spectrum/story-utils", link: "/spectrum/story-utils" },
+          { text: "@vue-spectrum/s2", link: "/spectrum/s2" },
           { text: "@vue-spectrum/icon", link: "/spectrum/icon" },
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },
           { text: "@vue-spectrum/form", link: "/spectrum/form" },
