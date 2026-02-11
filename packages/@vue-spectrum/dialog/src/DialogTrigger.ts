@@ -87,6 +87,18 @@ function getOverlayTestId(type: DialogType): "modal" | "popover" | "tray" {
   return "modal";
 }
 
+const DISMISS_BUTTON_STYLE: Record<string, string> = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: "0",
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: "0",
+};
+
 export const DialogTrigger = defineComponent({
   name: "DialogTrigger",
   inheritAttrs: false,
@@ -295,6 +307,8 @@ export const DialogTrigger = defineComponent({
         shouldUsePopoverPositioning.value
           ? overlayPosition.placement.value ?? null
           : null;
+      const shouldRenderDismissButtons =
+        effectiveType.value === "popover" || effectiveType.value === "tray";
 
       const renderedTrigger = cloneVNode(
         triggerNode,
@@ -349,7 +363,31 @@ export const DialogTrigger = defineComponent({
                       : undefined,
                   },
                   [
+                    shouldRenderDismissButtons
+                      ? h(
+                          "button",
+                          {
+                            type: "button",
+                            "aria-label": "Dismiss",
+                            style: DISMISS_BUTTON_STYLE,
+                            onClick: close,
+                          },
+                          "Dismiss"
+                        )
+                      : null,
                     renderedContent,
+                    shouldRenderDismissButtons
+                      ? h(
+                          "button",
+                          {
+                            type: "button",
+                            "aria-label": "Dismiss",
+                            style: DISMISS_BUTTON_STYLE,
+                            onClick: close,
+                          },
+                          "Dismiss"
+                        )
+                      : null,
                   ]
                 ),
             }

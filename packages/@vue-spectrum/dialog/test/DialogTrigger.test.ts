@@ -224,4 +224,29 @@ describe("DialogTrigger", () => {
       wrapper.unmount();
     }
   });
+
+  it("restores focus to trigger when closed from hidden dismiss button", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+    });
+
+    try {
+      const trigger = wrapper.get("button").element as HTMLButtonElement;
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dismissButtons = document.body.querySelectorAll(
+        "button[aria-label=\"Dismiss\"]"
+      );
+      expect(dismissButtons.length).toBeGreaterThan(0);
+
+      (dismissButtons[0] as HTMLButtonElement).click();
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      wrapper.unmount();
+    }
+  });
 });
