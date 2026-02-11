@@ -21,6 +21,7 @@ export { ButtonGroup } from "./ButtonGroup";
 export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
 export { Calendar, RangeCalendar } from "./Calendar";
+export { Card, CardView } from "./Card";
 export { ComboBox, ComboBoxItem, ComboBoxSection } from "./ComboBox";
 export {
   ColorArea,
@@ -98,6 +99,12 @@ export type {
 export type { S2AvatarProps } from "./Avatar";
 export type { S2BadgeProps } from "./Badge";
 export type { S2CalendarProps, S2RangeCalendarProps } from "./Calendar";
+export type {
+  CardSize,
+  CardVariant,
+  S2CardProps,
+  S2CardViewProps,
+} from "./Card";
 export type { S2CloseButtonProps } from "./CloseButton";
 export type { S2CheckboxProps } from "./Checkbox";
 export type { S2CheckboxGroupProps } from "./CheckboxGroup";
