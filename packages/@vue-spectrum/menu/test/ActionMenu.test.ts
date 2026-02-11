@@ -46,6 +46,27 @@ describe("ActionMenu", () => {
     expect(trigger.getAttribute("aria-label")).toBe("Custom Aria Label");
   });
 
+  it("prioritizes aria-labelledby over default aria-label", () => {
+    const externalLabel = document.createElement("span");
+    externalLabel.id = "actionmenu-external-label";
+    externalLabel.textContent = "External menu label";
+    document.body.append(externalLabel);
+
+    try {
+      const tree = renderComponent({
+        ariaLabelledby: "actionmenu-external-label",
+      });
+
+      const trigger = tree.getByRole("button", { name: "External menu label" });
+      expect(trigger.getAttribute("aria-label")).toBeNull();
+      expect(trigger.getAttribute("aria-labelledby")).toBe(
+        "actionmenu-external-label"
+      );
+    } finally {
+      externalLabel.remove();
+    }
+  });
+
   it("does not open when disabled", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({ isDisabled: true });
