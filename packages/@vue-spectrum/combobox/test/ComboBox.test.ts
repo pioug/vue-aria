@@ -78,7 +78,8 @@ describe("ComboBox", () => {
     expect(getHiddenInput()?.value).toBe("2");
     expect(getHiddenInput()?.getAttribute("form")).toBe("test-form");
 
-    await user.click(tree.getByRole("button"));
+    const [comboTrigger] = tree.getAllByRole("button");
+    await user.click(comboTrigger as HTMLElement);
     const listbox = tree.getByRole("listbox");
     const options = within(listbox).getAllByRole("option");
     await user.click(options[0] as Element);
@@ -98,6 +99,77 @@ describe("ComboBox", () => {
     expect(
       tree.container.querySelector("input[type=\"hidden\"][name=\"combo-name\"]")
     ).toBeNull();
+  });
+
+  it("supports form reset", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "ComboBoxFormResetApp",
+      setup() {
+        return () =>
+          h("form", {}, [
+            h(ComboBox, {
+              label: "Test",
+              items,
+              name: "test",
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const combobox = tree.getByRole("combobox") as HTMLInputElement;
+    expect(combobox.getAttribute("name")).toBe("test");
+
+    const [comboTrigger] = tree.getAllByRole("button");
+    await user.click(comboTrigger as HTMLElement);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[1] as Element);
+    expect(combobox.value).toBe("Two");
+
+    await user.click(tree.getByTestId("reset"));
+    expect(combobox.value).toBe("");
+  });
+
+  it("resets to defaultSelectedKey on form reset", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "ComboBoxDefaultResetApp",
+      setup() {
+        return () =>
+          h("form", {}, [
+            h(ComboBox, {
+              label: "Test",
+              items,
+              name: "test",
+              defaultSelectedKey: "1",
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const combobox = tree.getByRole("combobox") as HTMLInputElement;
+    expect(combobox.value).toBe("One");
+
+    const [comboTrigger] = tree.getAllByRole("button");
+    await user.click(comboTrigger as HTMLElement);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[2] as Element);
+    expect(combobox.value).toBe("Three");
+
+    await user.click(tree.getByTestId("reset"));
+    expect(combobox.value).toBe("One");
   });
 
   it("opens with button press and closes on second press", async () => {
