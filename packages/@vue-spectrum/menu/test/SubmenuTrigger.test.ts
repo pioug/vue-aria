@@ -307,6 +307,99 @@ describe("SubmenuTrigger", () => {
     expect(tree.container.contains(submenu)).toBe(false);
   });
 
+  it("calls submenu onAction and onClose together when selecting a submenu option", async () => {
+    const user = userEvent.setup();
+    const submenuOnAction = vi.fn();
+    const submenuOnClose = vi.fn();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerCombinedCallbacksHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(
+                SubmenuTrigger,
+                null,
+                {
+                  default: () => [
+                    h(Item, { id: "more" }, () => "More"),
+                    h(
+                      Menu,
+                      {
+                        "aria-label": "Composed nested menu",
+                        onAction: submenuOnAction,
+                        onClose: submenuOnClose,
+                      },
+                      {
+                        default: () => [
+                          h(Item, { id: "rename" }, () => "Rename"),
+                          h(Item, { id: "delete" }, () => "Delete"),
+                        ],
+                      }
+                    ),
+                  ],
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    await user.click(within(submenu).getByRole("menuitem", { name: "Rename" }));
+
+    expect(submenuOnAction).toHaveBeenCalledWith("rename");
+    expect(submenuOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("supports submenu selectionMode and onSelectionChange callbacks", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      selectionMode: "single",
+      onSelectionChange,
+    });
+
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    const options = within(submenu).getAllByRole("menuitemradio");
+    expect(options).toHaveLength(2);
+    await user.click(options[1] as Element);
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    const selectedKeys = onSelectionChange.mock.calls[0]?.[0] as Set<unknown>;
+    expect(Array.from(selectedKeys)).toEqual(["delete"]);
+  });
+
+  it("does not trigger submenu selection when activating the submenu trigger itself", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      selectionMode: "single",
+      onSelectionChange,
+    });
+
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    trigger.focus();
+    await user.keyboard("{Enter}");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("keeps only one sibling submenu open at a time", async () => {
     const user = userEvent.setup();
 

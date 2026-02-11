@@ -72,4 +72,5 @@ const component = h(MenuTrigger, {
 - Baseline submenu behavior supports hover-open interactions, hover-leave closing to neighboring items, and keeps submenu open when pointer moves between trigger and submenu content.
 - Baseline submenu behavior does not fire `onAction` when activating submenu-trigger items.
 - Baseline submenu behavior fires submenu `onClose` callbacks when closing from item selection.
+- Baseline submenu behavior supports submenu `selectionMode`/`onSelectionChange`, does not treat trigger activation as submenu selection, and supports combined submenu `onAction` + `onClose` callback wiring on option selection.
 - Advanced contextual-help parity (additional upstream submenu close edge-cases and icon/overlay visual parity) remains in progress.
