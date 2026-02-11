@@ -161,6 +161,109 @@ describe("ActionGroup", () => {
     expect(options[1].getAttribute("aria-checked")).toBe("true");
   });
 
+  it("collapses overflowing items into an overflow menu", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return 220;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          return 100;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        overflowMode: "collapse",
+        onAction,
+      });
+      await nextTick();
+      await nextTick();
+
+      const buttons = tree.getAllByRole("button");
+      expect(buttons).toHaveLength(2);
+      expect(buttons[0]?.textContent).toContain("One");
+      expect(buttons[1]?.textContent).toContain("More");
+
+      await user.click(buttons[1] as HTMLElement);
+      const menu = tree.getByRole("menu");
+      expect(menu).toBeTruthy();
+      expect(tree.getByRole("menuitem", { name: "Two" })).toBeTruthy();
+
+      await user.click(tree.getByRole("menuitem", { name: "Three" }));
+      expect(onAction).toHaveBeenCalledWith("three");
+    } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
+  it("collapses all items into the menu when selection mode is enabled", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return 220;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          return 100;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        overflowMode: "collapse",
+        selectionMode: "single",
+        defaultSelectedKeys: ["two"],
+        onSelectionChange,
+      });
+      await nextTick();
+      await nextTick();
+
+      expect(tree.queryByRole("radiogroup")).toBeNull();
+      const menuButton = tree.getByRole("button", { name: "actiongroup-test" });
+      expect(menuButton).toBeTruthy();
+
+      await user.click(menuButton);
+      const menuItems = tree.getAllByRole("menuitemradio");
+      expect(menuItems).toHaveLength(3);
+      expect(
+        tree.getByRole("menuitemradio", { name: "Two" }).getAttribute("aria-checked")
+      ).toBe("true");
+
+      await user.click(tree.getByRole("menuitemradio", { name: "Three" }));
+      expect(onSelectionChange).toHaveBeenCalled();
+      const lastSelection = onSelectionChange.mock.calls[
+        onSelectionChange.mock.calls.length - 1
+      ]?.[0] as Set<string>;
+      expect(Array.from(lastSelection)).toEqual(["three"]);
+    } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
   it("attaches a user provided ref", async () => {
     const groupRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(null);
 

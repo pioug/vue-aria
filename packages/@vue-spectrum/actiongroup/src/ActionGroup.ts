@@ -4,6 +4,9 @@ import {
   defineComponent,
   h,
   isVNode,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
   ref,
   watch,
   type VNode,
@@ -13,8 +16,14 @@ import {
 import { useLocale } from "@vue-aria/i18n";
 import { filterDOMProps } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
+import { ActionMenu } from "@vue-spectrum/menu";
 import { useProviderProps } from "@vue-spectrum/provider";
-import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
+import {
+  classNames,
+  useResizeObserver,
+  useStyleProps,
+  type ClassValue,
+} from "@vue-spectrum/utils";
 
 export type ActionGroupKey = string | number;
 
@@ -39,6 +48,7 @@ export type ActionGroupButtonLabelBehavior = "show" | "collapse" | "hide";
 
 interface ActionButtonHandle {
   focus?: () => void;
+  UNSAFE_getDOMNode?: () => HTMLElement | null;
 }
 
 export interface SpectrumActionGroupProps {
@@ -421,12 +431,28 @@ export const ActionGroup = defineComponent({
     );
 
     const focusedKey = ref<string | null>(null);
+    const visibleItemCount = ref<number>(items.value.length);
+    const measuredItemWidths = ref<number[]>([]);
 
     const isItemDisabled = (item: SpectrumActionGroupItemData): boolean =>
       Boolean(isDisabled.value || item.isDisabled || disabledKeys.value.has(String(item.key)));
 
+    const shouldOverflowCollapse = computed(
+      () => props.overflowMode === "collapse" && orientation.value === "horizontal"
+    );
+    const visibleItems = computed(() =>
+      shouldOverflowCollapse.value
+        ? items.value.slice(0, visibleItemCount.value)
+        : items.value
+    );
+    const overflowItems = computed(() =>
+      shouldOverflowCollapse.value
+        ? items.value.slice(visibleItemCount.value)
+        : []
+    );
+
     const enabledItemKeys = computed(() =>
-      items.value
+      visibleItems.value
         .filter((item) => !isItemDisabled(item))
         .map((item) => String(item.key))
     );
@@ -493,6 +519,65 @@ export const ActionGroup = defineComponent({
       focusKey(keys[nextIndex] ?? null);
     };
 
+    const updateOverflow = () => {
+      if (!shouldOverflowCollapse.value) {
+        visibleItemCount.value = items.value.length;
+        measuredItemWidths.value = [];
+        return;
+      }
+
+      const root = rootRef.value;
+      if (!root || items.value.length === 0) {
+        visibleItemCount.value = items.value.length;
+        return;
+      }
+
+      if (measuredItemWidths.value.length !== items.value.length) {
+        const renderedButtons = Array.from(
+          root.querySelectorAll<HTMLElement>(".spectrum-ActionButton")
+        );
+        if (renderedButtons.length >= items.value.length) {
+          measuredItemWidths.value = renderedButtons
+            .slice(0, items.value.length)
+            .map((button) => button.offsetWidth);
+        }
+      }
+
+      const widths = measuredItemWidths.value;
+      if (widths.length !== items.value.length) {
+        return;
+      }
+
+      const containerWidth = root.clientWidth;
+      const totalItemWidth = widths.reduce((sum, width) => sum + width, 0);
+      if (totalItemWidth <= containerWidth) {
+        visibleItemCount.value = items.value.length;
+        return;
+      }
+
+      const measuredMenuButton = root.querySelector<HTMLElement>(
+        ".spectrum-ActionMenu .spectrum-ActionButton"
+      );
+      const overflowButtonWidth = measuredMenuButton?.offsetWidth ?? 40;
+
+      let nextVisibleCount = 0;
+      let consumedWidth = 0;
+      for (const width of widths) {
+        if (consumedWidth + width + overflowButtonWidth <= containerWidth) {
+          consumedWidth += width;
+          nextVisibleCount += 1;
+          continue;
+        }
+        break;
+      }
+
+      if (selectionMode.value !== "none" && nextVisibleCount < items.value.length) {
+        nextVisibleCount = 0;
+      }
+
+      visibleItemCount.value = nextVisibleCount;
+    };
+
     watch(
       enabledItemKeys,
       (keys) => {
@@ -509,6 +594,44 @@ export const ActionGroup = defineComponent({
       },
       { immediate: true }
     );
+
+    watch(
+      [
+        () => items.value.length,
+        () => props.overflowMode,
+        () => orientation.value,
+        () => selectionMode.value,
+      ],
+      () => {
+        visibleItemCount.value = items.value.length;
+        measuredItemWidths.value = [];
+        void nextTick(() => {
+          updateOverflow();
+        });
+      },
+      { immediate: true }
+    );
+
+    useResizeObserver({
+      ref: rootRef,
+      onResize: updateOverflow,
+    });
+
+    onMounted(() => {
+      if (typeof window !== "undefined") {
+        window.addEventListener("resize", updateOverflow);
+      }
+
+      void nextTick(() => {
+        updateOverflow();
+      });
+    });
+
+    onBeforeUnmount(() => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", updateOverflow);
+      }
+    });
 
     expose({
       UNSAFE_getDOMNode: () => rootRef.value,
@@ -541,6 +664,15 @@ export const ActionGroup = defineComponent({
       const ariaLabelledby =
         props.ariaLabelledby ??
         (attrsRecord["aria-labelledby"] as string | undefined);
+      const hasOverflowMenu = overflowItems.value.length > 0;
+      const collapseToMenuOnly =
+        shouldOverflowCollapse.value && hasOverflowMenu && visibleItems.value.length === 0;
+      const overflowMenuItems = overflowItems.value.map((item) => ({
+        key: item.key,
+        label: item.label,
+        isDisabled: isItemDisabled(item),
+        "aria-label": item["aria-label"],
+      }));
 
       return h(
         "div",
@@ -550,11 +682,13 @@ export const ActionGroup = defineComponent({
           ref: (value: unknown) => {
             rootRef.value = value as HTMLElement | null;
           },
-          role,
-          "aria-disabled": isDisabled.value ? "true" : undefined,
-          "aria-label": ariaLabel,
-          "aria-labelledby": ariaLabelledby,
-          "aria-orientation": isVertical ? "vertical" : undefined,
+          role: collapseToMenuOnly ? undefined : role,
+          "aria-disabled":
+            collapseToMenuOnly || !isDisabled.value ? undefined : "true",
+          "aria-label": collapseToMenuOnly ? undefined : ariaLabel,
+          "aria-labelledby": collapseToMenuOnly ? undefined : ariaLabelledby,
+          "aria-orientation":
+            collapseToMenuOnly || !isVertical ? undefined : "vertical",
           class: classNames(
             "spectrum-ActionGroup",
             {
@@ -627,61 +761,98 @@ export const ActionGroup = defineComponent({
             event.stopPropagation();
           },
         },
-        items.value.map((item) => {
-          const itemKey = String(item.key);
-          const selected = selectedKeys.value.has(itemKey);
-          const disabled = isItemDisabled(item);
+        visibleItems.value
+          .map((item) => {
+            const itemKey = String(item.key);
+            const selected = selectedKeys.value.has(itemKey);
+            const disabled = isItemDisabled(item);
 
-          return h(
-            ActionButton,
-            {
-              key: itemKey,
-              ref: (value: unknown) => {
-                if (!value) {
-                  itemRefs.delete(itemKey);
-                  return;
-                }
+            return h(
+              ActionButton,
+              {
+                key: itemKey,
+                ref: (value: unknown) => {
+                  if (!value) {
+                    itemRefs.delete(itemKey);
+                    return;
+                  }
 
-                itemRefs.set(itemKey, value as ActionButtonHandle);
-              },
-              role:
-                selectionMode.value === "single"
-                  ? "radio"
-                  : selectionMode.value === "multiple"
-                    ? "checkbox"
-                    : undefined,
-              "aria-checked":
-                selectionMode.value === "none" ? undefined : String(selected),
-              "aria-label": item["aria-label"],
-              tabindex: focusedKey.value === itemKey ? 0 : -1,
-              isDisabled: disabled,
-              isQuiet: isQuiet.value,
-              staticColor: props.staticColor,
-              UNSAFE_className: classNames(
-                "spectrum-ActionGroup-item",
-                {
-                  "is-selected": selected,
-                  "is-disabled": disabled,
-                  "spectrum-ActionButton--emphasized": Boolean(props.isEmphasized),
-                }
-              ),
-              onFocus: () => {
-                focusedKey.value = itemKey;
-              },
-              onPress: () => {
-                if (disabled) {
-                  return;
-                }
+                  itemRefs.set(itemKey, value as ActionButtonHandle);
+                },
+                role:
+                  selectionMode.value === "single"
+                    ? "radio"
+                    : selectionMode.value === "multiple"
+                      ? "checkbox"
+                      : undefined,
+                "aria-checked":
+                  selectionMode.value === "none" ? undefined : String(selected),
+                "aria-label": item["aria-label"],
+                tabindex: focusedKey.value === itemKey ? 0 : -1,
+                isDisabled: disabled,
+                isQuiet: isQuiet.value,
+                staticColor: props.staticColor,
+                UNSAFE_className: classNames(
+                  "spectrum-ActionGroup-item",
+                  {
+                    "is-selected": selected,
+                    "is-disabled": disabled,
+                    "spectrum-ActionButton--emphasized": Boolean(props.isEmphasized),
+                  }
+                ),
+                onFocus: () => {
+                  focusedKey.value = itemKey;
+                },
+                onPress: () => {
+                  if (disabled) {
+                    return;
+                  }
 
-                selectKey(itemKey);
-                props.onAction?.(item.key);
+                  selectKey(itemKey);
+                  props.onAction?.(item.key);
+                },
               },
-            },
-            {
-              default: () => item.label,
-            }
-          );
-        })
+              {
+                default: () => item.label,
+              }
+            );
+          })
+          .concat(
+            hasOverflowMenu
+              ? [
+                  h(ActionMenu, {
+                    key: "__overflow_menu__",
+                    items: overflowMenuItems,
+                    selectionMode:
+                      selectionMode.value === "none" ? undefined : selectionMode.value,
+                    selectedKeys: selectedKeys.value,
+                    disabledKeys: disabledKeys.value,
+                    isDisabled: isDisabled.value,
+                    triggerLabel: "More",
+                    triggerAriaLabel:
+                      collapseToMenuOnly ? ariaLabel ?? "More actions" : "More actions",
+                    UNSAFE_className: classNames(
+                      "spectrum-ActionGroup-item",
+                      "spectrum-ActionGroup-menu"
+                    ),
+                    onAction: (key: ActionGroupKey) => {
+                      const originalKey = keyMap.value.get(String(key)) ?? key;
+                      props.onAction?.(originalKey);
+                    },
+                    onSelectionChange: (keys: Set<ActionGroupKey>) => {
+                      if (selectionMode.value === "none") {
+                        return;
+                      }
+
+                      const normalized = new Set(
+                        Array.from(keys, (key) => String(key))
+                      );
+                      commitSelection(normalized);
+                    },
+                  }),
+                ]
+              : []
+          )
       );
     };
   },
