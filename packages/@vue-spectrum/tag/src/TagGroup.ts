@@ -175,6 +175,20 @@ function parseTagSlotItems(nodes: VNode[] | undefined): SpectrumTagItemData[] {
     }
 
     const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const dataAttributes: Record<string, string> = {};
+    for (const [key, value] of Object.entries(nodeProps)) {
+      if (!key.startsWith("data-")) {
+        continue;
+      }
+
+      if (
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+      ) {
+        dataAttributes[key] = String(value);
+      }
+    }
     const key = normalizeTagKey(node.key ?? nodeProps.id, `tag-${itemIndex + 1}`);
     const slotLabel = extractTextContent(getSlotContent(node)).trim();
 
@@ -184,6 +198,11 @@ function parseTagSlotItems(nodes: VNode[] | undefined): SpectrumTagItemData[] {
       "aria-label":
         typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
       isDisabled: Boolean(nodeProps.isDisabled),
+      href: typeof nodeProps.href === "string" ? nodeProps.href : undefined,
+      target: typeof nodeProps.target === "string" ? nodeProps.target : undefined,
+      rel: typeof nodeProps.rel === "string" ? nodeProps.rel : undefined,
+      dataAttributes:
+        Object.keys(dataAttributes).length > 0 ? dataAttributes : undefined,
     });
     itemIndex += 1;
   }
@@ -206,7 +225,12 @@ function areTagItemsEqual(
       current.key !== candidate.key ||
       current.label !== candidate.label ||
       current["aria-label"] !== candidate["aria-label"] ||
-      current.isDisabled !== candidate.isDisabled
+      current.isDisabled !== candidate.isDisabled ||
+      current.href !== candidate.href ||
+      current.target !== candidate.target ||
+      current.rel !== candidate.rel ||
+      JSON.stringify(current.dataAttributes ?? {}) !==
+        JSON.stringify(candidate.dataAttributes ?? {})
     ) {
       return false;
     }
@@ -514,6 +538,9 @@ export const TagGroup = defineComponent({
         props.ariaLabelledby ??
         props["aria-labelledby"] ??
         (attrsRecord["aria-labelledby"] as string | undefined);
+      const gridDataAttributes = Object.fromEntries(
+        Object.entries(attrsRecord).filter(([key]) => key.startsWith("data-"))
+      );
       const hasOverflowFromMaxRows = Boolean(
         shouldUseMaxRows.value &&
           measuredCollapsedCount.value !== null &&
@@ -562,6 +589,7 @@ export const TagGroup = defineComponent({
           h(
             "div",
             {
+              ...gridDataAttributes,
               id: gridId.value,
               ref: (value: unknown) => {
                 gridRef.value = value as HTMLDivElement | null;

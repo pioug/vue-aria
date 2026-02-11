@@ -56,4 +56,5 @@ const component = h(TagGroup, {
 - Baseline now includes `maxRows` collapse/expand behavior with built-in `Show all`/`Show less` controls.
 - Baseline also includes an action area via `actionLabel` + `onAction`.
 - Baseline includes custom empty-state rendering via `renderEmptyState`.
+- Baseline includes data-attribute passthrough on tag items and link-style tags via `href`.
 - Field-label and validation integration parity remains in progress.

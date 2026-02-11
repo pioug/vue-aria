@@ -1,4 +1,4 @@
-import { defineComponent, h, type PropType } from "vue";
+import { defineComponent, h, ref, type PropType } from "vue";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 
 export type TagKey = string | number;
@@ -8,6 +8,10 @@ export interface SpectrumTagItemData {
   label: string;
   "aria-label"?: string | undefined;
   isDisabled?: boolean | undefined;
+  href?: string | undefined;
+  target?: string | undefined;
+  rel?: string | undefined;
+  dataAttributes?: Record<string, string> | undefined;
 }
 
 export interface SpectrumTagProps {
@@ -73,6 +77,8 @@ export const Tag = defineComponent({
     },
   },
   setup(props) {
+    const linkRef = ref<HTMLAnchorElement | null>(null);
+
     return () => {
       if (!props.item) {
         return null;
@@ -80,13 +86,16 @@ export const Tag = defineComponent({
 
       const disabled = Boolean(props.isDisabled || props.item.isDisabled);
       const removable = Boolean(props.allowsRemoving) && !disabled;
+      const dataAttributes = props.item.dataAttributes ?? {};
 
       return h(
         "div",
         {
+          ...dataAttributes,
           role: "row",
           tabindex: props.tabIndex ?? -1,
           "aria-disabled": disabled ? "true" : undefined,
+          "data-href": props.item.href,
           class: classNames(
             "spectrum-Tag",
             {
@@ -103,8 +112,28 @@ export const Tag = defineComponent({
           onKeydown: (event: KeyboardEvent) => {
             props.onKeydown?.(event);
           },
+          onClick: () => {
+            if (disabled || !props.item?.href) {
+              return;
+            }
+
+            linkRef.value?.click();
+          },
         },
         [
+          props.item.href
+            ? h("a", {
+                ref: (value: unknown) => {
+                  linkRef.value = value as HTMLAnchorElement | null;
+                },
+                href: props.item.href,
+                target: props.item.target,
+                rel: props.item.rel,
+                tabindex: -1,
+                "aria-hidden": "true",
+                style: "display:none;",
+              })
+            : null,
           h(
             "div",
             {

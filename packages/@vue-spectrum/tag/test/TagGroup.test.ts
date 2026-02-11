@@ -356,6 +356,76 @@ describe("TagGroup", () => {
     );
   });
 
+  it("supports data attributes on tag group and tag items", () => {
+    const App = defineComponent({
+      name: "TagGroupDataAttributesHarness",
+      setup() {
+        return () =>
+          h(
+            TagGroup,
+            {
+              "aria-label": "tag group",
+              "data-foo": "group",
+            },
+            {
+              default: () => [
+                h(Tag, { id: "one", "data-foo": "one" }, () => "Tag 1"),
+                h(Tag, { id: "two", "data-foo": "two" }, () => "Tag 2"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const grid = tree.getByRole("grid", { name: "tag group" });
+    const rows = tree.getAllByRole("row");
+
+    expect(grid.getAttribute("data-foo")).toBe("group");
+    expect(rows[0]?.getAttribute("data-foo")).toBe("one");
+    expect(rows[1]?.getAttribute("data-foo")).toBe("two");
+  });
+
+  it("supports link-style tag items via href", async () => {
+    const user = userEvent.setup();
+    const linkClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+
+    try {
+      const App = defineComponent({
+        name: "TagGroupLinksHarness",
+        setup() {
+          return () =>
+            h(
+              TagGroup,
+              {
+                "aria-label": "tag group",
+              },
+              {
+                default: () => [
+                  h(Tag, { id: "one", href: "https://example.com/one" }, () => "One"),
+                  h(Tag, { id: "two", href: "https://example.com/two" }, () => "Two"),
+                ],
+              }
+            );
+        },
+      });
+
+      const tree = render(App);
+      const rows = tree.getAllByRole("row");
+      expect(rows[0]?.tagName).toBe("DIV");
+      expect(rows[1]?.tagName).toBe("DIV");
+      expect(rows[0]?.getAttribute("data-href")).toBe("https://example.com/one");
+      expect(rows[1]?.getAttribute("data-href")).toBe("https://example.com/two");
+
+      await user.click(rows[0] as HTMLElement);
+      expect(linkClickSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      linkClickSpy.mockRestore();
+    }
+  });
+
   it("exports Item alias", () => {
     expect(Item).toBe(Tag);
   });
