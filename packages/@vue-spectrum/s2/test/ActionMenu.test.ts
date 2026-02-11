@@ -9,6 +9,7 @@ import { ActionMenu } from "../src/ActionMenu";
 describe("@vue-spectrum/s2 ActionMenu", () => {
   it("renders baseline attrs with default trigger aria-label", () => {
     const wrapper = mount(Provider, {
+      attachTo: document.body,
       props: {
         theme: defaultTheme,
       },
@@ -46,15 +47,21 @@ describe("@vue-spectrum/s2 ActionMenu", () => {
               { key: "delete", label: "Delete" },
             ],
             onAction,
-          }),
+        }),
       },
     });
 
-    const trigger = wrapper.get("button");
-    await user.click(trigger.element);
+    try {
+      const trigger = wrapper.get("button");
+      await user.click(trigger.element);
 
-    const editItem = wrapper.get('[role="menuitem"]');
-    await user.click(editItem.element);
-    expect(onAction).toHaveBeenCalledWith("edit");
+      const editItem = document.body.querySelector('[role="menuitem"]');
+      expect(editItem).not.toBeNull();
+      await user.click(editItem as Element);
+
+      expect(onAction).toHaveBeenCalledWith("edit");
+    } finally {
+      wrapper.unmount();
+    }
   });
 });

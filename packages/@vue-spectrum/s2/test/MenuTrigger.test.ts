@@ -52,9 +52,17 @@ describe("@vue-spectrum/s2 MenuTrigger", () => {
       },
     });
 
-    await wrapper.vm.$nextTick();
-    await user.click(wrapper.get('button[aria-haspopup="menu"]').element);
-    await user.click(wrapper.get('[role="menuitem"]').element);
-    expect(onAction).toHaveBeenCalledWith("edit");
+    try {
+      await wrapper.vm.$nextTick();
+      await user.click(wrapper.get('button[aria-haspopup="menu"]').element);
+
+      const editItem = document.body.querySelector('[role="menuitem"]');
+      expect(editItem).not.toBeNull();
+      await user.click(editItem as Element);
+
+      expect(onAction).toHaveBeenCalledWith("edit");
+    } finally {
+      wrapper.unmount();
+    }
   });
 });
