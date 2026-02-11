@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Dialog, DialogTrigger } from "../src";
 
 async function flushOverlay(): Promise<void> {
@@ -22,6 +22,34 @@ function mountDialogTrigger(
       ],
     },
   });
+}
+
+function mockMatchMedia(matches: boolean): () => void {
+  const originalMatchMedia = window.matchMedia;
+  const mock = vi.fn().mockImplementation((query: string) => ({
+    matches,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    configurable: true,
+    value: mock,
+  });
+
+  return () => {
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      configurable: true,
+      value: originalMatchMedia,
+    });
+  };
 }
 
 describe("DialogTrigger", () => {
@@ -99,5 +127,42 @@ describe("DialogTrigger", () => {
     expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
 
     wrapper.unmount();
+  });
+
+  it("triggers a modal instead of a popover on mobile", async () => {
+    const restore = mockMatchMedia(true);
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      expect(document.body.querySelector("[data-testid=\"modal\"]")).not.toBeNull();
+      expect(document.body.querySelector("[data-testid=\"popover\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+      restore();
+    }
+  });
+
+  it("triggers a tray instead of a popover on mobile when mobileType is tray", async () => {
+    const restore = mockMatchMedia(true);
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      mobileType: "tray",
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      expect(document.body.querySelector("[data-testid=\"tray\"]")).not.toBeNull();
+      expect(document.body.querySelector("[data-testid=\"popover\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+      restore();
+    }
   });
 });

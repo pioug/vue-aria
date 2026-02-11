@@ -137,7 +137,21 @@ export const DialogTrigger = defineComponent({
     const overlayRootRef = ref<HTMLElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
-    const effectiveType = computed<DialogType>(() => props.type ?? "modal");
+    const requestedType = computed<DialogType>(() => props.type ?? "modal");
+    const isMobileViewport = computed<boolean>(() => {
+      if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+        return false;
+      }
+
+      return window.matchMedia("(max-width: 700px)").matches;
+    });
+    const effectiveType = computed<DialogType>(() => {
+      if (requestedType.value !== "popover" || !isMobileViewport.value) {
+        return requestedType.value;
+      }
+
+      return props.mobileType ?? "modal";
+    });
     const isOpen = computed<boolean>(() =>
       props.isOpen !== undefined ? props.isOpen : uncontrolledOpen.value
     );

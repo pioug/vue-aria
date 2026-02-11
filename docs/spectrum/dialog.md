@@ -44,4 +44,5 @@ const component = h(DialogTrigger, null, {
 ## Notes
 
 - Baseline includes modal/tray/popover trigger shells, dialog container management, and alert-dialog action flows.
+- Baseline now includes mobile popover fallback parity in `DialogTrigger` (`type="popover"` renders as `modal` on mobile, with `mobileType="tray"` override support).
 - Advanced overlay positioning and complete React Spectrum parity for dialog internals remain in progress.
