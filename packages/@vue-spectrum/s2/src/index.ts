@@ -50,6 +50,7 @@ export { ContextualHelp } from "./ContextualHelp";
 export { Meter } from "./Meter";
 export { Menu, MenuItem, MenuTrigger } from "./Menu";
 export { NumberField } from "./NumberField";
+export { Picker, PickerItem, PickerSection } from "./Picker";
 export { ProgressBar } from "./ProgressBar";
 export { ProgressCircle } from "./ProgressCircle";
 export { SearchField } from "./SearchField";
@@ -142,6 +143,14 @@ export type {
   S2MenuTriggerProps,
 } from "./Menu";
 export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
+export type {
+  PickerSize,
+  S2PickerItemData,
+  S2PickerItemProps,
+  S2PickerKey,
+  S2PickerProps,
+  S2PickerSectionProps,
+} from "./Picker";
 export type { S2ProgressBarProps } from "./ProgressBar";
 export type { S2ProgressCircleProps } from "./ProgressCircle";
 export type { S2RadioProps } from "./Radio";
