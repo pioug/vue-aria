@@ -33,6 +33,7 @@ export { ProgressCircle } from "./ProgressCircle";
 export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
 export { Slider } from "./Slider";
+export { Cell, Column, Row, TableBody, TableHeader, TableView } from "./TableView";
 export { StatusLight } from "./StatusLight";
 export { Switch } from "./Switch";
 export { TextField } from "./TextField";
@@ -76,6 +77,22 @@ export type { S2RadioProps } from "./Radio";
 export type { S2RadioGroupProps } from "./RadioGroup";
 export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
 export type { SliderSize, S2SliderProps } from "./Slider";
+export type {
+  S2CellProps,
+  S2ColumnProps,
+  S2RowProps,
+  S2SortDescriptor,
+  S2SortDirection,
+  S2TableBodyProps,
+  S2TableCellData,
+  S2TableColumnData,
+  S2TableHeaderProps,
+  S2TableKey,
+  S2TableRowData,
+  S2TableSelectionMode,
+  S2TableSelectionStyle,
+  S2TableViewProps,
+} from "./TableView";
 export type {
   SelectBoxKey,
   SelectBoxGroupOrientation,
