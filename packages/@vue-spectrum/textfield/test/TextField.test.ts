@@ -233,6 +233,64 @@ describe("TextField", () => {
     expect(input.getAttribute("aria-describedby")).toBeTruthy();
   });
 
+  it("supports native server validation from Form.validationErrors", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "TextFieldNativeServerValidationHarness",
+      setup() {
+        const serverErrors = ref<Record<string, string>>({});
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: serverErrors.value,
+              onSubmit: (event: Event) => {
+                event.preventDefault();
+                serverErrors.value = {
+                  name: "Invalid name.",
+                };
+              },
+            } as Record<string, unknown>,
+            {
+              default: () => [
+                h(TextField, {
+                  label: "Name",
+                  name: "name",
+                  "data-testid": "name-input",
+                }),
+                h(
+                  "button",
+                  {
+                    type: "submit",
+                  },
+                  "Submit"
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = renderWithProvider(Harness);
+    const input = tree.getByTestId("name-input") as HTMLInputElement;
+    const submit = tree.getByRole("button", { name: "Submit" });
+
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+    expect(input.validity.valid).toBe(true);
+
+    await user.click(submit);
+    await nextTick();
+
+    expect(tree.getByText("Invalid name.")).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+    expect(input.validity.valid).toBe(true);
+  });
+
   it("supports disabled and readOnly states", () => {
     const { getByRole } = render(TextField, {
       props: {

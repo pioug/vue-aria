@@ -305,11 +305,13 @@ export function useSpectrumTextField(
       return;
     }
 
-    if (
-      validationBehavior.value === "native" &&
-      typeof props.validate === "function"
-    ) {
-      inputElement.setCustomValidity(validationErrorMessage.value ?? "");
+    if (validationBehavior.value === "native") {
+      const customValidityMessage =
+        serverErrorMessage.value ??
+        (typeof props.validate === "function"
+          ? (validationErrorMessage.value ?? "")
+          : "");
+      inputElement.setCustomValidity(customValidityMessage);
       return;
     }
 
