@@ -238,7 +238,7 @@ export { Avatar } from "@vue-spectrum/avatar";
 export { Image } from "@vue-spectrum/image";
 export { IllustratedMessage } from "@vue-spectrum/illustratedmessage";
 export { InlineAlert } from "@vue-spectrum/inlinealert";
-export { Overlay, Popover, OpenTransition } from "@vue-spectrum/overlays";
+export { Overlay, Popover, Modal, OpenTransition } from "@vue-spectrum/overlays";
 export {
   Dialog,
   AlertDialog,
@@ -523,6 +523,8 @@ export type { SpectrumIllustratedMessageProps } from "@vue-spectrum/illustratedm
 export type { InlineAlertVariant, SpectrumInlineAlertProps } from "@vue-spectrum/inlinealert";
 export type {
   OpenTransitionProps,
+  SpectrumModalProps,
+  SpectrumModalType,
   SpectrumOverlayProps,
   SpectrumPopoverProps,
 } from "@vue-spectrum/overlays";

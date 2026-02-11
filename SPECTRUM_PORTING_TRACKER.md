@@ -110,6 +110,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [x] `Link` — `1 / 1` exported; missing: none
 - [x] `Menu` — `5 / 5` exported
 - [x] `Meter` — `1 / 1` exported; missing: none
+- [x] `Modal` — `1 / 1` exported; missing: none
 - [ ] `NotificationBadge` — `0 / 1` exported; missing: `NotificationBadge`
 - [x] `NumberField` — `1 / 1` exported; missing: none
 - [ ] `Picker` — `0 / 3` exported; missing: `Picker`, `PickerItem`, `PickerSection`
@@ -205,7 +206,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Overlays and Messaging
 
-- In progress baseline: `@react-spectrum/overlays` now has Vue `Overlay`, `Popover`, and `OpenTransition` primitives with baseline portal-mount behavior, transition lifecycle callback wiring, and Popover positioning/dismiss semantics (`Escape` close, modal underlay + non-modal mode, and arrow visibility toggles) plus starter/SSR tests and docs/umbrella wiring; `Modal`/`Tray` parity remains.
+- In progress baseline: `@react-spectrum/overlays` now has Vue `Overlay`, `Popover`, `Modal`, and `OpenTransition` primitives with baseline portal-mount behavior, transition lifecycle callback wiring, Popover positioning/dismiss semantics (`Escape` close, modal underlay + non-modal mode, and arrow visibility toggles), and Modal overlay semantics (`Escape` close, optional outside-dismiss, underlay, and modal scroll-lock/focus-containment behavior) plus starter/SSR tests and docs/umbrella wiring; `Tray` parity remains.
 - In progress baseline: `@react-spectrum/dialog` now has Vue `Dialog`, `AlertDialog`, `DialogTrigger`, and `DialogContainer` primitives with baseline trigger/container wiring, dismiss/escape behavior, and alert-dialog action flows plus starter/SSR tests and docs/umbrella wiring; advanced overlay/context parity remains.
 - In progress baseline: `@react-spectrum/illustratedmessage` now has Vue `IllustratedMessage` primitive with baseline root rendering behavior, slot-based heading/content styling wiring, and starter/SSR tests plus docs/umbrella wiring; advanced visual/theming parity remains.
 - In progress baseline: `@react-spectrum/inlinealert` now has Vue `InlineAlert` primitive with baseline alert semantics, variant class behavior, autofocus handling, and starter/SSR tests plus docs/umbrella wiring; advanced icon/theming parity remains.
