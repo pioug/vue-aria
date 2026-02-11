@@ -25,6 +25,7 @@ const actions = [
 ## Exports
 
 - `ActionBar`
+- `ActionBarItem`
 - `ActionBarContainer`
 
 ## Example
@@ -51,5 +52,5 @@ const component = h(ActionBar, {
 
 ## Notes
 
-- Baseline includes open/close behavior based on selection count, `ActionGroup` action wiring, clear-selection behavior (button + Escape), and selected-count rendering.
+- Baseline includes open/close behavior based on selection count, `ActionGroup` action wiring, clear-selection behavior (button + Escape), selected-count rendering, and static slot composition support via `ActionBarItem`.
 - Transition/announcement parity and richer actiongroup-collapse behavior remain in progress.

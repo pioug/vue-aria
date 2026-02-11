@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
-import { ActionBar, ActionBarContainer } from "../src";
+import { ActionBar, ActionBarContainer, ActionBarItem } from "../src";
 
 const items = [
   { key: "edit", label: "Edit" },
@@ -128,6 +128,36 @@ describe("ActionBar", () => {
     }
 
     expect(onClearSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("supports static slot syntax with ActionBarItem", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const tree = renderWithProvider(
+      h(
+        ActionBar,
+        {
+          selectedItemCount: 1,
+          onAction,
+        },
+        {
+          default: () => [
+            h(ActionBarItem, { id: "edit" }, () => "Edit"),
+            h(ActionBarItem, { id: "copy", isDisabled: true }, () => "Copy"),
+            h(ActionBarItem, { id: "delete" }, () => "Delete"),
+          ],
+        }
+      )
+    );
+
+    const toolbar = tree.getByRole("toolbar", { name: "Actions" });
+    const actions = within(toolbar).getAllByRole("button");
+    expect(actions).toHaveLength(3);
+    expect(actions[1]?.getAttribute("disabled")).not.toBeNull();
+
+    await user.click(actions[0] as HTMLElement);
+    expect(onAction).toHaveBeenCalledWith("edit");
   });
 });
 

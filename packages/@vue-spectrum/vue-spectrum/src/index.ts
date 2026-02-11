@@ -158,7 +158,7 @@ export {
   LogicButton,
   ToggleButton,
 } from "@vue-spectrum/button";
-export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
+export { ActionBar, ActionBarItem, ActionBarContainer } from "@vue-spectrum/actionbar";
 export { ActionGroup, ActionGroupItem } from "@vue-spectrum/actiongroup";
 export { TagGroup, Tag } from "@vue-spectrum/tag";
 export { Picker, PickerItem, PickerSection } from "@vue-spectrum/picker";
@@ -311,6 +311,7 @@ export type {
   SpectrumToggleButtonProps,
 } from "@vue-spectrum/button";
 export type {
+  SpectrumActionBarItemProps,
   SpectrumActionBarContainerProps,
   SpectrumActionBarProps,
 } from "@vue-spectrum/actionbar";
