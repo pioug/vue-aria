@@ -174,6 +174,20 @@ describe("SearchField", () => {
     expect(onSubmit).toHaveBeenCalledTimes(0);
   });
 
+  it("does not submit when readOnly", async () => {
+    const onSubmit = vi.fn();
+    const tree = renderComponent({
+      defaultValue: inputText,
+      isReadOnly: true,
+      onSubmit,
+    });
+
+    const input = tree.getByRole("searchbox") as HTMLInputElement;
+    await fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+  });
+
   it("clears uncontrolled value on Escape", async () => {
     const onChange = vi.fn();
     const onClear = vi.fn();

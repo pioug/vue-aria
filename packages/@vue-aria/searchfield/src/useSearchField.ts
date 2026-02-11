@@ -64,24 +64,27 @@ export function useSearchField(
   const onKeydown = (event: KeyboardEvent) => {
     const key = event.key;
 
-    if (key === "Enter" && (isDisabled() || isReadOnly())) {
+    if (key === "Enter" && isDisabled()) {
       event.preventDefault();
     }
 
-    if (!isDisabled() && !isReadOnly()) {
-      if (key === "Enter" && options.onSubmit) {
-        event.preventDefault();
-        options.onSubmit(value.value);
-      }
+    if (isDisabled() || isReadOnly()) {
+      options.onKeydown?.(event);
+      return;
+    }
 
-      if (key === "Escape") {
-        const target = event.target as HTMLInputElement | null;
-        const liveValue = target?.value ?? "";
-        if (value.value !== "" || liveValue !== "") {
-          event.preventDefault();
-          setValue("");
-          options.onClear?.();
-        }
+    if (key === "Enter" && options.onSubmit) {
+      event.preventDefault();
+      options.onSubmit(value.value);
+    }
+
+    if (key === "Escape") {
+      const target = event.target as HTMLInputElement | null;
+      const liveValue = target?.value ?? "";
+      if (value.value !== "" || liveValue !== "") {
+        event.preventDefault();
+        setValue("");
+        options.onClear?.();
       }
     }
 

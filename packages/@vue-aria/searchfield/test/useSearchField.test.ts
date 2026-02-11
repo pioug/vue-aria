@@ -94,6 +94,26 @@ describe("useSearchField", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
+  it("does not intercept Enter when readOnly", () => {
+    const onSubmit = vi.fn();
+    const { inputProps } = useSearchField({
+      "aria-label": "Search",
+      isReadOnly: true,
+      onSubmit,
+    });
+    const handlers = inputProps.value as SearchFieldHandlers;
+    const event = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+
+    handlers.onKeydown?.(event);
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it("returns clear button props and clears on press", () => {
     const onClear = vi.fn();
     const focus = vi.fn();
