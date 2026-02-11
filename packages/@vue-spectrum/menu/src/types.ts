@@ -1,4 +1,5 @@
 export type MenuKey = string | number;
+export type MenuCloseReason = "escape" | "select" | "dismiss";
 
 export interface SpectrumMenuItemData {
   key: MenuKey;
@@ -29,7 +30,7 @@ export interface SpectrumMenuBaseProps {
   autoFocus?: true | "first" | "last" | undefined;
   onAction?: ((key: MenuKey) => void) | undefined;
   onSelectionChange?: ((keys: Set<MenuKey>) => void) | undefined;
-  onClose?: (() => void) | undefined;
+  onClose?: ((reason?: MenuCloseReason) => void) | undefined;
   ariaLabel?: string | undefined;
   ariaLabelledby?: string | undefined;
   "aria-label"?: string | undefined;

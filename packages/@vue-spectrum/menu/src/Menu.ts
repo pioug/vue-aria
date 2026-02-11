@@ -20,6 +20,7 @@ import {
   areSetsEqual,
   keyToString,
   normalizeKeySet,
+  type MenuCloseReason,
   type MenuKey,
   type SpectrumMenuBaseProps,
   type SpectrumMenuItemData,
@@ -29,6 +30,8 @@ import {
 
 export interface SpectrumMenuProps extends SpectrumMenuBaseProps {
   id?: string | undefined;
+  closeOnEscape?: boolean | undefined;
+  onEscapeKeyDown?: (() => void) | undefined;
 }
 
 export interface SpectrumMenuSectionProps {
@@ -452,6 +455,14 @@ export const Menu = defineComponent({
       default: undefined,
     },
     onClose: {
+      type: Function as PropType<((reason?: MenuCloseReason) => void) | undefined>,
+      default: undefined,
+    },
+    closeOnEscape: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    onEscapeKeyDown: {
       type: Function as PropType<(() => void) | undefined>,
       default: undefined,
     },
@@ -683,7 +694,7 @@ export const Menu = defineComponent({
       props.onAction?.(item.key);
 
       if (shouldCloseOnSelect.value) {
-        props.onClose?.();
+        props.onClose?.("select");
       }
     };
 
@@ -972,7 +983,10 @@ export const Menu = defineComponent({
               case "Escape":
                 event.preventDefault();
                 openContextualHelpKey.value = null;
-                props.onClose?.();
+                props.onEscapeKeyDown?.();
+                if (props.closeOnEscape !== false) {
+                  props.onClose?.("escape");
+                }
                 break;
               default:
                 break;

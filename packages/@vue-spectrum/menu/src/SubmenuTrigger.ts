@@ -15,6 +15,7 @@ import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
 import { Menu } from "./Menu";
 import type {
+  MenuCloseReason,
   MenuKey,
   SpectrumMenuBaseProps,
   SpectrumMenuItemData,
@@ -237,9 +238,11 @@ export const SubmenuTrigger = defineComponent({
       props.onOpenChange?.(nextOpen);
     };
 
-    const closeMenu = (restoreFocus = false) => {
+    const closeMenu = (restoreFocus = false, shouldNotify = true) => {
       setOpen(false);
-      props.onClose?.();
+      if (shouldNotify) {
+        props.onClose?.();
+      }
 
       if (restoreFocus) {
         buttonRef.value?.focus();
@@ -382,7 +385,7 @@ export const SubmenuTrigger = defineComponent({
                   case "ArrowLeft":
                   case "Escape":
                     event.preventDefault();
-                    closeMenu(true);
+                    closeMenu(true, false);
                     break;
                   default:
                     break;
@@ -443,6 +446,10 @@ export const SubmenuTrigger = defineComponent({
                   props.ariaLabelledby ??
                   props["aria-labelledby"] ??
                   triggerId.value,
+                closeOnEscape: false,
+                onEscapeKeyDown: () => {
+                  closeMenu(true, false);
+                },
                 onAction: (key) => {
                   callHandler(slottedMenuProps.onAction, key);
                   props.onAction?.(key);
@@ -454,9 +461,12 @@ export const SubmenuTrigger = defineComponent({
                   callHandler(slottedMenuProps.onSelectionChange, keys);
                   props.onSelectionChange?.(keys);
                 },
-                onClose: () => {
-                  callHandler(slottedMenuProps.onClose);
-                  closeMenu(true);
+                onClose: (reason?: MenuCloseReason) => {
+                  const shouldNotify = reason !== "escape";
+                  if (shouldNotify) {
+                    callHandler(slottedMenuProps.onClose);
+                  }
+                  closeMenu(true, shouldNotify);
                 },
               }, slottedMenuSlots)
             : null,

@@ -1,4 +1,4 @@
-import { render, within } from "@testing-library/vue";
+import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
@@ -92,6 +92,23 @@ describe("SubmenuTrigger", () => {
 
     await user.keyboard("{Escape}");
     expect(tree.container.contains(submenu)).toBe(false);
+  });
+
+  it("does not fire onClose when closing submenu with Escape", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    const tree = renderComponent({ onClose });
+
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    submenu.focus();
+    fireEvent.keyDown(submenu, { key: "Escape" });
+    await Promise.resolve();
+
+    expect(tree.container.contains(submenu)).toBe(false);
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("supports static trigger + menu composition syntax", async () => {
