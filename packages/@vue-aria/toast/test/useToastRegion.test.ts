@@ -84,7 +84,7 @@ describe("useToastRegion", () => {
         relatedTarget: externalButton,
       } as unknown as FocusEvent);
 
-      (region.regionProps.value.onFocus as (event: FocusEvent) => void)({
+      (region.regionProps.value.onFocusin as (event: FocusEvent) => void)({
         target: toastElement,
       } as unknown as FocusEvent);
 

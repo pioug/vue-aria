@@ -331,4 +331,131 @@ describe("ToastContainer", () => {
 
     wrapper.unmount();
   });
+
+  it("moves focus to the remaining toast when dismissing a focused toast", async () => {
+    const component = defineComponent({
+      name: "ToastFocusMoveHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { id: "toast-focus-move-trigger", type: "button" }, "Trigger"),
+            h(ToastContainer),
+          ]);
+      },
+    });
+    const wrapper = mount(component, { attachTo: document.body });
+
+    const trigger = document.body.querySelector(
+      "#toast-focus-move-trigger"
+    ) as HTMLButtonElement | null;
+    expect(trigger).not.toBeNull();
+    if (!trigger) {
+      throw new Error("Missing focus move trigger");
+    }
+    trigger.focus();
+
+    queueToast("neutral", { actionLabel: "Action 1" });
+    queueToast("neutral", { actionLabel: "Action 2" });
+    await flushToasts();
+
+    let toasts = Array.from(
+      document.body.querySelectorAll<HTMLElement>("[role=\"alertdialog\"]")
+    );
+    expect(toasts).toHaveLength(2);
+
+    const closeButton = toasts[0]?.querySelector(
+      "[data-testid=\"rsp-Toast-closeButton\"]"
+    ) as HTMLButtonElement | null;
+    expect(closeButton).not.toBeNull();
+    if (!closeButton) {
+      throw new Error("Missing close button on first toast");
+    }
+    closeButton.dispatchEvent(
+      new FocusEvent("focusin", {
+        bubbles: true,
+        relatedTarget: trigger,
+      })
+    );
+    closeButton.focus();
+    await flushToasts();
+
+    clickElement("[data-testid=\"rsp-Toast-closeButton\"]");
+    await flushToasts();
+
+    toasts = Array.from(document.body.querySelectorAll<HTMLElement>("[role=\"alertdialog\"]"));
+    expect(toasts).toHaveLength(1);
+    expect(document.activeElement).toBe(toasts[0]);
+
+    wrapper.unmount();
+  });
+
+  it("restores trigger focus after dismissing all toasts from a stacked set", async () => {
+    const component = defineComponent({
+      name: "ToastStackedDismissHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { id: "toast-stacked-trigger", type: "button" }, "Trigger"),
+            h(ToastContainer),
+          ]);
+      },
+    });
+    const wrapper = mount(component, { attachTo: document.body });
+
+    const trigger = document.body.querySelector(
+      "#toast-stacked-trigger"
+    ) as HTMLButtonElement | null;
+    expect(trigger).not.toBeNull();
+    if (!trigger) {
+      throw new Error("Missing stacked trigger");
+    }
+    trigger.focus();
+
+    queueToast("neutral", { actionLabel: "Action 1" });
+    queueToast("neutral", { actionLabel: "Action 2" });
+    await flushToasts();
+
+    let toasts = Array.from(
+      document.body.querySelectorAll<HTMLElement>("[role=\"alertdialog\"]")
+    );
+    expect(toasts).toHaveLength(2);
+
+    let closeButton = toasts[1]?.querySelector(
+      "[data-testid=\"rsp-Toast-closeButton\"]"
+    ) as HTMLButtonElement | null;
+    expect(closeButton).not.toBeNull();
+    if (!closeButton) {
+      throw new Error("Missing close button on second toast");
+    }
+    closeButton.dispatchEvent(
+      new FocusEvent("focusin", {
+        bubbles: true,
+        relatedTarget: trigger,
+      })
+    );
+    closeButton.focus();
+    await flushToasts();
+
+    closeButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await flushToasts();
+
+    toasts = Array.from(document.body.querySelectorAll<HTMLElement>("[role=\"alertdialog\"]"));
+    expect(toasts).toHaveLength(1);
+    expect(document.activeElement).toBe(toasts[0]);
+
+    closeButton = toasts[0]?.querySelector(
+      "[data-testid=\"rsp-Toast-closeButton\"]"
+    ) as HTMLButtonElement | null;
+    expect(closeButton).not.toBeNull();
+    if (!closeButton) {
+      throw new Error("Missing close button on final toast");
+    }
+    closeButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await flushToasts();
+
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+
+    wrapper.unmount();
+  });
 });

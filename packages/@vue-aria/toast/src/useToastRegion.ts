@@ -1,4 +1,4 @@
-import { onScopeDispose, ref, toValue, watch, watchEffect } from "vue";
+import { nextTick, onScopeDispose, ref, toValue, watch, watchEffect } from "vue";
 import { useFocusWithin, useHover } from "@vue-aria/interactions";
 import { announce } from "@vue-aria/live-announcer";
 import { mergeProps } from "@vue-aria/utils";
@@ -150,8 +150,10 @@ export function useToastRegion<T>(
         const previousFocusedKey = previousKeyList[focusedToastIndex.value];
         if (previousFocusedKey && !keys.includes(previousFocusedKey)) {
           const fallbackIndex = Math.min(focusedToastIndex.value, keys.length - 1);
-          const nodes = getToastNodes(currentRegion);
-          focusWithoutScrolling(nodes[fallbackIndex] ?? nodes[nodes.length - 1] ?? null);
+          nextTick(() => {
+            const nodes = getToastNodes(toValue(regionRef) ?? null);
+            focusWithoutScrolling(nodes[fallbackIndex] ?? nodes[nodes.length - 1] ?? null);
+          });
         }
       }
     },
@@ -191,13 +193,10 @@ export function useToastRegion<T>(
         "aria-label": resolveLabel(options, state.visibleToasts.value),
         tabIndex: -1,
         "data-react-aria-top-layer": true,
-        onFocus: (event: FocusEvent) => {
+        onFocusin: (event: FocusEvent) => {
           const target = (event.target as HTMLElement | null)?.closest("[role='alertdialog']");
           const nodes = getToastNodes(toValue(regionRef) ?? null);
           focusedToastIndex.value = target ? nodes.findIndex((node) => node === target) : -1;
-        },
-        onBlur: () => {
-          focusedToastIndex.value = -1;
         },
       });
     },
