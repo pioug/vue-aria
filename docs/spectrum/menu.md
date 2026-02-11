@@ -65,6 +65,7 @@ const component = h(MenuTrigger, {
 - Baseline includes `ContextualHelpTrigger` integration for static menu composition: unavailable items open contextual-help dialogs and suppress menu action callbacks while keeping regular item behavior when available.
 - Baseline includes custom overlay container targeting for `MenuTrigger`/`ActionMenu` via `container`.
 - Baseline contextual-help support includes click, hover, and `ArrowRight` opening for unavailable items, and closes when moving hover/focus to another menu item.
+- Contextual-help hover/`ArrowRight` opening is gated to unavailable items (`isUnavailable=true`) and does not open for available items.
 - Baseline contextual-help support includes an unavailable indicator icon on unavailable contextual-help items.
 - Baseline submenu behavior includes Escape-key close without firing submenu `onClose` callbacks.
 - Baseline submenu behavior keeps only one sibling submenu open at a time.

@@ -100,4 +100,48 @@ describe("ContextualHelpTrigger", () => {
     expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
     expect(document.body.textContent).toContain("Keyboard help content");
   });
+
+  it("does not open on hover when available", async () => {
+    const tree = render(ContextualHelpTrigger, {
+      props: {
+        isUnavailable: false,
+      },
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Available item"),
+          h(Dialog, null, {
+            default: () => "Help content",
+          }),
+        ],
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "Available item" });
+    fireEvent.mouseEnter(trigger);
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+  });
+
+  it("does not open on ArrowRight when available", async () => {
+    const tree = render(ContextualHelpTrigger, {
+      props: {
+        isUnavailable: false,
+      },
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Available item"),
+          h(Dialog, null, {
+            default: () => "Help content",
+          }),
+        ],
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "Available item" });
+    fireEvent.keyDown(trigger, { key: "ArrowRight" });
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+  });
 });
