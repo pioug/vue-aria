@@ -31,6 +31,8 @@ export type SpectrumSearchAutocompleteLoadingState =
 
 export interface SpectrumSearchAutocompleteProps {
   id?: string | undefined;
+  name?: string | undefined;
+  form?: string | undefined;
   label?: string | undefined;
   description?: string | undefined;
   errorMessage?: string | undefined;
@@ -78,6 +80,14 @@ export interface SpectrumSearchAutocompleteProps {
 
 export const searchAutocompletePropOptions = {
   id: {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  name: {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  form: {
     type: String as PropType<string | undefined>,
     default: undefined,
   },

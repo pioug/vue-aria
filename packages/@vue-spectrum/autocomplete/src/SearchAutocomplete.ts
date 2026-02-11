@@ -4,7 +4,10 @@ import {
   defineComponent,
   h,
   isVNode,
+  onBeforeUnmount,
+  onMounted,
   ref,
+  watch,
   type VNode,
   type VNodeChild,
   type PropType,
@@ -66,6 +69,9 @@ interface NormalizedSearchAutocompleteSlotModel {
 
 const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
   textValue.toLowerCase().includes(inputValue.toLowerCase());
+
+const PLACEHOLDER_DEPRECATION_WARNING =
+  "Placeholders are deprecated due to accessibility issues. Please use help text instead.";
 
 function normalizeSearchAutocompleteKey(value: unknown, fallback: Key): Key {
   if (typeof value === "string" || typeof value === "number") {
@@ -504,11 +510,28 @@ export const SearchAutocomplete = defineComponent({
     const inputRef = ref<HTMLInputElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
     const listBoxRef = ref<HTMLElement | null>(null);
+    const formRef = ref<HTMLFormElement | null>(null);
     const loadMoreRequested = ref(false);
+    const hasWarnedPlaceholder = ref(false);
     const slotModel = ref<NormalizedSearchAutocompleteSlotModel>({
       items: [],
       entries: [],
     });
+    const isProduction =
+      typeof process !== "undefined" && process.env.NODE_ENV === "production";
+
+    watch(
+      () => props.placeholder,
+      (placeholder) => {
+        if (isProduction || hasWarnedPlaceholder.value || !placeholder) {
+          return;
+        }
+
+        console.warn(PLACEHOLDER_DEPRECATION_WARNING);
+        hasWarnedPlaceholder.value = true;
+      },
+      { immediate: true }
+    );
 
     const normalizedItems = computed<NormalizedSearchAutocompleteItem[]>(() => {
       const source = props.items ?? props.defaultItems;
@@ -646,6 +669,83 @@ export const SearchAutocomplete = defineComponent({
       loadMoreRequested.value = true;
       props.onLoadMore();
     };
+
+    const getItemTextByKey = (key: Key | null): string => {
+      if (key === null) {
+        return "";
+      }
+
+      const item = normalizedItems.value.find((entry) => entry.key === key);
+      return item?.textValue ?? item?.label ?? "";
+    };
+
+    const onFormReset = () => {
+      const defaultSelectedKey = props.defaultSelectedKey ?? null;
+
+      if (props.selectedKey === undefined) {
+        state.setSelectedKey(defaultSelectedKey);
+      }
+
+      if (props.inputValue === undefined) {
+        const resetInputValue =
+          props.defaultInputValue ??
+          getItemTextByKey(
+            props.selectedKey !== undefined
+              ? props.selectedKey ?? null
+              : defaultSelectedKey
+          );
+        state.setInputValue(resetInputValue);
+      }
+
+      state.close();
+    };
+
+    const resolveFormElement = (): HTMLFormElement | null => {
+      if (typeof document === "undefined") {
+        return null;
+      }
+
+      if (props.form) {
+        const target = document.getElementById(props.form);
+        return target instanceof HTMLFormElement ? target : null;
+      }
+
+      return rootRef.value?.closest("form") ?? null;
+    };
+
+    const detachFormListener = () => {
+      if (formRef.value) {
+        formRef.value.removeEventListener("reset", onFormReset);
+        formRef.value = null;
+      }
+    };
+
+    const attachFormListener = () => {
+      detachFormListener();
+
+      const formElement = resolveFormElement();
+      if (!formElement) {
+        return;
+      }
+
+      formElement.addEventListener("reset", onFormReset);
+      formRef.value = formElement;
+    };
+
+    onMounted(() => {
+      attachFormListener();
+    });
+
+    onBeforeUnmount(() => {
+      detachFormListener();
+    });
+
+    watch(
+      () => props.form,
+      () => {
+        attachFormListener();
+      }
+    );
 
     const isLoadingInput = computed(
       () => props.loadingState === "loading" || props.loadingState === "filtering"
@@ -889,6 +989,8 @@ export const SearchAutocomplete = defineComponent({
                 ref: (value: unknown) => {
                   inputRef.value = value as HTMLInputElement | null;
                 },
+                name: props.name,
+                form: props.form,
                 placeholder: props.placeholder,
                 disabled: props.isDisabled,
                 readonly: props.isReadOnly,

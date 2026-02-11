@@ -15,6 +15,9 @@ const items: SpectrumSearchAutocompleteItemData[] = [
   { key: "3", label: "Three" },
 ];
 
+const PLACEHOLDER_DEPRECATION_WARNING =
+  "Placeholders are deprecated due to accessibility issues. Please use help text instead.";
+
 function renderComponent(props: Record<string, unknown> = {}) {
   return render(SearchAutocomplete, {
     props: {
@@ -35,6 +38,27 @@ describe("SearchAutocomplete", () => {
     expect(searchAutocomplete.getAttribute("autocorrect")).toBe("off");
     expect(searchAutocomplete.getAttribute("spellcheck")).toBe("false");
     expect(searchAutocomplete.getAttribute("autocomplete")).toBe("off");
+  });
+
+  it("renders with placeholder text and shows warning", () => {
+    const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const tree = renderComponent({ placeholder: "Test placeholder" });
+      const searchAutocomplete = tree.getByRole("combobox") as HTMLInputElement;
+
+      expect(searchAutocomplete.placeholder).toBe("Test placeholder");
+      expect(spyWarn).toHaveBeenCalledWith(PLACEHOLDER_DEPRECATION_WARNING);
+    } finally {
+      spyWarn.mockRestore();
+    }
+  });
+
+  it("propagates the name attribute", () => {
+    const tree = renderComponent({ name: "test-name" });
+
+    const searchAutocomplete = tree.getByRole("combobox");
+    expect(searchAutocomplete.getAttribute("name")).toBe("test-name");
   });
 
   it("supports custom icon", () => {
@@ -132,6 +156,75 @@ describe("SearchAutocomplete", () => {
     await user.keyboard("{ArrowDown}");
 
     expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("supports form reset", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "SearchAutocompleteFormResetApp",
+      setup() {
+        return () =>
+          h("form", {}, [
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              name: "test",
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.getAttribute("name")).toBe("test");
+
+    await user.click(input);
+    await user.keyboard("Tw");
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+    expect(input.value).toBe("Two");
+
+    await user.click(tree.getByTestId("reset"));
+    expect(input.value).toBe("");
+  });
+
+  it("resets to defaultInputValue on form reset", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "SearchAutocompleteDefaultResetApp",
+      setup() {
+        return () =>
+          h("form", {}, [
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              name: "test",
+              defaultInputValue: "One",
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("One");
+
+    await user.click(input);
+    await user.clear(input);
+    await user.type(input, "custom");
+    expect(input.value).toBe("custom");
+
+    await user.click(tree.getByTestId("reset"));
+    expect(input.value).toBe("One");
   });
 
   it("renders loading indicators", () => {
