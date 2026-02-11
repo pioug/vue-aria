@@ -18,6 +18,13 @@ export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
 export { Calendar, RangeCalendar } from "./Calendar";
 export { ComboBox } from "./ComboBox";
+export {
+  ColorArea,
+  ColorSlider,
+  ColorSwatch,
+  ColorSwatchPicker,
+  ColorWheel,
+} from "./Color";
 export { ColorField } from "./ColorField";
 export { Content, Footer, Header, Heading, Keyboard, Text } from "./Content";
 export { Checkbox } from "./Checkbox";
@@ -82,6 +89,13 @@ export type { S2CloseButtonProps } from "./CloseButton";
 export type { S2CheckboxProps } from "./Checkbox";
 export type { S2CheckboxGroupProps } from "./CheckboxGroup";
 export type { ComboBoxSize, S2ComboBoxProps } from "./ComboBox";
+export type {
+  S2ColorAreaProps,
+  S2ColorSliderProps,
+  S2ColorSwatchPickerProps,
+  S2ColorSwatchProps,
+  S2ColorWheelProps,
+} from "./Color";
 export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
 export type {
   S2ContentProps,
