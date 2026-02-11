@@ -57,6 +57,49 @@ describe("ComboBox", () => {
     expect(combobox.getAttribute("name")).toBe("test-name");
   });
 
+  it("supports formValue=\"key\" with hidden input value", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      name: "combo-name",
+      form: "test-form",
+      formValue: "key",
+      defaultSelectedKey: "2",
+    });
+
+    const getHiddenInput = () =>
+      tree.container.querySelector(
+        "input[type=\"hidden\"][name=\"combo-name\"]"
+      ) as HTMLInputElement | null;
+
+    const combobox = tree.getByRole("combobox");
+    expect(combobox.getAttribute("name")).toBeNull();
+    expect(combobox.getAttribute("form")).toBe("test-form");
+    expect(getHiddenInput()).not.toBeNull();
+    expect(getHiddenInput()?.value).toBe("2");
+    expect(getHiddenInput()?.getAttribute("form")).toBe("test-form");
+
+    await user.click(tree.getByRole("button"));
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+
+    expect(getHiddenInput()?.value).toBe("1");
+  });
+
+  it("uses text form value when allowsCustomValue is true", () => {
+    const tree = renderComponent({
+      name: "combo-name",
+      formValue: "key",
+      allowsCustomValue: true,
+    });
+
+    const combobox = tree.getByRole("combobox");
+    expect(combobox.getAttribute("name")).toBe("combo-name");
+    expect(
+      tree.container.querySelector("input[type=\"hidden\"][name=\"combo-name\"]")
+    ).toBeNull();
+  });
+
   it("opens with button press and closes on second press", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();

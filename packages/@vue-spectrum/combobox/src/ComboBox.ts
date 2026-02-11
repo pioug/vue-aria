@@ -33,6 +33,8 @@ import type { SpectrumComboBoxItemData } from "./types";
 export interface SpectrumComboBoxProps {
   id?: string | undefined;
   name?: string | undefined;
+  form?: string | undefined;
+  formValue?: "text" | "key" | undefined;
   label?: string | undefined;
   description?: string | undefined;
   errorMessage?: string | undefined;
@@ -549,6 +551,14 @@ export const ComboBox = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    form: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    formValue: {
+      type: String as PropType<"text" | "key" | undefined>,
+      default: "text",
+    },
     label: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -803,6 +813,21 @@ export const ComboBox = defineComponent({
     const isLoading = computed(
       () => props.loadingState === "loading" || props.loadingState === "loadingMore"
     );
+    const resolvedFormValue = computed<"text" | "key">(() => {
+      if (props.allowsCustomValue) {
+        return "text";
+      }
+
+      return props.formValue ?? "text";
+    });
+    const hiddenInputValue = computed<string>(() => {
+      const selectedKey = state.selectedKey.value;
+      if (selectedKey === null || selectedKey === undefined) {
+        return "";
+      }
+
+      return String(selectedKey);
+    });
 
     const resolvedButtonDisabled = computed(() => {
       const value = (buttonProps.value.isDisabled as boolean | undefined) ?? false;
@@ -1047,7 +1072,8 @@ export const ComboBox = defineComponent({
               ref: (value: unknown) => {
                 inputRef.value = value as HTMLInputElement | null;
               },
-              name: props.name,
+              name: resolvedFormValue.value === "text" ? props.name : undefined,
+              form: props.form,
               placeholder: props.placeholder,
               disabled: props.isDisabled,
               readonly: props.isReadOnly,
@@ -1073,6 +1099,14 @@ export const ComboBox = defineComponent({
               onClick: onButtonClick,
             }, "▼"),
           ]),
+          props.name && resolvedFormValue.value === "key"
+            ? h("input", {
+              type: "hidden",
+              name: props.name,
+              form: props.form,
+              value: hiddenInputValue.value,
+            })
+            : null,
           props.description
             ? h("div", mergeProps(descriptionProps.value, {
               class: classNames("spectrum-FieldDescription"),
