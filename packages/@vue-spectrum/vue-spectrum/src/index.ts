@@ -29,7 +29,9 @@ export {
   Button as S2Button,
   LinkButton as S2LinkButton,
   ActionButton as S2ActionButton,
+  ActionButtonGroup as S2ActionButtonGroup,
   ButtonGroup as S2ButtonGroup,
+  ToggleButton as S2ToggleButton,
   pressScale,
   isDocsEnv,
 } from "@vue-spectrum/s2";
