@@ -4,6 +4,7 @@ import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Provider } from "@vue-spectrum/provider";
 import { Slider } from "../src";
+import { press, testKeypresses } from "./utils";
 
 function createTheme() {
   return {
@@ -320,7 +321,6 @@ describe("Slider", () => {
   });
 
   it("supports keyboard page/home/end interactions", async () => {
-    const user = userEvent.setup();
     const wrapper = mount(Slider, {
       attachTo: document.body,
       props: {
@@ -332,20 +332,15 @@ describe("Slider", () => {
     });
 
     const input = wrapper.get("input[type='range']");
-    (input.element as HTMLInputElement).focus();
-
-    await user.keyboard("{PageUp}");
-    expect((input.element as HTMLInputElement).value).toBe("60");
-
-    await user.keyboard("{Home}");
-    expect((input.element as HTMLInputElement).value).toBe("0");
-
-    await user.keyboard("{End}");
-    expect((input.element as HTMLInputElement).value).toBe("100");
+    const slider = input.element as HTMLInputElement;
+    await testKeypresses([slider, slider], [
+      { left: press.PageUp, result: +10 },
+      { left: press.Home, result: "0" },
+      { left: press.End, result: "100" },
+    ]);
   });
 
   it("snaps default keyboard page size to a step multiple (range 0-230, step 10)", async () => {
-    const user = userEvent.setup();
     const wrapper = mount(Slider, {
       attachTo: document.body,
       props: {
@@ -358,16 +353,14 @@ describe("Slider", () => {
     });
 
     const input = wrapper.get("input[type='range']");
-    (input.element as HTMLInputElement).focus();
-
-    await user.keyboard("{PageUp}");
-    expect((input.element as HTMLInputElement).value).toBe("70");
-    await user.keyboard("{PageDown}");
-    expect((input.element as HTMLInputElement).value).toBe("50");
+    const slider = input.element as HTMLInputElement;
+    await testKeypresses([slider, slider], [
+      { left: press.PageUp, result: +20 },
+      { left: press.PageDown, result: -20 },
+    ]);
   });
 
   it("snaps default keyboard page size down when range-derived value is fractional", async () => {
-    const user = userEvent.setup();
     const wrapper = mount(Slider, {
       attachTo: document.body,
       props: {
@@ -380,16 +373,14 @@ describe("Slider", () => {
     });
 
     const input = wrapper.get("input[type='range']");
-    (input.element as HTMLInputElement).focus();
-
-    await user.keyboard("{PageUp}");
-    expect((input.element as HTMLInputElement).value).toBe("62");
-    await user.keyboard("{PageDown}");
-    expect((input.element as HTMLInputElement).value).toBe("60");
+    const slider = input.element as HTMLInputElement;
+    await testKeypresses([slider, slider], [
+      { left: press.PageUp, result: +2 },
+      { left: press.PageDown, result: -2 },
+    ]);
   });
 
   it("snaps default keyboard page size up when range-derived value is fractional", async () => {
-    const user = userEvent.setup();
     const wrapper = mount(Slider, {
       attachTo: document.body,
       props: {
@@ -402,12 +393,11 @@ describe("Slider", () => {
     });
 
     const input = wrapper.get("input[type='range']");
-    (input.element as HTMLInputElement).focus();
-
-    await user.keyboard("{PageUp}");
-    expect((input.element as HTMLInputElement).value).toBe("-36");
-    await user.keyboard("{PageDown}");
-    expect((input.element as HTMLInputElement).value).toBe("-40");
+    const slider = input.element as HTMLInputElement;
+    await testKeypresses([slider, slider], [
+      { left: press.PageUp, result: +4 },
+      { left: press.PageDown, result: -4 },
+    ]);
   });
 
   it("supports clicking the track", async () => {

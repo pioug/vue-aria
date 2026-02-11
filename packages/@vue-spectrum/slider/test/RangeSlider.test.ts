@@ -4,6 +4,7 @@ import { defineComponent, h, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { Provider } from "@vue-spectrum/provider";
 import { RangeSlider } from "../src";
+import { press, testKeypresses } from "./utils";
 
 function createTheme() {
   return {
@@ -219,7 +220,6 @@ describe("RangeSlider", () => {
   });
 
   it("snaps default page size to a step multiple for keyboard paging", async () => {
-    const user = userEvent.setup();
     const wrapper = mount(RangeSlider, {
       attachTo: document.body,
       props: {
@@ -236,16 +236,14 @@ describe("RangeSlider", () => {
 
     const inputs = wrapper.findAll("input[type='range']");
     const startInput = inputs[0];
-    (startInput.element as HTMLInputElement).focus();
-
-    await user.keyboard("{PageUp}");
-    expect((startInput.element as HTMLInputElement).value).toBe("40");
-    await user.keyboard("{PageDown}");
-    expect((startInput.element as HTMLInputElement).value).toBe("20");
+    const startSlider = startInput.element as HTMLInputElement;
+    await testKeypresses([startSlider, startSlider], [
+      { left: press.PageUp, result: +20 },
+      { left: press.PageDown, result: -20 },
+    ]);
   });
 
   it("applies snapped fractional default page size for keyboard paging", async () => {
-    const user = userEvent.setup();
     const wrapper = mount(RangeSlider, {
       attachTo: document.body,
       props: {
@@ -262,11 +260,10 @@ describe("RangeSlider", () => {
 
     const inputs = wrapper.findAll("input[type='range']");
     const startInput = inputs[0];
-    (startInput.element as HTMLInputElement).focus();
-
-    await user.keyboard("{PageUp}");
-    expect((startInput.element as HTMLInputElement).value).toBe("-36");
-    await user.keyboard("{PageDown}");
-    expect((startInput.element as HTMLInputElement).value).toBe("-40");
+    const startSlider = startInput.element as HTMLInputElement;
+    await testKeypresses([startSlider, startSlider], [
+      { left: press.PageUp, result: +4 },
+      { left: press.PageDown, result: -4 },
+    ]);
   });
 });
