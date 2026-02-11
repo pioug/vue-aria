@@ -13,6 +13,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - Task progress: `76 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Priority mode: React Spectrum v1 package parity first; `@vue-spectrum/s2` stays in a secondary lane until v1 parity is complete.
+- Focus lane (active): end-to-end parity and docs usability for `@vue-spectrum/button`, `@vue-spectrum/textfield`, and `@vue-spectrum/dialog` before widening scope again.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
 - Display/status package progress: `@vue-spectrum/divider`, `@vue-spectrum/well`, `@vue-spectrum/statuslight`, `@vue-spectrum/badge`, `@vue-spectrum/avatar`, `@vue-spectrum/image`, `@vue-spectrum/progress`, `@vue-spectrum/meter`, and `@vue-spectrum/labeledvalue` are now complete.

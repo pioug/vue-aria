@@ -8,6 +8,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - Remaining packages: `42`
 - Current stage: phase-1 foundation migration
 - Priority mode: complete React Spectrum v1 package parity first; keep S2 on a secondary track until v1 reaches completion gates.
+- Active focus lane: drive `@vue-spectrum/button`, `@vue-spectrum/textfield`, and `@vue-spectrum/dialog` to end-to-end parity (behavior + tests + docs usability/styling) before broadening to additional packages.
 
 ## Upstream Source of Truth
 

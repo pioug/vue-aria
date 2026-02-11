@@ -100,3 +100,324 @@
   border-radius: 8px;
   background: var(--vp-c-bg-soft-up);
 }
+
+/* Focused parity styling layer for button/textfield/dialog docs. */
+.spectrum-docs-provider {
+  --spectrum-ui-bg: #ffffff;
+  --spectrum-ui-bg-subtle: #f8fafc;
+  --spectrum-ui-border: #c9d2e3;
+  --spectrum-ui-border-strong: #8796b0;
+  --spectrum-ui-text: #202938;
+  --spectrum-ui-text-muted: #5f6b7e;
+  --spectrum-ui-accent: #1473e6;
+  --spectrum-ui-accent-hover: #0d66d0;
+  --spectrum-ui-danger: #d31510;
+  --spectrum-ui-focus: #2680eb;
+  --spectrum-ui-shadow: 0 10px 32px rgba(15, 23, 42, 0.18);
+}
+
+.spectrum-Button,
+.spectrum-ActionButton,
+.spectrum-FieldButton,
+.spectrum-ClearButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  font: 500 0.875rem/1.15 var(--vp-font-family-base);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.spectrum-Button {
+  min-width: 5.5rem;
+  padding: 0.5rem 0.85rem;
+}
+
+.spectrum-ActionButton,
+.spectrum-FieldButton {
+  padding: 0.45rem 0.7rem;
+}
+
+.spectrum-ClearButton {
+  min-height: 2rem;
+  min-width: 2rem;
+  padding: 0.35rem;
+  border-radius: 999px;
+}
+
+.spectrum-Button:hover,
+.spectrum-ActionButton:hover,
+.spectrum-FieldButton:hover,
+.spectrum-ClearButton:hover {
+  border-color: var(--spectrum-ui-border-strong);
+  background: var(--spectrum-ui-bg-subtle);
+}
+
+.spectrum-Button:active,
+.spectrum-ActionButton:active,
+.spectrum-FieldButton:active,
+.spectrum-ClearButton:active,
+.is-active.spectrum-Button,
+.is-active.spectrum-ActionButton,
+.is-active.spectrum-FieldButton,
+.is-active.spectrum-ClearButton,
+.is-selected.spectrum-ActionButton {
+  transform: translateY(1px);
+  border-color: var(--spectrum-ui-border-strong);
+}
+
+.spectrum-Button[data-style="fill"][data-variant="accent"],
+.spectrum-Button[data-style="fill"][data-variant="primary"] {
+  background: var(--spectrum-ui-accent);
+  border-color: var(--spectrum-ui-accent);
+  color: #fff;
+}
+
+.spectrum-Button[data-style="fill"][data-variant="accent"]:hover,
+.spectrum-Button[data-style="fill"][data-variant="primary"]:hover {
+  background: var(--spectrum-ui-accent-hover);
+  border-color: var(--spectrum-ui-accent-hover);
+}
+
+.spectrum-Button[data-variant="negative"] {
+  color: var(--spectrum-ui-danger);
+  border-color: rgba(211, 21, 16, 0.45);
+}
+
+.spectrum-Button[data-style="fill"][data-variant="negative"] {
+  background: var(--spectrum-ui-danger);
+  border-color: var(--spectrum-ui-danger);
+  color: #fff;
+}
+
+.spectrum-Button[data-style="outline"] {
+  background: var(--spectrum-ui-bg);
+}
+
+.spectrum-Button--iconOnly {
+  min-width: 2.1rem;
+  min-height: 2.1rem;
+  padding: 0.35rem;
+}
+
+.spectrum-Button .spectrum-Icon,
+.spectrum-ActionButton .spectrum-Icon,
+.spectrum-FieldButton .spectrum-Icon,
+.spectrum-ClearButton .spectrum-Icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.spectrum-Button-label,
+.spectrum-ActionButton-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.spectrum-Button.is-disabled,
+.spectrum-ActionButton.is-disabled,
+.spectrum-FieldButton.is-disabled,
+.spectrum-ClearButton.is-disabled,
+.spectrum-Button:disabled,
+.spectrum-ActionButton:disabled,
+.spectrum-FieldButton:disabled,
+.spectrum-ClearButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.focus-ring {
+  outline: 2px solid var(--spectrum-ui-focus);
+  outline-offset: 2px;
+}
+
+.spectrum-Field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-Field--positionSide {
+  grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: start;
+}
+
+.spectrum-FieldLabel {
+  color: var(--spectrum-ui-text);
+  font: 500 0.875rem/1.2 var(--vp-font-family-base);
+}
+
+.spectrum-FieldLabel-requiredIcon {
+  color: var(--spectrum-ui-danger);
+  margin-inline-start: 0.2rem;
+}
+
+.spectrum-Textfield-wrapper {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-Textfield {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.spectrum-Textfield:hover {
+  border-color: var(--spectrum-ui-border-strong);
+}
+
+.spectrum-Textfield:focus-within {
+  border-color: var(--spectrum-ui-focus);
+  box-shadow: 0 0 0 1px var(--spectrum-ui-focus);
+}
+
+.spectrum-Textfield--quiet {
+  border: none;
+  border-bottom: 1px solid var(--spectrum-ui-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.spectrum-Textfield--quiet:focus-within {
+  border-bottom-color: var(--spectrum-ui-focus);
+  box-shadow: inset 0 -1px 0 0 var(--spectrum-ui-focus);
+}
+
+.spectrum-Textfield--invalid {
+  border-color: rgba(211, 21, 16, 0.55);
+}
+
+.spectrum-Textfield--invalid:focus-within {
+  border-color: var(--spectrum-ui-danger);
+  box-shadow: 0 0 0 1px var(--spectrum-ui-danger);
+}
+
+.spectrum-Textfield-input {
+  width: 100%;
+  min-height: 2.1rem;
+  padding: 0.42rem 0.65rem;
+  border: none;
+  outline: none;
+  color: var(--spectrum-ui-text);
+  background: transparent;
+  font: 400 0.9rem/1.35 var(--vp-font-family-base);
+}
+
+.spectrum-Textfield--multiline .spectrum-Textfield-input {
+  min-height: 4.5rem;
+  resize: vertical;
+}
+
+.spectrum-Textfield-input::placeholder {
+  color: #7d899c;
+}
+
+.spectrum-HelpText {
+  font: 400 0.78rem/1.35 var(--vp-font-family-base);
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-HelpText--negative {
+  color: var(--spectrum-ui-danger);
+}
+
+.spectrum-DialogOverlay,
+.spectrum-Modal-wrapper,
+.spectrum-Tray-wrapper {
+  z-index: 1200;
+}
+
+.spectrum-Underlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 28, 45, 0.48);
+}
+
+.spectrum-Modal-wrapper {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.spectrum-Modal {
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 14px;
+  background: var(--spectrum-ui-bg);
+  box-shadow: var(--spectrum-ui-shadow);
+}
+
+.spectrum-DialogOverlay--modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.spectrum-DialogOverlay--popover {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg);
+  box-shadow: var(--spectrum-ui-shadow);
+}
+
+.spectrum-DialogOverlay--tray {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  border-radius: 14px 14px 0 0;
+  border: 1px solid var(--spectrum-ui-border);
+  border-bottom: none;
+  background: var(--spectrum-ui-bg);
+  box-shadow: var(--spectrum-ui-shadow);
+}
+
+.spectrum-Dialog {
+  position: relative;
+  width: min(38rem, calc(100vw - 2rem));
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg);
+  box-shadow: var(--spectrum-ui-shadow);
+}
+
+.spectrum-Dialog-grid {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem 1rem 1.15rem;
+}
+
+.spectrum-Dialog-closeButton {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 999px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  cursor: pointer;
+}
