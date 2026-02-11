@@ -1,6 +1,7 @@
 export { pressScale } from "./pressScale";
 export { isDocsEnv } from "./macros";
 export { Provider, ColorSchemeContext, useColorSchemeContext } from "./Provider";
+export { ActionMenu } from "./ActionMenu";
 export { Button, LinkButton } from "./Button";
 export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
@@ -10,6 +11,7 @@ export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 
 export type { ProviderBackground, S2ProviderProps } from "./Provider";
+export type { S2ActionMenuProps } from "./ActionMenu";
 export type {
   ActionButtonSize,
   S2ActionButtonProps,
