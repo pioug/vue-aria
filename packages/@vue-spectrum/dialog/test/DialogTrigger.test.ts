@@ -165,4 +165,63 @@ describe("DialogTrigger", () => {
       restore();
     }
   });
+
+  it("dismissable modals close when clicking outside", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "modal",
+      isDismissable: true,
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"modal\"]")).not.toBeNull();
+
+      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("non-dismissable modals do not close when clicking outside", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "modal",
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"modal\"]")).not.toBeNull();
+
+      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("non-modal popovers close on outside click even when isDismissable is false", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      isDismissable: false,
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"popover\"]")).not.toBeNull();
+
+      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
 });
