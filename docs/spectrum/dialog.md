@@ -49,6 +49,7 @@ const component = h(DialogTrigger, null, {
 - Baseline `DialogTrigger` state parity now includes controlled/uncontrolled open flows (`isOpen`/`onOpenChange` and `defaultOpen`), keyboard-dismiss disabling (`isKeyboardDismissDisabled`), and custom close-button wiring through injected close callbacks.
 - Baseline `DialogTrigger` and `DialogContainer` now include keyboard focus-containment loops (`Tab`/`Shift+Tab`) so focus stays trapped within the active dialog overlay.
 - Baseline `DialogContainer` dismissal semantics now cover `Escape` handling, keyboard-dismiss disabling, and outside-click dismissal rules (`isDismissable` gated).
+- Baseline `DialogTrigger` now matches upstream unmount safety behavior by warning in development when a non-popover dialog trigger unmounts while still open.
 - Baseline `DialogTrigger` and `DialogContainer` now support custom portal container targeting via `container`.
 - Baseline `Dialog` label semantics now match explicit-prop precedence (`aria-labelledby` / `aria-label`) and automatically link `aria-labelledby` to the first heading when no explicit label props are supplied.
 - Advanced overlay positioning and complete React Spectrum parity for dialog internals remain in progress.

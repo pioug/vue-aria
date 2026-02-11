@@ -101,6 +101,9 @@ const DISMISS_BUTTON_STYLE: Record<string, string> = {
   border: "0",
 };
 
+const UNMOUNT_OPEN_WARNING =
+  "A DialogTrigger unmounted while open. This is likely due to being placed within a trigger that unmounts or inside a conditional. Consider using a DialogContainer instead.";
+
 export const DialogTrigger = defineComponent({
   name: "DialogTrigger",
   inheritAttrs: false,
@@ -154,6 +157,7 @@ export const DialogTrigger = defineComponent({
     const triggerRef = ref<HTMLElement | null>(null);
     const overlayRootRef = ref<HTMLElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
+    const wasOpenRef = ref(false);
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const requestedType = computed<DialogType>(() => props.type ?? "modal");
     const isMobileViewport = computed<boolean>(() => {
@@ -273,11 +277,23 @@ export const DialogTrigger = defineComponent({
       if (typeof document !== "undefined") {
         document.removeEventListener("mousedown", onDocumentMouseDown, true);
       }
+
+      if (
+        wasOpenRef.value &&
+        effectiveType.value !== "popover" &&
+        effectiveType.value !== "tray" &&
+        typeof process !== "undefined" &&
+        process.env.NODE_ENV !== "production"
+      ) {
+        console.warn(UNMOUNT_OPEN_WARNING);
+      }
     });
 
     watch(
       isOpen,
       (nextIsOpen) => {
+        wasOpenRef.value = nextIsOpen;
+
         if (nextIsOpen) {
           restoreFocusRef.value = triggerRef.value;
           void nextTick(() => {
@@ -292,7 +308,8 @@ export const DialogTrigger = defineComponent({
             focusTarget.focus();
           });
         }
-      }
+      },
+      { immediate: true }
     );
 
     const onOverlayKeydown = (event: KeyboardEvent): void => {

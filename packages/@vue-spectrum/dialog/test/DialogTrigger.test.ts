@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref, type PropType } from "vue";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Dialog, DialogTrigger } from "../src";
 
 async function flushOverlay(): Promise<void> {
@@ -53,6 +53,16 @@ function mockMatchMedia(matches: boolean): () => void {
 }
 
 describe("DialogTrigger", () => {
+  let warnMock: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    warnMock = vi.spyOn(console, "warn").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warnMock.mockRestore();
+  });
+
   it("triggers a modal by default", async () => {
     const wrapper = mountDialogTrigger();
 
@@ -507,6 +517,23 @@ describe("DialogTrigger", () => {
     } finally {
       wrapper.unmount();
       customContainer.remove();
+    }
+  });
+
+  it("warns when unmounting while a non-popover dialog is open", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "modal",
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+      expect(warnMock).toHaveBeenCalledWith(
+        "A DialogTrigger unmounted while open. This is likely due to being placed within a trigger that unmounts or inside a conditional. Consider using a DialogContainer instead."
+      );
     }
   });
 });
