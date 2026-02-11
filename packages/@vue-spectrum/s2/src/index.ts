@@ -6,14 +6,18 @@ export { Button, LinkButton } from "./Button";
 export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
+export { Avatar } from "./Avatar";
+export { Badge } from "./Badge";
 export { ComboBox } from "./ComboBox";
 export { ColorField } from "./ColorField";
 export { CloseButton } from "./CloseButton";
 export { DateField } from "./DateField";
+export { Divider } from "./Divider";
 export { NumberField } from "./NumberField";
 export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
 export { Slider } from "./Slider";
+export { StatusLight } from "./StatusLight";
 export { Switch } from "./Switch";
 export { TextField } from "./TextField";
 export { ToggleButton } from "./ToggleButton";
@@ -25,10 +29,13 @@ export type {
   ActionButtonSize,
   S2ActionButtonProps,
 } from "./ActionButton";
+export type { S2AvatarProps } from "./Avatar";
+export type { S2BadgeProps } from "./Badge";
 export type { S2CloseButtonProps } from "./CloseButton";
 export type { ComboBoxSize, S2ComboBoxProps } from "./ComboBox";
 export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
 export type { DateFieldSize, S2DateFieldProps } from "./DateField";
+export type { S2DividerProps } from "./Divider";
 export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
 export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
 export type { SliderSize, S2SliderProps } from "./Slider";
@@ -39,6 +46,7 @@ export type {
   S2SelectBoxGroupProps,
   S2SelectBoxProps,
 } from "./SelectBoxGroup";
+export type { S2StatusLightProps } from "./StatusLight";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
 export type { S2TextFieldProps, TextFieldSize } from "./TextField";
 export type {
