@@ -4,6 +4,7 @@ import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
 import type {
   SpectrumTextAreaProps,
+  SpectrumTextFieldErrorMessageContext,
   SpectrumTextFieldBaseProps,
   SpectrumTextFieldValidationBehavior,
 } from "./types";
@@ -28,6 +29,7 @@ export function useSpectrumTextField(
   const isServerErrorCleared = ref(false);
   const currentValue = ref(props.value ?? props.defaultValue ?? "");
   const nativeValidationMessage = ref<string | undefined>(undefined);
+  const nativeValidationDetails = ref<unknown>(undefined);
 
   watch(
     () => [formValidationErrors.value, props.name] as const,
@@ -122,6 +124,45 @@ export function useSpectrumTextField(
   const ariaValidationErrorMessage = computed(() =>
     validationBehavior.value === "aria" ? validationErrorMessage.value : undefined
   );
+  const baseValidationErrors = computed<string[]>(() => {
+    if (serverErrorMessage.value) {
+      return [serverErrorMessage.value];
+    }
+
+    if (ariaValidationErrorMessage.value) {
+      return [ariaValidationErrorMessage.value];
+    }
+
+    if (nativeValidationMessage.value) {
+      return [nativeValidationMessage.value];
+    }
+
+    return [];
+  });
+  const resolvedErrorMessageFromProp = computed<string | undefined>(() => {
+    if (typeof props.errorMessage === "string") {
+      return props.errorMessage;
+    }
+
+    if (typeof props.errorMessage !== "function") {
+      return undefined;
+    }
+
+    const context: SpectrumTextFieldErrorMessageContext = {
+      isInvalid:
+        Boolean(props.isInvalid) ||
+        validationState.value === "invalid" ||
+        baseValidationErrors.value.length > 0,
+      validationErrors: baseValidationErrors.value,
+      validationDetails: nativeValidationDetails.value ?? {},
+    };
+    const value = props.errorMessage(context);
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value;
+    }
+
+    return undefined;
+  });
   const resolvedValidationState = computed(
     () =>
       validationState.value ??
@@ -133,7 +174,7 @@ export function useSpectrumTextField(
   );
   const resolvedErrorMessage = computed(
     () =>
-      props.errorMessage ??
+      resolvedErrorMessageFromProp.value ??
       serverErrorMessage.value ??
       ariaValidationErrorMessage.value ??
       nativeValidationMessage.value
@@ -280,6 +321,7 @@ export function useSpectrumTextField(
     (nextBehavior) => {
       if (nextBehavior !== "native") {
         nativeValidationMessage.value = undefined;
+        nativeValidationDetails.value = undefined;
       }
     },
     { immediate: true }
@@ -298,6 +340,7 @@ export function useSpectrumTextField(
 
       nativeValidationMessage.value =
         inputElement.validationMessage || "Constraints not satisfied";
+      nativeValidationDetails.value = inputElement.validity;
     };
     const onNativeBlur = () => {
       if (validationBehavior.value !== "native") {
@@ -306,10 +349,12 @@ export function useSpectrumTextField(
 
       if (inputElement.validity.valid) {
         nativeValidationMessage.value = undefined;
+        nativeValidationDetails.value = inputElement.validity;
       }
     };
     const onFormReset = () => {
       nativeValidationMessage.value = undefined;
+      nativeValidationDetails.value = undefined;
     };
 
     inputElement.addEventListener("invalid", onNativeInvalid);

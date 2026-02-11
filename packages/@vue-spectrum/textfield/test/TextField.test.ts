@@ -199,6 +199,40 @@ describe("TextField", () => {
     expect(input.getAttribute("aria-describedby")).toBeNull();
   });
 
+  it("supports custom native error message functions", async () => {
+    const Harness = defineComponent({
+      name: "TextFieldNativeCustomMessageHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(TextField, {
+              label: "Name",
+              isRequired: true,
+              validationBehavior: "native",
+              errorMessage: (context) =>
+                (
+                  context.validationDetails as
+                    | { valueMissing?: boolean }
+                    | undefined
+                )?.valueMissing
+                  ? "Please enter a name"
+                  : null,
+            }),
+          ]);
+      },
+    });
+
+    const { getByRole, getByTestId, getByText } = render(Harness);
+    const input = getByRole("textbox") as HTMLInputElement;
+    const form = getByTestId("form") as HTMLFormElement;
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(getByText("Please enter a name")).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+  });
+
   it("supports disabled and readOnly states", () => {
     const { getByRole } = render(TextField, {
       props: {
@@ -592,6 +626,40 @@ describe("TextArea", () => {
     await fireEvent.blur(input);
     await nextTick();
     expect(input.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("supports custom native error message functions", async () => {
+    const Harness = defineComponent({
+      name: "TextAreaNativeCustomMessageHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(TextArea, {
+              label: "Notes",
+              isRequired: true,
+              validationBehavior: "native",
+              errorMessage: (context) =>
+                (
+                  context.validationDetails as
+                    | { valueMissing?: boolean }
+                    | undefined
+                )?.valueMissing
+                  ? "Please enter notes"
+                  : null,
+            }),
+          ]);
+      },
+    });
+
+    const { getByRole, getByTestId, getByText } = render(Harness);
+    const input = getByRole("textbox") as HTMLTextAreaElement;
+    const form = getByTestId("form") as HTMLFormElement;
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(getByText("Please enter notes")).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
   });
 
   it("supports text updates", async () => {

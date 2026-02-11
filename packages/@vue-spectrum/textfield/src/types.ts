@@ -4,6 +4,18 @@ import type { LabelAlign, LabelPosition, NecessityIndicator } from "@vue-spectru
 export type SpectrumTextFieldValidationState = "valid" | "invalid";
 export type SpectrumTextFieldValidationBehavior = "aria" | "native";
 
+export interface SpectrumTextFieldErrorMessageContext {
+  isInvalid: boolean;
+  validationErrors: string[];
+  validationDetails: unknown;
+}
+
+export type SpectrumTextFieldErrorMessage =
+  | string
+  | ((
+      context: SpectrumTextFieldErrorMessageContext
+    ) => string | null | undefined);
+
 export interface SpectrumTextFieldBaseProps {
   id?: string | undefined;
   label?: string | undefined;
@@ -12,7 +24,7 @@ export interface SpectrumTextFieldBaseProps {
   necessityIndicator?: NecessityIndicator | null | undefined;
   includeNecessityIndicatorInAccessibilityName?: boolean | undefined;
   description?: string | undefined;
-  errorMessage?: string | undefined;
+  errorMessage?: SpectrumTextFieldErrorMessage | undefined;
   isDisabled?: boolean | undefined;
   isReadOnly?: boolean | undefined;
   isRequired?: boolean | undefined;
@@ -110,7 +122,7 @@ export const textFieldBasePropOptions = {
     default: undefined,
   },
   errorMessage: {
-    type: String as PropType<string | undefined>,
+    type: [String, Function] as PropType<SpectrumTextFieldErrorMessage | undefined>,
     default: undefined,
   },
   isDisabled: {
