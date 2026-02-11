@@ -123,4 +123,99 @@ describe("TooltipTrigger", () => {
 
     wrapper.unmount();
   });
+
+  it("does not close on press when shouldCloseOnPress is false", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+      shouldCloseOnPress: false,
+    });
+
+    const button = wrapper.get("button");
+    await button.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    await button.trigger("click");
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    expect(onOpenChange).not.toHaveBeenCalledWith(false);
+
+    wrapper.unmount();
+  });
+
+  it("supports controlled open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      isOpen: true,
+      onOpenChange,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+      const button = wrapper.get("button");
+      await button.trigger("click");
+      await flushOverlay();
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("supports controlled hidden state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      isOpen: false,
+      onOpenChange,
+    });
+
+    try {
+      const button = wrapper.get("button");
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("supports uncontrolled defaultOpen", async () => {
+    const wrapper = mountTooltipTrigger({
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("does not open when disabled", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      isDisabled: true,
+      onOpenChange,
+    });
+
+    try {
+      const button = wrapper.get("button");
+      (button.element as HTMLButtonElement).focus();
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+
+      expect(onOpenChange).not.toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
 });

@@ -45,5 +45,5 @@ const component = h(
 
 ## Notes
 
-- Baseline includes focus/hover trigger behavior, Escape close handling, portal-based rendering, and trigger-anchored overlay positioning with placement support (`top`/`bottom`/`left`/`right`).
+- Baseline includes focus/hover trigger behavior, Escape close handling, press-close and optional no-close-on-press behavior (`shouldCloseOnPress=false`), controlled/uncontrolled visibility support (`isOpen`/`defaultOpen`), disabled trigger behavior (`isDisabled`), portal-based rendering, and trigger-anchored overlay positioning with placement support (`top`/`bottom`/`left`/`right`).
 - Advanced icon variants and full transition parity remain in progress.
