@@ -126,6 +126,86 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenLastCalledWith(0);
   });
 
+  it("starts stepping from zero when empty and no bounds are set", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(input.value).toBe("");
+
+    await user.click(incrementButton);
+    expect(input.value).toBe("0");
+    expect(onChange).toHaveBeenLastCalledWith(0);
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "");
+    await fireEvent.blur(input);
+    expect(input.value).toBe("");
+
+    await user.click(decrementButton);
+    expect(input.value).toBe("0");
+    expect(onChange).toHaveBeenLastCalledWith(0);
+  });
+
+  it("starts stepping from minValue when empty and minValue is set", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      minValue: 3,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(input.value).toBe("");
+
+    await user.click(incrementButton);
+    expect(input.value).toBe("3");
+    expect(onChange).toHaveBeenLastCalledWith(3);
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "");
+    await fireEvent.blur(input);
+    expect(input.value).toBe("");
+
+    await user.click(decrementButton);
+    expect(input.value).toBe("3");
+    expect(onChange).toHaveBeenLastCalledWith(3);
+  });
+
+  it("starts stepping from maxValue when empty and decrementing with maxValue set", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      maxValue: 3,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(input.value).toBe("");
+
+    await user.click(decrementButton);
+    expect(input.value).toBe("3");
+    expect(onChange).toHaveBeenLastCalledWith(3);
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "");
+    await fireEvent.blur(input);
+    expect(input.value).toBe("");
+
+    await user.click(incrementButton);
+    expect(input.value).toBe("0");
+    expect(onChange).toHaveBeenLastCalledWith(0);
+  });
+
   it("hides stepper buttons when hideStepper is true", () => {
     const tree = renderNumberField({
       hideStepper: true,

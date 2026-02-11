@@ -200,11 +200,32 @@ export function useNumberField(
     }
 
     const parsedInput = parseNumber(inputValue.value);
-    const base =
-      parsedInput ??
-      currentNumberValue.value ??
-      (minValue.value !== undefined ? minValue.value : 0);
-    const nextValue = clamp(base + step.value * factor * direction);
+    const currentValue = currentNumberValue.value;
+    const nextValue = (() => {
+      if (parsedInput === undefined && currentValue === undefined) {
+        if (direction > 0) {
+          if (minValue.value !== undefined) {
+            return clamp(minValue.value);
+          }
+
+          return clamp(0);
+        }
+
+        if (maxValue.value !== undefined) {
+          return clamp(maxValue.value);
+        }
+
+        if (minValue.value !== undefined) {
+          return clamp(minValue.value);
+        }
+
+        return clamp(0);
+      }
+
+      const base = parsedInput ?? currentValue ?? 0;
+      return clamp(base + step.value * factor * direction);
+    })();
+
     inputValue.value = formatNumber(nextValue);
     commitNumberValue(nextValue);
 
