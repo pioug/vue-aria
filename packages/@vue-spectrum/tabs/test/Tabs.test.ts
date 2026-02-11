@@ -819,6 +819,115 @@ describe("Tabs", () => {
     }
   });
 
+  it("dynamically collapses and expands across item and orientation updates", async () => {
+    const itemsWithFourth = [
+      ...defaultItems,
+      { key: "tab-4", title: "Tab 4", children: "Tab 4 body" },
+    ];
+    let wrapperWidth = 1200;
+    let tabListScrollWidth = 300;
+
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-TabsPanel-collapseWrapper")) {
+          return wrapperWidth;
+        }
+
+        return 0;
+      });
+    const scrollWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "tablist") {
+          return tabListScrollWidth;
+        }
+
+        return 0;
+      });
+
+    try {
+      const App = defineComponent({
+        name: "TabsCollapseRerenderHarness",
+        props: {
+          items: {
+            type: Array as () => SpectrumTabItem[],
+            required: true,
+          },
+          orientation: {
+            type: String as () => "horizontal" | "vertical",
+            required: true,
+          },
+        },
+        setup(componentProps) {
+          return () =>
+            h(
+              Tabs,
+              {
+                "aria-label": "Dynamic tabs",
+                items: componentProps.items,
+                orientation: componentProps.orientation,
+              },
+              {
+                default: () => [h(TabList), h(TabPanels)],
+              }
+            );
+        },
+      });
+
+      const tree = render(App, {
+        props: {
+          items: defaultItems,
+          orientation: "horizontal",
+        },
+      });
+      await flush();
+
+      expect(tree.getByRole("tablist")).toBeTruthy();
+      expect(tree.container.querySelector(".spectrum-Tabs--isCollapsed")).toBeNull();
+
+      wrapperWidth = 320;
+      tabListScrollWidth = 1400;
+      await tree.rerender({
+        items: itemsWithFourth,
+        orientation: "horizontal",
+      });
+      await flush();
+
+      expect(tree.queryByRole("tablist")).toBeNull();
+      const collapsedPicker = tree.container.querySelector(
+        ".spectrum-Tabs-picker.spectrum-Tabs--isCollapsed"
+      ) as HTMLElement | null;
+      expect(collapsedPicker).not.toBeNull();
+      expect(tree.getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(
+        collapsedPicker?.getAttribute("id")
+      );
+
+      await tree.rerender({
+        items: itemsWithFourth,
+        orientation: "vertical",
+      });
+      await flush();
+
+      expect(tree.getByRole("tablist")).toBeTruthy();
+      expect(tree.container.querySelector(".spectrum-Tabs--isCollapsed")).toBeNull();
+
+      wrapperWidth = 1200;
+      tabListScrollWidth = 300;
+      await tree.rerender({
+        items: defaultItems,
+        orientation: "horizontal",
+      });
+      await flush();
+
+      expect(tree.getByRole("tablist")).toBeTruthy();
+      expect(tree.container.querySelector(".spectrum-Tabs--isCollapsed")).toBeNull();
+    } finally {
+      clientWidthSpy.mockRestore();
+      scrollWidthSpy.mockRestore();
+    }
+  });
+
   it("supports tabs as links", async () => {
     const user = userEvent.setup();
     const linkItems: SpectrumTabItem[] = [
