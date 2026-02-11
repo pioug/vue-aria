@@ -197,4 +197,110 @@ describe("ComboBox", () => {
     expect(onSelectionChange).toHaveBeenCalledWith("other-1");
     expect((tree.getByRole("combobox") as HTMLInputElement).value).toBe("Three");
   });
+
+  it("renders grouped section semantics from static slot sections", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "ComboBoxGroupedSectionsApp",
+      setup() {
+        return () =>
+          h(ComboBox, { label: "Test" }, {
+            default: () => [
+              h(ComboBoxSection, { id: "first", title: "Favorites" }, {
+                default: () => [
+                  h(ComboBoxItem, { id: "fav-1" }, () => "One"),
+                  h(ComboBoxItem, { id: "fav-2" }, () => "Two"),
+                ],
+              }),
+              h(ComboBoxSection, { id: "second", title: "Others" }, {
+                default: () => [
+                  h(ComboBoxItem, { id: "other-1" }, () => "Three"),
+                ],
+              }),
+            ],
+          });
+      },
+    });
+
+    const tree = render(App);
+    await user.click(tree.getByRole("button"));
+
+    const listbox = tree.getByRole("listbox");
+    const groups = within(listbox).getAllByRole("group");
+    expect(groups).toHaveLength(2);
+    expect(tree.getByText("Favorites")).toBeTruthy();
+    expect(tree.getByText("Others")).toBeTruthy();
+    expect(within(groups[0] as HTMLElement).getAllByRole("option")).toHaveLength(2);
+    expect(within(groups[1] as HTMLElement).getAllByRole("option")).toHaveLength(1);
+  });
+
+  it("keeps section groups in sync with filtering results", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "ComboBoxFilteredSectionsApp",
+      setup() {
+        return () =>
+          h(ComboBox, { label: "Test" }, {
+            default: () => [
+              h(ComboBoxSection, { id: "first", title: "Favorites" }, {
+                default: () => [
+                  h(ComboBoxItem, { id: "fav-1" }, () => "One"),
+                  h(ComboBoxItem, { id: "fav-2" }, () => "Two"),
+                ],
+              }),
+              h(ComboBoxSection, { id: "second", title: "Others" }, {
+                default: () => [
+                  h(ComboBoxItem, { id: "other-1" }, () => "Three"),
+                ],
+              }),
+            ],
+          });
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.type(input, "thr");
+
+    const listbox = tree.getByRole("listbox");
+    const groups = within(listbox).getAllByRole("group");
+    const options = within(listbox).getAllByRole("option");
+    expect(groups).toHaveLength(1);
+    expect(options).toHaveLength(1);
+    expect(tree.getByText("Others")).toBeTruthy();
+    expect(tree.queryByText("Favorites")).toBeNull();
+    expect(options[0]?.textContent).toContain("Three");
+  });
+
+  it("uses section aria-label when section title is omitted", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "ComboBoxSectionAriaLabelApp",
+      setup() {
+        return () =>
+          h(ComboBox, { label: "Test" }, {
+            default: () => [
+              h(ComboBoxSection, { id: "untitled", "aria-label": "Ungrouped items" }, {
+                default: () => [
+                  h(ComboBoxItem, { id: "one" }, () => "One"),
+                ],
+              }),
+            ],
+          });
+      },
+    });
+
+    const tree = render(App);
+    await user.click(tree.getByRole("button"));
+
+    const listbox = tree.getByRole("listbox");
+    const group = within(listbox).getByRole("group");
+    expect(group.getAttribute("aria-label")).toBe("Ungrouped items");
+    expect(group.getAttribute("aria-labelledby")).toBeNull();
+  });
 });

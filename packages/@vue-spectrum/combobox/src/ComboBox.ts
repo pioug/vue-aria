@@ -91,6 +91,27 @@ interface NormalizedComboBoxItem {
   label: string;
   isDisabled?: boolean | undefined;
   "aria-label"?: string | undefined;
+  sectionKey?: Key | undefined;
+}
+
+interface NormalizedComboBoxItemEntry {
+  type: "item";
+  key: Key;
+}
+
+interface NormalizedComboBoxSectionEntry {
+  type: "section";
+  key: Key;
+  title?: string | undefined;
+  "aria-label"?: string | undefined;
+  itemKeys: Key[];
+}
+
+type NormalizedComboBoxEntry = NormalizedComboBoxItemEntry | NormalizedComboBoxSectionEntry;
+
+interface NormalizedComboBoxSlotModel {
+  items: NormalizedComboBoxItem[];
+  entries: NormalizedComboBoxEntry[];
 }
 
 const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
@@ -207,7 +228,11 @@ function extractTextContent(value: unknown): string {
   return "";
 }
 
-function parseComboBoxItemNode(node: VNode, fallback: Key): NormalizedComboBoxItem {
+function parseComboBoxItemNode(
+  node: VNode,
+  fallback: Key,
+  sectionKey?: Key
+): NormalizedComboBoxItem {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const labelFromSlot = extractTextContent(getSlotContent(node)).trim();
   const textValue =
@@ -221,39 +246,79 @@ function parseComboBoxItemNode(node: VNode, fallback: Key): NormalizedComboBoxIt
     isDisabled: Boolean(props.isDisabled),
     "aria-label":
       typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+    sectionKey,
   };
 }
 
-function parseComboBoxSlotItems(nodes: VNode[] | undefined): NormalizedComboBoxItem[] {
+function parseComboBoxSlotItems(
+  nodes: VNode[] | undefined
+): NormalizedComboBoxSlotModel {
   if (!nodes || nodes.length === 0) {
-    return [];
+    return { items: [], entries: [] };
   }
 
   const topLevelNodes = flattenVNodeChildren(nodes);
   const items: NormalizedComboBoxItem[] = [];
+  const entries: NormalizedComboBoxEntry[] = [];
   let itemIndex = 0;
+  let sectionIndex = 0;
 
   for (const node of topLevelNodes) {
     const componentName = getComponentName(node);
     if (componentName === "ComboBoxItem") {
-      items.push(parseComboBoxItemNode(node, `item-${itemIndex}`));
+      const item = parseComboBoxItemNode(node, `item-${itemIndex}`);
+      items.push(item);
+      entries.push({
+        type: "item",
+        key: item.key,
+      });
       itemIndex += 1;
       continue;
     }
 
     if (componentName === "ComboBoxSection") {
+      const sectionProps = (node.props ?? {}) as Record<string, unknown>;
+      const sectionKey = normalizeComboBoxKey(
+        node.key ?? sectionProps.id,
+        `section-${sectionIndex}`
+      );
+      const sectionTitle =
+        typeof sectionProps.title === "string" ? sectionProps.title : undefined;
+      const sectionAriaLabel =
+        typeof sectionProps["aria-label"] === "string"
+          ? sectionProps["aria-label"]
+          : undefined;
       const sectionChildren = getSlotChildren(node).filter(
         (child) => getComponentName(child) === "ComboBoxItem"
       );
+      const sectionItemKeys: Key[] = [];
 
       for (const child of sectionChildren) {
-        items.push(parseComboBoxItemNode(child, `item-${itemIndex}`));
+        const item = parseComboBoxItemNode(
+          child,
+          `item-${itemIndex}`,
+          sectionKey
+        );
+        items.push(item);
+        sectionItemKeys.push(item.key);
         itemIndex += 1;
       }
+
+      if (sectionItemKeys.length > 0) {
+        entries.push({
+          type: "section",
+          key: sectionKey,
+          title: sectionTitle,
+          "aria-label": sectionAriaLabel,
+          itemKeys: sectionItemKeys,
+        });
+      }
+
+      sectionIndex += 1;
     }
   }
 
-  return items;
+  return { items, entries };
 }
 
 function areNormalizedItemsEqual(
@@ -272,13 +337,74 @@ function areNormalizedItemsEqual(
       current.label !== candidate.label ||
       current.textValue !== candidate.textValue ||
       current.isDisabled !== candidate.isDisabled ||
-      current["aria-label"] !== candidate["aria-label"]
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.sectionKey !== candidate.sectionKey
     ) {
       return false;
     }
   }
 
   return true;
+}
+
+function areNormalizedEntriesEqual(
+  left: NormalizedComboBoxEntry[],
+  right: NormalizedComboBoxEntry[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      !current ||
+      !candidate ||
+      current.type !== candidate.type ||
+      current.key !== candidate.key
+    ) {
+      return false;
+    }
+
+    if (current.type === "item") {
+      continue;
+    }
+
+    if (candidate.type !== "section") {
+      return false;
+    }
+
+    if (
+      current.title !== candidate.title ||
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.itemKeys.length !== candidate.itemKeys.length
+    ) {
+      return false;
+    }
+
+    for (let keyIndex = 0; keyIndex < current.itemKeys.length; keyIndex += 1) {
+      if (current.itemKeys[keyIndex] !== candidate.itemKeys[keyIndex]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+function areNormalizedSlotModelsEqual(
+  left: NormalizedComboBoxSlotModel,
+  right: NormalizedComboBoxSlotModel
+): boolean {
+  return (
+    areNormalizedItemsEqual(left.items, right.items) &&
+    areNormalizedEntriesEqual(left.entries, right.entries)
+  );
+}
+
+function normalizeIdSegment(value: Key): string {
+  return String(value).replace(/[^a-zA-Z0-9_-]/g, "-");
 }
 
 function createStaticComboBoxComponent(name: string, props: Record<string, unknown>) {
@@ -580,7 +706,10 @@ export const ComboBox = defineComponent({
     const listBoxRef = ref<HTMLElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
     const loadMoreRequested = ref(false);
-    const slotItems = ref<NormalizedComboBoxItem[]>([]);
+    const slotModel = ref<NormalizedComboBoxSlotModel>({
+      items: [],
+      entries: [],
+    });
 
     const normalizedItems = computed<NormalizedComboBoxItem[]>(() => {
       if (props.items) {
@@ -593,7 +722,7 @@ export const ComboBox = defineComponent({
         }));
       }
 
-      return slotItems.value;
+      return slotModel.value.items;
     });
 
     const state = useComboBoxState<NormalizedComboBoxItem>({
@@ -741,9 +870,11 @@ export const ComboBox = defineComponent({
 
     return () => {
       if (!props.items) {
-        const parsedItems = parseComboBoxSlotItems(slots.default?.() as VNode[] | undefined);
-        if (!areNormalizedItemsEqual(parsedItems, slotItems.value)) {
-          slotItems.value = parsedItems;
+        const parsedSlotModel = parseComboBoxSlotItems(
+          slots.default?.() as VNode[] | undefined
+        );
+        if (!areNormalizedSlotModelsEqual(parsedSlotModel, slotModel.value)) {
+          slotModel.value = parsedSlotModel;
         }
       }
 
@@ -756,13 +887,84 @@ export const ComboBox = defineComponent({
         UNSAFE_style: props.UNSAFE_style,
       });
 
-      const renderedList = state.collection.value.map((item) =>
+      const visibleItemsByKey = new Map<Key, NormalizedComboBoxItem>();
+      for (const item of state.collection.value) {
+        visibleItemsByKey.set(item.key, item);
+      }
+
+      const renderOption = (item: NormalizedComboBoxItem) =>
         h(ComboBoxOption, {
           key: String(item.key),
           item,
           state,
-        })
-      );
+        });
+
+      const renderedList: VNode[] = [];
+
+      if (props.items || slotModel.value.entries.length === 0) {
+        for (const item of state.collection.value) {
+          renderedList.push(renderOption(item));
+        }
+      } else {
+        const listBoxId = listBoxProps.value.id as string | undefined;
+
+        for (const entry of slotModel.value.entries) {
+          if (entry.type === "item") {
+            const visibleItem = visibleItemsByKey.get(entry.key);
+            if (visibleItem) {
+              renderedList.push(renderOption(visibleItem));
+            }
+            continue;
+          }
+
+          const visibleSectionItems = entry.itemKeys
+            .map((key) => visibleItemsByKey.get(key))
+            .filter((item): item is NormalizedComboBoxItem => Boolean(item));
+          if (visibleSectionItems.length === 0) {
+            continue;
+          }
+
+          const sectionHeadingId = entry.title
+            ? `${listBoxId ?? "combobox-listbox"}-section-${normalizeIdSegment(entry.key)}-heading`
+            : undefined;
+
+          renderedList.push(
+            h(
+              "div",
+              {
+                key: `section-${String(entry.key)}`,
+                role: "presentation",
+                class: classNames("react-spectrum-ComboBox-section"),
+              },
+              [
+                entry.title
+                  ? h(
+                    "div",
+                    {
+                      id: sectionHeadingId,
+                      role: "presentation",
+                      class: classNames("spectrum-Menu-sectionHeading"),
+                    },
+                    entry.title
+                  )
+                  : null,
+                h(
+                  "div",
+                  {
+                    role: "group",
+                    "aria-labelledby": sectionHeadingId,
+                    "aria-label": sectionHeadingId
+                      ? undefined
+                      : entry["aria-label"],
+                    class: classNames("spectrum-Menu-section"),
+                  },
+                  visibleSectionItems.map((item) => renderOption(item))
+                ),
+              ]
+            )
+          );
+        }
+      }
 
       if (isLoading.value) {
         renderedList.push(
