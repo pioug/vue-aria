@@ -321,6 +321,17 @@ describe("NumberField", () => {
     expect(hidden?.value).toBe("4");
   });
 
+  it("passes data attributes through to the text input", () => {
+    const tree = renderNumberField({
+      "data-testid": "number-input",
+      "data-track-id": "qty",
+    });
+
+    const input = tree.getByRole("textbox");
+    expect(input.getAttribute("data-testid")).toBe("number-input");
+    expect(input.getAttribute("data-track-id")).toBe("qty");
+  });
+
   it("uses upstream-style platform inputMode behavior", () => {
     const platformSpy = vi
       .spyOn(window.navigator, "platform", "get")

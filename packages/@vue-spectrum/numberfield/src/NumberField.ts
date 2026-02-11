@@ -222,6 +222,16 @@ export const NumberField = defineComponent({
     const ariaErrorMessage = resolveStringProp("aria-errormessage", [
       "ariaErrormessage",
     ]);
+    const inputDataAttributes = computed<Record<string, unknown>>(() => {
+      const dataAttributes: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(attrsRecord)) {
+        if (key.startsWith("data-")) {
+          dataAttributes[key] = value;
+        }
+      }
+
+      return dataAttributes;
+    });
 
     const numberField = useNumberField({
       id: computed(() => props.id),
@@ -423,7 +433,7 @@ export const NumberField = defineComponent({
               [
                 h(
                   "input",
-                  mergeProps(numberField.inputProps.value, {
+                  mergeProps(numberField.inputProps.value, inputDataAttributes.value, {
                     ref: (value: unknown) => {
                       inputRef.value = value as HTMLInputElement | null;
                     },
