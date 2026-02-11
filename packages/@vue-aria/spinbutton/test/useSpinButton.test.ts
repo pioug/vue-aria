@@ -1,3 +1,4 @@
+import { ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSpinButton } from "../src/useSpinButton";
 import type { PressEvent } from "@vue-aria/types";
@@ -8,6 +9,7 @@ interface SpinHandlers {
 
 interface StepperHandlers {
   onPressStart?: (event: PressEvent) => void;
+  onPressUp?: (event: PressEvent) => void;
   onPressEnd?: (event: PressEvent) => void;
 }
 
@@ -130,6 +132,20 @@ describe("useSpinButton", () => {
     });
     expect(onIncrement).toHaveBeenCalledTimes(1);
 
+    incHandlers.onPressStart?.({
+      type: "press",
+      pointerType: "touch",
+      target: null,
+      originalEvent: new Event("pointerdown"),
+    });
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+
+    incHandlers.onPressUp?.({
+      type: "press",
+      pointerType: "touch",
+      target: null,
+      originalEvent: new Event("pointerup"),
+    });
     incHandlers.onPressEnd?.({
       type: "press",
       pointerType: "touch",
@@ -144,6 +160,18 @@ describe("useSpinButton", () => {
       target: null,
       originalEvent: new Event("mousedown"),
     });
+    decHandlers.onPressStart?.({
+      type: "press",
+      pointerType: "touch",
+      target: null,
+      originalEvent: new Event("pointerdown"),
+    });
+    decHandlers.onPressUp?.({
+      type: "press",
+      pointerType: "touch",
+      target: null,
+      originalEvent: new Event("pointerup"),
+    });
     decHandlers.onPressEnd?.({
       type: "press",
       pointerType: "touch",
@@ -151,5 +179,105 @@ describe("useSpinButton", () => {
       originalEvent: new Event("pointerup"),
     });
     expect(onDecrement).toHaveBeenCalledTimes(2);
+  });
+
+  it("repeats increment while mouse press is held and stops on press end", () => {
+    vi.useFakeTimers();
+
+    const currentValue = ref(10);
+    const onIncrement = vi.fn(() => {
+      currentValue.value += 1;
+    });
+
+    const { incrementButtonProps } = useSpinButton({
+      value: currentValue,
+      onIncrement,
+    });
+    const handlers = incrementButtonProps.value as StepperHandlers;
+
+    handlers.onPressStart?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mousedown"),
+    });
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+    expect(currentValue.value).toBe(11);
+
+    vi.advanceTimersByTime(399);
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(1);
+    expect(onIncrement).toHaveBeenCalledTimes(2);
+    expect(currentValue.value).toBe(12);
+
+    vi.advanceTimersByTime(120);
+    expect(onIncrement).toHaveBeenCalledTimes(4);
+    expect(currentValue.value).toBe(14);
+
+    handlers.onPressEnd?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mouseup"),
+    });
+
+    vi.advanceTimersByTime(500);
+    expect(onIncrement).toHaveBeenCalledTimes(4);
+
+    vi.useRealTimers();
+  });
+
+  it("does not repeat beyond min or max boundaries", () => {
+    vi.useFakeTimers();
+
+    const currentValue = ref(19);
+    const onIncrement = vi.fn(() => {
+      currentValue.value += 1;
+    });
+    const onDecrement = vi.fn(() => {
+      currentValue.value -= 1;
+    });
+
+    const { incrementButtonProps, decrementButtonProps } = useSpinButton({
+      value: currentValue,
+      minValue: 0,
+      maxValue: 20,
+      onIncrement,
+      onDecrement,
+    });
+    const incrementHandlers = incrementButtonProps.value as StepperHandlers;
+    const decrementHandlers = decrementButtonProps.value as StepperHandlers;
+
+    incrementHandlers.onPressStart?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mousedown"),
+    });
+    vi.advanceTimersByTime(1000);
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+    expect(currentValue.value).toBe(20);
+
+    incrementHandlers.onPressEnd?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mouseup"),
+    });
+
+    currentValue.value = 1;
+
+    decrementHandlers.onPressStart?.({
+      type: "press",
+      pointerType: "mouse",
+      target: null,
+      originalEvent: new Event("mousedown"),
+    });
+    vi.advanceTimersByTime(1000);
+    expect(onDecrement).toHaveBeenCalledTimes(1);
+    expect(currentValue.value).toBe(0);
+
+    vi.useRealTimers();
   });
 });

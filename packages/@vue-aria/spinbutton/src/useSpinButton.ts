@@ -1,4 +1,4 @@
-import { computed, ref, toValue } from "vue";
+import { computed, getCurrentInstance, onBeforeUnmount, ref, toValue } from "vue";
 import type { MaybeReactive, PressEvent, ReadonlyRef } from "@vue-aria/types";
 
 export interface UseSpinButtonOptions {
@@ -38,12 +38,18 @@ export function useSpinButton(
   options: UseSpinButtonOptions = {}
 ): UseSpinButtonResult {
   const isFocused = ref(false);
+  const isDisabled = computed(() =>
+    options.isDisabled === undefined ? false : Boolean(toValue(options.isDisabled))
+  );
   const isReadOnly = computed(() =>
     options.isReadOnly === undefined ? false : Boolean(toValue(options.isReadOnly))
   );
   const value = computed(() => getNumber(options.value));
   const minValue = computed(() => getNumber(options.minValue));
   const maxValue = computed(() => getNumber(options.maxValue));
+  const repeatTimer = ref<ReturnType<typeof setTimeout> | null>(null);
+  const touchPressReleased = ref(false);
+  const didRepeatStep = ref(false);
 
   const textValue = computed(() => {
     const explicit = options.textValue === undefined ? undefined : toValue(options.textValue);
@@ -56,6 +62,7 @@ export function useSpinButton(
 
   const onKeydown = (event: KeyboardEvent) => {
     if (
+      isDisabled.value ||
       isReadOnly.value ||
       event.ctrlKey ||
       event.metaKey ||
@@ -127,24 +134,132 @@ export function useSpinButton(
     isFocused.value = false;
   };
 
+  const clearRepeatTimer = () => {
+    if (repeatTimer.value !== null) {
+      clearTimeout(repeatTimer.value);
+      repeatTimer.value = null;
+    }
+  };
+
+  const canIncrement = () => {
+    if (isDisabled.value || isReadOnly.value) {
+      return false;
+    }
+
+    const current = value.value;
+    const max = maxValue.value;
+    return max === undefined || current === undefined || current < max;
+  };
+
+  const canDecrement = () => {
+    if (isDisabled.value || isReadOnly.value) {
+      return false;
+    }
+
+    const current = value.value;
+    const min = minValue.value;
+    return min === undefined || current === undefined || current > min;
+  };
+
+  const performIncrement = () => {
+    if (!canIncrement()) {
+      return false;
+    }
+
+    options.onIncrement?.();
+    return true;
+  };
+
+  const performDecrement = () => {
+    if (!canDecrement()) {
+      return false;
+    }
+
+    options.onDecrement?.();
+    return true;
+  };
+
+  const startRepeat = (direction: "increment" | "decrement", initialDelay: number) => {
+    clearRepeatTimer();
+
+    const repeat = () => {
+      const stepped =
+        direction === "increment" ? performIncrement() : performDecrement();
+      if (!stepped) {
+        clearRepeatTimer();
+        return;
+      }
+
+      didRepeatStep.value = true;
+      repeatTimer.value = setTimeout(repeat, 60);
+    };
+
+    repeatTimer.value = setTimeout(repeat, initialDelay);
+  };
+
+  const resetPressState = () => {
+    clearRepeatTimer();
+    touchPressReleased.value = false;
+    didRepeatStep.value = false;
+  };
+
+  if (getCurrentInstance()) {
+    onBeforeUnmount(() => {
+      clearRepeatTimer();
+    });
+  }
+
   const onStepperPressStart = (
     event: PressEvent | undefined,
-    onMousePress: (() => void) | undefined
+    direction: "increment" | "decrement"
   ) => {
     const pointerType = event?.pointerType ?? "mouse";
-    if (pointerType !== "touch") {
-      onMousePress?.();
+    touchPressReleased.value = false;
+    didRepeatStep.value = false;
+    clearRepeatTimer();
+
+    if (pointerType === "touch") {
+      startRepeat(direction, 600);
+      return;
     }
+
+    const stepped =
+      direction === "increment" ? performIncrement() : performDecrement();
+    if (stepped) {
+      startRepeat(direction, 400);
+    }
+  };
+
+  const onStepperPressUp = (event: PressEvent | undefined) => {
+    const pointerType = event?.pointerType ?? "mouse";
+    if (pointerType === "touch") {
+      touchPressReleased.value = true;
+    }
+
+    clearRepeatTimer();
   };
 
   const onStepperPressEnd = (
     event: PressEvent | undefined,
-    onTouchPress: (() => void) | undefined
+    direction: "increment" | "decrement"
   ) => {
     const pointerType = event?.pointerType ?? "mouse";
-    if (pointerType === "touch") {
-      onTouchPress?.();
+
+    clearRepeatTimer();
+
+    if (
+      pointerType === "touch" &&
+      touchPressReleased.value &&
+      didRepeatStep.value === false
+    ) {
+      if (direction === "increment") {
+        performIncrement();
+      } else {
+        performDecrement();
+      }
     }
+
+    resetPressState();
   };
 
   const spinButtonProps = computed<Record<string, unknown>>(() => ({
@@ -153,8 +268,7 @@ export function useSpinButton(
     "aria-valuetext": textValue.value,
     "aria-valuemin": minValue.value,
     "aria-valuemax": maxValue.value,
-    "aria-disabled":
-      options.isDisabled === undefined ? undefined : Boolean(toValue(options.isDisabled)),
+    "aria-disabled": isDisabled.value || undefined,
     "aria-readonly": isReadOnly.value || undefined,
     "aria-required":
       options.isRequired === undefined ? undefined : Boolean(toValue(options.isRequired)),
@@ -165,16 +279,18 @@ export function useSpinButton(
 
   const incrementButtonProps = computed<Record<string, unknown>>(() => ({
     onPressStart: (event: PressEvent) =>
-      onStepperPressStart(event, options.onIncrement),
-    onPressEnd: (event: PressEvent) => onStepperPressEnd(event, options.onIncrement),
+      onStepperPressStart(event, "increment"),
+    onPressUp: (event: PressEvent) => onStepperPressUp(event),
+    onPressEnd: (event: PressEvent) => onStepperPressEnd(event, "increment"),
     onFocus,
     onBlur,
   }));
 
   const decrementButtonProps = computed<Record<string, unknown>>(() => ({
     onPressStart: (event: PressEvent) =>
-      onStepperPressStart(event, options.onDecrement),
-    onPressEnd: (event: PressEvent) => onStepperPressEnd(event, options.onDecrement),
+      onStepperPressStart(event, "decrement"),
+    onPressUp: (event: PressEvent) => onStepperPressUp(event),
+    onPressEnd: (event: PressEvent) => onStepperPressEnd(event, "decrement"),
     onFocus,
     onBlur,
   }));

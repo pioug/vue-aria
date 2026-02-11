@@ -221,4 +221,42 @@ describe("NumberField", () => {
     await fireEvent.wheel(disabledInput, { deltaY: 10 });
     expect(onChange).toHaveBeenCalledTimes(1);
   });
+
+  it("repeats stepper increments while the button is held", async () => {
+    vi.useFakeTimers();
+
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: 10,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox");
+    const [incrementButton] = tree.getAllByRole("button");
+
+    await fireEvent.focus(input);
+    await fireEvent.pointerDown(incrementButton, {
+      button: 0,
+      pointerType: "mouse",
+    });
+
+    expect(onChange).toHaveBeenLastCalledWith(11);
+
+    vi.advanceTimersByTime(400);
+    expect(onChange).toHaveBeenLastCalledWith(12);
+
+    vi.advanceTimersByTime(120);
+    expect(onChange).toHaveBeenLastCalledWith(14);
+
+    await fireEvent.pointerUp(incrementButton, {
+      button: 0,
+      pointerType: "mouse",
+    });
+    const callCountAfterRelease = onChange.mock.calls.length;
+
+    vi.advanceTimersByTime(500);
+    expect(onChange).toHaveBeenCalledTimes(callCountAfterRelease);
+
+    vi.useRealTimers();
+  });
 });
