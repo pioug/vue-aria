@@ -64,7 +64,7 @@ const component = h(ListView, {
 
 ## Notes
 
-- Baseline includes grid/list semantics (`grid` + `row` + `gridcell`), keyboard row navigation, single/multiple selection behavior, static slot composition support via `ListViewItem`, and row child-action focus cycling via `ArrowLeft`/`ArrowRight` (including RTL ordering).
+- Baseline includes grid/list semantics (`grid` + `row` + `gridcell`), keyboard row navigation, single/multiple selection behavior, static slot composition support via `ListViewItem`, row focus marshalling on cell press, and row child-action focus cycling via `ArrowLeft`/`ArrowRight` (including RTL ordering).
 - Package also exports `Collection` and `Item` compatibility helpers for React Spectrum-style item composition.
 - Loading/empty-state rendering and scroll-bottom `onLoadMore` behavior are included, and disabled rows now propagate `disabled` state to nested native controls.
 - Advanced upstream drag-and-drop integration and complete visual/theming parity remain in progress.

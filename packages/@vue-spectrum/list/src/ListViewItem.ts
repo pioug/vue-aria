@@ -311,6 +311,25 @@ export const ListViewItem = defineComponent({
           ),
           "aria-label": props.item!.label,
           onKeydown: onRowKeydown,
+          onClick: (event: MouseEvent) => {
+            const row = rowRef.value;
+            if (!row) {
+              return;
+            }
+
+            const target = event.target;
+            if (!(target instanceof HTMLElement)) {
+              row.focus();
+              return;
+            }
+
+            const focusableTarget = target.closest<HTMLElement>(FOCUSABLE_ROW_SELECTOR);
+            if (focusableTarget && row.contains(focusableTarget)) {
+              return;
+            }
+
+            row.focus();
+          },
         }),
         [
           h(

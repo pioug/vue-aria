@@ -203,6 +203,16 @@ describe("ListView", () => {
     expect(document.activeElement).toBe(button);
   });
 
+  it("focuses the row when pressing the gridcell", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({ selectionMode: "single" });
+    const rows = tree.getAllByRole("row");
+    const cell = within(rows[1] as HTMLElement).getByRole("gridcell");
+
+    await user.click(cell);
+    expect(document.activeElement).toBe(rows[1]);
+  });
+
   it("moves focus between row and child focusables with ArrowRight and ArrowLeft", async () => {
     const user = userEvent.setup();
     const tree = renderListWithFocusableChildren();
