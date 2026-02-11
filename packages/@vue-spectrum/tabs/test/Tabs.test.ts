@@ -1132,4 +1132,176 @@ describe("Tabs", () => {
     await flush();
     expect(tree.getByRole("tabpanel").textContent).toContain("Tab 2 content");
   });
+
+  it("supports static fragment children for TabList and TabPanels", async () => {
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Fragment children tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () =>
+              h(Fragment, null, [
+                h(Item, { id: "first" }, () => "Tab 1"),
+                h(Item, { id: "second" }, () => "Tab 2"),
+              ]),
+          }),
+          h(TabPanels, null, {
+            default: () =>
+              h(Fragment, null, [
+                h(Item, { id: "first" }, () => "Tab 1 content"),
+                h(Item, { id: "second" }, () => "Tab 2 content"),
+              ]),
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 1 content");
+  });
+
+  it("supports non-matching fragment sibling positions between list and panels", async () => {
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Mismatched fragment tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () => [
+              h(Fragment, null, [h(Item, { id: "first" }, () => "Tab 1")]),
+              h(Item, { id: "second" }, () => "Tab 2"),
+            ],
+          }),
+          h(TabPanels, null, {
+            default: () => [
+              h(Item, { id: "first" }, () => "Tab 1 content"),
+              h(Fragment, null, [h(Item, { id: "second" }, () => "Tab 2 content")]),
+            ],
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 1 content");
+  });
+
+  it("supports fragment wrappers in renderer slot functions", async () => {
+    const tree = renderTabs(
+      {},
+      defaultItems,
+      {
+        tabListSlot: ({ item }) =>
+          h(Fragment, null, [h(Item, { title: item.title ?? String(item.key) })]),
+        tabPanelsSlot: ({ item }) =>
+          h(Fragment, null, [h(Item, null, () => String(item.children ?? ""))]),
+      }
+    );
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs).toHaveLength(3);
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 1 body");
+  });
+
+  it("supports fragment wrappers around mapped static items", async () => {
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Mapped fragment tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () =>
+              h(
+                Fragment,
+                null,
+                defaultItems.map((item) =>
+                  h(Item, { id: String(item.key), title: item.title ?? String(item.key) })
+                )
+              ),
+          }),
+          h(TabPanels, null, {
+            default: () =>
+              h(
+                Fragment,
+                null,
+                defaultItems.map((item) =>
+                  h(Item, { id: String(item.key) }, () => String(item.children ?? ""))
+                )
+              ),
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs).toHaveLength(3);
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 1 body");
+  });
+
+  it("falls back to the first available tab when the selected tab is removed", async () => {
+    const onSelectionChange = vi.fn();
+    const App = defineComponent({
+      name: "TabsSelectedRemovalHarness",
+      props: {
+        items: {
+          type: Array as () => SpectrumTabItem[],
+          required: true,
+        },
+      },
+      setup(componentProps) {
+        return () =>
+          h(
+            Tabs,
+            {
+              "aria-label": "Removal tabs",
+              items: componentProps.items,
+              disabledKeys: ["tab-1"],
+              onSelectionChange,
+            },
+            {
+              default: () => [h(TabList), h(TabPanels)],
+            }
+          );
+      },
+    });
+
+    const tree = render(App, {
+      props: {
+        items: defaultItems,
+      },
+    });
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    fireEvent.keyDown(tabs[1] as HTMLElement, { key: "ArrowRight" });
+    await flush();
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-3");
+
+    await tree.rerender({
+      items: [{ ...defaultItems[0] }],
+    });
+    await flush();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-1");
+    expect(tree.getByRole("tabpanel").textContent).toContain("Tab 1 body");
+  });
 });

@@ -87,4 +87,6 @@ h(TabList, null, {
 - Includes tabpanel child-subtree isolation parity so uncontrolled inputs do not leak values across tab switches.
 - Includes collapsed-picker parity for disabled tabs (disabled options do not trigger selection) and static fragment-sibling composition support in `TabList`/`TabPanels`.
 - Includes dynamic collapse/expand parity coverage across rerender updates (item count changes and orientation switching).
+- Includes expanded fragment composition parity across static children, renderer slots, and mapped static-item fragments.
+- Includes selected-tab-removal fallback parity (reselecting the first available tab when the current selection disappears).
 - Advanced visual/theming polish remains in progress.
