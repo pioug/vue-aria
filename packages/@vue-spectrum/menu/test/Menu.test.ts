@@ -298,6 +298,10 @@ describe("Menu", () => {
     expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
     expect(document.body.textContent).toContain("Blocked help content");
 
+    fireEvent.mouseEnter(menuItems[2] as Element);
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+
     await user.click(menuItems[0] as Element);
     expect(onAction).toHaveBeenCalledWith("alpha");
   });

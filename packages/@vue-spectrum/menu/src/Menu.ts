@@ -573,6 +573,7 @@ export const Menu = defineComponent({
     );
 
     const focusedKey = ref<string | null>(null);
+    const openContextualHelpKey = ref<string | null>(null);
 
     const enabledKeys = computed(() =>
       items.value
@@ -582,6 +583,14 @@ export const Menu = defineComponent({
 
     const setFocusedKey = (key: string | null, shouldMoveFocus = true) => {
       focusedKey.value = key;
+      if (
+        openContextualHelpKey.value &&
+        key &&
+        openContextualHelpKey.value !== key
+      ) {
+        openContextualHelpKey.value = null;
+      }
+
       if (!shouldMoveFocus || !key) {
         return;
       }
@@ -653,6 +662,10 @@ export const Menu = defineComponent({
         return;
       }
 
+      if (openContextualHelpKey.value && openContextualHelpKey.value !== key) {
+        openContextualHelpKey.value = null;
+      }
+
       if (selectionMode.value === "single") {
         emitSelectionChange(new Set([key]));
       }
@@ -677,6 +690,15 @@ export const Menu = defineComponent({
     watch(
       items,
       () => {
+        if (
+          openContextualHelpKey.value &&
+          !items.value.some(
+            (item) => String(item.key) === openContextualHelpKey.value
+          )
+        ) {
+          openContextualHelpKey.value = null;
+        }
+
         if (selectionMode.value === "none") {
           return;
         }
@@ -836,9 +858,21 @@ export const Menu = defineComponent({
           ariaHaspopup: hasContextualHelpDialog ? "dialog" : undefined,
           tabIndex: focusedKey.value === itemKey ? 0 : -1,
           onFocus: () => {
+            if (
+              openContextualHelpKey.value &&
+              openContextualHelpKey.value !== itemKey
+            ) {
+              openContextualHelpKey.value = null;
+            }
             focusedKey.value = itemKey;
           },
           onHover: () => {
+            if (
+              openContextualHelpKey.value &&
+              openContextualHelpKey.value !== itemKey
+            ) {
+              openContextualHelpKey.value = null;
+            }
             focusedKey.value = itemKey;
           },
           onAction: hasContextualHelpDialog
@@ -857,6 +891,17 @@ export const Menu = defineComponent({
           {
             key: `contextual-help-${itemKey}`,
             isUnavailable: true,
+            isOpen: openContextualHelpKey.value === itemKey,
+            onOpenChange: (nextOpen: boolean) => {
+              if (nextOpen) {
+                openContextualHelpKey.value = itemKey;
+                return;
+              }
+
+              if (openContextualHelpKey.value === itemKey) {
+                openContextualHelpKey.value = null;
+              }
+            },
           },
           {
             default: () => [itemNode, cloneVNode(item.contextualHelpContent!)],
@@ -925,6 +970,7 @@ export const Menu = defineComponent({
                 break;
               case "Escape":
                 event.preventDefault();
+                openContextualHelpKey.value = null;
                 props.onClose?.();
                 break;
               default:

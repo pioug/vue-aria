@@ -12,6 +12,8 @@ import { DialogTrigger } from "@vue-spectrum/dialog";
 
 export interface SpectrumMenuDialogTriggerProps {
   isUnavailable?: boolean | undefined;
+  isOpen?: boolean | undefined;
+  onOpenChange?: ((isOpen: boolean) => void) | undefined;
   slot?: string | undefined;
 }
 
@@ -44,6 +46,14 @@ export const ContextualHelpTrigger = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    isOpen: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    onOpenChange: {
+      type: Function as PropType<((isOpen: boolean) => void) | undefined>,
+      default: undefined,
+    },
     slot: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -67,6 +77,10 @@ export const ContextualHelpTrigger = defineComponent({
         trigger,
         mergeProps((trigger.props ?? {}) as Record<string, unknown>, {
           onMouseenter: (event: MouseEvent) => {
+            if (props.isOpen === true) {
+              return;
+            }
+
             const target = event.currentTarget as HTMLElement | null;
             target?.click();
           },
@@ -76,6 +90,10 @@ export const ContextualHelpTrigger = defineComponent({
             }
 
             event.preventDefault();
+            if (props.isOpen === true) {
+              return;
+            }
+
             const target = event.currentTarget as HTMLElement | null;
             target?.click();
           },
@@ -88,6 +106,8 @@ export const ContextualHelpTrigger = defineComponent({
         {
           type: "popover",
           placement: "end top",
+          isOpen: props.isOpen,
+          onOpenChange: props.onOpenChange,
         },
         {
           default: () => [triggerWithContextualHelpHandlers, content],

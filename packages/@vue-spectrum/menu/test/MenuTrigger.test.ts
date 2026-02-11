@@ -343,5 +343,9 @@ describe("MenuTrigger", () => {
     expect(onAction).not.toHaveBeenCalledWith("blocked");
     expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
     expect(document.body.textContent).toContain("Blocked composed help content");
+
+    fireEvent.mouseEnter(menuItems[0] as Element);
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
   });
 });
