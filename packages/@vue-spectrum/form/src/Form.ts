@@ -69,10 +69,7 @@ function filterFormDOMProps(
 }
 
 export function useFormProps<T extends Record<string, unknown>>(props: T): T {
-  const context = inject<ReadonlyRef<FormContextValue> | null>(
-    FORM_CONTEXT_SYMBOL,
-    null
-  );
+  const context = useFormContext();
   if (!context) {
     return props;
   }
@@ -81,6 +78,13 @@ export function useFormProps<T extends Record<string, unknown>>(props: T): T {
     ...context.value,
     ...props,
   } as T;
+}
+
+export function useFormContext(): ReadonlyRef<FormContextValue> | null {
+  return inject<ReadonlyRef<FormContextValue> | null>(
+    FORM_CONTEXT_SYMBOL,
+    null
+  );
 }
 
 export function useFormValidationErrors(): ReadonlyRef<FormValidationErrors> {

@@ -1,4 +1,4 @@
-export { Form, useFormProps, useFormValidationErrors } from "./Form";
+export { Form, useFormContext, useFormProps, useFormValidationErrors } from "./Form";
 
 export type {
   FormValidationErrors,

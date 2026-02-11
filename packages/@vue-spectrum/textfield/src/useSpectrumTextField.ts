@@ -1,6 +1,6 @@
 import { computed, ref, watch, watchEffect, type Ref } from "vue";
 import { useTextField } from "@vue-aria/textfield";
-import { useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
+import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
 import type {
   SpectrumTextAreaProps,
@@ -23,6 +23,7 @@ export function useSpectrumTextField(
 ) {
   const propsRecord = props as Record<string, unknown>;
   const provider = useProviderContext();
+  const formContext = useFormContext();
   const formValidationErrors = useFormValidationErrors();
   const isServerErrorCleared = ref(false);
   const currentValue = ref(props.value ?? props.defaultValue ?? "");
@@ -45,14 +46,14 @@ export function useSpectrumTextField(
     { immediate: true }
   );
 
-  const resolvedFormProps = computed(() =>
-    useFormProps({
-      labelPosition: props.labelPosition,
-      labelAlign: props.labelAlign,
-      necessityIndicator: props.necessityIndicator,
-      validationBehavior: props.validationBehavior,
-    })
-  );
+  const resolvedFormProps = computed(() => ({
+    labelPosition: props.labelPosition ?? formContext?.value.labelPosition,
+    labelAlign: props.labelAlign ?? formContext?.value.labelAlign,
+    necessityIndicator:
+      props.necessityIndicator ?? formContext?.value.necessityIndicator,
+    validationBehavior:
+      props.validationBehavior ?? formContext?.value.validationBehavior,
+  }));
 
   const isDisabled = computed(
     () => props.isDisabled ?? provider?.value.isDisabled ?? false
