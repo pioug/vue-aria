@@ -193,7 +193,7 @@ export {
   Cell,
   EditableCell,
 } from "@vue-spectrum/table";
-export { TreeView, TreeViewItem, TreeViewItemContent } from "@vue-spectrum/tree";
+export { Collection, TreeView, TreeViewItem, TreeViewItemContent } from "@vue-spectrum/tree";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
@@ -394,6 +394,7 @@ export type {
   SpectrumEditableCellProps,
 } from "@vue-spectrum/table";
 export type {
+  SpectrumCollectionProps,
   SpectrumTreeViewProps,
   SpectrumTreeViewItemProps,
   SpectrumTreeViewItemContentProps,

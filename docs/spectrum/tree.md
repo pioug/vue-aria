@@ -42,6 +42,7 @@ const items = [
 
 ## Exports
 
+- `Collection`
 - `TreeView`
 - `TreeViewItem`
 - `TreeViewItemContent`
@@ -50,10 +51,43 @@ const items = [
 
 ```ts
 import { h } from "vue";
-import { TreeView } from "@vue-spectrum/tree";
+import { Collection, TreeView, TreeViewItem, TreeViewItemContent } from "@vue-spectrum/tree";
 
 const component = h(TreeView, {
-  "aria-label": "Tree",
+  "aria-label": "Tree static",
+}, {
+  default: () =>
+    h(Collection, {
+      items: [
+        {
+          id: "documents",
+          name: "Documents",
+          children: [
+            { id: "project-a", name: "Project A" },
+            { id: "document-1", name: "Document 1" },
+          ],
+        },
+        { id: "photos", name: "Photos" },
+      ],
+    }, {
+      default: ({ item }) => h(TreeViewItem, { id: item.id }, {
+        default: () => [
+          h(TreeViewItemContent, null, () => item.name),
+          ...(item.children ?? []).map((child) =>
+            h(TreeViewItem, { id: child.id }, () => child.name)
+          ),
+        ],
+      }),
+    }),
+});
+```
+
+```ts
+import { h } from "vue";
+import { TreeView } from "@vue-spectrum/tree";
+
+const dynamicComponent = h(TreeView, {
+  "aria-label": "Tree dynamic",
   selectionMode: "multiple",
   defaultExpandedKeys: ["documents"],
   items: [
@@ -75,5 +109,5 @@ const component = h(TreeView, {
 
 ## Notes
 
-- Baseline includes treegrid semantics, expandable nested rows, row keyboard navigation, controlled/uncontrolled selection and expansion state, and static slot composition support via `TreeViewItem` and `TreeViewItemContent`.
+- Baseline includes treegrid semantics, expandable nested rows, row keyboard navigation, controlled/uncontrolled selection and expansion state, and static slot composition support via `Collection`, `TreeViewItem`, and `TreeViewItemContent`.
 - Advanced upstream parity such as drag-and-drop integration, deep collection composition, and full visual/theming alignment remains in progress.

@@ -1,6 +1,7 @@
-export { TreeView, TreeViewItem, TreeViewItemContent } from "./TreeView";
+export { Collection, TreeView, TreeViewItem, TreeViewItemContent } from "./TreeView";
 
 export type {
+  SpectrumCollectionProps,
   SpectrumTreeViewProps,
   SpectrumTreeViewItemProps,
   SpectrumTreeViewItemContentProps,

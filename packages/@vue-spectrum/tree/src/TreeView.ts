@@ -69,6 +69,10 @@ export interface SpectrumTreeViewItemContentProps {
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
 
+export interface SpectrumCollectionProps<T = unknown> {
+  items?: T[] | undefined;
+}
+
 function createTreeStaticComponent(name: string, props: Record<string, unknown>) {
   return defineComponent({
     name,
@@ -134,6 +138,51 @@ function getSlotChildren(node: VNode): VNode[] {
   }
 
   return [];
+}
+
+function getCollectionChildren(node: VNode): VNode[] {
+  if (!node.children || typeof node.children !== "object") {
+    return [];
+  }
+
+  const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+  const collectionItems = Array.isArray(nodeProps.items)
+    ? (nodeProps.items as unknown[])
+    : undefined;
+  const defaultSlot = (node.children as {
+    default?: ((scope?: { item: unknown; index: number }) => unknown) | undefined;
+  }).default;
+
+  if (typeof defaultSlot !== "function") {
+    return [];
+  }
+
+  if (!collectionItems || collectionItems.length === 0) {
+    return flattenVNodeChildren(defaultSlot());
+  }
+
+  return collectionItems.flatMap((item, index) =>
+    flattenVNodeChildren(defaultSlot({ item, index }))
+  );
+}
+
+function collectTreeItemNodes(nodes: VNode[]): VNode[] {
+  const resolved: VNode[] = [];
+
+  for (const node of nodes) {
+    const componentName = getComponentName(node);
+
+    if (componentName === "TreeViewItem") {
+      resolved.push(node);
+      continue;
+    }
+
+    if (componentName === "Collection") {
+      resolved.push(...collectTreeItemNodes(getCollectionChildren(node)));
+    }
+  }
+
+  return resolved;
 }
 
 function getSlotContent(node: VNode): VNodeChild | undefined {
@@ -222,9 +271,7 @@ function extractTreeItemLabel(value: unknown): string {
 function parseTreeItemNode(node: VNode, fallback: TreeKey): SpectrumTreeViewItemData {
   const nodeProps = (node.props ?? {}) as Record<string, unknown>;
   const key = normalizeTreeKey(node.key ?? nodeProps.id, fallback);
-  const childItemNodes = getSlotChildren(node).filter(
-    (child) => getComponentName(child) === "TreeViewItem"
-  );
+  const childItemNodes = collectTreeItemNodes(getSlotChildren(node));
   const childItems = childItemNodes.map((child, index) =>
     parseTreeItemNode(child, `${String(key)}-${index + 1}`)
   );
@@ -251,9 +298,7 @@ function parseTreeSlotItems(nodes: VNode[] | undefined): SpectrumTreeViewItemDat
     return [];
   }
 
-  const topLevelNodes = flattenVNodeChildren(nodes).filter(
-    (node) => getComponentName(node) === "TreeViewItem"
-  );
+  const topLevelNodes = collectTreeItemNodes(flattenVNodeChildren(nodes));
 
   return topLevelNodes.map((node, index) =>
     parseTreeItemNode(node, `item-${index + 1}`)
@@ -336,6 +381,19 @@ export const TreeViewItemContent = createTreeStaticComponent("TreeViewItemConten
   UNSAFE_style: {
     type: Object as PropType<Record<string, string | number> | undefined>,
     default: undefined,
+  },
+});
+
+export const Collection = defineComponent({
+  name: "Collection",
+  props: {
+    items: {
+      type: Array as PropType<unknown[] | undefined>,
+      default: undefined,
+    },
+  },
+  setup(_, { slots }) {
+    return () => slots.default?.() ?? null;
   },
 });
 

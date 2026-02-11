@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
+  Collection,
   TreeView,
   TreeViewItem,
   TreeViewItemContent,
@@ -237,5 +238,67 @@ describe("TreeView", () => {
 
     expect(onAction).toHaveBeenCalledWith("photos");
     expect(Array.from(onSelectionChange.mock.calls[0][0] as Set<string>)).toEqual(["photos"]);
+  });
+
+  it("supports Collection wrapper slot composition with scoped items", () => {
+    const App = defineComponent({
+      name: "TreeViewCollectionHarness",
+      setup() {
+        return () =>
+          h(
+            TreeView,
+            {
+              "aria-label": "Tree collection",
+              defaultExpandedKeys: ["projects"],
+            },
+            {
+              default: () =>
+                h(
+                  Collection,
+                  {
+                    items: [
+                      {
+                        id: "projects",
+                        name: "Projects",
+                        children: [{ id: "project-a", name: "Project A" }],
+                      },
+                      { id: "photos", name: "Photos" },
+                    ],
+                  },
+                  {
+                    default: ({
+                      item,
+                    }: {
+                      item: {
+                        id: string;
+                        name: string;
+                        children?: Array<{ id: string; name: string }>;
+                      };
+                    }) =>
+                      h(
+                        TreeViewItem,
+                        { id: item.id },
+                        {
+                          default: () => [
+                            h(TreeViewItemContent, null, () => item.name),
+                            ...(item.children ?? []).map((child) =>
+                              h(TreeViewItem, { id: child.id }, () => child.name)
+                            ),
+                          ],
+                        }
+                      ),
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const treeGrid = tree.getByRole("treegrid", { name: "Tree collection" });
+
+    expect(within(treeGrid).getAllByText("Projects").length).toBeGreaterThan(0);
+    expect(within(treeGrid).getAllByText("Project A").length).toBeGreaterThan(0);
+    expect(within(treeGrid).getAllByText("Photos").length).toBeGreaterThan(0);
   });
 });
