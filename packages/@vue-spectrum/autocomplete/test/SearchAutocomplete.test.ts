@@ -104,6 +104,14 @@ describe("SearchAutocomplete", () => {
     expect(tree.queryByTestId("searchicon")).toBeNull();
   });
 
+  it("supports custom data attributes", () => {
+    const tree = renderComponent({
+      "data-testid": "autocomplete-root",
+    });
+
+    expect(tree.getByTestId("autocomplete-root")).toBeTruthy();
+  });
+
   it("opens on typing and filters options", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
@@ -200,6 +208,73 @@ describe("SearchAutocomplete", () => {
     await user.keyboard("{ArrowDown}");
 
     expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("does not open when readonly and keeps existing value", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      isReadOnly: true,
+      defaultInputValue: "Blargh",
+      onOpenChange,
+    });
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    await user.click(input);
+    await user.keyboard("One");
+    await user.keyboard("{ArrowDown}");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.value).toBe("Blargh");
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("opens on ArrowUp and focuses the last item", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("{ArrowUp}");
+
+    const listbox = await tree.findByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+
+    expect(options).toHaveLength(3);
+    expect(input.getAttribute("aria-activedescendant")).toBe(options[2]?.id);
+  });
+
+  it("does not open the menu if no items match", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.keyboard("X");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("keeps menu open when clearing input with menuTrigger focus", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      menuTrigger: "focus",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+    await user.keyboard("Two");
+
+    let listbox = await tree.findByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+
+    await user.clear(input);
+
+    listbox = await tree.findByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(input.getAttribute("aria-expanded")).toBe("true");
   });
 
   it("supports form reset", async () => {

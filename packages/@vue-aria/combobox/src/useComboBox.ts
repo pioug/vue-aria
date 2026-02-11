@@ -75,8 +75,21 @@ export function useComboBox<T extends ListBoxItem>(
   const isDisabled = computed(() => resolveBoolean(options.isDisabled));
   const isReadOnly = computed(() => resolveBoolean(options.isReadOnly));
 
+  const focusBoundaryItem = (strategy: Exclude<FocusStrategy, null>): void => {
+    const disabledKeys = state.disabledKeys.value;
+    const collection =
+      strategy === "last"
+        ? [...state.collection.value].reverse()
+        : state.collection.value;
+    const target = collection.find((item) => !disabledKeys.has(item.key));
+    state.setFocusedKey(target?.key ?? null);
+  };
+
   const onKeydown = (event: KeyboardEvent): void => {
     options.onKeydown?.(event);
+    if (event.defaultPrevented || isDisabled.value || isReadOnly.value) {
+      return;
+    }
 
     switch (event.key) {
       case "Enter":
@@ -92,10 +105,12 @@ export function useComboBox<T extends ListBoxItem>(
       case "ArrowDown":
         event.preventDefault();
         state.open("first", "manual");
+        focusBoundaryItem("first");
         break;
       case "ArrowUp":
         event.preventDefault();
         state.open("last", "manual");
+        focusBoundaryItem("last");
         break;
       case "ArrowLeft":
       case "ArrowRight":

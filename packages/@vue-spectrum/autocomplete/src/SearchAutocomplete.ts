@@ -579,7 +579,13 @@ export const SearchAutocomplete = defineComponent({
       onInputChange: props.onInputChange,
       isOpen: props.isOpen,
       defaultOpen: props.defaultOpen,
-      onOpenChange: props.onOpenChange,
+      onOpenChange: (isOpen, trigger) => {
+        if (props.isDisabled || props.isReadOnly) {
+          return;
+        }
+
+        props.onOpenChange?.(isOpen, trigger);
+      },
       defaultFilter: props.defaultFilter ?? DEFAULT_FILTER,
       completionMode: props.completionMode,
       menuTrigger: props.menuTrigger ?? "input",
@@ -627,6 +633,13 @@ export const SearchAutocomplete = defineComponent({
         onFocus: props.onFocus,
         onBlur: props.onBlur,
         onKeydown: (event) => {
+          if (props.isReadOnly && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+            event.preventDefault();
+            state.close();
+            props.onKeydown?.(event);
+            return;
+          }
+
           if (event.key === "Escape" && !props.isDisabled && !props.isReadOnly) {
             if (state.inputValue.value.length > 0) {
               state.setSelectedKey(null);
@@ -648,6 +661,15 @@ export const SearchAutocomplete = defineComponent({
         },
       },
       state
+    );
+
+    watch(
+      () => [props.isDisabled, props.isReadOnly, state.isOpen.value] as const,
+      ([isDisabled, isReadOnly, isOpen]) => {
+        if ((isDisabled || isReadOnly) && isOpen) {
+          state.close();
+        }
+      }
     );
 
     const clearSearch = () => {
