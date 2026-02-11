@@ -451,6 +451,106 @@ describe("Button package", () => {
     expect(keyupSpace.defaultPrevented).toBe(false);
   });
 
+  it("Button submit in form using space does not prevent default on keyup", async () => {
+    const user = userEvent.setup();
+    let keyupEvent: KeyboardEvent | undefined;
+
+    const Harness = defineComponent({
+      name: "ButtonSubmitSpaceHarness",
+      setup() {
+        return () =>
+          h(
+            "form",
+            {
+              onSubmit: (event: Event) => {
+                event.preventDefault();
+              },
+            },
+            [
+              h(
+                Button,
+                {
+                  type: "submit",
+                },
+                {
+                  default: () => "Submit",
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const wrapper = mount(Harness, {
+      attachTo: document.body,
+    });
+
+    try {
+      const element = wrapper.get("button").element as HTMLButtonElement;
+      element.addEventListener("keyup", (event) => {
+        keyupEvent = event;
+      });
+
+      element.focus();
+      await user.keyboard("{Space}");
+
+      expect(keyupEvent).toBeDefined();
+      expect(keyupEvent?.defaultPrevented).toBe(false);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("Button submit in form using enter does not prevent default on keydown", async () => {
+    const user = userEvent.setup();
+    let keydownEvent: KeyboardEvent | undefined;
+
+    const Harness = defineComponent({
+      name: "ButtonSubmitEnterHarness",
+      setup() {
+        return () =>
+          h(
+            "form",
+            {
+              onSubmit: (event: Event) => {
+                event.preventDefault();
+              },
+            },
+            [
+              h(
+                Button,
+                {
+                  type: "submit",
+                },
+                {
+                  default: () => "Submit",
+                }
+              ),
+            ]
+          );
+      },
+    });
+
+    const wrapper = mount(Harness, {
+      attachTo: document.body,
+    });
+
+    try {
+      const element = wrapper.get("button").element as HTMLButtonElement;
+      element.addEventListener("keydown", (event) => {
+        keydownEvent = event;
+      });
+
+      element.focus();
+      await user.keyboard("{Enter}");
+
+      expect(keydownEvent).toBeDefined();
+      expect(keydownEvent?.defaultPrevented).toBe(false);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("Button localizes pending aria label", () => {
     const Harness = defineComponent({
       name: "ButtonPendingLocalizedHarness",
