@@ -10,7 +10,8 @@ async function flushOverlay(): Promise<void> {
 }
 
 function mountTooltipTrigger(
-  props: Record<string, unknown> = {}
+  props: Record<string, unknown> = {},
+  tooltipProps: Record<string, unknown> = {}
 ) {
   return mount(TooltipTrigger, {
     attachTo: document.body,
@@ -18,7 +19,7 @@ function mountTooltipTrigger(
     slots: {
       default: () => [
         h("button", { "aria-label": "trigger" }, "Trigger"),
-        h(Tooltip, null, () => "Helpful information."),
+        h(Tooltip, tooltipProps, () => "Helpful information."),
       ],
     },
   });
@@ -103,6 +104,22 @@ describe("TooltipTrigger", () => {
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
     expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("applies overlay positioning styles and requested placement", async () => {
+    const wrapper = mountTooltipTrigger({}, { placement: "bottom" });
+    const button = wrapper.get("button");
+
+    await button.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+
+    const tooltip = document.body.querySelector("[role=\"tooltip\"]") as HTMLElement | null;
+    expect(tooltip).not.toBeNull();
+    expect(tooltip?.className).toContain("spectrum-Tooltip--bottom");
+    expect(tooltip?.style.position.length).toBeGreaterThan(0);
+    expect(tooltip?.style.zIndex).toBe("100000");
 
     wrapper.unmount();
   });

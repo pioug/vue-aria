@@ -42,7 +42,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/overlays` (in progress): overlay primitives (`Overlay`, `OpenTransition`) with baseline portal rendering and transition lifecycle wiring
 - `@vue-spectrum/dialog` (in progress): dialog primitives (`Dialog`, `AlertDialog`, `DialogTrigger`, `DialogContainer`) with baseline trigger/container wiring and action flows
 - `@vue-spectrum/contextualhelp` (in progress): contextual-help primitive (`ContextualHelp`) with baseline trigger/popover rendering and default/custom label behavior
-- `@vue-spectrum/tooltip` (in progress): tooltip primitives (`Tooltip`, `TooltipTrigger`) with baseline focus/hover trigger behavior and Escape/press close handling
+- `@vue-spectrum/tooltip` (in progress): tooltip primitives (`Tooltip`, `TooltipTrigger`) with baseline focus/hover trigger behavior, Escape/press close handling, and trigger-anchored placement support
 - `@vue-spectrum/toast` (in progress): toast primitives (`ToastContainer`, `ToastQueue`) with baseline global queue behavior, action/close handling, and timeout/event support
 - `@vue-spectrum/dnd` (in progress): collection dnd hooks (`useDragAndDrop`) with baseline drag/drop hook composition over `@vue-aria/dnd` and `@vue-aria/dnd-state`
 - `@vue-spectrum/dropzone` (in progress): dropzone primitive (`DropZone`) with baseline drop-target lifecycle, filled banner behavior, and starter drag/drop coverage

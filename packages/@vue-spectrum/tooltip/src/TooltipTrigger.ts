@@ -9,6 +9,7 @@ import {
   type VNode,
   type VNodeChild,
 } from "vue";
+import { useOverlayPosition } from "@vue-aria/overlays";
 import { useTooltipTrigger } from "@vue-aria/tooltip";
 import { mergeProps } from "@vue-aria/utils";
 import { classNames } from "@vue-spectrum/utils";
@@ -31,6 +32,8 @@ interface TooltipTriggerStateLike {
   open: (immediate?: boolean) => void;
   close: (immediate?: boolean) => void;
 }
+
+type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
 function normalizeChildren(nodes: VNodeChild[] | undefined): VNode[] {
   if (!nodes) {
@@ -72,6 +75,10 @@ function toHTMLElement(value: unknown): HTMLElement | null {
   return null;
 }
 
+function isTooltipPlacement(value: unknown): value is TooltipPlacement {
+  return value === "top" || value === "bottom" || value === "left" || value === "right";
+}
+
 export const TooltipTrigger = defineComponent({
   name: "TooltipTrigger",
   inheritAttrs: false,
@@ -111,6 +118,8 @@ export const TooltipTrigger = defineComponent({
   },
   setup(props, { slots, expose }) {
     const triggerElementRef = ref<HTMLElement | null>(null);
+    const tooltipElementRef = ref<HTMLElement | null>(null);
+    const requestedPlacement = ref<TooltipPlacement>("top");
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const isOpen = computed<boolean>(() =>
       props.isOpen !== undefined ? props.isOpen : uncontrolledOpen.value
@@ -152,6 +161,15 @@ export const TooltipTrigger = defineComponent({
       computed(() => triggerElementRef.value)
     );
 
+    const overlayPosition = useOverlayPosition({
+      targetRef: computed(() => triggerElementRef.value),
+      overlayRef: computed(() => tooltipElementRef.value),
+      placement: computed(() => requestedPlacement.value),
+      offset: 8,
+      isOpen,
+      shouldUpdatePosition: isOpen,
+    });
+
     expose({
       UNSAFE_getDOMNode: () => triggerElementRef.value,
     });
@@ -164,6 +182,12 @@ export const TooltipTrigger = defineComponent({
 
       const triggerNode = children[0];
       const tooltipNode = children[1];
+      if (tooltipNode && isVNode(tooltipNode)) {
+        const tooltipNodeProps = (tooltipNode.props ?? {}) as Record<string, unknown>;
+        requestedPlacement.value = isTooltipPlacement(tooltipNodeProps.placement)
+          ? tooltipNodeProps.placement
+          : "top";
+      }
 
       const renderedTrigger = cloneVNode(
         triggerNode,
@@ -180,8 +204,14 @@ export const TooltipTrigger = defineComponent({
         tooltipNode && isVNode(tooltipNode)
           ? cloneVNode(
               tooltipNode,
-              mergeProps(tooltipProps.value, {
+              mergeProps(tooltipProps.value, overlayPosition.overlayProps.value, {
                 isOpen: isOpen.value,
+                placement:
+                  (overlayPosition.placement.value as TooltipPlacement | null) ??
+                  requestedPlacement.value,
+                ref: (value: unknown) => {
+                  tooltipElementRef.value = toHTMLElement(value);
+                },
               }),
               true
             )
