@@ -288,6 +288,128 @@ describe("Picker", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("submits empty option by default when used in a form", () => {
+    let submittedValue: FormDataEntryValue | undefined;
+    const onSubmit = vi.fn((event: Event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget as HTMLFormElement);
+      submittedValue = formData.get("picker") ?? undefined;
+    });
+
+    const App = defineComponent({
+      name: "PickerFormSubmitEmptyApp",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form", onSubmit }, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+            }),
+            h("button", { type: "submit" }, "submit"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    fireEvent.submit(tree.getByTestId("form"));
+
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(submittedValue).toBe("");
+  });
+
+  it("submits defaultSelectedKey in a form", () => {
+    let submittedValue: FormDataEntryValue | undefined;
+    const onSubmit = vi.fn((event: Event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget as HTMLFormElement);
+      submittedValue = formData.get("picker") ?? undefined;
+    });
+
+    const App = defineComponent({
+      name: "PickerFormSubmitDefaultApp",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form", onSubmit }, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+              defaultSelectedKey: "1",
+            }),
+            h("button", { type: "submit" }, "submit"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    fireEvent.submit(tree.getByTestId("form"));
+
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(submittedValue).toBe("1");
+  });
+
+  it("supports form prop on hidden input", () => {
+    const tree = render(Picker, {
+      props: {
+        "aria-label": "picker-test",
+        name: "picker",
+        form: "external-form",
+        items,
+      },
+    });
+
+    const hiddenInput = tree.container.querySelector(
+      "input[name=\"picker\"]"
+    ) as HTMLInputElement | null;
+    expect(hiddenInput).toBeTruthy();
+    expect(hiddenInput?.getAttribute("form")).toBe("external-form");
+  });
+
+  it("resets uncontrolled selection to defaultSelectedKey on form reset", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "PickerFormResetApp",
+      setup() {
+        return () =>
+          h("form", null, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+              defaultSelectedKey: "1",
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const hiddenInput = tree.container.querySelector(
+      "input[name=\"picker\"]"
+    ) as HTMLInputElement;
+    expect(hiddenInput.value).toBe("1");
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    await user.click(trigger);
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[1] as Element);
+
+    expect(hiddenInput.value).toBe("2");
+    expect(tree.getByText("Two")).toBeTruthy();
+
+    await user.click(tree.getByTestId("reset"));
+    await Promise.resolve();
+
+    expect(hiddenInput.value).toBe("1");
+    expect(tree.getByText("One")).toBeTruthy();
+  });
+
   it("supports static slot syntax with PickerItem and PickerSection", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();

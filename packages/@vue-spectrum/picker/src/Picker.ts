@@ -32,6 +32,8 @@ export interface SpectrumPickerItemData {
 export interface SpectrumPickerProps {
   id?: string | undefined;
   items?: SpectrumPickerItemData[] | undefined;
+  name?: string | undefined;
+  form?: string | undefined;
   selectedKey?: PickerKey | undefined;
   defaultSelectedKey?: PickerKey | undefined;
   isDisabled?: boolean | undefined;
@@ -277,6 +279,14 @@ export const Picker = defineComponent({
       type: Array as PropType<SpectrumPickerItemData[] | undefined>,
       default: undefined,
     },
+    name: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    form: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     selectedKey: {
       type: [String, Number] as PropType<PickerKey | undefined>,
       default: undefined,
@@ -350,6 +360,7 @@ export const Picker = defineComponent({
     const rootRef = ref<HTMLDivElement | null>(null);
     const triggerRef = ref<HTMLButtonElement | null>(null);
     const pickerOverlayRef = ref<HTMLElement | null>(null);
+    const formRef = ref<HTMLFormElement | null>(null);
     const loadMoreRequested = ref(false);
     const optionRefs = new Map<string, HTMLLIElement>();
 
@@ -594,17 +605,69 @@ export const Picker = defineComponent({
       closeMenu();
     };
 
+    const onFormReset = () => {
+      if (props.selectedKey !== undefined) {
+        return;
+      }
+
+      uncontrolledSelectedKey.value = keyToString(props.defaultSelectedKey);
+      closeMenu();
+    };
+
+    const resolveFormElement = (): HTMLFormElement | null => {
+      if (typeof document === "undefined") {
+        return null;
+      }
+
+      if (props.form) {
+        const target = document.getElementById(props.form);
+        return target instanceof HTMLFormElement ? target : null;
+      }
+
+      return rootRef.value?.closest("form") ?? null;
+    };
+
+    const detachFormListener = () => {
+      if (formRef.value) {
+        formRef.value.removeEventListener("reset", onFormReset);
+        formRef.value = null;
+      }
+    };
+
+    const attachFormListener = () => {
+      detachFormListener();
+
+      const formElement = resolveFormElement();
+      if (!formElement) {
+        return;
+      }
+
+      formElement.addEventListener("reset", onFormReset);
+      formRef.value = formElement;
+    };
+
     onMounted(() => {
       if (typeof document !== "undefined") {
         document.addEventListener("mousedown", onDocumentPointerDown, true);
       }
+
+      attachFormListener();
     });
 
     onBeforeUnmount(() => {
       if (typeof document !== "undefined") {
         document.removeEventListener("mousedown", onDocumentPointerDown, true);
       }
+
+      detachFormListener();
     });
+
+    watch(
+      () => props.form,
+      () => {
+        attachFormListener();
+      }
+    );
 
     expose({
       UNSAFE_getDOMNode: () => rootRef.value,
@@ -722,6 +785,14 @@ export const Picker = defineComponent({
               h("span", { class: classNames("spectrum-Dropdown-chevron"), "aria-hidden": "true" }, "▾"),
             ]
           ),
+          props.name
+            ? h("input", {
+                type: "hidden",
+                name: props.name,
+                form: props.form,
+                value: selectedKey.value ?? "",
+              })
+            : null,
           isOpen.value && items.value.length > 0
             ? h(
                 Overlay,
