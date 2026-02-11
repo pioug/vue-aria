@@ -210,6 +210,20 @@ describe("ComboBox", () => {
     expect(options[0]?.id).toContain("option");
   });
 
+  it("opens with ArrowUp and focuses the last item", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("{ArrowUp}");
+
+    const listbox = await tree.findByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(input.getAttribute("aria-activedescendant")).toBe(options[2]?.id);
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({
@@ -237,6 +251,30 @@ describe("ComboBox", () => {
     const options = within(listbox).getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]?.textContent).toContain("Three");
+  });
+
+  it("does not open the menu if no items match", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.type(input, "X");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("does not open on input when menuTrigger is manual", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      menuTrigger: "manual",
+    });
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.type(input, "O");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
   });
 
   it("does not focus a disabled matching item on input", async () => {
@@ -279,6 +317,28 @@ describe("ComboBox", () => {
       within(readOnlyTree.container as HTMLElement).getByRole("button") as HTMLElement
     );
     expect(readOnlyTree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("keeps menu open when clearing input with menuTrigger focus", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      menuTrigger: "focus",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+    await user.type(input, "Two");
+
+    let listbox = await tree.findByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+
+    await user.clear(input);
+
+    listbox = await tree.findByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(input.getAttribute("aria-expanded")).toBe("true");
   });
 
   it("renders loading state and fires onLoadMore", () => {
