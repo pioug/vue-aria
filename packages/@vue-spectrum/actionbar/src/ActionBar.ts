@@ -4,7 +4,9 @@ import {
   defineComponent,
   h,
   isVNode,
+  nextTick,
   ref,
+  watch,
   type VNode,
   type VNodeChild,
   type PropType,
@@ -293,6 +295,8 @@ export const ActionBar = defineComponent({
     const resolvedProviderProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
+    const rootRef = ref<HTMLDivElement | null>(null);
+    const restoreFocusRef = ref<HTMLElement | null>(null);
     const slotItems = ref<SpectrumActionGroupItemData[]>([]);
 
     const count = computed<number | "all">(() => {
@@ -313,6 +317,39 @@ export const ActionBar = defineComponent({
       }
 
       return props.selectedCountLabel?.(count.value) ?? `${count.value} selected`;
+    });
+
+    watch(isOpen, (nextOpen, previousOpen) => {
+      if (nextOpen && !previousOpen) {
+        if (typeof document === "undefined") {
+          return;
+        }
+
+        const activeElement = document.activeElement;
+        if (
+          activeElement instanceof HTMLElement &&
+          !rootRef.value?.contains(activeElement)
+        ) {
+          restoreFocusRef.value = activeElement;
+        }
+        return;
+      }
+
+      if (!nextOpen && previousOpen) {
+        const restoreTarget = restoreFocusRef.value;
+        if (!restoreTarget || typeof document === "undefined") {
+          return;
+        }
+
+        if (!document.contains(restoreTarget)) {
+          restoreFocusRef.value = null;
+          return;
+        }
+
+        void nextTick(() => {
+          restoreTarget.focus();
+        });
+      }
     });
 
     return () => {
@@ -358,6 +395,9 @@ export const ActionBar = defineComponent({
         "div",
         {
           ...domProps,
+          ref: (value: unknown) => {
+            rootRef.value = value as HTMLDivElement | null;
+          },
           class: classNames(
             "react-spectrum-ActionBar",
             {

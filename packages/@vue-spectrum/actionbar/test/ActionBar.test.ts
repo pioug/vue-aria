@@ -1,6 +1,6 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { ActionBar, ActionBarContainer, ActionBarItem } from "../src";
@@ -29,6 +29,41 @@ function renderWithProvider(component: ReturnType<typeof h>) {
   });
 
   return render(App);
+}
+
+function renderFocusRestoreHarness() {
+  const onClearSelection = vi.fn();
+
+  const Harness = defineComponent({
+    name: "ActionBarFocusRestoreHarness",
+    setup() {
+      const selectedItemCount = ref(0);
+
+      return () =>
+        h("div", [
+          h("input", {
+            type: "checkbox",
+            "aria-label": "row checkbox",
+            checked: selectedItemCount.value > 0,
+            onClick: () => {
+              selectedItemCount.value =
+                selectedItemCount.value > 0 ? 0 : 1;
+            },
+          }),
+          h(ActionBar, {
+            selectedItemCount: selectedItemCount.value,
+            items,
+            onClearSelection: () => {
+              onClearSelection();
+              selectedItemCount.value = 0;
+            },
+          }),
+        ]);
+    },
+  });
+
+  const tree = renderWithProvider(h(Harness));
+  return { tree, onClearSelection };
 }
 
 describe("ActionBar", () => {
@@ -130,6 +165,43 @@ describe("ActionBar", () => {
     }
 
     expect(onClearSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("closes and restores focus when pressing clear", async () => {
+    const user = userEvent.setup();
+    const { tree, onClearSelection } = renderFocusRestoreHarness();
+    const rowCheckbox = tree.getByRole("checkbox", { name: "row checkbox" });
+
+    await user.click(rowCheckbox);
+    expect(tree.getByRole("toolbar", { name: "Actions" })).toBeTruthy();
+    expect(document.activeElement).toBe(rowCheckbox);
+
+    const clearButton = tree.getByLabelText("Clear selection");
+    (clearButton as HTMLElement).focus();
+    await user.click(clearButton);
+    await Promise.resolve();
+
+    expect(onClearSelection).toHaveBeenCalledTimes(1);
+    expect(tree.queryByRole("toolbar")).toBeNull();
+    expect(document.activeElement).toBe(rowCheckbox);
+  });
+
+  it("closes and restores focus when pressing Escape", async () => {
+    const user = userEvent.setup();
+    const { tree, onClearSelection } = renderFocusRestoreHarness();
+    const rowCheckbox = tree.getByRole("checkbox", { name: "row checkbox" });
+
+    await user.click(rowCheckbox);
+    const toolbar = tree.getByRole("toolbar", { name: "Actions" });
+    const actionButtons = within(toolbar).getAllByRole("button");
+    (actionButtons[0] as HTMLElement).focus();
+
+    await user.keyboard("{Escape}");
+    await Promise.resolve();
+
+    expect(onClearSelection).toHaveBeenCalledTimes(1);
+    expect(tree.queryByRole("toolbar")).toBeNull();
+    expect(document.activeElement).toBe(rowCheckbox);
   });
 
   it("supports static slot syntax with ActionBarItem", async () => {
