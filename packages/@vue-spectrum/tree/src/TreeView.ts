@@ -1,11 +1,15 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   onMounted,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useTree, useTreeItem } from "@vue-aria/tree";
@@ -73,6 +77,236 @@ function createTreeStaticComponent(name: string, props: Record<string, unknown>)
       return () => slots.default?.() ?? null;
     },
   });
+}
+
+function normalizeTreeKey(value: unknown, fallback: TreeKey): TreeKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function extractTreeItemLabel(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTreeItemLabel(entry)).join("");
+  }
+
+  if (!isVNode(value)) {
+    return "";
+  }
+
+  const componentName = getComponentName(value);
+  if (componentName === "TreeViewItem") {
+    return "";
+  }
+
+  if (componentName === "TreeViewItemContent") {
+    return extractTextContent(getSlotContent(value));
+  }
+
+  return extractTreeItemLabel(getSlotContent(value));
+}
+
+function parseTreeItemNode(node: VNode, fallback: TreeKey): SpectrumTreeViewItemData {
+  const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+  const key = normalizeTreeKey(node.key ?? nodeProps.id, fallback);
+  const childItemNodes = getSlotChildren(node).filter(
+    (child) => getComponentName(child) === "TreeViewItem"
+  );
+  const childItems = childItemNodes.map((child, index) =>
+    parseTreeItemNode(child, `${String(key)}-${index + 1}`)
+  );
+  const slotLabel = extractTreeItemLabel(getSlotContent(node)).trim();
+  const textValue =
+    typeof nodeProps.textValue === "string"
+      ? nodeProps.textValue
+      : slotLabel || String(key);
+  const resolvedLabel = slotLabel || textValue || String(key);
+
+  return {
+    key,
+    id: key,
+    textValue,
+    label: resolvedLabel,
+    name: resolvedLabel,
+    isDisabled: Boolean(nodeProps.isDisabled),
+    childItems: childItems.length > 0 ? childItems : undefined,
+  };
+}
+
+function parseTreeSlotItems(nodes: VNode[] | undefined): SpectrumTreeViewItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const topLevelNodes = flattenVNodeChildren(nodes).filter(
+    (node) => getComponentName(node) === "TreeViewItem"
+  );
+
+  return topLevelNodes.map((node, index) =>
+    parseTreeItemNode(node, `item-${index + 1}`)
+  );
+}
+
+function getTreeNodeChildren(item: SpectrumTreeViewItemData): SpectrumTreeViewItemData[] {
+  if (Array.isArray(item.childItems)) {
+    return item.childItems;
+  }
+
+  if (Array.isArray(item.children)) {
+    return item.children;
+  }
+
+  return [];
+}
+
+function areTreeItemsEqual(
+  left: SpectrumTreeViewItemData[],
+  right: SpectrumTreeViewItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+
+    if (
+      current.key !== candidate.key ||
+      current.id !== candidate.id ||
+      current.textValue !== candidate.textValue ||
+      current.label !== candidate.label ||
+      current.name !== candidate.name ||
+      current.description !== candidate.description ||
+      current.isDisabled !== candidate.isDisabled
+    ) {
+      return false;
+    }
+
+    if (
+      !areTreeItemsEqual(
+        getTreeNodeChildren(current),
+        getTreeNodeChildren(candidate)
+      )
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export const TreeViewItem = createTreeStaticComponent("TreeViewItem", {
@@ -388,8 +622,14 @@ export const TreeView = defineComponent({
   },
   setup(props, { attrs, expose, slots }) {
     const rootRef = ref<HTMLElement | null>(null);
+    const slotItems = ref<SpectrumTreeViewItemData[]>([]);
 
-    const normalizedItems = computed(() => normalizeTreeItems(props.items));
+    const normalizedItems = computed(() =>
+      normalizeTreeItems(props.items ?? slotItems.value)
+    );
+    const usesStaticItemComposition = computed(
+      () => props.items === undefined && slotItems.value.length > 0
+    );
 
     const effectiveDisabledKeys = computed(() => {
       const keys = new Set<TreeKey>(props.disabledKeys ?? []);
@@ -505,6 +745,13 @@ export const TreeView = defineComponent({
     });
 
     return () => {
+      if (props.items === undefined) {
+        const parsedItems = parseTreeSlotItems(slots.default?.() as VNode[] | undefined);
+        if (!areTreeItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const domProps = filterDOMProps(attrs as Record<string, unknown>, {
         labelable: true,
       });
@@ -521,7 +768,7 @@ export const TreeView = defineComponent({
           state,
           node,
           onAction: props.onAction,
-          renderContent: slots.default
+          renderContent: slots.default && !usesStaticItemComposition.value
             ? (item, currentNode) =>
                 slots.default?.({
                   item,

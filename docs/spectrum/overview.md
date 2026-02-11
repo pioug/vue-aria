@@ -36,7 +36,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/list` (in progress): list primitives (`ListView`, `ListViewItem`) with baseline grid/list semantics, keyboard row navigation, single/multiple selection behavior, and static slot composition support
 - `@vue-spectrum/listbox` (in progress): listbox primitives (`ListBox`, `ListBoxBase`, `ListBoxOption`, `ListBoxSection`) with baseline section semantics, keyboard navigation, single/multiple selection behavior, and static slot composition support
 - `@vue-spectrum/table` (in progress): table primitives (`TableView`, `Column`, `TableHeader`, `TableBody`, `Section`, `Row`, `Cell`, `EditableCell`) with baseline static table semantics, row selection, keyboard navigation, and sortable header-state behavior
-- `@vue-spectrum/tree` (in progress): tree primitives (`TreeView`, `TreeViewItem`, `TreeViewItemContent`) with baseline treegrid semantics, nested expansion state, keyboard navigation, and controlled/uncontrolled selection behavior
+- `@vue-spectrum/tree` (in progress): tree primitives (`TreeView`, `TreeViewItem`, `TreeViewItemContent`) with baseline treegrid semantics, nested expansion state, keyboard navigation, controlled/uncontrolled selection behavior, and static slot composition support
 - `@vue-spectrum/illustratedmessage` (in progress): illustrated-message primitive (`IllustratedMessage`) with baseline heading/content slot styling and SSR coverage
 - `@vue-spectrum/inlinealert` (in progress): inline-alert primitive (`InlineAlert`) with baseline alert semantics, variant classes, and autofocus behavior
 - `@vue-spectrum/overlays` (in progress): overlay primitives (`Overlay`, `OpenTransition`) with baseline portal rendering and transition lifecycle wiring

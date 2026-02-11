@@ -1,9 +1,11 @@
 import { render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { h } from "vue";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   TreeView,
+  TreeViewItem,
+  TreeViewItemContent,
   type SpectrumTreeViewItemData,
   type TreeKey,
 } from "../src";
@@ -176,5 +178,64 @@ describe("TreeView", () => {
     expect(rows).toHaveLength(2);
     expect(rows[0]?.textContent).toContain("Zero");
     expect(rows[1]?.textContent).toContain("Empty");
+  });
+
+  it("supports static slot syntax with TreeViewItem", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "TreeViewSlotHarness",
+      setup() {
+        return () =>
+          h(
+            TreeView,
+            {
+              "aria-label": "Tree static",
+              selectionMode: "single",
+              defaultExpandedKeys: ["projects"],
+              onSelectionChange,
+              onAction,
+            },
+            {
+              default: () => [
+                h(
+                  TreeViewItem,
+                  { id: "projects" },
+                  {
+                    default: () => [
+                      h(TreeViewItemContent, null, () => "Projects"),
+                      h(TreeViewItem, { id: "project-a" }, () => "Project A"),
+                      h(TreeViewItem, { id: "project-b", isDisabled: true }, () => "Project B"),
+                    ],
+                  }
+                ),
+                h(TreeViewItem, { id: "photos" }, () => "Photos"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const treeGrid = tree.getByRole("treegrid", { name: "Tree static" });
+    const rows = within(treeGrid).getAllByRole("row");
+
+    expect(rows).toHaveLength(4);
+    expect(within(treeGrid).getAllByText("Projects").length).toBeGreaterThan(0);
+    expect(within(treeGrid).getAllByText("Project A").length).toBeGreaterThan(0);
+    expect(within(treeGrid).getAllByText("Project B").length).toBeGreaterThan(0);
+
+    const disabledRow = within(treeGrid)
+      .getAllByText("Project B")[0]
+      ?.closest('[role="row"]');
+    expect(disabledRow?.getAttribute("aria-disabled")).toBe("true");
+
+    const photosRow = within(treeGrid).getAllByText("Photos")[0]?.closest('[role="row"]');
+    await user.click(photosRow as HTMLElement);
+
+    expect(onAction).toHaveBeenCalledWith("photos");
+    expect(Array.from(onSelectionChange.mock.calls[0][0] as Set<string>)).toEqual(["photos"]);
   });
 });

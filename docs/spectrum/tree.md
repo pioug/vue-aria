@@ -75,6 +75,5 @@ const component = h(TreeView, {
 
 ## Notes
 
-- Baseline includes treegrid semantics, expandable nested rows, row keyboard navigation, and controlled/uncontrolled selection and expansion state.
-- The baseline currently focuses on item-prop rendering (`items`/`childItems`); richer static composition parity for `TreeViewItem` slot trees remains in progress.
+- Baseline includes treegrid semantics, expandable nested rows, row keyboard navigation, controlled/uncontrolled selection and expansion state, and static slot composition support via `TreeViewItem` and `TreeViewItemContent`.
 - Advanced upstream parity such as drag-and-drop integration, deep collection composition, and full visual/theming alignment remains in progress.
