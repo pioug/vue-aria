@@ -1,4 +1,4 @@
-import { computed, type Ref } from "vue";
+import { computed, ref, watch, type Ref } from "vue";
 import { useTextField } from "@vue-aria/textfield";
 import { useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
@@ -23,6 +23,15 @@ export function useSpectrumTextField(
 ) {
   const provider = useProviderContext();
   const formValidationErrors = useFormValidationErrors();
+  const isServerErrorCleared = ref(false);
+
+  watch(
+    () => [formValidationErrors.value, props.name] as const,
+    () => {
+      isServerErrorCleared.value = false;
+    },
+    { deep: true }
+  );
 
   const resolvedFormProps = computed(() =>
     useFormProps({
@@ -45,7 +54,7 @@ export function useSpectrumTextField(
   const validationState = computed(
     () => props.validationState ?? provider?.value.validationState
   );
-  const serverErrorMessage = computed(() => {
+  const serverErrorMessageFromForm = computed(() => {
     if (!props.name) {
       return undefined;
     }
@@ -65,6 +74,9 @@ export function useSpectrumTextField(
 
     return undefined;
   });
+  const serverErrorMessage = computed(() =>
+    isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
+  );
   const resolvedValidationState = computed(
     () => validationState.value ?? (serverErrorMessage.value ? "invalid" : undefined)
   );
@@ -136,7 +148,12 @@ export function useSpectrumTextField(
         props["aria-errormessage"] ??
         (attrs["aria-errormessage"] as string | undefined)
     ),
-    onInput: props.onInput,
+    onInput: (event) => {
+      if (serverErrorMessageFromForm.value) {
+        isServerErrorCleared.value = true;
+      }
+      props.onInput?.(event);
+    },
     onChange: props.onChange,
     onFocus: props.onFocus,
     onBlur: props.onBlur,

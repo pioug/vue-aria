@@ -326,6 +326,41 @@ describe("TextField", () => {
       message.getAttribute("id") ?? ""
     );
   });
+
+  it("clears form validationErrors message when the field value changes", async () => {
+    const App = defineComponent({
+      name: "TextFieldFormValidationClearHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                username: "Invalid username.",
+              },
+            },
+            {
+              default: () =>
+                h(TextField, {
+                  label: "Username",
+                  name: "username",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(tree.getByText("Invalid username.")).toBeTruthy();
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+
+    await fireEvent.update(input, "devon");
+    await nextTick();
+
+    expect(tree.queryByText("Invalid username.")).toBeNull();
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
 });
 
 describe("TextArea", () => {
@@ -555,5 +590,40 @@ describe("TextArea", () => {
     expect(input.getAttribute("aria-describedby")).toContain(
       message.getAttribute("id") ?? ""
     );
+  });
+
+  it("clears form validationErrors message when the textarea value changes", async () => {
+    const App = defineComponent({
+      name: "TextAreaFormValidationClearHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                notes: "Invalid notes.",
+              },
+            },
+            {
+              default: () =>
+                h(TextArea, {
+                  label: "Notes",
+                  name: "notes",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox") as HTMLTextAreaElement;
+    expect(tree.getByText("Invalid notes.")).toBeTruthy();
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+
+    await fireEvent.update(input, "updated");
+    await nextTick();
+
+    expect(tree.queryByText("Invalid notes.")).toBeNull();
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
   });
 });
