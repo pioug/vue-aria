@@ -5,6 +5,7 @@ export { Button, LinkButton } from "./Button";
 export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
+export { CloseButton } from "./CloseButton";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 
@@ -13,6 +14,7 @@ export type {
   ActionButtonSize,
   S2ActionButtonProps,
 } from "./ActionButton";
+export type { S2CloseButtonProps } from "./CloseButton";
 export type {
   ActionButtonGroupDensity,
   ActionButtonGroupSize,

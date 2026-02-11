@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `65 / 76` completed.
+- Task progress: `66 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -58,7 +58,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/style-macro-s1` baseline is now in progress with upstream-compatible package layout (`index.ts`, `src/runtime.ts`, `src/style-macro.ts`, `src/spectrum-theme.ts`, `src/types.ts`), starter runtime/helper tests (`mergeStyles`, `baseColor`, `lightDark`, `focusRing`, `raw`, `keyframes`), docs, and umbrella wiring; full macro/token parity remains.
 - `@vue-spectrum/test-utils` baseline is now in progress with upstream-style package layout (`index.ts`, `src/index.ts`, `src/testSetup.ts`), mobile/desktop screen-width simulation helpers (`simulateMobile`, `simulateDesktop`) supporting global `jest`/`vi` spy APIs, starter tests, docs, and umbrella wiring; parity re-export coverage for `@react-aria/test-utils` remains.
 - `@vue-spectrum/story-utils` baseline is now in progress with upstream-style package layout (`index.ts`, `src/index.ts`, `src/ErrorBoundary.tsx`, `src/GeneratePowerset.tsx`) adapted to Vue equivalents (`ErrorBoundary`, `generatePowerset`) plus starter tests, docs, and umbrella wiring; storybook-specific parity hardening remains.
-- `@vue-spectrum/s2` baseline is now in progress with initial infrastructure utility ports (`pressScale`, `isDocsEnv`) and first component primitives (`Provider`, `Button`, `LinkButton`, `ActionButton`, `ActionButtonGroup`, `ButtonGroup`, `ToggleButton`, `ToggleButtonGroup`) plus starter tests/docs and umbrella wiring; full S2 component export parity remains.
+- `@vue-spectrum/s2` baseline is now in progress with initial infrastructure utility ports (`pressScale`, `isDocsEnv`) and first component primitives (`Provider`, `Button`, `LinkButton`, `ActionButton`, `ActionButtonGroup`, `ButtonGroup`, `CloseButton`, `ToggleButton`, `ToggleButtonGroup`) plus starter tests/docs and umbrella wiring; full S2 component export parity remains.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
 - CI now runs `npm run test:spectrum-parity` on pull requests and pushes to `main`.
@@ -178,4 +178,4 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 1. Deepen `@vue-spectrum/provider` parity (`Provider` wrapper behavior, slot/context behavior, and SSR-focused coverage).
 2. Deepen `@vue-spectrum/icon` parity (slot behavior and class/style integration edge cases), then move it from baseline to complete.
 3. Continue support package track: `@vue-spectrum/style-macro-s1`, `@vue-spectrum/test-utils`, `@vue-spectrum/story-utils`, and `@vue-spectrum/s2`.
-4. Continue `@vue-spectrum/s2` by porting the next component primitives (`ActionMenu`, `CloseButton`) next.
+4. Continue `@vue-spectrum/s2` by porting the next component primitives (`ActionMenu`, `SelectBox`) and deepening grouped-control behavior parity next.

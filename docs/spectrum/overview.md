@@ -18,7 +18,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/style-macro-s1` (in progress): style-macro baseline with upstream-compatible runtime/theme helper exports (`style`, `baseColor`, `lightDark`, `focusRing`, `raw`, `keyframes`)
 - `@vue-spectrum/test-utils` (in progress): test utility baseline with screen-width helpers for mobile/desktop simulation (`simulateMobile`, `simulateDesktop`)
 - `@vue-spectrum/story-utils` (in progress): story utility baseline with Vue `ErrorBoundary` and powerset generation helper (`generatePowerset`)
-- `@vue-spectrum/s2` (in progress): early S2 baseline with shared utility exports (`pressScale`, `isDocsEnv`) plus first component primitives (`Provider`, `Button`, `LinkButton`, `ActionButton`, `ActionButtonGroup`, `ButtonGroup`, `ToggleButton`, `ToggleButtonGroup`)
+- `@vue-spectrum/s2` (in progress): early S2 baseline with shared utility exports (`pressScale`, `isDocsEnv`) plus first component primitives (`Provider`, `Button`, `LinkButton`, `ActionButton`, `ActionButtonGroup`, `ButtonGroup`, `CloseButton`, `ToggleButton`, `ToggleButtonGroup`)
 - `@vue-spectrum/icon`: icon wrapper component primitives (`Icon`, `UIIcon`, `Illustration`)
 - `@vue-spectrum/utils`: shared class-name utility baseline
 - `@vue-spectrum/form`: form wrapper and form context primitives (`Form`, `useFormProps`, `useFormValidationErrors`)

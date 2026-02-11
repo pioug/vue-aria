@@ -31,6 +31,7 @@ export {
   ActionButton as S2ActionButton,
   ActionButtonGroup as S2ActionButtonGroup,
   ButtonGroup as S2ButtonGroup,
+  CloseButton as S2CloseButton,
   ToggleButton as S2ToggleButton,
   ToggleButtonGroup as S2ToggleButtonGroup,
   pressScale,
