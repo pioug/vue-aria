@@ -3,35 +3,57 @@ import { useId } from "@vue-aria/ssr";
 import { VisuallyHidden } from "@vue-aria/visually-hidden";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import {
+  type StepKey,
   useStepListContext,
   type SpectrumStepListItemData,
 } from "./StepListContext";
+
+export interface SpectrumStepListItemProps {
+  id?: StepKey | undefined;
+  isDisabled?: boolean | undefined;
+}
 
 export const StepListItem = defineComponent({
   name: "StepListItem",
   props: {
     item: {
       type: Object as PropType<SpectrumStepListItemData>,
-      required: true,
+      default: undefined,
+    },
+    id: {
+      type: [String, Number] as PropType<StepKey | undefined>,
+      default: undefined,
     },
     isEmphasized: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
   },
   setup(props) {
+    if (!props.item) {
+      return () => null;
+    }
+
     const state = useStepListContext();
 
     const markerId = useId(undefined, "v-spectrum-step-marker");
     const labelId = useId(undefined, "v-spectrum-step-label");
 
     const isSelected = computed(
-      () => state.selectedKey.value === props.item.key
+      () => state.selectedKey.value === props.item?.key
     );
-    const isCompleted = computed(() => state.isCompleted(props.item.key));
-    const isSelectable = computed(() => state.isSelectable(props.item.key));
+    const isCompleted = computed(() => state.isCompleted(props.item!.key));
+    const isSelectable = computed(() => state.isSelectable(props.item!.key));
     const isItemDisabled = computed(
-      () => !isSelectable.value || state.isDisabled.value || state.isReadOnly.value
+      () =>
+        !isSelectable.value ||
+        state.isDisabled.value ||
+        state.isReadOnly.value ||
+        Boolean(props.isDisabled)
     );
 
     const stateText = computed(() => {
@@ -51,7 +73,7 @@ export const StepListItem = defineComponent({
         return;
       }
 
-      state.selectStep(props.item.key);
+      state.selectStep(props.item!.key);
     };
 
     return () =>
@@ -112,7 +134,7 @@ export const StepListItem = defineComponent({
                     id: markerId.value,
                     class: classNames("spectrum-Steplist-marker"),
                   },
-                  String(state.getItemIndex(props.item.key) + 1)
+                  String(state.getItemIndex(props.item!.key) + 1)
                 ),
               ]
             ),

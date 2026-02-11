@@ -499,6 +499,7 @@ export type {
 export type { SpectrumFileTriggerProps } from "@vue-spectrum/filetrigger";
 export type {
   SpectrumStepListProps,
+  SpectrumStepListItemProps,
   SpectrumStepListItemData,
   StepKey,
 } from "@vue-spectrum/steplist";

@@ -49,5 +49,5 @@ const component = h(StepList, {
 
 ## Notes
 
-- Baseline includes selection progression rules, disabled/read-only handling, controlled/uncontrolled selection, and SSR coverage.
-- Advanced upstream collections integration (`Item` API parity), icon visuals, and localized state messages remain in progress.
+- Baseline includes selection progression rules, disabled/read-only handling, controlled/uncontrolled selection, SSR coverage, and static slot composition support via `StepListItem`.
+- Advanced upstream icon visuals and localized state messages remain in progress.

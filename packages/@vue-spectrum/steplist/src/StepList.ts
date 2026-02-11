@@ -1,9 +1,13 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useProviderProps } from "@vue-spectrum/provider";
@@ -50,6 +54,153 @@ function keyToString(key: StepKey | undefined): string | undefined {
   }
 
   return String(key);
+}
+
+function normalizeStepKey(value: unknown, fallback: StepKey): StepKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseStepListSlotItems(nodes: VNode[] | undefined): SpectrumStepListItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const flattened = flattenVNodeChildren(nodes);
+  const parsedItems: SpectrumStepListItemData[] = [];
+  let itemIndex = 0;
+
+  for (const node of flattened) {
+    if (getComponentName(node) !== "StepListItem") {
+      continue;
+    }
+
+    const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const key = normalizeStepKey(node.key ?? nodeProps.id, `step-${itemIndex + 1}`);
+    const slotLabel = extractTextContent(getSlotContent(node)).trim();
+
+    parsedItems.push({
+      key,
+      label: slotLabel || `Step ${itemIndex + 1}`,
+      isDisabled: Boolean(nodeProps.isDisabled),
+    });
+    itemIndex += 1;
+  }
+
+  return parsedItems;
+}
+
+function areStepItemsEqual(
+  left: SpectrumStepListItemData[],
+  right: SpectrumStepListItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current.isDisabled !== candidate.isDisabled
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export const StepList = defineComponent({
@@ -129,12 +280,15 @@ export const StepList = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const resolvedProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
+    const slotItems = ref<SpectrumStepListItemData[]>([]);
 
-    const stepItems = computed<SpectrumStepListItemData[]>(() => props.items ?? []);
+    const stepItems = computed<SpectrumStepListItemData[]>(
+      () => props.items ?? slotItems.value
+    );
     const keyOrder = computed<StepKey[]>(() => stepItems.value.map((item) => item.key));
     const disabledKeys = computed(() => normalizeKeySet(props.disabledKeys));
     const isDisabled = computed(() =>
@@ -210,7 +364,7 @@ export const StepList = defineComponent({
       keyOrder,
       (keys) => {
         if (keys.length === 0) {
-          if (props.selectedKey === undefined) {
+          if (props.items !== undefined && props.selectedKey === undefined) {
             uncontrolledSelectedKey.value = null;
           }
           return;
@@ -233,13 +387,25 @@ export const StepList = defineComponent({
       return index !== -1 && index <= completedIndex.value;
     };
 
+    const isItemMarkedDisabled = (key: StepKey): boolean =>
+      Boolean(
+        stepItems.value.find(
+          (item) => keyToString(item.key) === keyToString(key)
+        )?.isDisabled
+      );
+
     const isSelectable = (key: StepKey): boolean => {
       const index = resolveStepIndex(key);
       if (index === -1) {
         return false;
       }
 
-      if (isDisabled.value || isReadOnly.value || disabledKeys.value.has(key)) {
+      if (
+        isDisabled.value ||
+        isReadOnly.value ||
+        disabledKeys.value.has(key) ||
+        isItemMarkedDisabled(key)
+      ) {
         return false;
       }
 
@@ -314,6 +480,13 @@ export const StepList = defineComponent({
     });
 
     return () => {
+      if (!props.items) {
+        const parsedItems = parseStepListSlotItems(slots.default?.() as VNode[] | undefined);
+        if (!areStepItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const size = props.size ?? "M";
       const orientation = props.orientation ?? "horizontal";
       const attrsRecord = {

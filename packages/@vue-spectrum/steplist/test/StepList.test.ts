@@ -2,7 +2,7 @@ import { render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { StepList, type SpectrumStepListItemData } from "../src";
+import { StepList, StepListItem, type SpectrumStepListItemData } from "../src";
 
 const items: SpectrumStepListItemData[] = [
   { key: "step-one", label: "Step 1" },
@@ -177,5 +177,44 @@ describe("StepList", () => {
     expect(stepList.className).toContain("spectrum-Steplist--vertical");
     expect(stepList.className).toContain("spectrum-Steplist--large");
     expect(stepList.className).toContain("spectrum-Steplist--emphasized");
+  });
+
+  it("supports static slot syntax with StepListItem", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+
+    const App = defineComponent({
+      name: "StepListSlotHarness",
+      setup() {
+        return () =>
+          h(
+            StepList,
+            {
+              "aria-label": "steplist-test",
+              defaultSelectedKey: "step-three",
+              defaultLastCompletedStep: "step-two",
+              onSelectionChange,
+            },
+            {
+              default: () => [
+                h(StepListItem, { id: "step-one" }, () => "Step 1"),
+                h(StepListItem, { id: "step-two", isDisabled: true }, () => "Step 2"),
+                h(StepListItem, { id: "step-three" }, () => "Step 3"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const stepListItems = tree.getAllByRole("link");
+
+    expect(stepListItems).toHaveLength(3);
+    expect(stepListItems[1].getAttribute("aria-disabled")).toBe("true");
+    expect(stepListItems[2].getAttribute("aria-current")).toBe("step");
+
+    await user.click(stepListItems[0]);
+    expect(stepListItems[0].getAttribute("aria-current")).toBe("step");
+    expect(onSelectionChange).toHaveBeenCalledWith("step-one");
   });
 });
