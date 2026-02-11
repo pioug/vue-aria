@@ -4,9 +4,11 @@ import { describe, expect, it, vi } from "vitest";
 import { theme as defaultTheme } from "@vue-spectrum/theme-default";
 import {
   AlertDialog,
+  CustomDialog,
   Dialog,
   DialogContainer,
   DialogTrigger,
+  FullscreenDialog,
   useDialogContainer,
 } from "../src/Dialog";
 import { Provider } from "../src/Provider";
@@ -18,6 +20,62 @@ async function flushOverlay(): Promise<void> {
 }
 
 describe("@vue-spectrum/s2 Dialog", () => {
+  it("renders CustomDialog with baseline props", async () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: defaultTheme,
+      },
+      slots: {
+        default: () =>
+          h(
+            CustomDialog,
+            {
+              ariaLabel: "Custom dialog",
+              size: "M",
+              padding: "none",
+              isDismissible: true,
+            },
+            {
+              default: () => "Custom content",
+            }
+          ),
+      },
+    });
+
+    await wrapper.vm.$nextTick();
+    const dialog = wrapper.get(".s2-CustomDialog");
+    expect(dialog.classes()).toContain("s2-CustomDialog--M");
+    expect(dialog.classes()).toContain("s2-CustomDialog--padding-none");
+    expect(dialog.attributes("role")).toBe("dialog");
+    expect(wrapper.find(".spectrum-Dialog-closeButton").exists()).toBe(true);
+  });
+
+  it("renders FullscreenDialog with variant mapping", async () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: defaultTheme,
+      },
+      slots: {
+        default: () =>
+          h(
+            FullscreenDialog,
+            {
+              ariaLabel: "Fullscreen dialog",
+              variant: "fullscreenTakeover",
+            },
+            {
+              default: () => "Fullscreen content",
+            }
+          ),
+      },
+    });
+
+    await wrapper.vm.$nextTick();
+    const dialog = wrapper.get(".s2-FullscreenDialog");
+    expect(dialog.classes()).toContain("s2-FullscreenDialog--fullscreenTakeover");
+    expect(dialog.classes()).toContain("spectrum-Dialog--fullscreenTakeover");
+  });
+
   it("renders alert dialog baseline class and primary action", async () => {
     const onPrimaryAction = vi.fn();
     const wrapper = mount(Provider, {

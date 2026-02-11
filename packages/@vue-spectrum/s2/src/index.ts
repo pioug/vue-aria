@@ -39,9 +39,11 @@ export { DateField } from "./DateField";
 export { DatePicker, DateRangePicker, TimeField } from "./DatePicker";
 export {
   AlertDialog,
+  CustomDialog,
   Dialog,
   DialogContainer,
   DialogTrigger,
+  FullscreenDialog,
   useDialogContainer,
 } from "./Dialog";
 export { Divider } from "./Divider";
@@ -145,11 +147,13 @@ export type {
 } from "./DatePicker";
 export type {
   S2AlertDialogProps,
+  S2CustomDialogProps,
   S2DialogContainerProps,
   S2DialogContainerValue,
   S2DialogProps,
   S2DialogTriggerProps,
   S2DialogType,
+  S2FullscreenDialogProps,
 } from "./Dialog";
 export type { S2DividerProps } from "./Divider";
 export type { S2DropZoneProps } from "./DropZone";
