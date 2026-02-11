@@ -2,7 +2,10 @@ import {
   computed,
   defineComponent,
   h,
+  onMounted,
+  onUpdated,
   type PropType,
+  ref,
 } from "vue";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { LocaleDirection } from "@vue-aria/i18n";
@@ -115,6 +118,10 @@ export const Provider = defineComponent({
   },
   setup(props, { attrs, slots }) {
     const parentProvider = useSpectrumProviderContext();
+    const wrapperRef = ref<HTMLElement | null>(null);
+    const hasWarnedNestedDirection = ref(false);
+    const isProduction =
+      typeof process !== "undefined" && process.env.NODE_ENV === "production";
 
     provideSpectrumProvider({
       theme: computed(() => props.theme),
@@ -173,6 +180,34 @@ export const Provider = defineComponent({
       return hasDOMProps(filterDOMProps(attrs as Record<string, unknown>));
     });
 
+    const maybeWarnNestedDirection = () => {
+      if (isProduction || hasWarnedNestedDirection.value || !wrapperRef.value) {
+        return;
+      }
+
+      const direction = domProps.value.dir;
+      if (!direction) {
+        return;
+      }
+
+      const nearestParentWithDirection = wrapperRef.value.parentElement?.closest("[dir]");
+      const parentDirection = nearestParentWithDirection?.getAttribute("dir");
+      if (parentDirection && parentDirection !== direction) {
+        console.warn(
+          `Language directions cannot be nested. ${direction} inside ${parentDirection}.`
+        );
+        hasWarnedNestedDirection.value = true;
+      }
+    };
+
+    onMounted(() => {
+      maybeWarnNestedDirection();
+    });
+
+    onUpdated(() => {
+      maybeWarnNestedDirection();
+    });
+
     return () => {
       const children = slots.default?.() ?? [];
       if (!shouldWrapInDOM.value) {
@@ -185,6 +220,11 @@ export const Provider = defineComponent({
         "div",
         mergeProps(
           forwardedDOMProps,
+          {
+            ref: (value: unknown) => {
+              wrapperRef.value = value as HTMLElement | null;
+            },
+          },
           domProps.value as unknown as Record<string, unknown>
         ),
         children

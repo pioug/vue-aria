@@ -11,7 +11,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 
 ## Current Baseline
 
-- `@vue-spectrum/provider`: provider context primitives and media query helpers
+- `@vue-spectrum/provider`: provider context primitives, media query helpers, and nested-direction warning parity behavior
 - `@vue-spectrum/theme-default` (in progress): default theme package baseline (`theme`) aligned to the provider class-map contract (`global`, `light`, `dark`, `medium`, `large`)
 - `@vue-spectrum/theme-light` (in progress): light theme package baseline (`theme`) with provider-compatible theme sections and light/dark class variants (`lightest`/`darkest`)
 - `@vue-spectrum/theme-dark` (in progress): dark theme package baseline (`theme`) with provider-compatible theme sections and dark-biased class variants (`dark`/`darkest`)

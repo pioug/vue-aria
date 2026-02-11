@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   Provider,
@@ -67,6 +67,21 @@ describe("Provider", () => {
     });
 
     expect(wrapper.get("div").classes()).toContain("spectrum--dark");
+  });
+
+  it("uses OS light mode by default", () => {
+    installMatchMediaStub(["(prefers-color-scheme: light)"]);
+
+    const wrapper = mount(Provider, {
+      props: {
+        theme,
+      },
+      slots: {
+        default: () => h("div", "hello"),
+      },
+    });
+
+    expect(wrapper.get("div").classes()).toContain("spectrum--light");
   });
 
   it("supports explicit color scheme overrides", () => {
@@ -180,5 +195,68 @@ describe("Provider", () => {
     await wrapper.setProps({ colorScheme: "dark" });
 
     expect(wrapper.get("div").classes()).toContain("spectrum--dark");
+  });
+
+  it("updates nested providers when ancestor color scheme changes", async () => {
+    const Nested = defineComponent({
+      name: "NestedProvider",
+      props: {
+        scheme: {
+          type: String,
+          required: true,
+        },
+      },
+      setup(localProps) {
+        return () =>
+          h(Provider, { theme, colorScheme: localProps.scheme }, {
+            default: () =>
+              h(Provider, null, {
+                default: () => h("span", "inner"),
+              }),
+          });
+      },
+    });
+
+    const wrapper = mount(Nested, {
+      props: {
+        scheme: "dark",
+      },
+    });
+
+    let wrappers = wrapper.findAll(".spectrum");
+    expect(wrappers).toHaveLength(1);
+    expect(wrappers[0].classes()).toContain("spectrum--dark");
+
+    await wrapper.setProps({ scheme: "light" });
+
+    wrappers = wrapper.findAll(".spectrum");
+    expect(wrappers).toHaveLength(1);
+    expect(wrappers[0].classes()).toContain("spectrum--light");
+  });
+
+  it("warns once when nested providers have conflicting directions", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    mount(Provider, {
+      props: {
+        theme,
+        locale: "en-US",
+      },
+      slots: {
+        default: () =>
+          h(Provider, { locale: "ar-EG" }, {
+            default: () => h("div", "hello"),
+          }),
+      },
+    });
+
+    await nextTick();
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Language directions cannot be nested. rtl inside ltr."
+    );
+
+    warnSpy.mockRestore();
   });
 });
