@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { computed, defineComponent, h, type PropType } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { useId } from "@vue-aria/ssr";
 import {
   ClearSlots,
   SlotProvider,
@@ -78,6 +79,39 @@ const TestConsumer = defineComponent({
             resolvedProps.value.isQuiet === undefined
               ? undefined
               : String(Boolean(resolvedProps.value.isQuiet)),
+        },
+        "push me"
+      );
+  },
+});
+
+const TestConsumerWithUseId = defineComponent({
+  name: "TestConsumerWithUseId",
+  props: {
+    slot: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    id: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+  },
+  setup(props) {
+    const resolvedProps = computed(() =>
+      useSlotProps(
+        props as unknown as ConsumerProps & Record<string, unknown>,
+        "slotname"
+      )
+    );
+    const resolvedId = useId(computed(() => resolvedProps.value.id));
+
+    return () =>
+      h(
+        "button",
+        {
+          "data-testid": "slot-consumer-useid",
+          id: resolvedId.value,
         },
         "push me"
       );
@@ -198,6 +232,62 @@ describe("Slots", () => {
     });
 
     expect(wrapper.get('[data-testid="slot-consumer"]').attributes("data-id")).toBe("bar");
+  });
+
+  it("keeps user-provided ids when slot id is generated via useId with a default", () => {
+    const App = defineComponent({
+      setup() {
+        const slotId = useId("foo");
+
+        return () =>
+          h(
+            SlotProvider,
+            {
+              slots: {
+                slotname: {
+                  id: slotId.value,
+                },
+              },
+            },
+            {
+              default: () => h(TestConsumerWithUseId, { id: "bar" }),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const consumer = wrapper.get('[data-testid="slot-consumer-useid"]');
+
+    expect(consumer.attributes("id")).toBe("bar");
+  });
+
+  it("keeps user-provided ids when slot id is generated via useId", () => {
+    const App = defineComponent({
+      setup() {
+        const slotId = useId();
+
+        return () =>
+          h(
+            SlotProvider,
+            {
+              slots: {
+                slotname: {
+                  id: slotId.value,
+                },
+              },
+            },
+            {
+              default: () => h(TestConsumerWithUseId, { id: "bar" }),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const consumer = wrapper.get('[data-testid="slot-consumer-useid"]');
+
+    expect(consumer.attributes("id")).toBe("bar");
   });
 
   it("clears slots for nested consumers", () => {
