@@ -4,6 +4,16 @@ import type { Key, MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { TableRowNode, UseTableStateResult } from "@vue-aria/table-state";
 import { getRowElementMap, getRowId, getRowLabelledBy, tableData } from "./utils";
 
+const FOCUSABLE_ROW_SELECTOR = [
+  "button:not([disabled])",
+  "a[href]",
+  "input:not([disabled]):not([type=\"hidden\"])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex=\"-1\"]):not([disabled])",
+  "[contenteditable=\"true\"]",
+].join(",");
+
 export interface UseTableRowOptions<T = unknown> {
   row: TableRowNode<T>;
   rowIndex: number;
@@ -150,8 +160,23 @@ export function useTableRow<T>(
     onMouseLeave: () => {
       isPressed.value = false;
     },
-    onClick: () => {
+    onClick: (event: MouseEvent) => {
       isPressed.value = false;
+      const rowElement = toValue(rowRef);
+      if (rowElement) {
+        const target = event.target;
+        if (target instanceof HTMLElement) {
+          const focusableTarget = target.closest<HTMLElement>(FOCUSABLE_ROW_SELECTOR);
+          if (
+            focusableTarget &&
+            focusableTarget !== rowElement &&
+            rowElement.contains(focusableTarget)
+          ) {
+            return;
+          }
+        }
+      }
+
       selectRow();
     },
     onDblclick: () => {

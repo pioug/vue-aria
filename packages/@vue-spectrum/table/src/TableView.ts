@@ -41,6 +41,16 @@ import {
   parseTableSlotDefinition,
 } from "./types";
 
+const FOCUSABLE_ROW_SELECTOR = [
+  "button:not([disabled])",
+  "a[href]",
+  "input:not([disabled]):not([type=\"hidden\"])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex=\"-1\"]):not([disabled])",
+  "[contenteditable=\"true\"]",
+].join(",");
+
 export interface SpectrumTableViewProps {
   id?: string | undefined;
   columns?: SpectrumTableColumnData[] | undefined;
@@ -377,6 +387,29 @@ const TableRowView = defineComponent({
         mergeProps(rowProps.value, {
           ref: (value: unknown) => {
             rowRef.value = value as HTMLElement | null;
+          },
+          onClick: (event: MouseEvent) => {
+            const row = rowRef.value;
+            if (!row) {
+              return;
+            }
+
+            const target = event.target;
+            if (!(target instanceof HTMLElement)) {
+              row.focus();
+              return;
+            }
+
+            const focusableTarget = target.closest<HTMLElement>(FOCUSABLE_ROW_SELECTOR);
+            if (
+              focusableTarget &&
+              focusableTarget !== row &&
+              row.contains(focusableTarget)
+            ) {
+              return;
+            }
+
+            row.focus();
           },
           class: classNames("spectrum-Table-row", "react-spectrum-TableView-row", {
             "is-selected": isSelected.value,

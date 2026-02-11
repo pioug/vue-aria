@@ -42,6 +42,62 @@ function renderTable(
   });
 }
 
+function renderFocusableTable(props: Record<string, unknown> = {}) {
+  const App = defineComponent({
+    name: "TableFocusableHarness",
+    setup() {
+      return () =>
+        h(
+          TableView,
+          {
+            "aria-label": "Focusable table",
+            selectionMode: "single",
+            ...props,
+          },
+          {
+            default: () => [
+              h(TableHeader, null, {
+                default: () => [
+                  h(Column, { id: "foo", isRowHeader: true }, () => "Foo"),
+                  h(Column, { id: "bar" }, () => "Bar"),
+                  h(Column, { id: "baz" }, () => "Baz"),
+                ],
+              }),
+              h(TableBody, null, {
+                default: () => [
+                  h(Row, { id: "row-1" }, {
+                    default: () => [
+                      h(Cell, { textValue: "button 1" }, () =>
+                        h("button", { type: "button" }, "button 1")
+                      ),
+                      h(Cell, { textValue: "link 1" }, () =>
+                        h("a", { href: "#row-1" }, "link 1")
+                      ),
+                      h(Cell, () => "Baz 1"),
+                    ],
+                  }),
+                  h(Row, { id: "row-2" }, {
+                    default: () => [
+                      h(Cell, { textValue: "button 2" }, () =>
+                        h("button", { type: "button" }, "button 2")
+                      ),
+                      h(Cell, { textValue: "link 2" }, () =>
+                        h("a", { href: "#row-2" }, "link 2")
+                      ),
+                      h(Cell, () => "Baz 2"),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }
+        );
+    },
+  });
+
+  return render(App);
+}
+
 export function tableTests() {
   it("renders a static table from columns and items", () => {
     const tree = renderTable({
@@ -178,6 +234,42 @@ export function tableTests() {
 
     await user.keyboard("{Home}");
     expect(document.activeElement).toBe(bodyRows[0]);
+  });
+
+  it("retains focus on the pressed child", async () => {
+    const user = userEvent.setup();
+    const tree = renderFocusableTable();
+    const button = tree.getAllByRole("button")[1] as HTMLElement;
+
+    await user.click(button);
+    expect(document.activeElement).toBe(button);
+  });
+
+  it("focuses the row when pressing a non-focusable cell", async () => {
+    const user = userEvent.setup();
+    const tree = renderFocusableTable();
+    const grid = tree.getByRole("grid", { name: "Focusable table" });
+    const rowGroups = within(grid).getAllByRole("rowgroup");
+    const bodyRows = within(rowGroups[1] as HTMLElement).getAllByRole("row");
+    const plainCell = within(bodyRows[0] as HTMLElement).getAllByRole("gridcell")[1];
+
+    await user.click(plainCell as HTMLElement);
+    expect(document.activeElement).toBe(bodyRows[0]);
+  });
+
+  it("supports row keyboard navigation after pressing a child focusable", async () => {
+    const user = userEvent.setup();
+    const tree = renderFocusableTable();
+    const grid = tree.getByRole("grid", { name: "Focusable table" });
+    const rowGroups = within(grid).getAllByRole("rowgroup");
+    const bodyRows = within(rowGroups[1] as HTMLElement).getAllByRole("row");
+    const firstButton = tree.getAllByRole("button")[0] as HTMLElement;
+
+    await user.click(firstButton);
+    expect(document.activeElement).toBe(firstButton);
+
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toBe(bodyRows[1]);
   });
 
   it("supports uncontrolled sorting", async () => {
