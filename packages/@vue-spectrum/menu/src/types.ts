@@ -7,10 +7,18 @@ export interface SpectrumMenuItemData {
   "aria-label"?: string | undefined;
 }
 
+export interface SpectrumMenuSectionData {
+  key?: MenuKey | undefined;
+  heading?: string | undefined;
+  "aria-label"?: string | undefined;
+  items: SpectrumMenuItemData[];
+}
+
 export type SpectrumMenuSelectionMode = "none" | "single" | "multiple";
 
 export interface SpectrumMenuBaseProps {
   items?: SpectrumMenuItemData[] | undefined;
+  sections?: SpectrumMenuSectionData[] | undefined;
   selectionMode?: SpectrumMenuSelectionMode | undefined;
   selectedKeys?: Iterable<MenuKey> | undefined;
   defaultSelectedKeys?: Iterable<MenuKey> | undefined;

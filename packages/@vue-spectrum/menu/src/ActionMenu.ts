@@ -18,6 +18,10 @@ export const ActionMenu = defineComponent({
       type: Array as PropType<SpectrumActionMenuProps["items"]>,
       default: undefined,
     },
+    sections: {
+      type: Array as PropType<SpectrumActionMenuProps["sections"]>,
+      default: undefined,
+    },
     selectionMode: {
       type: String as PropType<SpectrumActionMenuProps["selectionMode"]>,
       default: undefined,

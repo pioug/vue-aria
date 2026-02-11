@@ -9,6 +9,22 @@ const items: SpectrumMenuItemData[] = [
   { key: "baz", label: "Baz" },
 ];
 
+const sectionedItems = [
+  {
+    key: "actions",
+    heading: "Actions",
+    items: [
+      { key: "edit", label: "Edit" },
+      { key: "copy", label: "Copy" },
+    ],
+  },
+  {
+    key: "danger",
+    heading: "Danger zone",
+    items: [{ key: "delete", label: "Delete" }],
+  },
+];
+
 function renderComponent(props: Record<string, unknown> = {}) {
   return render(Menu, {
     props: {
@@ -121,5 +137,28 @@ describe("Menu", () => {
     fireEvent.keyDown(menu, { key: "Escape" });
 
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders grouped sections when sections are provided", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    const tree = render(Menu, {
+      props: {
+        "aria-label": "menu-test",
+        sections: sectionedItems,
+        onAction,
+      },
+    });
+
+    expect(tree.getByText("Actions")).toBeTruthy();
+    expect(tree.getByText("Danger zone")).toBeTruthy();
+    expect(tree.getByRole("group", { name: "Actions" })).toBeTruthy();
+    expect(tree.getByRole("group", { name: "Danger zone" })).toBeTruthy();
+
+    const menuItems = tree.getAllByRole("menuitem");
+    expect(menuItems).toHaveLength(3);
+
+    await user.click(menuItems[2] as Element);
+    expect(onAction).toHaveBeenCalledWith("delete");
   });
 });

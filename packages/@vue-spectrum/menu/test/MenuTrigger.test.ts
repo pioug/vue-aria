@@ -10,6 +10,19 @@ const items: SpectrumMenuItemData[] = [
   { key: "baz", label: "Baz" },
 ];
 
+const sections = [
+  {
+    key: "actions",
+    heading: "Actions",
+    items: [{ key: "foo", label: "Foo" }],
+  },
+  {
+    key: "secondary",
+    heading: "Secondary",
+    items: [{ key: "bar", label: "Bar" }],
+  },
+];
+
 function renderComponent(props: Record<string, unknown> = {}) {
   return render(MenuTrigger, {
     props: {
@@ -164,5 +177,20 @@ describe("MenuTrigger", () => {
 
     await user.click(trigger);
     expect(tree.queryByRole("menu")).toBeNull();
+  });
+
+  it("passes sections to the menu overlay", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      items: undefined,
+      sections,
+    });
+
+    const trigger = tree.getByRole("button", { name: "Menu Button" });
+    await user.click(trigger);
+
+    expect(tree.getByRole("group", { name: "Actions" })).toBeTruthy();
+    expect(tree.getByRole("group", { name: "Secondary" })).toBeTruthy();
+    expect(tree.getAllByRole("menuitem")).toHaveLength(2);
   });
 });

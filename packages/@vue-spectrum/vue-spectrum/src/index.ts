@@ -162,7 +162,7 @@ export { ActionBar, ActionBarContainer } from "@vue-spectrum/actionbar";
 export { ActionGroup } from "@vue-spectrum/actiongroup";
 export { TagGroup, Tag } from "@vue-spectrum/tag";
 export { Picker, PickerItem, PickerSection } from "@vue-spectrum/picker";
-export { Menu, MenuItem, MenuTrigger, ActionMenu } from "@vue-spectrum/menu";
+export { Menu, MenuSection, MenuItem, MenuTrigger, ActionMenu } from "@vue-spectrum/menu";
 export { ListView, ListViewItem } from "@vue-spectrum/list";
 export {
   ListBox,
@@ -329,8 +329,10 @@ export type {
 export type {
   MenuKey,
   SpectrumMenuItemData,
+  SpectrumMenuSectionData,
   SpectrumMenuSelectionMode,
   SpectrumMenuProps,
+  SpectrumMenuSectionProps,
   SpectrumMenuItemProps,
   SpectrumMenuTriggerProps,
   SpectrumActionMenuProps,

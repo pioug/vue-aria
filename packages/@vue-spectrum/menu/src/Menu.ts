@@ -17,12 +17,81 @@ import {
   type MenuKey,
   type SpectrumMenuBaseProps,
   type SpectrumMenuItemData,
+  type SpectrumMenuSectionData,
   type SpectrumMenuSelectionMode,
 } from "./types";
 
 export interface SpectrumMenuProps extends SpectrumMenuBaseProps {
   id?: string | undefined;
 }
+
+export interface SpectrumMenuSectionProps {
+  heading?: string | undefined;
+  headingId?: string | undefined;
+  ariaLabel?: string | undefined;
+  showDivider?: boolean | undefined;
+}
+
+interface NormalizedSpectrumMenuSection {
+  key: string;
+  heading?: string | undefined;
+  ariaLabel?: string | undefined;
+  items: SpectrumMenuItemData[];
+  implicit: boolean;
+}
+
+export const MenuSection = defineComponent({
+  name: "MenuSection",
+  props: {
+    heading: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    headingId: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaLabel: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    showDivider: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+  },
+  setup(props, { slots }) {
+    return () =>
+      h("li", { role: "presentation", class: classNames("spectrum-Menu-section") }, [
+        props.showDivider
+          ? h("div", {
+              role: "presentation",
+              class: classNames("spectrum-Menu-divider"),
+            })
+          : null,
+        props.heading
+          ? h(
+              "div",
+              {
+                id: props.headingId,
+                class: classNames("spectrum-Menu-sectionHeading"),
+              },
+              props.heading
+            )
+          : null,
+        h(
+          "ul",
+          {
+            role: "group",
+            "aria-label": props.ariaLabel,
+            "aria-labelledby": props.headingId,
+            class: classNames("spectrum-Menu"),
+          },
+          slots.default?.()
+        ),
+      ]);
+  },
+});
 
 export const Menu = defineComponent({
   name: "Menu",
@@ -34,6 +103,10 @@ export const Menu = defineComponent({
     },
     items: {
       type: Array as PropType<SpectrumMenuItemData[] | undefined>,
+      default: undefined,
+    },
+    sections: {
+      type: Array as PropType<SpectrumMenuSectionData[] | undefined>,
       default: undefined,
     },
     selectionMode: {
@@ -113,7 +186,29 @@ export const Menu = defineComponent({
     const rootRef = ref<HTMLUListElement | null>(null);
     const itemRefs = new Map<string, HTMLLIElement>();
 
-    const items = computed<SpectrumMenuItemData[]>(() => props.items ?? []);
+    const sections = computed<NormalizedSpectrumMenuSection[]>(() => {
+      if (props.sections && props.sections.length > 0) {
+        return props.sections.map((section, index) => ({
+          key: String(section.key ?? `section-${index}`),
+          heading: section.heading,
+          ariaLabel: section["aria-label"],
+          items: section.items ?? [],
+          implicit: false,
+        }));
+      }
+
+      return [
+        {
+          key: "default",
+          items: props.items ?? [],
+          implicit: true,
+        },
+      ];
+    });
+
+    const items = computed<SpectrumMenuItemData[]>(() =>
+      sections.value.flatMap((section) => section.items)
+    );
     const selectionMode = computed<SpectrumMenuSelectionMode>(
       () => props.selectionMode ?? "none"
     );
@@ -333,6 +428,42 @@ export const Menu = defineComponent({
         props["aria-labelledby"] ??
         (attrsRecord["aria-labelledby"] as string | undefined);
 
+      const renderMenuItem = (item: SpectrumMenuItemData) => {
+        const itemKey = keyToString(item.key) ?? "";
+
+        return h(MenuItem, {
+          key: itemKey,
+          ref: (value: unknown) => {
+            if (!value) {
+              itemRefs.delete(itemKey);
+              return;
+            }
+
+            const element = (value as { $el?: unknown }).$el as
+              | HTMLLIElement
+              | undefined;
+            if (element) {
+              itemRefs.set(itemKey, element);
+            }
+          },
+          item,
+          selectionMode: selectionMode.value,
+          isSelected: selectedKeys.value.has(itemKey),
+          isFocused: focusedKey.value === itemKey,
+          isDisabled: isItemDisabled(item),
+          tabIndex: focusedKey.value === itemKey ? 0 : -1,
+          onFocus: () => {
+            focusedKey.value = itemKey;
+          },
+          onHover: () => {
+            focusedKey.value = itemKey;
+          },
+          onAction: () => {
+            activateKey(itemKey);
+          },
+        });
+      };
+
       return h(
         "ul",
         {
@@ -399,40 +530,30 @@ export const Menu = defineComponent({
             }
           },
         },
-        items.value.map((item) => {
-          const itemKey = keyToString(item.key) ?? "";
+        sections.value.flatMap((section, sectionIndex) => {
+          if (section.implicit) {
+            return section.items.map((item) => renderMenuItem(item));
+          }
 
-          return h(MenuItem, {
-            key: itemKey,
-            ref: (value: unknown) => {
-              if (!value) {
-                itemRefs.delete(itemKey);
-                return;
-              }
+          const headingId = section.heading
+            ? `${props.id ?? "v-spectrum-menu"}-section-${sectionIndex}`
+            : undefined;
 
-              const element = (value as { $el?: unknown }).$el as
-                | HTMLLIElement
-                | undefined;
-              if (element) {
-                itemRefs.set(itemKey, element);
+          return [
+            h(
+              MenuSection,
+              {
+                key: section.key,
+                heading: section.heading,
+                headingId,
+                ariaLabel: section.ariaLabel,
+                showDivider: sectionIndex > 0,
+              },
+              {
+                default: () => section.items.map((item) => renderMenuItem(item)),
               }
-            },
-            item,
-            selectionMode: selectionMode.value,
-            isSelected: selectedKeys.value.has(itemKey),
-            isFocused: focusedKey.value === itemKey,
-            isDisabled: isItemDisabled(item),
-            tabIndex: focusedKey.value === itemKey ? 0 : -1,
-            onFocus: () => {
-              focusedKey.value = itemKey;
-            },
-            onHover: () => {
-              focusedKey.value = itemKey;
-            },
-            onAction: () => {
-              activateKey(itemKey);
-            },
-          });
+            ),
+          ];
         })
       );
     };

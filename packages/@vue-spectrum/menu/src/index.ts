@@ -1,10 +1,12 @@
 export { Menu } from "./Menu";
+export { MenuSection } from "./Menu";
 export { MenuItem } from "./MenuItem";
 export { MenuTrigger } from "./MenuTrigger";
 export { ActionMenu } from "./ActionMenu";
 
 export type {
   SpectrumMenuProps,
+  SpectrumMenuSectionProps,
 } from "./Menu";
 export type {
   SpectrumMenuItemProps,
@@ -18,5 +20,6 @@ export type {
 export type {
   MenuKey,
   SpectrumMenuItemData,
+  SpectrumMenuSectionData,
   SpectrumMenuSelectionMode,
 } from "./types";

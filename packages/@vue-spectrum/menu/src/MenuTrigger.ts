@@ -40,6 +40,10 @@ export const MenuTrigger = defineComponent({
       type: Array as PropType<SpectrumMenuItemData[] | undefined>,
       default: undefined,
     },
+    sections: {
+      type: Array as PropType<SpectrumMenuTriggerProps["sections"]>,
+      default: undefined,
+    },
     selectionMode: {
       type: String as PropType<SpectrumMenuSelectionMode | undefined>,
       default: undefined,
@@ -288,9 +292,10 @@ export const MenuTrigger = defineComponent({
             triggerLabel
           ),
           isOpen.value
-            ? h(Menu, {
+              ? h(Menu, {
                 id: menuId.value,
                 items: props.items,
+                sections: props.sections,
                 selectionMode: props.selectionMode,
                 selectedKeys: selectedKeys.value,
                 disabledKeys: props.disabledKeys,
