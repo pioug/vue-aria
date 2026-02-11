@@ -276,4 +276,47 @@ describe("Tabs", () => {
     expect(className).toContain("spectrum-Tabs--emphasized");
     expect(className).toContain("spectrum-Tabs--compact");
   });
+
+  it("collapses to a picker when horizontal tabs overflow", async () => {
+    const user = userEvent.setup();
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-TabsPanel-collapseWrapper")) {
+          return 320;
+        }
+
+        return 0;
+      });
+    const scrollWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "tablist") {
+          return 1200;
+        }
+
+        return 0;
+      });
+
+    try {
+      const { getByRole, queryByRole } = renderTabs();
+      await flush();
+
+      expect(queryByRole("tablist")).toBeNull();
+
+      const picker = getByRole("button", { name: "Tab 1" });
+      expect(picker).toBeTruthy();
+
+      await user.click(picker);
+      const option = getByRole("option", { name: "Tab 2" });
+      await user.click(option);
+      await flush();
+
+      const tabpanel = getByRole("tabpanel");
+      expect(tabpanel.textContent).toContain("Tab 2 body");
+    } finally {
+      clientWidthSpy.mockRestore();
+      scrollWidthSpy.mockRestore();
+    }
+  });
 });

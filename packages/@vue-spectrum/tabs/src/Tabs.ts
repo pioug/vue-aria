@@ -3,8 +3,12 @@ import {
   defineComponent,
   h,
   inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
   provide,
   ref,
+  watch,
   type InjectionKey,
   type PropType,
   type VNodeChild,
@@ -22,7 +26,8 @@ import {
 import type { Key, ReadonlyRef } from "@vue-aria/types";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { useProviderContext } from "@vue-spectrum/provider";
-import { classNames, type ClassValue } from "@vue-spectrum/utils";
+import { classNames, useResizeObserver, type ClassValue } from "@vue-spectrum/utils";
+import { Picker } from "@vue-spectrum/picker";
 
 export type TabsOrientation = "horizontal" | "vertical";
 export type TabsKeyboardActivation = "automatic" | "manual";
@@ -361,6 +366,8 @@ export const TabList = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const context = useTabsContext("TabList");
     const elementRef = ref<HTMLElement | null>(null);
+    const wrapperRef = ref<HTMLElement | null>(null);
+    const isCollapsed = ref(false);
 
     const { tabListProps } = useTabList(
       {
@@ -376,17 +383,80 @@ export const TabList = defineComponent({
       UNSAFE_getDOMNode: () => elementRef.value,
     });
 
+    const checkShouldCollapse = () => {
+      if (context.orientation.value === "vertical") {
+        isCollapsed.value = false;
+        return;
+      }
+
+      const wrapperElement = wrapperRef.value;
+      const tabListElement = elementRef.value;
+      if (!wrapperElement || !tabListElement) {
+        isCollapsed.value = false;
+        return;
+      }
+
+      isCollapsed.value = tabListElement.scrollWidth > wrapperElement.clientWidth + 1;
+    };
+
+    onMounted(() => {
+      if (typeof window !== "undefined") {
+        window.addEventListener("resize", checkShouldCollapse);
+      }
+
+      void nextTick(() => {
+        checkShouldCollapse();
+      });
+    });
+
+    onBeforeUnmount(() => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", checkShouldCollapse);
+      }
+    });
+
+    useResizeObserver({
+      ref: wrapperRef,
+      onResize: checkShouldCollapse,
+    });
+
+    watch(
+      [
+        () => context.collection.value.length,
+        () => context.state.selectedKey.value,
+        () => context.orientation.value,
+      ],
+      () => {
+        void nextTick(() => {
+          checkShouldCollapse();
+        });
+      },
+      { immediate: true }
+    );
+
     return () => {
       const domProps = filterDOMProps({
         ...(attrs as Record<string, unknown>),
       });
+      const shouldCollapse =
+        context.orientation.value !== "vertical" && isCollapsed.value;
+      const tabItems = context.collection.value.map((item) => ({
+        key: item.key,
+        label: item.title ?? String(item.key),
+        isDisabled: context.state.isKeyDisabled(item.key),
+      }));
+      const selectedPickerKey =
+        context.state.selectedKey.value === null
+          ? undefined
+          : context.state.selectedKey.value;
 
-      return h(
+      const tabListContent = h(
         "div",
         mergeProps(domProps, tabListProps.value, {
           ref: (value: unknown) => {
             elementRef.value = value as HTMLElement | null;
           },
+          "aria-hidden": shouldCollapse ? "true" : undefined,
           class: classNames(
             "spectrum-Tabs",
             `spectrum-Tabs--${context.orientation.value}`,
@@ -401,6 +471,14 @@ export const TabList = defineComponent({
           style: {
             ...(props.UNSAFE_style ?? {}),
             ...((domProps.style as Record<string, string | number> | undefined) ?? {}),
+            ...(shouldCollapse
+              ? {
+                  maxWidth: "calc(100% + 1px)",
+                  overflow: "hidden",
+                  visibility: "hidden",
+                  position: "absolute",
+                }
+              : {}),
           },
         }),
         [
@@ -416,6 +494,42 @@ export const TabList = defineComponent({
               }
             )
           ),
+        ]
+      );
+
+      if (context.orientation.value === "vertical") {
+        return tabListContent;
+      }
+
+      return h(
+        "div",
+        {
+          ref: (value: unknown) => {
+            wrapperRef.value = value as HTMLElement | null;
+          },
+          class: classNames("spectrum-TabsPanel-collapseWrapper"),
+        },
+        [
+          h(Picker, {
+            ariaLabel: context.ariaLabel.value,
+            ariaLabelledby: context.ariaLabelledby.value,
+            items: tabItems,
+            selectedKey: selectedPickerKey as string | number | undefined,
+            isDisabled: !shouldCollapse,
+            UNSAFE_className: classNames("spectrum-Tabs-picker", {
+              "spectrum-Tabs--isCollapsed": shouldCollapse,
+            }),
+            UNSAFE_style: shouldCollapse
+              ? undefined
+              : {
+                  visibility: "hidden",
+                  position: "absolute",
+                },
+            onSelectionChange: (key) => {
+              context.state.setSelectedKey(key);
+            },
+          }),
+          tabListContent,
         ]
       );
     };
