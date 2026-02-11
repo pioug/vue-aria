@@ -19,6 +19,7 @@ import {
   type FocusStrategy,
   type MenuTriggerAction,
 } from "@vue-aria/combobox-state";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useOption } from "@vue-aria/listbox";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/types";
@@ -72,6 +73,14 @@ const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
 
 const PLACEHOLDER_DEPRECATION_WARNING =
   "Placeholders are deprecated due to accessibility issues. Please use help text instead.";
+const searchAutocompleteMessages = {
+  "en-US": {
+    "Clear search": "Clear search",
+  },
+  "fr-FR": {
+    "Clear search": "Effacer la recherche",
+  },
+} as const;
 
 function normalizeSearchAutocompleteKey(value: unknown, fallback: Key): Key {
   if (typeof value === "string" || typeof value === "number") {
@@ -506,6 +515,10 @@ export const SearchAutocomplete = defineComponent({
     ...searchAutocompletePropOptions,
   },
   setup(props, { attrs, expose, slots }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      searchAutocompleteMessages,
+      "@vue-spectrum/autocomplete"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
@@ -936,7 +949,7 @@ export const SearchAutocomplete = defineComponent({
 
       const clearButton = shouldShowClearButton.value
         ? h(ClearButton as any, {
-            "aria-label": "Clear search",
+            "aria-label": stringFormatter.value.format("Clear search"),
             onPress: clearSearch,
             preventFocus: true,
             isDisabled: Boolean(props.isDisabled),

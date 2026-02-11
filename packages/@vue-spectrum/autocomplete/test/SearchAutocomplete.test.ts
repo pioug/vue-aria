@@ -3,6 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  provideSpectrumProvider,
+} from "@vue-spectrum/provider";
+import {
   Item,
   Section,
   SearchAutocomplete,
@@ -28,6 +32,27 @@ function renderComponent(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+function renderWithProvider(
+  component: ReturnType<typeof defineComponent>,
+  options: { locale?: string } = {}
+) {
+  const ProviderHarness = defineComponent({
+    name: "SearchAutocompleteProviderHarness",
+    setup() {
+      provideSpectrumProvider({
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        colorScheme: "light",
+        scale: "medium",
+        locale: options.locale,
+      });
+
+      return () => h(component);
+    },
+  });
+
+  return render(ProviderHarness);
 }
 
 describe("SearchAutocomplete", () => {
@@ -145,6 +170,23 @@ describe("SearchAutocomplete", () => {
     expect(onClear).toHaveBeenCalledTimes(1);
     expect(input.value).toBe("");
     expect(document.activeElement).toBe(input);
+  });
+
+  it("localizes clear button label with provider locale", () => {
+    const App = defineComponent({
+      name: "SearchAutocompleteLocalizedClearLabelHarness",
+      setup() {
+        return () =>
+          h(SearchAutocomplete, {
+            label: "Recherche",
+            defaultItems: items,
+            defaultInputValue: "Two",
+          });
+      },
+    });
+
+    const tree = renderWithProvider(App, { locale: "fr-FR" });
+    expect(tree.getByLabelText("Effacer la recherche")).toBeTruthy();
   });
 
   it("does not open when disabled", async () => {
