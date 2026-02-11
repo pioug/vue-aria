@@ -116,13 +116,23 @@ export const ActionMenu = defineComponent({
     },
   },
   setup(props, { attrs, slots }) {
-    return () =>
-      h(
+    return () => {
+      const attrsRecord = attrs as Record<string, unknown>;
+      const triggerAriaLabel =
+        props.triggerAriaLabel ??
+        props.ariaLabel ??
+        props["aria-label"] ??
+        (attrsRecord["aria-label"] as string | undefined) ??
+        "More actions";
+
+      return h(
         MenuTrigger,
         {
-          ...(attrs as Record<string, unknown>),
+          ...attrsRecord,
           ...props,
           triggerLabel: props.triggerLabel ?? "Actions",
+          triggerAriaLabel,
+          "aria-label": undefined,
           UNSAFE_className: classNames(
             "spectrum-ActionMenu",
             props.UNSAFE_className as ClassValue | undefined
@@ -130,5 +140,6 @@ export const ActionMenu = defineComponent({
         },
         slots
       );
+    };
   },
 });

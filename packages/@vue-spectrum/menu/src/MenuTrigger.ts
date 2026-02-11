@@ -26,6 +26,7 @@ export interface SpectrumMenuTriggerProps extends SpectrumMenuBaseProps {
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
   triggerLabel?: string | undefined;
   triggerAriaLabel?: string | undefined;
+  autoFocus?: boolean | undefined;
 }
 
 export const MenuTrigger = defineComponent({
@@ -102,6 +103,10 @@ export const MenuTrigger = defineComponent({
     },
     triggerAriaLabel: {
       type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    autoFocus: {
+      type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
     ariaLabel: {
@@ -201,6 +206,13 @@ export const MenuTrigger = defineComponent({
       if (typeof document !== "undefined") {
         document.addEventListener("mousedown", onDocumentMouseDown, true);
       }
+
+      if (props.autoFocus && !props.isDisabled) {
+        triggerRef.value?.focus();
+        void nextTick(() => {
+          triggerRef.value?.focus();
+        });
+      }
     });
 
     onBeforeUnmount(() => {
@@ -254,6 +266,7 @@ export const MenuTrigger = defineComponent({
               type: "button",
               class: classNames("spectrum-ActionButton"),
               disabled: props.isDisabled,
+              autofocus: props.autoFocus,
               "aria-label": props.triggerAriaLabel,
               "aria-haspopup": "menu",
               "aria-expanded": isOpen.value ? "true" : "false",
