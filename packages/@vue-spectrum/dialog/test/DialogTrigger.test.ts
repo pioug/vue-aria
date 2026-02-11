@@ -67,6 +67,24 @@ describe("DialogTrigger", () => {
     wrapper.unmount();
   });
 
+  it("positions popovers relative to the trigger", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      placement: "top",
+    });
+
+    await wrapper.get("button").trigger("click");
+    await flushOverlay();
+
+    const popover = document.body.querySelector("[data-testid=\"popover\"]") as HTMLElement;
+    expect(popover).not.toBeNull();
+    expect(popover.getAttribute("data-placement")).not.toBeNull();
+    expect(popover.style.position.length).toBeGreaterThan(0);
+    expect(popover.style.zIndex).toBe("100000");
+
+    wrapper.unmount();
+  });
+
   it("hides the dialog when pressing escape", async () => {
     const wrapper = mountDialogTrigger();
 

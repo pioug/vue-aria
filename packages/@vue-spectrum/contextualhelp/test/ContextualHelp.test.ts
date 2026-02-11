@@ -131,4 +131,25 @@ describe("ContextualHelp", () => {
     expect(button.attributes("aria-label")).toBeUndefined();
     expect(button.attributes("aria-labelledby")).toBe("test");
   });
+
+  it("forwards placement to the popover trigger", async () => {
+    const wrapper = mount(ContextualHelp, {
+      attachTo: document.body,
+      props: {
+        placement: "top",
+      },
+      slots: {
+        default: () => h(Header, null, () => "Test title"),
+      },
+    });
+
+    await wrapper.get("button").trigger("click");
+    await flushOverlay();
+
+    const popover = document.body.querySelector("[data-testid=\"popover\"]");
+    expect(popover).not.toBeNull();
+    expect(popover?.getAttribute("data-placement")).not.toBeNull();
+
+    wrapper.unmount();
+  });
 });

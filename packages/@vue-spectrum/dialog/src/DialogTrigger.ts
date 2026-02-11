@@ -13,6 +13,7 @@ import {
   type VNode,
   type VNodeChild,
 } from "vue";
+import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { mergeProps } from "@vue-aria/utils";
 import { classNames } from "@vue-spectrum/utils";
 import { Overlay } from "@vue-spectrum/overlays";
@@ -25,6 +26,7 @@ import {
 export interface SpectrumDialogTriggerProps {
   type?: DialogType | undefined;
   mobileType?: DialogType | undefined;
+  placement?: Placement | undefined;
   isDismissable?: boolean | undefined;
   isKeyboardDismissDisabled?: boolean | undefined;
   isOpen?: boolean | undefined;
@@ -95,6 +97,10 @@ export const DialogTrigger = defineComponent({
     },
     mobileType: {
       type: String as PropType<DialogType | undefined>,
+      default: undefined,
+    },
+    placement: {
+      type: String as PropType<Placement | undefined>,
       default: undefined,
     },
     isDismissable: {
@@ -168,6 +174,22 @@ export const DialogTrigger = defineComponent({
       }
 
       return Boolean(props.isDismissable);
+    });
+    const shouldUsePopoverPositioning = computed(
+      () => effectiveType.value === "popover"
+    );
+
+    const overlayPosition = useOverlayPosition({
+      targetRef: computed(() => triggerRef.value),
+      overlayRef: computed(() =>
+        shouldUsePopoverPositioning.value ? overlayRootRef.value : null
+      ),
+      placement: computed(() => props.placement ?? "bottom"),
+      offset: 8,
+      isOpen: computed(() => isOpen.value && shouldUsePopoverPositioning.value),
+      shouldUpdatePosition: computed(
+        () => isOpen.value && shouldUsePopoverPositioning.value
+      ),
     });
 
     const focusOverlay = () => {
@@ -255,6 +277,10 @@ export const DialogTrigger = defineComponent({
       const triggerNode = children[0];
       const contentNode = children[1];
       const overlayType = getOverlayTestId(effectiveType.value);
+      const placement =
+        shouldUsePopoverPositioning.value
+          ? overlayPosition.placement.value ?? null
+          : null;
 
       const renderedTrigger = cloneVNode(
         triggerNode,
@@ -295,11 +321,18 @@ export const DialogTrigger = defineComponent({
                     },
                     class: classNames(
                       "spectrum-DialogOverlay",
-                      `spectrum-DialogOverlay--${overlayType}`
+                      `spectrum-DialogOverlay--${overlayType}`,
+                      placement ? `spectrum-DialogOverlay--${placement}` : undefined
                     ),
                     "data-testid": overlayType,
+                    "data-placement": placement ?? undefined,
                     tabIndex: -1,
                     onKeydown: onOverlayKeydown,
+                    style: shouldUsePopoverPositioning.value
+                      ? (overlayPosition.overlayProps.value.style as
+                          | Record<string, unknown>
+                          | undefined)
+                      : undefined,
                   },
                   [
                     renderedContent,

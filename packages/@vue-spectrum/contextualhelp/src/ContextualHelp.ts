@@ -7,13 +7,14 @@ import {
   type VNode,
   type VNodeChild,
 } from "vue";
+import type { Placement } from "@vue-aria/overlays";
 import { ActionButton } from "@vue-spectrum/button";
 import { classNames, ClearSlots, SlotProvider, type ClassValue } from "@vue-spectrum/utils";
 import { Dialog, DialogTrigger } from "@vue-spectrum/dialog";
 
 export interface SpectrumContextualHelpProps {
   variant?: "help" | "info" | undefined;
-  placement?: string | undefined;
+  placement?: Placement | undefined;
   ariaLabel?: string | undefined;
   ariaLabelledby?: string | undefined;
   "aria-label"?: string | undefined;
@@ -92,7 +93,7 @@ export const ContextualHelp = defineComponent({
       default: undefined,
     },
     placement: {
-      type: String as PropType<string | undefined>,
+      type: String as PropType<Placement | undefined>,
       default: undefined,
     },
     ariaLabel: {
