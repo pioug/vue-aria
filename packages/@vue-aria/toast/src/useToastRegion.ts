@@ -1,4 +1,4 @@
-import { onScopeDispose, ref, toValue, watch } from "vue";
+import { onScopeDispose, ref, toValue, watch, watchEffect } from "vue";
 import { useFocusWithin, useHover } from "@vue-aria/interactions";
 import { announce } from "@vue-aria/live-announcer";
 import { mergeProps } from "@vue-aria/utils";
@@ -100,6 +100,36 @@ export function useToastRegion<T>(
     focusWithoutScrolling(lastFocusedElement.value);
     lastFocusedElement.value = null;
   };
+
+  watchEffect((onCleanup) => {
+    if (state.visibleToasts.value.length === 0) {
+      return;
+    }
+
+    const onKeydown = (event: KeyboardEvent): void => {
+      if (event.key !== "F6") {
+        return;
+      }
+
+      const region = toValue(regionRef) ?? null;
+      if (!region) {
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      if (activeElement instanceof HTMLElement && !region.contains(activeElement)) {
+        lastFocusedElement.value = activeElement;
+      }
+
+      event.preventDefault();
+      focusWithoutScrolling(region);
+    };
+
+    document.addEventListener("keydown", onKeydown);
+    onCleanup(() => {
+      document.removeEventListener("keydown", onKeydown);
+    });
+  });
 
   watch(
     () => state.visibleToasts.value.map((toast) => toast.key),

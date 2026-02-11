@@ -159,6 +159,54 @@ describe("ToastContainer", () => {
     wrapper.unmount();
   });
 
+  it("can focus the toast region using F6", async () => {
+    const component = defineComponent({
+      name: "ToastF6Harness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { id: "toast-f6-trigger", type: "button" }, "Trigger"),
+            h(ToastContainer),
+          ]);
+      },
+    });
+    const wrapper = mount(component, { attachTo: document.body });
+
+    const trigger = document.body.querySelector(
+      "#toast-f6-trigger"
+    ) as HTMLButtonElement | null;
+    expect(trigger).not.toBeNull();
+    if (!trigger) {
+      throw new Error("Missing F6 trigger button");
+    }
+
+    trigger.focus();
+    expect(document.activeElement).toBe(trigger);
+
+    queueToast("neutral", { timeout: 5000 });
+    await flushToasts();
+
+    trigger.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "F6",
+        bubbles: true,
+      })
+    );
+    trigger.dispatchEvent(
+      new KeyboardEvent("keyup", {
+        key: "F6",
+        bubbles: true,
+      })
+    );
+    await flushToasts();
+
+    const region = document.body.querySelector("[role=\"region\"]");
+    expect(region).not.toBeNull();
+    expect(document.activeElement).toBe(region);
+
+    wrapper.unmount();
+  });
+
   it("closes toast when shouldCloseOnAction is enabled", async () => {
     const onAction = vi.fn();
     const onClose = vi.fn();
