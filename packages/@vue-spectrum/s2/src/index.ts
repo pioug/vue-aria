@@ -40,6 +40,7 @@ export { RangeSlider, Slider } from "./Slider";
 export { Cell, Column, Row, TableBody, TableHeader, TableView } from "./TableView";
 export { StatusLight } from "./StatusLight";
 export { Switch } from "./Switch";
+export { Tag, TagGroup } from "./TagGroup";
 export { TextArea, TextField } from "./TextField";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
@@ -130,6 +131,7 @@ export type {
 } from "./SelectBoxGroup";
 export type { S2StatusLightProps } from "./StatusLight";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
+export type { S2TagGroupProps, S2TagProps } from "./TagGroup";
 export type { S2TextAreaProps, S2TextFieldProps, TextFieldSize } from "./TextField";
 export type { S2WellProps } from "./Well";
 export type {

@@ -84,6 +84,8 @@ export {
   RangeSlider as S2RangeSlider,
   StatusLight as S2StatusLight,
   Switch as S2Switch,
+  Tag as S2Tag,
+  TagGroup as S2TagGroup,
   TextField as S2TextField,
   TextArea as S2TextArea,
   ToggleButton as S2ToggleButton,
