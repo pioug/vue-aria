@@ -5,13 +5,24 @@ import { describe, expect, it, vi } from "vitest";
 import { theme as defaultTheme } from "@vue-spectrum/theme-default";
 import { Provider } from "../src/Provider";
 import {
+  AccordionItem,
+  AccordionItemHeader,
+  AccordionItemPanel,
+  AccordionItemTitle,
   Accordion,
   Disclosure,
   DisclosurePanel,
   DisclosureTitle,
-} from "../src/Accordion";
+} from "../src";
 
 describe("@vue-spectrum/s2 Accordion", () => {
+  it("re-exports accordion item aliases", () => {
+    expect(AccordionItem).toBe(Disclosure);
+    expect(AccordionItemHeader).toBe(DisclosureTitle);
+    expect(AccordionItemTitle).toBe(DisclosureTitle);
+    expect(AccordionItemPanel).toBe(DisclosurePanel);
+  });
+
   it("renders baseline attrs and toggles disclosure state", async () => {
     const user = userEvent.setup();
     const onExpandedChange = vi.fn();

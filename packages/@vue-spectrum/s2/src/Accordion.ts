@@ -16,6 +16,10 @@ export interface S2AccordionProps extends SpectrumAccordionProps {}
 export interface S2DisclosureProps extends SpectrumDisclosureProps {}
 export interface S2DisclosurePanelProps extends SpectrumDisclosurePanelProps {}
 export interface S2DisclosureTitleProps extends SpectrumDisclosureTitleProps {}
+export interface S2AccordionItemProps extends SpectrumDisclosureProps {}
+export interface S2AccordionItemHeaderProps extends SpectrumDisclosureTitleProps {}
+export interface S2AccordionItemTitleProps extends SpectrumDisclosureTitleProps {}
+export interface S2AccordionItemPanelProps extends SpectrumDisclosurePanelProps {}
 
 export const Accordion = defineComponent({
   name: "S2Accordion",
@@ -201,3 +205,8 @@ export const DisclosurePanel = defineComponent({
       });
   },
 });
+
+export const AccordionItem = Disclosure;
+export const AccordionItemHeader = DisclosureTitle;
+export const AccordionItemTitle = DisclosureTitle;
+export const AccordionItemPanel = DisclosurePanel;

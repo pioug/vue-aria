@@ -3,6 +3,10 @@ export { isDocsEnv } from "./macros";
 export { Provider, ColorSchemeContext, useColorSchemeContext } from "./Provider";
 export {
   Accordion,
+  AccordionItem,
+  AccordionItemHeader,
+  AccordionItemPanel,
+  AccordionItemTitle,
   Disclosure,
   DisclosurePanel,
   DisclosureTitle,
@@ -71,6 +75,10 @@ export { Well } from "./Well";
 
 export type { ProviderBackground, S2ProviderProps } from "./Provider";
 export type {
+  S2AccordionItemHeaderProps,
+  S2AccordionItemPanelProps,
+  S2AccordionItemProps,
+  S2AccordionItemTitleProps,
   S2AccordionProps,
   S2DisclosurePanelProps,
   S2DisclosureProps,
