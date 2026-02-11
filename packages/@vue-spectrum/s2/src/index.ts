@@ -49,6 +49,7 @@ export {
 export { Divider } from "./Divider";
 export { DropZone } from "./DropZone";
 export { Form } from "./Form";
+export { createIcon, createIllustration } from "./Icon";
 export { Image } from "./Image";
 export { IllustratedMessage } from "./IllustratedMessage";
 export { InlineAlert } from "./InlineAlert";
@@ -158,6 +159,11 @@ export type {
 export type { S2DividerProps } from "./Divider";
 export type { S2DropZoneProps } from "./DropZone";
 export type { S2FormProps } from "./Form";
+export type {
+  S2IconProps,
+  S2IllustrationProps,
+  S2SVGComponent,
+} from "./Icon";
 export type { S2ImageProps } from "./Image";
 export type { S2IllustratedMessageProps } from "./IllustratedMessage";
 export type { S2InlineAlertProps } from "./InlineAlert";
