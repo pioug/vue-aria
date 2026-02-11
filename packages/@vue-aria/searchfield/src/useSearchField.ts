@@ -1,4 +1,5 @@
 import { computed, ref, toValue } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useTextField, type UseTextFieldOptions } from "@vue-aria/textfield";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 
@@ -22,9 +23,19 @@ export interface UseSearchFieldResult {
   isInvalid: ReadonlyRef<boolean>;
 }
 
+const messages = {
+  "en-US": {
+    "Clear search": "Clear search",
+  },
+  "fr-FR": {
+    "Clear search": "Effacer la recherche",
+  },
+} as const;
+
 export function useSearchField(
   options: UseSearchFieldOptions = {}
 ): UseSearchFieldResult {
+  const strings = useLocalizedStringFormatter(messages, "@vue-aria/searchfield");
   const uncontrolledValue = ref(
     options.defaultValue === undefined
       ? ""
@@ -92,7 +103,7 @@ export function useSearchField(
   });
 
   const clearButtonProps = computed<Record<string, unknown>>(() => ({
-    "aria-label": "Clear search",
+    "aria-label": strings.value.format("Clear search"),
     excludeFromTabOrder: true,
     preventFocusOnPress: true,
     isDisabled: isDisabled() || isReadOnly(),

@@ -128,4 +128,18 @@ describe("useSearchField", () => {
 
     expect(inputProps.value.defaultValue).toBeUndefined();
   });
+
+  it("localizes clear button label from locale context fallback", () => {
+    const languageSpy = vi
+      .spyOn(window.navigator, "language", "get")
+      .mockReturnValue("fr-FR");
+
+    const { clearButtonProps } = useSearchField({
+      "aria-label": "Search",
+      defaultValue: "abc",
+    });
+
+    expect(clearButtonProps.value["aria-label"]).toBe("Effacer la recherche");
+    languageSpy.mockRestore();
+  });
 });

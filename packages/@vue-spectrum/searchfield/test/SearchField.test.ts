@@ -21,7 +21,10 @@ function renderComponent(props: Record<string, unknown> = {}) {
   });
 }
 
-function renderWithProvider(component: ReturnType<typeof defineComponent>) {
+function renderWithProvider(
+  component: ReturnType<typeof defineComponent>,
+  options: { locale?: string } = {}
+) {
   const ProviderHarness = defineComponent({
     name: "SearchFieldProviderHarness",
     setup() {
@@ -29,6 +32,7 @@ function renderWithProvider(component: ReturnType<typeof defineComponent>) {
         theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
         colorScheme: "light",
         scale: "medium",
+        locale: options.locale,
       });
 
       return () => h(component);
@@ -300,6 +304,24 @@ describe("SearchField", () => {
     });
 
     expect(tree.queryByLabelText("Clear search")).toBeNull();
+  });
+
+  it("localizes clear button label with provider locale", () => {
+    const tree = renderWithProvider(
+      defineComponent({
+        name: "SearchFieldLocaleHarness",
+        setup() {
+          return () =>
+            h(SearchField, {
+              "aria-label": "Recherche",
+              defaultValue: "bonjour",
+            });
+        },
+      }),
+      { locale: "fr-FR" }
+    );
+
+    expect(tree.getByLabelText("Effacer la recherche")).toBeTruthy();
   });
 
   it("wires description and error message via aria-describedby", () => {
