@@ -169,7 +169,7 @@ Companion docs:
 - [ ] `@react-spectrum/actiongroup` -> `@vue-spectrum/actiongroup`
 - [x] `@react-spectrum/buttongroup` -> `@vue-spectrum/buttongroup`
 - [x] `@react-spectrum/link` -> `@vue-spectrum/link`
-- [x] `@react-spectrum/breadcrumbs` -> `@vue-spectrum/breadcrumbs` (includes `Item` compatibility alias)
+- [x] `@react-spectrum/breadcrumbs` -> `@vue-spectrum/breadcrumbs` (includes `Item` compatibility alias and dedicated `BreadcrumbItem` parity test coverage)
 - [ ] `@react-spectrum/tabs` -> `@vue-spectrum/tabs`
 - [x] `@react-spectrum/accordion` -> `@vue-spectrum/accordion`
 - [ ] `@react-spectrum/steplist` -> `@vue-spectrum/steplist`

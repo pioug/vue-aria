@@ -1,15 +1,19 @@
 import {
   Fragment,
+  cloneVNode,
   computed,
   defineComponent,
   h,
+  isVNode,
   ref,
   type PropType,
+  type VNode,
 } from "vue";
 import { useBreadcrumbItem } from "@vue-aria/breadcrumbs";
 import { useFocusRing } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
 import { useHover } from "@vue-aria/interactions";
+import { useId } from "@vue-aria/ssr";
 import type { PressEvent } from "@vue-aria/types";
 import { filterDOMProps, mergeProps, type RouterOptions } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
@@ -100,6 +104,7 @@ export const BreadcrumbItem = defineComponent({
   },
   setup(props, { attrs, expose, slots }) {
     const elementRef = ref<HTMLElement | null>(null);
+    const fallbackId = useId(undefined, "v-spectrum-breadcrumb-item");
 
     const locale = useLocale();
     const isRTL = computed(() => locale.value.direction === "rtl");
@@ -163,41 +168,59 @@ export const BreadcrumbItem = defineComponent({
       const isMenu = Boolean(resolvedProps.isMenu);
       const showSeparator = resolvedProps.showSeparator !== false;
       const elementType = resolvedProps.href ? "a" : "span";
-
-      const element = h(
-        elementType,
-        mergeProps(
-          domProps,
-          styleProps,
-          isMenu ? {} : itemProps.value,
-          hoverProps,
-          focusRing.focusProps,
-          {
-            ref: (value: unknown) => {
-              elementRef.value = value as HTMLElement | null;
+      const elementId =
+        (resolvedProps.id as string | undefined) ??
+        fallbackId.value;
+      const slottedChildren = slots.default?.() ?? [];
+      const singleSlottedAnchor =
+        slottedChildren.length === 1 &&
+        isVNode(slottedChildren[0]) &&
+        slottedChildren[0].type === "a"
+          ? (slottedChildren[0] as VNode)
+          : null;
+      const mergedElementProps = mergeProps(
+        domProps,
+        styleProps,
+        isMenu ? {} : itemProps.value,
+        hoverProps,
+        focusRing.focusProps,
+        {
+          id: elementId,
+          ref: (value: unknown) => {
+            elementRef.value = value as HTMLElement | null;
+          },
+          class: classNames(
+            {
+              "spectrum-Breadcrumbs-itemLink": !isMenu,
+              "is-disabled": !isCurrent && isDisabled,
+              "is-hovered": isHovered.value,
+              "focus-ring": focusRing.isFocusVisible.value,
             },
-            class: classNames(
-              {
-                "spectrum-Breadcrumbs-itemLink": !isMenu,
-                "is-disabled": !isCurrent && isDisabled,
-                "is-hovered": isHovered.value,
-                "focus-ring": focusRing.isFocusVisible.value,
-              },
-              styleProps.class as ClassValue | undefined,
-              domProps.class as ClassValue | undefined,
-              resolvedProps.UNSAFE_className as ClassValue | undefined
-            ),
-            style: {
-              ...(styleProps.style ?? {}),
-              ...((resolvedProps.UNSAFE_style as
-                | Record<string, string | number>
-                | undefined) ?? {}),
-            },
-            tabindex: isCurrent ? -1 : undefined,
-          }
-        ),
-        slots.default?.()
+            styleProps.class as ClassValue | undefined,
+            domProps.class as ClassValue | undefined,
+            resolvedProps.UNSAFE_className as ClassValue | undefined
+          ),
+          style: {
+            ...(styleProps.style ?? {}),
+            ...((resolvedProps.UNSAFE_style as
+              | Record<string, string | number>
+              | undefined) ?? {}),
+          },
+          tabindex: isCurrent ? -1 : undefined,
+        }
       );
+
+      const element =
+        singleSlottedAnchor && !isMenu && !resolvedProps.href
+          ? cloneVNode(
+              singleSlottedAnchor,
+              mergeProps(
+                (singleSlottedAnchor.props ?? {}) as Record<string, unknown>,
+                mergedElementProps
+              ),
+              true
+            )
+          : h(elementType, mergedElementProps, slots.default?.());
 
       if (!showSeparator) {
         return element;

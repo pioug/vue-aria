@@ -56,3 +56,4 @@ const breadcrumbTree = h(
 - Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Supports automatic overflow collapsing with a menu trigger when items exceed available space.
 - Supports `showRoot`, `isDisabled`, and `size` options similar to upstream intent.
+- Includes dedicated `BreadcrumbItem` parity tests (defaults/current/disabled/onPress/custom slotted anchor behavior).
