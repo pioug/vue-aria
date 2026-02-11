@@ -53,4 +53,5 @@ const component = h(Picker, {
 - Mobile tray rendering is included when running on mobile screen widths.
 - Async loading baseline is included via `isLoading` spinner handling and `onLoadMore` scroll-threshold callbacks.
 - Basic form wiring is included via hidden-input submission/reset support (`name`, `form`, `defaultSelectedKey` reset behavior).
+- Basic validation semantics are included via `isRequired`, `isInvalid`, and `validationState` wiring to ARIA/class output.
 - Advanced parity work for full validation/deep form integration remains in progress.

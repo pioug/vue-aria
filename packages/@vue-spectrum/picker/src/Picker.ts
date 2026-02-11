@@ -42,6 +42,9 @@ export interface SpectrumPickerProps {
   selectedKey?: PickerKey | undefined;
   defaultSelectedKey?: PickerKey | undefined;
   isDisabled?: boolean | undefined;
+  isRequired?: boolean | undefined;
+  isInvalid?: boolean | undefined;
+  validationState?: "valid" | "invalid" | undefined;
   placeholder?: string | undefined;
   isLoading?: boolean | undefined;
   onLoadMore?: (() => void) | undefined;
@@ -304,6 +307,18 @@ export const Picker = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    isRequired: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    isInvalid: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    validationState: {
+      type: String as PropType<"valid" | "invalid" | undefined>,
+      default: undefined,
+    },
     placeholder: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -421,6 +436,9 @@ export const Picker = defineComponent({
 
     const isDisabled = computed(() =>
       Boolean((resolvedProviderProps.value.isDisabled as boolean | undefined) ?? props.isDisabled)
+    );
+    const isInvalid = computed(
+      () => Boolean(props.isInvalid) || props.validationState === "invalid"
     );
 
     const enabledKeys = computed(() =>
@@ -720,6 +738,7 @@ export const Picker = defineComponent({
             "spectrum-Dropdown",
             {
               "is-disabled": isDisabled.value,
+              "is-invalid": isInvalid.value && !isDisabled.value,
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined,
@@ -743,6 +762,8 @@ export const Picker = defineComponent({
               disabled: isDisabled.value,
               "aria-label": ariaLabel,
               "aria-labelledby": ariaLabelledby,
+              "aria-invalid": isInvalid.value ? "true" : undefined,
+              "aria-required": props.isRequired ? "true" : undefined,
               "aria-haspopup": "listbox",
               "aria-expanded": isOpen.value ? "true" : "false",
               "aria-controls": isOpen.value ? listboxId.value : undefined,
@@ -804,6 +825,7 @@ export const Picker = defineComponent({
                 name: props.name,
                 form: props.form,
                 value: selectedKey.value ?? "",
+                required: props.isRequired,
               })
             : null,
           isOpen.value && items.value.length > 0

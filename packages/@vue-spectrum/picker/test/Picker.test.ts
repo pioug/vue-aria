@@ -320,6 +320,38 @@ describe("Picker", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("applies invalid state class and aria-invalid", () => {
+    const tree = renderComponent({
+      validationState: "invalid",
+    });
+
+    const root = tree.container.querySelector(".spectrum-Dropdown");
+    expect(root?.classList.contains("is-invalid")).toBe(true);
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    expect(trigger.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("marks required semantics on trigger and hidden input", () => {
+    const tree = render(Picker, {
+      props: {
+        "aria-label": "picker-test",
+        items,
+        name: "picker",
+        isRequired: true,
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    expect(trigger.getAttribute("aria-required")).toBe("true");
+
+    const hiddenInput = tree.container.querySelector(
+      "input[name=\"picker\"]"
+    ) as HTMLInputElement | null;
+    expect(hiddenInput).toBeTruthy();
+    expect(hiddenInput?.required).toBe(true);
+  });
+
   it("submits empty option by default when used in a form", () => {
     let submittedValue: FormDataEntryValue | undefined;
     const onSubmit = vi.fn((event: Event) => {
