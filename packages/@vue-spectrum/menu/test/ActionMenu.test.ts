@@ -120,4 +120,16 @@ describe("ActionMenu", () => {
     expect(onOpenChange).toHaveBeenCalledTimes(1);
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
+
+  it("labels the menu via trigger id when opened", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const trigger = tree.getByRole("button", { name: "More actions" });
+
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    expect(trigger.id).toBeTruthy();
+    expect(menu.getAttribute("aria-labelledby")).toBe(trigger.id);
+  });
 });

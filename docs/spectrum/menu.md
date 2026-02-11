@@ -55,5 +55,5 @@ const component = h(MenuTrigger, {
 - Baseline includes menu and trigger behavior with keyboard navigation, selection modes (`none`/`single`/`multiple`), section grouping support (`sections` + `MenuSection`), submenu trigger behavior (`SubmenuTrigger`), and close-on-select behavior.
 - Baseline includes accessibility guardrails from upstream behavior: runtime warning when neither `aria-label` nor `aria-labelledby` is provided to `Menu`, plus section/item `aria-label` semantics for grouped/icon-style menus.
 - Baseline includes trigger-anchored popover positioning support (`placement`) for `MenuTrigger` and `ActionMenu`.
-- Baseline `ActionMenu` parity includes default/custom trigger ARIA labeling (`More actions` fallback), `aria-labelledby` precedence wiring, controlled/uncontrolled open-state behavior, disabled handling, and `autoFocus`.
+- Baseline `ActionMenu` parity includes default/custom trigger ARIA labeling (`More actions` fallback), `aria-labelledby` precedence wiring, trigger-id-to-menu `aria-labelledby` linkage, controlled/uncontrolled open-state behavior, disabled handling, and `autoFocus`.
 - Advanced parity for contextual-help/dialog trigger integration and full visual overlay parity remains in progress.

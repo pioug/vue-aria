@@ -211,4 +211,16 @@ describe("MenuTrigger", () => {
     expect(popover?.style.position.length).toBeGreaterThan(0);
     expect(popover?.style.zIndex).toBe("100000");
   });
+
+  it("labels the menu via trigger id when opened", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const trigger = tree.getByRole("button", { name: "Menu Button" });
+
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    expect(trigger.id).toBeTruthy();
+    expect(menu.getAttribute("aria-labelledby")).toBe(trigger.id);
+  });
 });
