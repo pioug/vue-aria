@@ -405,6 +405,7 @@ export const TagGroup = defineComponent({
     const rowRefs = new Map<string, HTMLDivElement>();
     const removedKeys = ref(new Set<string>());
     const focusedKey = ref<string | null>(null);
+    const rovingFocusActive = ref(false);
     const slotItems = ref<SpectrumTagItemData[]>([]);
     const isExpanded = ref(false);
     const measuredCollapsedCount = ref<number | null>(null);
@@ -566,6 +567,7 @@ export const TagGroup = defineComponent({
       (keys) => {
         if (keys.length === 0) {
           focusedKey.value = null;
+          rovingFocusActive.value = false;
           return;
         }
 
@@ -764,12 +766,17 @@ export const TagGroup = defineComponent({
                       }
                     },
                     item,
-                    tabIndex: focusedKey.value === itemKey ? 0 : -1,
+                    tabIndex: rovingFocusActive.value
+                      ? focusedKey.value === itemKey
+                        ? 0
+                        : -1
+                      : 0,
                     isFocused: focusedKey.value === itemKey,
                     isDisabled: disabled,
                     allowsRemoving: props.allowsRemoving,
                     removeButtonLabel: props.removeButtonLabel,
                     onFocus: () => {
+                      rovingFocusActive.value = true;
                       focusedKey.value = itemKey;
                     },
                     onKeydown: (event: KeyboardEvent) => {

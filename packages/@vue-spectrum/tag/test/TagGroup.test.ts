@@ -39,8 +39,8 @@ describe("TagGroup", () => {
     const tags = tree.getAllByRole("row");
 
     expect(tags[0].getAttribute("tabindex")).toBe("0");
-    expect(tags[1].getAttribute("tabindex")).toBe("-1");
-    expect(tags[2].getAttribute("tabindex")).toBe("-1");
+    expect(tags[1].getAttribute("tabindex")).toBe("0");
+    expect(tags[2].getAttribute("tabindex")).toBe("0");
   });
 
   it("supports keyboard navigation in LTR", async () => {
@@ -104,9 +104,43 @@ describe("TagGroup", () => {
 
     await user.tab();
     expect(document.activeElement).toBe(tags[0]);
+    expect(tags[0].getAttribute("tabindex")).toBe("0");
+    expect(tags[1].getAttribute("tabindex")).toBe("-1");
+    expect(tags[2].getAttribute("tabindex")).toBe("-1");
 
     await user.tab();
     expect(document.activeElement).toBe(after);
+  });
+
+  it("is focusable with Shift+Tab and enters on the last tag", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "TagGroupShiftTabHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button", "aria-label": "Before" }, "Before"),
+            h(TagGroup, {
+              "aria-label": "tag group",
+              items,
+            }),
+            h("button", { type: "button", "aria-label": "After" }, "After"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const before = tree.getByRole("button", { name: "Before" });
+    const after = tree.getByRole("button", { name: "After" });
+    const tags = tree.getAllByRole("row");
+
+    (after as HTMLButtonElement).focus();
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(tags[2]);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(before);
   });
 
   it("remembers the last focused tag when tabbing away and back", async () => {
