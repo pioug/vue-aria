@@ -24,7 +24,13 @@ export { theme as expressTheme } from "@vue-spectrum/theme-express";
 export { style, baseColor, lightDark, focusRing, raw, keyframes } from "@vue-spectrum/style-macro-s1";
 export { simulateMobile, simulateDesktop } from "@vue-spectrum/test-utils";
 export { ErrorBoundary, generatePowerset } from "@vue-spectrum/story-utils";
-export { pressScale, isDocsEnv } from "@vue-spectrum/s2";
+export {
+  Provider as S2Provider,
+  Button as S2Button,
+  LinkButton as S2LinkButton,
+  pressScale,
+  isDocsEnv,
+} from "@vue-spectrum/s2";
 
 export { Icon, UIIcon, Illustration } from "@vue-spectrum/icon";
 export {
