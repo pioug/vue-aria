@@ -1,7 +1,9 @@
 import { computed, defineComponent, h, type PropType } from "vue";
-import { useLocalizedStringFormatter } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
+import { useHover } from "@vue-aria/interactions";
 import { useId } from "@vue-aria/ssr";
 import { VisuallyHidden } from "@vue-aria/visually-hidden";
+import { mergeProps } from "@vue-aria/utils";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import {
   type StepKey,
@@ -41,6 +43,7 @@ export const StepListItem = defineComponent({
     }
 
     const state = useStepListContext();
+    const locale = useLocale();
     const stringFormatter = useLocalizedStringFormatter(stepListMessages);
 
     const markerId = useId(undefined, "v-spectrum-step-marker");
@@ -58,6 +61,9 @@ export const StepListItem = defineComponent({
         state.isReadOnly.value ||
         Boolean(props.isDisabled)
     );
+    const { hoverProps, isHovered } = useHover({
+      isDisabled: computed(() => isItemDisabled.value || isSelected.value),
+    });
 
     const stateText = computed(() => {
       if (isSelected.value) {
@@ -78,12 +84,15 @@ export const StepListItem = defineComponent({
 
       state.selectStep(props.item!.key);
     };
+    const markerLabel = computed(() =>
+      new Intl.NumberFormat().format(state.getItemIndex(props.item!.key) + 1)
+    );
 
     return () =>
       h("li", { class: classNames("spectrum-Steplist-item") }, [
         h(
           "a",
-          {
+          mergeProps(hoverProps, {
             href: "#",
             "aria-labelledby": `${markerId.value} ${labelId.value}`,
             "aria-current": isSelected.value ? "step" : undefined,
@@ -95,6 +104,7 @@ export const StepListItem = defineComponent({
                 "is-selected": isSelected.value && !isItemDisabled.value,
                 "is-disabled": isItemDisabled.value,
                 "is-completed": isCompleted.value,
+                "is-hovered": isHovered.value,
                 "is-selectable": isSelectable.value && !isSelected.value,
                 "spectrum-Steplist-link--emphasized": Boolean(props.isEmphasized),
               },
@@ -110,7 +120,7 @@ export const StepListItem = defineComponent({
                 onSelect();
               }
             },
-          },
+          }),
           [
             h(VisuallyHidden as any, null, {
               default: () => stateText.value,
@@ -128,6 +138,46 @@ export const StepListItem = defineComponent({
               "div",
               {
                 "aria-hidden": "true",
+                class: classNames("spectrum-Steplist-segment", {
+                  "is-completed": isCompleted.value,
+                }),
+              },
+              [
+                h(
+                  "svg",
+                  {
+                    class: classNames("spectrum-Steplist-segmentLine"),
+                    xmlns: "http://www.w3.org/2000/svg",
+                    height: "100%",
+                    viewBox: "0 0 2 8",
+                    preserveAspectRatio: "none",
+                  },
+                  [
+                    h("line", {
+                      x1: "1",
+                      y1: "0",
+                      x2: "1",
+                      y2: "8",
+                      vectorEffect: "non-scaling-stroke",
+                    }),
+                  ]
+                ),
+                h(
+                  "span",
+                  {
+                    class: classNames("spectrum-Steplist-chevron", {
+                      "is-reversed": locale.value.direction === "rtl",
+                    }),
+                    "aria-hidden": "true",
+                  },
+                  "›"
+                ),
+              ]
+            ),
+            h(
+              "div",
+              {
+                "aria-hidden": "true",
                 class: classNames("spectrum-Steplist-markerWrapper"),
               },
               [
@@ -137,7 +187,7 @@ export const StepListItem = defineComponent({
                     id: markerId.value,
                     class: classNames("spectrum-Steplist-marker"),
                   },
-                  String(state.getItemIndex(props.item!.key) + 1)
+                  markerLabel.value
                 ),
               ]
             ),

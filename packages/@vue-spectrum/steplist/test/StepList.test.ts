@@ -2,6 +2,7 @@ import { render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { StepList, StepListItem, type SpectrumStepListItemData } from "../src";
 
 const items: SpectrumStepListItemData[] = [
@@ -228,5 +229,34 @@ describe("StepList", () => {
     expect(stepListItems[1].textContent).toContain("Completed:");
     expect(stepListItems[2].textContent).toContain("Current:");
     expect(stepListItems[3].textContent).toContain("Not completed:");
+  });
+
+  it("renders step visuals and rtl chevron direction", () => {
+    const App = defineComponent({
+      name: "StepListVisualRtlHarness",
+      setup() {
+        provideI18n({
+          locale: "ar-AE",
+          direction: "rtl",
+        });
+
+        return () =>
+          h(StepList, {
+            "aria-label": "steplist-test",
+            items,
+            defaultSelectedKey: "step-two",
+            defaultLastCompletedStep: "step-one",
+          });
+      },
+    });
+
+    const tree = render(App);
+    const chevrons = tree.container.querySelectorAll(".spectrum-Steplist-chevron");
+    const segments = tree.container.querySelectorAll(".spectrum-Steplist-segment");
+
+    expect(chevrons).toHaveLength(4);
+    expect(segments).toHaveLength(4);
+    expect(chevrons[0]?.className).toContain("is-reversed");
+    expect(segments[0]?.className).toContain("is-completed");
   });
 });

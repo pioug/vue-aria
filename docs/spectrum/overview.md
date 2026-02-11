@@ -62,7 +62,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/color` (in progress): color primitives (`ColorArea`, `ColorWheel`, `ColorSlider`, `ColorField`, `ColorSwatch`, `ColorPicker`, `ColorEditor`, `ColorSwatchPicker`, `ColorThumb`) with baseline hex-color editing and selection flows
 - `@vue-spectrum/datepicker` (in progress): date-entry primitives (`DateField`, `TimeField`, `DatePicker`, `DateRangePicker`) with baseline native field behavior, popover calendar selection flows, and SSR coverage
 - `@vue-spectrum/filetrigger` (in progress): file selection trigger primitive (`FileTrigger`) with pressable-child integration, hidden input behavior, and file-selection callbacks
-- `@vue-spectrum/steplist` (in progress): step navigation primitives (`StepList`, `StepListItem`) with baseline progression and selection state behavior, static slot composition support, and localized step-state messages
+- `@vue-spectrum/steplist` (in progress): step navigation primitives (`StepList`, `StepListItem`) with baseline progression and selection state behavior, static slot composition support, localized step-state messages, and segment/chevron visuals
 - `@vue-spectrum/link`: navigation link primitive (`Link`)
 - `@vue-spectrum/breadcrumbs`: breadcrumb primitives (`Breadcrumbs`, `BreadcrumbItem`) with overflow/menu collapsing and link/action semantics
 - `@vue-spectrum/divider`: divider primitive (`Divider`)
