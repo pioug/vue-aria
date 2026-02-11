@@ -58,5 +58,6 @@ const component = h(ActionGroup, {
 - Baseline includes root custom-prop passthrough and static-item `aria-label` semantics.
 - Baseline includes `buttonLabelBehavior="hide"` wiring (`spectrum-ActionGroup-item--iconOnly` with aria-label fallback for accessibility).
 - Baseline includes `buttonLabelBehavior="collapse"` behavior: labels collapse to icon-only buttons before overflowing when possible, and labels restore when space increases.
+- Baseline test coverage now includes upstream-style toolbar composition scenarios with nested `ActionGroup` instances, divider orientation parity, toolbar label precedence, and combined action/selection flows.
 - Baseline multiple-selection behavior does not select all items on `Cmd/Ctrl + A`.
 - Advanced visual/theming parity for collapsed-label presentation remains in progress.
