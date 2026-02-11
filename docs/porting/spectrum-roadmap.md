@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `51 / 76` completed.
+- Task progress: `52 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -27,6 +27,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/list` baseline is now in progress with initial `ListView` and `ListViewItem` ports, including grid/list semantics (`grid` + `row` + `gridcell`), keyboard row navigation, controlled/uncontrolled single and multiple selection behavior, and loading/empty-state plus `onLoadMore` behavior with starter/SSR tests and docs/umbrella wiring; advanced child-action focus model and drag-and-drop parity remain.
 - `@vue-spectrum/listbox` baseline is now in progress with initial `ListBox`, `ListBoxBase`, `ListBoxOption`, and `ListBoxSection` ports, including grouped-option semantics (`group` + heading/divider), keyboard navigation (with optional focus-wrap behavior), controlled/uncontrolled single and multiple selection behavior, and starter/SSR tests with docs and umbrella wiring; advanced virtualizer/layout parity remains.
 - `@vue-spectrum/table` baseline is now in progress with initial `TableView`, `Column`, `TableHeader`, `TableBody`, `Section`, `Row`, and `Cell` ports, including static table semantics (`grid` + `rowgroup` + `row` + `columnheader` + `rowheader` + `gridcell`), keyboard row navigation, controlled/uncontrolled row selection, and starter sort-state/SSR coverage with docs and umbrella wiring; advanced upstream parity for resizing, nested rows, virtualization, and drag-and-drop remains.
+- `@vue-spectrum/tree` baseline is now in progress with initial `TreeView`, `TreeViewItem`, and `TreeViewItemContent` ports, including nested treegrid semantics (`treegrid` + `row` + `gridcell`), controlled/uncontrolled expansion and selection state handling, keyboard navigation, and starter/SSR coverage with docs and umbrella wiring; richer static-composition parity and advanced drag-and-drop/collection behavior remain.
 - `@vue-spectrum/illustratedmessage` baseline is now in progress with initial `IllustratedMessage` port, including root illustrated-message rendering behavior, slot-based heading/content styling wiring, and starter/SSR tests with docs and umbrella wiring; advanced visual/theming parity remains.
 - `@vue-spectrum/inlinealert` baseline is now in progress with initial `InlineAlert` port, including alert role semantics, variant class behavior (`neutral`/`info`/`positive`/`notice`/`negative`), and autofocus handling with starter/SSR tests plus docs/umbrella wiring; advanced icon/theming parity remains.
 - `@vue-spectrum/overlays` baseline is now in progress with initial `Overlay` and `OpenTransition` ports, including portal mounting behavior, transition lifecycle callback wiring, and starter/SSR tests with docs and umbrella wiring; `Modal`/`Popover`/`Tray` parity remains.

@@ -77,6 +77,9 @@ export default defineConfig({
         "@vue-spectrum/table": fileURLToPath(
           new URL("../../packages/@vue-spectrum/table/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/tree": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/tree/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/buttongroup": fileURLToPath(
           new URL("../../packages/@vue-spectrum/buttongroup/src/index.ts", import.meta.url)
         ),
@@ -312,6 +315,7 @@ export default defineConfig({
           { text: "@vue-spectrum/list", link: "/spectrum/list" },
           { text: "@vue-spectrum/listbox", link: "/spectrum/listbox" },
           { text: "@vue-spectrum/table", link: "/spectrum/table" },
+          { text: "@vue-spectrum/tree", link: "/spectrum/tree" },
           { text: "@vue-spectrum/buttongroup", link: "/spectrum/buttongroup" },
           { text: "@vue-spectrum/accordion", link: "/spectrum/accordion" },
           { text: "@vue-spectrum/checkbox", link: "/spectrum/checkbox" },
