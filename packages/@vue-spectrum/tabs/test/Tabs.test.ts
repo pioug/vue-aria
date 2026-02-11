@@ -306,6 +306,11 @@ describe("Tabs", () => {
 
       const picker = getByRole("button", { name: "Tab 1" });
       expect(picker).toBeTruthy();
+      const pickerContainer = picker.closest(".spectrum-Tabs-picker");
+      expect(pickerContainer).not.toBeNull();
+      const pickerId = pickerContainer?.getAttribute("id");
+      expect(pickerId).not.toBeNull();
+      expect(getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(pickerId);
 
       await user.click(picker);
       const option = getByRole("option", { name: "Tab 2" });

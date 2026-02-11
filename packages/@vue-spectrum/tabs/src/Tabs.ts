@@ -9,12 +9,14 @@ import {
   provide,
   ref,
   watch,
+  type Ref,
   type InjectionKey,
   type PropType,
   type VNodeChild,
 } from "vue";
 import { useFocusRing } from "@vue-aria/focus";
 import { useHover } from "@vue-aria/interactions";
+import { useId } from "@vue-aria/ssr";
 import {
   useTab,
   useTabList,
@@ -80,6 +82,7 @@ interface TabsContextValue {
   density: ReadonlyRef<TabsDensity>;
   ariaLabel: ReadonlyRef<string | undefined>;
   ariaLabelledby: ReadonlyRef<string | undefined>;
+  collapsedPanelLabelledby: Ref<string | undefined>;
 }
 
 const TABS_CONTEXT_SYMBOL: InjectionKey<TabsContextValue> = Symbol(
@@ -279,6 +282,7 @@ export const Tabs = defineComponent({
         props["aria-labelledby"] ??
         (attrs["aria-labelledby"] as string | undefined)
     );
+    const collapsedPanelLabelledby = ref<string | undefined>(undefined);
 
     const state = useTabListState<SpectrumTabItem>({
       collection,
@@ -310,6 +314,7 @@ export const Tabs = defineComponent({
       density,
       ariaLabel,
       ariaLabelledby,
+      collapsedPanelLabelledby,
     });
 
     expose({
@@ -368,6 +373,10 @@ export const TabList = defineComponent({
     const elementRef = ref<HTMLElement | null>(null);
     const wrapperRef = ref<HTMLElement | null>(null);
     const isCollapsed = ref(false);
+    const collapsePickerId = useId(undefined, "v-spectrum-tabs-picker");
+    const shouldCollapse = computed(
+      () => context.orientation.value !== "vertical" && isCollapsed.value
+    );
 
     const { tabListProps } = useTabList(
       {
@@ -413,6 +422,8 @@ export const TabList = defineComponent({
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", checkShouldCollapse);
       }
+
+      context.collapsedPanelLabelledby.value = undefined;
     });
 
     useResizeObserver({
@@ -434,12 +445,20 @@ export const TabList = defineComponent({
       { immediate: true }
     );
 
+    watch(
+      shouldCollapse,
+      (collapsed) => {
+        context.collapsedPanelLabelledby.value = collapsed
+          ? collapsePickerId.value
+          : undefined;
+      },
+      { immediate: true }
+    );
+
     return () => {
       const domProps = filterDOMProps({
         ...(attrs as Record<string, unknown>),
       });
-      const shouldCollapse =
-        context.orientation.value !== "vertical" && isCollapsed.value;
       const tabItems = context.collection.value.map((item) => ({
         key: item.key,
         label: item.title ?? String(item.key),
@@ -456,7 +475,7 @@ export const TabList = defineComponent({
           ref: (value: unknown) => {
             elementRef.value = value as HTMLElement | null;
           },
-          "aria-hidden": shouldCollapse ? "true" : undefined,
+          "aria-hidden": shouldCollapse.value ? "true" : undefined,
           class: classNames(
             "spectrum-Tabs",
             `spectrum-Tabs--${context.orientation.value}`,
@@ -471,7 +490,7 @@ export const TabList = defineComponent({
           style: {
             ...(props.UNSAFE_style ?? {}),
             ...((domProps.style as Record<string, string | number> | undefined) ?? {}),
-            ...(shouldCollapse
+            ...(shouldCollapse.value
               ? {
                   maxWidth: "calc(100% + 1px)",
                   overflow: "hidden",
@@ -511,15 +530,18 @@ export const TabList = defineComponent({
         },
         [
           h(Picker, {
+            id: collapsePickerId.value,
             ariaLabel: context.ariaLabel.value,
+            "aria-label": context.ariaLabel.value,
             ariaLabelledby: context.ariaLabelledby.value,
+            "aria-labelledby": context.ariaLabelledby.value,
             items: tabItems,
             selectedKey: selectedPickerKey as string | number | undefined,
-            isDisabled: !shouldCollapse,
+            isDisabled: !shouldCollapse.value,
             UNSAFE_className: classNames("spectrum-Tabs-picker", {
-              "spectrum-Tabs--isCollapsed": shouldCollapse,
+              "spectrum-Tabs--isCollapsed": shouldCollapse.value,
             }),
-            UNSAFE_style: shouldCollapse
+            UNSAFE_style: shouldCollapse.value
               ? undefined
               : {
                   visibility: "hidden",
@@ -577,10 +599,14 @@ export const TabPanels = defineComponent({
           : normalizeRenderable(
               slots.default?.({ item: selectedItem }) ?? selectedItem.children
             );
+      const panelAriaLabelledby =
+        context.collapsedPanelLabelledby.value ??
+        (tabPanelProps.value["aria-labelledby"] as string | undefined);
 
       return h(
         "div",
         mergeProps(domProps, tabPanelProps.value, {
+          "aria-labelledby": panelAriaLabelledby,
           ref: (value: unknown) => {
             elementRef.value = value as HTMLElement | null;
           },
