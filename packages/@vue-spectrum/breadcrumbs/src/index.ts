@@ -1,5 +1,6 @@
 export { Breadcrumbs } from "./Breadcrumbs";
 export { BreadcrumbItem } from "./BreadcrumbItem";
+export { BreadcrumbItem as Item } from "./BreadcrumbItem";
 
 export type {
   SpectrumBreadcrumbsProps,

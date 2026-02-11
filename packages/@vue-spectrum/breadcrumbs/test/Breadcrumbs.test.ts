@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { render, within } from "@testing-library/vue";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { h, nextTick, defineComponent } from "vue";
-import { BreadcrumbItem, Breadcrumbs } from "../src";
+import { BreadcrumbItem, Breadcrumbs, Item } from "../src";
 
 interface BreadcrumbFixtureItem {
   key?: string | number;
@@ -444,5 +444,9 @@ describe("Breadcrumbs", () => {
     expect(items).toHaveLength(5);
     expect(items[0]?.tagName).toBe("A");
     expect(items[0]?.getAttribute("href")).toBe("https://example.com");
+  });
+
+  it("exports Item alias", () => {
+    expect(Item).toBe(BreadcrumbItem);
   });
 });

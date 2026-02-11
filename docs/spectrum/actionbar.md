@@ -26,6 +26,7 @@ const actions = [
 
 - `ActionBar`
 - `ActionBarItem`
+- `Item` (alias of `ActionBarItem` for v1 compatibility)
 - `ActionBarContainer`
 
 ## Example
@@ -53,5 +54,6 @@ const component = h(ActionBar, {
 ## Notes
 
 - Baseline includes open/close behavior based on selection count, `ActionGroup` action wiring, clear-selection behavior (button + Escape), selected-count rendering (including retaining the last non-zero count during the close transition), live selection announcements (`role="status"`), focus restore to the pre-toolbar element on close, close-transition lifecycle/class handling, and static slot composition support via `ActionBarItem`.
+- Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Baseline includes ActionGroup overflow-collapse handoff for constrained layouts (actions collapse behind a menu trigger).
 - Richer animation polish remains in progress.

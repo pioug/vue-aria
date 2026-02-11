@@ -24,6 +24,7 @@ import { BreadcrumbItem, Breadcrumbs, Flex } from "@vue-spectrum/vue-spectrum";
 
 - `Breadcrumbs`
 - `BreadcrumbItem`
+- `Item` (alias of `BreadcrumbItem` for v1 compatibility)
 
 ## Example
 
@@ -52,5 +53,6 @@ const breadcrumbTree = h(
 ## Notes
 
 - Uses `@vue-aria/breadcrumbs` semantics for item and navigation ARIA behavior.
+- Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Supports automatic overflow collapsing with a menu trigger when items exceed available space.
 - Supports `showRoot`, `isDisabled`, and `size` options similar to upstream intent.

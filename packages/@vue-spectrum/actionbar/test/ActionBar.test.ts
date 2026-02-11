@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
-import { ActionBar, ActionBarContainer, ActionBarItem } from "../src";
+import { ActionBar, ActionBarContainer, ActionBarItem, Item } from "../src";
 
 const items = [
   { key: "edit", label: "Edit" },
@@ -321,6 +321,10 @@ describe("ActionBar", () => {
 
     await user.click(actions[0] as HTMLElement);
     expect(onAction).toHaveBeenCalledWith("edit");
+  });
+
+  it("exports Item alias", () => {
+    expect(Item).toBe(ActionBarItem);
   });
 });
 
