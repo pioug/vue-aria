@@ -60,7 +60,22 @@ export function useSliderState(
   const pageSize = computed(() => {
     const resolved =
       options.pageSize === undefined ? undefined : toValue(options.pageSize);
-    return resolved && resolved > 0 ? resolved : step.value * 10;
+    if (resolved && resolved > 0) {
+      return resolved;
+    }
+
+    const range = Math.abs(maxValue.value - minValue.value);
+    if (range <= 0) {
+      return step.value;
+    }
+
+    const rawPageSize = range / 10;
+    const snappedPageSize = Math.round(rawPageSize / step.value) * step.value;
+    if (snappedPageSize > 0) {
+      return round(snappedPageSize);
+    }
+
+    return step.value;
   });
   const orientation = computed<Orientation>(() => {
     const resolved =

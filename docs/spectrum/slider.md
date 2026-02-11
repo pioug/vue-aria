@@ -54,5 +54,5 @@ const range = h(RangeSlider, {
 ## Notes
 
 - Baseline includes controlled/uncontrolled slider and range-slider behavior.
-- Includes keyboard/page/home/end value updates, form integration, and SSR coverage.
+- Includes keyboard/page/home/end value updates (including range-derived PageUp/PageDown step snapping), form integration, and SSR coverage.
 - Advanced interaction/formatting parity work is still in progress.

@@ -258,6 +258,72 @@ describe("Slider", () => {
     expect((input.element as HTMLInputElement).value).toBe("100");
   });
 
+  it("snaps default keyboard page size to a step multiple (range 0-230, step 10)", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(Slider, {
+      attachTo: document.body,
+      props: {
+        label: "The Label",
+        minValue: 0,
+        maxValue: 230,
+        defaultValue: 50,
+        step: 10,
+      },
+    });
+
+    const input = wrapper.get("input[type='range']");
+    (input.element as HTMLInputElement).focus();
+
+    await user.keyboard("{PageUp}");
+    expect((input.element as HTMLInputElement).value).toBe("70");
+    await user.keyboard("{PageDown}");
+    expect((input.element as HTMLInputElement).value).toBe("50");
+  });
+
+  it("snaps default keyboard page size down when range-derived value is fractional", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(Slider, {
+      attachTo: document.body,
+      props: {
+        label: "The Label",
+        minValue: 50,
+        maxValue: 75,
+        defaultValue: 60,
+        step: 2,
+      },
+    });
+
+    const input = wrapper.get("input[type='range']");
+    (input.element as HTMLInputElement).focus();
+
+    await user.keyboard("{PageUp}");
+    expect((input.element as HTMLInputElement).value).toBe("62");
+    await user.keyboard("{PageDown}");
+    expect((input.element as HTMLInputElement).value).toBe("60");
+  });
+
+  it("snaps default keyboard page size up when range-derived value is fractional", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(Slider, {
+      attachTo: document.body,
+      props: {
+        label: "The Label",
+        minValue: -50,
+        maxValue: -15,
+        defaultValue: -40,
+        step: 2,
+      },
+    });
+
+    const input = wrapper.get("input[type='range']");
+    (input.element as HTMLInputElement).focus();
+
+    await user.keyboard("{PageUp}");
+    expect((input.element as HTMLInputElement).value).toBe("-36");
+    await user.keyboard("{PageDown}");
+    expect((input.element as HTMLInputElement).value).toBe("-40");
+  });
+
   it("supports clicking the track", async () => {
     const onChange = vi.fn();
     const wrapper = mount(Slider, {
