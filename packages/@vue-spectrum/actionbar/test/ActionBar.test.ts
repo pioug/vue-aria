@@ -57,7 +57,8 @@ describe("ActionBar", () => {
     const actions = within(toolbar).getAllByRole("button");
     expect(actions).toHaveLength(3);
 
-    expect(tree.getByText("1 selected")).toBeTruthy();
+    expect(tree.getAllByText("1 selected").length).toBeGreaterThan(0);
+    expect(tree.getByRole("status").textContent).toBe("1 selected");
     expect(tree.getByLabelText("Clear selection").tagName).toBe("BUTTON");
   });
 
@@ -69,7 +70,8 @@ describe("ActionBar", () => {
       })
     );
 
-    expect(tree.getByText("All selected")).toBeTruthy();
+    expect(tree.getAllByText("All selected").length).toBeGreaterThan(0);
+    expect(tree.getByRole("status").textContent).toBe("All selected");
   });
 
   it("fires onAction when an action is pressed", async () => {
@@ -120,7 +122,7 @@ describe("ActionBar", () => {
       })
     );
 
-    const root = tree.getByText("1 selected").closest(".react-spectrum-ActionBar");
+    const root = tree.container.querySelector(".react-spectrum-ActionBar");
     expect(root).toBeTruthy();
 
     if (root) {

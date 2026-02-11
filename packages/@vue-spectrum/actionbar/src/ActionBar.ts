@@ -43,6 +43,18 @@ export interface SpectrumActionBarItemProps {
   isDisabled?: boolean | undefined;
 }
 
+const SCREEN_READER_ONLY_STYLE: Record<string, string> = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: "0",
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: "0",
+};
+
 function normalizeActionBarKey(value: unknown, fallback: ActionGroupKey): ActionGroupKey {
   if (typeof value === "string" || typeof value === "number") {
     return value;
@@ -396,6 +408,17 @@ export const ActionBar = defineComponent({
               }
             ),
           ]),
+          h(
+            "span",
+            {
+              class: classNames("react-spectrum-ActionBar-announcer"),
+              role: "status",
+              "aria-live": "polite",
+              "aria-atomic": "true",
+              style: SCREEN_READER_ONLY_STYLE,
+            },
+            selectedLabel.value
+          ),
         ]
       );
     };
