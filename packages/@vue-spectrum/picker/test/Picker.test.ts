@@ -1,7 +1,12 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
+import {
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  provideSpectrumProvider,
+} from "@vue-spectrum/provider";
 import {
   Picker,
   PickerItem,
@@ -23,6 +28,23 @@ function renderComponent(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+function renderWithProvider(component: ReturnType<typeof defineComponent>) {
+  const ProviderHarness = defineComponent({
+    name: "PickerProviderHarness",
+    setup() {
+      provideSpectrumProvider({
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        colorScheme: "light",
+        scale: "medium",
+      });
+
+      return () => h(component);
+    },
+  });
+
+  return render(ProviderHarness);
 }
 
 describe("Picker", () => {
@@ -371,7 +393,7 @@ describe("Picker", () => {
     expect(trigger.getAttribute("aria-invalid")).toBe("true");
   });
 
-  it("marks required semantics on trigger and hidden input", () => {
+  it("marks required semantics on trigger in aria mode", () => {
     const tree = render(Picker, {
       props: {
         "aria-label": "picker-test",
@@ -388,7 +410,7 @@ describe("Picker", () => {
       "input[name=\"picker\"]"
     ) as HTMLInputElement | null;
     expect(hiddenInput).toBeTruthy();
-    expect(hiddenInput?.required).toBe(true);
+    expect(hiddenInput?.required).toBe(false);
   });
 
   it("submits empty option by default when used in a form", () => {
@@ -555,5 +577,277 @@ describe("Picker", () => {
     await user.click(options[2] as Element);
     expect(onSelectionChange).toHaveBeenCalledWith("other-1");
     expect(tree.getByText("Three")).toBeTruthy();
+  });
+
+  it("supports validate function in aria behavior", async () => {
+    const user = userEvent.setup();
+    const tree = render(Picker, {
+      props: {
+        "aria-label": "picker-test",
+        name: "picker",
+        items,
+        defaultSelectedKey: "2",
+        validate: (value: SpectrumPickerItemData["key"] | undefined) =>
+          value === "2" ? "Invalid value" : null,
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    expect(trigger.getAttribute("aria-invalid")).toBe("true");
+    expect(trigger.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Invalid value")).toBeTruthy();
+
+    await user.click(trigger);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-invalid")).not.toBe("true");
+    expect(tree.queryByText("Invalid value")).toBeNull();
+  });
+
+  it("supports Form.validationErrors in aria behavior", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "PickerAriaServerValidationApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                picker: "Invalid value",
+              },
+            },
+            {
+              default: () =>
+                h(Picker, {
+                  "aria-label": "picker-test",
+                  name: "picker",
+                  items,
+                }),
+            }
+          );
+      },
+    });
+
+    const tree = renderWithProvider(App);
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    expect(trigger.getAttribute("aria-invalid")).toBe("true");
+    expect(tree.getByText("Invalid value")).toBeTruthy();
+
+    await user.click(trigger);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-invalid")).not.toBe("true");
+    expect(tree.queryByText("Invalid value")).toBeNull();
+  });
+
+  it("supports native required validation behavior", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "PickerNativeRequiredValidationApp",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+          ]);
+      },
+    });
+    const tree = render(App);
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    const hiddenInput = tree.container.querySelector(
+      "input[name=\"picker\"]"
+    ) as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(hiddenInput.required).toBe(true);
+    expect(hiddenInput.validity.valid).toBe(false);
+    expect(trigger.getAttribute("aria-describedby")).toBeNull();
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Constraints not satisfied")).toBeTruthy();
+    expect(document.activeElement).toBe(trigger);
+
+    await user.click(trigger);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("supports native validate function", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "PickerNativeValidateFunctionApp",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+              defaultSelectedKey: "2",
+              validationBehavior: "native",
+              validate: (value: SpectrumPickerItemData["key"] | undefined) =>
+                value === "2" ? "Invalid value" : null,
+            }),
+          ]);
+      },
+    });
+    const tree = render(App);
+    const form = tree.getByTestId("form") as HTMLFormElement;
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+    expect(tree.getByText("Invalid value")).toBeTruthy();
+    expect(trigger.getAttribute("aria-describedby")).toBeTruthy();
+
+    await user.click(trigger);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("supports native custom errorMessage function", async () => {
+    const App = defineComponent({
+      name: "PickerNativeErrorMessageFunctionApp",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+              isRequired: true,
+              validationBehavior: "native",
+              errorMessage: (context) =>
+                (
+                  context.validationDetails as
+                    | { valueMissing?: boolean }
+                    | undefined
+                )?.valueMissing
+                  ? "Please enter a value"
+                  : null,
+            }),
+          ]);
+      },
+    });
+    const tree = render(App);
+    const form = tree.getByTestId("form") as HTMLFormElement;
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+    expect(trigger.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Please enter a value")).toBeTruthy();
+  });
+
+  it("supports native Form.validationErrors from submit", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "PickerNativeServerValidationApp",
+      setup() {
+        const serverErrors = ref<Record<string, string | string[]>>({});
+
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: serverErrors.value,
+              onSubmit: (event: Event) => {
+                event.preventDefault();
+                serverErrors.value = {
+                  picker: "Invalid value.",
+                };
+              },
+            },
+            {
+              default: () => [
+                h(Picker, {
+                  "aria-label": "picker-test",
+                  name: "picker",
+                  items,
+                }),
+                h("button", { type: "submit", "data-testid": "submit" }, "submit"),
+              ],
+            }
+        );
+      },
+    });
+    const tree = renderWithProvider(App);
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    const hiddenInput = tree.container.querySelector(
+      "input[name=\"picker\"]"
+    ) as HTMLInputElement;
+
+    expect(trigger.getAttribute("aria-describedby")).toBeNull();
+    await user.click(tree.getByTestId("submit"));
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Invalid value.")).toBeTruthy();
+    expect(hiddenInput.validity.valid).toBe(false);
+
+    await user.click(trigger);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    await user.click(options[0] as Element);
+    await nextTick();
+
+    expect(trigger.getAttribute("aria-describedby")).toBeNull();
+    expect(hiddenInput.validity.valid).toBe(true);
+  });
+
+  it("clears native validation state on form reset", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "PickerNativeValidationResetApp",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(Picker, {
+              "aria-label": "picker-test",
+              name: "picker",
+              items,
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+            h("button", { type: "reset", "data-testid": "reset" }, "reset"),
+          ]);
+      },
+    });
+    const tree = render(App);
+    const form = tree.getByTestId("form") as HTMLFormElement;
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+    expect(trigger.getAttribute("aria-describedby")).toBeTruthy();
+
+    await user.click(tree.getByTestId("reset"));
+    await nextTick();
+    expect(trigger.getAttribute("aria-describedby")).toBeNull();
   });
 });

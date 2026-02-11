@@ -54,5 +54,5 @@ const component = h(Picker, {
 - Mobile tray rendering is included when running on mobile screen widths.
 - Async loading baseline is included via `isLoading` spinner handling, `onLoadMore` scroll-threshold callbacks, loading-progress `aria-describedby` wiring on the trigger, and explicit loading labels (`Loading…`, `Loading more…`).
 - Basic form wiring is included via hidden-input submission/reset support (`name`, `form`, `defaultSelectedKey` reset behavior).
-- Basic validation semantics are included via `isRequired`, `isInvalid`, and `validationState` wiring to ARIA/class output.
-- Advanced parity work for full validation/deep form integration remains in progress.
+- Baseline now includes validation behavior parity across `aria` and `native` modes: `validate(value)` support, function-style `errorMessage` customizers with validation context, and `Form.validationErrors` integration by field `name` with clear-on-selection behavior.
+- Native-mode baseline includes required/custom-validity wiring on the hidden form input, `checkValidity` invalid-message display/focus behavior, and reset clearing behavior.

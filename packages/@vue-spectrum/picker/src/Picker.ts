@@ -16,6 +16,7 @@ import {
 import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
+import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderProps } from "@vue-spectrum/provider";
 import {
   classNames,
@@ -45,6 +46,20 @@ export interface SpectrumPickerProps {
   isRequired?: boolean | undefined;
   isInvalid?: boolean | undefined;
   validationState?: "valid" | "invalid" | undefined;
+  validationBehavior?: "aria" | "native" | undefined;
+  errorMessage?:
+    | string
+    | ((
+        context: {
+          isInvalid: boolean;
+          validationErrors: string[];
+          validationDetails: unknown;
+        }
+      ) => string | null | undefined)
+    | undefined;
+  validate?:
+    | ((value: PickerKey | undefined) => string | string[] | boolean | null | undefined)
+    | undefined;
   autoFocus?: boolean | undefined;
   placeholder?: string | undefined;
   isLoading?: boolean | undefined;
@@ -236,6 +251,24 @@ function parsePickerSlotItems(nodes: VNode[] | undefined): SpectrumPickerItemDat
   return items;
 }
 
+function getValidationMessage(
+  result: string | string[] | boolean | null | undefined
+): string | undefined {
+  if (typeof result === "string" && result.trim().length > 0) {
+    return result;
+  }
+
+  if (Array.isArray(result)) {
+    for (const entry of result) {
+      if (typeof entry === "string" && entry.trim().length > 0) {
+        return entry;
+      }
+    }
+  }
+
+  return undefined;
+}
+
 function createStaticPickerComponent(name: string, props: Record<string, unknown>) {
   return defineComponent({
     name,
@@ -320,6 +353,31 @@ export const Picker = defineComponent({
       type: String as PropType<"valid" | "invalid" | undefined>,
       default: undefined,
     },
+    validationBehavior: {
+      type: String as PropType<"aria" | "native" | undefined>,
+      default: undefined,
+    },
+    errorMessage: {
+      type: [String, Function] as PropType<
+        | string
+        | ((
+            context: {
+              isInvalid: boolean;
+              validationErrors: string[];
+              validationDetails: unknown;
+            }
+          ) => string | null | undefined)
+        | undefined
+      >,
+      default: undefined,
+    },
+    validate: {
+      type: Function as PropType<
+        | ((value: PickerKey | undefined) => string | string[] | boolean | null | undefined)
+        | undefined
+      >,
+      default: undefined,
+    },
     autoFocus: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -381,16 +439,23 @@ export const Picker = defineComponent({
     const resolvedProviderProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
+    const formContext = useFormContext();
+    const formValidationErrors = useFormValidationErrors();
 
     const rootRef = ref<HTMLDivElement | null>(null);
     const triggerRef = ref<HTMLButtonElement | null>(null);
     const pickerOverlayRef = ref<HTMLElement | null>(null);
     const formRef = ref<HTMLFormElement | null>(null);
+    const hiddenInputRef = ref<HTMLInputElement | null>(null);
     const loadMoreRequested = ref(false);
+    const isServerErrorCleared = ref(false);
+    const nativeValidationMessage = ref<string | undefined>(undefined);
+    const nativeValidationDetails = ref<unknown>(undefined);
     const optionRefs = new Map<string, HTMLLIElement>();
 
     const listboxId = useId(undefined, "v-spectrum-picker-listbox");
     const loadingIndicatorId = useId(undefined, "v-spectrum-picker-loading");
+    const errorMessageId = useId(undefined, "v-spectrum-picker-error");
 
     const parsedSlotItems = computed<SpectrumPickerItemData[]>(() =>
       parsePickerSlotItems(slots.default?.() as VNode[] | undefined)
@@ -443,8 +508,116 @@ export const Picker = defineComponent({
     const isDisabled = computed(() =>
       Boolean((resolvedProviderProps.value.isDisabled as boolean | undefined) ?? props.isDisabled)
     );
+    const isRequired = computed(() =>
+      Boolean(
+        (resolvedProviderProps.value.isRequired as boolean | undefined) ??
+          props.isRequired
+      )
+    );
+    const resolvedValidationState = computed(() => {
+      const value =
+        props.validationState ??
+        (resolvedProviderProps.value.validationState as "valid" | "invalid" | undefined);
+      if (value === "valid" || value === "invalid") {
+        return value;
+      }
+
+      return undefined;
+    });
+    const validationBehavior = computed(
+      () => props.validationBehavior ?? formContext?.value.validationBehavior ?? "aria"
+    );
+    const serverErrorMessageFromForm = computed(() => {
+      if (!props.name) {
+        return undefined;
+      }
+
+      const formError = formValidationErrors.value[props.name];
+      if (typeof formError === "string") {
+        return formError;
+      }
+
+      if (Array.isArray(formError)) {
+        for (const entry of formError) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const serverErrorMessage = computed(() =>
+      isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
+    );
+    const selectedValidationValue = computed<PickerKey | undefined>(() => {
+      if (selectedKey.value === null) {
+        return undefined;
+      }
+
+      return itemByKey.value.get(selectedKey.value)?.key ?? props.selectedKey;
+    });
+    const validationErrorMessage = computed(() =>
+      getValidationMessage(props.validate?.(selectedValidationValue.value))
+    );
+    const ariaValidationErrorMessage = computed(() =>
+      validationBehavior.value === "aria" ? validationErrorMessage.value : undefined
+    );
+    const baseValidationErrors = computed<string[]>(() => {
+      if (serverErrorMessage.value) {
+        return [serverErrorMessage.value];
+      }
+
+      if (ariaValidationErrorMessage.value) {
+        return [ariaValidationErrorMessage.value];
+      }
+
+      if (nativeValidationMessage.value) {
+        return [nativeValidationMessage.value];
+      }
+
+      return [];
+    });
+    const resolvedErrorMessageFromProp = computed<string | undefined>(() => {
+      if (typeof props.errorMessage === "string" && props.errorMessage.length > 0) {
+        return props.errorMessage;
+      }
+
+      if (typeof props.errorMessage !== "function") {
+        return undefined;
+      }
+
+      const value = props.errorMessage({
+        isInvalid:
+          Boolean(props.isInvalid) ||
+          resolvedValidationState.value === "invalid" ||
+          baseValidationErrors.value.length > 0,
+        validationErrors: baseValidationErrors.value,
+        validationDetails: nativeValidationDetails.value ?? {},
+      });
+      if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+      }
+
+      return undefined;
+    });
+    const resolvedErrorMessage = computed(
+      () =>
+        resolvedErrorMessageFromProp.value ??
+        serverErrorMessage.value ??
+        ariaValidationErrorMessage.value ??
+        nativeValidationMessage.value
+    );
     const isInvalid = computed(
-      () => Boolean(props.isInvalid) || props.validationState === "invalid"
+      () =>
+        Boolean(props.isInvalid) ||
+        resolvedValidationState.value === "invalid" ||
+        Boolean(serverErrorMessage.value) ||
+        Boolean(ariaValidationErrorMessage.value) ||
+        Boolean(nativeValidationMessage.value)
+    );
+    const shouldShowErrorMessage = computed(
+      () => isInvalid.value && Boolean(resolvedErrorMessage.value)
     );
 
     const enabledKeys = computed(() =>
@@ -556,9 +729,29 @@ export const Picker = defineComponent({
         uncontrolledSelectedKey.value = key;
       }
 
+      if (serverErrorMessageFromForm.value) {
+        isServerErrorCleared.value = true;
+      }
       props.onSelectionChange?.(item.key);
+      void nextTick(() => {
+        if (
+          validationBehavior.value === "native" &&
+          hiddenInputRef.value?.validity.valid
+        ) {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = hiddenInputRef.value.validity;
+        }
+      });
       closeMenu(true);
     };
+
+    watch(
+      () => [formValidationErrors.value, props.name] as const,
+      () => {
+        isServerErrorCleared.value = false;
+      },
+      { deep: true }
+    );
 
     watch(
       isLoading,
@@ -583,6 +776,17 @@ export const Picker = defineComponent({
 
         if (props.selectedKey === undefined) {
           uncontrolledSelectedKey.value = null;
+        }
+      },
+      { immediate: true }
+    );
+
+    watch(
+      () => validationBehavior.value,
+      (nextBehavior) => {
+        if (nextBehavior !== "native") {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = undefined;
         }
       },
       { immediate: true }
@@ -648,8 +852,85 @@ export const Picker = defineComponent({
       }
 
       uncontrolledSelectedKey.value = keyToString(props.defaultSelectedKey);
+      isServerErrorCleared.value = false;
+      nativeValidationMessage.value = undefined;
+      nativeValidationDetails.value = undefined;
       closeMenu();
     };
+    const onHiddenInvalid = (): void => {
+      if (validationBehavior.value !== "native") {
+        return;
+      }
+
+      const hiddenInput = hiddenInputRef.value;
+      if (!hiddenInput) {
+        return;
+      }
+
+      nativeValidationMessage.value =
+        hiddenInput.validationMessage || "Constraints not satisfied";
+      nativeValidationDetails.value = hiddenInput.validity;
+      triggerRef.value?.focus();
+    };
+
+    watch(
+      () => selectedKey.value,
+      () => {
+        if (
+          validationBehavior.value !== "native" ||
+          !hiddenInputRef.value?.validity.valid
+        ) {
+          return;
+        }
+
+        nativeValidationMessage.value = undefined;
+        nativeValidationDetails.value = hiddenInputRef.value.validity;
+      }
+    );
+
+    watch(
+      () =>
+        [
+          serverErrorMessage.value,
+          validationErrorMessage.value,
+          validationBehavior.value,
+          hiddenInputRef.value,
+        ] as const,
+      () => {
+        const hiddenInput = hiddenInputRef.value;
+        if (!hiddenInput) {
+          return;
+        }
+
+        if (validationBehavior.value === "native") {
+          const customValidityMessage =
+            serverErrorMessage.value ?? (validationErrorMessage.value ?? "");
+          hiddenInput.setCustomValidity(customValidityMessage);
+          return;
+        }
+
+        hiddenInput.setCustomValidity("");
+      },
+      { immediate: true }
+    );
+
+    watch(
+      () => hiddenInputRef.value,
+      (hiddenInput, previousHiddenInput, onCleanup) => {
+        if (previousHiddenInput) {
+          previousHiddenInput.removeEventListener("invalid", onHiddenInvalid);
+        }
+        if (!hiddenInput) {
+          return;
+        }
+
+        hiddenInput.addEventListener("invalid", onHiddenInvalid);
+        onCleanup(() => {
+          hiddenInput.removeEventListener("invalid", onHiddenInvalid);
+        });
+      },
+      { immediate: true }
+    );
 
     const resolveFormElement = (): HTMLFormElement | null => {
       if (typeof document === "undefined") {
@@ -741,6 +1022,7 @@ export const Picker = defineComponent({
       const triggerAriaDescribedby = [
         describedByFromProps,
         shouldShowTriggerLoading.value ? loadingIndicatorId.value : undefined,
+        shouldShowErrorMessage.value ? errorMessageId.value : undefined,
       ]
         .filter((value): value is string => Boolean(value))
         .join(" ");
@@ -785,7 +1067,10 @@ export const Picker = defineComponent({
               "aria-describedby":
                 triggerAriaDescribedby.length > 0 ? triggerAriaDescribedby : undefined,
               "aria-invalid": isInvalid.value ? "true" : undefined,
-              "aria-required": props.isRequired ? "true" : undefined,
+              "aria-required":
+                isRequired.value && validationBehavior.value === "aria"
+                  ? "true"
+                  : undefined,
               "aria-haspopup": "listbox",
               "aria-expanded": isOpen.value ? "true" : "false",
               "aria-controls": isOpen.value ? listboxId.value : undefined,
@@ -844,12 +1129,27 @@ export const Picker = defineComponent({
           ),
           props.name
             ? h("input", {
-                type: "hidden",
+                type: "text",
+                hidden: true,
                 name: props.name,
                 form: props.form,
                 value: selectedKey.value ?? "",
-                required: props.isRequired,
+                required:
+                  isRequired.value && validationBehavior.value === "native",
+                ref: (value: unknown) => {
+                  hiddenInputRef.value = value as HTMLInputElement | null;
+                },
               })
+            : null,
+          shouldShowErrorMessage.value
+            ? h(
+                "span",
+                {
+                  id: errorMessageId.value,
+                  class: classNames("spectrum-FieldError"),
+                },
+                resolvedErrorMessage.value
+              )
             : null,
           isOpen.value && items.value.length > 0
             ? h(
