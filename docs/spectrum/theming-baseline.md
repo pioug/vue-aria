@@ -45,4 +45,4 @@ provideSpectrumProvider({
 ## Notes
 
 - This is a migration baseline, not the full final Spectrum token system.
-- Theme package parity remains in the Phase 1 package track. `theme-default` baseline is now in progress; `theme-light`, `theme-dark`, and `theme-express` remain pending.
+- Theme package parity remains in the Phase 1 package track. `theme-default` and `theme-light` baselines are now in progress; `theme-dark` and `theme-express` remain pending.

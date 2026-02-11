@@ -18,6 +18,7 @@ export {
   useMediaQuery,
 } from "@vue-spectrum/provider";
 export { theme } from "@vue-spectrum/theme-default";
+export { theme as lightTheme } from "@vue-spectrum/theme-light";
 
 export { Icon, UIIcon, Illustration } from "@vue-spectrum/icon";
 export {
