@@ -54,7 +54,7 @@ describe("useTableColumnHeader", () => {
         ref(document.createElement("div"))
       );
 
-      expect(header.columnHeaderProps.value["aria-sort"]).toBe("none");
+      expect(header.columnHeaderProps.value["aria-sort"]).toBeUndefined();
 
       (header.columnHeaderProps.value.onClick as () => void)();
       expect(sortDescriptor.value).toEqual({

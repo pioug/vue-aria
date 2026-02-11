@@ -119,7 +119,7 @@ export function useTableRow<T>(
     "aria-disabled": isDisabled.value || undefined,
     "aria-selected":
       state.selectionManager.selectionMode.value === "none" ? undefined : isSelected.value,
-    "aria-rowindex": isVirtualized.value ? options.rowIndex + 2 : undefined,
+    "aria-rowindex": options.rowIndex + 2,
     "aria-labelledby":
       rowLabelledBy.value && rowLabelledBy.value.length > 0
         ? rowLabelledBy.value

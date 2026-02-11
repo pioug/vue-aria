@@ -44,29 +44,54 @@ function renderTable(
 
 export function tableTests() {
   it("renders a static table from columns and items", () => {
-    const tree = renderTable();
+    const tree = renderTable({
+      "data-testid": "test",
+      columns: [
+        { key: "foo", title: "Foo", isRowHeader: true },
+        { key: "bar", title: "Bar" },
+        { key: "baz", title: "Baz" },
+      ],
+    });
 
     const grid = tree.getByRole("grid", { name: "Table" });
+    expect(grid.getAttribute("data-testid")).toBe("test");
     expect(grid.getAttribute("aria-colcount")).toBe("3");
+    expect(grid.getAttribute("aria-rowcount")).toBe("3");
 
     const rowGroups = within(grid).getAllByRole("rowgroup");
     expect(rowGroups).toHaveLength(2);
 
+    const headerRows = within(rowGroups[0] as HTMLElement).getAllByRole("row");
+    expect(headerRows).toHaveLength(1);
+    expect(headerRows[0]?.getAttribute("aria-rowindex")).toBe("1");
+
     const headers = within(rowGroups[0] as HTMLElement).getAllByRole("columnheader");
     expect(headers).toHaveLength(3);
+    expect(headers[0]?.getAttribute("aria-colindex")).toBe("1");
+    expect(headers[1]?.getAttribute("aria-colindex")).toBe("2");
+    expect(headers[2]?.getAttribute("aria-colindex")).toBe("3");
     expect(headers[0]?.textContent).toContain("Foo");
     expect(headers[1]?.textContent).toContain("Bar");
     expect(headers[2]?.textContent).toContain("Baz");
+    for (const header of headers) {
+      expect(header.getAttribute("aria-sort")).toBeNull();
+      expect(header.getAttribute("aria-describedby")).toBeNull();
+    }
 
     const rows = within(rowGroups[1] as HTMLElement).getAllByRole("row");
     expect(rows).toHaveLength(2);
+    expect(rows[0]?.getAttribute("aria-rowindex")).toBe("2");
+    expect(rows[1]?.getAttribute("aria-rowindex")).toBe("3");
 
     const firstRowHeaders = within(rows[0] as HTMLElement).getAllByRole("rowheader");
     expect(firstRowHeaders).toHaveLength(1);
+    expect(firstRowHeaders[0]?.getAttribute("aria-colindex")).toBe("1");
     expect(firstRowHeaders[0]?.textContent).toContain("Foo 1");
 
     const firstRowCells = within(rows[0] as HTMLElement).getAllByRole("gridcell");
     expect(firstRowCells).toHaveLength(2);
+    expect(firstRowCells[0]?.getAttribute("aria-colindex")).toBe("2");
+    expect(firstRowCells[1]?.getAttribute("aria-colindex")).toBe("3");
     expect(firstRowCells[0]?.textContent).toContain("Bar 1");
     expect(firstRowCells[1]?.textContent).toContain("Baz 1");
   });

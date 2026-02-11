@@ -88,4 +88,5 @@ const component = h(TableView, {
 - Baseline includes static table semantics (`grid`, `rowgroup`, `row`, `columnheader`, `rowheader`, `gridcell`), single/multiple selection, keyboard row navigation, and sortable header state wiring.
 - Supports both prop-driven tables (`columns` + `items`) and static slot composition (`TableHeader`/`Column` + `TableBody`/`Row`/`Cell`/`EditableCell`).
 - Includes dedicated upstream-style `Table.test` and `Table.ssr.test` parity suites plus shared `test/TableTests` fixture parity scaffolding.
+- Includes expanded ARIA matrix assertions for static tables (`aria-rowcount`, row/column index attributes, and unsorted-header `aria-sort` omission).
 - Advanced upstream parity such as resizing, virtualization, nested row expansion, and drag-and-drop integration remains in progress.

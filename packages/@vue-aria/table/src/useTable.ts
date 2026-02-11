@@ -274,7 +274,7 @@ export function useTable<T>(
           ? state.collection.value.columns.length
           : undefined,
       "aria-rowcount":
-        resolveBoolean(options.isVirtualized) && state.collection.value.size > 0
+        state.collection.value.size > 0
           ? state.collection.value.size + 1
           : undefined,
       "aria-multiselectable":

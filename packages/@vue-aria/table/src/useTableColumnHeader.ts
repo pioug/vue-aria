@@ -77,7 +77,7 @@ export function useTableColumnHeader<T>(
       return sortDirection.value;
     }
 
-    return "none";
+    return undefined;
   });
 
   const sortDescription = computed(() => {
