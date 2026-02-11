@@ -1,4 +1,4 @@
-import { computed, ref, toValue, watchEffect } from "vue";
+import { computed, getCurrentScope, onScopeDispose, ref, toValue, watchEffect } from "vue";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import { useFocus, useHover } from "@vue-aria/interactions";
 import { mergeProps } from "@vue-aria/utils";
@@ -9,6 +9,7 @@ export interface UseTooltipTriggerOptions {
   isDisabled?: MaybeReactive<boolean | undefined>;
   trigger?: MaybeReactive<"focus" | "hover" | undefined>;
   shouldCloseOnPress?: MaybeReactive<boolean | undefined>;
+  delay?: MaybeReactive<number | undefined>;
 }
 
 export interface UseTooltipTriggerResult {
@@ -34,6 +35,19 @@ function resolveTrigger(
   return toValue(value) ?? "hover";
 }
 
+function resolveDelay(value: MaybeReactive<number | undefined> | undefined): number {
+  if (value === undefined) {
+    return 0;
+  }
+
+  const resolved = Number(toValue(value));
+  if (!Number.isFinite(resolved)) {
+    return 0;
+  }
+
+  return Math.max(0, resolved);
+}
+
 export function useTooltipTrigger(
   options: UseTooltipTriggerOptions,
   state: TooltipTriggerStateLike,
@@ -42,6 +56,28 @@ export function useTooltipTrigger(
   const tooltipId = useId(undefined, "v-aria-tooltip");
   const isHovered = ref(false);
   const isFocused = ref(false);
+  const showTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearShowTimeout = (): void => {
+    if (showTimeout.value !== null) {
+      clearTimeout(showTimeout.value);
+      showTimeout.value = null;
+    }
+  };
+
+  const scheduleShow = (): void => {
+    clearShowTimeout();
+    const delay = resolveDelay(options.delay);
+    if (delay <= 0) {
+      handleShow();
+      return;
+    }
+
+    showTimeout.value = setTimeout(() => {
+      showTimeout.value = null;
+      handleShow();
+    }, delay);
+  };
 
   const handleShow = (): void => {
     if (isHovered.value || isFocused.value) {
@@ -50,6 +86,7 @@ export function useTooltipTrigger(
   };
 
   const handleHide = (immediate?: boolean): void => {
+    clearShowTimeout();
     if (!isHovered.value && !isFocused.value) {
       state.close(immediate);
     }
@@ -81,7 +118,7 @@ export function useTooltipTrigger(
       }
 
       isHovered.value = true;
-      handleShow();
+      scheduleShow();
     },
     onHoverEnd: () => {
       if (resolveTrigger(options.trigger) === "focus") {
@@ -98,6 +135,7 @@ export function useTooltipTrigger(
     isDisabled: computed(() => resolveBoolean(options.isDisabled, false)),
     onFocus: () => {
       isFocused.value = true;
+      clearShowTimeout();
       handleShow();
     },
     onBlur: () => {
@@ -112,10 +150,17 @@ export function useTooltipTrigger(
       return;
     }
 
+    clearShowTimeout();
     isFocused.value = false;
     isHovered.value = false;
     handleHide(true);
   };
+
+  if (getCurrentScope()) {
+    onScopeDispose(() => {
+      clearShowTimeout();
+    });
+  }
 
   return {
     triggerProps: computed(() => ({

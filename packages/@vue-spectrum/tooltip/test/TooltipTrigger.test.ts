@@ -70,6 +70,95 @@ describe("TooltipTrigger", () => {
     wrapper.unmount();
   });
 
+  it("opens for hover after delay", async () => {
+    vi.useFakeTimers();
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+      delay: 350,
+    });
+
+    try {
+      const button = wrapper.get("button");
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(349);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1);
+      await flushOverlay();
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("does not open when hover leaves before delayed open", async () => {
+    vi.useFakeTimers();
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+      delay: 350,
+    });
+
+    try {
+      const button = wrapper.get("button");
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(175);
+      await flushOverlay();
+      await button.trigger("pointerleave", { pointerType: "mouse" });
+      await flushOverlay();
+
+      vi.advanceTimersByTime(350);
+      await flushOverlay();
+
+      expect(onOpenChange).not.toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("opens immediately for focus while delayed hover open is pending", async () => {
+    vi.useFakeTimers();
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+      delay: 350,
+    });
+
+    try {
+      const button = wrapper.get("button");
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(175);
+      await flushOverlay();
+
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("can be keyboard force closed", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mountTooltipTrigger({
