@@ -22,6 +22,7 @@ import {
 import { useProviderProps } from "@vue-spectrum/provider";
 import { Text } from "@vue-spectrum/text";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
+import { OpenTransition } from "@vue-spectrum/overlays";
 
 export interface SpectrumActionBarProps {
   selectedItemCount?: number | "all" | undefined;
@@ -310,6 +311,7 @@ export const ActionBar = defineComponent({
     const isOpen = computed(
       () => count.value === "all" || (typeof count.value === "number" && count.value > 0)
     );
+    const isMounted = ref(isOpen.value);
 
     const selectedLabel = computed(() => {
       if (count.value === "all") {
@@ -321,6 +323,8 @@ export const ActionBar = defineComponent({
 
     watch(isOpen, (nextOpen, previousOpen) => {
       if (nextOpen && !previousOpen) {
+        isMounted.value = true;
+
         if (typeof document === "undefined") {
           return;
         }
@@ -353,7 +357,7 @@ export const ActionBar = defineComponent({
     });
 
     return () => {
-      if (!isOpen.value) {
+      if (!isMounted.value) {
         return null;
       }
 
@@ -392,74 +396,89 @@ export const ActionBar = defineComponent({
       });
 
       return h(
-        "div",
+        OpenTransition,
         {
-          ...domProps,
-          ref: (value: unknown) => {
-            rootRef.value = value as HTMLDivElement | null;
-          },
-          class: classNames(
-            "react-spectrum-ActionBar",
-            {
-              "react-spectrum-ActionBar--emphasized": Boolean(isEmphasized),
-              "is-open": true,
-            },
-            styleProps.class as ClassValue | undefined,
-            domProps.class as ClassValue | undefined,
-            props.UNSAFE_className as ClassValue | undefined
-          ),
-          style: {
-            ...(styleProps.style ?? {}),
-            ...(props.UNSAFE_style ?? {}),
-          },
-          onKeydown: (event: KeyboardEvent) => {
-            if (event.key !== "Escape") {
-              return;
+          in: isOpen.value,
+          onExited: () => {
+            if (!isOpen.value) {
+              isMounted.value = false;
             }
-
-            event.preventDefault();
-            props.onClearSelection?.();
           },
         },
-        [
-          h("div", { class: classNames("react-spectrum-ActionBar-bar") }, [
-            actionGroupNode,
+        {
+          default: (transitionProps: { isOpen: boolean }) =>
             h(
-              ActionButton,
+              "div",
               {
-                "aria-label": props.clearSelectionLabel ?? "Clear selection",
-                isQuiet: true,
-                staticColor: isEmphasized ? "white" : undefined,
-                onPress: () => {
+                ...domProps,
+                ref: (value: unknown) => {
+                  rootRef.value = value as HTMLDivElement | null;
+                },
+                class: classNames(
+                  "react-spectrum-ActionBar",
+                  {
+                    "react-spectrum-ActionBar--emphasized": Boolean(isEmphasized),
+                    "is-open": transitionProps.isOpen,
+                    "is-closing": !transitionProps.isOpen,
+                  },
+                  styleProps.class as ClassValue | undefined,
+                  domProps.class as ClassValue | undefined,
+                  props.UNSAFE_className as ClassValue | undefined
+                ),
+                style: {
+                  ...(styleProps.style ?? {}),
+                  ...(props.UNSAFE_style ?? {}),
+                },
+                onKeydown: (event: KeyboardEvent) => {
+                  if (event.key !== "Escape") {
+                    return;
+                  }
+
+                  event.preventDefault();
                   props.onClearSelection?.();
                 },
               },
-              {
-                default: () => slots.clearButton?.() ?? "Clear",
-              }
+              [
+                h("div", { class: classNames("react-spectrum-ActionBar-bar") }, [
+                  actionGroupNode,
+                  h(
+                    ActionButton,
+                    {
+                      "aria-label": props.clearSelectionLabel ?? "Clear selection",
+                      isQuiet: true,
+                      staticColor: isEmphasized ? "white" : undefined,
+                      onPress: () => {
+                        props.onClearSelection?.();
+                      },
+                    },
+                    {
+                      default: () => slots.clearButton?.() ?? "Clear",
+                    }
+                  ),
+                  h(
+                    Text,
+                    {
+                      UNSAFE_className: classNames("react-spectrum-ActionBar-selectedCount"),
+                    },
+                    {
+                      default: () => selectedLabel.value,
+                    }
+                  ),
+                ]),
+                h(
+                  "span",
+                  {
+                    class: classNames("react-spectrum-ActionBar-announcer"),
+                    role: "status",
+                    "aria-live": "polite",
+                    "aria-atomic": "true",
+                    style: SCREEN_READER_ONLY_STYLE,
+                  },
+                  selectedLabel.value
+                ),
+              ]
             ),
-            h(
-              Text,
-              {
-                UNSAFE_className: classNames("react-spectrum-ActionBar-selectedCount"),
-              },
-              {
-                default: () => selectedLabel.value,
-              }
-            ),
-          ]),
-          h(
-            "span",
-            {
-              class: classNames("react-spectrum-ActionBar-announcer"),
-              role: "status",
-              "aria-live": "polite",
-              "aria-atomic": "true",
-              style: SCREEN_READER_ONLY_STYLE,
-            },
-            selectedLabel.value
-          ),
-        ]
+        }
       );
     };
   },

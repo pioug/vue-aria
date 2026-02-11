@@ -204,6 +204,49 @@ describe("ActionBar", () => {
     expect(document.activeElement).toBe(rowCheckbox);
   });
 
+  it("keeps the action bar mounted for the close transition tick", async () => {
+    const Harness = defineComponent({
+      name: "ActionBarTransitionHarness",
+      setup() {
+        const selectedItemCount = ref(1);
+
+        return () =>
+          h("div", [
+            h(
+              "button",
+              {
+                type: "button",
+                "data-testid": "close-actionbar",
+                onClick: () => {
+                  selectedItemCount.value = 0;
+                },
+              },
+              "close"
+            ),
+            h(ActionBar, {
+              selectedItemCount: selectedItemCount.value,
+              items,
+            }),
+          ]);
+      },
+    });
+
+    const tree = renderWithProvider(h(Harness));
+    expect(tree.getByRole("toolbar", { name: "Actions" })).toBeTruthy();
+
+    fireEvent.click(tree.getByTestId("close-actionbar"));
+    await Promise.resolve();
+
+    const root = tree.container.querySelector(".react-spectrum-ActionBar");
+    expect(root).toBeTruthy();
+    expect(root?.classList.contains("is-open")).toBe(false);
+    expect(root?.classList.contains("is-closing")).toBe(true);
+
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(tree.queryByRole("toolbar")).toBeNull();
+  });
+
   it("supports static slot syntax with ActionBarItem", async () => {
     const user = userEvent.setup();
     const onAction = vi.fn();
