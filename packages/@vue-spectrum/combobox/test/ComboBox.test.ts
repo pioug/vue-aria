@@ -1,7 +1,13 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { ComboBox, type SpectrumComboBoxItemData } from "../src";
+import {
+  ComboBox,
+  ComboBoxItem,
+  ComboBoxSection,
+  type SpectrumComboBoxItemData,
+} from "../src";
 
 const items: SpectrumComboBoxItemData[] = [
   { key: "1", label: "One" },
@@ -146,5 +152,49 @@ describe("ComboBox", () => {
     });
 
     expect(tree.getByRole("progressbar")).toBeTruthy();
+  });
+
+  it("supports static slot syntax with ComboBoxItem and ComboBoxSection", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+
+    const App = defineComponent({
+      name: "ComboBoxSlotApp",
+      setup() {
+        return () =>
+          h(
+            ComboBox,
+            {
+              label: "Test",
+              onSelectionChange,
+            },
+            {
+              default: () => [
+                h(ComboBoxSection, { id: "favorites", title: "Favorites" }, {
+                  default: () => [
+                    h(ComboBoxItem, { id: "fav-1" }, () => "One"),
+                    h(ComboBoxItem, { id: "fav-2", isDisabled: true }, () => "Two"),
+                  ],
+                }),
+                h(ComboBoxItem, { id: "other-1" }, () => "Three"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const button = tree.getByRole("button");
+
+    await user.click(button);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+
+    expect(options).toHaveLength(3);
+    expect(options[1]?.getAttribute("aria-disabled")).toBe("true");
+
+    await user.click(options[2] as Element);
+    expect(onSelectionChange).toHaveBeenCalledWith("other-1");
+    expect((tree.getByRole("combobox") as HTMLInputElement).value).toBe("Three");
   });
 });

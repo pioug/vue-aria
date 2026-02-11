@@ -207,7 +207,7 @@ export { Tabs, TabList, TabPanels } from "@vue-spectrum/tabs";
 export { TextField, TextArea } from "@vue-spectrum/textfield";
 export { SearchField } from "@vue-spectrum/searchfield";
 export { NumberField } from "@vue-spectrum/numberfield";
-export { ComboBox } from "@vue-spectrum/combobox";
+export { ComboBox, ComboBoxItem, ComboBoxSection } from "@vue-spectrum/combobox";
 export { SearchAutocomplete } from "@vue-spectrum/autocomplete";
 export { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
 export {
@@ -447,6 +447,8 @@ export type { SpectrumNumberFieldProps } from "@vue-spectrum/numberfield";
 export type {
   ComboBoxKey,
   SpectrumComboBoxItemData,
+  SpectrumComboBoxItemProps,
+  SpectrumComboBoxSectionProps,
   SpectrumComboBoxCompletionMode,
   SpectrumComboBoxMenuTrigger,
   SpectrumComboBoxMenuTriggerAction,

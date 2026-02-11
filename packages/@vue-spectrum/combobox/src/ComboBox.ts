@@ -1,9 +1,12 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   ref,
-  toValue,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useComboBox } from "@vue-aria/combobox";
@@ -69,6 +72,19 @@ export interface SpectrumComboBoxProps {
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
 
+export interface SpectrumComboBoxItemProps {
+  id?: Key | undefined;
+  textValue?: string | undefined;
+  isDisabled?: boolean | undefined;
+  "aria-label"?: string | undefined;
+}
+
+export interface SpectrumComboBoxSectionProps {
+  id?: Key | undefined;
+  title?: string | undefined;
+  "aria-label"?: string | undefined;
+}
+
 interface NormalizedComboBoxItem {
   key: Key;
   textValue?: string | undefined;
@@ -79,6 +95,235 @@ interface NormalizedComboBoxItem {
 
 const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
   textValue.toLowerCase().includes(inputValue.toLowerCase());
+
+function normalizeComboBoxKey(value: unknown, fallback: Key): Key {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseComboBoxItemNode(node: VNode, fallback: Key): NormalizedComboBoxItem {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  const labelFromSlot = extractTextContent(getSlotContent(node)).trim();
+  const textValue =
+    typeof props.textValue === "string" ? props.textValue : labelFromSlot;
+  const resolvedLabel = textValue || String(fallback);
+
+  return {
+    key: normalizeComboBoxKey(node.key ?? props.id, fallback),
+    label: resolvedLabel,
+    textValue: resolvedLabel,
+    isDisabled: Boolean(props.isDisabled),
+    "aria-label":
+      typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+  };
+}
+
+function parseComboBoxSlotItems(nodes: VNode[] | undefined): NormalizedComboBoxItem[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const topLevelNodes = flattenVNodeChildren(nodes);
+  const items: NormalizedComboBoxItem[] = [];
+  let itemIndex = 0;
+
+  for (const node of topLevelNodes) {
+    const componentName = getComponentName(node);
+    if (componentName === "ComboBoxItem") {
+      items.push(parseComboBoxItemNode(node, `item-${itemIndex}`));
+      itemIndex += 1;
+      continue;
+    }
+
+    if (componentName === "ComboBoxSection") {
+      const sectionChildren = getSlotChildren(node).filter(
+        (child) => getComponentName(child) === "ComboBoxItem"
+      );
+
+      for (const child of sectionChildren) {
+        items.push(parseComboBoxItemNode(child, `item-${itemIndex}`));
+        itemIndex += 1;
+      }
+    }
+  }
+
+  return items;
+}
+
+function areNormalizedItemsEqual(
+  left: NormalizedComboBoxItem[],
+  right: NormalizedComboBoxItem[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current.textValue !== candidate.textValue ||
+      current.isDisabled !== candidate.isDisabled ||
+      current["aria-label"] !== candidate["aria-label"]
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function createStaticComboBoxComponent(name: string, props: Record<string, unknown>) {
+  return defineComponent({
+    name,
+    props: props as any,
+    setup() {
+      return () => null;
+    },
+  });
+}
+
+export const ComboBoxItem = createStaticComboBoxComponent("ComboBoxItem", {
+  id: {
+    type: [String, Number] as PropType<Key | undefined>,
+    default: undefined,
+  },
+  textValue: {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  isDisabled: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  "aria-label": {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+});
+
+export const ComboBoxSection = createStaticComboBoxComponent("ComboBoxSection", {
+  id: {
+    type: [String, Number] as PropType<Key | undefined>,
+    default: undefined,
+  },
+  title: {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  "aria-label": {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+});
 
 const ComboBoxOption = defineComponent({
   name: "ComboBoxOption",
@@ -328,23 +573,28 @@ export const ComboBox = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
     const listBoxRef = ref<HTMLElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
     const loadMoreRequested = ref(false);
+    const slotItems = ref<NormalizedComboBoxItem[]>([]);
 
-    const normalizedItems = computed<NormalizedComboBoxItem[]>(() =>
-      (props.items ?? []).map((item) => ({
-        key: item.key,
-        label: item.label,
-        textValue: item.textValue ?? item.label,
-        isDisabled: item.isDisabled,
-        "aria-label": item["aria-label"],
-      }))
-    );
+    const normalizedItems = computed<NormalizedComboBoxItem[]>(() => {
+      if (props.items) {
+        return props.items.map((item) => ({
+          key: item.key,
+          label: item.label,
+          textValue: item.textValue ?? item.label,
+          isDisabled: item.isDisabled,
+          "aria-label": item["aria-label"],
+        }));
+      }
+
+      return slotItems.value;
+    });
 
     const state = useComboBoxState<NormalizedComboBoxItem>({
       collection: normalizedItems,
@@ -490,6 +740,13 @@ export const ComboBox = defineComponent({
     });
 
     return () => {
+      if (!props.items) {
+        const parsedItems = parseComboBoxSlotItems(slots.default?.() as VNode[] | undefined);
+        if (!areNormalizedItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const domProps = filterDOMProps(attrs as Record<string, unknown>, {
         labelable: true,
       });

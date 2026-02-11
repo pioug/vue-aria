@@ -1,6 +1,10 @@
-export { ComboBox } from "./ComboBox";
+export { ComboBox, ComboBoxItem, ComboBoxSection } from "./ComboBox";
 
-export type { SpectrumComboBoxProps } from "./ComboBox";
+export type {
+  SpectrumComboBoxProps,
+  SpectrumComboBoxItemProps,
+  SpectrumComboBoxSectionProps,
+} from "./ComboBox";
 export type {
   ComboBoxKey,
   SpectrumComboBoxItemData,
