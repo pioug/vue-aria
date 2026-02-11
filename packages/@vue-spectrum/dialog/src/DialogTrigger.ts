@@ -169,6 +169,18 @@ export const DialogTrigger = defineComponent({
 
       return props.mobileType ?? "modal";
     });
+    const resolvedDismissable = computed<boolean | undefined>(() => {
+      const didFallbackToModalOnMobile =
+        isMobileViewport.value &&
+        requestedType.value !== "modal" &&
+        effectiveType.value === "modal";
+
+      if (didFallbackToModalOnMobile) {
+        return true;
+      }
+
+      return props.isDismissable;
+    });
     const isOpen = computed<boolean>(() =>
       props.isOpen !== undefined ? props.isOpen : uncontrolledOpen.value
     );
@@ -186,15 +198,15 @@ export const DialogTrigger = defineComponent({
       onClose: () => {
         setOpen(false);
       },
-      isDismissable: props.isDismissable,
+      isDismissable: resolvedDismissable.value,
     };
     provideDialogContext(context);
 
     watch(
-      [effectiveType, () => props.isDismissable],
+      [effectiveType, resolvedDismissable],
       () => {
         context.type = effectiveType.value;
-        context.isDismissable = props.isDismissable;
+        context.isDismissable = resolvedDismissable.value;
       },
       { immediate: true }
     );
@@ -204,7 +216,7 @@ export const DialogTrigger = defineComponent({
         return true;
       }
 
-      return Boolean(props.isDismissable);
+      return Boolean(resolvedDismissable.value);
     });
     const shouldUsePopoverPositioning = computed(
       () => effectiveType.value === "popover"

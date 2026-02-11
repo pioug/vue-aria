@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Dialog, DialogTrigger } from "../src";
 
@@ -166,6 +166,28 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it("forces dismissable modal behavior for popover mobile fallback", async () => {
+    const restore = mockMatchMedia(true);
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      isDismissable: false,
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"modal\"]")).not.toBeNull();
+
+      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+      restore();
+    }
+  });
+
   it("dismissable modals close when clicking outside", async () => {
     const wrapper = mountDialogTrigger({
       type: "modal",
@@ -219,6 +241,73 @@ describe("DialogTrigger", () => {
       document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
       await flushOverlay();
 
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("popover trigger toggles open and close when pressed twice", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+    });
+
+    try {
+      const trigger = wrapper.get("button");
+      await trigger.trigger("click");
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+
+      await trigger.trigger("click");
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("supports controlled open state via isOpen and onOpenChange", async () => {
+    const onOpenChange = vi.fn();
+    const ControlledHarness = defineComponent({
+      setup() {
+        const isOpen = ref(false);
+        const handleOpenChange = (nextOpen: boolean): void => {
+          onOpenChange(nextOpen);
+          isOpen.value = nextOpen;
+        };
+
+        return () =>
+          h(
+            DialogTrigger,
+            {
+              type: "popover",
+              isOpen: isOpen.value,
+              onOpenChange: handleOpenChange,
+            },
+            {
+              default: () => [
+                h("button", { type: "button" }, "Trigger"),
+                h(Dialog, null, () => "contents"),
+              ],
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(ControlledHarness, {
+      attachTo: document.body,
+    });
+
+    try {
+      const trigger = wrapper.get("button");
+      await trigger.trigger("click");
+      await flushOverlay();
+      expect(onOpenChange).toHaveBeenLastCalledWith(true);
+      expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+
+      await trigger.trigger("click");
+      await flushOverlay();
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
       expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
     } finally {
       wrapper.unmount();

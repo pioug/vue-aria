@@ -44,9 +44,9 @@ const component = h(DialogTrigger, null, {
 ## Notes
 
 - Baseline includes modal/tray/popover trigger shells, dialog container management, and alert-dialog action flows.
-- Baseline now includes mobile popover fallback parity in `DialogTrigger` (`type="popover"` renders as `modal` on mobile, with `mobileType="tray"` override support).
+- Baseline now includes mobile popover fallback parity in `DialogTrigger` (`type="popover"` renders as `modal` on mobile, with `mobileType="tray"` override support) and matches upstream dismissability by forcing outside-click dismissal when that fallback resolves to `modal`.
 - Baseline `DialogTrigger` dismissal behavior now covers outside-click gating parity across overlay modes (dismissable modal closes, non-dismissable modal stays open, popover/tray close on outside interaction) plus hidden dismiss-button close paths with focus restoration.
 - Baseline `DialogContainer` dismissal semantics now cover `Escape` handling, keyboard-dismiss disabling, and outside-click dismissal rules (`isDismissable` gated).
 - Baseline `DialogTrigger` and `DialogContainer` now support custom portal container targeting via `container`.
-- Baseline `Dialog` label semantics now match explicit-prop precedence (`aria-labelledby` / `aria-label`) without leaking generated fallback ids when no explicit label linkage is provided.
+- Baseline `Dialog` label semantics now match explicit-prop precedence (`aria-labelledby` / `aria-label`) and automatically link `aria-labelledby` to the first heading when no explicit label props are supplied.
 - Advanced overlay positioning and complete React Spectrum parity for dialog internals remain in progress.
