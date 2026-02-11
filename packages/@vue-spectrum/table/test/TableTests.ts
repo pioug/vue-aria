@@ -300,6 +300,28 @@ export function tableTests() {
     expect(document.activeElement).toBe(firstButton);
   });
 
+  it("cycles row child controls with RTL Arrow ordering", async () => {
+    const user = userEvent.setup();
+    const tree = renderFocusableTable({ dir: "rtl" });
+    const grid = tree.getByRole("grid", { name: "Focusable table" });
+    const rowGroups = within(grid).getAllByRole("rowgroup");
+    const bodyRows = within(rowGroups[1] as HTMLElement).getAllByRole("row");
+    const [firstButton] = tree.getAllByRole("button") as HTMLElement[];
+    const [firstLink] = tree.getAllByRole("link") as HTMLElement[];
+
+    (bodyRows[0] as HTMLElement).focus();
+    expect(document.activeElement).toBe(bodyRows[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(firstLink);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(firstButton);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(firstLink);
+  });
+
   it("supports uncontrolled sorting", async () => {
     const user = userEvent.setup();
     const onSortChange = vi.fn();
