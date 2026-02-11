@@ -395,6 +395,18 @@ export const SubmenuTrigger = defineComponent({
 
             closeMenu(false, false);
           },
+          onFocusout: (event: FocusEvent) => {
+            if (!isOpen.value) {
+              return;
+            }
+
+            const nextTarget = event.relatedTarget as Node | null;
+            if (nextTarget && rootRef.value?.contains(nextTarget)) {
+              return;
+            }
+
+            closeMenu(false, false);
+          },
         },
         [
           h(

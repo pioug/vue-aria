@@ -457,6 +457,70 @@ describe("SubmenuTrigger", () => {
     expect(getSubmenuElementForLabel(tree, "More")).toBeNull();
   });
 
+  it("closes submenu when focus moves to a neighboring menu item", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerFocusMoveHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(SubmenuTrigger, {
+                label: "More",
+                items,
+              }),
+              h(
+                "li",
+                {
+                  role: "menuitem",
+                  "aria-label": "Neighbor",
+                  tabIndex: -1,
+                },
+                "Neighbor"
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    const neighbor = tree.getByRole("menuitem", { name: "Neighbor" }) as HTMLElement;
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    const submenuItem = within(submenu).getAllByRole("menuitem")[0] as HTMLElement;
+    submenuItem.focus();
+    fireEvent.focusOut(submenuItem, { relatedTarget: neighbor });
+    neighbor.focus();
+    await Promise.resolve();
+
+    expect(tree.container.contains(submenu)).toBe(false);
+  });
+
+  it("contains focus within submenu when pressing Tab", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+
+    const submenu = getSubmenuElement(tree);
+    const firstItem = within(submenu).getAllByRole("menuitem")[0] as HTMLElement;
+    firstItem.focus();
+    fireEvent.keyDown(submenu, { key: "Tab" });
+    fireEvent.keyUp(submenu, { key: "Tab" });
+    await Promise.resolve();
+
+    expect(document.activeElement).toBe(firstItem);
+  });
+
   it("keeps only one sibling submenu open at a time", async () => {
     const user = userEvent.setup();
 

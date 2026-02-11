@@ -74,4 +74,5 @@ const component = h(MenuTrigger, {
 - Baseline submenu behavior fires submenu `onClose` callbacks when closing from item selection.
 - Baseline submenu behavior supports submenu `selectionMode`/`onSelectionChange`, does not treat trigger activation as submenu selection, and supports combined submenu `onAction` + `onClose` callback wiring on option selection.
 - Baseline submenu behavior propagates disabled state from static trigger `Item` content (disabled trigger does not open on hover/click/keyboard).
+- Baseline submenu behavior closes when focus leaves submenu scope to neighboring items and retains focus within submenu content on `Tab` key handling.
 - Advanced contextual-help parity (additional upstream submenu close edge-cases and icon/overlay visual parity) remains in progress.
