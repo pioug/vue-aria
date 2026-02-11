@@ -208,7 +208,11 @@ export { TextField, TextArea } from "@vue-spectrum/textfield";
 export { SearchField } from "@vue-spectrum/searchfield";
 export { NumberField } from "@vue-spectrum/numberfield";
 export { ComboBox, ComboBoxItem, ComboBoxSection } from "@vue-spectrum/combobox";
-export { SearchAutocomplete } from "@vue-spectrum/autocomplete";
+export {
+  SearchAutocomplete,
+  SearchAutocompleteItem,
+  SearchAutocompleteSection,
+} from "@vue-spectrum/autocomplete";
 export { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
 export {
   ColorArea,
@@ -456,7 +460,9 @@ export type {
   SpectrumComboBoxProps,
 } from "@vue-spectrum/combobox";
 export type {
+  SpectrumSearchAutocompleteItemProps,
   SpectrumSearchAutocompleteItemData,
+  SpectrumSearchAutocompleteSectionProps,
   SpectrumSearchAutocompleteLoadingState,
   SpectrumSearchAutocompleteProps,
 } from "@vue-spectrum/autocomplete";

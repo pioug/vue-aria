@@ -1,8 +1,12 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   ref,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useComboBox } from "@vue-aria/combobox";
@@ -24,7 +28,9 @@ import {
 } from "@vue-spectrum/utils";
 import {
   searchAutocompletePropOptions,
+  type SpectrumSearchAutocompleteItemProps,
   type SpectrumSearchAutocompleteItemData,
+  type SpectrumSearchAutocompleteSectionProps,
 } from "./types";
 
 interface NormalizedSearchAutocompleteItem {
@@ -37,6 +43,249 @@ interface NormalizedSearchAutocompleteItem {
 
 const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
   textValue.toLowerCase().includes(inputValue.toLowerCase());
+
+function normalizeSearchAutocompleteKey(value: unknown, fallback: Key): Key {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseSearchAutocompleteItemNode(
+  node: VNode,
+  fallback: Key
+): NormalizedSearchAutocompleteItem {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  const labelFromSlot = extractTextContent(getSlotContent(node)).trim();
+  const textValue =
+    typeof props.textValue === "string" ? props.textValue : labelFromSlot;
+  const resolvedLabel = textValue || String(fallback);
+
+  return {
+    key: normalizeSearchAutocompleteKey(node.key ?? props.id, fallback),
+    label: resolvedLabel,
+    textValue: resolvedLabel,
+    isDisabled: Boolean(props.isDisabled),
+    "aria-label":
+      typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+  };
+}
+
+function parseSearchAutocompleteSlotItems(
+  nodes: VNode[] | undefined
+): NormalizedSearchAutocompleteItem[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const topLevelNodes = flattenVNodeChildren(nodes);
+  const items: NormalizedSearchAutocompleteItem[] = [];
+  let itemIndex = 0;
+
+  for (const node of topLevelNodes) {
+    const componentName = getComponentName(node);
+    if (componentName === "SearchAutocompleteItem") {
+      items.push(parseSearchAutocompleteItemNode(node, `item-${itemIndex}`));
+      itemIndex += 1;
+      continue;
+    }
+
+    if (componentName === "SearchAutocompleteSection") {
+      const sectionChildren = getSlotChildren(node).filter(
+        (child) => getComponentName(child) === "SearchAutocompleteItem"
+      );
+
+      for (const child of sectionChildren) {
+        items.push(parseSearchAutocompleteItemNode(child, `item-${itemIndex}`));
+        itemIndex += 1;
+      }
+    }
+  }
+
+  return items;
+}
+
+function areNormalizedItemsEqual(
+  left: NormalizedSearchAutocompleteItem[],
+  right: NormalizedSearchAutocompleteItem[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current.textValue !== candidate.textValue ||
+      current.isDisabled !== candidate.isDisabled ||
+      current["aria-label"] !== candidate["aria-label"]
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function createStaticSearchAutocompleteComponent(
+  name: string,
+  props: Record<string, unknown>
+) {
+  return defineComponent({
+    name,
+    props: props as any,
+    setup() {
+      return () => null;
+    },
+  });
+}
+
+export const SearchAutocompleteItem = createStaticSearchAutocompleteComponent(
+  "SearchAutocompleteItem",
+  {
+    id: {
+      type: [String, Number] as PropType<SpectrumSearchAutocompleteItemProps["id"]>,
+      default: undefined,
+    },
+    textValue: {
+      type: String as PropType<SpectrumSearchAutocompleteItemProps["textValue"]>,
+      default: undefined,
+    },
+    isDisabled: {
+      type: Boolean as PropType<SpectrumSearchAutocompleteItemProps["isDisabled"]>,
+      default: undefined,
+    },
+    "aria-label": {
+      type: String as PropType<SpectrumSearchAutocompleteItemProps["aria-label"]>,
+      default: undefined,
+    },
+  }
+);
+
+export const SearchAutocompleteSection = createStaticSearchAutocompleteComponent(
+  "SearchAutocompleteSection",
+  {
+    id: {
+      type: [String, Number] as PropType<SpectrumSearchAutocompleteSectionProps["id"]>,
+      default: undefined,
+    },
+    title: {
+      type: String as PropType<SpectrumSearchAutocompleteSectionProps["title"]>,
+      default: undefined,
+    },
+    "aria-label": {
+      type: String as PropType<SpectrumSearchAutocompleteSectionProps["aria-label"]>,
+      default: undefined,
+    },
+  }
+);
 
 const SearchAutocompleteOption = defineComponent({
   name: "SearchAutocompleteOption",
@@ -127,24 +376,28 @@ export const SearchAutocomplete = defineComponent({
   props: {
     ...searchAutocompletePropOptions,
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
     const listBoxRef = ref<HTMLElement | null>(null);
     const loadMoreRequested = ref(false);
+    const slotItems = ref<NormalizedSearchAutocompleteItem[]>([]);
 
-    const normalizedItems = computed<NormalizedSearchAutocompleteItem[]>(() =>
-      (props.items ?? props.defaultItems ?? []).map(
-        (item: SpectrumSearchAutocompleteItemData) => ({
+    const normalizedItems = computed<NormalizedSearchAutocompleteItem[]>(() => {
+      const source = props.items ?? props.defaultItems;
+      if (source) {
+        return source.map((item: SpectrumSearchAutocompleteItemData) => ({
           key: item.key,
           label: item.label,
           textValue: item.textValue ?? item.label,
           isDisabled: item.isDisabled,
           "aria-label": item["aria-label"],
-        })
-      )
-    );
+        }));
+      }
+
+      return slotItems.value;
+    });
 
     const isAsync = computed(() => props.loadingState !== undefined);
 
@@ -324,6 +577,15 @@ export const SearchAutocomplete = defineComponent({
     });
 
     return () => {
+      if (!props.items && !props.defaultItems) {
+        const parsedItems = parseSearchAutocompleteSlotItems(
+          slots.default?.() as VNode[] | undefined
+        );
+        if (!areNormalizedItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const domProps = filterDOMProps(attrs as Record<string, unknown>, {
         labelable: true,
       });

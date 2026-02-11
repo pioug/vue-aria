@@ -10,6 +10,19 @@ export interface SpectrumSearchAutocompleteItemData {
   "aria-label"?: string | undefined;
 }
 
+export interface SpectrumSearchAutocompleteItemProps {
+  id?: Key | undefined;
+  textValue?: string | undefined;
+  isDisabled?: boolean | undefined;
+  "aria-label"?: string | undefined;
+}
+
+export interface SpectrumSearchAutocompleteSectionProps {
+  id?: Key | undefined;
+  title?: string | undefined;
+  "aria-label"?: string | undefined;
+}
+
 export type SpectrumSearchAutocompleteLoadingState =
   | "idle"
   | "loading"

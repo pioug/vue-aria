@@ -1,8 +1,11 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   SearchAutocomplete,
+  SearchAutocompleteItem,
+  SearchAutocompleteSection,
   type SpectrumSearchAutocompleteItemData,
 } from "../src";
 
@@ -176,5 +179,51 @@ describe("SearchAutocomplete", () => {
       scrollHeightSpy.mockRestore();
       clientHeightSpy.mockRestore();
     }
+  });
+
+  it("supports static slot syntax with SearchAutocompleteItem and SearchAutocompleteSection", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+
+    const App = defineComponent({
+      name: "SearchAutocompleteSlotApp",
+      setup() {
+        return () =>
+          h(
+            SearchAutocomplete,
+            {
+              label: "Test",
+              onSelectionChange,
+            },
+            {
+              default: () => [
+                h(SearchAutocompleteSection, { id: "favorites", title: "Favorites" }, {
+                  default: () => [
+                    h(SearchAutocompleteItem, { id: "fav-1" }, () => "One"),
+                    h(SearchAutocompleteItem, { id: "fav-2", isDisabled: true }, () => "Two"),
+                  ],
+                }),
+                h(SearchAutocompleteItem, { id: "other-1" }, () => "Three"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.keyboard("{ArrowDown}");
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+
+    expect(options).toHaveLength(3);
+    expect(options[1]?.getAttribute("aria-disabled")).toBe("true");
+
+    await user.click(options[2] as Element);
+    expect(onSelectionChange).toHaveBeenCalledWith("other-1");
+    expect((tree.getByRole("combobox") as HTMLInputElement).value).toBe("Three");
   });
 });

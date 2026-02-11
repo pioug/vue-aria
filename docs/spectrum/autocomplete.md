@@ -32,6 +32,8 @@ const items = [
 ## Exports
 
 - `SearchAutocomplete`
+- `SearchAutocompleteItem`
+- `SearchAutocompleteSection`
 
 ## Example
 
@@ -54,7 +56,7 @@ const component = h(SearchAutocomplete, {
 
 ## Notes
 
-- Baseline includes combobox/search input/listbox ARIA wiring, type-to-filter behavior, clear-button semantics, and submit callbacks.
+- Baseline includes combobox/search input/listbox ARIA wiring, type-to-filter behavior, clear-button semantics, submit callbacks, and static slot composition support via `SearchAutocompleteItem` and `SearchAutocompleteSection`.
 - Controlled/uncontrolled `selectedKey`, `inputValue`, and open-state flows are wired through `@vue-aria/combobox-state`.
 - Loading indicators and scroll-bottom `onLoadMore` behavior are included for async suggestion lists.
-- Advanced popover/mobile tray behavior, sectioned collections, and full visual/theming parity remain in progress.
+- Advanced popover/mobile tray behavior, full grouped-section semantics, and full visual/theming parity remain in progress.
