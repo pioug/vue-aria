@@ -1,13 +1,17 @@
 import {
+  cloneVNode,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   onMounted,
   ref,
   type PropType,
+  type VNode,
 } from "vue";
 import { useDialog } from "@vue-aria/dialog";
+import { useId } from "@vue-aria/ssr";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
 import { useDialogContext, type DialogType } from "./context";
@@ -44,6 +48,19 @@ const typeSizeMap: Record<DialogType, string | undefined> = {
   fullscreen: "fullscreen",
   fullscreenTakeover: "fullscreenTakeover",
 };
+
+function isHeadingNode(node: VNode): boolean {
+  if (typeof node.type === "string") {
+    return /^h[1-6]$/i.test(node.type);
+  }
+
+  if (typeof node.type === "object" && node.type !== null) {
+    const componentType = node.type as { name?: string };
+    return componentType.name === "Heading";
+  }
+
+  return false;
+}
 
 export const Dialog = defineComponent({
   name: "Dialog",
@@ -101,6 +118,7 @@ export const Dialog = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const context = useDialogContext();
     const elementRef = ref<HTMLElement | null>(null);
+    const generatedHeadingId = useId(undefined, "v-spectrum-dialog-heading");
 
     const resolvedType = computed<DialogType>(() => props.type ?? context?.type ?? "modal");
     const resolvedDismissable = computed<boolean>(
@@ -166,10 +184,41 @@ export const Dialog = defineComponent({
       const { styleProps } = useStyleProps(styleInput);
       const domProps = filterDOMProps(attrsRecord, { labelable: true });
       const sizeVariant = typeSizeMap[resolvedType.value] ?? sizeMap[resolvedSize.value];
+      const explicitAriaLabel = ariaLabel.value;
+      const explicitAriaLabelledby = ariaLabelledby.value;
+      let renderedChildren = slots.default?.() ?? [];
+      let autoHeadingLabelledby: string | undefined;
+
+      if (!explicitAriaLabel && !explicitAriaLabelledby) {
+        renderedChildren = renderedChildren.map((child) => child);
+        const headingIndex = renderedChildren.findIndex(
+          (child) => isVNode(child) && isHeadingNode(child)
+        );
+
+        if (headingIndex >= 0) {
+          const headingNode = renderedChildren[headingIndex] as VNode;
+          const headingProps =
+            (headingNode.props as Record<string, unknown> | null) ?? {};
+          const headingId =
+            (headingProps.id as string | undefined) ?? generatedHeadingId.value;
+          autoHeadingLabelledby = headingId;
+
+          if (!headingProps.id) {
+            renderedChildren[headingIndex] = cloneVNode(
+              headingNode,
+              {
+                id: headingId,
+              },
+              true
+            );
+          }
+        }
+      }
+
       const mergedDialogProps = {
         ...dialogProps.value,
       } as Record<string, unknown>;
-      if (!ariaLabelledby.value || ariaLabel.value) {
+      if (!explicitAriaLabelledby || explicitAriaLabel) {
         delete mergedDialogProps["aria-labelledby"];
       }
       const resolvedRole =
@@ -178,7 +227,7 @@ export const Dialog = defineComponent({
         (mergedDialogProps.role as "dialog" | "alertdialog" | undefined) ??
         "dialog";
       const resolvedAriaLabelledby =
-        ariaLabelledby.value;
+        explicitAriaLabelledby ?? (explicitAriaLabel ? undefined : autoHeadingLabelledby);
 
       return h(
         "section",
@@ -201,7 +250,7 @@ export const Dialog = defineComponent({
             ...(props.UNSAFE_style ?? {}),
           },
           role: resolvedRole,
-          "aria-label": ariaLabel.value,
+          "aria-label": explicitAriaLabel,
           "aria-labelledby": resolvedAriaLabelledby,
         }),
         [
@@ -211,7 +260,7 @@ export const Dialog = defineComponent({
               class: classNames("spectrum-Dialog-grid"),
             },
             [
-              ...(slots.default?.() ?? []),
+              ...renderedChildren,
               resolvedDismissable.value
                 ? h(
                     "button",

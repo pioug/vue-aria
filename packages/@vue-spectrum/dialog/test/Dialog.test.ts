@@ -98,6 +98,41 @@ describe("Dialog", () => {
     expect(dialog.attributes("aria-labelledby")).toBeUndefined();
   });
 
+  it("links aria-labelledby to the first heading when no explicit label is provided", () => {
+    const wrapper = mount(Dialog, {
+      slots: {
+        default: () => [
+          h("h2", null, "Dialog title"),
+          h("p", null, "Dialog body"),
+        ],
+      },
+    });
+
+    const dialog = wrapper.get("[role=\"dialog\"]");
+    const labelledby = dialog.attributes("aria-labelledby");
+    expect(labelledby).toBeTruthy();
+
+    const heading = wrapper.get("h2");
+    expect(heading.attributes("id")).toBe(labelledby);
+  });
+
+  it("explicit aria-labelledby takes precedence over auto heading linkage", () => {
+    const wrapper = mount(Dialog, {
+      props: {
+        "aria-labelledby": "batman",
+      } as Record<string, unknown>,
+      slots: {
+        default: () => [
+          h("h2", null, "Dialog title"),
+          h("p", null, "Dialog body"),
+        ],
+      },
+    });
+
+    const dialog = wrapper.get("[role=\"dialog\"]");
+    expect(dialog.attributes("aria-labelledby")).toBe("batman");
+  });
+
   it("supports custom data attributes", () => {
     const wrapper = mount(Dialog, {
       props: {
