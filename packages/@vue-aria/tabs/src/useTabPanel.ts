@@ -1,4 +1,4 @@
-import { computed, toValue } from "vue";
+import { computed, nextTick, ref, toValue, watchEffect } from "vue";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type { TabListItem, UseTabListStateResult } from "./useTabListState";
 import { generateId } from "./utils";
@@ -37,6 +37,16 @@ export function useTabPanel<T extends TabListItem>(
   state: UseTabListStateResult<T> | null,
   panelRef: MaybeReactive<Element | null | undefined>
 ): UseTabPanelResult {
+  const hasFocusableChild = ref(false);
+
+  watchEffect(() => {
+    state?.selectedKey.value;
+
+    void nextTick(() => {
+      hasFocusableChild.value = hasTabbableChild(toValue(panelRef));
+    });
+  });
+
   const tabPanelProps = computed<Record<string, unknown>>(() => {
     const selectedKey = state?.selectedKey.value ?? null;
     const panelKey = options.id === undefined ? selectedKey : toValue(options.id);
@@ -45,12 +55,10 @@ export function useTabPanel<T extends TabListItem>(
       options["aria-labelledby"] === undefined
         ? generateId(state, selectedKey, "tab")
         : (toValue(options["aria-labelledby"]) ?? generateId(state, selectedKey, "tab"));
-    const panelElement = toValue(panelRef);
-
     return {
       id: panelId,
       role: "tabpanel",
-      tabIndex: hasTabbableChild(panelElement) ? undefined : 0,
+      tabIndex: hasFocusableChild.value ? undefined : 0,
       "aria-labelledby": labelledBy,
       "aria-label":
         options["aria-label"] === undefined

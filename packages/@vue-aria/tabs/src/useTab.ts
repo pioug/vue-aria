@@ -63,12 +63,13 @@ export function useTab<T extends TabListItem>(
 
   const tabProps = computed<Record<string, unknown>>(() => {
     const isFocused = state.focusedKey.value === options.key;
-    const tabIndex = isDisabled.value ? undefined : isFocused || isSelected.value ? 0 : -1;
+    const tabIndex = isDisabled.value ? -1 : isFocused || isSelected.value ? 0 : -1;
 
     return {
       id: tabId.value,
       role: "tab",
       tabIndex,
+      disabled: isDisabled.value || undefined,
       "aria-selected": isSelected.value,
       "aria-disabled": isDisabled.value || undefined,
       "aria-controls": isSelected.value ? tabPanelId.value : undefined,

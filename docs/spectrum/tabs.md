@@ -81,4 +81,6 @@ h(TabList, null, {
 - Includes baseline selection-indicator positioning parity (`spectrum-Tabs-selectionIndicator`) for selected tabs, including RTL right-edge transform behavior.
 - Includes collapsed-mode tabpanel and picker aria-labeling composition parity (`aria-label` + external `aria-labelledby`).
 - Includes link-tab parity behavior (`href`-based tabs rendered as anchor elements) and selection callbacks when re-clicking the already selected tab.
+- Includes static-slot composition hardening so per-tab labels and tabpanel content remain correctly mapped in `Item`-based `TabList`/`TabPanels` usage.
+- Includes all-disabled fallback behavior parity (first-tab fallback selection callback) and tabpanel tabbable-child `tabIndex` parity updates.
 - Advanced visual/theming polish remains in progress.

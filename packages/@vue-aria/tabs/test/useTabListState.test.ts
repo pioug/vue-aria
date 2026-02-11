@@ -59,6 +59,17 @@ describe("useTabListState", () => {
     expect(state.selectedKey.value).toBe("item-1");
   });
 
+  it("announces fallback selection when all tabs are disabled", () => {
+    const onSelectionChange = vi.fn();
+    useTabListState({
+      collection: tabs,
+      disabledKeys: ["item-1", "item-2", "item-3"],
+      onSelectionChange,
+    });
+
+    expect(onSelectionChange).toHaveBeenCalledWith("item-1");
+  });
+
   it("selects the first available tab when the current tab is removed", async () => {
     const collection = ref([...tabs]);
     const onSelectionChange = vi.fn();

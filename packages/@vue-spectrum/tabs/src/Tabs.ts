@@ -79,6 +79,7 @@ export interface SpectrumTabPanelsProps {
 interface TabsContextValue {
   state: UseTabListStateResult<SpectrumTabItem>;
   collection: ReadonlyRef<SpectrumTabItem[]>;
+  usesStaticItems: ReadonlyRef<boolean>;
   orientation: ReadonlyRef<TabsOrientation>;
   direction: ReadonlyRef<"ltr" | "rtl">;
   keyboardActivation: ReadonlyRef<TabsKeyboardActivation>;
@@ -573,6 +574,7 @@ export const Tabs = defineComponent({
       );
     });
     const collapsedPanelLabelledby = ref<string | undefined>(undefined);
+    const usesStaticItems = computed(() => props.items === undefined);
 
     const syncCollection = () => {
       const propItems = props.items as SpectrumTabItem[] | undefined;
@@ -629,6 +631,7 @@ export const Tabs = defineComponent({
     provide(TABS_CONTEXT_SYMBOL, {
       state,
       collection,
+      usesStaticItems,
       orientation,
       direction,
       keyboardActivation,
@@ -923,7 +926,7 @@ export const TabList = defineComponent({
                 item,
               },
               {
-                default: slots.default,
+                default: context.usesStaticItems.value ? undefined : slots.default,
               }
             )
           ),
@@ -1034,7 +1037,9 @@ export const TabPanels = defineComponent({
         selectedItem === undefined
           ? []
           : normalizeRenderable(
-              slots.default?.({ item: selectedItem }) ??
+              (!context.usesStaticItems.value
+                ? slots.default?.({ item: selectedItem })
+                : undefined) ??
                 (selectedItem.children as VNodeChild | VNodeChild[] | undefined)
             );
       const panelAriaLabelledby =

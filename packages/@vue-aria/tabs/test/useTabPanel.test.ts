@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { effectScope, ref } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { useTabList, useTabListState, useTabPanel } from "../src";
 
 afterEach(() => {
@@ -7,7 +7,7 @@ afterEach(() => {
 });
 
 describe("useTabPanel", () => {
-  it("returns tabpanel semantics and id wiring", () => {
+  it("returns tabpanel semantics and id wiring", async () => {
     const scope = effectScope();
     const panelElement = document.createElement("div");
     document.body.appendChild(panelElement);
@@ -23,6 +23,8 @@ describe("useTabPanel", () => {
       tabPanel = useTabPanel({}, state, ref(panelElement));
     });
 
+    await nextTick();
+
     expect(tabPanel.tabPanelProps.value.role).toBe("tabpanel");
     expect(tabPanel.tabPanelProps.value.id).toBeTypeOf("string");
     expect(tabPanel.tabPanelProps.value["aria-labelledby"]).toBeTypeOf("string");
@@ -32,7 +34,7 @@ describe("useTabPanel", () => {
     panelElement.remove();
   });
 
-  it("omits tabIndex when panel has tabbable children", () => {
+  it("omits tabIndex when panel has tabbable children", async () => {
     const scope = effectScope();
     const panelElement = document.createElement("div");
     const button = document.createElement("button");
@@ -49,6 +51,8 @@ describe("useTabPanel", () => {
       useTabList({ "aria-label": "Tabs" }, state);
       tabPanel = useTabPanel({}, state, ref(panelElement));
     });
+
+    await nextTick();
 
     expect(tabPanel.tabPanelProps.value.tabIndex).toBeUndefined();
 

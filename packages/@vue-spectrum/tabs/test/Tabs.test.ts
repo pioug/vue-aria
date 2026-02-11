@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { fireEvent, render, within } from "@testing-library/vue";
+import { fireEvent, render, waitFor, within } from "@testing-library/vue";
 import { defineComponent, h, nextTick, type VNodeChild } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
@@ -645,5 +645,112 @@ describe("Tabs", () => {
     fireEvent.keyDown(tabs[1] as HTMLElement, { key: "ArrowRight" });
     await flush();
     expect(tabs[2]?.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("updates tab index when selected key changes programmatically", async () => {
+    const App = defineComponent({
+      name: "TabsControlledTabIndexHarness",
+      props: {
+        selectedKey: {
+          type: String,
+          required: true,
+        },
+      },
+      setup(componentProps) {
+        return () =>
+          h(Tabs, {
+            "aria-label": "Tab Sample",
+            items: defaultItems,
+            selectedKey: componentProps.selectedKey,
+          }, {
+            default: () => [h(TabList), h(TabPanels)],
+          });
+      },
+    });
+
+    const tree = render(App, {
+      props: {
+        selectedKey: "tab-3",
+      },
+    });
+    await flush();
+
+    let tabs = tree.getAllByRole("tab");
+    expect(tabs[0]?.getAttribute("tabindex")).toBe("-1");
+    expect(tabs[1]?.getAttribute("tabindex")).toBe("-1");
+    expect(tabs[2]?.getAttribute("tabindex")).toBe("0");
+
+    await tree.rerender({
+      selectedKey: "tab-1",
+    });
+    await flush();
+
+    tabs = tree.getAllByRole("tab");
+    expect(tabs[0]?.getAttribute("tabindex")).toBe("0");
+    expect(tabs[1]?.getAttribute("tabindex")).toBe("-1");
+    expect(tabs[2]?.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("selects first tab when all tabs are disabled", async () => {
+    const onSelectionChange = vi.fn();
+    const user = userEvent.setup();
+    const { getByRole } = renderTabs({
+      disabledKeys: defaultItems.map((item) => item.key),
+      onSelectionChange,
+    });
+    await flush();
+
+    await user.tab();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    const tabpanel = getByRole("tabpanel");
+
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-1");
+    expect(document.activeElement).toBe(tabpanel);
+  });
+
+  it("sets tabpanel tabIndex only when no focusable child exists", async () => {
+    const user = userEvent.setup();
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Tab Example",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () => [h(Item, { id: "tab-1" }, () => "Tab 1"), h(Item, { id: "tab-2" }, () => "Tab 2")],
+          }),
+          h(TabPanels, null, {
+            default: () => [
+              h(Item, { id: "tab-1" }, () => h("input", { "data-testid": "panel-1-input" })),
+              h(Item, { id: "tab-2" }, () => h("input", { disabled: true, "data-testid": "panel-2-input" })),
+            ],
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    let tabpanel = tree.getByRole("tabpanel");
+    expect(tabpanel.getAttribute("tabindex")).toBeNull();
+
+    const tabs = tree.getAllByRole("tab");
+    await user.click(tabs[1] as HTMLElement);
+    await flush();
+
+    tabpanel = tree.getByRole("tabpanel");
+    await waitFor(() => {
+      expect(tabpanel.getAttribute("tabindex")).toBe("0");
+    });
+
+    await user.click(tabs[0] as HTMLElement);
+    await flush();
+
+    tabpanel = tree.getByRole("tabpanel");
+    await waitFor(() => {
+      expect(tabpanel.getAttribute("tabindex")).toBeNull();
+    });
   });
 });

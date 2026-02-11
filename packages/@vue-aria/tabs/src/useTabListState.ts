@@ -121,6 +121,9 @@ export function useTabListState<T extends TabListItem>(
   const disabledKeys = computed(() => resolveDisabledKeys(options.disabledKeys));
   const isDisabled = computed(() => resolveBoolean(options.isDisabled));
   const isControlled = computed(() => options.selectedKey !== undefined);
+  const hasExplicitDefaultSelectedKey = computed(
+    () => resolveKey(options.defaultSelectedKey) !== null
+  );
   const tabElements = new Map<Key, HTMLElement>();
 
   const initialUncontrolledKey = (() => {
@@ -143,6 +146,7 @@ export function useTabListState<T extends TabListItem>(
   });
 
   const focusedKey = ref<Key | null>(selectedKey.value);
+  const hasAnnouncedAllDisabledFallbackSelection = ref(false);
 
   const getItem = (key: Key): T | undefined =>
     collection.value.find((entry) => entry.key === key);
@@ -218,6 +222,30 @@ export function useTabListState<T extends TabListItem>(
       uncontrolledSelectedKey.value = nextSelectedKey;
       options.onSelectionChange?.(nextSelectedKey);
     }
+  });
+
+  watchEffect(() => {
+    if (isControlled.value || hasExplicitDefaultSelectedKey.value) {
+      return;
+    }
+
+    if (hasAnnouncedAllDisabledFallbackSelection.value) {
+      return;
+    }
+
+    if (collection.value.length === 0) {
+      return;
+    }
+
+    const allTabsDisabled = collection.value.every(
+      (item) => disabledKeys.value.has(item.key) || Boolean(item.isDisabled)
+    );
+    if (!allTabsDisabled || selectedKey.value === null) {
+      return;
+    }
+
+    hasAnnouncedAllDisabledFallbackSelection.value = true;
+    options.onSelectionChange?.(selectedKey.value);
   });
 
   watch(
