@@ -314,6 +314,50 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it("restores focus to trigger when popover closes on outside click", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      defaultOpen: true,
+    });
+
+    try {
+      await flushOverlay();
+      const trigger = wrapper.get("button").element as HTMLButtonElement;
+
+      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("mobile popover fallback modal closes on outside click and reports onOpenChange", async () => {
+    const restore = mockMatchMedia(true);
+    const onOpenChange = vi.fn();
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      defaultOpen: true,
+      onOpenChange,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"modal\"]")).not.toBeNull();
+
+      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      await flushOverlay();
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+      restore();
+    }
+  });
+
   it("popover trigger toggles open and close when pressed twice", async () => {
     const wrapper = mountDialogTrigger({
       type: "popover",

@@ -422,12 +422,15 @@ export const DialogTrigger = defineComponent({
         if (nextIsOpen) {
           restoreFocusRef.value = triggerRef.value;
           void nextTick(() => {
+            if (!restoreFocusRef.value) {
+              restoreFocusRef.value = triggerRef.value;
+            }
             focusOverlay();
           });
           return;
         }
 
-        const focusTarget = restoreFocusRef.value;
+        const focusTarget = restoreFocusRef.value ?? triggerRef.value;
         if (focusTarget) {
           void nextTick(() => {
             focusTarget.focus();

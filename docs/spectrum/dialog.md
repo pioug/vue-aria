@@ -63,7 +63,7 @@ const component = h(DialogTrigger, null, {
 - Baseline now includes mobile popover fallback parity in `DialogTrigger` (`type="popover"` renders as `modal` on mobile, with `mobileType="tray"` override support) and matches upstream dismissability by forcing outside-click dismissal when that fallback resolves to `modal`.
 - Baseline `DialogTrigger` dismissal behavior now covers outside-click gating parity across overlay modes (dismissable modal closes, non-dismissable modal stays open, popover/tray close on outside interaction) plus hidden dismiss-button close paths with focus restoration.
 - Baseline `DialogTrigger` state parity now includes controlled/uncontrolled open flows (`isOpen`/`onOpenChange` and `defaultOpen`), keyboard-dismiss disabling (`isKeyboardDismissDisabled`), custom close-button wiring through injected close callbacks, and built-in `Dialog` dismiss-button close paths.
-- Baseline `DialogTrigger` now includes focus-restore parity when closing by trigger-toggle, hidden dismiss button, and `Escape`.
+- Baseline `DialogTrigger` now includes focus-restore parity when closing by trigger-toggle, hidden dismiss button, `Escape`, and outside-dismiss flows (including `defaultOpen` mount cases).
 - Baseline `DialogTrigger` now preserves nested popover interactivity by ignoring outside-dismiss logic for pointer events that originate inside another dialog overlay.
 - Baseline modal focus containment now tracks and restores the last in-overlay focused control, including nested modal stacks where outside focus attempts should remain in the inner dialog.
 - Baseline `DialogTrigger` and `DialogContainer` now include keyboard focus-containment loops (`Tab`/`Shift+Tab`) so focus stays trapped within the active dialog overlay.
