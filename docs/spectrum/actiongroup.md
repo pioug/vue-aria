@@ -53,6 +53,7 @@ const component = h(ActionGroup, {
 - Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Baseline now includes overflow collapse/menu behavior (`overflowMode="collapse"`), including collapsing all items into the menu when selection mode is enabled and not all items fit.
 - When fully collapsed, aria labeling props are forwarded to the overflow menu trigger (`aria-label` / `aria-labelledby`).
+- Baseline includes group-level `aria-labelledby` / `aria-describedby` passthrough.
 - Baseline includes `buttonLabelBehavior="hide"` wiring (`spectrum-ActionGroup-item--iconOnly` with aria-label fallback for accessibility).
 - Baseline includes `buttonLabelBehavior="collapse"` behavior: labels collapse to icon-only buttons before overflowing when possible, and labels restore when space increases.
 - Baseline multiple-selection behavior does not select all items on `Cmd/Ctrl + A`.

@@ -69,6 +69,61 @@ describe("ActionGroup", () => {
     expect(group.className).toContain("spectrum-ActionGroup--vertical");
   });
 
+  it("supports aria-labelledby on the action group", () => {
+    const App = defineComponent({
+      name: "ActionGroupAriaLabelledByHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("span", { id: "actiongroup-label" }, "Action group label"),
+            h(
+              Provider,
+              { theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP },
+              {
+                default: () =>
+                  h(ActionGroup, {
+                    items,
+                    "aria-labelledby": "actiongroup-label",
+                  }),
+              }
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const group = tree.getByRole("toolbar", { name: "Action group label" });
+    expect(group.getAttribute("aria-labelledby")).toBe("actiongroup-label");
+  });
+
+  it("supports aria-describedby on the action group", () => {
+    const App = defineComponent({
+      name: "ActionGroupAriaDescribedByHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("p", { id: "actiongroup-description" }, "Helpful description"),
+            h(
+              Provider,
+              { theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP },
+              {
+                default: () =>
+                  h(ActionGroup, {
+                    items,
+                    "aria-label": "actiongroup-test",
+                    "aria-describedby": "actiongroup-description",
+                  }),
+              }
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const group = tree.getByRole("toolbar", { name: "actiongroup-test" });
+    expect(group.getAttribute("aria-describedby")).toBe("actiongroup-description");
+  });
+
   it("handles disabled single-selection mode", () => {
     const tree = renderComponent({
       selectionMode: "single",
