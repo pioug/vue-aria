@@ -39,6 +39,29 @@ interface NormalizedSearchAutocompleteItem {
   label: string;
   isDisabled?: boolean | undefined;
   "aria-label"?: string | undefined;
+  sectionKey?: Key | undefined;
+}
+
+interface NormalizedSearchAutocompleteItemEntry {
+  type: "item";
+  key: Key;
+}
+
+interface NormalizedSearchAutocompleteSectionEntry {
+  type: "section";
+  key: Key;
+  title?: string | undefined;
+  "aria-label"?: string | undefined;
+  itemKeys: Key[];
+}
+
+type NormalizedSearchAutocompleteEntry =
+  | NormalizedSearchAutocompleteItemEntry
+  | NormalizedSearchAutocompleteSectionEntry;
+
+interface NormalizedSearchAutocompleteSlotModel {
+  items: NormalizedSearchAutocompleteItem[];
+  entries: NormalizedSearchAutocompleteEntry[];
 }
 
 const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
@@ -157,7 +180,8 @@ function extractTextContent(value: unknown): string {
 
 function parseSearchAutocompleteItemNode(
   node: VNode,
-  fallback: Key
+  fallback: Key,
+  sectionKey?: Key
 ): NormalizedSearchAutocompleteItem {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const labelFromSlot = extractTextContent(getSlotContent(node)).trim();
@@ -172,41 +196,79 @@ function parseSearchAutocompleteItemNode(
     isDisabled: Boolean(props.isDisabled),
     "aria-label":
       typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+    sectionKey,
   };
 }
 
 function parseSearchAutocompleteSlotItems(
   nodes: VNode[] | undefined
-): NormalizedSearchAutocompleteItem[] {
+): NormalizedSearchAutocompleteSlotModel {
   if (!nodes || nodes.length === 0) {
-    return [];
+    return { items: [], entries: [] };
   }
 
   const topLevelNodes = flattenVNodeChildren(nodes);
   const items: NormalizedSearchAutocompleteItem[] = [];
+  const entries: NormalizedSearchAutocompleteEntry[] = [];
   let itemIndex = 0;
+  let sectionIndex = 0;
 
   for (const node of topLevelNodes) {
     const componentName = getComponentName(node);
     if (componentName === "SearchAutocompleteItem") {
-      items.push(parseSearchAutocompleteItemNode(node, `item-${itemIndex}`));
+      const item = parseSearchAutocompleteItemNode(node, `item-${itemIndex}`);
+      items.push(item);
+      entries.push({
+        type: "item",
+        key: item.key,
+      });
       itemIndex += 1;
       continue;
     }
 
     if (componentName === "SearchAutocompleteSection") {
+      const sectionProps = (node.props ?? {}) as Record<string, unknown>;
+      const sectionKey = normalizeSearchAutocompleteKey(
+        node.key ?? sectionProps.id,
+        `section-${sectionIndex}`
+      );
+      const sectionTitle =
+        typeof sectionProps.title === "string" ? sectionProps.title : undefined;
+      const sectionAriaLabel =
+        typeof sectionProps["aria-label"] === "string"
+          ? sectionProps["aria-label"]
+          : undefined;
       const sectionChildren = getSlotChildren(node).filter(
         (child) => getComponentName(child) === "SearchAutocompleteItem"
       );
+      const sectionItemKeys: Key[] = [];
 
       for (const child of sectionChildren) {
-        items.push(parseSearchAutocompleteItemNode(child, `item-${itemIndex}`));
+        const item = parseSearchAutocompleteItemNode(
+          child,
+          `item-${itemIndex}`,
+          sectionKey
+        );
+        items.push(item);
+        sectionItemKeys.push(item.key);
         itemIndex += 1;
       }
+
+      if (sectionItemKeys.length > 0) {
+        entries.push({
+          type: "section",
+          key: sectionKey,
+          title: sectionTitle,
+          "aria-label": sectionAriaLabel,
+          itemKeys: sectionItemKeys,
+        });
+      }
+
+      sectionIndex += 1;
     }
   }
 
-  return items;
+  return { items, entries };
 }
 
 function areNormalizedItemsEqual(
@@ -225,13 +287,74 @@ function areNormalizedItemsEqual(
       current.label !== candidate.label ||
       current.textValue !== candidate.textValue ||
       current.isDisabled !== candidate.isDisabled ||
-      current["aria-label"] !== candidate["aria-label"]
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.sectionKey !== candidate.sectionKey
     ) {
       return false;
     }
   }
 
   return true;
+}
+
+function areNormalizedEntriesEqual(
+  left: NormalizedSearchAutocompleteEntry[],
+  right: NormalizedSearchAutocompleteEntry[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      !current ||
+      !candidate ||
+      current.type !== candidate.type ||
+      current.key !== candidate.key
+    ) {
+      return false;
+    }
+
+    if (current.type === "item") {
+      continue;
+    }
+
+    if (candidate.type !== "section") {
+      return false;
+    }
+
+    if (
+      current.title !== candidate.title ||
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.itemKeys.length !== candidate.itemKeys.length
+    ) {
+      return false;
+    }
+
+    for (let keyIndex = 0; keyIndex < current.itemKeys.length; keyIndex += 1) {
+      if (current.itemKeys[keyIndex] !== candidate.itemKeys[keyIndex]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+function areNormalizedSlotModelsEqual(
+  left: NormalizedSearchAutocompleteSlotModel,
+  right: NormalizedSearchAutocompleteSlotModel
+): boolean {
+  return (
+    areNormalizedItemsEqual(left.items, right.items) &&
+    areNormalizedEntriesEqual(left.entries, right.entries)
+  );
+}
+
+function normalizeIdSegment(value: Key): string {
+  return String(value).replace(/[^a-zA-Z0-9_-]/g, "-");
 }
 
 function createStaticSearchAutocompleteComponent(
@@ -382,7 +505,10 @@ export const SearchAutocomplete = defineComponent({
     const popoverRef = ref<HTMLElement | null>(null);
     const listBoxRef = ref<HTMLElement | null>(null);
     const loadMoreRequested = ref(false);
-    const slotItems = ref<NormalizedSearchAutocompleteItem[]>([]);
+    const slotModel = ref<NormalizedSearchAutocompleteSlotModel>({
+      items: [],
+      entries: [],
+    });
 
     const normalizedItems = computed<NormalizedSearchAutocompleteItem[]>(() => {
       const source = props.items ?? props.defaultItems;
@@ -396,7 +522,7 @@ export const SearchAutocomplete = defineComponent({
         }));
       }
 
-      return slotItems.value;
+      return slotModel.value.items;
     });
 
     const isAsync = computed(() => props.loadingState !== undefined);
@@ -578,11 +704,11 @@ export const SearchAutocomplete = defineComponent({
 
     return () => {
       if (!props.items && !props.defaultItems) {
-        const parsedItems = parseSearchAutocompleteSlotItems(
+        const parsedSlotModel = parseSearchAutocompleteSlotItems(
           slots.default?.() as VNode[] | undefined
         );
-        if (!areNormalizedItemsEqual(parsedItems, slotItems.value)) {
-          slotItems.value = parsedItems;
+        if (!areNormalizedSlotModelsEqual(parsedSlotModel, slotModel.value)) {
+          slotModel.value = parsedSlotModel;
         }
       }
 
@@ -595,13 +721,84 @@ export const SearchAutocomplete = defineComponent({
         UNSAFE_style: props.UNSAFE_style,
       });
 
-      const renderedList = state.collection.value.map((item) =>
+      const visibleItemsByKey = new Map<Key, NormalizedSearchAutocompleteItem>();
+      for (const item of state.collection.value) {
+        visibleItemsByKey.set(item.key, item);
+      }
+
+      const renderOption = (item: NormalizedSearchAutocompleteItem) =>
         h(SearchAutocompleteOption, {
           key: String(item.key),
           item,
           state,
-        })
-      );
+        });
+
+      const renderedList: VNode[] = [];
+
+      if (props.items || props.defaultItems || slotModel.value.entries.length === 0) {
+        for (const item of state.collection.value) {
+          renderedList.push(renderOption(item));
+        }
+      } else {
+        const listBoxId = listBoxProps.value.id as string | undefined;
+
+        for (const entry of slotModel.value.entries) {
+          if (entry.type === "item") {
+            const visibleItem = visibleItemsByKey.get(entry.key);
+            if (visibleItem) {
+              renderedList.push(renderOption(visibleItem));
+            }
+            continue;
+          }
+
+          const visibleSectionItems = entry.itemKeys
+            .map((key) => visibleItemsByKey.get(key))
+            .filter((item): item is NormalizedSearchAutocompleteItem => Boolean(item));
+          if (visibleSectionItems.length === 0) {
+            continue;
+          }
+
+          const sectionHeadingId = entry.title
+            ? `${listBoxId ?? "autocomplete-listbox"}-section-${normalizeIdSegment(entry.key)}-heading`
+            : undefined;
+
+          renderedList.push(
+            h(
+              "div",
+              {
+                key: `section-${String(entry.key)}`,
+                role: "presentation",
+                class: classNames("react-spectrum-SearchAutocomplete-section"),
+              },
+              [
+                entry.title
+                  ? h(
+                    "div",
+                    {
+                      id: sectionHeadingId,
+                      role: "presentation",
+                      class: classNames("spectrum-Menu-sectionHeading"),
+                    },
+                    entry.title
+                  )
+                  : null,
+                h(
+                  "div",
+                  {
+                    role: "group",
+                    "aria-labelledby": sectionHeadingId,
+                    "aria-label": sectionHeadingId
+                      ? undefined
+                      : entry["aria-label"],
+                    class: classNames("spectrum-Menu-section"),
+                  },
+                  visibleSectionItems.map((item) => renderOption(item))
+                ),
+              ]
+            )
+          );
+        }
+      }
 
       if (state.collection.value.length === 0 && !isLoadingList.value && isAsync.value) {
         renderedList.push(
