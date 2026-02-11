@@ -9,13 +9,29 @@ import { ActionButton, Dialog, DialogTrigger, Heading } from "@vue-spectrum/vue-
 ## Preview
 
 <div class="spectrum-preview">
-  <DialogTrigger>
-    <ActionButton>Open dialog</ActionButton>
-    <Dialog isDismissable>
-      <Heading level="3">Dialog title</Heading>
-      <p>Dialogs display contextual content and actions.</p>
-    </Dialog>
-  </DialogTrigger>
+  <div class="spectrum-preview-panel" style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
+    <DialogTrigger>
+      <ActionButton>Open modal</ActionButton>
+      <Dialog isDismissable>
+        <Heading level="3">Modal dialog</Heading>
+        <p>Dialogs display contextual content and actions.</p>
+      </Dialog>
+    </DialogTrigger>
+    <DialogTrigger type="popover">
+      <ActionButton>Open popover</ActionButton>
+      <Dialog isDismissable>
+        <Heading level="3">Popover dialog</Heading>
+        <p>Popover dialogs anchor to a trigger.</p>
+      </Dialog>
+    </DialogTrigger>
+    <DialogTrigger type="tray">
+      <ActionButton>Open tray</ActionButton>
+      <Dialog isDismissable>
+        <Heading level="3">Tray dialog</Heading>
+        <p>Tray overlays are optimized for constrained viewports.</p>
+      </Dialog>
+    </DialogTrigger>
+  </div>
 </div>
 
 ## Exports
@@ -47,6 +63,7 @@ const component = h(DialogTrigger, null, {
 - Baseline now includes mobile popover fallback parity in `DialogTrigger` (`type="popover"` renders as `modal` on mobile, with `mobileType="tray"` override support) and matches upstream dismissability by forcing outside-click dismissal when that fallback resolves to `modal`.
 - Baseline `DialogTrigger` dismissal behavior now covers outside-click gating parity across overlay modes (dismissable modal closes, non-dismissable modal stays open, popover/tray close on outside interaction) plus hidden dismiss-button close paths with focus restoration.
 - Baseline `DialogTrigger` state parity now includes controlled/uncontrolled open flows (`isOpen`/`onOpenChange` and `defaultOpen`), keyboard-dismiss disabling (`isKeyboardDismissDisabled`), and custom close-button wiring through injected close callbacks.
+- Baseline `DialogTrigger` now includes focus-restore parity when closing by trigger-toggle, hidden dismiss button, and `Escape`.
 - Baseline `DialogTrigger` and `DialogContainer` now include keyboard focus-containment loops (`Tab`/`Shift+Tab`) so focus stays trapped within the active dialog overlay.
 - Baseline `DialogContainer` dismissal semantics now cover `Escape` handling, keyboard-dismiss disabling, and outside-click dismissal rules (`isDismissable` gated).
 - Baseline `DialogTrigger` now matches upstream unmount safety behavior by warning in development when a non-popover dialog trigger unmounts while still open.

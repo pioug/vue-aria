@@ -332,6 +332,49 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it("restores focus to trigger when closed via escape", async () => {
+    const wrapper = mountDialogTrigger();
+
+    try {
+      const trigger = wrapper.get("button").element as HTMLButtonElement;
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]") as HTMLElement;
+      expect(dialog).not.toBeNull();
+      expect(document.activeElement).toBe(dialog);
+
+      dialog.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("calls onOpenChange when uncontrolled popovers open and close", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      onOpenChange,
+    });
+
+    try {
+      const trigger = wrapper.get("button");
+      await trigger.trigger("click");
+      await flushOverlay();
+      expect(onOpenChange).toHaveBeenNthCalledWith(1, true);
+
+      await trigger.trigger("click");
+      await flushOverlay();
+      expect(onOpenChange).toHaveBeenNthCalledWith(2, false);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("supports controlled open state via isOpen and onOpenChange", async () => {
     const onOpenChange = vi.fn();
     const ControlledHarness = defineComponent({
