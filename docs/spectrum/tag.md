@@ -53,4 +53,6 @@ const component = h(TagGroup, {
 
 - Baseline includes keyboard roving focus, RTL/LTR arrow behavior, removable tags, grid semantics (`grid` / `row` / `gridcell`), and static slot composition support via `Tag`.
 - Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
-- Full parity for advanced features (`maxRows`, action area, and field-label/validation integration) remains in progress.
+- Baseline now includes `maxRows` collapse/expand behavior with built-in `Show all`/`Show less` controls.
+- Baseline also includes an action area via `actionLabel` + `onAction`.
+- Field-label and validation integration parity remains in progress.
