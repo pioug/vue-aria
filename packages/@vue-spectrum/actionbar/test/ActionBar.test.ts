@@ -241,6 +241,7 @@ describe("ActionBar", () => {
     expect(root).toBeTruthy();
     expect(root?.classList.contains("is-open")).toBe(false);
     expect(root?.classList.contains("is-closing")).toBe(true);
+    expect(tree.getAllByText("1 selected").length).toBeGreaterThan(0);
 
     await Promise.resolve();
     await Promise.resolve();

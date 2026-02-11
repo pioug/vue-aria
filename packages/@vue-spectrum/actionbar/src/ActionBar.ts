@@ -312,13 +312,30 @@ export const ActionBar = defineComponent({
       () => count.value === "all" || (typeof count.value === "number" && count.value > 0)
     );
     const isMounted = ref(isOpen.value);
+    const lastVisibleCount = ref<number | "all">(
+      isOpen.value ? count.value : 0
+    );
+
+    watch(
+      count,
+      (nextCount) => {
+        if (nextCount === "all" || nextCount > 0) {
+          lastVisibleCount.value = nextCount;
+        }
+      },
+      { immediate: true }
+    );
+
+    const displayCount = computed<number | "all">(() =>
+      isOpen.value ? count.value : lastVisibleCount.value
+    );
 
     const selectedLabel = computed(() => {
-      if (count.value === "all") {
+      if (displayCount.value === "all") {
         return props.selectedAllLabel ?? "All selected";
       }
 
-      return props.selectedCountLabel?.(count.value) ?? `${count.value} selected`;
+      return props.selectedCountLabel?.(displayCount.value) ?? `${displayCount.value} selected`;
     });
 
     watch(isOpen, (nextOpen, previousOpen) => {
