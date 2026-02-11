@@ -221,4 +221,18 @@ describe("ToastContainer", () => {
 
     wrapper.unmount();
   });
+
+  it("supports programmatically closing toasts", async () => {
+    const wrapper = mountToastContainer();
+
+    const close = ToastQueue.neutral("Toast is default");
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).not.toBeNull();
+
+    close();
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
 });
