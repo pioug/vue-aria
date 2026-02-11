@@ -58,6 +58,46 @@ describe("Dialog", () => {
     expect(dialog.attributes("aria-label")).toBe("robin");
   });
 
+  it("does not set aria-labelledby by default", () => {
+    const wrapper = mount(Dialog, {
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    const dialog = wrapper.get("[role=\"dialog\"]");
+    expect(dialog.attributes("aria-labelledby")).toBeUndefined();
+  });
+
+  it("uses aria-labelledby when provided", () => {
+    const wrapper = mount(Dialog, {
+      props: {
+        "aria-labelledby": "batman",
+      } as Record<string, unknown>,
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    const dialog = wrapper.get("[role=\"dialog\"]");
+    expect(dialog.attributes("aria-labelledby")).toBe("batman");
+  });
+
+  it("aria-label takes precedence over aria-labelledby fallback", () => {
+    const wrapper = mount(Dialog, {
+      props: {
+        "aria-label": "robin",
+      } as Record<string, unknown>,
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    const dialog = wrapper.get("[role=\"dialog\"]");
+    expect(dialog.attributes("aria-label")).toBe("robin");
+    expect(dialog.attributes("aria-labelledby")).toBeUndefined();
+  });
+
   it("supports custom data attributes", () => {
     const wrapper = mount(Dialog, {
       props: {

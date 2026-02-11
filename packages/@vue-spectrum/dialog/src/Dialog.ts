@@ -166,20 +166,23 @@ export const Dialog = defineComponent({
       const { styleProps } = useStyleProps(styleInput);
       const domProps = filterDOMProps(attrsRecord, { labelable: true });
       const sizeVariant = typeSizeMap[resolvedType.value] ?? sizeMap[resolvedSize.value];
+      const mergedDialogProps = {
+        ...dialogProps.value,
+      } as Record<string, unknown>;
+      if (!ariaLabelledby.value || ariaLabel.value) {
+        delete mergedDialogProps["aria-labelledby"];
+      }
       const resolvedRole =
         props.role ??
         (domProps.role as "dialog" | "alertdialog" | undefined) ??
-        (dialogProps.value.role as "dialog" | "alertdialog" | undefined) ??
+        (mergedDialogProps.role as "dialog" | "alertdialog" | undefined) ??
         "dialog";
       const resolvedAriaLabelledby =
-        ariaLabelledby.value ??
-        (ariaLabel.value
-          ? undefined
-          : (dialogProps.value["aria-labelledby"] as string | undefined));
+        ariaLabelledby.value;
 
       return h(
         "section",
-        mergeProps(domProps, dialogProps.value, {
+        mergeProps(domProps, mergedDialogProps, {
           ref: (value: unknown) => {
             elementRef.value = value as HTMLElement | null;
           },

@@ -48,4 +48,5 @@ const component = h(DialogTrigger, null, {
 - Baseline `DialogTrigger` dismissal behavior now covers outside-click gating parity across overlay modes (dismissable modal closes, non-dismissable modal stays open, popover/tray close on outside interaction) plus hidden dismiss-button close paths with focus restoration.
 - Baseline `DialogContainer` dismissal semantics now cover `Escape` handling, keyboard-dismiss disabling, and outside-click dismissal rules (`isDismissable` gated).
 - Baseline `DialogTrigger` and `DialogContainer` now support custom portal container targeting via `container`.
+- Baseline `Dialog` label semantics now match explicit-prop precedence (`aria-labelledby` / `aria-label`) without leaking generated fallback ids when no explicit label linkage is provided.
 - Advanced overlay positioning and complete React Spectrum parity for dialog internals remain in progress.
