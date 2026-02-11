@@ -312,6 +312,20 @@ describe("NumberField", () => {
     uaSpy.mockRestore();
   });
 
+  it("supports custom increment and decrement aria labels", () => {
+    const tree = renderNumberField({
+      label: "Count",
+      incrementAriaLabel: "Add one",
+      decrementAriaLabel: "Remove one",
+    });
+
+    const addButton = tree.getByRole("button", { name: "Add one" });
+    const removeButton = tree.getByRole("button", { name: "Remove one" });
+
+    expect(addButton).toBeTruthy();
+    expect(removeButton).toBeTruthy();
+  });
+
   it("supports focused wheel stepping and isWheelDisabled", async () => {
     const onChange = vi.fn();
     const tree = renderNumberField({
@@ -578,6 +592,71 @@ describe("NumberField", () => {
     await nextTick();
     expect(tree.queryByText("Invalid value.")).toBeNull();
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  it("supports uncontrolled form reset", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "NumberFieldUncontrolledResetHarness",
+      setup() {
+        return () =>
+          h("form", null, [
+            h(NumberField, {
+              "aria-label": "Amount",
+              defaultValue: 10,
+              name: "amount",
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(Harness);
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.value).toBe("10");
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "42");
+    await fireEvent.blur(input);
+    expect(input.value).toBe("42");
+
+    await user.click(tree.getByTestId("reset"));
+    expect(input.value).toBe("10");
+  });
+
+  it("can be reset to blank with null-like controlled value", async () => {
+    const Harness = defineComponent({
+      name: "NumberFieldNullResetHarness",
+      setup() {
+        const value = ref<number | null>(12);
+        return () =>
+          h("div", [
+            h(NumberField, {
+              "aria-label": "Amount",
+              value: value.value as unknown as number,
+            }),
+            h("button", {
+              type: "button",
+              "data-testid": "clear",
+              onClick: () => {
+                value.value = null;
+              },
+            }),
+          ]);
+      },
+    });
+
+    const user = userEvent.setup();
+    const tree = render(Harness);
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.value).toBe("12");
+
+    await user.click(tree.getByTestId("clear"));
+    await nextTick();
+    expect(input.value).toBe("");
   });
 
   it("supports native server validation from form submission", async () => {

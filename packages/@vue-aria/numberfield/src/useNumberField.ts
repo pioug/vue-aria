@@ -173,6 +173,30 @@ export function useNumberField(
     }
   });
 
+  watchEffect((onCleanup) => {
+    const inputElement = options.inputRef === undefined ? undefined : toValue(options.inputRef);
+    if (!inputElement || !inputElement.form) {
+      return;
+    }
+
+    const onFormReset = () => {
+      if (options.value !== undefined) {
+        inputValue.value = formatNumber(currentNumberValue.value);
+        return;
+      }
+
+      const resetValue = normalizeNumber(toResolvedNumber(options.defaultValue));
+      uncontrolledNumberValue.value = resetValue;
+      inputValue.value = formatNumber(resetValue);
+    };
+
+    inputElement.form.addEventListener("reset", onFormReset);
+
+    onCleanup(() => {
+      inputElement.form?.removeEventListener("reset", onFormReset);
+    });
+  });
+
   const commitNumberValue = (value: number | undefined) => {
     const normalized = normalizeNumber(value);
     const previousValue = currentNumberValue.value;

@@ -23,6 +23,8 @@ export interface SpectrumStepButtonProps {
   onPress?: ((event: PressEvent) => void) | undefined;
   onFocus?: ((event: FocusEvent) => void) | undefined;
   onBlur?: ((event: FocusEvent) => void) | undefined;
+  ariaLabel?: string | undefined;
+  ariaControls?: string | undefined;
   "aria-label"?: string | undefined;
   "aria-controls"?: string | undefined;
   UNSAFE_className?: string | undefined;
@@ -76,6 +78,14 @@ export const StepButton = defineComponent({
       type: Function as PropType<((event: FocusEvent) => void) | undefined>,
       default: undefined,
     },
+    ariaLabel: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaControls: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     "aria-label": {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -117,6 +127,23 @@ export const StepButton = defineComponent({
     );
 
     return () => {
+      const attrsRecord = attrs as Record<string, unknown>;
+      const resolvedAriaLabel =
+        props["aria-label"] ??
+        props.ariaLabel ??
+        (typeof attrsRecord["aria-label"] === "string"
+          ? (attrsRecord["aria-label"] as string)
+          : typeof attrsRecord.ariaLabel === "string"
+            ? (attrsRecord.ariaLabel as string)
+            : undefined);
+      const resolvedAriaControls =
+        props["aria-controls"] ??
+        props.ariaControls ??
+        (typeof attrsRecord["aria-controls"] === "string"
+          ? (attrsRecord["aria-controls"] as string)
+          : typeof attrsRecord.ariaControls === "string"
+            ? (attrsRecord.ariaControls as string)
+            : undefined);
       const directionClass =
         props.direction === "up"
           ? "spectrum-Stepper-button--stepUp"
@@ -145,8 +172,8 @@ export const StepButton = defineComponent({
             role: "button",
             tabindex: tabIndex.value,
             "aria-disabled": isDisabled.value || undefined,
-            "aria-label": props["aria-label"],
-            "aria-controls": props["aria-controls"],
+            "aria-label": resolvedAriaLabel,
+            "aria-controls": resolvedAriaControls,
             class: classNames(
               "spectrum-Stepper-button",
               directionClass,
