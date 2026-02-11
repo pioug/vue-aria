@@ -1,17 +1,17 @@
 import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { describe, expect, it } from "vitest";
-import { TextField } from "../src";
+import { TextArea } from "../src";
 
-describe("TextField SSR", () => {
-  it("renders text field", async () => {
+describe("TextArea SSR", () => {
+  it("renders text area", async () => {
     const App = defineComponent({
-      name: "TextFieldSSRApp",
+      name: "TextAreaSSRApp",
       setup() {
         return () =>
-          h(TextField, {
-            label: "Name",
-            defaultValue: "Ada",
+          h(TextArea, {
+            label: "Notes",
+            defaultValue: "Example",
           });
       },
     });
@@ -19,6 +19,6 @@ describe("TextField SSR", () => {
     const html = await renderToString(createSSRApp(App));
 
     expect(html).toContain("spectrum-Textfield");
-    expect(html).toContain("Name");
+    expect(html).toContain("Notes");
   });
 });
