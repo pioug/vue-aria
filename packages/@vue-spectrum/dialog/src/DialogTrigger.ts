@@ -158,6 +158,10 @@ export const DialogTrigger = defineComponent({
     const overlayRootRef = ref<HTMLElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
     const wasOpenRef = ref(false);
+    const hiddenBodyElements = ref<Array<{
+      element: HTMLElement;
+      previousValue: string | null;
+    }>>([]);
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const requestedType = computed<DialogType>(() => props.type ?? "modal");
     const isMobileViewport = computed<boolean>(() => {
@@ -267,6 +271,56 @@ export const DialogTrigger = defineComponent({
       setOpen(false);
     };
 
+    const clearAriaHiddenOutsideContent = (): void => {
+      for (const entry of hiddenBodyElements.value) {
+        if (entry.previousValue === null) {
+          entry.element.removeAttribute("aria-hidden");
+          continue;
+        }
+
+        entry.element.setAttribute("aria-hidden", entry.previousValue);
+      }
+      hiddenBodyElements.value = [];
+    };
+
+    const applyAriaHiddenOutsideContent = (): void => {
+      clearAriaHiddenOutsideContent();
+      if (
+        typeof document === "undefined" ||
+        !isOpen.value ||
+        effectiveType.value === "popover"
+      ) {
+        return;
+      }
+
+      const overlayContainer = overlayRootRef.value?.closest(
+        ".spectrum-Overlay"
+      ) as HTMLElement | null;
+      if (!overlayContainer) {
+        return;
+      }
+
+      const nextHiddenElements: Array<{
+        element: HTMLElement;
+        previousValue: string | null;
+      }> = [];
+
+      for (const child of Array.from(document.body.children)) {
+        if (!(child instanceof HTMLElement) || child === overlayContainer) {
+          continue;
+        }
+
+        const previousValue = child.getAttribute("aria-hidden");
+        child.setAttribute("aria-hidden", "true");
+        nextHiddenElements.push({
+          element: child,
+          previousValue,
+        });
+      }
+
+      hiddenBodyElements.value = nextHiddenElements;
+    };
+
     onMounted(() => {
       if (typeof document !== "undefined") {
         document.addEventListener("mousedown", onDocumentMouseDown, true);
@@ -277,6 +331,7 @@ export const DialogTrigger = defineComponent({
       if (typeof document !== "undefined") {
         document.removeEventListener("mousedown", onDocumentMouseDown, true);
       }
+      clearAriaHiddenOutsideContent();
 
       if (
         wasOpenRef.value &&
@@ -308,6 +363,21 @@ export const DialogTrigger = defineComponent({
             focusTarget.focus();
           });
         }
+      },
+      { immediate: true }
+    );
+
+    watch(
+      [isOpen, effectiveType, overlayRootRef],
+      ([nextIsOpen, nextType]) => {
+        if (!nextIsOpen || nextType === "popover") {
+          clearAriaHiddenOutsideContent();
+          return;
+        }
+
+        void nextTick(() => {
+          applyAriaHiddenOutsideContent();
+        });
       },
       { immediate: true }
     );

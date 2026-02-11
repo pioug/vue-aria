@@ -332,6 +332,30 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it("sets aria-hidden on non-overlay body content while modal is open", async () => {
+    const wrapper = mountDialogTrigger({
+      type: "modal",
+    });
+
+    try {
+      const trigger = wrapper.get("button");
+      await trigger.trigger("click");
+      await flushOverlay();
+
+      const host = wrapper.element as HTMLElement;
+      expect(host.closest("[aria-hidden=\"true\"]")).not.toBeNull();
+
+      const overlay = document.body.querySelector("[data-testid=\"modal\"]");
+      expect(overlay).not.toBeNull();
+      overlay?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      await flushOverlay();
+
+      expect(host.closest("[aria-hidden=\"true\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("restores focus to trigger when closed via escape", async () => {
     const wrapper = mountDialogTrigger();
 
