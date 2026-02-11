@@ -50,6 +50,48 @@ describe("NumberField", () => {
     expect(buttons[1].getAttribute("tabindex")).toBe("-1");
   });
 
+  it("exposes UNSAFE_getDOMNode and focus through component ref", async () => {
+    const numberFieldRef = ref<{
+      UNSAFE_getDOMNode?: () => HTMLElement | null;
+      focus?: () => void;
+    } | null>(null);
+
+    const Harness = defineComponent({
+      name: "NumberFieldRefHarness",
+      setup() {
+        return () =>
+          h("div", [
+            h(NumberField, {
+              ref: numberFieldRef,
+              "aria-label": "Amount",
+            }),
+            h("button", { type: "button", "data-testid": "after" }, "After"),
+            h("button", {
+              type: "button",
+              "data-testid": "focus",
+              onClick: () => numberFieldRef.value?.focus?.(),
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(Harness);
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const afterButton = tree.getByTestId("after") as HTMLButtonElement;
+    const focusButton = tree.getByTestId("focus");
+    const groupNode = numberFieldRef.value?.UNSAFE_getDOMNode?.();
+
+    expect(groupNode).toBeTruthy();
+    expect(groupNode?.getAttribute("role")).toBe("group");
+
+    afterButton.focus();
+    expect(document.activeElement).toBe(afterButton);
+
+    await fireEvent.click(focusButton);
+    await nextTick();
+    expect(document.activeElement).toBe(input);
+  });
+
   it("wires description and error message to aria-describedby", () => {
     const withDescription = renderNumberField({
       description: "Enter an integer.",

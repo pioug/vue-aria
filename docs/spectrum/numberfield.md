@@ -37,6 +37,6 @@ const field = h(NumberField, {
 ## Notes
 
 - Baseline includes `useNumberField` semantics, clamped min/max handling, controlled/uncontrolled value support, increment/decrement step buttons, long-press auto-repeat stepping, upstream-style platform `inputMode` handling, focused wheel stepping, empty-field stepper parity (initial step value resolution for unbounded, min-bounded, and max-bounded cases), minus-sign empty-input blur behavior (no spurious `onChange` emission), and custom increment/decrement aria-label support.
-- Description/error wiring, hidden form input (`name`), uncontrolled form reset support, controlled null-like reset-to-blank behavior, and SSR coverage are included.
+- Description/error wiring, hidden form input (`name`), uncontrolled form reset support, controlled null-like reset-to-blank behavior, component-ref DOM/focus helpers (`UNSAFE_getDOMNode`, `focus`), and SSR coverage are included.
 - Baseline now includes `validate(value)` support across ARIA/native validation modes, native required/invalid messaging lifecycle behavior (`checkValidity` display with valid-blur clearing), function-style native `errorMessage` customizers, and `Form.validationErrors` integration by field `name` (including submit-driven native server error behavior) with clear-on-input behavior.
 - Advanced locale edge cases remain in progress.

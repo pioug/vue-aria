@@ -19,13 +19,14 @@ export const NumberField = defineComponent({
   props: {
     ...numberFieldPropOptions,
   },
-  setup(props, { attrs }) {
+  setup(props, { attrs, expose }) {
     const attrsRecord = attrs as Record<string, unknown>;
     const propsRecord = props as unknown as Record<string, unknown>;
     const provider = useProviderContext();
     const formContext = useFormContext();
     const formValidationErrors = useFormValidationErrors();
     const inputRef = ref<HTMLInputElement | null>(null);
+    const groupRef = ref<HTMLElement | null>(null);
     const isServerErrorCleared = ref(false);
     const currentValue = ref<number | undefined>(
       props.value !== undefined ? props.value : props.defaultValue
@@ -358,6 +359,13 @@ export const NumberField = defineComponent({
       });
     });
 
+    expose({
+      UNSAFE_getDOMNode: () => groupRef.value,
+      focus: () => {
+        inputRef.value?.focus();
+      },
+    });
+
     return () =>
       h(
         Field,
@@ -392,6 +400,9 @@ export const NumberField = defineComponent({
             h(
               "div",
               mergeProps(numberField.groupProps.value, hoverProps, {
+                ref: (value: unknown) => {
+                  groupRef.value = value as HTMLElement | null;
+                },
                 class: classNames(
                   "spectrum-Stepper",
                   {
