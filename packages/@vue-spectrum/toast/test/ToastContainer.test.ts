@@ -235,4 +235,52 @@ describe("ToastContainer", () => {
 
     wrapper.unmount();
   });
+
+  it("restores focus to the previous element when toasts are dismissed", async () => {
+    const component = defineComponent({
+      name: "ToastFocusRestoreHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { id: "focus-trigger", type: "button" }, "Trigger"),
+            h(ToastContainer),
+          ]);
+      },
+    });
+    const wrapper = mount(component, { attachTo: document.body });
+
+    const trigger = document.body.querySelector("#focus-trigger") as HTMLButtonElement | null;
+    expect(trigger).not.toBeNull();
+    if (!trigger) {
+      throw new Error("Missing focus trigger");
+    }
+    trigger.focus();
+
+    queueToast();
+    await flushToasts();
+
+    const closeButton = document.body.querySelector(
+      "[data-testid=\"rsp-Toast-closeButton\"]"
+    ) as HTMLButtonElement | null;
+    expect(closeButton).not.toBeNull();
+    if (!closeButton) {
+      throw new Error("Missing toast close button");
+    }
+    closeButton.dispatchEvent(
+      new FocusEvent("focusin", {
+        bubbles: true,
+        relatedTarget: trigger,
+      })
+    );
+    closeButton.focus();
+    await flushToasts();
+
+    clickElement("[data-testid=\"rsp-Toast-closeButton\"]");
+    await flushToasts();
+
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+
+    wrapper.unmount();
+  });
 });
