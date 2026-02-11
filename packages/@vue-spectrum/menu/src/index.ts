@@ -1,6 +1,7 @@
 export { Menu } from "./Menu";
 export { MenuSection } from "./Menu";
 export { MenuItem } from "./MenuItem";
+export { SubmenuTrigger } from "./SubmenuTrigger";
 export { MenuTrigger } from "./MenuTrigger";
 export { ActionMenu } from "./ActionMenu";
 
@@ -11,6 +12,9 @@ export type {
 export type {
   SpectrumMenuItemProps,
 } from "./MenuItem";
+export type {
+  SpectrumSubmenuTriggerProps,
+} from "./SubmenuTrigger";
 export type {
   SpectrumMenuTriggerProps,
 } from "./MenuTrigger";

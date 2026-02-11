@@ -27,6 +27,7 @@ const menuItems = [
 - `Menu`
 - `MenuSection`
 - `MenuItem`
+- `SubmenuTrigger`
 - `MenuTrigger`
 - `ActionMenu`
 
@@ -51,5 +52,5 @@ const component = h(MenuTrigger, {
 
 ## Notes
 
-- Baseline includes menu and trigger behavior with keyboard navigation, selection modes (`none`/`single`/`multiple`), section grouping support (`sections` + `MenuSection`), and close-on-select behavior.
-- Advanced parity for sections/submenus, contextual-help/dialog triggers, and full popover positioning remains in progress.
+- Baseline includes menu and trigger behavior with keyboard navigation, selection modes (`none`/`single`/`multiple`), section grouping support (`sections` + `MenuSection`), submenu trigger behavior (`SubmenuTrigger`), and close-on-select behavior.
+- Advanced parity for contextual-help/dialog triggers and full popover positioning remains in progress.
