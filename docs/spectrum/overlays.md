@@ -3,7 +3,10 @@
 Vue port baseline of `@react-spectrum/overlays`.
 
 <script setup lang="ts">
-import { Overlay } from "@vue-spectrum/vue-spectrum";
+import { ref } from "vue";
+import { Overlay, Popover } from "@vue-spectrum/vue-spectrum";
+
+const popoverTrigger = ref<HTMLElement | null>(null);
 </script>
 
 ## Preview
@@ -18,18 +21,25 @@ import { Overlay } from "@vue-spectrum/vue-spectrum";
       Overlay content rendered in a portal.
     </div>
   </Overlay>
+  <div class="spectrum-preview-panel" style="max-width: 320px; margin: 0 auto; text-align: center;">
+    <button ref="popoverTrigger" type="button">Popover anchor</button>
+    <Popover :isOpen="true" :trigger-ref="popoverTrigger ?? undefined">
+      <div role="dialog" aria-label="Preview popover">Popover content.</div>
+    </Popover>
+  </div>
 </div>
 
 ## Exports
 
 - `Overlay`
+- `Popover`
 - `OpenTransition`
 
 ## Example
 
 ```ts
 import { h } from "vue";
-import { Overlay } from "@vue-spectrum/overlays";
+import { Overlay, Popover } from "@vue-spectrum/overlays";
 
 const component = h(
   Overlay,
@@ -38,9 +48,22 @@ const component = h(
     default: () => h("div", { role: "dialog" }, "Modal content"),
   }
 );
+
+const popover = h(
+  Popover,
+  {
+    isOpen: true,
+    triggerRef: document.getElementById("anchor") ?? undefined,
+    placement: "bottom",
+  },
+  {
+    default: () => h("div", { role: "dialog" }, "Popover content"),
+  }
+);
 ```
 
 ## Notes
 
 - Baseline includes portal mounting behavior and transition lifecycle callback wiring.
-- `Modal`, `Popover`, and `Tray` parity remains in progress.
+- Baseline now includes `Popover` with `@vue-aria/overlays` positioning/dismiss wiring (`Escape` close, underlay for modal mode, optional non-modal mode, and arrow visibility toggle).
+- `Modal` and `Tray` parity remain in progress.
