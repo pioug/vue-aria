@@ -42,6 +42,7 @@ export interface SpectrumTabItem extends TabListItem {
   title?: string | undefined;
   children?: unknown;
   href?: string | undefined;
+  "aria-label"?: string | undefined;
 }
 
 export interface SpectrumTabsProps {
@@ -231,6 +232,13 @@ interface ParsedStaticTabPanel {
   children?: unknown;
 }
 
+interface ResolvedTabSlotRender {
+  content: VNodeChild[];
+  href?: string | undefined;
+  ariaLabel?: string | undefined;
+  domProps: Record<string, unknown>;
+}
+
 function parseTabsStaticItems(nodes: VNode[] | undefined): SpectrumTabItem[] {
   if (!nodes || nodes.length === 0) {
     return [];
@@ -320,6 +328,57 @@ function normalizeRenderable(
   return [value];
 }
 
+function toTabItemDomProps(props: Record<string, unknown>): Record<string, unknown> {
+  const domProps = filterDOMProps(props);
+  delete domProps.id;
+  delete domProps.href;
+  delete domProps.disabled;
+  delete domProps.role;
+  delete domProps.type;
+  delete domProps.tabIndex;
+  delete domProps.tabindex;
+  delete domProps["aria-selected"];
+  delete domProps["aria-controls"];
+  delete domProps["aria-disabled"];
+  return domProps;
+}
+
+function resolveTabSlotRender(
+  rendered: VNodeChild | VNodeChild[] | undefined
+): ResolvedTabSlotRender {
+  const normalized = normalizeRenderable(rendered);
+  if (normalized.length !== 1 || !isVNode(normalized[0])) {
+    return {
+      content: normalized,
+      domProps: {},
+    };
+  }
+
+  const itemNode = normalized[0];
+  if (getComponentName(itemNode) !== "TabsItem") {
+    return {
+      content: normalized,
+      domProps: {},
+    };
+  }
+
+  const itemProps = (itemNode.props ?? {}) as Record<string, unknown>;
+  const itemContent = normalizeRenderable(
+    getSlotContent(itemNode) ??
+      (typeof itemProps.title === "string" ? itemProps.title : undefined)
+  );
+
+  return {
+    content: itemContent.length > 0 ? itemContent : normalized,
+    href: typeof itemProps.href === "string" ? itemProps.href : undefined,
+    ariaLabel:
+      typeof itemProps["aria-label"] === "string"
+        ? itemProps["aria-label"]
+        : undefined,
+    domProps: toTabItemDomProps(itemProps),
+  };
+}
+
 function useTabsContext(componentName: string): TabsContextValue {
   const context = inject(TABS_CONTEXT_SYMBOL, null);
   if (!context) {
@@ -355,19 +414,30 @@ const TabButton = defineComponent({
     const focusRing = useFocusRing();
 
     return () => {
-      const rendered =
-        slots.default?.({ item: props.item }) ?? props.item.title ?? String(props.item.key);
-      const content = normalizeRenderable(rendered);
-      const elementType = props.item.href ? "a" : "button";
+      const rendered = slots.default?.({ item: props.item });
+      const resolvedSlotRender = resolveTabSlotRender(rendered);
+      const content =
+        resolvedSlotRender.content.length > 0
+          ? resolvedSlotRender.content
+          : normalizeRenderable(props.item.title ?? String(props.item.key));
+      const href = resolvedSlotRender.href ?? props.item.href;
+      const elementType = href ? "a" : "button";
+      const ariaLabel = resolvedSlotRender.ariaLabel ?? props.item["aria-label"];
 
       return h(
         elementType,
-        mergeProps(tabProps.value, hoverProps, focusRing.focusProps, {
+        mergeProps(
+          tabProps.value,
+          hoverProps,
+          focusRing.focusProps,
+          resolvedSlotRender.domProps,
+          {
           ref: (value: unknown) => {
             tabRef.value = value as HTMLElement | null;
           },
           type: elementType === "button" ? "button" : undefined,
-          href: props.item.href,
+          href,
+          "aria-label": ariaLabel,
           class: classNames("spectrum-Tabs-item", {
             "is-selected": isSelected.value,
             "is-disabled": isDisabled.value,
@@ -375,7 +445,8 @@ const TabButton = defineComponent({
             "is-active": isPressed.value,
             "focus-ring": focusRing.isFocusVisible.value,
           }),
-        }),
+          }
+        ),
         [
           h(
             "span",

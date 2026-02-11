@@ -76,7 +76,9 @@ h(TabList, null, {
 - Baseline port includes keyboard navigation, selection state (controlled/uncontrolled), and tabpanel semantics.
 - Supports both automatic and manual keyboard activation behavior.
 - Includes `Item` compatibility helper for both scoped-slot and static item composition patterns.
+- Scoped `Item` slot rendering now forwards tab-level data/ARIA props (for example `data-testid`/`data-*`) to rendered tab elements while preserving generated tab ids.
 - Includes baseline horizontal overflow collapse-to-picker behavior via `TabList` wrapper measurement.
 - Includes baseline selection-indicator positioning parity (`spectrum-Tabs-selectionIndicator`) for selected tabs, including RTL right-edge transform behavior.
 - Includes collapsed-mode tabpanel and picker aria-labeling composition parity (`aria-label` + external `aria-labelledby`).
+- Includes link-tab parity behavior (`href`-based tabs rendered as anchor elements) and selection callbacks when re-clicking the already selected tab.
 - Advanced visual/theming polish remains in progress.

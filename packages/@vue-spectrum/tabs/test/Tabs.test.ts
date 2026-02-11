@@ -196,6 +196,57 @@ describe("Tabs", () => {
     expect(tabs[1]?.getAttribute("aria-selected")).toBe("false");
   });
 
+  it("fires onSelectionChange when clicking on the current tab", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const { getByRole } = renderTabs({
+      defaultSelectedKey: "tab-1",
+      onSelectionChange,
+    });
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+
+    await user.click(tabs[0] as HTMLElement);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-1");
+  });
+
+  it("supports custom props for the parent tabs element", async () => {
+    const { getByTestId } = renderTabs({
+      "data-testid": "tabs-root",
+    });
+    await flush();
+
+    expect(getByTestId("tabs-root")).toBeTruthy();
+  });
+
+  it("supports custom props for tab items via Item slot rendering", async () => {
+    const { getAllByTestId } = renderTabs(
+      {},
+      defaultItems,
+      {
+        tabListSlot: () =>
+          h(Item, {
+            title: "Custom label",
+            "data-testid": "tab-item",
+            "data-instance-id": "instance-id",
+            id: "custom-id",
+          }),
+      }
+    );
+    await flush();
+
+    const tabItems = getAllByTestId("tab-item");
+    expect(tabItems).toHaveLength(3);
+    for (const tabItem of tabItems) {
+      expect(tabItem.getAttribute("data-instance-id")).toBe("instance-id");
+      expect(tabItem.getAttribute("id")).not.toBe("custom-id");
+    }
+  });
+
   it("does not generate conflicting ids between multiple instances", async () => {
     const App = defineComponent({
       name: "TabsIdsApp",
@@ -566,5 +617,33 @@ describe("Tabs", () => {
       clientWidthSpy.mockRestore();
       scrollWidthSpy.mockRestore();
     }
+  });
+
+  it("supports tabs as links", async () => {
+    const user = userEvent.setup();
+    const linkItems: SpectrumTabItem[] = [
+      { key: "one", title: "One", href: "#one", children: "One panel" },
+      { key: "two", title: "Two", href: "#two", children: "Two panel" },
+      { key: "three", title: "Three", href: "#three", children: "Three panel" },
+    ];
+
+    const { getByRole } = renderTabs({}, linkItems);
+    await flush();
+
+    const tablist = getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect((tabs[0] as HTMLElement).tagName).toBe("A");
+    expect(tabs[0]?.getAttribute("href")).toBe("#one");
+    expect((tabs[1] as HTMLElement).tagName).toBe("A");
+    expect(tabs[1]?.getAttribute("href")).toBe("#two");
+    expect((tabs[2] as HTMLElement).tagName).toBe("A");
+    expect(tabs[2]?.getAttribute("href")).toBe("#three");
+
+    await user.click(tabs[1] as HTMLElement);
+    expect(tabs[1]?.getAttribute("aria-selected")).toBe("true");
+
+    fireEvent.keyDown(tabs[1] as HTMLElement, { key: "ArrowRight" });
+    await flush();
+    expect(tabs[2]?.getAttribute("aria-selected")).toBe("true");
   });
 });
