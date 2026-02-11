@@ -225,4 +225,25 @@ describe("SubmenuTrigger", () => {
     expect(submenuB).not.toBeNull();
     expect(submenuA && tree.container.contains(submenuA)).toBe(false);
   });
+
+  it("does not fire onAction when activating the submenu trigger itself", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    const tree = renderComponent({ onAction });
+
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    await user.click(trigger);
+    expect(onAction).not.toHaveBeenCalled();
+
+    trigger.focus();
+    await user.keyboard("{Enter}");
+    expect(onAction).not.toHaveBeenCalled();
+
+    const submenu = getSubmenuElement(tree);
+    const submenuItems = within(submenu).getAllByRole("menuitem");
+    await user.click(submenuItems[0] as Element);
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenLastCalledWith("rename");
+  });
 });
