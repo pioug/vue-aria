@@ -72,6 +72,12 @@ export { TextArea, TextField } from "./TextField";
 export { ToastContainer, ToastQueue } from "./Toast";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
+export {
+  TreeView,
+  TreeViewItem,
+  TreeViewItemContent,
+  TreeViewLoadMoreItem,
+} from "./TreeView";
 export { Tooltip, TooltipTrigger } from "./Tooltip";
 export { Radio } from "./Radio";
 export { RadioGroup } from "./RadioGroup";
@@ -227,6 +233,16 @@ export type {
   S2ToastOptions,
   S2ToastPlacement,
 } from "./Toast";
+export type {
+  S2TreeKey,
+  S2TreeSelectionMode,
+  S2TreeViewItemContentProps,
+  S2TreeViewItemData,
+  S2TreeViewItemProps,
+  S2TreeViewLoadMoreItemProps,
+  S2TreeViewProps,
+  TreeViewSize,
+} from "./TreeView";
 export type { S2TooltipProps, S2TooltipTriggerProps } from "./Tooltip";
 export type { S2WellProps } from "./Well";
 export type {
