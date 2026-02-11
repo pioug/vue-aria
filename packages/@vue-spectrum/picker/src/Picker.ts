@@ -1,12 +1,16 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   onBeforeUnmount,
   onMounted,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useId } from "@vue-aria/ssr";
@@ -40,6 +44,18 @@ export interface SpectrumPickerProps {
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
 
+export interface SpectrumPickerItemProps {
+  id?: PickerKey | undefined;
+  textValue?: string | undefined;
+  isDisabled?: boolean | undefined;
+}
+
+export interface SpectrumPickerSectionProps {
+  id?: PickerKey | undefined;
+  title?: string | undefined;
+  "aria-label"?: string | undefined;
+}
+
 function keyToString(key: PickerKey | undefined): string | null {
   if (key === undefined || key === null) {
     return null;
@@ -47,6 +63,201 @@ function keyToString(key: PickerKey | undefined): string | null {
 
   return String(key);
 }
+
+function normalizePickerKey(value: unknown, fallback: PickerKey): PickerKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parsePickerItemNode(node: VNode, fallback: PickerKey): SpectrumPickerItemData {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  const slotLabel = extractTextContent(getSlotContent(node)).trim();
+  const textValue =
+    typeof props.textValue === "string" ? props.textValue : slotLabel;
+
+  return {
+    key: normalizePickerKey(node.key ?? props.id, fallback),
+    label: textValue || String(fallback),
+    isDisabled: Boolean(props.isDisabled),
+  };
+}
+
+function parsePickerSlotItems(nodes: VNode[] | undefined): SpectrumPickerItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const topLevelNodes = flattenVNodeChildren(nodes);
+  const items: SpectrumPickerItemData[] = [];
+  let itemIndex = 0;
+
+  for (const node of topLevelNodes) {
+    const componentName = getComponentName(node);
+    if (componentName === "PickerItem") {
+      items.push(parsePickerItemNode(node, `item-${itemIndex}`));
+      itemIndex += 1;
+      continue;
+    }
+
+    if (componentName === "PickerSection") {
+      const sectionChildren = getSlotChildren(node).filter(
+        (child) => getComponentName(child) === "PickerItem"
+      );
+      for (const child of sectionChildren) {
+        items.push(parsePickerItemNode(child, `item-${itemIndex}`));
+        itemIndex += 1;
+      }
+    }
+  }
+
+  return items;
+}
+
+function createStaticPickerComponent(name: string, props: Record<string, unknown>) {
+  return defineComponent({
+    name,
+    props: props as any,
+    setup() {
+      return () => null;
+    },
+  });
+}
+
+export const PickerItem = createStaticPickerComponent("PickerItem", {
+  id: {
+    type: [String, Number] as PropType<PickerKey | undefined>,
+    default: undefined,
+  },
+  textValue: {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  isDisabled: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+});
+
+export const PickerSection = createStaticPickerComponent("PickerSection", {
+  id: {
+    type: [String, Number] as PropType<PickerKey | undefined>,
+    default: undefined,
+  },
+  title: {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  "aria-label": {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+});
 
 export const Picker = defineComponent({
   name: "Picker",
@@ -113,7 +324,7 @@ export const Picker = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const resolvedProviderProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
@@ -124,7 +335,12 @@ export const Picker = defineComponent({
 
     const listboxId = useId(undefined, "v-spectrum-picker-listbox");
 
-    const items = computed<SpectrumPickerItemData[]>(() => props.items ?? []);
+    const parsedSlotItems = computed<SpectrumPickerItemData[]>(() =>
+      parsePickerSlotItems(slots.default?.() as VNode[] | undefined)
+    );
+    const items = computed<SpectrumPickerItemData[]>(() =>
+      props.items ?? parsedSlotItems.value
+    );
     const itemByKey = computed(() => {
       const map = new Map<string, SpectrumPickerItemData>();
       for (const item of items.value) {

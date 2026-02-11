@@ -1,7 +1,13 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { Picker, type SpectrumPickerItemData } from "../src";
+import {
+  Picker,
+  PickerItem,
+  PickerSection,
+  type SpectrumPickerItemData,
+} from "../src";
 
 const items: SpectrumPickerItemData[] = [
   { key: "1", label: "One" },
@@ -168,5 +174,49 @@ describe("Picker", () => {
 
     await user.click(trigger);
     expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("supports static slot syntax with PickerItem and PickerSection", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+
+    const App = defineComponent({
+      name: "PickerSlotApp",
+      setup() {
+        return () =>
+          h(
+            Picker,
+            {
+              "aria-label": "picker-test",
+              onSelectionChange,
+            },
+            {
+              default: () => [
+                h(PickerSection, { id: "favorites", title: "Favorites" }, {
+                  default: () => [
+                    h(PickerItem, { id: "fav-1" }, () => "One"),
+                    h(PickerItem, { id: "fav-2", isDisabled: true }, () => "Two"),
+                  ],
+                }),
+                h(PickerItem, { id: "other-1" }, () => "Three"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+
+    await user.click(trigger);
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+
+    expect(options).toHaveLength(3);
+    expect(options[1]?.getAttribute("aria-disabled")).toBe("true");
+
+    await user.click(options[2] as Element);
+    expect(onSelectionChange).toHaveBeenCalledWith("other-1");
+    expect(tree.getByText("Three")).toBeTruthy();
   });
 });
