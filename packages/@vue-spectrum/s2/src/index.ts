@@ -44,6 +44,7 @@ export { Tag, TagGroup } from "./TagGroup";
 export { TextArea, TextField } from "./TextField";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
+export { Tooltip, TooltipTrigger } from "./Tooltip";
 export { Radio } from "./Radio";
 export { RadioGroup } from "./RadioGroup";
 export { Well } from "./Well";
@@ -133,6 +134,7 @@ export type { S2StatusLightProps } from "./StatusLight";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
 export type { S2TagGroupProps, S2TagProps } from "./TagGroup";
 export type { S2TextAreaProps, S2TextFieldProps, TextFieldSize } from "./TextField";
+export type { S2TooltipProps, S2TooltipTriggerProps } from "./Tooltip";
 export type { S2WellProps } from "./Well";
 export type {
   ActionButtonGroupDensity,

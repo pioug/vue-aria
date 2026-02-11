@@ -90,6 +90,8 @@ export {
   TextArea as S2TextArea,
   ToggleButton as S2ToggleButton,
   ToggleButtonGroup as S2ToggleButtonGroup,
+  Tooltip as S2Tooltip,
+  TooltipTrigger as S2TooltipTrigger,
   Well as S2Well,
   pressScale,
   isDocsEnv,
