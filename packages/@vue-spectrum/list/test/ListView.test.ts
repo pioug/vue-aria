@@ -31,6 +31,35 @@ function renderComponent(props: Record<string, unknown> = {}) {
   });
 }
 
+function renderListWithFocusableChildren(
+  props: Record<string, unknown> = {},
+  options: { dir?: "ltr" | "rtl" } = {}
+) {
+  const App = defineComponent({
+    name: "ListViewFocusableHarness",
+    setup() {
+      return () =>
+        h(
+          ListView,
+          {
+            "aria-label": "List",
+            items: baseItems,
+            dir: options.dir,
+            ...props,
+          },
+          {
+            default: ({ item }: { item: { label: string } }) => [
+              h("button", { type: "button" }, `button1 ${item.label}`),
+              h("button", { type: "button" }, `button2 ${item.label}`),
+            ],
+          }
+        );
+    },
+  });
+
+  return render(App);
+}
+
 describe("ListView", () => {
   it("renders dynamic list rows", () => {
     const tree = renderComponent();
@@ -162,6 +191,78 @@ describe("ListView", () => {
     (rows[0] as HTMLElement).focus();
     await user.keyboard("{ArrowDown}");
     expect(document.activeElement).toBe(rows[2]);
+  });
+
+  it("retains focus on the pressed child", async () => {
+    const user = userEvent.setup();
+    const tree = renderListWithFocusableChildren();
+    const firstRow = tree.getAllByRole("row")[0] as HTMLElement;
+    const button = within(firstRow).getAllByRole("button")[1] as HTMLElement;
+
+    await user.click(button);
+    expect(document.activeElement).toBe(button);
+  });
+
+  it("moves focus between row and child focusables with ArrowRight and ArrowLeft", async () => {
+    const user = userEvent.setup();
+    const tree = renderListWithFocusableChildren();
+    const firstRow = tree.getAllByRole("row")[0] as HTMLElement;
+    const buttons = within(firstRow).getAllByRole("button") as HTMLElement[];
+
+    firstRow.focus();
+    expect(document.activeElement).toBe(firstRow);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(buttons[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(buttons[1]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(firstRow);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(buttons[1]);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(buttons[0]);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(firstRow);
+  });
+
+  it("uses RTL ordering when moving between row child focusables", async () => {
+    const user = userEvent.setup();
+    const tree = renderListWithFocusableChildren({}, { dir: "rtl" });
+    const firstRow = tree.getAllByRole("row")[0] as HTMLElement;
+    const buttons = within(firstRow).getAllByRole("button") as HTMLElement[];
+
+    buttons[0]?.focus();
+    expect(document.activeElement).toBe(buttons[0]);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(buttons[1]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(buttons[0]);
+  });
+
+  it("disables nested controls when a row is disabled", () => {
+    const tree = renderListWithFocusableChildren({
+      selectionMode: "multiple",
+      disabledKeys: ["foo"],
+    });
+    const rows = tree.getAllByRole("row");
+
+    const disabledRowButtons = within(rows[0] as HTMLElement).getAllByRole("button");
+    expect(rows[0]?.getAttribute("aria-disabled")).toBe("true");
+    expect(disabledRowButtons[0]?.getAttribute("disabled")).not.toBeNull();
+    expect(disabledRowButtons[1]?.getAttribute("disabled")).not.toBeNull();
+
+    const enabledRowButtons = within(rows[1] as HTMLElement).getAllByRole("button");
+    expect(rows[1]?.getAttribute("aria-disabled")).not.toBe("true");
+    expect(enabledRowButtons[0]?.getAttribute("disabled")).toBeNull();
+    expect(enabledRowButtons[1]?.getAttribute("disabled")).toBeNull();
   });
 
   it("calls onLoadMore when scrolling to the bottom", async () => {

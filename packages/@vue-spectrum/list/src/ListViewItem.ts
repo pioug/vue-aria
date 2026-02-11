@@ -1,4 +1,13 @@
-import { computed, defineComponent, h, ref, type PropType } from "vue";
+import {
+  computed,
+  defineComponent,
+  h,
+  nextTick,
+  onMounted,
+  ref,
+  watch,
+  type PropType,
+} from "vue";
 import { mergeProps } from "@vue-aria/utils";
 import { useGridListItem } from "@vue-aria/gridlist";
 import type { UseListBoxStateResult } from "@vue-aria/listbox";
@@ -19,6 +28,59 @@ export interface SpectrumListViewItemProps {
   density?: "compact" | "regular" | "spacious" | undefined;
   overflowMode?: "truncate" | "wrap" | undefined;
   UNSAFE_className?: string | undefined;
+}
+
+const FOCUSABLE_ROW_SELECTOR = [
+  "button:not([disabled])",
+  "a[href]",
+  "input:not([disabled]):not([type=\"hidden\"])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex=\"-1\"]):not([disabled])",
+  "[contenteditable=\"true\"]",
+].join(",");
+
+const DISABLEABLE_ROW_CONTROL_SELECTOR = "button,input,select,textarea";
+const ROW_DISABLED_ATTRIBUTE = "data-v-spectrum-listview-row-disabled";
+
+function getFocusableRowElements(row: HTMLElement): HTMLElement[] {
+  return Array.from(row.querySelectorAll<HTMLElement>(FOCUSABLE_ROW_SELECTOR)).filter(
+    (element) => !element.hasAttribute("hidden") && element.getAttribute("aria-hidden") !== "true"
+  );
+}
+
+function getTextDirection(element: HTMLElement): "ltr" | "rtl" {
+  const dirContainer = element.closest<HTMLElement>("[dir]");
+  const direction =
+    dirContainer?.getAttribute("dir") ??
+    element.ownerDocument.documentElement.getAttribute("dir") ??
+    "ltr";
+
+  return direction.toLowerCase() === "rtl" ? "rtl" : "ltr";
+}
+
+function syncNestedDisabledState(row: HTMLElement | null, isDisabled: boolean): void {
+  if (!row) {
+    return;
+  }
+
+  const controls = Array.from(
+    row.querySelectorAll<HTMLElement>(DISABLEABLE_ROW_CONTROL_SELECTOR)
+  );
+  for (const control of controls) {
+    if (isDisabled) {
+      if (!control.hasAttribute("disabled")) {
+        control.setAttribute("disabled", "");
+        control.setAttribute(ROW_DISABLED_ATTRIBUTE, "true");
+      }
+      continue;
+    }
+
+    if (control.getAttribute(ROW_DISABLED_ATTRIBUTE) === "true") {
+      control.removeAttribute("disabled");
+      control.removeAttribute(ROW_DISABLED_ATTRIBUTE);
+    }
+  }
 }
 
 export const ListViewItem = defineComponent({
@@ -113,7 +175,91 @@ export const ListViewItem = defineComponent({
         mapped.onMouseleave = mapped.onMouseLeave;
         delete mapped.onMouseLeave;
       }
+      if ("onKeyDown" in mapped) {
+        mapped.onKeydown = mapped.onKeyDown;
+        delete mapped.onKeyDown;
+      }
+      if ("onKeyUp" in mapped) {
+        mapped.onKeyup = mapped.onKeyUp;
+        delete mapped.onKeyUp;
+      }
       return mapped;
+    };
+
+    const syncRowChildrenState = () => {
+      syncNestedDisabledState(rowRef.value, itemState.isDisabled.value);
+    };
+
+    onMounted(() => {
+      void nextTick(() => {
+        syncRowChildrenState();
+      });
+    });
+
+    watch(
+      () => itemState.isDisabled.value,
+      () => {
+        void nextTick(() => {
+          syncRowChildrenState();
+        });
+      }
+    );
+
+    const onRowKeydown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+        return;
+      }
+
+      const row = rowRef.value;
+      if (!row) {
+        return;
+      }
+
+      const activeElement = row.ownerDocument.activeElement;
+      if (!(activeElement instanceof HTMLElement) || !row.contains(activeElement)) {
+        return;
+      }
+
+      const focusables = getFocusableRowElements(row);
+      if (focusables.length === 0) {
+        return;
+      }
+
+      const isRtl = getTextDirection(row) === "rtl";
+      const moveForward =
+        event.key === (isRtl ? "ArrowLeft" : "ArrowRight");
+
+      let nextFocusable: HTMLElement | null = null;
+
+      if (activeElement === row) {
+        nextFocusable = moveForward
+          ? (focusables[0] ?? null)
+          : (focusables[focusables.length - 1] ?? null);
+      } else {
+        const currentIndex = focusables.indexOf(activeElement);
+        if (currentIndex < 0) {
+          return;
+        }
+
+        const nextIndex = moveForward ? currentIndex + 1 : currentIndex - 1;
+        if (nextIndex >= 0 && nextIndex < focusables.length) {
+          nextFocusable = focusables[nextIndex] ?? null;
+        } else {
+          nextFocusable = row;
+        }
+      }
+
+      if (!nextFocusable) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      nextFocusable.focus();
     };
 
     return () => {
@@ -147,6 +293,7 @@ export const ListViewItem = defineComponent({
         mergeProps(rowProps, {
           ref: (value: unknown) => {
             rowRef.value = value as HTMLElement | null;
+            syncNestedDisabledState(rowRef.value, isDisabled);
           },
           class: classNames(
             "react-spectrum-ListView-item",
@@ -163,6 +310,7 @@ export const ListViewItem = defineComponent({
             props.UNSAFE_className as ClassValue | undefined
           ),
           "aria-label": props.item!.label,
+          onKeydown: onRowKeydown,
         }),
         [
           h(
