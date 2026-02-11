@@ -58,4 +58,5 @@ const component = h(TagGroup, {
 - Baseline includes custom empty-state rendering via `renderEmptyState`.
 - Baseline includes data-attribute passthrough on tag items and link-style tags via `href`.
 - Baseline includes static-item `UNSAFE_className` passthrough on tag rows.
-- Field-label and validation integration parity remains in progress.
+- Baseline includes field semantics (`label`/`description`/`errorMessage`) and `Form.validationErrors` integration by field `name`.
+- Advanced visual/theming parity remains in progress.

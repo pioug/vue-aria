@@ -2,6 +2,7 @@ import { render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
 import { Item, Tag, TagGroup, type SpectrumTagItemData } from "../src";
 
 const items: SpectrumTagItemData[] = [
@@ -154,6 +155,57 @@ describe("TagGroup", () => {
     const firstCell = firstRow?.querySelector('[role="gridcell"]');
 
     expect(firstCell?.getAttribute("aria-label")).toBe("Tag 1");
+  });
+
+  it("renders label and description semantics", () => {
+    const tree = render(TagGroup, {
+      props: {
+        label: "Tag labels",
+        description: "Pick one or more tags",
+        items: [{ key: "1", label: "Tag 1" }],
+      },
+    });
+
+    const grid = tree.getByRole("grid", { name: "Tag labels" });
+    const description = tree.getByText("Pick one or more tags");
+    const describedBy = grid.getAttribute("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(describedBy?.includes(description.id)).toBe(true);
+  });
+
+  it("supports Form.validationErrors by name", () => {
+    const App = defineComponent({
+      name: "TagGroupFormValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                tags: "Select at least one tag",
+              },
+            },
+            {
+              default: () => [
+                h(TagGroup, {
+                  name: "tags",
+                  label: "Tag labels",
+                  items: [{ key: "1", label: "Tag 1" }],
+                }),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const grid = tree.getByRole("grid", { name: "Tag labels" });
+    const message = tree.getByText("Select at least one tag");
+    const describedBy = grid.getAttribute("aria-describedby");
+
+    expect(grid.getAttribute("aria-invalid")).toBe("true");
+    expect(describedBy).toBeTruthy();
+    expect(describedBy?.includes(message.id)).toBe(true);
   });
 
   it("renders empty state", () => {

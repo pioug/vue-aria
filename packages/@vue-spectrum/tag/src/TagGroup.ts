@@ -15,6 +15,15 @@ import { useLocale } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import {
+  useFormValidationErrors,
+  type LabelAlign,
+  type LabelPosition,
+  type NecessityIndicator,
+  type ValidationBehavior,
+  type ValidationState,
+} from "@vue-spectrum/form";
+import { Field } from "@vue-spectrum/label";
+import {
   classNames,
   useResizeObserver,
   useStyleProps,
@@ -37,6 +46,25 @@ export interface SpectrumTagGroupProps {
   onAction?: (() => void) | undefined;
   direction?: "ltr" | "rtl" | undefined;
   onRemove?: ((keys: Set<TagKey>) => void) | undefined;
+  label?: string | undefined;
+  description?: string | undefined;
+  errorMessage?:
+    | string
+    | ((
+        context: {
+          isInvalid: boolean;
+          validationErrors: string[];
+          validationDetails: unknown;
+        }
+      ) => unknown)
+    | undefined;
+  isInvalid?: boolean | undefined;
+  validationState?: ValidationState | undefined;
+  name?: string | undefined;
+  labelPosition?: LabelPosition | undefined;
+  labelAlign?: LabelAlign | undefined;
+  necessityIndicator?: NecessityIndicator | undefined;
+  validationBehavior?: ValidationBehavior | undefined;
   ariaLabel?: string | undefined;
   ariaLabelledby?: string | undefined;
   "aria-label"?: string | undefined;
@@ -288,6 +316,46 @@ export const TagGroup = defineComponent({
       type: Function as PropType<((keys: Set<TagKey>) => void) | undefined>,
       default: undefined,
     },
+    label: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    description: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    errorMessage: {
+      type: [String, Function] as PropType<SpectrumTagGroupProps["errorMessage"]>,
+      default: undefined,
+    },
+    isInvalid: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    validationState: {
+      type: String as PropType<ValidationState | undefined>,
+      default: undefined,
+    },
+    name: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    labelPosition: {
+      type: String as PropType<LabelPosition | undefined>,
+      default: undefined,
+    },
+    labelAlign: {
+      type: String as PropType<LabelAlign | undefined>,
+      default: undefined,
+    },
+    necessityIndicator: {
+      type: String as PropType<NecessityIndicator | undefined>,
+      default: undefined,
+    },
+    validationBehavior: {
+      type: String as PropType<ValidationBehavior | undefined>,
+      default: undefined,
+    },
     ariaLabel: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -331,6 +399,7 @@ export const TagGroup = defineComponent({
   },
   setup(props, { attrs, expose, slots }) {
     const locale = useLocale();
+    const formValidationErrors = useFormValidationErrors();
     const rootRef = ref<HTMLDivElement | null>(null);
     const gridRef = ref<HTMLDivElement | null>(null);
     const rowRefs = new Map<string, HTMLDivElement>();
@@ -342,8 +411,58 @@ export const TagGroup = defineComponent({
     const measurementReady = ref(false);
     const gridId = useId(undefined, "v-spectrum-tag-grid");
     const actionGroupId = useId(undefined, "v-spectrum-tag-actions");
+    const labelId = useId(undefined, "v-spectrum-tag-label");
+    const descriptionId = useId(undefined, "v-spectrum-tag-description");
+    const errorId = useId(undefined, "v-spectrum-tag-error");
 
     const disabledKeys = computed(() => normalizeKeySet(props.disabledKeys));
+    const serverErrorMessage = computed(() => {
+      if (!props.name) {
+        return undefined;
+      }
+
+      const formError = formValidationErrors.value[props.name];
+      if (typeof formError === "string") {
+        return formError;
+      }
+
+      if (Array.isArray(formError)) {
+        for (const entry of formError) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const resolvedErrorMessage = computed(() =>
+      serverErrorMessage.value ?? props.errorMessage
+    );
+    const resolvedValidationErrors = computed<string[]>(() => {
+      if (serverErrorMessage.value) {
+        return [serverErrorMessage.value];
+      }
+
+      if (typeof props.errorMessage === "string" && props.errorMessage.length > 0) {
+        return [props.errorMessage];
+      }
+
+      return [];
+    });
+    const resolvedIsInvalid = computed(
+      () =>
+        Boolean(props.isInvalid) ||
+        props.validationState === "invalid" ||
+        Boolean(serverErrorMessage.value)
+    );
+    const resolvedValidationState = computed<ValidationState | undefined>(() => {
+      if (resolvedIsInvalid.value) {
+        return "invalid";
+      }
+
+      return props.validationState;
+    });
 
     const items = computed(() => {
       const source = props.items ?? slotItems.value;
@@ -543,6 +662,7 @@ export const TagGroup = defineComponent({
         props.ariaLabelledby ??
         props["aria-labelledby"] ??
         (attrsRecord["aria-labelledby"] as string | undefined);
+      const ariaDescribedby = attrsRecord["aria-describedby"] as string | undefined;
       const gridDataAttributes = Object.fromEntries(
         Object.entries(attrsRecord).filter(([key]) => key.startsWith("data-"))
       );
@@ -567,8 +687,14 @@ export const TagGroup = defineComponent({
         emptyStateContent === null || emptyStateContent === undefined
           ? ""
           : emptyStateContent;
+      const resolvedAriaLabelledBy = ariaLabelledby ?? (props.label ? labelId.value : undefined);
+      const describedByParts = [
+        ariaDescribedby,
+        resolvedIsInvalid.value && resolvedErrorMessage.value ? errorId.value : undefined,
+        !resolvedIsInvalid.value && props.description ? descriptionId.value : undefined,
+      ].filter((value): value is string => Boolean(value));
 
-      return h(
+      const content = h(
         "div",
         {
           ...domProps,
@@ -603,7 +729,10 @@ export const TagGroup = defineComponent({
               tabIndex: -1,
               class: classNames("spectrum-Tags"),
               "aria-label": ariaLabel,
-              "aria-labelledby": ariaLabelledby,
+              "aria-labelledby": resolvedAriaLabelledBy,
+              "aria-describedby":
+                describedByParts.length > 0 ? describedByParts.join(" ") : undefined,
+              "aria-invalid": resolvedIsInvalid.value ? "true" : undefined,
             },
             visibleItems.length === 0
               ? [
@@ -736,6 +865,33 @@ export const TagGroup = defineComponent({
               )
             : null,
         ]
+      );
+
+      return h(
+        Field,
+        {
+          label: props.label,
+          description: props.description,
+          errorMessage: resolvedErrorMessage.value,
+          isInvalid: resolvedIsInvalid.value,
+          validationState: resolvedValidationState.value,
+          validationErrors: resolvedValidationErrors.value,
+          labelPosition: props.labelPosition,
+          labelAlign: props.labelAlign,
+          necessityIndicator: props.necessityIndicator,
+          validationBehavior: props.validationBehavior,
+          showErrorIcon: true,
+          elementType: "span",
+          labelProps: props.label ? { id: labelId.value } : undefined,
+          descriptionProps: props.description ? { id: descriptionId.value } : undefined,
+          errorMessageProps: resolvedErrorMessage.value ? { id: errorId.value } : undefined,
+          wrapperClassName: classNames("spectrum-Tags-fieldWrapper", {
+            "spectrum-Tags-fieldWrapper--positionSide": props.labelPosition === "side",
+          }),
+        },
+        {
+          default: () => [content],
+        }
       );
     };
   },
