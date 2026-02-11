@@ -89,6 +89,46 @@ function getOverlayTestId(type: DialogType): "modal" | "popover" | "tray" {
   return "modal";
 }
 
+function componentAcceptsProp(node: VNode, propName: string): boolean {
+  if (typeof node.type === "string" || typeof node.type === "symbol") {
+    return false;
+  }
+
+  const componentType = node.type as {
+    props?: Record<string, unknown> | string[] | undefined;
+  };
+  const propsDef = componentType.props;
+  if (!propsDef) {
+    return false;
+  }
+
+  if (Array.isArray(propsDef)) {
+    return propsDef.includes(propName);
+  }
+
+  return propName in propsDef;
+}
+
+function componentEmitsEvent(node: VNode, eventName: string): boolean {
+  if (typeof node.type === "string" || typeof node.type === "symbol") {
+    return false;
+  }
+
+  const componentType = node.type as {
+    emits?: Record<string, unknown> | string[] | undefined;
+  };
+  const emitsDef = componentType.emits;
+  if (!emitsDef) {
+    return false;
+  }
+
+  if (Array.isArray(emitsDef)) {
+    return emitsDef.includes(eventName);
+  }
+
+  return eventName in emitsDef;
+}
+
 const DISMISS_BUTTON_STYLE: Record<string, string> = {
   position: "absolute",
   width: "1px",
@@ -521,10 +561,18 @@ export const DialogTrigger = defineComponent({
         true
       );
 
-      const renderedContent = cloneVNode(contentNode, {
-        close,
-        onClose: close,
-      }, true);
+      const contentCloseProps: Record<string, unknown> = {};
+      if (componentAcceptsProp(contentNode, "close")) {
+        contentCloseProps.close = close;
+      }
+      if (
+        componentAcceptsProp(contentNode, "onClose") ||
+        componentEmitsEvent(contentNode, "close")
+      ) {
+        contentCloseProps.onClose = close;
+      }
+
+      const renderedContent = cloneVNode(contentNode, contentCloseProps, true);
 
       return h(
         "span",
