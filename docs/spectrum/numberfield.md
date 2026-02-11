@@ -36,6 +36,6 @@ const field = h(NumberField, {
 
 ## Notes
 
-- Baseline includes `useNumberField` semantics, clamped min/max handling, controlled/uncontrolled value support, and increment/decrement step buttons.
+- Baseline includes `useNumberField` semantics, clamped min/max handling, controlled/uncontrolled value support, increment/decrement step buttons, upstream-style platform `inputMode` handling, and focused wheel stepping.
 - Description/error wiring, hidden form input (`name`), and SSR coverage are included.
-- Advanced upstream locale/inputMode and wheel/long-press interaction parity remains in progress.
+- Advanced locale edge cases and long-press stepper parity remain in progress.

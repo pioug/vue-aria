@@ -108,6 +108,7 @@ export const NumberField = defineComponent({
       name: computed(() => props.name),
       form: computed(() => props.form),
       placeholder: computed(() => props.placeholder),
+      isWheelDisabled: computed(() => props.isWheelDisabled),
       autoFocus: computed(() => props.autoFocus),
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,

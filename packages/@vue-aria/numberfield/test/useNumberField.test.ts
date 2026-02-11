@@ -4,6 +4,9 @@ import { useNumberField } from "../src/useNumberField";
 interface NumberFieldHandlers {
   onChange?: (event: Event) => void;
   onKeydown?: (event: KeyboardEvent) => void;
+  onFocus?: (event: FocusEvent) => void;
+  onBlur?: (event: FocusEvent) => void;
+  onWheel?: (event: WheelEvent) => void;
   onCopy?: (event: ClipboardEvent) => void;
   onCut?: (event: ClipboardEvent) => void;
   onPaste?: (event: ClipboardEvent) => void;
@@ -174,5 +177,91 @@ describe("useNumberField", () => {
       originalEvent: new Event("mousedown"),
     });
     expect(focus).toHaveBeenCalledTimes(1);
+  });
+
+  it("applies upstream-style platform inputMode behavior", () => {
+    const platformSpy = vi
+      .spyOn(window.navigator, "platform", "get")
+      .mockReturnValue("iPhone");
+    const uaSpy = vi
+      .spyOn(window.navigator, "userAgent", "get")
+      .mockReturnValue("AppleWebKit");
+
+    expect(
+      useNumberField({ "aria-label": "mandatory label" }).inputProps.value.inputMode
+    ).toBe("text");
+    expect(
+      useNumberField({ "aria-label": "mandatory label", minValue: 0 }).inputProps.value
+        .inputMode
+    ).toBe("decimal");
+    expect(
+      useNumberField({
+        "aria-label": "mandatory label",
+        minValue: 0,
+        formatOptions: { maximumFractionDigits: 0 },
+      }).inputProps.value.inputMode
+    ).toBe("numeric");
+
+    platformSpy.mockRestore();
+    uaSpy.mockRestore();
+
+    const androidPlatformSpy = vi
+      .spyOn(window.navigator, "platform", "get")
+      .mockReturnValue("Linux");
+    const androidUaSpy = vi
+      .spyOn(window.navigator, "userAgent", "get")
+      .mockReturnValue("Android");
+
+    expect(
+      useNumberField({ "aria-label": "mandatory label", minValue: 0 }).inputProps.value
+        .inputMode
+    ).toBe("decimal");
+
+    androidPlatformSpy.mockRestore();
+    androidUaSpy.mockRestore();
+  });
+
+  it("supports focused wheel stepping and ignores zoom/horizontal wheel gestures", () => {
+    const onChange = vi.fn();
+    const { inputProps } = useNumberField({
+      "aria-label": "mandatory label",
+      defaultValue: 0,
+      onChange,
+    });
+    const handlers = inputProps.value as NumberFieldHandlers;
+
+    handlers.onWheel?.({ deltaX: 0, deltaY: 10, ctrlKey: false } as WheelEvent);
+    expect(onChange).not.toHaveBeenCalled();
+
+    handlers.onFocus?.({} as FocusEvent);
+    handlers.onWheel?.({ deltaX: 20, deltaY: 10, ctrlKey: false } as WheelEvent);
+    expect(onChange).not.toHaveBeenCalled();
+
+    handlers.onWheel?.({ deltaX: 0, deltaY: 10, ctrlKey: true } as WheelEvent);
+    expect(onChange).not.toHaveBeenCalled();
+
+    handlers.onWheel?.({ deltaX: 0, deltaY: 10, ctrlKey: false } as WheelEvent);
+    expect(onChange).toHaveBeenLastCalledWith(1);
+
+    handlers.onBlur?.({} as FocusEvent);
+    const callCountAfterBlur = onChange.mock.calls.length;
+    handlers.onWheel?.({ deltaX: 0, deltaY: 10, ctrlKey: false } as WheelEvent);
+    expect(onChange).toHaveBeenCalledTimes(callCountAfterBlur);
+  });
+
+  it("disables wheel stepping when isWheelDisabled is true", () => {
+    const onChange = vi.fn();
+    const { inputProps } = useNumberField({
+      "aria-label": "mandatory label",
+      defaultValue: 0,
+      isWheelDisabled: true,
+      onChange,
+    });
+    const handlers = inputProps.value as NumberFieldHandlers;
+
+    handlers.onFocus?.({} as FocusEvent);
+    handlers.onWheel?.({ deltaX: 0, deltaY: 10, ctrlKey: false } as WheelEvent);
+
+    expect(onChange).not.toHaveBeenCalled();
   });
 });

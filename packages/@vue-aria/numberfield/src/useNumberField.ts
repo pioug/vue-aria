@@ -21,6 +21,7 @@ export interface UseNumberFieldOptions
   onIncrement?: (value: number | undefined) => void;
   onDecrement?: (value: number | undefined) => void;
   inputRef?: MaybeReactive<HTMLInputElement | null | undefined>;
+  isWheelDisabled?: MaybeReactive<boolean | undefined>;
 }
 
 export interface UseNumberFieldResult {
@@ -60,6 +61,32 @@ function parseNumber(value: string): number | undefined {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
+function getNavigatorPlatform(): string {
+  if (typeof navigator === "undefined") {
+    return "";
+  }
+
+  return navigator.platform ?? "";
+}
+
+function getNavigatorUserAgent(): string {
+  if (typeof navigator === "undefined") {
+    return "";
+  }
+
+  return navigator.userAgent ?? "";
+}
+
+function isIPhone(): boolean {
+  const platform = getNavigatorPlatform();
+  return /iPhone/i.test(platform);
+}
+
+function isAndroid(): boolean {
+  const userAgent = getNavigatorUserAgent();
+  return /Android/i.test(userAgent);
+}
+
 export function useNumberField(
   options: UseNumberFieldOptions = {}
 ): UseNumberFieldResult {
@@ -76,6 +103,7 @@ export function useNumberField(
     onIncrement: _onIncrement,
     onDecrement: _onDecrement,
     inputRef: _inputRef,
+    isWheelDisabled: _isWheelDisabled,
     ...textFieldOptions
   } = options;
 
@@ -203,24 +231,60 @@ export function useNumberField(
     commitNumberValue(maxValue.value);
   };
 
-  const hasDecimals = computed(() => {
-    const stepValue = step.value;
-    if (!Number.isInteger(stepValue)) {
-      return true;
-    }
-    const formatterOptions =
-      options.formatOptions === undefined ? undefined : toValue(options.formatOptions);
-    const maxFractionDigits = formatterOptions?.maximumFractionDigits;
-    return typeof maxFractionDigits === "number" && maxFractionDigits > 0;
-  });
+  const hasDecimals = computed(
+    () => (numberFormatter.value.resolvedOptions().maximumFractionDigits ?? 0) > 0
+  );
+  const hasNegative = computed(
+    () => minValue.value === undefined || minValue.value < 0
+  );
 
   const inputMode = computed<"numeric" | "decimal" | "text">(() => {
-    const allowsNegative = minValue.value === undefined || minValue.value < 0;
-    if (allowsNegative) {
-      return "text";
+    if (isIPhone()) {
+      if (hasNegative.value) {
+        return "text";
+      }
+
+      return hasDecimals.value ? "decimal" : "numeric";
     }
-    return hasDecimals.value ? "decimal" : "numeric";
+
+    if (isAndroid()) {
+      if (!hasNegative.value && hasDecimals.value) {
+        return "decimal";
+      }
+
+      return "numeric";
+    }
+
+    return "numeric";
   });
+
+  const isFocused = ref(false);
+
+  const handleWheel = (event: WheelEvent) => {
+    if (
+      isFocused.value === false ||
+      isDisabled.value ||
+      isReadOnly.value ||
+      Boolean(
+        options.isWheelDisabled === undefined
+          ? false
+          : toValue(options.isWheelDisabled)
+      ) ||
+      event.ctrlKey
+    ) {
+      return;
+    }
+
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
+      return;
+    }
+
+    if (event.deltaY > 0) {
+      changeByStep(1);
+    } else if (event.deltaY < 0) {
+      changeByStep(-1);
+    }
+  };
 
   const {
     labelProps,
@@ -317,6 +381,15 @@ export function useNumberField(
 
   const inputProps = computed<Record<string, unknown>>(() =>
     mergeProps(spinButtonProps.value, textFieldProps.value, {
+      onFocus: () => {
+        isFocused.value = true;
+      },
+      onBlur: () => {
+        isFocused.value = false;
+      },
+      onWheel: (event: WheelEvent) => {
+        handleWheel(event);
+      },
       role: null,
       "aria-roledescription": "numberField",
       "aria-valuenow": null,

@@ -32,6 +32,7 @@ export interface SpectrumNumberFieldProps {
   decrementAriaLabel?: string | undefined;
   incrementAriaLabel?: string | undefined;
   hideStepper?: boolean | undefined;
+  isWheelDisabled?: boolean | undefined;
   name?: string | undefined;
   form?: string | undefined;
   placeholder?: string | undefined;
@@ -144,6 +145,10 @@ export const numberFieldPropOptions = {
     default: undefined,
   },
   hideStepper: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  isWheelDisabled: {
     type: Boolean as PropType<boolean | undefined>,
     default: undefined,
   },

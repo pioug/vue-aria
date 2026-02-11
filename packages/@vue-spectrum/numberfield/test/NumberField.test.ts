@@ -156,4 +156,69 @@ describe("NumberField", () => {
     expect(hidden).toBeTruthy();
     expect(hidden?.value).toBe("4");
   });
+
+  it("uses upstream-style platform inputMode behavior", () => {
+    const platformSpy = vi
+      .spyOn(window.navigator, "platform", "get")
+      .mockReturnValue("iPhone");
+    const uaSpy = vi
+      .spyOn(window.navigator, "userAgent", "get")
+      .mockReturnValue("AppleWebKit");
+
+    const negativeField = renderNumberField();
+    expect(
+      (negativeField.getByRole("textbox") as HTMLInputElement).getAttribute("inputmode")
+    ).toBe("text");
+    negativeField.unmount();
+
+    const nonNegativeField = renderNumberField({ minValue: 0 });
+    expect(
+      (nonNegativeField.getByRole("textbox") as HTMLInputElement).getAttribute("inputmode")
+    ).toBe("decimal");
+    nonNegativeField.unmount();
+
+    const integerField = renderNumberField({
+      minValue: 0,
+      formatOptions: { maximumFractionDigits: 0 },
+    });
+    expect(
+      (integerField.getByRole("textbox") as HTMLInputElement).getAttribute("inputmode")
+    ).toBe("numeric");
+    integerField.unmount();
+
+    platformSpy.mockRestore();
+    uaSpy.mockRestore();
+  });
+
+  it("supports focused wheel stepping and isWheelDisabled", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: 0,
+      onChange,
+    });
+    const input = tree.getByRole("textbox");
+
+    await fireEvent.wheel(input, { deltaY: 10 });
+    expect(onChange).not.toHaveBeenCalled();
+
+    await fireEvent.focus(input);
+    await fireEvent.wheel(input, { deltaY: 10, ctrlKey: true });
+    expect(onChange).not.toHaveBeenCalled();
+
+    await fireEvent.wheel(input, { deltaY: 10 });
+    expect(onChange).toHaveBeenLastCalledWith(1);
+
+    tree.unmount();
+
+    const disabledWheelTree = renderNumberField({
+      defaultValue: 0,
+      isWheelDisabled: true,
+      onChange,
+    });
+    const disabledInput = disabledWheelTree.getByRole("textbox");
+
+    await fireEvent.focus(disabledInput);
+    await fireEvent.wheel(disabledInput, { deltaY: 10 });
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
 });
