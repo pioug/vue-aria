@@ -331,10 +331,16 @@ export function useNumberField(
   };
 
   const commit = (rawValue?: string) => {
-    const parsed = parseNumber(rawValue ?? inputValue.value);
-    if (parsed === undefined) {
+    const valueToCommit = rawValue ?? inputValue.value;
+    if (valueToCommit.trim() === "") {
       inputValue.value = "";
       commitNumberValue(undefined);
+      return;
+    }
+
+    const parsed = parseNumber(valueToCommit);
+    if (parsed === undefined) {
+      inputValue.value = formatNumber(currentNumberValue.value);
       return;
     }
 

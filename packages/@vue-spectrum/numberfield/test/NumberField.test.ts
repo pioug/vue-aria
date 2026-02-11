@@ -546,6 +546,28 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenLastCalledWith(12.83);
   });
 
+  it("reverts invalid non-empty input to the last valid formatted value", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: -1,
+      formatOptions: {
+        style: "currency",
+        currency: "EUR",
+      },
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const initialValue = input.value;
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "-");
+    await fireEvent.blur(input);
+
+    expect(input.value).toBe(initialValue);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("parses percent input as fractional values", async () => {
     const onChange = vi.fn();
     const tree = renderNumberField({
