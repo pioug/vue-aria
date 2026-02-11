@@ -97,4 +97,25 @@ describe("Tray", () => {
     const tray = tree.getByTestId("tray");
     expect(tray.getAttribute("class") ?? "").toContain("spectrum-Tray--fixedHeight");
   });
+
+  it("hides on blur when shouldCloseOnBlur is true", async () => {
+    const onOpenChange = vi.fn();
+    const tree = render(Tray, {
+      props: {
+        isOpen: true,
+        shouldCloseOnBlur: true,
+        onOpenChange,
+      },
+      slots: {
+        default: () => h("div", { role: "dialog", tabIndex: -1 }, "contents"),
+      },
+    });
+
+    await nextTick();
+    const dialog = tree.getByRole("dialog") as HTMLElement;
+    dialog.focus();
+    await fireEvent.focusOut(dialog, { relatedTarget: document.body });
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
 });
