@@ -6,12 +6,19 @@ import {
 } from "vue";
 import { mergeProps } from "@vue-aria/utils";
 import { useOption, type UseListBoxStateResult } from "@vue-aria/listbox";
+import type { Key } from "@vue-aria/types";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import type { NormalizedListBoxItemData } from "./types";
 
 export interface SpectrumListBoxOptionProps {
-  item: NormalizedListBoxItemData;
-  state: UseListBoxStateResult<NormalizedListBoxItemData>;
+  item?: NormalizedListBoxItemData | undefined;
+  state?: UseListBoxStateResult<NormalizedListBoxItemData> | undefined;
+  id?: Key | undefined;
+  description?: string | undefined;
+  textValue?: string | undefined;
+  "aria-label"?: string | undefined;
+  isDisabled?: boolean | undefined;
+  href?: string | undefined;
   shouldSelectOnPressUp?: boolean | undefined;
   shouldFocusOnHover?: boolean | undefined;
   shouldUseVirtualFocus?: boolean | undefined;
@@ -23,11 +30,35 @@ export const ListBoxOption = defineComponent({
   props: {
     item: {
       type: Object as PropType<NormalizedListBoxItemData>,
-      required: true,
+      default: undefined,
     },
     state: {
       type: Object as PropType<UseListBoxStateResult<NormalizedListBoxItemData>>,
-      required: true,
+      default: undefined,
+    },
+    id: {
+      type: [String, Number] as PropType<Key | undefined>,
+      default: undefined,
+    },
+    description: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    textValue: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    "aria-label": {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    href: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
     },
     shouldSelectOnPressUp: {
       type: Boolean as PropType<boolean | undefined>,
@@ -47,18 +78,22 @@ export const ListBoxOption = defineComponent({
     },
   },
   setup(props) {
+    if (!props.item || !props.state) {
+      return () => null;
+    }
+
     const optionRef = ref<HTMLElement | null>(null);
 
     const optionState = useOption(
       {
-        key: props.item.key,
-        "aria-label": props.item["aria-label"],
-        isDisabled: props.item.isDisabled,
+        key: props.item!.key,
+        "aria-label": props.item!["aria-label"],
+        isDisabled: props.item!.isDisabled,
         shouldSelectOnPressUp: props.shouldSelectOnPressUp,
         shouldFocusOnHover: props.shouldFocusOnHover,
         shouldUseVirtualFocus: props.shouldUseVirtualFocus,
       },
-      props.state,
+      props.state!,
       optionRef
     );
 
@@ -88,7 +123,7 @@ export const ListBoxOption = defineComponent({
     return () => {
       const isSelected = optionState.isSelected.value;
       const isDisabled = optionState.isDisabled.value;
-      const elementType = props.item.href ? "a" : "div";
+      const elementType = props.item!.href ? "a" : "div";
       const optionProps = toVueOptionProps(
         optionState.optionProps.value as Record<string, unknown>
       );
@@ -99,7 +134,7 @@ export const ListBoxOption = defineComponent({
           ref: (value: unknown) => {
             optionRef.value = value as HTMLElement | null;
           },
-          href: props.item.href,
+          href: props.item!.href,
           class: classNames(
             "spectrum-Menu-item",
             {
@@ -118,18 +153,18 @@ export const ListBoxOption = defineComponent({
             mergeProps(optionState.labelProps.value, {
               class: classNames("spectrum-Menu-itemLabel"),
             }),
-            props.item.label
+            props.item!.label
           ),
-          props.item.description
+          props.item!.description
             ? h(
               "span",
               mergeProps(optionState.descriptionProps.value, {
                 class: classNames("spectrum-Menu-description"),
               }),
-              props.item.description
+              props.item!.description
             )
             : null,
-          isSelected && props.state.selectionMode.value !== "none"
+          isSelected && props.state!.selectionMode.value !== "none"
             ? h(
               "span",
               {

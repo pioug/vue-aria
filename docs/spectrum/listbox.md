@@ -85,6 +85,6 @@ const component = h(ListBox, {
 
 ## Notes
 
-- Baseline includes section rendering (`group` + heading semantics), keyboard navigation, wrap-focus support, and single/multiple selection behavior.
+- Baseline includes section rendering (`group` + heading semantics), keyboard navigation, wrap-focus support, single/multiple selection behavior, and static slot composition support via `ListBoxOption` and `ListBoxSection`.
 - Loading and empty-state rendering hooks are included via `isLoading`, `showLoadingSpinner`, `onLoadMore`, and `renderEmptyState`.
 - Advanced virtualizer layout/measurement parity and full visual/theming parity remain in progress.

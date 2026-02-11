@@ -1,11 +1,15 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   onMounted,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import {
@@ -25,8 +29,11 @@ import {
 import { ListBoxSection } from "./ListBoxSection";
 import {
   flattenListBoxSections,
+  isListBoxSectionData,
+  type ListBoxKey,
   normalizeListBoxSections,
   type NormalizedListBoxItemData,
+  type SpectrumListBoxOptionData,
   type SpectrumListBoxItemData,
   type SpectrumListBoxSelectionMode,
 } from "./types";
@@ -82,6 +89,232 @@ export function useListBoxLayout(): Readonly<{ value: ListBoxLayout }> {
       placeholderHeight: isLarge ? 48 : 32,
     };
   });
+}
+
+function normalizeListBoxKey(value: unknown, fallback: ListBoxKey): ListBoxKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseListBoxOptionNode(node: VNode, fallback: ListBoxKey): SpectrumListBoxOptionData {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  const key = normalizeListBoxKey(node.key ?? props.id, fallback);
+  const slotLabel = extractTextContent(getSlotContent(node)).trim();
+  const textValue = typeof props.textValue === "string" ? props.textValue : slotLabel;
+  const label = slotLabel || textValue || String(key);
+
+  return {
+    key,
+    label,
+    description: typeof props.description === "string" ? props.description : undefined,
+    textValue: textValue || label,
+    isDisabled: Boolean(props.isDisabled),
+    "aria-label":
+      typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+    href: typeof props.href === "string" ? props.href : undefined,
+  };
+}
+
+function parseListBoxSlotItems(nodes: VNode[] | undefined): SpectrumListBoxItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const topLevelNodes = flattenVNodeChildren(nodes);
+  const items: SpectrumListBoxItemData[] = [];
+  let sectionIndex = 0;
+  let itemIndex = 0;
+
+  for (const node of topLevelNodes) {
+    const componentName = getComponentName(node);
+
+    if (componentName === "ListBoxOption") {
+      items.push(parseListBoxOptionNode(node, `item-${itemIndex + 1}`));
+      itemIndex += 1;
+      continue;
+    }
+
+    if (componentName === "ListBoxSection") {
+      const sectionProps = (node.props ?? {}) as Record<string, unknown>;
+      const sectionChildren = getSlotChildren(node).filter(
+        (child) => getComponentName(child) === "ListBoxOption"
+      );
+
+      const sectionItems = sectionChildren.map((child) => {
+        const parsed = parseListBoxOptionNode(child, `item-${itemIndex + 1}`);
+        itemIndex += 1;
+        return parsed;
+      });
+
+      const section: SpectrumListBoxItemData = {
+        key: normalizeListBoxKey(node.key ?? sectionProps.id, `section-${sectionIndex + 1}`),
+        heading: typeof sectionProps.heading === "string" ? sectionProps.heading : undefined,
+        "aria-label":
+          typeof sectionProps["aria-label"] === "string"
+            ? sectionProps["aria-label"]
+            : undefined,
+        items: sectionItems,
+      };
+      items.push(section);
+      sectionIndex += 1;
+    }
+  }
+
+  return items;
+}
+
+function areListBoxItemsEqual(
+  left: SpectrumListBoxItemData[],
+  right: SpectrumListBoxItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    const currentIsSection = isListBoxSectionData(current);
+    const candidateIsSection = isListBoxSectionData(candidate);
+
+    if (currentIsSection !== candidateIsSection) {
+      return false;
+    }
+
+    if (currentIsSection && candidateIsSection) {
+      if (
+        current.key !== candidate.key ||
+        current.heading !== candidate.heading ||
+        current["aria-label"] !== candidate["aria-label"] ||
+        !areListBoxItemsEqual(current.items, candidate.items)
+      ) {
+        return false;
+      }
+      continue;
+    }
+
+    const currentOption = current as SpectrumListBoxOptionData;
+    const candidateOption = candidate as SpectrumListBoxOptionData;
+    if (
+      currentOption.key !== candidateOption.key ||
+      currentOption.label !== candidateOption.label ||
+      currentOption.description !== candidateOption.description ||
+      currentOption.textValue !== candidateOption.textValue ||
+      currentOption.isDisabled !== candidateOption.isDisabled ||
+      currentOption["aria-label"] !== candidateOption["aria-label"] ||
+      currentOption.href !== candidateOption.href
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export const ListBoxBase = defineComponent({
@@ -204,8 +437,9 @@ export const ListBoxBase = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const rootRef = ref<HTMLElement | null>(null);
     const loadingRequested = ref(false);
+    const slotItems = ref<SpectrumListBoxItemData[]>([]);
 
-    const sections = computed(() => normalizeListBoxSections(props.items));
+    const sections = computed(() => normalizeListBoxSections(props.items ?? slotItems.value));
     const collection = computed<NormalizedListBoxItemData[]>(() =>
       flattenListBoxSections(sections.value)
     );
@@ -426,6 +660,13 @@ export const ListBoxBase = defineComponent({
     });
 
     return () => {
+      if (props.items === undefined) {
+        const parsedItems = parseListBoxSlotItems(slots.default?.() as VNode[] | undefined);
+        if (!areListBoxItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const domProps = filterDOMProps(attrs as Record<string, unknown>, {
         labelable: true,
       });

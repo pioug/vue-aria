@@ -1,7 +1,13 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { ListBox, type SpectrumListBoxItemData } from "../src";
+import {
+  ListBox,
+  ListBoxOption,
+  ListBoxSection,
+  type SpectrumListBoxItemData,
+} from "../src";
 
 const sectionedItems: SpectrumListBoxItemData[] = [
   {
@@ -290,5 +296,55 @@ describe("ListBox", () => {
     const keys = onSelectionChange.mock.calls[1]?.[0] as Set<string>;
     expect(keys.has("blah")).toBe(true);
     expect(keys.has("bar")).toBe(true);
+  });
+
+  it("supports static slot syntax with ListBoxOption and ListBoxSection", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "ListBoxSlotHarness",
+      setup() {
+        return () =>
+          h(
+            ListBox,
+            {
+              "aria-label": "listbox-slot",
+              selectionMode: "single",
+              onSelectionChange,
+              onAction,
+            },
+            {
+              default: () => [
+                h(ListBoxOption, { id: "alpha" }, () => "Alpha"),
+                h(
+                  ListBoxSection,
+                  { id: "group-1", heading: "Group 1" },
+                  {
+                    default: () => [
+                      h(ListBoxOption, { id: "beta", isDisabled: true }, () => "Beta"),
+                      h(ListBoxOption, { id: "gamma" }, () => "Gamma"),
+                    ],
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const listbox = tree.getByRole("listbox", { name: "listbox-slot" });
+    const options = within(listbox).getAllByRole("option");
+    const groups = within(listbox).getAllByRole("group");
+
+    expect(options).toHaveLength(3);
+    expect(groups).toHaveLength(1);
+    expect(findOptionByText(listbox, "Beta").getAttribute("aria-disabled")).toBe("true");
+
+    await user.click(findOptionByText(listbox, "Alpha"));
+    expect(onAction).toHaveBeenCalledWith("alpha");
+    expect(Array.from(onSelectionChange.mock.calls[0][0] as Set<string>)).toEqual(["alpha"]);
   });
 });

@@ -365,6 +365,8 @@ export type {
   SpectrumListBoxOptionData,
   SpectrumListBoxSectionData,
   SpectrumListBoxItemData,
+  SpectrumListBoxOptionProps,
+  SpectrumListBoxSectionProps,
   SpectrumListBoxBaseProps,
   SpectrumListBoxProps,
 } from "@vue-spectrum/listbox";
