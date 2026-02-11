@@ -256,10 +256,12 @@ describe("DialogTrigger", () => {
   });
 
   it("dismissable modals close when clicking outside", async () => {
+    const onOpenChange = vi.fn();
     const wrapper = mountDialogTrigger({
       type: "modal",
       isDismissable: true,
       defaultOpen: true,
+      onOpenChange,
     });
 
     try {
@@ -270,15 +272,18 @@ describe("DialogTrigger", () => {
       await flushOverlay();
 
       expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     } finally {
       wrapper.unmount();
     }
   });
 
   it("non-dismissable modals do not close when clicking outside", async () => {
+    const onOpenChange = vi.fn();
     const wrapper = mountDialogTrigger({
       type: "modal",
       defaultOpen: true,
+      onOpenChange,
     });
 
     try {
@@ -289,16 +294,19 @@ describe("DialogTrigger", () => {
       await flushOverlay();
 
       expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+      expect(onOpenChange).toHaveBeenCalledTimes(0);
     } finally {
       wrapper.unmount();
     }
   });
 
   it("non-modal popovers close on outside click even when isDismissable is false", async () => {
+    const onOpenChange = vi.fn();
     const wrapper = mountDialogTrigger({
       type: "popover",
       isDismissable: false,
       defaultOpen: true,
+      onOpenChange,
     });
 
     try {
@@ -309,6 +317,7 @@ describe("DialogTrigger", () => {
       await flushOverlay();
 
       expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     } finally {
       wrapper.unmount();
     }
