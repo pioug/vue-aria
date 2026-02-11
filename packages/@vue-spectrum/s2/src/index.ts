@@ -8,6 +8,8 @@ export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
 export { ColorField } from "./ColorField";
 export { CloseButton } from "./CloseButton";
+export { DateField } from "./DateField";
+export { NumberField } from "./NumberField";
 export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
 export { ToggleButton } from "./ToggleButton";
@@ -21,6 +23,8 @@ export type {
 } from "./ActionButton";
 export type { S2CloseButtonProps } from "./CloseButton";
 export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
+export type { DateFieldSize, S2DateFieldProps } from "./DateField";
+export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
 export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
 export type {
   SelectBoxKey,

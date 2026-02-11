@@ -34,6 +34,8 @@ export {
   ButtonGroup as S2ButtonGroup,
   ColorField as S2ColorField,
   CloseButton as S2CloseButton,
+  DateField as S2DateField,
+  NumberField as S2NumberField,
   SearchField as S2SearchField,
   SelectBox as S2SelectBox,
   SelectBoxGroup as S2SelectBoxGroup,
