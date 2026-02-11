@@ -103,4 +103,69 @@ describe("DialogContainer", () => {
       })
     ).toThrow("Only a single child can be passed to DialogContainer.");
   });
+
+  it("does not close on escape when keyboard dismiss is disabled", async () => {
+    const onDismiss = vi.fn();
+    const wrapper = mount(DialogContainer, {
+      attachTo: document.body,
+      props: {
+        onDismiss,
+        isKeyboardDismissDisabled: true,
+      },
+      slots: {
+        default: () => h(Dialog, null, () => "contents"),
+      },
+    });
+
+    await flushOverlay();
+    const overlay = document.body.querySelector("[data-testid=\"modal\"]");
+    expect(overlay).not.toBeNull();
+
+    overlay?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flushOverlay();
+
+    expect(onDismiss).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it("does not close when clicking outside by default", async () => {
+    const onDismiss = vi.fn();
+    const wrapper = mount(DialogContainer, {
+      attachTo: document.body,
+      props: {
+        onDismiss,
+      },
+      slots: {
+        default: () => h(Dialog, null, () => "contents"),
+      },
+    });
+
+    await flushOverlay();
+    document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    await flushOverlay();
+
+    expect(onDismiss).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it("closes when clicking outside when dismissable", async () => {
+    const onDismiss = vi.fn();
+    const wrapper = mount(DialogContainer, {
+      attachTo: document.body,
+      props: {
+        onDismiss,
+        isDismissable: true,
+      },
+      slots: {
+        default: () => h(Dialog, null, () => "contents"),
+      },
+    });
+
+    await flushOverlay();
+    document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    await flushOverlay();
+
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    wrapper.unmount();
+  });
 });
