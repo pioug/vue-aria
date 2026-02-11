@@ -1042,6 +1042,10 @@ export const TabPanels = defineComponent({
                 : undefined) ??
                 (selectedItem.children as VNodeChild | VNodeChild[] | undefined)
             );
+      const panelContent =
+        selectedItem === undefined
+          ? rendered
+          : [h(Fragment, { key: String(selectedItem.key) }, rendered)];
       const panelAriaLabelledby =
         context.collapsedPanelLabelledby.value ??
         (tabPanelProps.value["aria-labelledby"] as string | undefined);
@@ -1063,7 +1067,7 @@ export const TabPanels = defineComponent({
             ...((domProps.style as Record<string, string | number> | undefined) ?? {}),
           },
         }),
-        rendered
+        panelContent
       );
     };
   },

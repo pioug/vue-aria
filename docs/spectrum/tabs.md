@@ -83,4 +83,6 @@ h(TabList, null, {
 - Includes link-tab parity behavior (`href`-based tabs rendered as anchor elements) and selection callbacks when re-clicking the already selected tab.
 - Includes static-slot composition hardening so per-tab labels and tabpanel content remain correctly mapped in `Item`-based `TabList`/`TabPanels` usage.
 - Includes all-disabled fallback behavior parity (first-tab fallback selection callback) and tabpanel tabbable-child `tabIndex` parity updates.
+- Includes first-tab-entry focus parity (selected tab on initial Tab entry, tabpanel focus fallback when tabs are disabled) plus user-ref exposure via `UNSAFE_getDOMNode`.
+- Includes tabpanel child-subtree isolation parity so uncontrolled inputs do not leak values across tab switches.
 - Advanced visual/theming polish remains in progress.

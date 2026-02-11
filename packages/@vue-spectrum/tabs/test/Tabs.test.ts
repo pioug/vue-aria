@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { fireEvent, render, waitFor, within } from "@testing-library/vue";
-import { defineComponent, h, nextTick, type VNodeChild } from "vue";
+import { defineComponent, h, nextTick, ref, type VNodeChild } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Item, TabList, TabPanels, Tabs, type SpectrumTabItem } from "../src";
@@ -72,6 +72,34 @@ describe("Tabs", () => {
     const tabpanel = getByRole("tabpanel");
     expect(tabpanel.textContent).toContain("Tab 1 body");
     expect(tabpanel.getAttribute("aria-labelledby")).toBe(tabs[0]?.id ?? null);
+  });
+
+  it("attaches a user provided ref to the outer tabs element", async () => {
+    const tabsRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(null);
+    const App = defineComponent({
+      name: "TabsRefHarness",
+      setup() {
+        return () =>
+          h(
+            Tabs,
+            {
+              ref: tabsRef,
+              "aria-label": "Tab Sample",
+              items: defaultItems,
+            },
+            {
+              default: () => [h(TabList), h(TabPanels)],
+            }
+          );
+      },
+    });
+    const tree = render(App);
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const root = tablist.closest(".spectrum-TabsPanel");
+    expect(root).not.toBeNull();
+    expect(tabsRef.value?.UNSAFE_getDOMNode()).toBe(root);
   });
 
   it("supports vertical orientation keyboard navigation", async () => {
@@ -290,6 +318,72 @@ describe("Tabs", () => {
     });
   });
 
+  it("focuses the selected tab when tabbing in for the first time", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "TabsFirstTabFocusHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button" }, "Before"),
+            h(
+              Tabs,
+              {
+                "aria-label": "Tab Sample",
+                items: defaultItems,
+                defaultSelectedKey: "tab-2",
+              },
+              {
+                default: () => [h(TabList), h(TabPanels)],
+              }
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    await flush();
+    await user.tab();
+    await user.tab();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(document.activeElement).toBe(tabs[1]);
+  });
+
+  it("does not focus tabs when disabled and tabbing in", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "TabsDisabledTabFocusHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button" }, "Before"),
+            h(
+              Tabs,
+              {
+                "aria-label": "Tab Sample",
+                items: defaultItems,
+                defaultSelectedKey: "tab-2",
+                isDisabled: true,
+              },
+              {
+                default: () => [h(TabList), h(TabPanels)],
+              }
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    await flush();
+    await user.tab();
+    await user.tab();
+
+    const tabpanel = tree.getByRole("tabpanel");
+    expect(document.activeElement).toBe(tabpanel);
+  });
+
   it("supports scoped slots for tab labels and panels", async () => {
     const { getByRole } = renderTabs(
       {},
@@ -363,6 +457,29 @@ describe("Tabs", () => {
 
     await user.click(tabs[1] as HTMLElement);
     expect(tree.getByRole("tabpanel").textContent).toContain("Second panel");
+  });
+
+  it("supports aria-label on static Item tab entries", async () => {
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Aria tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () => [h(Item, { id: "first", "aria-label": "Foo tab" }, () => "Tab 1"), h(Item, { id: "second" }, () => "Tab 2")],
+          }),
+          h(TabPanels, null, {
+            default: () => [h(Item, { id: "first" }, () => "Panel 1"), h(Item, { id: "second" }, () => "Panel 2")],
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    const tab = tree.getByLabelText("Foo tab");
+    const tablist = tree.getByRole("tablist");
+    expect(tab).toBe(within(tablist).getAllByRole("tab")[0]);
   });
 
   it("applies root class and tablist appearance modifiers", async () => {
@@ -619,6 +736,38 @@ describe("Tabs", () => {
     }
   });
 
+  it("does not collapse when all tabs fit horizontally", async () => {
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-TabsPanel-collapseWrapper")) {
+          return 1200;
+        }
+
+        return 0;
+      });
+    const scrollWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "tablist") {
+          return 300;
+        }
+
+        return 0;
+      });
+
+    try {
+      const { getByRole, queryByRole } = renderTabs();
+      await flush();
+
+      expect(getByRole("tablist")).toBeTruthy();
+      expect(queryByRole("button", { name: /Tab 1/i })).toBeNull();
+    } finally {
+      clientWidthSpy.mockRestore();
+      scrollWidthSpy.mockRestore();
+    }
+  });
+
   it("supports tabs as links", async () => {
     const user = userEvent.setup();
     const linkItems: SpectrumTabItem[] = [
@@ -752,5 +901,40 @@ describe("Tabs", () => {
     await waitFor(() => {
       expect(tabpanel.getAttribute("tabindex")).toBeNull();
     });
+  });
+
+  it("does not share input values between tabpanels", async () => {
+    const user = userEvent.setup();
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Input tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () => [h(Item, { id: "tab-1" }, () => "Tab 1"), h(Item, { id: "tab-2" }, () => "Tab 2")],
+          }),
+          h(TabPanels, null, {
+            default: () => [
+              h(Item, { id: "tab-1" }, () => h("input", { "data-testid": "panel1_input" })),
+              h(Item, { id: "tab-2" }, () => h("input", { disabled: true, "data-testid": "panel2_input" })),
+            ],
+          }),
+        ],
+      },
+    });
+    await flush();
+
+    const firstInput = tree.getByTestId("panel1_input") as HTMLInputElement;
+    expect(firstInput.value).toBe("");
+    firstInput.value = "A String";
+    expect(firstInput.value).toBe("A String");
+
+    const tabs = tree.getAllByRole("tab");
+    await user.click(tabs[1] as HTMLElement);
+    await flush();
+
+    const secondInput = tree.getByTestId("panel2_input") as HTMLInputElement;
+    expect(secondInput.value).toBe("");
   });
 });
