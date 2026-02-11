@@ -17,6 +17,7 @@ export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
 export { ComboBox } from "./ComboBox";
 export { ColorField } from "./ColorField";
+export { Content, Footer, Header, Heading, Keyboard, Text } from "./Content";
 export { Checkbox } from "./Checkbox";
 export { CheckboxGroup } from "./CheckboxGroup";
 export { CloseButton } from "./CloseButton";
@@ -64,6 +65,14 @@ export type { S2CheckboxProps } from "./Checkbox";
 export type { S2CheckboxGroupProps } from "./CheckboxGroup";
 export type { ComboBoxSize, S2ComboBoxProps } from "./ComboBox";
 export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
+export type {
+  S2ContentProps,
+  S2FooterProps,
+  S2HeaderProps,
+  S2HeadingProps,
+  S2KeyboardProps,
+  S2TextProps,
+} from "./Content";
 export type { DateFieldSize, S2DateFieldProps } from "./DateField";
 export type { S2DividerProps } from "./Divider";
 export type { S2ImageProps } from "./Image";
