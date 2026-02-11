@@ -43,4 +43,5 @@ const area = h(TextArea, {
 
 - Baseline includes `useTextField` accessibility semantics, validation wiring, and controlled/uncontrolled value behavior.
 - `TextArea` baseline includes multiline rendering and row configuration.
+- Placeholder deprecation warning parity from upstream `TextField` and `TextArea` is included.
 - Upstream advanced icon/loading/auto-resize behavior is still pending parity work.

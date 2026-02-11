@@ -5,6 +5,29 @@ import { describe, expect, it, vi } from "vitest";
 import { TextArea, TextField } from "../src";
 
 describe("TextField", () => {
+  it("warns once when placeholder is provided", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { rerender } = render(TextField, {
+      props: {
+        label: "Name",
+        placeholder: "Full name",
+      },
+    });
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/TextField.html#help-text"
+    );
+
+    await rerender({
+      label: "Name",
+      placeholder: "Another placeholder",
+    });
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    warnSpy.mockRestore();
+  });
+
   it("renders a labeled text input", () => {
     const { getByRole } = render(TextField, {
       props: {
@@ -135,6 +158,29 @@ describe("TextField", () => {
 });
 
 describe("TextArea", () => {
+  it("warns once when placeholder is provided", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { rerender } = render(TextArea, {
+      props: {
+        label: "Notes",
+        placeholder: "Type notes",
+      },
+    });
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/TextArea.html#help-text"
+    );
+
+    await rerender({
+      label: "Notes",
+      placeholder: "Another placeholder",
+    });
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    warnSpy.mockRestore();
+  });
+
   it("renders textarea with rows", () => {
     const { getByRole } = render(TextArea, {
       props: {

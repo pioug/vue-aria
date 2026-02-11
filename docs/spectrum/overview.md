@@ -53,7 +53,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/switch`: switch field primitive (`Switch`) with controlled/uncontrolled behavior, read-only/disabled support, and ARIA labeling parity
 - `@vue-spectrum/slider` (in progress): slider primitives (`Slider`, `RangeSlider`) with controlled/uncontrolled value handling, output label behavior, and baseline interaction coverage
 - `@vue-spectrum/tabs` (in progress): tabs primitives (`Tabs`, `TabList`, `TabPanels`) with keyboard navigation and controlled/uncontrolled selection behavior
-- `@vue-spectrum/textfield` (in progress): text input primitives (`TextField`, `TextArea`) with label/help/error semantics and controlled/uncontrolled value behavior
+- `@vue-spectrum/textfield` (in progress): text input primitives (`TextField`, `TextArea`) with label/help/error semantics, placeholder deprecation warning parity, and controlled/uncontrolled value behavior
 - `@vue-spectrum/searchfield` (in progress): search input primitive (`SearchField`) with Enter submit behavior, Escape/clear-button clearing semantics, placeholder deprecation warning parity, slot-prop override parity via `searchfield` slot context, and controlled/uncontrolled value behavior
 - `@vue-spectrum/numberfield` (in progress): numeric input primitive (`NumberField`) with controlled/uncontrolled value support, clamped min/max behavior, and baseline stepper interactions
 - `@vue-spectrum/combobox` (in progress): combobox primitive (`ComboBox`) with baseline input/listbox ARIA wiring, filter-on-type behavior, and controlled/uncontrolled selection/input/open state handling
