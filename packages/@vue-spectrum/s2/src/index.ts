@@ -10,6 +10,8 @@ export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
 export { ComboBox } from "./ComboBox";
 export { ColorField } from "./ColorField";
+export { Checkbox } from "./Checkbox";
+export { CheckboxGroup } from "./CheckboxGroup";
 export { CloseButton } from "./CloseButton";
 export { DateField } from "./DateField";
 export { Divider } from "./Divider";
@@ -29,6 +31,9 @@ export { Switch } from "./Switch";
 export { TextField } from "./TextField";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
+export { Radio } from "./Radio";
+export { RadioGroup } from "./RadioGroup";
+export { Well } from "./Well";
 
 export type { ProviderBackground, S2ProviderProps } from "./Provider";
 export type { S2ActionMenuProps } from "./ActionMenu";
@@ -39,6 +44,8 @@ export type {
 export type { S2AvatarProps } from "./Avatar";
 export type { S2BadgeProps } from "./Badge";
 export type { S2CloseButtonProps } from "./CloseButton";
+export type { S2CheckboxProps } from "./Checkbox";
+export type { S2CheckboxGroupProps } from "./CheckboxGroup";
 export type { ComboBoxSize, S2ComboBoxProps } from "./ComboBox";
 export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
 export type { DateFieldSize, S2DateFieldProps } from "./DateField";
@@ -51,6 +58,8 @@ export type { S2MeterProps } from "./Meter";
 export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
 export type { S2ProgressBarProps } from "./ProgressBar";
 export type { S2ProgressCircleProps } from "./ProgressCircle";
+export type { S2RadioProps } from "./Radio";
+export type { S2RadioGroupProps } from "./RadioGroup";
 export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
 export type { SliderSize, S2SliderProps } from "./Slider";
 export type {
@@ -63,6 +72,7 @@ export type {
 export type { S2StatusLightProps } from "./StatusLight";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
 export type { S2TextFieldProps, TextFieldSize } from "./TextField";
+export type { S2WellProps } from "./Well";
 export type {
   ActionButtonGroupDensity,
   ActionButtonGroupSize,
