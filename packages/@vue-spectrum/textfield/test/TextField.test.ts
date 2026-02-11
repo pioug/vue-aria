@@ -210,4 +210,88 @@ describe("TextArea", () => {
     expect(onChange).toHaveBeenCalled();
     expect(textarea.value).toBe("hello");
   });
+
+  it("auto-resizes based on scroll height on mount", async () => {
+    let scrollHeight = 72;
+    const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "scrollHeight"
+    );
+    Object.defineProperty(HTMLTextAreaElement.prototype, "scrollHeight", {
+      configurable: true,
+      get() {
+        return scrollHeight;
+      },
+    });
+
+    try {
+      const { getByRole } = render(TextArea, {
+        props: {
+          label: "Notes",
+          defaultValue: "Initial content",
+        },
+      });
+
+      await nextTick();
+      await nextTick();
+
+      const textarea = getByRole("textbox") as HTMLTextAreaElement;
+      expect(textarea.style.height).toBe("72px");
+    } finally {
+      if (scrollHeightDescriptor) {
+        Object.defineProperty(
+          HTMLTextAreaElement.prototype,
+          "scrollHeight",
+          scrollHeightDescriptor
+        );
+      } else {
+        delete (HTMLTextAreaElement.prototype as { scrollHeight?: number }).scrollHeight;
+      }
+    }
+  });
+
+  it("auto-resizes when content grows", async () => {
+    let scrollHeight = 64;
+    const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "scrollHeight"
+    );
+    Object.defineProperty(HTMLTextAreaElement.prototype, "scrollHeight", {
+      configurable: true,
+      get() {
+        return scrollHeight;
+      },
+    });
+
+    try {
+      const { getByRole } = render(TextArea, {
+        props: {
+          label: "Notes",
+          defaultValue: "Start",
+        },
+      });
+
+      await nextTick();
+      await nextTick();
+
+      const textarea = getByRole("textbox") as HTMLTextAreaElement;
+      expect(textarea.style.height).toBe("64px");
+
+      scrollHeight = 128;
+      await fireEvent.update(textarea, "Expanded content");
+      await nextTick();
+
+      expect(textarea.style.height).toBe("128px");
+    } finally {
+      if (scrollHeightDescriptor) {
+        Object.defineProperty(
+          HTMLTextAreaElement.prototype,
+          "scrollHeight",
+          scrollHeightDescriptor
+        );
+      } else {
+        delete (HTMLTextAreaElement.prototype as { scrollHeight?: number }).scrollHeight;
+      }
+    }
+  });
 });
