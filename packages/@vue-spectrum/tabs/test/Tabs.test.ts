@@ -277,6 +277,43 @@ describe("Tabs", () => {
     expect(tabpanel.textContent).toContain("Item Panel: tab-1");
   });
 
+  it("supports static Item composition in TabList and TabPanels", async () => {
+    const user = userEvent.setup();
+
+    const tree = render(Tabs, {
+      props: {
+        "aria-label": "Static tabs",
+      },
+      slots: {
+        default: () => [
+          h(TabList, null, {
+            default: () => [
+              h(Item, { id: "first", title: "First tab" }),
+              h(Item, { id: "second", title: "Second tab" }),
+            ],
+          }),
+          h(TabPanels, null, {
+            default: () => [
+              h(Item, { id: "first" }, () => "First panel"),
+              h(Item, { id: "second" }, () => "Second panel"),
+            ],
+          }),
+        ],
+      },
+    });
+
+    await flush();
+
+    const tablist = tree.getByRole("tablist");
+    const tabs = within(tablist).getAllByRole("tab");
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(tree.getByRole("tabpanel").textContent).toContain("First panel");
+
+    await user.click(tabs[1] as HTMLElement);
+    expect(tree.getByRole("tabpanel").textContent).toContain("Second panel");
+  });
+
   it("applies root class and tablist appearance modifiers", async () => {
     const { getByRole } = renderTabs({
       isQuiet: true,

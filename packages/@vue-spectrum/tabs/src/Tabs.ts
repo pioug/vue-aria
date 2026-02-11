@@ -1,8 +1,10 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
   inject,
+  isVNode,
   nextTick,
   onBeforeUnmount,
   onMounted,
@@ -12,6 +14,7 @@ import {
   type Ref,
   type InjectionKey,
   type PropType,
+  type VNode,
   type VNodeChild,
 } from "vue";
 import { useFocusRing } from "@vue-aria/focus";
@@ -37,7 +40,7 @@ export type TabsDensity = "regular" | "compact";
 
 export interface SpectrumTabItem extends TabListItem {
   title?: string | undefined;
-  children?: VNodeChild | VNodeChild[] | undefined;
+  children?: unknown;
   href?: string | undefined;
 }
 
@@ -99,6 +102,208 @@ function normalizeItems(items: SpectrumTabItem[] | undefined): SpectrumTabItem[]
     ...item,
     key: item.key ?? index,
   }));
+}
+
+function normalizeTabKey(value: unknown, fallback: Key): Key {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (!isVNode(value)) {
+    return "";
+  }
+
+  if (typeof value.children === "string") {
+    return value.children;
+  }
+
+  if (Array.isArray(value.children)) {
+    return extractTextContent(value.children);
+  }
+
+  if (value.children && typeof value.children === "object") {
+    const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return extractTextContent(maybeDefault());
+    }
+  }
+
+  return "";
+}
+
+interface ParsedStaticTabItem {
+  key: Key;
+  title: string;
+  isDisabled?: boolean | undefined;
+  href?: string | undefined;
+  "aria-label"?: string | undefined;
+}
+
+interface ParsedStaticTabPanel {
+  key: Key;
+  title?: string | undefined;
+  children?: unknown;
+}
+
+function parseTabsStaticItems(nodes: VNode[] | undefined): SpectrumTabItem[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const slotNodes = flattenVNodeChildren(nodes);
+  const tabListNode = slotNodes.find((node) => getComponentName(node) === "TabList");
+  const tabPanelsNode = slotNodes.find((node) => getComponentName(node) === "TabPanels");
+
+  const tabListItems = (tabListNode ? getSlotChildren(tabListNode) : []).filter(
+    (node) => getComponentName(node) === "TabsItem"
+  );
+  const tabPanelItems = (tabPanelsNode ? getSlotChildren(tabPanelsNode) : []).filter(
+    (node) => getComponentName(node) === "TabsItem"
+  );
+
+  const parsedTabs: ParsedStaticTabItem[] = tabListItems.map((node, index) => {
+    const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const key = normalizeTabKey(node.key ?? nodeProps.id, `tab-${index + 1}`);
+    const slotText = extractTextContent(getSlotContent(node)).trim();
+    const title =
+      typeof nodeProps.title === "string" ? nodeProps.title : slotText || String(key);
+
+    return {
+      key,
+      title,
+      isDisabled: Boolean(nodeProps.isDisabled),
+      href: typeof nodeProps.href === "string" ? nodeProps.href : undefined,
+      "aria-label":
+        typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
+    };
+  });
+
+  const parsedPanels: ParsedStaticTabPanel[] = tabPanelItems.map((node, index) => {
+    const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const key = normalizeTabKey(
+      node.key ?? nodeProps.id,
+      parsedTabs[index]?.key ?? `tab-${index + 1}`
+    );
+
+    return {
+      key,
+      title: typeof nodeProps.title === "string" ? nodeProps.title : undefined,
+      children: getSlotContent(node),
+    };
+  });
+
+  if (parsedTabs.length === 0) {
+    return parsedPanels.map((panel, index) => {
+      const fallbackTitle = extractTextContent(panel.children).trim();
+      const key = panel.key ?? `tab-${index + 1}`;
+
+      return {
+        key,
+        title: panel.title ?? (fallbackTitle || String(key)),
+        children: panel.children,
+      };
+    });
+  }
+
+  return parsedTabs.map((tab, index) => {
+    const panel =
+      parsedPanels.find((candidate) => candidate.key === tab.key) ?? parsedPanels[index];
+
+    return {
+      key: tab.key,
+      title: tab.title,
+      isDisabled: tab.isDisabled,
+      href: tab.href,
+      "aria-label": tab["aria-label"],
+      children: panel?.children,
+    };
+  });
 }
 
 function normalizeRenderable(
@@ -257,8 +462,8 @@ export const Tabs = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const provider = useProviderContext();
     const elementRef = ref<HTMLElement | null>(null);
-
-    const collection = computed(() => normalizeItems(props.items));
+    const slotItems = ref<SpectrumTabItem[]>([]);
+    const collection = ref<SpectrumTabItem[]>([]);
     const orientation = computed<TabsOrientation>(
       () => props.orientation ?? "horizontal"
     );
@@ -298,7 +503,39 @@ export const Tabs = defineComponent({
     });
     const collapsedPanelLabelledby = ref<string | undefined>(undefined);
 
-    const state = useTabListState<SpectrumTabItem>({
+    const syncCollection = () => {
+      const propItems = props.items as SpectrumTabItem[] | undefined;
+      if (propItems !== undefined) {
+        collection.value = normalizeItems(propItems);
+        return;
+      }
+
+      collection.value = slotItems.value;
+    };
+
+    syncCollection();
+
+    watch(
+      () => props.items,
+      (value) => {
+        if (value !== undefined) {
+          slotItems.value = [];
+        }
+        syncCollection();
+      }
+    );
+
+    watch(
+      slotItems,
+      () => {
+        if (props.items === undefined) {
+          syncCollection();
+        }
+      },
+      { deep: true }
+    );
+
+    const state = useTabListState({
       collection,
       selectedKey:
         props.selectedKey !== undefined
@@ -313,10 +550,10 @@ export const Tabs = defineComponent({
           ? computed(() => props.disabledKeys)
           : undefined,
       isDisabled,
-      onSelectionChange: (key) => {
+      onSelectionChange: (key: Key) => {
         props.onSelectionChange?.(key);
       },
-    });
+    } as any) as UseTabListStateResult<SpectrumTabItem>;
 
     provide(TABS_CONTEXT_SYMBOL, {
       state,
@@ -337,6 +574,13 @@ export const Tabs = defineComponent({
     });
 
     return () => {
+      if (props.items === undefined && slotItems.value.length === 0) {
+        const parsedItems = parseTabsStaticItems(slots.default?.() as VNode[] | undefined);
+        if (parsedItems.length > 0) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const domProps = filterDOMProps({
         ...(attrs as Record<string, unknown>),
       });
@@ -719,7 +963,8 @@ export const TabPanels = defineComponent({
         selectedItem === undefined
           ? []
           : normalizeRenderable(
-              slots.default?.({ item: selectedItem }) ?? selectedItem.children
+              slots.default?.({ item: selectedItem }) ??
+                (selectedItem.children as VNodeChild | VNodeChild[] | undefined)
             );
       const panelAriaLabelledby =
         context.collapsedPanelLabelledby.value ??

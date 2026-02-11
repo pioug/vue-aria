@@ -60,11 +60,22 @@ h(TabList, null, {
 });
 ```
 
+Static `Item` composition is also supported:
+
+```ts
+h(TabList, null, {
+  default: () => [
+    h(Item, { id: "first", title: "First tab" }),
+    h(Item, { id: "second", title: "Second tab" }),
+  ],
+});
+```
+
 ## Notes
 
 - Baseline port includes keyboard navigation, selection state (controlled/uncontrolled), and tabpanel semantics.
 - Supports both automatic and manual keyboard activation behavior.
-- Includes `Item` compatibility helper for scoped slot composition patterns.
+- Includes `Item` compatibility helper for both scoped-slot and static item composition patterns.
 - Includes baseline horizontal overflow collapse-to-picker behavior via `TabList` wrapper measurement.
 - Includes baseline selection-indicator positioning parity (`spectrum-Tabs-selectionIndicator`) for selected tabs, including RTL right-edge transform behavior.
 - Includes collapsed-mode tabpanel and picker aria-labeling composition parity (`aria-label` + external `aria-labelledby`).
