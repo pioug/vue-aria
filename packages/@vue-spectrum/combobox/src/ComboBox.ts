@@ -5,6 +5,7 @@ import {
   h,
   isVNode,
   ref,
+  watch,
   type VNode,
   type VNodeChild,
   type PropType,
@@ -31,6 +32,7 @@ import type { SpectrumComboBoxItemData } from "./types";
 
 export interface SpectrumComboBoxProps {
   id?: string | undefined;
+  name?: string | undefined;
   label?: string | undefined;
   description?: string | undefined;
   errorMessage?: string | undefined;
@@ -116,6 +118,9 @@ interface NormalizedComboBoxSlotModel {
 
 const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
   textValue.toLowerCase().includes(inputValue.toLowerCase());
+
+const PLACEHOLDER_DEPRECATION_WARNING =
+  "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/ComboBox.html#help-text";
 
 function normalizeComboBoxKey(value: unknown, fallback: Key): Key {
   if (typeof value === "string" || typeof value === "number") {
@@ -540,6 +545,10 @@ export const ComboBox = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    name: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     label: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -706,10 +715,26 @@ export const ComboBox = defineComponent({
     const listBoxRef = ref<HTMLElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
     const loadMoreRequested = ref(false);
+    const hasWarnedPlaceholder = ref(false);
     const slotModel = ref<NormalizedComboBoxSlotModel>({
       items: [],
       entries: [],
     });
+    const isProduction =
+      typeof process !== "undefined" && process.env.NODE_ENV === "production";
+
+    watch(
+      () => props.placeholder,
+      (placeholder) => {
+        if (isProduction || hasWarnedPlaceholder.value || !placeholder) {
+          return;
+        }
+
+        console.warn(PLACEHOLDER_DEPRECATION_WARNING);
+        hasWarnedPlaceholder.value = true;
+      },
+      { immediate: true }
+    );
 
     const normalizedItems = computed<NormalizedComboBoxItem[]>(() => {
       if (props.items) {
@@ -1022,6 +1047,7 @@ export const ComboBox = defineComponent({
               ref: (value: unknown) => {
                 inputRef.value = value as HTMLInputElement | null;
               },
+              name: props.name,
               placeholder: props.placeholder,
               disabled: props.isDisabled,
               readonly: props.isReadOnly,

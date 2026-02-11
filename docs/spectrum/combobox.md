@@ -56,7 +56,7 @@ const component = h(ComboBox, {
 
 ## Notes
 
-- Baseline includes combobox/input/listbox ARIA wiring, type-to-filter behavior, button-trigger opening, selection commit behavior, and static slot composition support via `ComboBoxItem` and `ComboBoxSection`.
+- Baseline includes combobox/input/listbox ARIA wiring, type-to-filter behavior, button-trigger opening, selection commit behavior, placeholder deprecation warning parity, native input `name` propagation, and static slot composition support via `ComboBoxItem` and `ComboBoxSection`.
 - Controlled/uncontrolled `selectedKey`, `inputValue`, and open-state flows are wired through `@vue-aria/combobox-state`.
 - Baseline now includes grouped-section listbox semantics for slot-defined `ComboBoxSection` content (headings + `role="group"` containers) with filtering-aware section rendering.
 - Advanced popover positioning/mobile tray behavior, full async loading UX parity, and full visual/theming parity remain in progress.

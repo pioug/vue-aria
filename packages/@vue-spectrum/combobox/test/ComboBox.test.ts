@@ -15,6 +15,9 @@ const items: SpectrumComboBoxItemData[] = [
   { key: "3", label: "Three" },
 ];
 
+const PLACEHOLDER_DEPRECATION_WARNING =
+  "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/ComboBox.html#help-text";
+
 function renderComponent(props: Record<string, unknown> = {}) {
   return render(ComboBox, {
     props: {
@@ -31,6 +34,27 @@ describe("ComboBox", () => {
     expect(tree.getByRole("combobox")).toBeTruthy();
     expect(tree.getByRole("button")).toBeTruthy();
     expect(tree.getByText("Test")).toBeTruthy();
+  });
+
+  it("renders with placeholder text and shows warning", () => {
+    const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const tree = renderComponent({ placeholder: "Test placeholder" });
+      const combobox = tree.getByRole("combobox") as HTMLInputElement;
+
+      expect(combobox.placeholder).toBe("Test placeholder");
+      expect(spyWarn).toHaveBeenCalledWith(PLACEHOLDER_DEPRECATION_WARNING);
+    } finally {
+      spyWarn.mockRestore();
+    }
+  });
+
+  it("propagates the name attribute", () => {
+    const tree = renderComponent({ name: "test-name" });
+
+    const combobox = tree.getByRole("combobox");
+    expect(combobox.getAttribute("name")).toBe("test-name");
   });
 
   it("opens with button press and closes on second press", async () => {
