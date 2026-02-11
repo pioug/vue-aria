@@ -478,6 +478,151 @@ describe("TagGroup", () => {
     );
   });
 
+  it("supports keyboard tab navigation to and from custom action button", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "TagGroupActionKeyboardHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button", "aria-label": "Before" }, "Before"),
+            h(TagGroup, {
+              items,
+              "aria-label": "tag group",
+              actionLabel: "Clear",
+              onAction,
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const before = tree.getByRole("button", { name: "Before" });
+    const tags = tree.getAllByRole("row");
+    const actionButton = tree.getByRole("button", { name: "Clear" });
+
+    (before as HTMLButtonElement).focus();
+    await user.tab();
+    expect(document.activeElement).toBe(tags[0]);
+
+    await user.tab();
+    expect(document.activeElement).toBe(actionButton);
+
+    await user.keyboard("{Enter}");
+    expect(onAction).toHaveBeenCalledTimes(1);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(tags[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(tags[1]);
+
+    await user.tab();
+    expect(document.activeElement).toBe(actionButton);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(tags[1]);
+  });
+
+  it("supports keyboard navigation across maxRows toggle and custom action", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-Tag")) {
+          const text = this.textContent ?? "";
+          if (text.includes("Tag 1")) {
+            return { top: 10 } as DOMRect;
+          }
+          if (text.includes("Tag 2")) {
+            return { top: 10 } as DOMRect;
+          }
+          if (text.includes("Tag 3")) {
+            return { top: 20 } as DOMRect;
+          }
+          if (text.includes("Tag 4")) {
+            return { top: 20 } as DOMRect;
+          }
+          if (text.includes("Tag 5")) {
+            return { top: 30 } as DOMRect;
+          }
+          if (text.includes("Tag 6")) {
+            return { top: 30 } as DOMRect;
+          }
+          if (text.includes("Tag 7")) {
+            return { top: 40 } as DOMRect;
+          }
+        }
+
+        return { top: 0 } as DOMRect;
+      });
+
+    try {
+      const sevenItems: SpectrumTagItemData[] = [
+        { key: "1", label: "Tag 1" },
+        { key: "2", label: "Tag 2" },
+        { key: "3", label: "Tag 3" },
+        { key: "4", label: "Tag 4" },
+        { key: "5", label: "Tag 5" },
+        { key: "6", label: "Tag 6" },
+        { key: "7", label: "Tag 7" },
+      ];
+
+      const App = defineComponent({
+        name: "TagGroupToggleAndActionKeyboardHarness",
+        setup() {
+          return () =>
+            h("div", null, [
+              h("button", { type: "button", "aria-label": "Before" }, "Before"),
+              h(TagGroup, {
+                items: sevenItems,
+                maxRows: 2,
+                "aria-label": "tag group",
+                actionLabel: "Clear",
+                onAction,
+              }),
+            ]);
+        },
+      });
+
+      const tree = render(App);
+      await nextTick();
+      await nextTick();
+
+      const before = tree.getByRole("button", { name: "Before" });
+      const tags = tree.getAllByRole("row");
+      const showAllButton = tree.getByRole("button", { name: "Show all (7)" });
+      const actionButton = tree.getByRole("button", { name: "Clear" });
+
+      expect(tags.length).toBeGreaterThan(0);
+      expect(tree.getAllByRole("gridcell")).toHaveLength(4);
+
+      (before as HTMLButtonElement).focus();
+      await user.tab();
+      expect(document.activeElement).toBe(tags[0]);
+
+      await user.tab();
+      expect(document.activeElement).toBe(showAllButton);
+
+      await user.tab();
+      expect(document.activeElement).toBe(actionButton);
+
+      await user.keyboard("{Enter}");
+      expect(onAction).toHaveBeenCalledTimes(1);
+
+      await user.tab({ shift: true });
+      expect(document.activeElement).toBe(showAllButton);
+
+      await user.tab({ shift: true });
+      expect(document.activeElement).toBe(tags[0]);
+    } finally {
+      rectSpy.mockRestore();
+    }
+  });
+
   it("supports data attributes on tag group and tag items", () => {
     const App = defineComponent({
       name: "TagGroupDataAttributesHarness",
