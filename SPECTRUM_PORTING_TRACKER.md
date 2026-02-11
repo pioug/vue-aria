@@ -53,6 +53,93 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `@react-spectrum/story-utils` -> `@vue-spectrum/story-utils` (internal)
 - [ ] `@react-spectrum/s2` -> `@vue-spectrum/s2`
 
+## S2 Detailed Export Tracker
+
+- Scope: runtime exports from `references/react-spectrum/packages/@react-spectrum/s2/src/index.ts`, excluding `*Context` and type-only exports.
+- Current export parity in `packages/@vue-spectrum/s2/src/index.ts`: `56 / 133`.
+- Normalization note: this tracker checks exact upstream export names, so wrapper renames (for example `BreadcrumbItem` vs upstream `Breadcrumb`) remain visible as pending.
+- Local-only utility note: `isDocsEnv` exists in Vue S2 but is not part of the upstream runtime export set and is not counted below.
+
+- [ ] `Accordion` — `1 / 5` exported; missing: `AccordionItem`, `AccordionItemHeader`, `AccordionItemTitle`, `AccordionItemPanel`
+- [ ] `ActionBar` — `0 / 1` exported; missing: `ActionBar`
+- [x] `ActionButton` — `1 / 1` exported; missing: none
+- [x] `ActionButtonGroup` — `1 / 1` exported; missing: none
+- [x] `ActionMenu` — `1 / 1` exported; missing: none
+- [ ] `AlertDialog` — `0 / 1` exported; missing: `AlertDialog`
+- [x] `Avatar` — `1 / 1` exported; missing: none
+- [ ] `AvatarGroup` — `0 / 1` exported; missing: `AvatarGroup`
+- [x] `Badge` — `1 / 1` exported; missing: none
+- [ ] `Breadcrumbs` — `1 / 2` exported; missing: `Breadcrumb`
+- [x] `Button` — `2 / 2` exported; missing: none
+- [x] `ButtonGroup` — `1 / 1` exported; missing: none
+- [ ] `Calendar` — `0 / 1` exported; missing: `Calendar`
+- [ ] `Card` — `0 / 6` exported; missing: `Card`, `CardPreview`, `CollectionCardPreview`, `AssetCard`, `UserCard`, `ProductCard`
+- [ ] `CardView` — `0 / 1` exported; missing: `CardView`
+- [x] `Checkbox` — `1 / 1` exported; missing: none
+- [x] `CheckboxGroup` — `1 / 1` exported; missing: none
+- [x] `CloseButton` — `1 / 1` exported; missing: none
+- [ ] `ColorArea` — `0 / 1` exported; missing: `ColorArea`
+- [x] `ColorField` — `1 / 1` exported; missing: none
+- [ ] `ColorSlider` — `0 / 1` exported; missing: `ColorSlider`
+- [ ] `ColorSwatch` — `0 / 1` exported; missing: `ColorSwatch`
+- [ ] `ColorSwatchPicker` — `0 / 1` exported; missing: `ColorSwatchPicker`
+- [ ] `ColorWheel` — `0 / 1` exported; missing: `ColorWheel`
+- [ ] `ComboBox` — `1 / 3` exported; missing: `ComboBoxItem`, `ComboBoxSection`
+- [ ] `ContextualHelp` — `0 / 1` exported; missing: `ContextualHelp`
+- [x] `DateField` — `1 / 1` exported; missing: none
+- [ ] `DatePicker` — `0 / 1` exported; missing: `DatePicker`
+- [ ] `DateRangePicker` — `0 / 1` exported; missing: `DateRangePicker`
+- [ ] `Disclosure` — `3 / 4` exported; missing: `DisclosureHeader`
+- [x] `Content` — `6 / 6` exported; missing: none
+- [ ] `Dialog` — `0 / 1` exported; missing: `Dialog`
+- [ ] `CustomDialog` — `0 / 1` exported; missing: `CustomDialog`
+- [ ] `FullscreenDialog` — `0 / 1` exported; missing: `FullscreenDialog`
+- [ ] `DialogTrigger` — `0 / 1` exported; missing: `DialogTrigger`
+- [ ] `DialogContainer` — `0 / 2` exported; missing: `DialogContainer`, `useDialogContainer`
+- [x] `Divider` — `1 / 1` exported; missing: none
+- [ ] `DropZone` — `0 / 1` exported; missing: `DropZone`
+- [ ] `Form` — `0 / 1` exported; missing: `Form`
+- [ ] `Icon` — `0 / 2` exported; missing: `createIcon`, `createIllustration`
+- [x] `IllustratedMessage` — `1 / 1` exported; missing: none
+- [x] `Image` — `1 / 1` exported; missing: none
+- [ ] `ImageCoordinator` — `0 / 1` exported; missing: `ImageCoordinator`
+- [x] `InlineAlert` — `1 / 1` exported; missing: none
+- [x] `Link` — `1 / 1` exported; missing: none
+- [ ] `Menu` — `3 / 5` exported; missing: `MenuSection`, `SubmenuTrigger`
+- [x] `Meter` — `1 / 1` exported; missing: none
+- [ ] `NotificationBadge` — `0 / 1` exported; missing: `NotificationBadge`
+- [x] `NumberField` — `1 / 1` exported; missing: none
+- [ ] `Picker` — `0 / 3` exported; missing: `Picker`, `PickerItem`, `PickerSection`
+- [ ] `Popover` — `0 / 1` exported; missing: `Popover`
+- [x] `ProgressBar` — `1 / 1` exported; missing: none
+- [x] `ProgressCircle` — `1 / 1` exported; missing: none
+- [x] `Provider` — `1 / 1` exported; missing: none
+- [x] `Radio` — `1 / 1` exported; missing: none
+- [x] `RadioGroup` — `1 / 1` exported; missing: none
+- [ ] `RangeCalendar` — `0 / 1` exported; missing: `RangeCalendar`
+- [ ] `RangeSlider` — `0 / 1` exported; missing: `RangeSlider`
+- [x] `SearchField` — `1 / 1` exported; missing: none
+- [ ] `SegmentedControl` — `0 / 2` exported; missing: `SegmentedControl`, `SegmentedControlItem`
+- [x] `SelectBoxGroup` — `2 / 2` exported; missing: none
+- [x] `Slider` — `1 / 1` exported; missing: none
+- [ ] `Skeleton` — `0 / 2` exported; missing: `Skeleton`, `useIsSkeleton`
+- [ ] `SkeletonCollection` — `0 / 1` exported; missing: `SkeletonCollection`
+- [x] `StatusLight` — `1 / 1` exported; missing: none
+- [x] `Switch` — `1 / 1` exported; missing: none
+- [ ] `TableView` — `6 / 7` exported; missing: `EditableCell`
+- [ ] `Tabs` — `0 / 4` exported; missing: `Tabs`, `TabList`, `Tab`, `TabPanel`
+- [ ] `TagGroup` — `0 / 2` exported; missing: `TagGroup`, `Tag`
+- [ ] `TextField` — `1 / 2` exported; missing: `TextArea`
+- [ ] `TimeField` — `0 / 1` exported; missing: `TimeField`
+- [ ] `Toast` — `0 / 2` exported; missing: `ToastContainer`, `ToastQueue`
+- [x] `ToggleButton` — `1 / 1` exported; missing: none
+- [x] `ToggleButtonGroup` — `1 / 1` exported; missing: none
+- [ ] `Tooltip` — `0 / 2` exported; missing: `Tooltip`, `TooltipTrigger`
+- [ ] `TreeView` — `0 / 4` exported; missing: `TreeView`, `TreeViewItem`, `TreeViewItemContent`, `TreeViewLoadMoreItem`
+- [x] `pressScale` — `1 / 1` exported; missing: none
+- [ ] `react-aria-components` — `0 / 5` exported; missing: `Autocomplete`, `Collection`, `FileTrigger`, `parseColor`, `useLocale`
+- [ ] `react-stately` — `0 / 3` exported; missing: `useListData`, `useTreeData`, `useAsyncList`
+
 ## Actions and Navigation
 
 - In progress baseline: `@react-spectrum/button` now has Vue `Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, and `ToggleButton` primitives with parity-aligned press lifecycle callbacks (`onPressStart`/`onPressEnd`/`onPressUp`/`onPressChange`/`onPress`), pending-state behavior (`isPending` delayed spinner visibility plus repeated-press suppression) including localized pending announcements, anchor-element edge-case behavior, and expanded upstream-style test coverage (`Button`, `ActionButton`, `ToggleButton`, `ClearButton`, and SSR scenarios including `FieldButton`); pending parity includes remaining edge-case interaction nuances.
