@@ -1,7 +1,7 @@
-import { cloneVNode, defineComponent, type PropType } from "vue";
-import { filterDOMProps } from "@vue-aria/utils";
+import { cloneVNode, computed, defineComponent, type PropType } from "vue";
+import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { useSpectrumProviderContext } from "@vue-spectrum/provider";
-import { classNames } from "@vue-spectrum/utils";
+import { classNames, useSlotProps } from "@vue-spectrum/utils";
 import type { ClassValue } from "@vue-spectrum/utils";
 import { getDisplayName, getFirstSlotVNode, mergeStyle, normalizeAriaHidden } from "./shared";
 import type { UIIconProps } from "./types";
@@ -21,6 +21,13 @@ export const UIIcon = defineComponent({
   },
   setup(props, { attrs, slots }) {
     const provider = useSpectrumProviderContext();
+    const attrsRecord = attrs as Record<string, unknown>;
+    const slottedProps = computed(() =>
+      useSlotProps(
+        mergeProps(attrsRecord, props as unknown as Record<string, unknown>),
+        "icon"
+      )
+    );
 
     return () => {
       const iconNode = getFirstSlotVNode(slots);
@@ -28,16 +35,24 @@ export const UIIcon = defineComponent({
         return null;
       }
 
-      const ariaLabel = props.ariaLabel;
+      const slotProps = slottedProps.value as Record<string, unknown>;
+      const ariaLabel = (slotProps.ariaLabel ??
+        slotProps["aria-label"]) as string | undefined;
       const ariaHidden = ariaLabel
-        ? normalizeAriaHidden(props.ariaHidden)
+        ? normalizeAriaHidden(
+            (slotProps.ariaHidden ??
+              slotProps["aria-hidden"]) as UIIconProps["ariaHidden"]
+          )
         : true;
-      const domProps = filterDOMProps(attrs as Record<string, unknown>);
+      const domProps = filterDOMProps(slotProps);
       const displayName = getDisplayName(iconNode);
       const childClass = (iconNode.props as Record<string, unknown> | null)?.class as
         | ClassValue
         | undefined;
       const domClass = domProps.class as ClassValue | undefined;
+      const unsafeClassName = slotProps.UNSAFE_className as ClassValue | undefined;
+      const unsafeStyle =
+        slotProps.UNSAFE_style as Record<string, string | number> | undefined;
 
       return cloneVNode(iconNode, {
         ...domProps,
@@ -45,9 +60,10 @@ export const UIIcon = defineComponent({
           childClass,
           "spectrum-Icon",
           displayName ? `spectrum-UIIcon-${displayName}` : null,
-          domClass
+          domClass,
+          unsafeClassName
         ),
-        style: mergeStyle(domProps.style),
+        style: mergeStyle(domProps.style, unsafeStyle),
         scale: provider?.value.scale === "large" ? "L" : "M",
         focusable: "false",
         role: "img",

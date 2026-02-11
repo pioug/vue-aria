@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { computed, defineComponent, h, type PropType } from "vue";
 import { describe, expect, it } from "vitest";
 import { provideSpectrumProvider } from "@vue-spectrum/provider";
+import { SlotProvider } from "@vue-spectrum/utils";
 import { Icon } from "../src";
 import type { IconSize } from "../src";
 import type { SpectrumTheme } from "@vue-spectrum/provider";
@@ -167,5 +168,48 @@ describe("Icon", () => {
     expect(icon.attributes("style")).toContain(
       "var(--spectrum-semantic-negative-color-icon)"
     );
+  });
+
+  it("supports icon slot-prop overrides", () => {
+    const App = defineComponent({
+      name: "IconSlotProviderHarness",
+      setup() {
+        return () =>
+          h(
+            SlotProvider,
+            {
+              slots: {
+                icon: {
+                  ariaLabel: "slot icon",
+                  size: "XL",
+                  UNSAFE_className: "slot-class",
+                },
+              },
+            },
+            {
+              default: () =>
+                h(
+                  Icon,
+                  {
+                    ariaLabel: "local icon",
+                    size: "S",
+                    UNSAFE_className: "local-class",
+                  } as Record<string, unknown>,
+                  {
+                    default: () => [renderFakeIcon()],
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const icon = wrapper.get("svg");
+
+    expect(icon.attributes("aria-label")).toBe("slot icon");
+    expect(icon.classes()).toContain("spectrum-Icon--sizeXL");
+    expect(icon.classes()).toContain("local-class");
+    expect(icon.classes()).toContain("slot-class");
   });
 });

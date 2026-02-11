@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { computed, defineComponent, h, type PropType } from "vue";
 import { describe, expect, it } from "vitest";
 import { provideSpectrumProvider } from "@vue-spectrum/provider";
+import { SlotProvider } from "@vue-spectrum/utils";
 import { UIIcon } from "../src";
 import type { SpectrumTheme } from "@vue-spectrum/provider";
 
@@ -144,5 +145,45 @@ describe("UIIcon", () => {
     expect(icon.attributes("data-testid")).toBe("ui-icon-dom");
     expect(icon.attributes("style")).toContain("opacity: 0.6");
     expect(icon.attributes("style")).toContain("margin-top: 6px");
+  });
+
+  it("supports icon slot-prop overrides", () => {
+    const App = defineComponent({
+      name: "UIIconSlotProviderHarness",
+      setup() {
+        return () =>
+          h(
+            SlotProvider,
+            {
+              slots: {
+                icon: {
+                  ariaLabel: "slot ui icon",
+                  UNSAFE_className: "slot-ui-class",
+                },
+              },
+            },
+            {
+              default: () =>
+                h(
+                  UIIcon,
+                  {
+                    ariaLabel: "local ui icon",
+                    UNSAFE_className: "local-ui-class",
+                  } as Record<string, unknown>,
+                  {
+                    default: () => [renderFakeIcon()],
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const icon = wrapper.get("svg");
+
+    expect(icon.attributes("aria-label")).toBe("slot ui icon");
+    expect(icon.classes()).toContain("local-ui-class");
+    expect(icon.classes()).toContain("slot-ui-class");
   });
 });

@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, type PropType } from "vue";
 import { describe, expect, it } from "vitest";
+import { SlotProvider } from "@vue-spectrum/utils";
 import { Illustration } from "../src";
 
 function renderCustomIllustration() {
@@ -116,5 +117,45 @@ describe("Illustration", () => {
     expect(illustration.classes()).toContain("illustration-dom");
     expect(illustration.attributes("data-testid")).toBe("illustration-dom");
     expect(illustration.attributes("style")).toContain("margin-top: 2px");
+  });
+
+  it("supports illustration slot-prop overrides", () => {
+    const App = defineComponent({
+      name: "IllustrationSlotProviderHarness",
+      setup() {
+        return () =>
+          h(
+            SlotProvider,
+            {
+              slots: {
+                illustration: {
+                  ariaLabel: "slot illustration",
+                  UNSAFE_className: "slot-illustration-class",
+                },
+              },
+            },
+            {
+              default: () =>
+                h(
+                  Illustration,
+                  {
+                    ariaLabel: "local illustration",
+                    UNSAFE_className: "local-illustration-class",
+                  } as Record<string, unknown>,
+                  {
+                    default: () => [renderCustomIllustration()],
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const illustration = wrapper.get("svg");
+
+    expect(illustration.attributes("aria-label")).toBe("slot illustration");
+    expect(illustration.classes()).toContain("local-illustration-class");
+    expect(illustration.classes()).toContain("slot-illustration-class");
   });
 });
