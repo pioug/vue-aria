@@ -6,6 +6,7 @@ export { Button, LinkButton } from "./Button";
 export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
+export { ComboBox } from "./ComboBox";
 export { ColorField } from "./ColorField";
 export { CloseButton } from "./CloseButton";
 export { DateField } from "./DateField";
@@ -14,6 +15,7 @@ export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
 export { Slider } from "./Slider";
 export { Switch } from "./Switch";
+export { TextField } from "./TextField";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 
@@ -24,6 +26,7 @@ export type {
   S2ActionButtonProps,
 } from "./ActionButton";
 export type { S2CloseButtonProps } from "./CloseButton";
+export type { ComboBoxSize, S2ComboBoxProps } from "./ComboBox";
 export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
 export type { DateFieldSize, S2DateFieldProps } from "./DateField";
 export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
@@ -37,6 +40,7 @@ export type {
   S2SelectBoxProps,
 } from "./SelectBoxGroup";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
+export type { S2TextFieldProps, TextFieldSize } from "./TextField";
 export type {
   ActionButtonGroupDensity,
   ActionButtonGroupSize,
