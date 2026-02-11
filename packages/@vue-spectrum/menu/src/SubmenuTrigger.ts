@@ -224,6 +224,7 @@ export const SubmenuTrigger = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const rootRef = ref<HTMLLIElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
+    const openedByHover = ref(false);
     const menuId = useId(undefined, "v-spectrum-submenu");
     const triggerId = useId(undefined, "v-spectrum-submenu-trigger-button");
 
@@ -245,6 +246,10 @@ export const SubmenuTrigger = defineComponent({
             detail: { triggerId: triggerId.value },
           })
         );
+      }
+
+      if (!nextOpen) {
+        openedByHover.value = false;
       }
     };
 
@@ -374,6 +379,18 @@ export const SubmenuTrigger = defineComponent({
             ...(styleProps.style ?? {}),
             ...(props.UNSAFE_style ?? {}),
           },
+          onMouseleave: (event: MouseEvent) => {
+            if (!isOpen.value) {
+              return;
+            }
+
+            const nextTarget = event.relatedTarget as Node | null;
+            if (nextTarget && rootRef.value?.contains(nextTarget)) {
+              return;
+            }
+
+            closeMenu(false, false);
+          },
         },
         [
           h(
@@ -396,7 +413,37 @@ export const SubmenuTrigger = defineComponent({
                 if (props.isDisabled) {
                   return;
                 }
-                setOpen(!isOpen.value);
+                if (!isOpen.value) {
+                  setOpen(true);
+                  return;
+                }
+
+                if (openedByHover.value) {
+                  openedByHover.value = false;
+                  return;
+                }
+
+                setOpen(false);
+              },
+              onMouseenter: () => {
+                if (props.isDisabled) {
+                  return;
+                }
+
+                openedByHover.value = true;
+                setOpen(true);
+              },
+              onMouseleave: (event: MouseEvent) => {
+                if (!isOpen.value) {
+                  return;
+                }
+
+                const nextTarget = event.relatedTarget as Node | null;
+                if (nextTarget && rootRef.value?.contains(nextTarget)) {
+                  return;
+                }
+
+                closeMenu(false, false);
               },
               onKeydown: (event: KeyboardEvent) => {
                 if (props.isDisabled) {

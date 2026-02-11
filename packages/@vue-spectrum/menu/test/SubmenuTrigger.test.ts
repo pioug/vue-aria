@@ -57,6 +57,75 @@ function renderComponent(props: Record<string, unknown> = {}) {
 }
 
 describe("SubmenuTrigger", () => {
+  it("opens on hover and closes when hover moves to a neighboring menu item", async () => {
+    const onOpenChange = vi.fn();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerHoverHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(SubmenuTrigger, {
+                label: "More",
+                items,
+                onOpenChange,
+              }),
+              h(
+                "li",
+                {
+                  role: "menuitem",
+                  "aria-label": "Neighbor",
+                  tabIndex: -1,
+                },
+                "Neighbor"
+              ),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    const neighbor = tree.getByRole("menuitem", { name: "Neighbor" });
+
+    fireEvent.mouseEnter(trigger);
+    await Promise.resolve();
+    const submenu = getSubmenuElement(tree);
+    expect(submenu).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    fireEvent.mouseLeave(trigger, { relatedTarget: neighbor });
+    await Promise.resolve();
+    expect(tree.container.contains(submenu)).toBe(false);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it("keeps submenu open when hover moves between trigger and submenu content", async () => {
+    const tree = renderComponent();
+
+    const trigger = tree.getByRole("menuitem", { name: "More" });
+    fireEvent.mouseEnter(trigger);
+    await Promise.resolve();
+    const submenu = getSubmenuElement(tree);
+    const submenuItem = within(submenu).getAllByRole("menuitem")[0] as HTMLElement;
+
+    fireEvent.mouseLeave(trigger, { relatedTarget: submenuItem });
+    fireEvent.mouseEnter(submenuItem);
+    await Promise.resolve();
+    expect(tree.container.contains(submenu)).toBe(true);
+
+    fireEvent.mouseLeave(submenuItem, { relatedTarget: trigger });
+    fireEvent.mouseEnter(trigger);
+    await Promise.resolve();
+    expect(tree.container.contains(submenu)).toBe(true);
+  });
+
   it("opens and closes nested submenu on click", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();

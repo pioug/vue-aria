@@ -69,6 +69,7 @@ const component = h(MenuTrigger, {
 - Baseline contextual-help support includes an unavailable indicator icon on unavailable contextual-help items.
 - Baseline submenu behavior includes Escape-key close without firing submenu `onClose` callbacks.
 - Baseline submenu behavior keeps only one sibling submenu open at a time.
+- Baseline submenu behavior supports hover-open interactions, hover-leave closing to neighboring items, and keeps submenu open when pointer moves between trigger and submenu content.
 - Baseline submenu behavior does not fire `onAction` when activating submenu-trigger items.
 - Baseline submenu behavior fires submenu `onClose` callbacks when closing from item selection.
 - Advanced contextual-help parity (additional upstream submenu close edge-cases and icon/overlay visual parity) remains in progress.
