@@ -18,6 +18,8 @@ export interface SpectrumMenuItemProps {
   onHover?: (() => void) | undefined;
   onAction?: ((key: MenuKey) => void) | undefined;
   ariaHaspopup?: "dialog" | "menu" | true | undefined;
+  showUnavailableIndicator?: boolean | undefined;
+  unavailableIndicatorLabel?: string | undefined;
   UNSAFE_className?: string | undefined;
 }
 
@@ -66,6 +68,14 @@ export const MenuItem = defineComponent({
     },
     ariaHaspopup: {
       type: [String, Boolean] as PropType<"dialog" | "menu" | true | undefined>,
+      default: undefined,
+    },
+    showUnavailableIndicator: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    unavailableIndicatorLabel: {
+      type: String as PropType<string | undefined>,
       default: undefined,
     },
     UNSAFE_className: {
@@ -147,6 +157,17 @@ export const MenuItem = defineComponent({
             },
             slots.default?.() ?? item.label
           ),
+          props.showUnavailableIndicator
+            ? h(
+                "span",
+                {
+                  role: "img",
+                  class: classNames("spectrum-Menu-unavailableIcon"),
+                  "aria-label": props.unavailableIndicatorLabel ?? "Unavailable",
+                },
+                "ℹ"
+              )
+            : null,
         ]
       );
     };

@@ -290,6 +290,7 @@ describe("Menu", () => {
 
     expect(menuItems).toHaveLength(3);
     expect(menuItems[1]?.getAttribute("aria-haspopup")).toBe("dialog");
+    expect(within(menuItems[1] as HTMLElement).getByRole("img")).toBeTruthy();
 
     await user.click(menuItems[1] as Element);
     await flushOverlay();
@@ -298,7 +299,7 @@ describe("Menu", () => {
     expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
     expect(document.body.textContent).toContain("Blocked help content");
 
-    fireEvent.mouseEnter(menuItems[2] as Element);
+    fireEvent.mouseEnter(menuItems[2] as HTMLElement);
     await flushOverlay();
     expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
 
@@ -384,6 +385,7 @@ describe("Menu", () => {
 
     expect(availableItem.getAttribute("aria-checked")).toBe("false");
     expect(availableItem.getAttribute("aria-haspopup")).toBeNull();
+    expect(within(availableItem).queryByRole("img")).toBeNull();
 
     await user.click(availableItem);
     expect(availableItem.getAttribute("aria-checked")).toBe("true");

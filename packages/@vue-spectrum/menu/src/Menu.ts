@@ -856,6 +856,7 @@ export const Menu = defineComponent({
           isFocused: focusedKey.value === itemKey,
           isDisabled: isItemDisabled(item),
           ariaHaspopup: hasContextualHelpDialog ? "dialog" : undefined,
+          showUnavailableIndicator: Boolean(item.contextualHelpUnavailable),
           tabIndex: focusedKey.value === itemKey ? 0 : -1,
           onFocus: () => {
             if (
