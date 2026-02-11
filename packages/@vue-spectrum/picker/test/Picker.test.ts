@@ -143,22 +143,54 @@ describe("Picker", () => {
 
   it("renders picker popover with placement positioning styles", async () => {
     const user = userEvent.setup();
-    const tree = renderComponent({ placement: "top end" });
+    const desktopSpy = vi
+      .spyOn(window.screen, "width", "get")
+      .mockImplementation(() => 701);
 
-    const trigger = tree.getByRole("button", { name: "picker-test" });
-    await user.click(trigger);
+    try {
+      const tree = renderComponent({ placement: "top end" });
 
-    const popover = tree.baseElement.querySelector(
-      "[data-testid=\"picker-popover\"]"
-    ) as HTMLElement | null;
-    expect(popover).toBeTruthy();
-    expect(popover?.getAttribute("data-placement")).not.toBeNull();
-    expect(popover?.style.position.length).toBeGreaterThan(0);
-    expect(popover?.style.zIndex).toBe("100000");
+      const trigger = tree.getByRole("button", { name: "picker-test" });
+      await user.click(trigger);
 
-    const listbox = within(popover as HTMLElement).getByRole("listbox");
-    const options = within(listbox).getAllByRole("option");
-    expect(options).toHaveLength(3);
+      const popover = tree.baseElement.querySelector(
+        "[data-testid=\"picker-popover\"]"
+      ) as HTMLElement | null;
+      expect(popover).toBeTruthy();
+      expect(popover?.getAttribute("data-placement")).not.toBeNull();
+      expect(popover?.style.position.length).toBeGreaterThan(0);
+      expect(popover?.style.zIndex).toBe("100000");
+
+      const listbox = within(popover as HTMLElement).getByRole("listbox");
+      const options = within(listbox).getAllByRole("option");
+      expect(options).toHaveLength(3);
+    } finally {
+      desktopSpy.mockRestore();
+    }
+  });
+
+  it("renders picker listbox in tray mode on mobile devices", async () => {
+    const user = userEvent.setup();
+    const mobileSpy = vi
+      .spyOn(window.screen, "width", "get")
+      .mockImplementation(() => 700);
+
+    try {
+      const tree = renderComponent();
+      const trigger = tree.getByRole("button", { name: "picker-test" });
+      await user.click(trigger);
+
+      const tray = tree.baseElement.querySelector(
+        "[data-testid=\"picker-tray\"]"
+      ) as HTMLElement | null;
+      expect(tray).toBeTruthy();
+      expect(
+        tree.baseElement.querySelector("[data-testid=\"picker-popover\"]")
+      ).toBeNull();
+      expect(within(tray as HTMLElement).getByRole("listbox")).toBeTruthy();
+    } finally {
+      mobileSpy.mockRestore();
+    }
   });
 
   it("fires onLoadMore when listbox scrolls near the end", async () => {

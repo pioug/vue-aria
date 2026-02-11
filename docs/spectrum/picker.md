@@ -50,6 +50,7 @@ const component = h(Picker, {
 ## Notes
 
 - Baseline includes trigger + listbox behavior (open/close, keyboard navigation, selection callbacks, controlled/uncontrolled selection, and trigger-anchored popover placement), plus static slot composition via `PickerItem` and `PickerSection`.
+- Mobile tray rendering is included when running on mobile screen widths.
 - Async loading baseline is included via `isLoading` spinner handling and `onLoadMore` scroll-threshold callbacks.
 - Basic form wiring is included via hidden-input submission/reset support (`name`, `form`, `defaultSelectedKey` reset behavior).
-- Advanced parity work for tray/mobile variants and full validation/deep form integration remains in progress.
+- Advanced parity work for full validation/deep form integration remains in progress.

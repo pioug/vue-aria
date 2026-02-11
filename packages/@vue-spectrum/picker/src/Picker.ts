@@ -17,7 +17,12 @@ import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
-import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
+import {
+  classNames,
+  useIsMobileDevice,
+  useStyleProps,
+  type ClassValue,
+} from "@vue-spectrum/utils";
 import { Overlay } from "@vue-spectrum/overlays";
 import { ProgressCircle } from "@vue-spectrum/progress";
 
@@ -398,6 +403,14 @@ export const Picker = defineComponent({
         ? itemByKey.value.get(selectedKey.value) ?? null
         : null
     );
+    const isMobileDevice = useIsMobileDevice();
+    const shouldUseTray = computed(() => {
+      if (typeof window === "undefined") {
+        return false;
+      }
+
+      return isMobileDevice.value && window.screen.width > 0;
+    });
     const isLoading = computed(() => Boolean(props.isLoading));
     const shouldShowTriggerLoading = computed(
       () => isLoading.value && items.value.length === 0
@@ -808,16 +821,23 @@ export const Picker = defineComponent({
                           pickerOverlayRef.value = value as HTMLElement | null;
                         },
                         class: classNames(
-                          "spectrum-Dropdown-popover",
-                          overlayPosition.placement.value
+                          shouldUseTray.value
+                            ? "spectrum-Picker-tray"
+                            : "spectrum-Dropdown-popover",
+                          !shouldUseTray.value && overlayPosition.placement.value
                             ? `spectrum-Dropdown-popover--${overlayPosition.placement.value}`
                             : undefined
                         ),
-                        "data-testid": "picker-popover",
-                        "data-placement": overlayPosition.placement.value ?? undefined,
-                        style: overlayPosition.overlayProps.value.style as
-                          | Record<string, unknown>
-                          | undefined,
+                        "data-testid": shouldUseTray.value ? "picker-tray" : "picker-popover",
+                        "data-placement":
+                          shouldUseTray.value
+                            ? undefined
+                            : overlayPosition.placement.value ?? undefined,
+                        style: shouldUseTray.value
+                          ? undefined
+                          : (overlayPosition.overlayProps.value.style as
+                              | Record<string, unknown>
+                              | undefined),
                       },
                       [
                         h(
