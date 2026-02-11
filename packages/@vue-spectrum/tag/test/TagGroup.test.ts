@@ -1,7 +1,8 @@
 import { render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { TagGroup, type SpectrumTagItemData } from "../src";
+import { Tag, TagGroup, type SpectrumTagItemData } from "../src";
 
 const items: SpectrumTagItemData[] = [
   { key: "1", label: "Tag 1", "aria-label": "Tag 1" },
@@ -123,5 +124,45 @@ describe("TagGroup", () => {
     });
 
     expect(tree.getByText("No tags available")).toBeTruthy();
+  });
+
+  it("supports static slot syntax with Tag", async () => {
+    const user = userEvent.setup();
+    const onRemove = vi.fn();
+
+    const App = defineComponent({
+      name: "TagGroupSlotHarness",
+      setup() {
+        return () =>
+          h(
+            TagGroup,
+            {
+              "aria-label": "tag group",
+              allowsRemoving: true,
+              onRemove,
+            },
+            {
+              default: () => [
+                h(Tag, { id: "one" }, () => "Tag 1"),
+                h(Tag, { id: "two", isDisabled: true }, () => "Tag 2"),
+                h(Tag, { id: "three" }, () => "Tag 3"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const tags = tree.getAllByRole("row");
+
+    expect(tags).toHaveLength(3);
+    expect(tags[1].getAttribute("aria-disabled")).toBe("true");
+
+    tags[2]?.focus();
+    await user.keyboard("{Backspace}");
+
+    expect(onRemove).toHaveBeenCalledTimes(1);
+    const removedSet = onRemove.mock.calls[0]?.[0] as Set<string>;
+    expect(Array.from(removedSet)).toEqual(["three"]);
   });
 });

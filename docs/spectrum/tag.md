@@ -50,5 +50,5 @@ const component = h(TagGroup, {
 
 ## Notes
 
-- Baseline includes keyboard roving focus, RTL/LTR arrow behavior, removable tags, and grid semantics (`grid` / `row` / `gridcell`).
+- Baseline includes keyboard roving focus, RTL/LTR arrow behavior, removable tags, grid semantics (`grid` / `row` / `gridcell`), and static slot composition support via `Tag`.
 - Full parity for advanced features (`maxRows`, action area, and field-label/validation integration) remains in progress.

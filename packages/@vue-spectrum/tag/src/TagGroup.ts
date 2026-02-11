@@ -1,9 +1,13 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { useLocale } from "@vue-aria/i18n";
@@ -48,6 +52,156 @@ function keyToString(key: TagKey | undefined): string | undefined {
   }
 
   return String(key);
+}
+
+function normalizeTagKey(value: unknown, fallback: TagKey): TagKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (isVNode(value)) {
+    if (typeof value.children === "string") {
+      return value.children;
+    }
+
+    if (Array.isArray(value.children)) {
+      return extractTextContent(value.children);
+    }
+
+    if (value.children && typeof value.children === "object") {
+      const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+        .default;
+      if (typeof maybeDefault === "function") {
+        return extractTextContent(maybeDefault());
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseTagSlotItems(nodes: VNode[] | undefined): SpectrumTagItemData[] {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+
+  const flattened = flattenVNodeChildren(nodes);
+  const parsedItems: SpectrumTagItemData[] = [];
+  let itemIndex = 0;
+
+  for (const node of flattened) {
+    if (getComponentName(node) !== "Tag") {
+      continue;
+    }
+
+    const nodeProps = (node.props ?? {}) as Record<string, unknown>;
+    const key = normalizeTagKey(node.key ?? nodeProps.id, `tag-${itemIndex + 1}`);
+    const slotLabel = extractTextContent(getSlotContent(node)).trim();
+
+    parsedItems.push({
+      key,
+      label: slotLabel || String(key),
+      "aria-label":
+        typeof nodeProps["aria-label"] === "string" ? nodeProps["aria-label"] : undefined,
+      isDisabled: Boolean(nodeProps.isDisabled),
+    });
+    itemIndex += 1;
+  }
+
+  return parsedItems;
+}
+
+function areTagItemsEqual(
+  left: SpectrumTagItemData[],
+  right: SpectrumTagItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.isDisabled !== candidate.isDisabled
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export const TagGroup = defineComponent({
@@ -119,17 +273,18 @@ export const TagGroup = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const locale = useLocale();
     const rootRef = ref<HTMLDivElement | null>(null);
     const rowRefs = new Map<string, HTMLDivElement>();
     const removedKeys = ref(new Set<string>());
     const focusedKey = ref<string | null>(null);
+    const slotItems = ref<SpectrumTagItemData[]>([]);
 
     const disabledKeys = computed(() => normalizeKeySet(props.disabledKeys));
 
     const items = computed(() => {
-      const source = props.items ?? [];
+      const source = props.items ?? slotItems.value;
       return source.filter((item) => !removedKeys.value.has(String(item.key)));
     });
 
@@ -204,6 +359,13 @@ export const TagGroup = defineComponent({
     };
 
     return () => {
+      if (!props.items) {
+        const parsedItems = parseTagSlotItems(slots.default?.() as VNode[] | undefined);
+        if (!areTagItemsEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const styleInput = {
         ...attrsRecord,

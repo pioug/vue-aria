@@ -30,7 +30,7 @@ This section tracks the Vue port of React Spectrum UI component packages.
 - `@vue-spectrum/button` (in progress): button primitives (`Button`, `ActionButton`, `ClearButton`, `FieldButton`, `LogicButton`, `ToggleButton`) with pending-state and expanded press lifecycle behavior
 - `@vue-spectrum/actionbar` (in progress): action-bar primitives (`ActionBar`, `ActionBarItem`, `ActionBarContainer`) with baseline selected-count rendering, clear-selection/action wiring, and static slot composition support
 - `@vue-spectrum/actiongroup` (in progress): action-group primitives (`ActionGroup`, `ActionGroupItem`) with baseline item rendering, selection state, keyboard roving behavior, and static slot composition support
-- `@vue-spectrum/tag` (in progress): tag primitives (`TagGroup`, `Tag`) with baseline grid semantics, roving focus, and removable-tag behavior
+- `@vue-spectrum/tag` (in progress): tag primitives (`TagGroup`, `Tag`) with baseline grid semantics, roving focus, removable-tag behavior, and static slot composition support
 - `@vue-spectrum/picker` (in progress): picker primitives (`Picker`, `PickerItem`, `PickerSection`) with baseline trigger/listbox interaction, keyboard navigation, controlled/uncontrolled selection behavior, and static slot composition support
 - `@vue-spectrum/menu` (in progress): menu primitives (`Menu`, `MenuSection`, `MenuItem`, `SubmenuTrigger`, `MenuTrigger`, `ActionMenu`) with baseline trigger/menu interaction, section-grouping support, submenu trigger behavior, ActionMenu aria/autofocus coverage, and selection behavior
 - `@vue-spectrum/list` (in progress): list primitives (`ListView`, `ListViewItem`) with baseline grid/list semantics, keyboard row navigation, and single/multiple selection behavior

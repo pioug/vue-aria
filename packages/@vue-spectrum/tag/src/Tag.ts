@@ -11,7 +11,8 @@ export interface SpectrumTagItemData {
 }
 
 export interface SpectrumTagProps {
-  item: SpectrumTagItemData;
+  item?: SpectrumTagItemData | undefined;
+  id?: TagKey | undefined;
   tabIndex?: number | undefined;
   isFocused?: boolean | undefined;
   isDisabled?: boolean | undefined;
@@ -28,7 +29,11 @@ export const Tag = defineComponent({
   props: {
     item: {
       type: Object as PropType<SpectrumTagItemData>,
-      required: true,
+      default: undefined,
+    },
+    id: {
+      type: [String, Number] as PropType<TagKey | undefined>,
+      default: undefined,
     },
     tabIndex: {
       type: Number as PropType<number | undefined>,
@@ -69,6 +74,10 @@ export const Tag = defineComponent({
   },
   setup(props) {
     return () => {
+      if (!props.item) {
+        return null;
+      }
+
       const disabled = Boolean(props.isDisabled || props.item.isDisabled);
       const removable = Boolean(props.allowsRemoving) && !disabled;
 
