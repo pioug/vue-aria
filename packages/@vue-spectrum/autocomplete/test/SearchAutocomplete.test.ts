@@ -270,6 +270,19 @@ describe("SearchAutocomplete", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("does not open on input when menuTrigger is manual", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      menuTrigger: "manual",
+    });
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.keyboard("T");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
   it("does not focus a disabled matching item on input", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
