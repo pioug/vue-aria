@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Form } from "@vue-spectrum/form";
 import {
@@ -479,5 +479,54 @@ describe("NumberField", () => {
     await nextTick();
     expect(tree.queryByText("Invalid value.")).toBeNull();
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  it("supports native server validation from form submission", async () => {
+    const App = defineComponent({
+      name: "NumberFieldNativeSubmitServerValidationHarness",
+      setup() {
+        const serverErrors = ref<Record<string, string | string[]>>({});
+
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: serverErrors.value,
+              onSubmit: (event: Event) => {
+                event.preventDefault();
+                serverErrors.value = {
+                  amount: "Invalid value.",
+                };
+              },
+            },
+            {
+              default: () => [
+                h(NumberField, {
+                  label: "Amount",
+                  name: "amount",
+                }),
+                h("button", { type: "submit", "data-testid": "submit" }, "Submit"),
+              ],
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+
+    await fireEvent.click(tree.getByTestId("submit"));
+    await nextTick();
+
+    expect(tree.getByText("Invalid value.")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await fireEvent.update(input, "4");
+    await nextTick();
+
+    expect(tree.queryByText("Invalid value.")).toBeNull();
+    expect(input.validity.valid).toBe(true);
   });
 });
