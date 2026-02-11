@@ -77,6 +77,7 @@ export {
   ListBoxSection,
   useListBoxLayout,
 } from "@vue-spectrum/listbox";
+export { TableView, Column, TableHeader, TableBody, Section, Row, Cell } from "@vue-spectrum/table";
 export { ButtonGroup } from "@vue-spectrum/buttongroup";
 export {
   Accordion,
@@ -243,6 +244,23 @@ export type {
   SpectrumListBoxBaseProps,
   SpectrumListBoxProps,
 } from "@vue-spectrum/listbox";
+export type {
+  TableKey,
+  SpectrumTableSelectionMode,
+  SpectrumTableSelectionStyle,
+  SpectrumSortDirection,
+  SpectrumSortDescriptor,
+  SpectrumTableColumnData,
+  SpectrumTableCellData,
+  SpectrumTableRowData,
+  SpectrumTableViewProps,
+  SpectrumColumnProps,
+  SpectrumTableHeaderProps,
+  SpectrumTableBodyProps,
+  SpectrumSectionProps,
+  SpectrumRowProps,
+  SpectrumCellProps,
+} from "@vue-spectrum/table";
 export type {
   ButtonGroupAlign,
   ButtonGroupOrientation,

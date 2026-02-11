@@ -80,6 +80,7 @@
       "@vue-spectrum/menu": ["packages/@vue-spectrum/menu/src/index.ts"],
       "@vue-spectrum/list": ["packages/@vue-spectrum/list/src/index.ts"],
       "@vue-spectrum/listbox": ["packages/@vue-spectrum/listbox/src/index.ts"],
+      "@vue-spectrum/table": ["packages/@vue-spectrum/table/src/index.ts"],
       "@vue-spectrum/buttongroup": ["packages/@vue-spectrum/buttongroup/src/index.ts"],
       "@vue-spectrum/accordion": ["packages/@vue-spectrum/accordion/src/index.ts"],
       "@vue-spectrum/checkbox": ["packages/@vue-spectrum/checkbox/src/index.ts"],
