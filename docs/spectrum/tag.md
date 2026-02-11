@@ -59,4 +59,5 @@ const component = h(TagGroup, {
 - Baseline includes data-attribute passthrough on tag items and link-style tags via `href`.
 - Baseline includes static-item `UNSAFE_className` passthrough on tag rows.
 - Baseline includes field semantics (`label`/`description`/`errorMessage`) and `Form.validationErrors` integration by field `name`.
+- Baseline removable-tag behavior includes keyboard (`Delete`/`Backspace`) and explicit remove-button click flows, while non-remove keys (for example Space) do not remove tags.
 - Advanced visual/theming parity remains in progress.

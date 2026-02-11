@@ -1,4 +1,4 @@
-import { render } from "@testing-library/vue";
+import { render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
@@ -176,6 +176,47 @@ describe("TagGroup", () => {
     expect(Array.from(removedSet)).toEqual(["2"]);
 
     expect(tree.getAllByRole("row")).toHaveLength(2);
+  });
+
+  it("does not remove a tag on Space key press", async () => {
+    const user = userEvent.setup();
+    const onRemove = vi.fn();
+
+    const tree = renderComponent({
+      allowsRemoving: true,
+      onRemove,
+    });
+
+    const tags = tree.getAllByRole("row");
+    (tags[0] as HTMLElement).focus();
+    await user.keyboard(" ");
+
+    expect(onRemove).not.toHaveBeenCalled();
+    expect(tree.getAllByRole("row")).toHaveLength(3);
+  });
+
+  it("removes only when clicking the remove button, not the tag row", async () => {
+    const user = userEvent.setup();
+    const onRemove = vi.fn();
+
+    const tree = renderComponent({
+      allowsRemoving: true,
+      onRemove,
+    });
+
+    let tags = tree.getAllByRole("row");
+    await user.click(tags[0] as Element);
+    expect(onRemove).not.toHaveBeenCalled();
+
+    const removeButton = within(tags[0] as HTMLElement).getByRole("button");
+    await user.click(removeButton);
+
+    expect(onRemove).toHaveBeenCalledTimes(1);
+    const removedSet = onRemove.mock.calls[0]?.[0] as Set<string>;
+    expect(Array.from(removedSet)).toEqual(["1"]);
+
+    tags = tree.getAllByRole("row");
+    expect(tags).toHaveLength(2);
   });
 
   it("moves focus to the next available tag after removal", async () => {
