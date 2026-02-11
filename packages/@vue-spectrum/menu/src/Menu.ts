@@ -1,10 +1,14 @@
 import {
+  Fragment,
   computed,
   defineComponent,
   h,
+  isVNode,
   nextTick,
   ref,
   watch,
+  type VNode,
+  type VNodeChild,
   type PropType,
 } from "vue";
 import { filterDOMProps } from "@vue-aria/utils";
@@ -38,6 +42,242 @@ interface NormalizedSpectrumMenuSection {
   ariaLabel?: string | undefined;
   items: SpectrumMenuItemData[];
   implicit: boolean;
+}
+
+function normalizeMenuKey(value: unknown, fallback: MenuKey): MenuKey {
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+
+  return fallback;
+}
+
+function getComponentName(node: VNode): string | undefined {
+  if (typeof node.type === "string") {
+    return node.type;
+  }
+
+  if (typeof node.type === "symbol") {
+    return undefined;
+  }
+
+  const componentType = node.type as { name?: string | undefined };
+  return componentType.name;
+}
+
+function flattenVNodeChildren(input: unknown): VNode[] {
+  if (input === null || input === undefined) {
+    return [];
+  }
+
+  if (Array.isArray(input)) {
+    return input.flatMap((entry) => flattenVNodeChildren(entry));
+  }
+
+  if (!isVNode(input)) {
+    return [];
+  }
+
+  if (input.type === Fragment) {
+    return flattenVNodeChildren(input.children);
+  }
+
+  return [input];
+}
+
+function getSlotChildren(node: VNode): VNode[] {
+  if (Array.isArray(node.children)) {
+    return flattenVNodeChildren(node.children);
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return flattenVNodeChildren(maybeDefault());
+    }
+  }
+
+  return [];
+}
+
+function getSlotContent(node: VNode): VNodeChild | undefined {
+  if (Array.isArray(node.children)) {
+    return node.children as VNodeChild;
+  }
+
+  if (node.children && typeof node.children === "object") {
+    const maybeDefault = (node.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return maybeDefault() as VNodeChild;
+    }
+  }
+
+  if (typeof node.children === "string") {
+    return node.children;
+  }
+
+  return undefined;
+}
+
+function extractTextContent(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => extractTextContent(entry)).join("");
+  }
+
+  if (!isVNode(value)) {
+    return "";
+  }
+
+  if (typeof value.children === "string") {
+    return value.children;
+  }
+
+  if (Array.isArray(value.children)) {
+    return extractTextContent(value.children);
+  }
+
+  if (value.children && typeof value.children === "object") {
+    const maybeDefault = (value.children as { default?: (() => unknown) | undefined })
+      .default;
+    if (typeof maybeDefault === "function") {
+      return extractTextContent(maybeDefault());
+    }
+  }
+
+  return "";
+}
+
+function parseMenuItemNode(node: VNode, fallback: MenuKey): SpectrumMenuItemData {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  const key = normalizeMenuKey(node.key ?? props.id, fallback);
+  const slotLabel = extractTextContent(getSlotContent(node)).trim();
+  const label = slotLabel || String(key);
+
+  return {
+    key,
+    label,
+    isDisabled: Boolean(props.isDisabled),
+    "aria-label":
+      typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+  };
+}
+
+function parseMenuSlotData(
+  nodes: VNode[] | undefined
+): {
+  items: SpectrumMenuItemData[];
+  sections: SpectrumMenuSectionData[];
+} {
+  if (!nodes || nodes.length === 0) {
+    return {
+      items: [],
+      sections: [],
+    };
+  }
+
+  const topLevel = flattenVNodeChildren(nodes);
+  const items: SpectrumMenuItemData[] = [];
+  const sections: SpectrumMenuSectionData[] = [];
+  let itemIndex = 0;
+  let sectionIndex = 0;
+
+  for (const node of topLevel) {
+    const componentName = getComponentName(node);
+    if (componentName === "MenuItem") {
+      items.push(parseMenuItemNode(node, `item-${itemIndex + 1}`));
+      itemIndex += 1;
+      continue;
+    }
+
+    if (componentName === "MenuSection") {
+      const sectionProps = (node.props ?? {}) as Record<string, unknown>;
+      const sectionNodes = getSlotChildren(node).filter(
+        (child) => getComponentName(child) === "MenuItem"
+      );
+      const sectionItems = sectionNodes.map((child) => {
+        const parsed = parseMenuItemNode(child, `item-${itemIndex + 1}`);
+        itemIndex += 1;
+        return parsed;
+      });
+
+      sections.push({
+        key: normalizeMenuKey(node.key ?? sectionProps.id, `section-${sectionIndex + 1}`),
+        heading:
+          typeof sectionProps.heading === "string" ? sectionProps.heading : undefined,
+        "aria-label":
+          typeof sectionProps["aria-label"] === "string"
+            ? sectionProps["aria-label"]
+            : typeof sectionProps.ariaLabel === "string"
+              ? sectionProps.ariaLabel
+              : undefined,
+        items: sectionItems,
+      });
+      sectionIndex += 1;
+    }
+  }
+
+  return {
+    items,
+    sections,
+  };
+}
+
+function areMenuItemsEqual(
+  left: SpectrumMenuItemData[],
+  right: SpectrumMenuItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current.isDisabled !== candidate.isDisabled ||
+      current["aria-label"] !== candidate["aria-label"]
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function areMenuSectionsEqual(
+  left: SpectrumMenuSectionData[],
+  right: SpectrumMenuSectionData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.heading !== candidate.heading ||
+      current["aria-label"] !== candidate["aria-label"] ||
+      !areMenuItemsEqual(current.items, candidate.items)
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export const MenuSection = defineComponent({
@@ -182,9 +422,11 @@ export const Menu = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, expose }) {
+  setup(props, { attrs, expose, slots }) {
     const rootRef = ref<HTMLUListElement | null>(null);
     const itemRefs = new Map<string, HTMLLIElement>();
+    const slotItems = ref<SpectrumMenuItemData[]>([]);
+    const slotSections = ref<SpectrumMenuSectionData[]>([]);
 
     const sections = computed<NormalizedSpectrumMenuSection[]>(() => {
       if (props.sections && props.sections.length > 0) {
@@ -197,10 +439,43 @@ export const Menu = defineComponent({
         }));
       }
 
+      if (props.items && props.items.length > 0) {
+        return [
+          {
+            key: "default",
+            items: props.items,
+            implicit: true,
+          },
+        ];
+      }
+
+      if (slotSections.value.length > 0) {
+        const normalizedSections = slotSections.value.map((section, index) => ({
+          key: String(section.key ?? `section-${index}`),
+          heading: section.heading,
+          ariaLabel: section["aria-label"],
+          items: section.items ?? [],
+          implicit: false,
+        }));
+
+        if (slotItems.value.length === 0) {
+          return normalizedSections;
+        }
+
+        return [
+          {
+            key: "default",
+            items: slotItems.value,
+            implicit: true,
+          },
+          ...normalizedSections,
+        ];
+      }
+
       return [
         {
           key: "default",
-          items: props.items ?? [],
+          items: slotItems.value,
           implicit: true,
         },
       ];
@@ -398,6 +673,26 @@ export const Menu = defineComponent({
       { immediate: true }
     );
 
+    watch(
+      () => props.items,
+      (value) => {
+        if (value !== undefined) {
+          slotItems.value = [];
+          slotSections.value = [];
+        }
+      }
+    );
+
+    watch(
+      () => props.sections,
+      (value) => {
+        if (value !== undefined) {
+          slotItems.value = [];
+          slotSections.value = [];
+        }
+      }
+    );
+
     expose({
       UNSAFE_getDOMNode: () => rootRef.value,
       focus: () => {
@@ -410,6 +705,16 @@ export const Menu = defineComponent({
     });
 
     return () => {
+      if (props.items === undefined && props.sections === undefined) {
+        const parsed = parseMenuSlotData(slots.default?.() as VNode[] | undefined);
+        if (!areMenuItemsEqual(parsed.items, slotItems.value)) {
+          slotItems.value = parsed.items;
+        }
+        if (!areMenuSectionsEqual(parsed.sections, slotSections.value)) {
+          slotSections.value = parsed.sections;
+        }
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const styleInput = {
         ...attrsRecord,

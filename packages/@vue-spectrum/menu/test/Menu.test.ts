@@ -1,5 +1,6 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   Item,
@@ -191,6 +192,56 @@ describe("Menu", () => {
     expect(menuItem.getAttribute("aria-label")).toBe("Notification");
     expect(menuItem.getAttribute("aria-labelledby")).toBeNull();
     expect(menuItem.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("supports static slot syntax with Item and Section", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "MenuSlotHarness",
+      setup() {
+        return () =>
+          h(
+            Menu,
+            {
+              "aria-label": "menu-slot-test",
+              onAction,
+            },
+            {
+              default: () => [
+                h(Item, { id: "alpha" }, () => "Alpha"),
+                h(
+                  Section,
+                  { id: "group-1", heading: "Group 1" },
+                  {
+                    default: () => [
+                      h(Item, { id: "beta", isDisabled: true }, () => "Beta"),
+                      h(Item, { id: "gamma" }, () => "Gamma"),
+                    ],
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const menu = tree.getByRole("menu", { name: "menu-slot-test" });
+    const groups = within(menu).getAllByRole("group");
+    const menuItems = within(menu).getAllByRole("menuitem");
+
+    expect(groups).toHaveLength(1);
+    expect(menuItems).toHaveLength(3);
+    expect(tree.getByText("Group 1")).toBeTruthy();
+    expect(menuItems[1]?.getAttribute("aria-disabled")).toBe("true");
+
+    await user.click(menuItems[0] as Element);
+    expect(onAction).toHaveBeenCalledWith("alpha");
+
+    await user.click(menuItems[1] as Element);
+    expect(onAction).toHaveBeenCalledTimes(1);
   });
 
   it("warns when no aria-label or aria-labelledby is provided", () => {

@@ -7,7 +7,8 @@ import type {
 } from "./types";
 
 export interface SpectrumMenuItemProps {
-  item: SpectrumMenuItemData;
+  item?: SpectrumMenuItemData | undefined;
+  id?: MenuKey | undefined;
   selectionMode?: SpectrumMenuSelectionMode | undefined;
   isSelected?: boolean | undefined;
   isFocused?: boolean | undefined;
@@ -23,8 +24,12 @@ export const MenuItem = defineComponent({
   name: "MenuItem",
   props: {
     item: {
-      type: Object as PropType<SpectrumMenuItemData>,
-      required: true,
+      type: Object as PropType<SpectrumMenuItemData | undefined>,
+      default: undefined,
+    },
+    id: {
+      type: [String, Number] as PropType<MenuKey | undefined>,
+      default: undefined,
     },
     selectionMode: {
       type: String as PropType<SpectrumMenuSelectionMode | undefined>,
@@ -63,7 +68,7 @@ export const MenuItem = defineComponent({
       default: undefined,
     },
   },
-  setup(props) {
+  setup(props, { slots }) {
     const role = computed(() => {
       if (props.selectionMode === "single") {
         return "menuitemradio";
@@ -77,7 +82,22 @@ export const MenuItem = defineComponent({
     });
 
     return () => {
-      const disabled = Boolean(props.isDisabled || props.item.isDisabled);
+      if (!props.item) {
+        return h(
+          "li",
+          {
+            role: "presentation",
+            class: classNames(
+              "spectrum-Menu-item",
+              props.UNSAFE_className as ClassValue | undefined
+            ),
+          },
+          slots.default?.()
+        );
+      }
+
+      const item = props.item;
+      const disabled = Boolean(props.isDisabled || item.isDisabled);
       const selected = Boolean(props.isSelected);
       const focused = Boolean(props.isFocused);
 
@@ -86,7 +106,7 @@ export const MenuItem = defineComponent({
         {
           role: role.value,
           tabIndex: props.tabIndex ?? -1,
-          "aria-label": props.item["aria-label"],
+          "aria-label": item["aria-label"],
           "aria-disabled": disabled ? "true" : undefined,
           "aria-checked":
             props.selectionMode === "none" ? undefined : String(selected),
@@ -109,7 +129,7 @@ export const MenuItem = defineComponent({
           },
           onClick: () => {
             if (!disabled) {
-              props.onAction?.(props.item.key);
+              props.onAction?.(item.key);
             }
           },
         },
@@ -119,7 +139,7 @@ export const MenuItem = defineComponent({
             {
               class: classNames("spectrum-Menu-itemLabel"),
             },
-            props.item.label
+            slots.default?.() ?? item.label
           ),
         ]
       );
