@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `54 / 76` completed.
+- Task progress: `55 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -53,6 +53,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/utils` now includes React Spectrum-style `classNames` CSS-module mapping plus compatibility toggles (`keepSpectrumClassNames`/`shouldKeepSpectrumClassNames`), slot utilities (`useSlotProps`, `SlotProvider`, `ClearSlots`), `getWrappedElement`, media/device helpers (`useMediaQuery`, `useIsMobileDevice`, `useHasChild`), breakpoint utilities (`BreakpointProvider`, `useMatchedBreakpoints`, `useBreakpoint`), DOM-ref helpers (`createDOMRef`, `useDOMRef`, `useFocusableRef`, unwrap helpers), style-prop conversion primitives (`convertStyleProps`/`useStyleProps`), and `@react-aria/utils` parity re-exports (`useValueEffect`, `useResizeObserver`); remaining utility surfaces stay in progress.
 - `@vue-spectrum/theme-default` baseline is now in progress with initial `theme` export wired to the provider class-map contract (`global`, `light`, `dark`, `medium`, `large`) plus starter integration tests/docs; full upstream token/CSS parity remains.
 - `@vue-spectrum/theme-light` baseline is now in progress with initial `theme` export wired to provider-compatible theme sections plus light/dark class-variant coverage (`lightest`/`darkest`) and starter integration tests/docs; full upstream token/CSS parity remains.
+- `@vue-spectrum/theme-dark` baseline is now in progress with initial `theme` export wired to provider-compatible theme sections plus dark-biased class-variant coverage (`dark`/`darkest`) and starter integration tests/docs; full upstream token/CSS parity remains.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
 - CI now runs `npm run test:spectrum-parity` on pull requests and pushes to `main`.
@@ -172,4 +173,4 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 1. Deepen `@vue-spectrum/provider` parity (`Provider` wrapper behavior, slot/context behavior, and SSR-focused coverage).
 2. Deepen `@vue-spectrum/icon` parity (slot behavior and class/style integration edge cases), then move it from baseline to complete.
 3. Begin support package track: `@vue-spectrum/style-macro-s1`, `@vue-spectrum/test-utils`, `@vue-spectrum/story-utils`, and `@vue-spectrum/s2`.
-4. Continue theme package track by porting `@vue-spectrum/theme-dark` next, then `@vue-spectrum/theme-express`.
+4. Continue theme package track by porting `@vue-spectrum/theme-express` next.
