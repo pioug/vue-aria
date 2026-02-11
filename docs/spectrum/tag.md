@@ -51,7 +51,7 @@ const component = h(TagGroup, {
 
 ## Notes
 
-- Baseline includes keyboard roving focus, RTL/LTR arrow behavior, removable tags (with post-remove focus handoff to the next tag or the grid when empty), grid semantics (`grid` / `row` / `gridcell`), and static slot composition support via `Tag`.
+- Baseline includes keyboard roving focus, RTL/LTR arrow behavior, tab entry/exit with remembered tag focus, removable tags (with post-remove focus handoff to the next tag or the grid when empty), grid semantics (`grid` / `row` / `gridcell`), and static slot composition support via `Tag`.
 - Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Baseline now includes `maxRows` collapse/expand behavior with built-in `Show all`/`Show less` controls.
 - Baseline also includes an action area via `actionLabel` + `onAction`.

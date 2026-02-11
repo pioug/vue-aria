@@ -76,6 +76,76 @@ describe("TagGroup", () => {
     expect(document.activeElement).toBe(tags[0]);
   });
 
+  it("is focusable with Tab and then tabs to the next control", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "TagGroupTabHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button", "aria-label": "Before" }, "Before"),
+            h(TagGroup, {
+              "aria-label": "tag group",
+              items,
+            }),
+            h("button", { type: "button", "aria-label": "After" }, "After"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const before = tree.getByRole("button", { name: "Before" });
+    const after = tree.getByRole("button", { name: "After" });
+    const tags = tree.getAllByRole("row");
+
+    (before as HTMLButtonElement).focus();
+    expect(document.activeElement).toBe(before);
+
+    await user.tab();
+    expect(document.activeElement).toBe(tags[0]);
+
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+  });
+
+  it("remembers the last focused tag when tabbing away and back", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "TagGroupRememberFocusHarness",
+      setup() {
+        return () =>
+          h("div", null, [
+            h("button", { type: "button", "aria-label": "Before" }, "Before"),
+            h(TagGroup, {
+              "aria-label": "tag group",
+              items,
+            }),
+            h("button", { type: "button", "aria-label": "After" }, "After"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const tags = tree.getAllByRole("row");
+    const before = tree.getByRole("button", { name: "Before" });
+    const after = tree.getByRole("button", { name: "After" });
+
+    (before as HTMLButtonElement).focus();
+    await user.tab();
+    expect(document.activeElement).toBe(tags[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(tags[1]);
+
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(tags[1]);
+  });
+
   it("skips disabled keys when navigating", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({ disabledKeys: ["2"] });
