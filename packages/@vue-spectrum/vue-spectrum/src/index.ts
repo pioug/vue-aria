@@ -39,6 +39,8 @@ export {
   SearchField as S2SearchField,
   SelectBox as S2SelectBox,
   SelectBoxGroup as S2SelectBoxGroup,
+  Slider as S2Slider,
+  Switch as S2Switch,
   ToggleButton as S2ToggleButton,
   ToggleButtonGroup as S2ToggleButtonGroup,
   pressScale,

@@ -12,6 +12,8 @@ export { DateField } from "./DateField";
 export { NumberField } from "./NumberField";
 export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
+export { Slider } from "./Slider";
+export { Switch } from "./Switch";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 
@@ -26,6 +28,7 @@ export type { ColorFieldSize, S2ColorFieldProps } from "./ColorField";
 export type { DateFieldSize, S2DateFieldProps } from "./DateField";
 export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
 export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
+export type { SliderSize, S2SliderProps } from "./Slider";
 export type {
   SelectBoxKey,
   SelectBoxGroupOrientation,
@@ -33,6 +36,7 @@ export type {
   S2SelectBoxGroupProps,
   S2SelectBoxProps,
 } from "./SelectBoxGroup";
+export type { S2SwitchProps, SwitchSize } from "./Switch";
 export type {
   ActionButtonGroupDensity,
   ActionButtonGroupSize,
