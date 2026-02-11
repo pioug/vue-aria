@@ -108,6 +108,7 @@ export interface SpectrumMenuTriggerProps
   triggerAriaLabelledby?: string | undefined;
   autoFocus?: boolean | undefined;
   placement?: Placement | undefined;
+  container?: HTMLElement | undefined;
 }
 
 export const MenuTrigger = defineComponent({
@@ -196,6 +197,10 @@ export const MenuTrigger = defineComponent({
     },
     placement: {
       type: String as PropType<Placement | undefined>,
+      default: undefined,
+    },
+    container: {
+      type: null as unknown as PropType<HTMLElement | undefined>,
       default: undefined,
     },
     ariaLabel: {
@@ -539,6 +544,7 @@ export const MenuTrigger = defineComponent({
               Overlay,
               {
                 isOpen: isOpen.value,
+                container: props.container,
               },
               {
                 default: () =>

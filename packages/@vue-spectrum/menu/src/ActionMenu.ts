@@ -111,6 +111,10 @@ export const ActionMenu = defineComponent({
       type: String as PropType<Placement | undefined>,
       default: undefined,
     },
+    container: {
+      type: null as unknown as PropType<HTMLElement | undefined>,
+      default: undefined,
+    },
     slot: {
       type: String as PropType<string | undefined>,
       default: undefined,

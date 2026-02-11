@@ -267,6 +267,24 @@ describe("MenuTrigger", () => {
     expect(popover?.style.zIndex).toBe("100000");
   });
 
+  it("renders the menu in the provided container", async () => {
+    const user = userEvent.setup();
+    const container = document.createElement("div");
+    container.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(container);
+
+    try {
+      const tree = renderComponent({ container });
+      const trigger = tree.getByRole("button", { name: "Menu Button" });
+      await user.click(trigger);
+
+      const menu = tree.getByRole("menu");
+      expect(menu.closest("[data-testid=\"custom-container\"]")).toBe(container);
+    } finally {
+      container.remove();
+    }
+  });
+
   it("labels the menu via trigger id when opened", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();

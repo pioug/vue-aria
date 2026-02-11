@@ -63,6 +63,7 @@ const component = h(MenuTrigger, {
 - Baseline includes trigger-anchored popover positioning support (`placement`) for `MenuTrigger` and `ActionMenu`.
 - Baseline `ActionMenu` parity includes default/custom trigger ARIA labeling (`More actions` fallback), `aria-labelledby` precedence wiring, trigger-id-to-menu `aria-labelledby` linkage, controlled/uncontrolled open-state behavior, disabled handling, and `autoFocus`.
 - Baseline includes `ContextualHelpTrigger` integration for static menu composition: unavailable items open contextual-help dialogs and suppress menu action callbacks while keeping regular item behavior when available.
+- Baseline includes custom overlay container targeting for `MenuTrigger`/`ActionMenu` via `container`.
 - Baseline contextual-help support includes click, hover, and `ArrowRight` opening for unavailable items, and closes when moving hover/focus to another menu item.
 - Baseline contextual-help support includes an unavailable indicator icon on unavailable contextual-help items.
 - Baseline submenu behavior includes Escape-key close without firing submenu `onClose` callbacks.
