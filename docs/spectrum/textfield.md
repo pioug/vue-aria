@@ -73,6 +73,7 @@ const area = h(TextArea, {
 - Native required/invalid messaging now follows `checkValidity` + blur lifecycle semantics (invalid message shown after invalid submit/check and cleared after a valid blur).
 - Native validation now supports function-style `errorMessage` customizers based on validation context (for example `valueMissing` checks).
 - Native mode now applies `Form.validationErrors` to browser custom validity so server errors participate in `input.validity` state.
+- Native server validation errors persist across repeated submits until the field value changes.
 - `TextArea` baseline includes multiline rendering, row configuration, and auto-resize behavior driven by textarea `scrollHeight` updates.
 - Placeholder deprecation warning parity from upstream `TextField` and `TextArea` is included.
 - Baseline icon, loading-indicator, validation-icon, and `excludeFromTabOrder` behavior parity is now included for both `TextField` and `TextArea`.

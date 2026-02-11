@@ -286,6 +286,11 @@ describe("TextField", () => {
     expect(input.getAttribute("aria-describedby")).toBeTruthy();
     expect(input.validity.valid).toBe(false);
 
+    await user.click(submit);
+    await nextTick();
+    expect(tree.getByText("Invalid name.")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
     await fireEvent.update(input, "Devon");
     await nextTick();
     expect(input.validity.valid).toBe(true);
