@@ -152,6 +152,7 @@ describe("Picker", () => {
 
     const progressbar = tree.getByRole("progressbar");
     expect(progressbar).toBeTruthy();
+    expect(progressbar.getAttribute("aria-label")).toBe("Loading…");
     const trigger = tree.getByRole("button", { name: "picker-test" });
     expect(trigger.getAttribute("aria-describedby")).toBe(progressbar.getAttribute("id"));
   });
@@ -302,7 +303,9 @@ describe("Picker", () => {
       fireEvent.scroll(listbox);
 
       expect(onLoadMore).not.toHaveBeenCalled();
-      expect(tree.getAllByRole("progressbar").length).toBeGreaterThan(0);
+      const progressbars = tree.getAllByRole("progressbar");
+      expect(progressbars.length).toBeGreaterThan(0);
+      expect(progressbars[0]?.getAttribute("aria-label")).toBe("Loading more…");
     } finally {
       scrollHeightSpy.mockRestore();
       clientHeightSpy.mockRestore();

@@ -52,7 +52,7 @@ const component = h(Picker, {
 - Baseline includes trigger + listbox behavior (open/close, keyboard navigation, selection callbacks, controlled/uncontrolled selection, and trigger-anchored popover placement), plus static slot composition via `PickerItem` and `PickerSection`.
 - Trigger autofocus baseline is included via `autoFocus`.
 - Mobile tray rendering is included when running on mobile screen widths.
-- Async loading baseline is included via `isLoading` spinner handling, `onLoadMore` scroll-threshold callbacks, and loading-progress `aria-describedby` wiring on the trigger.
+- Async loading baseline is included via `isLoading` spinner handling, `onLoadMore` scroll-threshold callbacks, loading-progress `aria-describedby` wiring on the trigger, and explicit loading labels (`Loading…`, `Loading more…`).
 - Basic form wiring is included via hidden-input submission/reset support (`name`, `form`, `defaultSelectedKey` reset behavior).
 - Basic validation semantics are included via `isRequired`, `isInvalid`, and `validationState` wiring to ARIA/class output.
 - Advanced parity work for full validation/deep form integration remains in progress.

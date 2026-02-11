@@ -835,7 +835,7 @@ export const Picker = defineComponent({
                     id: loadingIndicatorId.value,
                     isIndeterminate: true,
                     size: "S",
-                    "aria-label": "Loading",
+                    "aria-label": "Loading…",
                     UNSAFE_className: classNames("spectrum-Dropdown-progressCircle"),
                   })
                 : null,
@@ -989,7 +989,7 @@ export const Picker = defineComponent({
                                       h(ProgressCircle, {
                                         isIndeterminate: true,
                                         size: "S",
-                                        "aria-label": "Loading more",
+                                        "aria-label": "Loading more…",
                                         UNSAFE_className: classNames(
                                           "spectrum-Dropdown-progressCircle"
                                         ),
