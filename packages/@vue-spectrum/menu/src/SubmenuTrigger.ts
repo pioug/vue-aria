@@ -23,6 +23,8 @@ import type {
   SpectrumMenuSelectionMode,
 } from "./types";
 
+const SUBMENU_OPEN_EVENT = "v-spectrum-submenu-open";
+
 function getComponentName(node: VNode): string | undefined {
   if (typeof node.type === "string") {
     return node.type;
@@ -236,6 +238,14 @@ export const SubmenuTrigger = defineComponent({
       }
 
       props.onOpenChange?.(nextOpen);
+
+      if (nextOpen && typeof document !== "undefined") {
+        document.dispatchEvent(
+          new CustomEvent(SUBMENU_OPEN_EVENT, {
+            detail: { triggerId: triggerId.value },
+          })
+        );
+      }
     };
 
     const closeMenu = (restoreFocus = false, shouldNotify = true) => {
@@ -262,15 +272,33 @@ export const SubmenuTrigger = defineComponent({
       closeMenu();
     };
 
+    const onSiblingSubmenuOpen = (event: Event) => {
+      if (!isOpen.value) {
+        return;
+      }
+
+      const detail = (event as CustomEvent<{ triggerId?: string }>).detail;
+      if (detail?.triggerId === triggerId.value) {
+        return;
+      }
+
+      closeMenu();
+    };
+
     onMounted(() => {
       if (typeof document !== "undefined") {
         document.addEventListener("mousedown", onDocumentMouseDown, true);
+        document.addEventListener(SUBMENU_OPEN_EVENT, onSiblingSubmenuOpen as EventListener);
       }
     });
 
     onBeforeUnmount(() => {
       if (typeof document !== "undefined") {
         document.removeEventListener("mousedown", onDocumentMouseDown, true);
+        document.removeEventListener(
+          SUBMENU_OPEN_EVENT,
+          onSiblingSubmenuOpen as EventListener
+        );
       }
     });
 

@@ -18,6 +18,19 @@ function getSubmenuElement(tree: ReturnType<typeof render>) {
   return submenu as HTMLElement;
 }
 
+function getSubmenuElementForLabel(
+  tree: ReturnType<typeof render>,
+  label: string
+): HTMLElement | null {
+  const trigger = tree.getByRole("menuitem", { name: label });
+  const submenuId = trigger.getAttribute("aria-controls");
+  if (!submenuId) {
+    return null;
+  }
+
+  return tree.container.querySelector(`#${submenuId}`) as HTMLElement | null;
+}
+
 function renderComponent(props: Record<string, unknown> = {}) {
   const App = defineComponent({
     name: "SubmenuTriggerHarness",
@@ -169,5 +182,47 @@ describe("SubmenuTrigger", () => {
     expect(onAction).toHaveBeenCalledWith("delete");
     expect(menuOnAction).toHaveBeenCalledWith("delete");
     expect(tree.container.contains(submenu)).toBe(false);
+  });
+
+  it("keeps only one sibling submenu open at a time", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "SubmenuTriggerSiblingsHarness",
+      setup() {
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(SubmenuTrigger, {
+                label: "More A",
+                items,
+              }),
+              h(SubmenuTrigger, {
+                label: "More B",
+                items,
+              }),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    const triggerA = tree.getByRole("menuitem", { name: "More A" });
+    const triggerB = tree.getByRole("menuitem", { name: "More B" });
+
+    await user.click(triggerA);
+    const submenuA = getSubmenuElementForLabel(tree, "More A");
+    expect(submenuA).not.toBeNull();
+
+    await user.click(triggerB);
+    const submenuB = getSubmenuElementForLabel(tree, "More B");
+
+    expect(submenuB).not.toBeNull();
+    expect(submenuA && tree.container.contains(submenuA)).toBe(false);
   });
 });
