@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Dialog, DialogTrigger } from "../src";
@@ -601,6 +602,65 @@ describe("DialogTrigger", () => {
       expect(warnMock).toHaveBeenCalledWith(
         "A DialogTrigger unmounted while open. This is likely due to being placed within a trigger that unmounts or inside a conditional. Consider using a DialogContainer instead."
       );
+    }
+  });
+
+  it("keeps inputs inside nested popovers interactive", async () => {
+    const user = userEvent.setup();
+    const NestedHarness = defineComponent({
+      name: "NestedDialogTriggerHarness",
+      setup() {
+        return () =>
+          h(DialogTrigger, { type: "popover" }, {
+            default: () => [
+              h("button", { type: "button" }, "Outer trigger"),
+              h(Dialog, null, () => [
+                h("p", null, "Outer content"),
+                h(DialogTrigger, { type: "popover" }, {
+                  default: () => [
+                    h("button", { type: "button" }, "Inner trigger"),
+                    h(Dialog, null, () =>
+                      h("input", {
+                        type: "text",
+                        "aria-label": "inner input",
+                      })
+                    ),
+                  ],
+                }),
+              ]),
+            ],
+          });
+      },
+    });
+
+    const wrapper = mount(NestedHarness, {
+      attachTo: document.body,
+    });
+
+    try {
+      await user.click(wrapper.get("button").element as HTMLElement);
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"popover\"]")).not.toBeNull();
+
+      const innerTrigger = Array.from(document.body.querySelectorAll("button")).find(
+        (button) => button.textContent?.trim() === "Inner trigger"
+      ) as HTMLButtonElement | undefined;
+      expect(innerTrigger).toBeTruthy();
+
+      await user.click(innerTrigger as HTMLElement);
+      await flushOverlay();
+
+      const innerInput = document.body.querySelector(
+        "input[aria-label=\"inner input\"]"
+      ) as HTMLInputElement | null;
+      expect(innerInput).not.toBeNull();
+
+      await user.click(innerInput as HTMLElement);
+      await flushOverlay();
+
+      expect(document.activeElement).toBe(innerInput);
+    } finally {
+      wrapper.unmount();
     }
   });
 });

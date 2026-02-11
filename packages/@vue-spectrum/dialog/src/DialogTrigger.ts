@@ -268,6 +268,13 @@ export const DialogTrigger = defineComponent({
         return;
       }
 
+      if (target instanceof HTMLElement) {
+        const nestedOverlay = target.closest(".spectrum-DialogOverlay");
+        if (nestedOverlay && nestedOverlay !== overlayRootRef.value) {
+          return;
+        }
+      }
+
       setOpen(false);
     };
 
