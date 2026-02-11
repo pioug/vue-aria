@@ -1,7 +1,8 @@
 import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { h } from "vue";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { SlotProvider } from "@vue-spectrum/utils";
 import { SearchField } from "../src";
 
 const inputText = "blah";
@@ -16,6 +17,46 @@ function renderComponent(props: Record<string, unknown> = {}) {
 }
 
 describe("SearchField", () => {
+  it("supports searchfield slot props overrides", () => {
+    const App = defineComponent({
+      name: "SearchFieldSlotApp",
+      setup() {
+        return () =>
+          h(
+            SlotProvider,
+            {
+              slots: {
+                searchfield: {
+                  ariaLabel: "Slot search",
+                  isDisabled: true,
+                  UNSAFE_className: "slot-search",
+                },
+              },
+            },
+            {
+              default: () =>
+                h(SearchField, {
+                  "aria-label": "Local search",
+                  isDisabled: false,
+                  UNSAFE_className: "local-search",
+                }),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("searchbox") as HTMLInputElement;
+    expect(input.getAttribute("aria-label")).toBe("Slot search");
+    expect(input.disabled).toBe(true);
+
+    const wrapper =
+      tree.container.querySelector(".spectrum-Textfield-wrapper");
+    expect(wrapper).toBeTruthy();
+    expect(wrapper?.className).toContain("slot-search");
+    expect(wrapper?.className).toContain("local-search");
+  });
+
   it("warns once when placeholder is provided", async () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tree = renderComponent({

@@ -8,7 +8,11 @@ import {
   type SpectrumTextFieldValidationBehavior,
   type SpectrumTextFieldValidationState,
 } from "@vue-spectrum/textfield";
-import { classNames, type ClassValue } from "@vue-spectrum/utils";
+import {
+  classNames,
+  useSlotProps,
+  type ClassValue,
+} from "@vue-spectrum/utils";
 import {
   searchFieldPropOptions,
   type SpectrumSearchFieldProps,
@@ -25,7 +29,15 @@ export const SearchField = defineComponent({
   },
   setup(props, { attrs }) {
     const attrsRecord = attrs as Record<string, unknown>;
-    const propsRecord = props as unknown as Record<string, unknown>;
+    const slottedProps = computed(() =>
+      useSlotProps(
+        props as unknown as SpectrumSearchFieldProps & Record<string, unknown>,
+        "searchfield"
+      )
+    );
+    const propsRecord = computed(
+      () => slottedProps.value as unknown as Record<string, unknown>
+    );
     const provider = useProviderContext();
     const inputRef = ref<HTMLInputElement | null>(null);
     const hasWarnedPlaceholder = ref(false);
@@ -33,7 +45,7 @@ export const SearchField = defineComponent({
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
 
     watch(
-      () => props.placeholder,
+      () => propsRecord.value.placeholder as string | undefined,
       (placeholder) => {
         if (isProduction || hasWarnedPlaceholder.value || !placeholder) {
           return;
@@ -53,7 +65,7 @@ export const SearchField = defineComponent({
         const candidateKeys = [kebabCase, ...camelCaseAlternatives];
 
         for (const key of candidateKeys) {
-          const value = propsRecord[key] ?? attrsRecord[key];
+          const value = propsRecord.value[key] ?? attrsRecord[key];
           if (typeof value === "string") {
             return value;
           }
@@ -76,24 +88,45 @@ export const SearchField = defineComponent({
 
     const resolvedFormProps = computed(() =>
       useFormProps({
-        labelPosition: props.labelPosition,
-        labelAlign: props.labelAlign,
-        necessityIndicator: props.necessityIndicator,
-        validationBehavior: props.validationBehavior,
+        labelPosition: propsRecord.value.labelPosition as
+          | SpectrumSearchFieldProps["labelPosition"]
+          | undefined,
+        labelAlign: propsRecord.value.labelAlign as
+          | SpectrumSearchFieldProps["labelAlign"]
+          | undefined,
+        necessityIndicator: propsRecord.value.necessityIndicator as
+          | SpectrumSearchFieldProps["necessityIndicator"]
+          | undefined,
+        validationBehavior: propsRecord.value.validationBehavior as
+          | SpectrumSearchFieldProps["validationBehavior"]
+          | undefined,
       })
     );
 
     const isDisabled = computed(
-      () => props.isDisabled ?? provider?.value.isDisabled ?? false
+      () =>
+        (propsRecord.value.isDisabled as boolean | undefined) ??
+        provider?.value.isDisabled ??
+        false
     );
     const isReadOnly = computed(
-      () => props.isReadOnly ?? provider?.value.isReadOnly ?? false
+      () =>
+        (propsRecord.value.isReadOnly as boolean | undefined) ??
+        provider?.value.isReadOnly ??
+        false
     );
     const isRequired = computed(
-      () => props.isRequired ?? provider?.value.isRequired ?? false
+      () =>
+        (propsRecord.value.isRequired as boolean | undefined) ??
+        provider?.value.isRequired ??
+        false
     );
     const validationState = computed(() => {
-      const value = props.validationState ?? provider?.value.validationState;
+      const value =
+        (propsRecord.value.validationState as
+          | SpectrumSearchFieldProps["validationState"]
+          | undefined) ??
+        provider?.value.validationState;
       if (value === "valid" || value === "invalid") {
         return value;
       }
@@ -102,54 +135,96 @@ export const SearchField = defineComponent({
     });
     const validationBehavior = computed<SpectrumTextFieldValidationBehavior>(
       () =>
-        props.validationBehavior ??
+        (propsRecord.value.validationBehavior as
+          | SpectrumTextFieldValidationBehavior
+          | undefined) ??
         (resolvedFormProps.value.validationBehavior as
           | SpectrumTextFieldValidationBehavior
           | undefined) ??
         "aria"
     );
+    const hasControlledValue = computed(
+      () => propsRecord.value.value !== undefined
+    );
 
     const searchField = useSearchField({
-      id: computed(() => props.id),
-      label: computed(() => props.label),
-      description: computed(() => props.description),
-      errorMessage: computed(() => props.errorMessage),
-      isInvalid:
-        props.isInvalid !== undefined
-          ? computed(() => props.isInvalid)
-          : undefined,
+      id: computed(() => propsRecord.value.id as string | undefined),
+      label: computed(() => propsRecord.value.label as string | undefined),
+      description: computed(
+        () => propsRecord.value.description as string | undefined
+      ),
+      errorMessage: computed(
+        () => propsRecord.value.errorMessage as string | undefined
+      ),
+      isInvalid: computed(
+        () => propsRecord.value.isInvalid as boolean | undefined
+      ),
       validationState,
       validationBehavior,
       isDisabled,
       isReadOnly,
       isRequired,
-      value: props.value !== undefined ? computed(() => props.value) : undefined,
-      defaultValue: props.defaultValue,
-      name: computed(() => props.name),
-      form: computed(() => props.form),
-      placeholder: computed(() => props.placeholder),
-      autoFocus: computed(() => props.autoFocus),
-      autoComplete: computed(() => props.autoComplete),
-      autoCapitalize: computed(() => props.autoCapitalize),
-      inputMode: computed(() => props.inputMode),
-      autoCorrect: computed(() => props.autoCorrect),
-      spellCheck: computed(() => props.spellCheck),
-      enterKeyHint: computed(() => props.enterKeyHint),
-      maxLength: computed(() => props.maxLength),
-      minLength: computed(() => props.minLength),
+      value: hasControlledValue.value
+        ? computed(() => propsRecord.value.value as string | undefined)
+        : undefined,
+      defaultValue: computed(
+        () => propsRecord.value.defaultValue as string | undefined
+      ),
+      name: computed(() => propsRecord.value.name as string | undefined),
+      form: computed(() => propsRecord.value.form as string | undefined),
+      placeholder: computed(
+        () => propsRecord.value.placeholder as string | undefined
+      ),
+      autoFocus: computed(
+        () => propsRecord.value.autoFocus as boolean | undefined
+      ),
+      autoComplete: computed(
+        () => propsRecord.value.autoComplete as string | undefined
+      ),
+      autoCapitalize: computed(
+        () => propsRecord.value.autoCapitalize as string | undefined
+      ),
+      inputMode: computed(
+        () => propsRecord.value.inputMode as string | undefined
+      ),
+      autoCorrect: computed(
+        () => propsRecord.value.autoCorrect as string | undefined
+      ),
+      spellCheck: computed(
+        () => propsRecord.value.spellCheck as boolean | undefined
+      ),
+      enterKeyHint: computed(
+        () => propsRecord.value.enterKeyHint as string | undefined
+      ),
+      maxLength: computed(
+        () => propsRecord.value.maxLength as number | undefined
+      ),
+      minLength: computed(
+        () => propsRecord.value.minLength as number | undefined
+      ),
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
       "aria-errormessage": ariaErrorMessage,
-      onInput: props.onInput,
-      onChange: props.onChange,
-      onFocus: props.onFocus,
-      onBlur: props.onBlur,
-      onKeydown: (propsRecord.onKeydown ?? attrsRecord.onKeydown) as
+      onInput: propsRecord.value.onInput as
+        | ((value: string) => void)
+        | undefined,
+      onChange: propsRecord.value.onChange as
+        | ((value: string) => void)
+        | undefined,
+      onFocus: propsRecord.value.onFocus as
+        | ((event: FocusEvent) => void)
+        | undefined,
+      onBlur: propsRecord.value.onBlur as
+        | ((event: FocusEvent) => void)
+        | undefined,
+      onKeydown: (propsRecord.value.onKeydown ?? attrsRecord.onKeydown) as
         | ((event: KeyboardEvent) => void)
         | undefined,
-      onSubmit: props.onSubmit,
-      onClear: props.onClear,
+      onSubmit: propsRecord.value.onSubmit as
+        | ((value: string) => void)
+        | undefined,
+      onClear: propsRecord.value.onClear as (() => void) | undefined,
       inputRef,
     });
 
@@ -158,12 +233,13 @@ export const SearchField = defineComponent({
     );
 
     const resolvedIcon = computed(() => {
-      if (props.icon === "" || props.icon === null) {
+      const icon = propsRecord.value.icon as SpectrumSearchFieldProps["icon"];
+      if (icon === "" || icon === null) {
         return undefined;
       }
 
-      if (props.icon !== undefined) {
-        return props.icon;
+      if (icon !== undefined) {
+        return icon;
       }
 
       return h("span", {
@@ -177,7 +253,7 @@ export const SearchField = defineComponent({
         ...searchField.inputProps.value,
       };
 
-      if (props.excludeFromTabOrder) {
+      if (propsRecord.value.excludeFromTabOrder) {
         baseProps.tabIndex = -1;
       }
 
@@ -219,7 +295,7 @@ export const SearchField = defineComponent({
 
       return h(TextFieldBase as any, {
         ...(attrsRecord as Record<string, unknown>),
-        ...props,
+        ...slottedProps.value,
         isDisabled: isDisabled.value,
         isInvalid: searchField.isInvalid.value,
         validationState: resolvedValidationState.value,
@@ -236,13 +312,13 @@ export const SearchField = defineComponent({
           "spectrum-Textfield",
           {
             "is-disabled": isDisabled.value,
-            "is-quiet": Boolean(props.isQuiet),
+            "is-quiet": Boolean(propsRecord.value.isQuiet),
             "spectrum-Search--invalid":
               resolvedValidationState.value === "invalid" && !isDisabled.value,
             "spectrum-Search--valid":
               resolvedValidationState.value === "valid" && !isDisabled.value,
           },
-          props.UNSAFE_className as ClassValue | undefined
+          propsRecord.value.UNSAFE_className as ClassValue | undefined
         ),
       } as Record<string, unknown>);
     };
