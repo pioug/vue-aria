@@ -246,6 +246,25 @@ describe("NumberField", () => {
     expect(input.value).toBe("7");
   });
 
+  it("does not emit onChange when only a minus sign is typed then blurred from empty", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.value).toBe("");
+
+    await user.click(input);
+    await user.keyboard("-");
+    expect(input.value).toBe("-");
+
+    await fireEvent.blur(input);
+    expect(input.value).toBe("");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("renders hidden input when name is provided", () => {
     const tree = renderNumberField({
       name: "quantity",

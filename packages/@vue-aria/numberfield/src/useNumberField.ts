@@ -175,10 +175,14 @@ export function useNumberField(
 
   const commitNumberValue = (value: number | undefined) => {
     const normalized = normalizeNumber(value);
+    const previousValue = currentNumberValue.value;
     if (options.value === undefined) {
       uncontrolledNumberValue.value = normalized;
     }
-    options.onChange?.(normalized);
+
+    if (!Object.is(previousValue, normalized)) {
+      options.onChange?.(normalized);
+    }
   };
 
   const commit = (rawValue?: string) => {
