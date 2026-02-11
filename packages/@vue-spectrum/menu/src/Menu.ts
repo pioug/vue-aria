@@ -988,6 +988,10 @@ export const Menu = defineComponent({
                   props.onClose?.("escape");
                 }
                 break;
+              case "Tab":
+                event.preventDefault();
+                setFocusedKey(focusedKey.value ?? enabledKeys.value[0] ?? null);
+                break;
               default:
                 break;
             }

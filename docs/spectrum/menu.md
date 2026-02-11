@@ -55,7 +55,7 @@ const component = h(MenuTrigger, {
 
 ## Notes
 
-- Baseline includes menu and trigger behavior with keyboard navigation, selection modes (`none`/`single`/`multiple`), section grouping support (`sections` + `MenuSection`), submenu trigger behavior (`SubmenuTrigger`), and close-on-select behavior for pointer and keyboard item activation flows.
+- Baseline includes menu and trigger behavior with keyboard navigation, selection modes (`none`/`single`/`multiple`), section grouping support (`sections` + `MenuSection`), submenu trigger behavior (`SubmenuTrigger`), close-on-select behavior for pointer and keyboard item activation flows, and tab-key focus retention while open.
 - Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style menu composition, including static slot syntax.
 - `MenuTrigger` baseline supports both prop-driven usage and upstream-style static composition (`trigger + Menu` children).
 - `SubmenuTrigger` baseline supports both prop-driven usage and upstream-style static composition (`trigger + Menu` children).

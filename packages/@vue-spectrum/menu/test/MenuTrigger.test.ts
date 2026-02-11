@@ -409,4 +409,20 @@ describe("MenuTrigger", () => {
     await flushOverlay();
     expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
   });
+
+  it("does not close when tabbing away from the menu", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+
+    const trigger = tree.getByRole("button", { name: "Menu Button" });
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    const menuItems = within(menu).getAllByRole("menuitem");
+
+    await user.tab();
+
+    expect(tree.getByRole("menu")).toBeTruthy();
+    expect(document.activeElement).toBe(menuItems[0]);
+  });
 });
