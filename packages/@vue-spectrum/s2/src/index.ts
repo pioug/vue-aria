@@ -7,6 +7,7 @@ export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
 export { CloseButton } from "./CloseButton";
+export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 
@@ -17,6 +18,13 @@ export type {
   S2ActionButtonProps,
 } from "./ActionButton";
 export type { S2CloseButtonProps } from "./CloseButton";
+export type {
+  SelectBoxKey,
+  SelectBoxGroupOrientation,
+  SelectBoxGroupSelectionMode,
+  S2SelectBoxGroupProps,
+  S2SelectBoxProps,
+} from "./SelectBoxGroup";
 export type {
   ActionButtonGroupDensity,
   ActionButtonGroupSize,

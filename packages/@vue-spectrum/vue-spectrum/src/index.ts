@@ -33,6 +33,8 @@ export {
   ActionButtonGroup as S2ActionButtonGroup,
   ButtonGroup as S2ButtonGroup,
   CloseButton as S2CloseButton,
+  SelectBox as S2SelectBox,
+  SelectBoxGroup as S2SelectBoxGroup,
   ToggleButton as S2ToggleButton,
   ToggleButtonGroup as S2ToggleButtonGroup,
   pressScale,
