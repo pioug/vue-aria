@@ -49,6 +49,7 @@ interface SelectBoxGroupContextValue {
   isSelected: (key: SelectBoxKey) => boolean;
   isOptionDisabled: (optionDisabled: boolean | undefined) => boolean;
   toggleSelection: (key: SelectBoxKey, optionDisabled: boolean | undefined) => void;
+  resolveKey: (key: string) => SelectBoxKey;
   registerKey: (key: SelectBoxKey) => void;
   unregisterKey: (key: SelectBoxKey) => void;
 }
@@ -81,6 +82,67 @@ function setsEqual(first: Set<string>, second: Set<string>): boolean {
   }
 
   return true;
+}
+
+function getEnabledSelectBoxElements(
+  currentTarget: HTMLElement,
+  orientation: SelectBoxGroupOrientation
+): HTMLElement[] {
+  const selector =
+    orientation === "horizontal" ? ".s2-SelectBox--horizontal" : ".s2-SelectBox--vertical";
+  const group = currentTarget.closest(".s2-SelectBoxGroup");
+  if (!group) {
+    return [];
+  }
+
+  return Array.from(group.querySelectorAll<HTMLElement>(selector)).filter(
+    (element) => element.getAttribute("aria-disabled") !== "true"
+  );
+}
+
+function getNextFocusIndex(
+  event: KeyboardEvent,
+  currentIndex: number,
+  elementCount: number,
+  orientation: SelectBoxGroupOrientation,
+  isRtl: boolean
+): number | null {
+  if (elementCount === 0) {
+    return null;
+  }
+
+  if (event.key === "Home") {
+    return 0;
+  }
+
+  if (event.key === "End") {
+    return elementCount - 1;
+  }
+
+  const backward = (currentIndex - 1 + elementCount) % elementCount;
+  const forward = (currentIndex + 1) % elementCount;
+
+  if (orientation === "vertical") {
+    if (event.key === "ArrowUp") {
+      return backward;
+    }
+
+    if (event.key === "ArrowDown") {
+      return forward;
+    }
+
+    return null;
+  }
+
+  if (event.key === "ArrowLeft") {
+    return isRtl ? forward : backward;
+  }
+
+  if (event.key === "ArrowRight") {
+    return isRtl ? backward : forward;
+  }
+
+  return null;
 }
 
 export const SelectBox = defineComponent({
@@ -198,12 +260,56 @@ export const SelectBox = defineComponent({
               return;
             }
 
-            if (event.key !== " " && event.key !== "Enter") {
+            if (
+              event.key === " " ||
+              event.key === "Space" ||
+              event.key === "Spacebar" ||
+              event.key === "Enter"
+            ) {
+              event.preventDefault();
+              activate();
+              return;
+            }
+
+            const currentTarget = event.currentTarget as HTMLElement | null;
+            if (!currentTarget) {
+              return;
+            }
+
+            const options = getEnabledSelectBoxElements(
+              currentTarget,
+              orientation.value
+            );
+            const currentIndex = options.indexOf(currentTarget);
+            if (currentIndex < 0) {
+              return;
+            }
+
+            const isRtl =
+              currentTarget.closest('[dir="rtl"]') !== null ||
+              currentTarget.ownerDocument?.documentElement?.getAttribute("dir") ===
+                "rtl";
+            const nextIndex = getNextFocusIndex(
+              event,
+              currentIndex,
+              options.length,
+              orientation.value,
+              isRtl
+            );
+            if (nextIndex === null) {
               return;
             }
 
             event.preventDefault();
-            activate();
+            const target = options[nextIndex];
+            target?.focus();
+
+            if (selectionMode.value === "single" && context) {
+              const targetKey = target?.getAttribute("data-s2-key");
+              if (targetKey) {
+                context.toggleSelection(context.resolveKey(targetKey), false);
+              }
+            }
           },
         },
         [
@@ -352,6 +458,7 @@ export const SelectBoxGroup = defineComponent({
 
         emitSelection(next);
       },
+      resolveKey: (key) => keyMap.get(key) ?? key,
       registerKey: (key) => {
         keyMap.set(keyToString(key), key);
       },
