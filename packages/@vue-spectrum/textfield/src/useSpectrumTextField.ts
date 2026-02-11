@@ -1,4 +1,4 @@
-import { computed, ref, watch, type Ref } from "vue";
+import { computed, ref, watch, watchEffect, type Ref } from "vue";
 import { useTextField } from "@vue-aria/textfield";
 import { useFormProps, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
@@ -250,6 +250,23 @@ export function useSpectrumTextField(
     }
 
     return mergedProps;
+  });
+
+  watchEffect(() => {
+    const inputElement = options.inputRef?.value;
+    if (!inputElement) {
+      return;
+    }
+
+    if (
+      validationBehavior.value === "native" &&
+      typeof props.validate === "function"
+    ) {
+      inputElement.setCustomValidity(validationErrorMessage.value ?? "");
+      return;
+    }
+
+    inputElement.setCustomValidity("");
   });
 
   return {

@@ -462,6 +462,27 @@ describe("TextField", () => {
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
     expect(tree.queryByText("Invalid name")).toBeNull();
   });
+
+  it("supports validate function in native behavior", async () => {
+    const tree = render(TextField, {
+      props: {
+        label: "Name",
+        defaultValue: "Foo",
+        validationBehavior: "native",
+        validate: (value: string) => (value === "Foo" ? "Invalid name" : null),
+      },
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.validity.valid).toBe(false);
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+
+    expect(input.validity.valid).toBe(true);
+    expect(tree.queryByText("Invalid name")).toBeNull();
+  });
 });
 
 describe("TextArea", () => {
@@ -745,6 +766,27 @@ describe("TextArea", () => {
     await nextTick();
 
     expect(input.getAttribute("aria-invalid")).not.toBe("true");
+    expect(tree.queryByText("Invalid name")).toBeNull();
+  });
+
+  it("supports validate function in native behavior", async () => {
+    const tree = render(TextArea, {
+      props: {
+        label: "Notes",
+        defaultValue: "Foo",
+        validationBehavior: "native",
+        validate: (value: string) => (value === "Foo" ? "Invalid name" : null),
+      },
+    });
+
+    const input = tree.getByRole("textbox") as HTMLTextAreaElement;
+    expect(input.validity.valid).toBe(false);
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+
+    await fireEvent.update(input, "Devon");
+    await nextTick();
+
+    expect(input.validity.valid).toBe(true);
     expect(tree.queryByText("Invalid name")).toBeNull();
   });
 });
