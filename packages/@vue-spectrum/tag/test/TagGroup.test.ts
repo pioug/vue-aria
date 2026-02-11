@@ -165,6 +165,33 @@ describe("TagGroup", () => {
     expect(tree.getByText("No tags available")).toBeTruthy();
   });
 
+  it("supports custom empty state rendering", () => {
+    const tree = render(TagGroup, {
+      props: {
+        items: [],
+        "aria-label": "tag group",
+        renderEmptyState: () => h("span", null, "No tags. Click to add."),
+      },
+    });
+
+    expect(tree.getByText("No tags. Click to add.")).toBeTruthy();
+  });
+
+  it("allows tabbing to focusable content in a custom empty state", async () => {
+    const user = userEvent.setup();
+    const tree = render(TagGroup, {
+      props: {
+        items: [],
+        "aria-label": "tag group",
+        renderEmptyState: () => h("a", { href: "#empty-link" }, "Empty link"),
+      },
+    });
+
+    const link = tree.getByRole("link", { name: "Empty link" });
+    await user.tab();
+    expect(document.activeElement).toBe(link);
+  });
+
   it("supports static slot syntax with Tag", async () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();

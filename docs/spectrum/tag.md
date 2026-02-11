@@ -55,4 +55,5 @@ const component = h(TagGroup, {
 - Package also exports upstream-compatible `Item` alias for React Spectrum-style composition.
 - Baseline now includes `maxRows` collapse/expand behavior with built-in `Show all`/`Show less` controls.
 - Baseline also includes an action area via `actionLabel` + `onAction`.
+- Baseline includes custom empty-state rendering via `renderEmptyState`.
 - Field-label and validation integration parity remains in progress.

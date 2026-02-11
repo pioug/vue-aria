@@ -42,6 +42,7 @@ export interface SpectrumTagGroupProps {
   "aria-label"?: string | undefined;
   "aria-labelledby"?: string | undefined;
   emptyStateLabel?: string | undefined;
+  renderEmptyState?: (() => VNodeChild) | undefined;
   removeButtonLabel?: string | undefined;
   slot?: string | undefined;
   UNSAFE_className?: string | undefined;
@@ -276,6 +277,10 @@ export const TagGroup = defineComponent({
     },
     emptyStateLabel: {
       type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    renderEmptyState: {
+      type: Function as PropType<(() => VNodeChild) | undefined>,
       default: undefined,
     },
     removeButtonLabel: {
@@ -523,6 +528,13 @@ export const TagGroup = defineComponent({
       const showAllLabel = `Show all (${items.value.length})`;
       const showLessLabel = "Show less";
       const showActions = hasOverflowFromMaxRows || Boolean(props.actionLabel);
+      const emptyStateContent = props.renderEmptyState
+        ? props.renderEmptyState()
+        : props.emptyStateLabel ?? "No tags";
+      const normalizedEmptyStateContent =
+        emptyStateContent === null || emptyStateContent === undefined
+          ? ""
+          : emptyStateContent;
 
       return h(
         "div",
@@ -555,7 +567,7 @@ export const TagGroup = defineComponent({
                 gridRef.value = value as HTMLDivElement | null;
               },
               role: "grid",
-              tabIndex: visibleItems.length === 0 ? 0 : -1,
+              tabIndex: -1,
               class: classNames("spectrum-Tags"),
               "aria-label": ariaLabel,
               "aria-labelledby": ariaLabelledby,
@@ -567,7 +579,7 @@ export const TagGroup = defineComponent({
                     {
                       class: classNames("spectrum-Tags-empty-state"),
                     },
-                    props.emptyStateLabel ?? "No tags"
+                    normalizedEmptyStateContent
                   ),
                 ]
               : visibleItems.map((item) => {
