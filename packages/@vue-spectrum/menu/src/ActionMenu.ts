@@ -1,4 +1,5 @@
 import { defineComponent, h, type PropType } from "vue";
+import type { Placement } from "@vue-aria/overlays";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { MenuTrigger, type SpectrumMenuTriggerProps } from "./MenuTrigger";
 
@@ -102,6 +103,10 @@ export const ActionMenu = defineComponent({
       type: String as PropType<"start" | "end" | undefined>,
       default: undefined,
     },
+    placement: {
+      type: String as PropType<Placement | undefined>,
+      default: undefined,
+    },
     slot: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -124,6 +129,8 @@ export const ActionMenu = defineComponent({
         props["aria-label"] ??
         (attrsRecord["aria-label"] as string | undefined) ??
         "More actions";
+      const placement =
+        props.placement ?? (props.align === "end" ? "bottom end" : "bottom start");
 
       return h(
         MenuTrigger,
@@ -132,6 +139,7 @@ export const ActionMenu = defineComponent({
           ...props,
           triggerLabel: props.triggerLabel ?? "Actions",
           triggerAriaLabel,
+          placement,
           "aria-label": undefined,
           UNSAFE_className: classNames(
             "spectrum-ActionMenu",

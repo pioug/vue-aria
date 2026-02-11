@@ -8,8 +8,10 @@ import {
   ref,
   type PropType,
 } from "vue";
+import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
+import { Overlay } from "@vue-spectrum/overlays";
 import {
   normalizeKeySet,
   type MenuKey,
@@ -28,6 +30,7 @@ export interface SpectrumMenuTriggerProps
   triggerLabel?: string | undefined;
   triggerAriaLabel?: string | undefined;
   autoFocus?: boolean | undefined;
+  placement?: Placement | undefined;
 }
 
 export const MenuTrigger = defineComponent({
@@ -110,6 +113,10 @@ export const MenuTrigger = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    placement: {
+      type: String as PropType<Placement | undefined>,
+      default: undefined,
+    },
     ariaLabel: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -142,6 +149,7 @@ export const MenuTrigger = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const rootRef = ref<HTMLDivElement | null>(null);
     const triggerRef = ref<HTMLButtonElement | null>(null);
+    const menuOverlayRef = ref<HTMLElement | null>(null);
 
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const focusStrategy = ref<"first" | "last" | undefined>(undefined);
@@ -161,6 +169,14 @@ export const MenuTrigger = defineComponent({
     );
 
     const menuId = computed(() => `${props.id ?? "v-spectrum-menu-trigger"}-menu`);
+    const overlayPosition = useOverlayPosition({
+      targetRef: computed(() => triggerRef.value),
+      overlayRef: computed(() => menuOverlayRef.value),
+      placement: computed(() => props.placement ?? "bottom start"),
+      offset: 8,
+      isOpen,
+      shouldUpdatePosition: isOpen,
+    });
 
     const setOpen = (nextOpen: boolean) => {
       if (props.isOpen === undefined) {
@@ -196,7 +212,10 @@ export const MenuTrigger = defineComponent({
       }
 
       const target = event.target as Node | null;
-      if (target && rootRef.value?.contains(target)) {
+      if (
+        target &&
+        (rootRef.value?.contains(target) || menuOverlayRef.value?.contains(target))
+      ) {
         return;
       }
 
@@ -237,6 +256,7 @@ export const MenuTrigger = defineComponent({
       const domProps = filterDOMProps(attrsRecord, { labelable: false });
 
       const triggerLabel = slots.default?.() ?? props.triggerLabel ?? "Menu";
+      const resolvedPlacement = overlayPosition.placement.value ?? null;
 
       return h(
         "div",
@@ -306,31 +326,61 @@ export const MenuTrigger = defineComponent({
             triggerLabel
           ),
           isOpen.value
-              ? h(Menu, {
-                id: menuId.value,
-                items: props.items,
-                sections: props.sections,
-                selectionMode: props.selectionMode,
-                selectedKeys: selectedKeys.value,
-                disabledKeys: props.disabledKeys,
-                closeOnSelect: props.closeOnSelect,
-                shouldFocusWrap: props.shouldFocusWrap,
-                autoFocus: focusStrategy.value ?? "first",
-                ariaLabel: props.ariaLabel ?? props["aria-label"],
-                ariaLabelledby:
-                  props.ariaLabelledby ?? props["aria-labelledby"] ?? triggerRef.value?.id,
-                onAction: props.onAction,
-                onSelectionChange: (keys) => {
-                  if (props.selectedKeys === undefined) {
-                    uncontrolledSelectedKeys.value = normalizeKeySet(keys);
-                  }
+            ? h(
+              Overlay,
+              {
+                isOpen: isOpen.value,
+              },
+              {
+                default: () =>
+                  h(
+                    "div",
+                    {
+                      ref: (value: unknown) => {
+                        menuOverlayRef.value = value as HTMLElement | null;
+                      },
+                      class: classNames(
+                        "spectrum-MenuTrigger-popover",
+                        resolvedPlacement
+                          ? `spectrum-MenuTrigger-popover--${resolvedPlacement}`
+                          : undefined
+                      ),
+                      "data-testid": "menu-trigger-popover",
+                      "data-placement": resolvedPlacement ?? undefined,
+                      style: overlayPosition.overlayProps.value.style as
+                        | Record<string, unknown>
+                        | undefined,
+                    },
+                    [
+                      h(Menu, {
+                        id: menuId.value,
+                        items: props.items,
+                        sections: props.sections,
+                        selectionMode: props.selectionMode,
+                        selectedKeys: selectedKeys.value,
+                        disabledKeys: props.disabledKeys,
+                        closeOnSelect: props.closeOnSelect,
+                        shouldFocusWrap: props.shouldFocusWrap,
+                        autoFocus: focusStrategy.value ?? "first",
+                        ariaLabel: props.ariaLabel ?? props["aria-label"],
+                        ariaLabelledby:
+                          props.ariaLabelledby ?? props["aria-labelledby"] ?? triggerRef.value?.id,
+                        onAction: props.onAction,
+                        onSelectionChange: (keys) => {
+                          if (props.selectedKeys === undefined) {
+                            uncontrolledSelectedKeys.value = normalizeKeySet(keys);
+                          }
 
-                  props.onSelectionChange?.(keys);
-                },
-                onClose: () => {
-                  closeMenu(true);
-                },
-              })
+                          props.onSelectionChange?.(keys);
+                        },
+                        onClose: () => {
+                          closeMenu(true);
+                        },
+                      }),
+                    ]
+                  ),
+              }
+            )
             : null,
         ]
       );

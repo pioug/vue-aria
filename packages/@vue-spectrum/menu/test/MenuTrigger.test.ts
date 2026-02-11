@@ -193,4 +193,22 @@ describe("MenuTrigger", () => {
     expect(tree.getByRole("group", { name: "Secondary" })).toBeTruthy();
     expect(tree.getAllByRole("menuitem")).toHaveLength(2);
   });
+
+  it("positions the menu in an anchored overlay", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      placement: "top",
+    });
+
+    const trigger = tree.getByRole("button", { name: "Menu Button" });
+    await user.click(trigger);
+
+    const popover = tree.baseElement.querySelector(
+      "[data-testid=\"menu-trigger-popover\"]"
+    ) as HTMLElement | null;
+    expect(popover).toBeTruthy();
+    expect(popover?.getAttribute("data-placement")).not.toBeNull();
+    expect(popover?.style.position.length).toBeGreaterThan(0);
+    expect(popover?.style.zIndex).toBe("100000");
+  });
 });
