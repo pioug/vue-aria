@@ -45,6 +45,7 @@ export interface SpectrumPickerProps {
   isRequired?: boolean | undefined;
   isInvalid?: boolean | undefined;
   validationState?: "valid" | "invalid" | undefined;
+  autoFocus?: boolean | undefined;
   placeholder?: string | undefined;
   isLoading?: boolean | undefined;
   onLoadMore?: (() => void) | undefined;
@@ -317,6 +318,10 @@ export const Picker = defineComponent({
     },
     validationState: {
       type: String as PropType<"valid" | "invalid" | undefined>,
+      default: undefined,
+    },
+    autoFocus: {
+      type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
     placeholder: {
@@ -684,6 +689,12 @@ export const Picker = defineComponent({
       }
 
       attachFormListener();
+
+      if (props.autoFocus && !isDisabled.value) {
+        void nextTick(() => {
+          triggerRef.value?.focus();
+        });
+      }
     });
 
     onBeforeUnmount(() => {
@@ -767,6 +778,7 @@ export const Picker = defineComponent({
               type: "button",
               class: classNames("spectrum-Dropdown-trigger"),
               role: "button",
+              autofocus: props.autoFocus,
               disabled: isDisabled.value,
               "aria-label": ariaLabel,
               "aria-labelledby": ariaLabelledby,

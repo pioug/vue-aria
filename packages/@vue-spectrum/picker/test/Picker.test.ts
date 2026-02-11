@@ -42,6 +42,18 @@ describe("Picker", () => {
     expect(tree.getByText("Select…")).toBeTruthy();
   });
 
+  it("focuses trigger on mount when autoFocus is enabled", async () => {
+    const tree = renderComponent({
+      autoFocus: true,
+    });
+
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    expect(document.activeElement).toBe(trigger);
+  });
+
   it("opens on click", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
