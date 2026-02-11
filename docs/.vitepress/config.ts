@@ -29,6 +29,9 @@ export default defineConfig({
         "@vue-spectrum/provider": fileURLToPath(
           new URL("../../packages/@vue-spectrum/provider/src/index.ts", import.meta.url)
         ),
+        "@vue-spectrum/theme-default": fileURLToPath(
+          new URL("../../packages/@vue-spectrum/theme-default/src/index.ts", import.meta.url)
+        ),
         "@vue-spectrum/icon": fileURLToPath(
           new URL("../../packages/@vue-spectrum/icon/src/index.ts", import.meta.url)
         ),
@@ -299,6 +302,7 @@ export default defineConfig({
           { text: "Cross-Browser Demos", link: "/spectrum/cross-browser-demos" },
           { text: "Theming Baseline", link: "/spectrum/theming-baseline" },
           { text: "@vue-spectrum/provider", link: "/spectrum/provider" },
+          { text: "@vue-spectrum/theme-default", link: "/spectrum/theme-default" },
           { text: "@vue-spectrum/icon", link: "/spectrum/icon" },
           { text: "@vue-spectrum/utils", link: "/spectrum/utils" },
           { text: "@vue-spectrum/form", link: "/spectrum/form" },

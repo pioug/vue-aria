@@ -35,7 +35,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Foundation, Theme, and Infrastructure
 
-- In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, and component-level tests now ported), `@react-spectrum/utils` (classNames compatibility flags, slot utilities, `getWrappedElement`, media/device hooks, breakpoint utilities, DOM-ref utilities, style-prop conversion helpers, and `@react-aria/utils` parity re-exports `useValueEffect`/`useResizeObserver` now ported)
+- In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, and component-level tests now ported), `@react-spectrum/utils` (classNames compatibility flags, slot utilities, `getWrappedElement`, media/device hooks, breakpoint utilities, DOM-ref utilities, style-prop conversion helpers, and `@react-aria/utils` parity re-exports `useValueEffect`/`useResizeObserver` now ported), `@react-spectrum/theme-default` (baseline `theme` export now ported with provider-compatible theme sections and starter integration tests/docs)
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
 - [x] `@react-spectrum/icon` -> `@vue-spectrum/icon`

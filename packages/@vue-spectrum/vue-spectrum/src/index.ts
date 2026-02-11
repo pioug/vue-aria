@@ -17,6 +17,7 @@ export {
   useScale,
   useMediaQuery,
 } from "@vue-spectrum/provider";
+export { theme } from "@vue-spectrum/theme-default";
 
 export { Icon, UIIcon, Illustration } from "@vue-spectrum/icon";
 export {

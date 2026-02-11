@@ -10,7 +10,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 
 ## Current Status
 
-- Task progress: `52 / 76` completed.
+- Task progress: `53 / 76` completed.
 - Phase 0 is complete; Phase 1 foundation migration is in progress.
 - Initial baseline packages exist: `@vue-spectrum/provider`, `@vue-spectrum/icon`, `@vue-spectrum/utils`, `@vue-spectrum/vue-spectrum`.
 - Foundation packages marked complete: `@vue-spectrum/icon`, `@vue-spectrum/form`, `@vue-spectrum/label`, `@vue-spectrum/text`, `@vue-spectrum/view`, `@vue-spectrum/layout`.
@@ -51,6 +51,7 @@ The package-by-package checklist lives in `/SPECTRUM_PORTING_TRACKER.md`.
 - `@vue-spectrum/card` baseline is now in progress with initial `Card`, `CardView`, and layout class ports plus parity-aligned starter tests (including keyboard-nav with `Arrow*`, `Home`/`End`, `PageUp`/`PageDown`, and RTL left/right mapping, single/multiple selection handling with single-mode deselection behavior, controlled/falsy-key selection behavior, loading/empty-state behavior (`loading`, `loadingMore`, `filtering`, `renderEmptyState`), scroll-bottom `onLoadMore` callback behavior with loading-state suppression, checkbox interaction, `selectionMode="none"` behavior, focusable-child warning behavior, and falsy-id coverage); advanced interaction/layout parity remains.
 - `@vue-spectrum/provider` now includes a `Provider` component surface, React Spectrum-style alias exports (`useProvider*`), and component-level parity tests (package still in-progress for full parity).
 - `@vue-spectrum/utils` now includes React Spectrum-style `classNames` CSS-module mapping plus compatibility toggles (`keepSpectrumClassNames`/`shouldKeepSpectrumClassNames`), slot utilities (`useSlotProps`, `SlotProvider`, `ClearSlots`), `getWrappedElement`, media/device helpers (`useMediaQuery`, `useIsMobileDevice`, `useHasChild`), breakpoint utilities (`BreakpointProvider`, `useMatchedBreakpoints`, `useBreakpoint`), DOM-ref helpers (`createDOMRef`, `useDOMRef`, `useFocusableRef`, unwrap helpers), style-prop conversion primitives (`convertStyleProps`/`useStyleProps`), and `@react-aria/utils` parity re-exports (`useValueEffect`, `useResizeObserver`); remaining utility surfaces stay in progress.
+- `@vue-spectrum/theme-default` baseline is now in progress with initial `theme` export wired to the provider class-map contract (`global`, `light`, `dark`, `medium`, `large`) plus starter integration tests/docs; full upstream token/CSS parity remains.
 - Spectrum parity gate script is available at `npm run test:spectrum-parity`.
 - Spectrum docs now include cross-browser demos at `/spectrum/cross-browser-demos`.
 - CI now runs `npm run test:spectrum-parity` on pull requests and pushes to `main`.
