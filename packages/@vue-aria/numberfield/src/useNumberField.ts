@@ -526,6 +526,24 @@ export function useNumberField(
 
       options.onKeydown?.(event);
     },
+    onPaste: (event) => {
+      options.onPaste?.(event);
+      const inputElement = event.target as HTMLInputElement | null;
+      if (!inputElement) {
+        return;
+      }
+
+      const selectionStart = inputElement.selectionStart ?? 0;
+      const selectionEnd = inputElement.selectionEnd ?? -1;
+      const selectionLength = selectionEnd - selectionStart;
+      if (selectionLength !== inputElement.value.length) {
+        return;
+      }
+
+      event.preventDefault();
+      const pastedText = event.clipboardData?.getData("text/plain")?.trim() ?? "";
+      commit(pastedText);
+    },
   });
 
   const {

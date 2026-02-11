@@ -134,6 +134,48 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenLastCalledWith(5);
   });
 
+  it("commits pasted text when the full input value is selected", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: 10,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    input.focus();
+    input.setSelectionRange(0, input.value.length);
+
+    await fireEvent.paste(input, {
+      clipboardData: {
+        getData: () => "42",
+      },
+    });
+
+    expect(input.value).toBe("42");
+    expect(onChange).toHaveBeenLastCalledWith(42);
+  });
+
+  it("does not commit paste when only part of the input is selected", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: 10,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    input.focus();
+    input.setSelectionRange(0, 1);
+
+    await fireEvent.paste(input, {
+      clipboardData: {
+        getData: () => "42",
+      },
+    });
+
+    expect(input.value).toBe("10");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("snaps typed values to step boundaries on blur", async () => {
     const onChange = vi.fn();
     const tree = renderNumberField({
