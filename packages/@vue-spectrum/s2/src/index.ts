@@ -15,6 +15,7 @@ export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
 export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
+export { Calendar, RangeCalendar } from "./Calendar";
 export { ComboBox } from "./ComboBox";
 export { ColorField } from "./ColorField";
 export { Content, Footer, Header, Heading, Keyboard, Text } from "./Content";
@@ -22,6 +23,7 @@ export { Checkbox } from "./Checkbox";
 export { CheckboxGroup } from "./CheckboxGroup";
 export { CloseButton } from "./CloseButton";
 export { DateField } from "./DateField";
+export { DatePicker, DateRangePicker, TimeField } from "./DatePicker";
 export { Divider } from "./Divider";
 export { Image } from "./Image";
 export { IllustratedMessage } from "./IllustratedMessage";
@@ -34,11 +36,11 @@ export { ProgressBar } from "./ProgressBar";
 export { ProgressCircle } from "./ProgressCircle";
 export { SearchField } from "./SearchField";
 export { SelectBox, SelectBoxGroup } from "./SelectBoxGroup";
-export { Slider } from "./Slider";
+export { RangeSlider, Slider } from "./Slider";
 export { Cell, Column, Row, TableBody, TableHeader, TableView } from "./TableView";
 export { StatusLight } from "./StatusLight";
 export { Switch } from "./Switch";
-export { TextField } from "./TextField";
+export { TextArea, TextField } from "./TextField";
 export { ToggleButton } from "./ToggleButton";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
 export { Radio } from "./Radio";
@@ -60,6 +62,7 @@ export type {
 } from "./ActionButton";
 export type { S2AvatarProps } from "./Avatar";
 export type { S2BadgeProps } from "./Badge";
+export type { S2CalendarProps, S2RangeCalendarProps } from "./Calendar";
 export type { S2CloseButtonProps } from "./CloseButton";
 export type { S2CheckboxProps } from "./Checkbox";
 export type { S2CheckboxGroupProps } from "./CheckboxGroup";
@@ -74,6 +77,12 @@ export type {
   S2TextProps,
 } from "./Content";
 export type { DateFieldSize, S2DateFieldProps } from "./DateField";
+export type {
+  DatePickerSize,
+  S2DatePickerProps,
+  S2DateRangePickerProps,
+  S2TimeFieldProps,
+} from "./DatePicker";
 export type { S2DividerProps } from "./Divider";
 export type { S2ImageProps } from "./Image";
 export type { S2IllustratedMessageProps } from "./IllustratedMessage";
@@ -95,7 +104,7 @@ export type { S2ProgressCircleProps } from "./ProgressCircle";
 export type { S2RadioProps } from "./Radio";
 export type { S2RadioGroupProps } from "./RadioGroup";
 export type { SearchFieldSize, S2SearchFieldProps } from "./SearchField";
-export type { SliderSize, S2SliderProps } from "./Slider";
+export type { S2RangeSliderProps, SliderSize, S2SliderProps } from "./Slider";
 export type {
   S2CellProps,
   S2ColumnProps,
@@ -121,7 +130,7 @@ export type {
 } from "./SelectBoxGroup";
 export type { S2StatusLightProps } from "./StatusLight";
 export type { S2SwitchProps, SwitchSize } from "./Switch";
-export type { S2TextFieldProps, TextFieldSize } from "./TextField";
+export type { S2TextAreaProps, S2TextFieldProps, TextFieldSize } from "./TextField";
 export type { S2WellProps } from "./Well";
 export type {
   ActionButtonGroupDensity,

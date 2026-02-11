@@ -35,7 +35,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 
 ## Foundation, Theme, and Infrastructure
 
-- In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, and component-level tests now ported), `@react-spectrum/utils` (classNames compatibility flags, slot utilities, `getWrappedElement`, media/device hooks, breakpoint utilities, DOM-ref utilities, style-prop conversion helpers, and `@react-aria/utils` parity re-exports `useValueEffect`/`useResizeObserver` now ported), `@react-spectrum/theme-default` (baseline `theme` export now ported with provider-compatible theme sections and starter integration tests/docs), `@react-spectrum/theme-light` (baseline `theme` export now ported with provider-compatible sections and light/dark class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-dark` (baseline `theme` export now ported with provider-compatible sections and dark-biased class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-express` (baseline `theme` export now ported on top of `theme-default` with express global + scale class variants and starter integration tests/docs), `@react-spectrum/style-macro-s1` (baseline package layout/runtime helpers now ported with starter merge/helper tests and docs), `@react-spectrum/test-utils` (baseline package layout now ported with screen-width test helpers and starter docs/tests), `@react-spectrum/story-utils` (baseline package layout now ported with Vue `ErrorBoundary` + `generatePowerset` equivalents and starter docs/tests), `@react-spectrum/s2` (baseline package now includes shared utility exports `pressScale`/`isDocsEnv` and first component primitives `Provider`/`Accordion`/`Disclosure`/`DisclosurePanel`/`DisclosureTitle`/`ActionMenu`/`Breadcrumbs`/`BreadcrumbItem`/`Button`/`LinkButton`/`ActionButton`/`ActionButtonGroup`/`Avatar`/`Badge`/`ButtonGroup`/`ComboBox`/`ColorField`/`Heading`/`Header`/`Content`/`Text`/`Keyboard`/`Footer`/`Checkbox`/`CheckboxGroup`/`CloseButton`/`DateField`/`Divider`/`Image`/`IllustratedMessage`/`InlineAlert`/`Link`/`Meter`/`Menu`/`MenuItem`/`MenuTrigger`/`NumberField`/`ProgressBar`/`ProgressCircle`/`SearchField`/`TableView`/`TableHeader`/`TableBody`/`Column`/`Row`/`Cell`/`Radio`/`RadioGroup`/`SelectBox`/`SelectBoxGroup`/`Slider`/`StatusLight`/`Switch`/`TextField`/`ToggleButton`/`ToggleButtonGroup`/`Well`, plus starter docs/tests, keyboard parity hardening for `SelectBoxGroup` navigation/selection edge cases, sortable-header callback coverage for `TableView`, trigger/menu action-flow coverage for `MenuTrigger`, and `isHidden` unmount coverage for content primitives)
+- In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, and component-level tests now ported), `@react-spectrum/utils` (classNames compatibility flags, slot utilities, `getWrappedElement`, media/device hooks, breakpoint utilities, DOM-ref utilities, style-prop conversion helpers, and `@react-aria/utils` parity re-exports `useValueEffect`/`useResizeObserver` now ported), `@react-spectrum/theme-default` (baseline `theme` export now ported with provider-compatible theme sections and starter integration tests/docs), `@react-spectrum/theme-light` (baseline `theme` export now ported with provider-compatible sections and light/dark class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-dark` (baseline `theme` export now ported with provider-compatible sections and dark-biased class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-express` (baseline `theme` export now ported on top of `theme-default` with express global + scale class variants and starter integration tests/docs), `@react-spectrum/style-macro-s1` (baseline package layout/runtime helpers now ported with starter merge/helper tests and docs), `@react-spectrum/test-utils` (baseline package layout now ported with screen-width test helpers and starter docs/tests), `@react-spectrum/story-utils` (baseline package layout now ported with Vue `ErrorBoundary` + `generatePowerset` equivalents and starter docs/tests), `@react-spectrum/s2` (baseline package now includes shared utility exports `pressScale`/`isDocsEnv` and first component primitives `Provider`/`Accordion`/`Disclosure`/`DisclosurePanel`/`DisclosureTitle`/`ActionMenu`/`Breadcrumbs`/`BreadcrumbItem`/`Button`/`LinkButton`/`ActionButton`/`ActionButtonGroup`/`Avatar`/`Badge`/`ButtonGroup`/`ComboBox`/`ColorField`/`Heading`/`Header`/`Content`/`Text`/`Keyboard`/`Footer`/`Checkbox`/`CheckboxGroup`/`CloseButton`/`DateField`/`DatePicker`/`DateRangePicker`/`TimeField`/`Divider`/`Image`/`IllustratedMessage`/`InlineAlert`/`Link`/`Meter`/`Menu`/`MenuItem`/`MenuTrigger`/`NumberField`/`ProgressBar`/`ProgressCircle`/`SearchField`/`TableView`/`TableHeader`/`TableBody`/`Column`/`Row`/`Cell`/`Radio`/`RadioGroup`/`SelectBox`/`SelectBoxGroup`/`Slider`/`RangeSlider`/`StatusLight`/`Switch`/`TextField`/`TextArea`/`ToggleButton`/`ToggleButtonGroup`/`Well`, plus starter docs/tests, keyboard parity hardening for `SelectBoxGroup` navigation/selection edge cases, sortable-header callback coverage for `TableView`, trigger/menu action-flow coverage for `MenuTrigger`, `isHidden` unmount coverage for content primitives, and baseline date/time-range wrapper coverage)
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
 - [x] `@react-spectrum/icon` -> `@vue-spectrum/icon`
@@ -56,7 +56,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 ## S2 Detailed Export Tracker
 
 - Scope: runtime exports from `references/react-spectrum/packages/@react-spectrum/s2/src/index.ts`, excluding `*Context` and type-only exports.
-- Current export parity in `packages/@vue-spectrum/s2/src/index.ts`: `56 / 133`.
+- Current export parity in `packages/@vue-spectrum/s2/src/index.ts`: `63 / 133`.
 - Normalization note: this tracker checks exact upstream export names, so wrapper renames (for example `BreadcrumbItem` vs upstream `Breadcrumb`) remain visible as pending.
 - Local-only utility note: `isDocsEnv` exists in Vue S2 but is not part of the upstream runtime export set and is not counted below.
 
@@ -72,7 +72,7 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `Breadcrumbs` — `1 / 2` exported; missing: `Breadcrumb`
 - [x] `Button` — `2 / 2` exported; missing: none
 - [x] `ButtonGroup` — `1 / 1` exported; missing: none
-- [ ] `Calendar` — `0 / 1` exported; missing: `Calendar`
+- [x] `Calendar` — `1 / 1` exported; missing: none
 - [ ] `Card` — `0 / 6` exported; missing: `Card`, `CardPreview`, `CollectionCardPreview`, `AssetCard`, `UserCard`, `ProductCard`
 - [ ] `CardView` — `0 / 1` exported; missing: `CardView`
 - [x] `Checkbox` — `1 / 1` exported; missing: none
@@ -87,8 +87,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `ComboBox` — `1 / 3` exported; missing: `ComboBoxItem`, `ComboBoxSection`
 - [ ] `ContextualHelp` — `0 / 1` exported; missing: `ContextualHelp`
 - [x] `DateField` — `1 / 1` exported; missing: none
-- [ ] `DatePicker` — `0 / 1` exported; missing: `DatePicker`
-- [ ] `DateRangePicker` — `0 / 1` exported; missing: `DateRangePicker`
+- [x] `DatePicker` — `1 / 1` exported; missing: none
+- [x] `DateRangePicker` — `1 / 1` exported; missing: none
 - [ ] `Disclosure` — `3 / 4` exported; missing: `DisclosureHeader`
 - [x] `Content` — `6 / 6` exported; missing: none
 - [ ] `Dialog` — `0 / 1` exported; missing: `Dialog`
@@ -116,8 +116,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [x] `Provider` — `1 / 1` exported; missing: none
 - [x] `Radio` — `1 / 1` exported; missing: none
 - [x] `RadioGroup` — `1 / 1` exported; missing: none
-- [ ] `RangeCalendar` — `0 / 1` exported; missing: `RangeCalendar`
-- [ ] `RangeSlider` — `0 / 1` exported; missing: `RangeSlider`
+- [x] `RangeCalendar` — `1 / 1` exported; missing: none
+- [x] `RangeSlider` — `1 / 1` exported; missing: none
 - [x] `SearchField` — `1 / 1` exported; missing: none
 - [ ] `SegmentedControl` — `0 / 2` exported; missing: `SegmentedControl`, `SegmentedControlItem`
 - [x] `SelectBoxGroup` — `2 / 2` exported; missing: none
@@ -129,8 +129,8 @@ This is the master checklist for parity with React Spectrum UI components in Vue
 - [ ] `TableView` — `6 / 7` exported; missing: `EditableCell`
 - [ ] `Tabs` — `0 / 4` exported; missing: `Tabs`, `TabList`, `Tab`, `TabPanel`
 - [ ] `TagGroup` — `0 / 2` exported; missing: `TagGroup`, `Tag`
-- [ ] `TextField` — `1 / 2` exported; missing: `TextArea`
-- [ ] `TimeField` — `0 / 1` exported; missing: `TimeField`
+- [x] `TextField` — `2 / 2` exported; missing: none
+- [x] `TimeField` — `1 / 1` exported; missing: none
 - [ ] `Toast` — `0 / 2` exported; missing: `ToastContainer`, `ToastQueue`
 - [x] `ToggleButton` — `1 / 1` exported; missing: none
 - [x] `ToggleButtonGroup` — `1 / 1` exported; missing: none
