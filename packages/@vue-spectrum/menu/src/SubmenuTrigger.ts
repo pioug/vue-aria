@@ -10,6 +10,7 @@ import {
   type PropType,
   type VNode,
 } from "vue";
+import { useLocale } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
@@ -222,6 +223,7 @@ export const SubmenuTrigger = defineComponent({
     },
   },
   setup(props, { attrs, slots, expose }) {
+    const locale = useLocale();
     const rootRef = ref<HTMLLIElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
     const openedByHover = ref(false);
@@ -467,20 +469,20 @@ export const SubmenuTrigger = defineComponent({
                   return;
                 }
 
-                switch (event.key) {
-                  case "ArrowRight":
-                  case "Enter":
-                  case " ":
-                    event.preventDefault();
-                    setOpen(true);
-                    break;
-                  case "ArrowLeft":
-                  case "Escape":
-                    event.preventDefault();
-                    closeMenu(true, false);
-                    break;
-                  default:
-                    break;
+                const openKey =
+                  locale.value.direction === "rtl" ? "ArrowLeft" : "ArrowRight";
+                const closeKey =
+                  locale.value.direction === "rtl" ? "ArrowRight" : "ArrowLeft";
+
+                if (event.key === openKey || event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setOpen(true);
+                  return;
+                }
+
+                if (event.key === closeKey || event.key === "Escape") {
+                  event.preventDefault();
+                  closeMenu(true, false);
                 }
               },
             },

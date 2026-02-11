@@ -68,6 +68,7 @@ const component = h(MenuTrigger, {
 - Contextual-help hover/`ArrowRight` opening is gated to unavailable items (`isUnavailable=true`) and does not open for available items.
 - Baseline contextual-help support includes an unavailable indicator icon on unavailable contextual-help items.
 - Baseline submenu behavior includes Escape-key close without firing submenu `onClose` callbacks.
+- Baseline submenu keyboard behavior now uses locale-aware arrow semantics (`ArrowRight`/`ArrowLeft` swap in RTL) for open/close handling.
 - Baseline submenu behavior keeps only one sibling submenu open at a time.
 - Baseline submenu behavior supports hover-open interactions, hover-leave closing to neighboring items, and keeps submenu open when pointer moves between trigger and submenu content.
 - Baseline submenu behavior does not fire `onAction` when activating submenu-trigger items.

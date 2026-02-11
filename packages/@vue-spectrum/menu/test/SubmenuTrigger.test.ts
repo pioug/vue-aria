@@ -2,6 +2,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { Item, Menu, SubmenuTrigger } from "../src";
 
 const items = [
@@ -31,10 +32,19 @@ function getSubmenuElementForLabel(
   return tree.container.querySelector(`#${submenuId}`) as HTMLElement | null;
 }
 
-function renderComponent(props: Record<string, unknown> = {}) {
+function renderComponent(
+  props: Record<string, unknown> = {},
+  options: {
+    locale?: string;
+  } = {}
+) {
   const App = defineComponent({
     name: "SubmenuTriggerHarness",
     setup() {
+      if (options.locale) {
+        provideI18n({ locale: options.locale });
+      }
+
       return () =>
         h(
           "ul",
@@ -175,6 +185,37 @@ describe("SubmenuTrigger", () => {
     await user.keyboard("{Escape}");
     expect(tree.container.contains(submenu)).toBe(false);
   });
+
+  it.each([
+    {
+      name: "LTR",
+      locale: "en-US",
+      openKey: "{ArrowRight}",
+      closeKey: "{ArrowLeft}",
+    },
+    {
+      name: "RTL",
+      locale: "ar-AE",
+      openKey: "{ArrowLeft}",
+      closeKey: "{ArrowRight}",
+    },
+  ])(
+    "uses $name arrow direction for keyboard open and close",
+    async ({ locale, openKey, closeKey }) => {
+      const user = userEvent.setup();
+      const tree = renderComponent({}, { locale });
+      const trigger = tree.getByRole("menuitem", { name: "More" }) as HTMLElement;
+
+      trigger.focus();
+
+      await user.keyboard(openKey);
+      const submenu = getSubmenuElement(tree);
+      expect(submenu).toBeTruthy();
+
+      await user.keyboard(closeKey);
+      expect(tree.container.contains(submenu)).toBe(false);
+    }
+  );
 
   it("does not fire onClose when closing submenu with Escape", async () => {
     const user = userEvent.setup();
