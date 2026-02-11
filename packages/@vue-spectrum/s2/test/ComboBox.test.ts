@@ -2,9 +2,13 @@ import userEvent from "@testing-library/user-event";
 import { mount } from "@vue/test-utils";
 import { h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import {
+  ComboBoxItem as SpectrumComboBoxItem,
+  ComboBoxSection as SpectrumComboBoxSection,
+} from "@vue-spectrum/combobox";
 import { theme as defaultTheme } from "@vue-spectrum/theme-default";
+import { ComboBox, ComboBoxItem, ComboBoxSection } from "../src";
 import { Provider } from "../src/Provider";
-import { ComboBox } from "../src/ComboBox";
 
 describe("@vue-spectrum/s2 ComboBox", () => {
   it("renders baseline attrs", () => {
@@ -57,5 +61,10 @@ describe("@vue-spectrum/s2 ComboBox", () => {
     const firstOption = wrapper.get('[role="option"]');
     await user.click(firstOption.element);
     expect(onSelectionChange).toHaveBeenCalledWith("1");
+  });
+
+  it("re-exports static slot helpers", () => {
+    expect(ComboBoxItem).toBe(SpectrumComboBoxItem);
+    expect(ComboBoxSection).toBe(SpectrumComboBoxSection);
   });
 });

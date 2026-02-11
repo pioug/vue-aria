@@ -17,7 +17,7 @@ export { ButtonGroup } from "./ButtonGroup";
 export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
 export { Calendar, RangeCalendar } from "./Calendar";
-export { ComboBox } from "./ComboBox";
+export { ComboBox, ComboBoxItem, ComboBoxSection } from "./ComboBox";
 export {
   ColorArea,
   ColorSlider,
@@ -92,7 +92,18 @@ export type { S2CalendarProps, S2RangeCalendarProps } from "./Calendar";
 export type { S2CloseButtonProps } from "./CloseButton";
 export type { S2CheckboxProps } from "./Checkbox";
 export type { S2CheckboxGroupProps } from "./CheckboxGroup";
-export type { ComboBoxSize, S2ComboBoxProps } from "./ComboBox";
+export type {
+  ComboBoxSize,
+  S2ComboBoxCompletionMode,
+  S2ComboBoxFilterFn,
+  S2ComboBoxItemData,
+  S2ComboBoxItemProps,
+  S2ComboBoxKey,
+  S2ComboBoxMenuTrigger,
+  S2ComboBoxMenuTriggerAction,
+  S2ComboBoxProps,
+  S2ComboBoxSectionProps,
+} from "./ComboBox";
 export type {
   S2ColorAreaProps,
   S2ColorSliderProps,
