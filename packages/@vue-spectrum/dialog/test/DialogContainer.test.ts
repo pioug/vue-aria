@@ -168,4 +168,30 @@ describe("DialogContainer", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
     wrapper.unmount();
   });
+
+  it("renders overlays in a custom portal container", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.append(customContainer);
+
+    const wrapper = mount(DialogContainer, {
+      attachTo: document.body,
+      props: {
+        container: customContainer,
+      },
+      slots: {
+        default: () => h(Dialog, null, () => "contents"),
+      },
+    });
+
+    try {
+      await flushOverlay();
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
 });

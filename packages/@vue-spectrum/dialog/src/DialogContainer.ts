@@ -25,6 +25,7 @@ export interface SpectrumDialogContainerProps {
   onDismiss?: (() => void) | undefined;
   isDismissable?: boolean | undefined;
   isKeyboardDismissDisabled?: boolean | undefined;
+  container?: HTMLElement | undefined;
 }
 
 function normalizeChildren(nodes: VNodeChild[] | undefined): VNode[] {
@@ -79,6 +80,10 @@ export const DialogContainer = defineComponent({
     },
     isKeyboardDismissDisabled: {
       type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    container: {
+      type: null as unknown as PropType<HTMLElement | undefined>,
       default: undefined,
     },
   },
@@ -173,6 +178,7 @@ export const DialogContainer = defineComponent({
         Overlay,
         {
           isOpen: isOpen.value,
+          container: props.container,
         },
         {
           default: () =>

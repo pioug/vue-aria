@@ -32,6 +32,7 @@ export interface SpectrumDialogTriggerProps {
   isOpen?: boolean | undefined;
   defaultOpen?: boolean | undefined;
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
+  container?: HTMLElement | undefined;
   slot?: string | undefined;
   UNSAFE_className?: string | undefined;
 }
@@ -133,6 +134,10 @@ export const DialogTrigger = defineComponent({
     },
     onOpenChange: {
       type: Function as PropType<((isOpen: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    container: {
+      type: null as unknown as PropType<HTMLElement | undefined>,
       default: undefined,
     },
     slot: {
@@ -338,6 +343,7 @@ export const DialogTrigger = defineComponent({
             Overlay,
             {
               isOpen: isOpen.value,
+              container: props.container,
             },
             {
               default: () =>

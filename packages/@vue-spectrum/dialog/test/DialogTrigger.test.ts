@@ -249,4 +249,27 @@ describe("DialogTrigger", () => {
       wrapper.unmount();
     }
   });
+
+  it("renders overlays in a custom portal container", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.append(customContainer);
+
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      container: customContainer,
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
 });
