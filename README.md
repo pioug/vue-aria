@@ -11,7 +11,8 @@ The priority is behavior and accessibility parity with upstream, while keeping V
 
 - `@vue-aria/*`: parity-complete baseline, now in maintenance/hardening mode.
 - `@vue-spectrum/*`: active migration.
-- Execution strategy: horizontal lane-by-lane parity (runtime + tests + docs + preview usability), currently focused on `button`, `textfield`, and `dialog`.
+- Execution strategy: horizontal lane-by-lane parity (runtime + tests + docs + preview usability) focused on React Spectrum v1 package completion.
+- `@vue-spectrum/s2`: deprioritized/paused for new feature work until v1 parity and quality gates are complete (only regression or unblocker fixes are in scope).
 
 ## Source of truth
 

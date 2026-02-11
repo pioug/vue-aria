@@ -6,8 +6,9 @@ This page is the consolidated entry point for migration status and execution mod
 
 - React Aria layer (`@vue-aria/*`): parity-complete baseline, maintenance/hardening mode.
 - React Spectrum layer (`@vue-spectrum/*`): active migration.
-- Priority: complete React Spectrum v1 parity before expanding S2 parity.
-- Active horizontal lane: `@vue-spectrum/button`, `@vue-spectrum/textfield`, `@vue-spectrum/dialog`.
+- Priority: complete React Spectrum v1 parity before any further S2 expansion.
+- S2 execution state: paused/deprioritized (new S2 feature slices are deferred until v1 completion gates pass).
+- Active horizontal lane: v1 packages only (behavior parity, test parity, docs/preview usability, and CI stability).
 
 ## Source of Truth
 

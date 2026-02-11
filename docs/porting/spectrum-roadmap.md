@@ -12,11 +12,13 @@ For live package-by-package completion, use the canonical tracker:
 - Port behavior first, then upstream-equivalent tests, then docs.
 - Run horizontal lanes to deliver visible, end-to-end progress faster.
 - Prioritize React Spectrum v1 parity before S2 expansion.
+- Deprioritize S2 execution: no new S2 feature lanes while v1 parity remains incomplete.
 
 ## Current Priority
 
-- Active lane: `@vue-spectrum/button`, `@vue-spectrum/textfield`, `@vue-spectrum/dialog`.
-- Objective in this lane: usable docs previews + behavior/test parity hardening.
+- Active lane: v1 package completion and hardening across remaining incomplete `@vue-spectrum/*` packages.
+- Objective in this lane: usable docs previews + behavior/test parity hardening + CI stability for v1.
+- S2 lane status: paused except regression or unblocker fixes.
 
 ## Phases
 
@@ -45,7 +47,7 @@ For live package-by-package completion, use the canonical tracker:
 
 - Close remaining v1 parity gaps
 - Freeze quality gates for v1
-- Expand S2 parity after v1 completion criteria are met
+- Re-enable and expand S2 parity after v1 completion criteria are met
 
 ## Completion Criteria
 
