@@ -65,7 +65,7 @@ const area = h(TextArea, {
 
 ## Notes
 
-- Baseline includes `useTextField` accessibility semantics, validation wiring, controlled/uncontrolled value behavior, and passthrough ARIA/data attributes on the native input.
+- Baseline includes `useTextField` accessibility semantics, validation wiring, controlled/uncontrolled value behavior, and passthrough ARIA/data attributes on the native input (including `aria-errormessage`).
 - Baseline includes controlled form-reset parity (`<form><input type="reset" /></form>`) for both `TextField` and `TextArea`.
 - Baseline includes `Form.validationErrors` wiring by field `name`, including invalid-state and error message semantics plus server-error clearing when the user edits the field.
 - `TextArea` baseline includes multiline rendering, row configuration, and auto-resize behavior driven by textarea `scrollHeight` updates.

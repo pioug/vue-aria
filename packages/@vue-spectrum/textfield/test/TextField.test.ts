@@ -99,6 +99,20 @@ describe("TextField", () => {
     );
   });
 
+  it("passes through aria-errormessage when invalid", () => {
+    const { getByRole } = render(TextField, {
+      props: {
+        label: "Name",
+        validationState: "invalid",
+        "aria-errormessage": "name-error",
+      } as Record<string, unknown>,
+    });
+
+    const input = getByRole("textbox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.getAttribute("aria-errormessage")).toBe("name-error");
+  });
+
   it("supports uncontrolled value changes and onChange callback", async () => {
     const onChange = vi.fn();
     const { getByRole } = render(TextField, {
@@ -229,6 +243,59 @@ describe("TextField", () => {
     expect(queryByTestId("textfield-valid-icon")).toBeNull();
   });
 
+  it("switches between description and error message based on validity", async () => {
+    const App = defineComponent({
+      name: "TextFieldValidationMessageHarness",
+      setup() {
+        const value = ref("0");
+        return () =>
+          h(TextField, {
+            "data-testid": "favorite-number",
+            label: "Favorite number",
+            value: value.value,
+            onChange: (nextValue: string) => {
+              value.value = nextValue;
+            },
+            maxLength: 1,
+            validationState: /^\d$/.test(value.value) ? "valid" : "invalid",
+            description: "Enter a single digit number.",
+            errorMessage:
+              value.value === ""
+                ? "Empty input not allowed."
+                : "Single digit numbers are 0-9.",
+          });
+      },
+    });
+    const tree = render(App);
+    const input = tree.getByTestId("favorite-number") as HTMLInputElement;
+
+    const description = tree.getByText("Enter a single digit number.");
+    const validIcon = tree.getByTestId("textfield-valid-icon");
+    expect(input.getAttribute("aria-describedby")).toContain(
+      description.getAttribute("id") ?? ""
+    );
+    expect(input.getAttribute("aria-describedby")).toContain(
+      validIcon.getAttribute("id") ?? ""
+    );
+
+    await fireEvent.update(input, "s");
+    const invalidMessage = tree.getByText("Single digit numbers are 0-9.");
+    expect(input.getAttribute("aria-describedby")).toContain(
+      invalidMessage.getAttribute("id") ?? ""
+    );
+    expect(tree.queryByTestId("textfield-valid-icon")).toBeNull();
+
+    await fireEvent.update(input, "");
+    const emptyMessage = tree.getByText("Empty input not allowed.");
+    expect(input.getAttribute("aria-describedby")).toContain(
+      emptyMessage.getAttribute("id") ?? ""
+    );
+
+    await fireEvent.update(input, "4");
+    expect(tree.getByText("Enter a single digit number.")).toBeTruthy();
+    expect(tree.getByTestId("textfield-valid-icon")).toBeTruthy();
+  });
+
   it("passes through ARIA and data attributes to the input", () => {
     const { getByRole } = render(TextField, {
       props: {
@@ -257,6 +324,20 @@ describe("TextField", () => {
 
     const input = getByRole("textbox");
     expect(input.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("passes through aria-errormessage when invalid", () => {
+    const { getByRole } = render(TextArea, {
+      props: {
+        label: "Notes",
+        validationState: "invalid",
+        "aria-errormessage": "notes-error",
+      } as Record<string, unknown>,
+    });
+
+    const input = getByRole("textbox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.getAttribute("aria-errormessage")).toBe("notes-error");
   });
 
   it("supports form reset with controlled value", async () => {

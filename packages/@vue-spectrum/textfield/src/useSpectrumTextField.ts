@@ -21,6 +21,7 @@ export function useSpectrumTextField(
   attrs: Record<string, unknown>,
   options: UseSpectrumTextFieldOptions = {}
 ) {
+  const propsRecord = props as Record<string, unknown>;
   const provider = useProviderContext();
   const formValidationErrors = useFormValidationErrors();
   const isServerErrorCleared = ref(false);
@@ -98,6 +99,19 @@ export function useSpectrumTextField(
       "aria"
   );
 
+  const readAriaProp = (
+    dashedName: string,
+    camelName: string
+  ): string | undefined => {
+    const fromProps = propsRecord[dashedName] ?? propsRecord[camelName];
+    if (typeof fromProps === "string") {
+      return fromProps;
+    }
+
+    const fromAttrs = attrs[dashedName] ?? attrs[camelName];
+    return typeof fromAttrs === "string" ? fromAttrs : undefined;
+  };
+
   const textField = useTextField({
     inputElementType: computed(() =>
       options.multiLine ? "textarea" : "input"
@@ -130,23 +144,15 @@ export function useSpectrumTextField(
     spellCheck: computed(() => props.spellCheck),
     enterKeyHint: computed(() => props.enterKeyHint),
     autoFocus: computed(() => props.autoFocus),
-    "aria-label": computed(
-      () => props["aria-label"] ?? (attrs["aria-label"] as string | undefined)
+    "aria-label": computed(() => readAriaProp("aria-label", "ariaLabel")),
+    "aria-labelledby": computed(() =>
+      readAriaProp("aria-labelledby", "ariaLabelledby")
     ),
-    "aria-labelledby": computed(
-      () =>
-        props["aria-labelledby"] ??
-        (attrs["aria-labelledby"] as string | undefined)
+    "aria-describedby": computed(() =>
+      readAriaProp("aria-describedby", "ariaDescribedby")
     ),
-    "aria-describedby": computed(
-      () =>
-        props["aria-describedby"] ??
-        (attrs["aria-describedby"] as string | undefined)
-    ),
-    "aria-errormessage": computed(
-      () =>
-        props["aria-errormessage"] ??
-        (attrs["aria-errormessage"] as string | undefined)
+    "aria-errormessage": computed(() =>
+      readAriaProp("aria-errormessage", "ariaErrormessage")
     ),
     onInput: (event) => {
       if (serverErrorMessageFromForm.value) {
