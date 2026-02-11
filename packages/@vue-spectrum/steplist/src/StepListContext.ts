@@ -12,6 +12,7 @@ export type StepKey = string | number;
 export interface SpectrumStepListItemData {
   key: StepKey;
   label: string;
+  isDisabled?: boolean | undefined;
 }
 
 export interface StepListContextValue {

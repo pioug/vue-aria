@@ -19,7 +19,8 @@ import {
 } from "./types";
 import { Menu } from "./Menu";
 
-export interface SpectrumMenuTriggerProps extends SpectrumMenuBaseProps {
+export interface SpectrumMenuTriggerProps
+  extends Omit<SpectrumMenuBaseProps, "autoFocus"> {
   id?: string | undefined;
   isOpen?: boolean | undefined;
   defaultOpen?: boolean | undefined;

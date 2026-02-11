@@ -119,7 +119,7 @@ export const StepListItem = defineComponent({
                 "aria-hidden": "true",
                 class: classNames("spectrum-Steplist-label"),
               },
-              props.item.label
+              props.item!.label
             ),
             h(
               "div",

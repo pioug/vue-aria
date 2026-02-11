@@ -182,7 +182,10 @@ export const SearchField = defineComponent({
         () => propsRecord.value.autoComplete as string | undefined
       ),
       autoCapitalize: computed(
-        () => propsRecord.value.autoCapitalize as string | undefined
+        () =>
+          propsRecord.value.autoCapitalize as
+            | SpectrumSearchFieldProps["autoCapitalize"]
+            | undefined
       ),
       inputMode: computed(
         () => propsRecord.value.inputMode as string | undefined
@@ -194,7 +197,10 @@ export const SearchField = defineComponent({
         () => propsRecord.value.spellCheck as boolean | undefined
       ),
       enterKeyHint: computed(
-        () => propsRecord.value.enterKeyHint as string | undefined
+        () =>
+          propsRecord.value.enterKeyHint as
+            | SpectrumSearchFieldProps["enterKeyHint"]
+            | undefined
       ),
       maxLength: computed(
         () => propsRecord.value.maxLength as number | undefined
@@ -207,7 +213,7 @@ export const SearchField = defineComponent({
       "aria-describedby": ariaDescribedBy,
       "aria-errormessage": ariaErrorMessage,
       onInput: propsRecord.value.onInput as
-        | ((value: string) => void)
+        | ((event: Event) => void)
         | undefined,
       onChange: propsRecord.value.onChange as
         | ((value: string) => void)
