@@ -6,6 +6,7 @@ export { ActionButton } from "./ActionButton";
 export { ActionButtonGroup } from "./ActionButtonGroup";
 export { ButtonGroup } from "./ButtonGroup";
 export { ToggleButton } from "./ToggleButton";
+export { ToggleButtonGroup } from "./ToggleButtonGroup";
 
 export type { ProviderBackground, S2ProviderProps } from "./Provider";
 export type {
@@ -22,6 +23,7 @@ export type {
   S2ButtonGroupProps,
 } from "./ButtonGroup";
 export type { S2ToggleButtonProps } from "./ToggleButton";
+export type { S2ToggleButtonGroupProps } from "./ToggleButtonGroup";
 export type {
   ButtonFillStyle,
   ButtonSize,
