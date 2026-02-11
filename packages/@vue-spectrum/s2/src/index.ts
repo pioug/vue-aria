@@ -7,6 +7,7 @@ export {
   DisclosurePanel,
   DisclosureTitle,
 } from "./Accordion";
+export { ActionBar } from "./ActionBar";
 export { ActionMenu } from "./ActionMenu";
 export { BreadcrumbItem, Breadcrumbs } from "./Breadcrumbs";
 export { Button, LinkButton } from "./Button";
@@ -56,6 +57,7 @@ export type {
   S2DisclosureProps,
   S2DisclosureTitleProps,
 } from "./Accordion";
+export type { S2ActionBarProps } from "./ActionBar";
 export type { S2ActionMenuProps } from "./ActionMenu";
 export type { S2BreadcrumbItemProps, S2BreadcrumbsProps } from "./Breadcrumbs";
 export type {
