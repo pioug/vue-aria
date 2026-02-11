@@ -178,6 +178,49 @@ describe("MenuTrigger", () => {
     expect(tree.getByRole("menu")).toBeTruthy();
   });
 
+  it("does not close on keyboard selection when closeOnSelect is false", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      selectionMode: "single",
+      closeOnSelect: false,
+      onOpenChange,
+    });
+
+    const trigger = tree.getByRole("button", { name: "Menu Button" });
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    const menuItems = within(menu).getAllByRole("menuitemradio");
+    (menuItems[0] as HTMLElement).focus();
+    await user.keyboard("{Enter}");
+
+    expect(tree.getByRole("menu")).toBeTruthy();
+    expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("closes on selection when closeOnSelect is true in multiple mode", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    const tree = renderComponent({
+      selectionMode: "multiple",
+      closeOnSelect: true,
+      onClose,
+    });
+
+    const trigger = tree.getByRole("button", { name: "Menu Button" });
+    await user.click(trigger);
+
+    const menu = tree.getByRole("menu");
+    const menuItems = within(menu).getAllByRole("menuitemcheckbox");
+
+    await user.click(menuItems[0] as Element);
+
+    expect(tree.queryByRole("menu")).toBeNull();
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
   it("does not open when disabled", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
