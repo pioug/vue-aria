@@ -17,6 +17,7 @@ import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { mergeProps } from "@vue-aria/utils";
 import { classNames } from "@vue-spectrum/utils";
 import { Overlay } from "@vue-spectrum/overlays";
+import { trapFocusWithinOverlay } from "./focusTrap";
 import {
   provideDialogContext,
   type DialogContextValue,
@@ -295,12 +296,24 @@ export const DialogTrigger = defineComponent({
     );
 
     const onOverlayKeydown = (event: KeyboardEvent): void => {
-      if (event.key !== "Escape" || props.isKeyboardDismissDisabled) {
+      if (event.key === "Escape") {
+        if (props.isKeyboardDismissDisabled) {
+          return;
+        }
+
+        event.preventDefault();
+        setOpen(false);
         return;
       }
 
-      event.preventDefault();
-      setOpen(false);
+      const root = overlayRootRef.value;
+      if (!root) {
+        return;
+      }
+
+      const dialog =
+        root.querySelector<HTMLElement>("[role=\"dialog\"], [role=\"alertdialog\"]") ?? root;
+      trapFocusWithinOverlay(event, root, dialog);
     };
 
     const toggle = (): void => {
@@ -387,6 +400,7 @@ export const DialogTrigger = defineComponent({
                           {
                             type: "button",
                             "aria-label": "Dismiss",
+                            tabIndex: -1,
                             style: DISMISS_BUTTON_STYLE,
                             onClick: close,
                           },
@@ -400,6 +414,7 @@ export const DialogTrigger = defineComponent({
                           {
                             type: "button",
                             "aria-label": "Dismiss",
+                            tabIndex: -1,
                             style: DISMISS_BUTTON_STYLE,
                             onClick: close,
                           },

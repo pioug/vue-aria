@@ -166,6 +166,62 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it.each(["modal", "popover", "tray"] as const)(
+    "contains focus within the dialog when rendered as %s",
+    async (type) => {
+      const wrapper = mount(DialogTrigger, {
+        attachTo: document.body,
+        props: {
+          type,
+        },
+        slots: {
+          default: () => [
+            h("button", { type: "button" }, "Trigger"),
+            h(Dialog, null, () => [
+              h("input", { "data-testid": "input1" }),
+              h("input", { "data-testid": "input2" }),
+            ]),
+          ],
+        },
+      });
+
+      try {
+        await wrapper.get("button").trigger("click");
+        await flushOverlay();
+
+        const dialog = document.body.querySelector("[role=\"dialog\"]") as HTMLElement;
+        const input1 = document.body.querySelector(
+          "[data-testid=\"input1\"]"
+        ) as HTMLInputElement;
+        const input2 = document.body.querySelector(
+          "[data-testid=\"input2\"]"
+        ) as HTMLInputElement;
+
+        expect(document.activeElement).toBe(dialog);
+
+        (document.activeElement as HTMLElement).dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Tab", bubbles: true })
+        );
+        await flushOverlay();
+        expect(document.activeElement).toBe(input1);
+
+        (document.activeElement as HTMLElement).dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Tab", bubbles: true })
+        );
+        await flushOverlay();
+        expect(document.activeElement).toBe(input2);
+
+        (document.activeElement as HTMLElement).dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Tab", bubbles: true })
+        );
+        await flushOverlay();
+        expect(document.activeElement).toBe(input1);
+      } finally {
+        wrapper.unmount();
+      }
+    }
+  );
+
   it("forces dismissable modal behavior for popover mobile fallback", async () => {
     const restore = mockMatchMedia(true);
     const wrapper = mountDialogTrigger({

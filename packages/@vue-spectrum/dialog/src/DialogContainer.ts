@@ -19,6 +19,7 @@ import {
   type DialogContextValue,
   type DialogType,
 } from "./context";
+import { trapFocusWithinOverlay } from "./focusTrap";
 
 export interface SpectrumDialogContainerProps {
   type?: DialogType | undefined;
@@ -112,12 +113,24 @@ export const DialogContainer = defineComponent({
     );
 
     const onOverlayKeydown = (event: KeyboardEvent): void => {
-      if (event.key !== "Escape" || props.isKeyboardDismissDisabled) {
+      if (event.key === "Escape") {
+        if (props.isKeyboardDismissDisabled) {
+          return;
+        }
+
+        event.preventDefault();
+        props.onDismiss?.();
         return;
       }
 
-      event.preventDefault();
-      props.onDismiss?.();
+      const root = overlayRootRef.value;
+      if (!root) {
+        return;
+      }
+
+      const dialog =
+        root.querySelector<HTMLElement>("[role=\"dialog\"], [role=\"alertdialog\"]") ?? root;
+      trapFocusWithinOverlay(event, root, dialog);
     };
 
     const onDocumentMouseDown = (event: MouseEvent): void => {
