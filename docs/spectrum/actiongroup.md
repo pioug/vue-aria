@@ -55,6 +55,7 @@ const component = h(ActionGroup, {
 - When fully collapsed, aria labeling props are forwarded to the overflow menu trigger (`aria-label` / `aria-labelledby`).
 - Baseline includes group-level `aria-labelledby` / `aria-describedby` passthrough.
 - Baseline includes static-item `data-*` attribute passthrough from `ActionGroupItem`.
+- Baseline includes root custom-prop passthrough and static-item `aria-label` semantics.
 - Baseline includes `buttonLabelBehavior="hide"` wiring (`spectrum-ActionGroup-item--iconOnly` with aria-label fallback for accessibility).
 - Baseline includes `buttonLabelBehavior="collapse"` behavior: labels collapse to icon-only buttons before overflowing when possible, and labels restore when space increases.
 - Baseline multiple-selection behavior does not select all items on `Cmd/Ctrl + A`.

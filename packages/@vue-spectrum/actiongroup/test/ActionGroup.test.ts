@@ -58,6 +58,15 @@ describe("ActionGroup", () => {
     expect(buttons[2].textContent).toContain("Three");
   });
 
+  it("supports custom props on the action group root", () => {
+    const tree = renderComponent({
+      "data-testid": "actiongroup-root",
+    });
+
+    const group = tree.getByRole("toolbar", { name: "actiongroup-test" });
+    expect(group.getAttribute("data-testid")).toBe("actiongroup-root");
+  });
+
   it("handles vertical orientation", () => {
     const tree = renderComponent({
       orientation: "vertical",
@@ -303,6 +312,38 @@ describe("ActionGroup", () => {
     expect(onAction).toHaveBeenLastCalledWith("two");
     expect(Array.from(onSelectionChange.mock.calls[1][0] as Set<string>)).toEqual(["two"]);
     expect(options[1].getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("supports aria-label on static ActionGroupItem nodes", () => {
+    const App = defineComponent({
+      name: "ActionGroupItemAriaLabelHarness",
+      setup() {
+        return () =>
+          h(
+            Provider,
+            {
+              theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+            },
+            {
+              default: () =>
+                h(
+                  ActionGroup,
+                  {
+                    "aria-label": "actiongroup-test",
+                    selectionMode: "single",
+                  },
+                  {
+                    default: () => [h(ActionGroupItem, { id: "one", "aria-label": "Test label" }, () => "One")],
+                  }
+                ),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const option = tree.getByRole("radio");
+    expect(option.getAttribute("aria-label")).toBe("Test label");
   });
 
   it("does not select all items on Cmd/Ctrl+A in multiple selection mode", async () => {
