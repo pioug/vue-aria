@@ -14,6 +14,22 @@ const FOCUSABLE_ROW_SELECTOR = [
   "[contenteditable=\"true\"]",
 ].join(",");
 
+function getFocusableRowElements(row: HTMLElement): HTMLElement[] {
+  return Array.from(row.querySelectorAll<HTMLElement>(FOCUSABLE_ROW_SELECTOR)).filter(
+    (element) => !element.hasAttribute("hidden") && element.getAttribute("aria-hidden") !== "true"
+  );
+}
+
+function getTextDirection(element: HTMLElement): "ltr" | "rtl" {
+  const dirContainer = element.closest<HTMLElement>("[dir]");
+  const direction =
+    dirContainer?.getAttribute("dir") ??
+    element.ownerDocument.documentElement.getAttribute("dir") ??
+    "ltr";
+
+  return direction.toLowerCase() === "rtl" ? "rtl" : "ltr";
+}
+
 export interface UseTableRowOptions<T = unknown> {
   row: TableRowNode<T>;
   rowIndex: number;
@@ -183,12 +199,66 @@ export function useTableRow<T>(
       triggerAction();
     },
     onKeydown: (event: KeyboardEvent) => {
+      const rowElement = toValue(rowRef);
+      const target = event.target;
+      const isNestedFocusableTarget =
+        rowElement &&
+        target instanceof HTMLElement &&
+        target !== rowElement &&
+        rowElement.contains(target) &&
+        target.closest(FOCUSABLE_ROW_SELECTOR) !== null;
+
+      if (
+        (event.key === "ArrowRight" || event.key === "ArrowLeft") &&
+        rowElement &&
+        !shouldUseVirtualFocus.value
+      ) {
+        const activeElement = rowElement.ownerDocument.activeElement;
+        if (activeElement instanceof HTMLElement && rowElement.contains(activeElement)) {
+          const focusables = getFocusableRowElements(rowElement);
+          if (focusables.length > 0) {
+            const isRtl = getTextDirection(rowElement) === "rtl";
+            const moveForward =
+              event.key === (isRtl ? "ArrowLeft" : "ArrowRight");
+            let nextFocusable: HTMLElement | null = null;
+
+            if (activeElement === rowElement) {
+              nextFocusable = moveForward
+                ? (focusables[0] ?? null)
+                : (focusables[focusables.length - 1] ?? null);
+            } else {
+              const currentIndex = focusables.indexOf(activeElement);
+              if (currentIndex >= 0) {
+                const nextIndex = moveForward ? currentIndex + 1 : currentIndex - 1;
+                nextFocusable =
+                  nextIndex >= 0 && nextIndex < focusables.length
+                    ? (focusables[nextIndex] ?? null)
+                    : rowElement;
+              }
+            }
+
+            if (nextFocusable) {
+              event.preventDefault();
+              event.stopPropagation();
+              nextFocusable.focus();
+              return;
+            }
+          }
+        }
+      }
+
       if (event.key === " ") {
+        if (isNestedFocusableTarget) {
+          return;
+        }
         event.preventDefault();
         selectRow();
       }
 
       if (event.key === "Enter") {
+        if (isNestedFocusableTarget) {
+          return;
+        }
         event.preventDefault();
         triggerAction();
       }

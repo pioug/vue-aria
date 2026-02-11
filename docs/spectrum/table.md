@@ -85,7 +85,7 @@ const component = h(TableView, {
 
 ## Notes
 
-- Baseline includes static table semantics (`grid`, `rowgroup`, `row`, `columnheader`, `rowheader`, `gridcell`), single/multiple selection, keyboard row navigation, sortable header state wiring, row-focus marshalling on non-focusable cell press, and focused-child retention for interactive elements inside cells.
+- Baseline includes static table semantics (`grid`, `rowgroup`, `row`, `columnheader`, `rowheader`, `gridcell`), single/multiple selection, keyboard row navigation, sortable header state wiring, row-focus marshalling on non-focusable cell press, focused-child retention for interactive elements inside cells, and left/right keyboard cycling across interactive row content with fallback back to the row.
 - Supports both prop-driven tables (`columns` + `items`) and static slot composition (`TableHeader`/`Column` + `TableBody`/`Row`/`Cell`/`EditableCell`).
 - Includes dedicated upstream-style `Table.test` and `Table.ssr.test` parity suites plus shared `test/TableTests` fixture parity scaffolding.
 - Includes expanded ARIA matrix assertions for static tables (`aria-rowcount`, row/column index attributes, and unsorted-header `aria-sort` omission).
