@@ -86,6 +86,7 @@ export const MenuItem = defineComponent({
         {
           role: role.value,
           tabIndex: props.tabIndex ?? -1,
+          "aria-label": props.item["aria-label"],
           "aria-disabled": disabled ? "true" : undefined,
           "aria-checked":
             props.selectionMode === "none" ? undefined : String(selected),
@@ -117,7 +118,6 @@ export const MenuItem = defineComponent({
             "span",
             {
               class: classNames("spectrum-Menu-itemLabel"),
-              "aria-label": props.item["aria-label"],
             },
             props.item.label
           ),

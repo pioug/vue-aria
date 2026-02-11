@@ -161,4 +161,45 @@ describe("Menu", () => {
     await user.click(menuItems[2] as Element);
     expect(onAction).toHaveBeenCalledWith("delete");
   });
+
+  it("supports aria-label on sections and items", () => {
+    const tree = render(Menu, {
+      props: {
+        "aria-label": "menu-test",
+        sections: [
+          {
+            key: "icons",
+            "aria-label": "Icon section",
+            items: [{ key: "bell", label: "Bell", "aria-label": "Notification" }],
+          },
+        ],
+      },
+    });
+
+    const menu = tree.getByRole("menu", { name: "menu-test" });
+    const section = within(menu).getByRole("group");
+    const menuItem = within(menu).getByRole("menuitem", { name: "Notification" });
+
+    expect(section.getAttribute("aria-label")).toBe("Icon section");
+    expect(menuItem.getAttribute("aria-label")).toBe("Notification");
+    expect(menuItem.getAttribute("aria-labelledby")).toBeNull();
+    expect(menuItem.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("warns when no aria-label or aria-labelledby is provided", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      render(Menu, {
+        props: {
+          items,
+        },
+      });
+      expect(warnSpy).toHaveBeenCalledWith(
+        "An aria-label or aria-labelledby prop is required for accessibility."
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
 });

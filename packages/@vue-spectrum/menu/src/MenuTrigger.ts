@@ -9,6 +9,7 @@ import {
   type PropType,
 } from "vue";
 import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
+import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
 import { Overlay } from "@vue-spectrum/overlays";
@@ -155,6 +156,7 @@ export const MenuTrigger = defineComponent({
     const rootRef = ref<HTMLDivElement | null>(null);
     const triggerRef = ref<HTMLButtonElement | null>(null);
     const menuOverlayRef = ref<HTMLElement | null>(null);
+    const triggerId = useId(undefined, "v-spectrum-menu-trigger-button");
 
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const focusStrategy = ref<"first" | "last" | undefined>(undefined);
@@ -286,6 +288,7 @@ export const MenuTrigger = defineComponent({
           h(
             "button",
             {
+              id: triggerId.value,
               ref: (value: unknown) => {
                 triggerRef.value = value as HTMLButtonElement | null;
               },
@@ -370,7 +373,9 @@ export const MenuTrigger = defineComponent({
                         autoFocus: focusStrategy.value ?? "first",
                         ariaLabel: props.ariaLabel ?? props["aria-label"],
                         ariaLabelledby:
-                          props.ariaLabelledby ?? props["aria-labelledby"] ?? triggerRef.value?.id,
+                          props.ariaLabelledby ??
+                          props["aria-labelledby"] ??
+                          triggerId.value,
                         onAction: props.onAction,
                         onSelectionChange: (keys) => {
                           if (props.selectedKeys === undefined) {

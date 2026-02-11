@@ -427,6 +427,14 @@ export const Menu = defineComponent({
         props.ariaLabelledby ??
         props["aria-labelledby"] ??
         (attrsRecord["aria-labelledby"] as string | undefined);
+      const isProduction =
+        typeof process !== "undefined" && process.env.NODE_ENV === "production";
+
+      if (!isProduction && !ariaLabel && !ariaLabelledby) {
+        console.warn(
+          "An aria-label or aria-labelledby prop is required for accessibility."
+        );
+      }
 
       const renderMenuItem = (item: SpectrumMenuItemData) => {
         const itemKey = keyToString(item.key) ?? "";

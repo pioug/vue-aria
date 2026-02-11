@@ -132,6 +132,7 @@ export const SubmenuTrigger = defineComponent({
     const rootRef = ref<HTMLLIElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
     const menuId = useId(undefined, "v-spectrum-submenu");
+    const triggerId = useId(undefined, "v-spectrum-submenu-trigger-button");
 
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const isOpen = computed<boolean>(() =>
@@ -232,6 +233,7 @@ export const SubmenuTrigger = defineComponent({
           h(
             "button",
             {
+              id: triggerId.value,
               ref: (value: unknown) => {
                 buttonRef.value = value as HTMLButtonElement | null;
               },
@@ -297,7 +299,8 @@ export const SubmenuTrigger = defineComponent({
                 closeOnSelect: props.closeOnSelect,
                 shouldFocusWrap: props.shouldFocusWrap,
                 ariaLabel: props.ariaLabel,
-                ariaLabelledby: props.ariaLabelledby,
+                ariaLabelledby:
+                  props.ariaLabelledby ?? props["aria-labelledby"] ?? triggerId.value,
                 onAction: (key) => {
                   props.onAction?.(key);
                   if (closeOnSelect) {
