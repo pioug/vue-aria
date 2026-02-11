@@ -252,7 +252,7 @@ describe("Menu", () => {
   });
 
   it("supports ContextualHelpTrigger with unavailable static items", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ skipHover: true });
     const onAction = vi.fn();
 
     const App = defineComponent({

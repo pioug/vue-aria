@@ -1,4 +1,4 @@
-import { render } from "@testing-library/vue";
+import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { h, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
@@ -32,7 +32,7 @@ describe("ContextualHelpTrigger", () => {
   });
 
   it("opens dialog content when unavailable", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ skipHover: true });
     const tree = render(ContextualHelpTrigger, {
       props: {
         isUnavailable: true,
@@ -53,5 +53,51 @@ describe("ContextualHelpTrigger", () => {
     const dialog = document.body.querySelector("[role=\"dialog\"]");
     expect(dialog).not.toBeNull();
     expect(document.body.textContent).toContain("Help content");
+  });
+
+  it("opens on hover when unavailable", async () => {
+    const tree = render(ContextualHelpTrigger, {
+      props: {
+        isUnavailable: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Unavailable item"),
+          h(Dialog, null, {
+            default: () => "Hover help content",
+          }),
+        ],
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "Unavailable item" });
+    fireEvent.mouseEnter(trigger);
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    expect(document.body.textContent).toContain("Hover help content");
+  });
+
+  it("opens on ArrowRight when unavailable", async () => {
+    const tree = render(ContextualHelpTrigger, {
+      props: {
+        isUnavailable: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Unavailable item"),
+          h(Dialog, null, {
+            default: () => "Keyboard help content",
+          }),
+        ],
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "Unavailable item" });
+    fireEvent.keyDown(trigger, { key: "ArrowRight" });
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    expect(document.body.textContent).toContain("Keyboard help content");
   });
 });

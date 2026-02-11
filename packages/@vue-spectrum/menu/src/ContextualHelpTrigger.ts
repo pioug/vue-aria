@@ -1,7 +1,9 @@
 import {
+  cloneVNode,
   defineComponent,
   h,
   isVNode,
+  mergeProps,
   type PropType,
   type VNode,
   type VNodeChild,
@@ -61,6 +63,26 @@ export const ContextualHelpTrigger = defineComponent({
         return trigger;
       }
 
+      const triggerWithContextualHelpHandlers = cloneVNode(
+        trigger,
+        mergeProps((trigger.props ?? {}) as Record<string, unknown>, {
+          onMouseenter: (event: MouseEvent) => {
+            const target = event.currentTarget as HTMLElement | null;
+            target?.click();
+          },
+          onKeydown: (event: KeyboardEvent) => {
+            if (event.key !== "ArrowRight") {
+              return;
+            }
+
+            event.preventDefault();
+            const target = event.currentTarget as HTMLElement | null;
+            target?.click();
+          },
+        }),
+        true
+      );
+
       return h(
         DialogTrigger,
         {
@@ -68,7 +90,7 @@ export const ContextualHelpTrigger = defineComponent({
           placement: "end top",
         },
         {
-          default: () => [trigger, content],
+          default: () => [triggerWithContextualHelpHandlers, content],
         }
       );
     };

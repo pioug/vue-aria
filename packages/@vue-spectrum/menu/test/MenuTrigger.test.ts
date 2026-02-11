@@ -285,7 +285,7 @@ describe("MenuTrigger", () => {
   });
 
   it("supports contextual help within slotted composed menus", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ skipHover: true });
     const onAction = vi.fn();
 
     const App = defineComponent({
