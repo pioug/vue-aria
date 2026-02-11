@@ -110,6 +110,46 @@ export function useSpectrumTextField(
     onBlur: props.onBlur,
   });
 
+  const forwardedInputAttrs = computed<Record<string, unknown>>(() => {
+    const result: Record<string, unknown> = {};
+
+    for (const [key, value] of Object.entries(attrs)) {
+      if (value === undefined) {
+        continue;
+      }
+
+      if (
+        key.startsWith("aria-") ||
+        key.startsWith("data-") ||
+        key === "role" ||
+        key === "tabIndex" ||
+        key === "tabindex"
+      ) {
+        result[key] = value;
+      }
+    }
+
+    return result;
+  });
+
+  const inputProps = computed<Record<string, unknown>>(() => {
+    const mergedProps: Record<string, unknown> = {
+      ...(textField.inputProps.value as Record<string, unknown>),
+    };
+
+    for (const [key, value] of Object.entries(forwardedInputAttrs.value)) {
+      if (mergedProps[key] === undefined) {
+        mergedProps[key] = value;
+      }
+    }
+
+    if (props.excludeFromTabOrder) {
+      mergedProps.tabIndex = -1;
+    }
+
+    return mergedProps;
+  });
+
   return {
     isDisabled,
     isReadOnly,
@@ -117,6 +157,7 @@ export function useSpectrumTextField(
     validationState,
     validationBehavior,
     textField,
+    inputProps,
     inputRows: computed(() =>
       options.multiLine ? (options.rows as SpectrumTextAreaProps["rows"]) : undefined
     ),

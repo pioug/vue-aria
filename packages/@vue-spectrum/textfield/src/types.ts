@@ -59,6 +59,11 @@ export interface SpectrumTextFieldBaseProps {
   onBlur?: ((event: FocusEvent) => void) | undefined;
   contextualHelp?: VNode | undefined;
   slot?: string | undefined;
+  icon?: VNode | "" | null | undefined;
+  loadingIndicator?: VNode | null | undefined;
+  isLoading?: boolean | undefined;
+  disableFocusRing?: boolean | undefined;
+  excludeFromTabOrder?: boolean | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
@@ -244,6 +249,26 @@ export const textFieldBasePropOptions = {
   },
   slot: {
     type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  icon: {
+    type: null as unknown as PropType<VNode | "" | null | undefined>,
+    default: undefined,
+  },
+  loadingIndicator: {
+    type: Object as PropType<VNode | null | undefined>,
+    default: undefined,
+  },
+  isLoading: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  disableFocusRing: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  excludeFromTabOrder: {
+    type: Boolean as PropType<boolean | undefined>,
     default: undefined,
   },
   UNSAFE_className: {

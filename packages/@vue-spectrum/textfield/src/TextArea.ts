@@ -63,6 +63,7 @@ export const TextArea = defineComponent({
       isDisabled,
       validationState,
       textField,
+      inputProps,
       inputRows,
     } = useSpectrumTextField(props as SpectrumTextAreaProps, attrsRecord, {
       multiLine: true,
@@ -113,7 +114,7 @@ export const TextArea = defineComponent({
         labelProps: textField.labelProps.value,
         descriptionProps: textField.descriptionProps.value,
         errorMessageProps: textField.errorMessageProps.value,
-        inputProps: mergeProps(textField.inputProps.value, {
+        inputProps: mergeProps(inputProps.value, {
           onInput: () => {
             syncTextareaHeight();
           },

@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { nextTick } from "vue";
+import { h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { TextArea, TextField } from "../src";
 
@@ -155,6 +155,87 @@ describe("TextField", () => {
     const input = getByRole("textbox");
     expect(document.activeElement).toBe(input);
   });
+
+  it("supports custom icon rendering", () => {
+    const { getByTestId } = render(TextField, {
+      props: {
+        label: "Name",
+        icon: h("span", { "data-testid": "textfield-icon", role: "img" }, "*"),
+      },
+    });
+
+    expect(getByTestId("textfield-icon")).toBeTruthy();
+  });
+
+  it("supports validation icons and valid aria-describedby wiring", () => {
+    const validTree = render(TextField, {
+      props: {
+        label: "Name",
+        validationState: "valid",
+      },
+    });
+
+    const validInput = validTree.getByRole("textbox");
+    const validIcon = validTree.getByTestId("textfield-valid-icon");
+    const validIconId = validIcon.getAttribute("id");
+
+    expect(validIconId).toBeTruthy();
+    expect(validInput.getAttribute("aria-describedby")).toContain(validIconId ?? "");
+    validTree.unmount();
+
+    const invalidTree = render(TextField, {
+      props: {
+        label: "Name",
+        validationState: "invalid",
+      },
+    });
+
+    expect(invalidTree.getByTestId("textfield-invalid-icon")).toBeTruthy();
+  });
+
+  it("supports loading indicator and suppresses validation icon while loading", () => {
+    const { getByTestId, queryByTestId } = render(TextField, {
+      props: {
+        label: "Name",
+        validationState: "valid",
+        isLoading: true,
+        loadingIndicator: h("span", { "data-testid": "textfield-loading" }, "Loading"),
+      },
+    });
+
+    expect(getByTestId("textfield-loading")).toBeTruthy();
+    expect(queryByTestId("textfield-valid-icon")).toBeNull();
+  });
+
+  it("passes through ARIA and data attributes to the input", () => {
+    const { getByRole } = render(TextField, {
+      props: {
+        label: "Name",
+        "data-testid": "name-input",
+        "aria-activedescendant": "item-1",
+        "aria-autocomplete": "list",
+        "aria-haspopup": "menu",
+      } as Record<string, unknown>,
+    });
+
+    const input = getByRole("textbox");
+    expect(input.getAttribute("data-testid")).toBe("name-input");
+    expect(input.getAttribute("aria-activedescendant")).toBe("item-1");
+    expect(input.getAttribute("aria-autocomplete")).toBe("list");
+    expect(input.getAttribute("aria-haspopup")).toBe("menu");
+  });
+
+  it("supports excludeFromTabOrder", () => {
+    const { getByRole } = render(TextField, {
+      props: {
+        label: "Name",
+        excludeFromTabOrder: true,
+      },
+    });
+
+    const input = getByRole("textbox");
+    expect(input.getAttribute("tabindex")).toBe("-1");
+  });
 });
 
 describe("TextArea", () => {
@@ -293,5 +374,28 @@ describe("TextArea", () => {
         delete (HTMLTextAreaElement.prototype as { scrollHeight?: number }).scrollHeight;
       }
     }
+  });
+
+  it("supports custom icon rendering", () => {
+    const { getByTestId } = render(TextArea, {
+      props: {
+        label: "Notes",
+        icon: h("span", { "data-testid": "textarea-icon", role: "img" }, "*"),
+      },
+    });
+
+    expect(getByTestId("textarea-icon")).toBeTruthy();
+  });
+
+  it("supports excludeFromTabOrder", () => {
+    const { getByRole } = render(TextArea, {
+      props: {
+        label: "Notes",
+        excludeFromTabOrder: true,
+      },
+    });
+
+    const input = getByRole("textbox");
+    expect(input.getAttribute("tabindex")).toBe("-1");
   });
 });

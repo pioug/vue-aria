@@ -45,6 +45,7 @@ export const TextField = defineComponent({
       isDisabled,
       validationState,
       textField,
+      inputProps,
     } = useSpectrumTextField(props as SpectrumTextFieldProps, attrsRecord, {
       multiLine: false,
       type: props.type,
@@ -64,7 +65,7 @@ export const TextField = defineComponent({
         labelProps: textField.labelProps.value,
         descriptionProps: textField.descriptionProps.value,
         errorMessageProps: textField.errorMessageProps.value,
-        inputProps: textField.inputProps.value,
+        inputProps: inputProps.value,
       } as Record<string, unknown>);
   },
 });

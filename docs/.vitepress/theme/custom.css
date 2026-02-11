@@ -329,6 +329,50 @@
   color: #7d899c;
 }
 
+.spectrum-Textfield-icon,
+.spectrum-Textfield-validationIcon,
+.spectrum-Textfield-loadingIcon {
+  flex: 0 0 auto;
+  margin-inline-end: 0.55rem;
+  font: 600 0.72rem/1 var(--vp-font-family-base);
+}
+
+.spectrum-Textfield-icon {
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-Textfield-validationIcon {
+  color: var(--spectrum-ui-success);
+}
+
+.spectrum-Textfield--invalid .spectrum-Textfield-validationIcon {
+  color: var(--spectrum-ui-danger);
+}
+
+.spectrum-Textfield-loadingIcon {
+  color: var(--spectrum-ui-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.spectrum-preview-inline-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: #ebf2ff;
+  color: #335cb5;
+  font: 700 0.68rem/1 var(--vp-font-family-base);
+}
+
+.spectrum-preview-inline-loader {
+  display: inline-flex;
+  align-items: center;
+  font: 600 0.7rem/1 var(--vp-font-family-base);
+  letter-spacing: 0.08em;
+}
+
 .spectrum-HelpText {
   font: 400 0.78rem/1.35 var(--vp-font-family-base);
   color: var(--spectrum-ui-text-muted);

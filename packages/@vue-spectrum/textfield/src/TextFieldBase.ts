@@ -11,6 +11,7 @@ import {
   type Ref,
   type VNode,
 } from "vue";
+import { useId } from "@vue-aria/ssr";
 import { useFocusRing } from "@vue-aria/focus";
 import { useHover } from "@vue-aria/interactions";
 import { mergeProps } from "@vue-aria/utils";
@@ -37,6 +38,9 @@ export interface SpectrumTextFieldBaseRenderProps {
   inputRef?: Ref<HTMLInputElement | HTMLTextAreaElement | null> | undefined;
   inputClassName?: string | undefined;
   icon?: unknown;
+  loadingIndicator?: VNode | undefined;
+  isLoading?: boolean | undefined;
+  disableFocusRing?: boolean | undefined;
   wrapperChildren?: VNode | VNode[] | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
@@ -126,6 +130,18 @@ export const TextFieldBase = defineComponent({
       type: null as unknown as PropType<unknown>,
       default: undefined,
     },
+    loadingIndicator: {
+      type: null as unknown as PropType<VNode | undefined>,
+      default: undefined,
+    },
+    isLoading: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    disableFocusRing: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     wrapperChildren: {
       type: null as unknown as PropType<VNode | VNode[] | undefined>,
       default: undefined,
@@ -149,6 +165,7 @@ export const TextFieldBase = defineComponent({
   },
   setup(props, { expose }) {
     const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
+    const validIconId = useId(undefined, "v-spectrum-textfield-valid");
 
     const setInputRef = (value: HTMLInputElement | HTMLTextAreaElement | null) => {
       inputRef.value = value;
@@ -184,10 +201,36 @@ export const TextFieldBase = defineComponent({
     });
 
     return () => {
-      const inputInteractionProps = props.inputProps;
+      const resolvedValidationState =
+        props.validationState ?? (props.isInvalid ? "invalid" : undefined);
+      const inputInteractionProps: Record<string, unknown> = {
+        ...(props.inputProps as Record<string, unknown>),
+      };
       const isInvalid =
-        Boolean(props.isInvalid) || props.validationState === "invalid";
+        Boolean(props.isInvalid) || resolvedValidationState === "invalid";
       const elementType = props.multiLine ? "textarea" : "input";
+      if (
+        resolvedValidationState === "valid" &&
+        !isInvalid &&
+        !props.isDisabled &&
+        !props.isLoading
+      ) {
+        const describedBy = inputInteractionProps["aria-describedby"];
+        const describedByValue =
+          typeof describedBy === "string" ? describedBy : undefined;
+        if (
+          !describedByValue ||
+          !describedByValue.includes(validIconId.value)
+        ) {
+          inputInteractionProps["aria-describedby"] = [
+            describedByValue,
+            validIconId.value,
+          ]
+            .filter(Boolean)
+            .join(" ");
+        }
+      }
+
       let iconNode: VNode | undefined;
       if (isVNode(props.icon)) {
         const iconProps = (props.icon as VNode).props as
@@ -201,6 +244,42 @@ export const TextFieldBase = defineComponent({
           ),
         });
       }
+      let loadingIndicatorNode: VNode | undefined;
+      if (isVNode(props.loadingIndicator)) {
+        const loadingIndicatorProps = (props.loadingIndicator as VNode).props as
+          | Record<string, unknown>
+          | null
+          | undefined;
+        loadingIndicatorNode = cloneVNode(props.loadingIndicator as VNode, {
+          class: classNames(
+            "spectrum-Textfield-loadingIcon",
+            loadingIndicatorProps?.class as ClassValue | undefined
+          ),
+        });
+      }
+
+      const validationNode =
+        resolvedValidationState && !props.isLoading && !props.isDisabled
+          ? h(
+              "span",
+              resolvedValidationState === "valid"
+                ? {
+                    id: validIconId.value,
+                    role: "img",
+                    "aria-label": "Valid",
+                    class: "spectrum-Textfield-validationIcon",
+                    "data-testid": "textfield-valid-icon",
+                  }
+                : {
+                    role: "img",
+                    "aria-label": "Invalid",
+                    class: "spectrum-Textfield-validationIcon",
+                    "data-testid": "textfield-invalid-icon",
+                  },
+              resolvedValidationState === "valid" ? "\u2713" : "!"
+            )
+          : undefined;
+
       const wrapperChildren = Array.isArray(props.wrapperChildren)
         ? props.wrapperChildren
         : props.wrapperChildren
@@ -230,6 +309,12 @@ export const TextFieldBase = defineComponent({
       if (iconNode) {
         textFieldChildren.push(iconNode);
       }
+      if (validationNode) {
+        textFieldChildren.push(validationNode);
+      }
+      if (props.isLoading && loadingIndicatorNode) {
+        textFieldChildren.push(loadingIndicatorNode);
+      }
       textFieldChildren.push(...wrapperChildren);
 
       const textField = h(
@@ -238,10 +323,12 @@ export const TextFieldBase = defineComponent({
           class: classNames("spectrum-Textfield", {
             "spectrum-Textfield--invalid": isInvalid && !props.isDisabled,
             "spectrum-Textfield--valid":
-              props.validationState === "valid" && !props.isDisabled,
+              resolvedValidationState === "valid" && !props.isDisabled,
+            "spectrum-Textfield--loadable": Boolean(props.loadingIndicator),
             "spectrum-Textfield--quiet": Boolean(props.isQuiet),
             "spectrum-Textfield--multiline": Boolean(props.multiLine),
-            "focus-ring": focusRing.isFocusVisible.value,
+            "focus-ring":
+              !props.disableFocusRing && focusRing.isFocusVisible.value,
           }),
         },
         textFieldChildren
@@ -259,7 +346,7 @@ export const TextFieldBase = defineComponent({
           description: props.description,
           errorMessage: props.errorMessage,
           isInvalid: props.isInvalid,
-          validationState: props.validationState,
+          validationState: resolvedValidationState,
           isDisabled: props.isDisabled,
           contextualHelp: props.contextualHelp,
           labelProps: props.labelProps,
