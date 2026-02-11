@@ -3,8 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
+  Item,
   ListBox,
   ListBoxOption,
+  Section,
   ListBoxSection,
   type SpectrumListBoxItemData,
 } from "../src";
@@ -346,5 +348,10 @@ describe("ListBox", () => {
     await user.click(findOptionByText(listbox, "Alpha"));
     expect(onAction).toHaveBeenCalledWith("alpha");
     expect(Array.from(onSelectionChange.mock.calls[0][0] as Set<string>)).toEqual(["alpha"]);
+  });
+
+  it("exports Item and Section aliases", () => {
+    expect(Item).toBe(ListBoxOption);
+    expect(Section).toBe(ListBoxSection);
   });
 });

@@ -1,11 +1,13 @@
 export { Tabs, TabList, TabPanels } from "./Tabs";
+export { Item } from "./Item";
 
 export type {
   SpectrumTabsProps,
+  SpectrumTabItem,
   SpectrumTabListProps,
   SpectrumTabPanelsProps,
-  SpectrumTabItem,
   TabsOrientation,
   TabsKeyboardActivation,
   TabsDensity,
 } from "./Tabs";
+export type { SpectrumTabsItemProps } from "./Item";

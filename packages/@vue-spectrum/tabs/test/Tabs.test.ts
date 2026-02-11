@@ -3,7 +3,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import { defineComponent, h, nextTick, type VNodeChild } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
-import { TabList, TabPanels, Tabs, type SpectrumTabItem } from "../src";
+import { Item, TabList, TabPanels, Tabs, type SpectrumTabItem } from "../src";
 
 const defaultItems: SpectrumTabItem[] = [
   { key: "tab-1", title: "Tab 1", children: "Tab 1 body" },
@@ -256,6 +256,25 @@ describe("Tabs", () => {
 
     const tabpanel = getByRole("tabpanel");
     expect(tabpanel.textContent).toContain("Panel: tab-1");
+  });
+
+  it("supports Item compatibility in scoped tab slots", async () => {
+    const { getByRole } = renderTabs(
+      {},
+      defaultItems,
+      {
+        tabListSlot: ({ item }) => h(Item, { title: `Item Label: ${item.title}` }),
+        tabPanelsSlot: ({ item }) => h(Item, null, () => `Item Panel: ${item.key}`),
+      }
+    );
+
+    await flush();
+
+    const tablist = getByRole("tablist");
+    expect(within(tablist).getByText("Item Label: Tab 1")).toBeTruthy();
+
+    const tabpanel = getByRole("tabpanel");
+    expect(tabpanel.textContent).toContain("Item Panel: tab-1");
   });
 
   it("applies root class and tablist appearance modifiers", async () => {

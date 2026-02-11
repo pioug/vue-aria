@@ -2,8 +2,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { ListView, type SpectrumListViewItemData } from "../src";
-import { ListViewItem } from "../src";
+import { Item, ListView, ListViewItem, type SpectrumListViewItemData } from "../src";
 
 const baseItems: SpectrumListViewItemData[] = [
   { key: "foo", label: "Foo" },
@@ -315,5 +314,9 @@ describe("ListView", () => {
     expect(tree.getByRole("grid", { name: "List" }).getAttribute("data-testid")).toBe(
       "test-grid"
     );
+  });
+
+  it("exports Item as a ListViewItem alias", () => {
+    expect(Item).toBe(ListViewItem);
   });
 });
