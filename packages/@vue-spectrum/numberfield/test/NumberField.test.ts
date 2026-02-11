@@ -227,6 +227,49 @@ describe("NumberField", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it("moves focus to the input when steppers are pressed with a mouse", async () => {
+    const tree = renderNumberField({
+      defaultValue: 1,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton] = tree.getAllByRole("button") as HTMLElement[];
+
+    incrementButton.focus();
+    expect(document.activeElement).toBe(incrementButton);
+
+    await fireEvent.pointerDown(incrementButton, {
+      button: 0,
+      pointerType: "mouse",
+    });
+
+    expect(document.activeElement).toBe(input);
+
+    await fireEvent.pointerUp(incrementButton, {
+      button: 0,
+      pointerType: "mouse",
+    });
+  });
+
+  it("keeps focus on the pressed stepper for keyboard presses", async () => {
+    const tree = renderNumberField({
+      defaultValue: 1,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton] = tree.getAllByRole("button") as HTMLElement[];
+    input.focus();
+    expect(document.activeElement).toBe(input);
+
+    incrementButton.focus();
+    expect(document.activeElement).toBe(incrementButton);
+    await fireEvent.keyDown(incrementButton, { key: " " });
+
+    expect(document.activeElement).toBe(incrementButton);
+
+    await fireEvent.keyUp(incrementButton, { key: " " });
+  });
+
   it("starts stepping from zero when empty and no bounds are set", async () => {
     const onChange = vi.fn();
     const user = userEvent.setup();

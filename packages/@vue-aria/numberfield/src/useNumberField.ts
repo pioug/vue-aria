@@ -3,7 +3,7 @@ import { NumberParser } from "@internationalized/number";
 import { useTextField, type UseTextFieldOptions } from "@vue-aria/textfield";
 import { useSpinButton } from "@vue-aria/spinbutton";
 import { mergeProps } from "@vue-aria/utils";
-import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
+import type { MaybeReactive, PressEvent, ReadonlyRef } from "@vue-aria/types";
 
 export interface UseNumberFieldOptions
   extends Omit<
@@ -629,9 +629,25 @@ export function useNumberField(
       excludeFromTabOrder: true,
       preventFocusOnPress: true,
       isDisabled: !canIncrement.value,
-      onPressStart: () => {
-        const inputRef = options.inputRef === undefined ? undefined : toValue(options.inputRef);
-        inputRef?.focus();
+      onPressStart: (event: PressEvent) => {
+        const inputElement =
+          options.inputRef === undefined ? undefined : toValue(options.inputRef);
+        if (!inputElement) {
+          return;
+        }
+
+        if (inputElement.ownerDocument.activeElement === inputElement) {
+          return;
+        }
+
+        if (event.pointerType === "mouse") {
+          inputElement.focus();
+          return;
+        }
+
+        if (event.target instanceof HTMLElement) {
+          event.target.focus();
+        }
       },
     })
   );
@@ -646,9 +662,25 @@ export function useNumberField(
       excludeFromTabOrder: true,
       preventFocusOnPress: true,
       isDisabled: !canDecrement.value,
-      onPressStart: () => {
-        const inputRef = options.inputRef === undefined ? undefined : toValue(options.inputRef);
-        inputRef?.focus();
+      onPressStart: (event: PressEvent) => {
+        const inputElement =
+          options.inputRef === undefined ? undefined : toValue(options.inputRef);
+        if (!inputElement) {
+          return;
+        }
+
+        if (inputElement.ownerDocument.activeElement === inputElement) {
+          return;
+        }
+
+        if (event.pointerType === "mouse") {
+          inputElement.focus();
+          return;
+        }
+
+        if (event.target instanceof HTMLElement) {
+          event.target.focus();
+        }
       },
     })
   );
