@@ -36,5 +36,6 @@ const field = h(SearchField, {
 ## Notes
 
 - Baseline includes `useSearchField` semantics: Enter submit handling, Escape clearing, clear-button interaction, and controlled/uncontrolled value behavior.
+- Includes parity placeholder deprecation warning behavior from upstream `@react-spectrum/searchfield`.
 - `excludeFromTabOrder`, description/error wiring, and SSR coverage are included.
 - Advanced upstream visual polish and icon/theming parity remain in progress.

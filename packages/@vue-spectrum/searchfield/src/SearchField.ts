@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref, watch } from "vue";
 import { useSearchField } from "@vue-aria/searchfield";
 import { ClearButton } from "@vue-spectrum/button";
 import { useFormProps } from "@vue-spectrum/form";
@@ -14,6 +14,9 @@ import {
   type SpectrumSearchFieldProps,
 } from "./types";
 
+const PLACEHOLDER_DEPRECATION_WARNING =
+  "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/SearchField.html#help-text";
+
 export const SearchField = defineComponent({
   name: "SearchField",
   inheritAttrs: false,
@@ -25,6 +28,22 @@ export const SearchField = defineComponent({
     const propsRecord = props as unknown as Record<string, unknown>;
     const provider = useProviderContext();
     const inputRef = ref<HTMLInputElement | null>(null);
+    const hasWarnedPlaceholder = ref(false);
+    const isProduction =
+      typeof process !== "undefined" && process.env.NODE_ENV === "production";
+
+    watch(
+      () => props.placeholder,
+      (placeholder) => {
+        if (isProduction || hasWarnedPlaceholder.value || !placeholder) {
+          return;
+        }
+
+        console.warn(PLACEHOLDER_DEPRECATION_WARNING);
+        hasWarnedPlaceholder.value = true;
+      },
+      { immediate: true }
+    );
 
     const resolveStringProp = (
       kebabCase: string,

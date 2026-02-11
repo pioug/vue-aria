@@ -16,6 +16,26 @@ function renderComponent(props: Record<string, unknown> = {}) {
 }
 
 describe("SearchField", () => {
+  it("warns once when placeholder is provided", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const tree = renderComponent({
+      placeholder: "Search...",
+    });
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/SearchField.html#help-text"
+    );
+
+    await tree.rerender({
+      "aria-label": "the label",
+      placeholder: "Search again...",
+    });
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    warnSpy.mockRestore();
+  });
+
   it("renders search input and hides clear button when empty", () => {
     const tree = renderComponent();
     const input = tree.getByRole("searchbox");
