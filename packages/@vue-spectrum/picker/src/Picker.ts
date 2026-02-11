@@ -13,10 +13,12 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
+import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
+import { Overlay } from "@vue-spectrum/overlays";
 
 export type PickerKey = string | number;
 
@@ -35,6 +37,7 @@ export interface SpectrumPickerProps {
   placeholder?: string | undefined;
   onSelectionChange?: ((key: PickerKey) => void) | undefined;
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
+  placement?: Placement | undefined;
   ariaLabel?: string | undefined;
   ariaLabelledby?: string | undefined;
   "aria-label"?: string | undefined;
@@ -295,6 +298,10 @@ export const Picker = defineComponent({
       type: Function as PropType<((isOpen: boolean) => void) | undefined>,
       default: undefined,
     },
+    placement: {
+      type: String as PropType<Placement | undefined>,
+      default: undefined,
+    },
     ariaLabel: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -331,6 +338,7 @@ export const Picker = defineComponent({
 
     const rootRef = ref<HTMLDivElement | null>(null);
     const triggerRef = ref<HTMLButtonElement | null>(null);
+    const pickerOverlayRef = ref<HTMLElement | null>(null);
     const optionRefs = new Map<string, HTMLLIElement>();
 
     const listboxId = useId(undefined, "v-spectrum-picker-listbox");
@@ -380,6 +388,14 @@ export const Picker = defineComponent({
 
     const isOpen = ref(false);
     const focusedKey = ref<string | null>(null);
+    const overlayPosition = useOverlayPosition({
+      targetRef: computed(() => triggerRef.value),
+      overlayRef: computed(() => pickerOverlayRef.value),
+      placement: computed(() => props.placement ?? "bottom start"),
+      offset: 8,
+      isOpen,
+      shouldUpdatePosition: isOpen,
+    });
 
     const focusOption = () => {
       if (focusedKey.value === null) {
@@ -519,7 +535,10 @@ export const Picker = defineComponent({
       }
 
       const target = event.target as Node | null;
-      if (target && rootRef.value?.contains(target)) {
+      if (
+        target &&
+        (rootRef.value?.contains(target) || pickerOverlayRef.value?.contains(target))
+      ) {
         return;
       }
 
@@ -648,95 +667,124 @@ export const Picker = defineComponent({
           ),
           isOpen.value && items.value.length > 0
             ? h(
-                "ul",
+                Overlay,
                 {
-                  id: listboxId.value,
-                  role: "listbox",
-                  class: classNames("spectrum-Dropdown-popover"),
-                  tabindex: -1,
-                  onKeydown: (event: KeyboardEvent) => {
-                    switch (event.key) {
-                      case "ArrowDown":
-                        event.preventDefault();
-                        moveFocus(1);
-                        break;
-                      case "ArrowUp":
-                        event.preventDefault();
-                        moveFocus(-1);
-                        break;
-                      case "Home":
-                        event.preventDefault();
-                        focusedKey.value = enabledKeys.value[0] ?? null;
-                        void nextTick(() => {
-                          focusOption();
-                        });
-                        break;
-                      case "End":
-                        event.preventDefault();
-                        focusedKey.value =
-                          enabledKeys.value[enabledKeys.value.length - 1] ?? null;
-                        void nextTick(() => {
-                          focusOption();
-                        });
-                        break;
-                      case "Enter":
-                      case " ":
-                        event.preventDefault();
-                        if (focusedKey.value !== null) {
-                          selectKey(focusedKey.value);
-                        }
-                        break;
-                      case "Escape":
-                        event.preventDefault();
-                        closeMenu(true);
-                        break;
-                      case "Tab":
-                        closeMenu();
-                        break;
-                      default:
-                        break;
-                    }
-                  },
+                  isOpen: isOpen.value,
                 },
-                items.value.map((item) => {
-                  const itemKey = String(item.key);
-                  const selected = selectedKey.value === itemKey;
-                  const focused = focusedKey.value === itemKey;
+                {
+                  default: () =>
+                    h(
+                      "div",
+                      {
+                        ref: (value: unknown) => {
+                          pickerOverlayRef.value = value as HTMLElement | null;
+                        },
+                        class: classNames(
+                          "spectrum-Dropdown-popover",
+                          overlayPosition.placement.value
+                            ? `spectrum-Dropdown-popover--${overlayPosition.placement.value}`
+                            : undefined
+                        ),
+                        "data-testid": "picker-popover",
+                        "data-placement": overlayPosition.placement.value ?? undefined,
+                        style: overlayPosition.overlayProps.value.style as
+                          | Record<string, unknown>
+                          | undefined,
+                      },
+                      [
+                        h(
+                          "ul",
+                          {
+                            id: listboxId.value,
+                            role: "listbox",
+                            tabindex: -1,
+                            onKeydown: (event: KeyboardEvent) => {
+                              switch (event.key) {
+                                case "ArrowDown":
+                                  event.preventDefault();
+                                  moveFocus(1);
+                                  break;
+                                case "ArrowUp":
+                                  event.preventDefault();
+                                  moveFocus(-1);
+                                  break;
+                                case "Home":
+                                  event.preventDefault();
+                                  focusedKey.value = enabledKeys.value[0] ?? null;
+                                  void nextTick(() => {
+                                    focusOption();
+                                  });
+                                  break;
+                                case "End":
+                                  event.preventDefault();
+                                  focusedKey.value =
+                                    enabledKeys.value[enabledKeys.value.length - 1] ?? null;
+                                  void nextTick(() => {
+                                    focusOption();
+                                  });
+                                  break;
+                                case "Enter":
+                                case " ":
+                                  event.preventDefault();
+                                  if (focusedKey.value !== null) {
+                                    selectKey(focusedKey.value);
+                                  }
+                                  break;
+                                case "Escape":
+                                  event.preventDefault();
+                                  closeMenu(true);
+                                  break;
+                                case "Tab":
+                                  closeMenu();
+                                  break;
+                                default:
+                                  break;
+                              }
+                            },
+                          },
+                          items.value.map((item) => {
+                            const itemKey = String(item.key);
+                            const selected = selectedKey.value === itemKey;
+                            const focused = focusedKey.value === itemKey;
 
-                  return h(
-                    "li",
-                    {
-                      key: itemKey,
-                      id: `${listboxId.value}-${itemKey}`,
-                      ref: (value: unknown) => {
-                        if (!value) {
-                          optionRefs.delete(itemKey);
-                          return;
-                        }
+                            return h(
+                              "li",
+                              {
+                                key: itemKey,
+                                id: `${listboxId.value}-${itemKey}`,
+                                ref: (value: unknown) => {
+                                  if (!value) {
+                                    optionRefs.delete(itemKey);
+                                    return;
+                                  }
 
-                        optionRefs.set(itemKey, value as HTMLLIElement);
-                      },
-                      role: "option",
-                      tabindex: focused ? 0 : -1,
-                      "aria-selected": selected ? "true" : "false",
-                      "aria-disabled": item.isDisabled ? "true" : undefined,
-                      class: classNames("spectrum-Menu-item", {
-                        "is-selected": selected,
-                        "is-focused": focused,
-                        "is-disabled": item.isDisabled,
-                      }),
-                      onMouseenter: () => {
-                        if (!item.isDisabled) {
-                          focusedKey.value = itemKey;
-                        }
-                      },
-                      onClick: () => {
-                        selectKey(itemKey);
-                      },
-                    },
-                    item.label
-                  );
-                })
+                                  optionRefs.set(itemKey, value as HTMLLIElement);
+                                },
+                                role: "option",
+                                tabindex: focused ? 0 : -1,
+                                "aria-selected": selected ? "true" : "false",
+                                "aria-disabled": item.isDisabled ? "true" : undefined,
+                                class: classNames("spectrum-Menu-item", {
+                                  "is-selected": selected,
+                                  "is-focused": focused,
+                                  "is-disabled": item.isDisabled,
+                                }),
+                                onMouseenter: () => {
+                                  if (!item.isDisabled) {
+                                    focusedKey.value = itemKey;
+                                  }
+                                },
+                                onClick: () => {
+                                  selectKey(itemKey);
+                                },
+                              },
+                              item.label
+                            );
+                          })
+                        ),
+                      ]
+                    ),
+                }
               )
             : null,
         ]

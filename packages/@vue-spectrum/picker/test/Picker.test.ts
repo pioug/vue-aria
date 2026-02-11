@@ -129,6 +129,26 @@ describe("Picker", () => {
     expect(tree.getByText("Three")).toBeTruthy();
   });
 
+  it("renders picker popover with placement positioning styles", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({ placement: "top end" });
+
+    const trigger = tree.getByRole("button", { name: "picker-test" });
+    await user.click(trigger);
+
+    const popover = tree.baseElement.querySelector(
+      "[data-testid=\"picker-popover\"]"
+    ) as HTMLElement | null;
+    expect(popover).toBeTruthy();
+    expect(popover?.getAttribute("data-placement")).not.toBeNull();
+    expect(popover?.style.position.length).toBeGreaterThan(0);
+    expect(popover?.style.zIndex).toBe("100000");
+
+    const listbox = within(popover as HTMLElement).getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+  });
+
   it("supports item key empty string with keyboard navigation", async () => {
     const user = userEvent.setup();
     const tree = render(Picker, {
