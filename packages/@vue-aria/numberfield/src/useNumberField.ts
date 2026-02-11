@@ -61,6 +61,96 @@ function parseNumber(value: string): number | undefined {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
+function clampNumber(
+  value: number,
+  min: number = Number.NEGATIVE_INFINITY,
+  max: number = Number.POSITIVE_INFINITY
+): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+function roundToStepPrecision(value: number, step: number): number {
+  let roundedValue = value;
+  let precision = 0;
+  const stepString = step.toString();
+  const exponentIndex = stepString.toLowerCase().indexOf("e-");
+
+  if (exponentIndex > 0) {
+    precision = Math.abs(Math.floor(Math.log10(Math.abs(step)))) + exponentIndex;
+  } else {
+    const pointIndex = stepString.indexOf(".");
+    if (pointIndex >= 0) {
+      precision = stepString.length - pointIndex;
+    }
+  }
+
+  if (precision > 0) {
+    const power = Math.pow(10, precision);
+    roundedValue = Math.round(roundedValue * power) / power;
+  }
+
+  return roundedValue;
+}
+
+function snapValueToStep(
+  value: number,
+  min: number | undefined,
+  max: number | undefined,
+  step: number
+): number {
+  const normalizedMin = Number(min);
+  const normalizedMax = Number(max);
+  const remainder = (value - (Number.isNaN(normalizedMin) ? 0 : normalizedMin)) % step;
+  let snappedValue = roundToStepPrecision(
+    Math.abs(remainder) * 2 >= step
+      ? value + Math.sign(remainder) * (step - Math.abs(remainder))
+      : value - remainder,
+    step
+  );
+
+  if (!Number.isNaN(normalizedMin)) {
+    if (snappedValue < normalizedMin) {
+      snappedValue = normalizedMin;
+    } else if (!Number.isNaN(normalizedMax) && snappedValue > normalizedMax) {
+      snappedValue =
+        normalizedMin +
+        Math.floor(
+          roundToStepPrecision((normalizedMax - normalizedMin) / step, step)
+        ) *
+          step;
+    }
+  } else if (!Number.isNaN(normalizedMax) && snappedValue > normalizedMax) {
+    snappedValue =
+      Math.floor(roundToStepPrecision(normalizedMax / step, step)) * step;
+  }
+
+  return roundToStepPrecision(snappedValue, step);
+}
+
+function handleDecimalOperation(
+  operator: "+" | "-",
+  left: number,
+  right: number
+): number {
+  let result = operator === "+" ? left + right : left - right;
+
+  if (left % 1 !== 0 || right % 1 !== 0) {
+    const leftDecimalLength = left.toString().split(".")[1]?.length ?? 0;
+    const rightDecimalLength = right.toString().split(".")[1]?.length ?? 0;
+    const multiplier = Math.pow(10, Math.max(leftDecimalLength, rightDecimalLength));
+
+    const normalizedLeft = Math.round(left * multiplier);
+    const normalizedRight = Math.round(right * multiplier);
+    result =
+      operator === "+"
+        ? normalizedLeft + normalizedRight
+        : normalizedLeft - normalizedRight;
+    result /= multiplier;
+  }
+
+  return result;
+}
+
 function getNavigatorPlatform(): string {
   if (typeof navigator === "undefined") {
     return "";
@@ -109,9 +199,9 @@ export function useNumberField(
 
   const minValue = computed(() => toResolvedNumber(options.minValue));
   const maxValue = computed(() => toResolvedNumber(options.maxValue));
-  const step = computed(() => {
+  const explicitStep = computed(() => {
     const resolved = toResolvedNumber(options.step);
-    return resolved === undefined || resolved === 0 ? 1 : resolved;
+    return resolved === undefined || resolved === 0 ? undefined : resolved;
   });
   const isDisabled = computed(() =>
     options.isDisabled === undefined ? false : Boolean(toValue(options.isDisabled))
@@ -128,6 +218,19 @@ export function useNumberField(
       )
   );
 
+  const step = computed(() => {
+    if (explicitStep.value !== undefined) {
+      return explicitStep.value;
+    }
+
+    const style = numberFormatter.value.resolvedOptions().style;
+    if (style === "percent") {
+      return 0.01;
+    }
+
+    return 1;
+  });
+
   const formatNumber = (value: number | undefined): string => {
     if (value === undefined || Number.isNaN(value)) {
       return "";
@@ -135,16 +238,10 @@ export function useNumberField(
     return numberFormatter.value.format(value);
   };
 
-  const clamp = (value: number): number => {
+  const clampToRange = (value: number): number => {
     const min = minValue.value;
     const max = maxValue.value;
-    if (min !== undefined && value < min) {
-      return min;
-    }
-    if (max !== undefined && value > max) {
-      return max;
-    }
-    return value;
+    return clampNumber(value, min, max);
   };
 
   const normalizeNumber = (value: number | undefined): number | undefined => {
@@ -152,7 +249,11 @@ export function useNumberField(
       return undefined;
     }
 
-    return clamp(value);
+    if (explicitStep.value !== undefined) {
+      return snapValueToStep(value, minValue.value, maxValue.value, explicitStep.value);
+    }
+
+    return clampToRange(value);
   };
 
   const uncontrolledNumberValue = ref<number | undefined>(
@@ -217,7 +318,7 @@ export function useNumberField(
       return;
     }
 
-    const normalized = clamp(parsed);
+    const normalized = normalizeNumber(parsed);
     inputValue.value = formatNumber(normalized);
     commitNumberValue(normalized);
   };
@@ -231,27 +332,44 @@ export function useNumberField(
     const currentValue = currentNumberValue.value;
     const nextValue = (() => {
       if (parsedInput === undefined && currentValue === undefined) {
-        if (direction > 0) {
-          if (minValue.value !== undefined) {
-            return clamp(minValue.value);
-          }
+        const initialValue =
+          direction > 0
+            ? minValue.value ?? 0
+            : maxValue.value ?? (minValue.value ?? 0);
 
-          return clamp(0);
-        }
-
-        if (maxValue.value !== undefined) {
-          return clamp(maxValue.value);
-        }
-
-        if (minValue.value !== undefined) {
-          return clamp(minValue.value);
-        }
-
-        return clamp(0);
+        return snapValueToStep(initialValue, minValue.value, maxValue.value, step.value);
       }
 
-      const base = parsedInput ?? currentValue ?? 0;
-      return clamp(base + step.value * factor * direction);
+      const base = parsedInput ?? currentValue;
+      if (base === undefined) {
+        return snapValueToStep(0, minValue.value, maxValue.value, step.value);
+      }
+
+      const snappedBase = snapValueToStep(
+        base,
+        minValue.value,
+        maxValue.value,
+        step.value
+      );
+
+      if (
+        (direction > 0 && snappedBase > base) ||
+        (direction < 0 && snappedBase < base)
+      ) {
+        return snappedBase;
+      }
+
+      const steppedValue =
+        direction > 0
+          ? handleDecimalOperation("+", base, step.value * factor)
+          : handleDecimalOperation("-", base, step.value * factor);
+
+      return snapValueToStep(
+        steppedValue,
+        minValue.value,
+        maxValue.value,
+        step.value
+      );
     })();
 
     inputValue.value = formatNumber(nextValue);
@@ -276,8 +394,14 @@ export function useNumberField(
     if (maxValue.value === undefined || isDisabled.value || isReadOnly.value) {
       return;
     }
-    inputValue.value = formatNumber(maxValue.value);
-    commitNumberValue(maxValue.value);
+    const snappedMax = snapValueToStep(
+      maxValue.value,
+      minValue.value,
+      maxValue.value,
+      step.value
+    );
+    inputValue.value = formatNumber(snappedMax);
+    commitNumberValue(snappedMax);
   };
 
   const hasDecimals = computed(
@@ -350,7 +474,7 @@ export function useNumberField(
       inputValue.value = value;
       const parsed = parseNumber(value);
       if (parsed !== undefined) {
-        commitNumberValue(clamp(parsed));
+        commitNumberValue(clampToRange(parsed));
       } else if (value.trim() === "") {
         commitNumberValue(undefined);
       }
@@ -393,22 +517,32 @@ export function useNumberField(
     if (isDisabled.value || isReadOnly.value) {
       return false;
     }
-    const current = currentNumberValue.value;
-    if (current === undefined || maxValue.value === undefined) {
+    const parsedInput = parseNumber(inputValue.value);
+    if (parsedInput === undefined || maxValue.value === undefined) {
       return true;
     }
-    return current < maxValue.value;
+
+    return (
+      snapValueToStep(parsedInput, minValue.value, maxValue.value, step.value) >
+        parsedInput ||
+      handleDecimalOperation("+", parsedInput, step.value) <= maxValue.value
+    );
   });
 
   const canDecrement = computed(() => {
     if (isDisabled.value || isReadOnly.value) {
       return false;
     }
-    const current = currentNumberValue.value;
-    if (current === undefined || minValue.value === undefined) {
+    const parsedInput = parseNumber(inputValue.value);
+    if (parsedInput === undefined || minValue.value === undefined) {
       return true;
     }
-    return current > minValue.value;
+
+    return (
+      snapValueToStep(parsedInput, minValue.value, maxValue.value, step.value) <
+        parsedInput ||
+      handleDecimalOperation("-", parsedInput, step.value) >= minValue.value
+    );
   });
 
   const fieldLabel = computed(() => {

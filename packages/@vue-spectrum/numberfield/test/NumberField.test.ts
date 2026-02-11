@@ -134,6 +134,22 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenLastCalledWith(5);
   });
 
+  it("snaps typed values to step boundaries on blur", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      step: 5,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "2");
+    await fireEvent.blur(input);
+
+    expect(input.value).toBe("0");
+    expect(onChange).toHaveBeenLastCalledWith(0);
+  });
+
   it("clamps default value to min and max range", () => {
     const minClamped = renderNumberField({
       defaultValue: 20,
@@ -148,6 +164,31 @@ describe("NumberField", () => {
       maxValue: 10,
     });
     expect((maxClamped.getByRole("textbox") as HTMLInputElement).value).toBe("10");
+  });
+
+  it("snaps stepped values to the nearest valid boundary", () => {
+    const minStepped = renderNumberField({
+      defaultValue: 20,
+      minValue: 50,
+      step: 3,
+    });
+    expect((minStepped.getByRole("textbox") as HTMLInputElement).value).toBe("50");
+    minStepped.unmount();
+
+    const maxStepped = renderNumberField({
+      defaultValue: 20,
+      maxValue: 10,
+      step: 3,
+    });
+    expect((maxStepped.getByRole("textbox") as HTMLInputElement).value).toBe("9");
+    maxStepped.unmount();
+
+    const controlledStepped = renderNumberField({
+      value: 20,
+      maxValue: 10,
+      step: 3,
+    });
+    expect((controlledStepped.getByRole("textbox") as HTMLInputElement).value).toBe("9");
   });
 
   it("increments and decrements with step buttons", async () => {
@@ -166,6 +207,24 @@ describe("NumberField", () => {
 
     await user.click(decrementButton);
     expect(onChange).toHaveBeenLastCalledWith(0);
+  });
+
+  it("keeps stepped max values on their snapped boundary", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      defaultValue: 8,
+      step: 3,
+      maxValue: 10,
+      onChange,
+    });
+
+    const [incrementButton] = tree.getAllByRole("button");
+    await user.click(incrementButton);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.value).toBe("9");
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("starts stepping from zero when empty and no bounds are set", async () => {
