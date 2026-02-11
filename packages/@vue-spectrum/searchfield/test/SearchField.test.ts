@@ -1,7 +1,12 @@
 import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
+import {
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  provideSpectrumProvider,
+} from "@vue-spectrum/provider";
 import { SlotProvider } from "@vue-spectrum/utils";
 import { SearchField } from "../src";
 
@@ -14,6 +19,23 @@ function renderComponent(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+function renderWithProvider(component: ReturnType<typeof defineComponent>) {
+  const ProviderHarness = defineComponent({
+    name: "SearchFieldProviderHarness",
+    setup() {
+      provideSpectrumProvider({
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        colorScheme: "light",
+        scale: "medium",
+      });
+
+      return () => h(component);
+    },
+  });
+
+  return render(ProviderHarness);
 }
 
 describe("SearchField", () => {
@@ -45,7 +67,7 @@ describe("SearchField", () => {
       },
     });
 
-    const tree = render(App);
+    const tree = renderWithProvider(App);
     const input = tree.getByRole("searchbox") as HTMLInputElement;
     expect(input.getAttribute("aria-label")).toBe("Slot search");
     expect(input.disabled).toBe(true);
@@ -321,5 +343,71 @@ describe("SearchField", () => {
     });
 
     expect(tree.getByRole("searchbox").getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("shows form validationErrors message when field name matches", () => {
+    const App = defineComponent({
+      name: "SearchFieldFormValidationHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                query: "Invalid query.",
+              },
+            },
+            {
+              default: () =>
+                h(SearchField, {
+                  label: "Query",
+                  name: "query",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("searchbox");
+    const message = tree.getByText("Invalid query.");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.getAttribute("aria-describedby")).toContain(
+      message.getAttribute("id") ?? ""
+    );
+  });
+
+  it("clears form validationErrors when value changes", async () => {
+    const App = defineComponent({
+      name: "SearchFieldFormValidationClearHarness",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                query: "Invalid query.",
+              },
+            },
+            {
+              default: () =>
+                h(SearchField, {
+                  label: "Query",
+                  name: "query",
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("searchbox") as HTMLInputElement;
+    expect(tree.getByText("Invalid query.")).toBeTruthy();
+
+    await fireEvent.update(input, "vue");
+    await nextTick();
+
+    expect(tree.queryByText("Invalid query.")).toBeNull();
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
   });
 });

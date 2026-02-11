@@ -39,4 +39,5 @@ const field = h(SearchField, {
 - Supports `searchfield` slot-prop overrides through `SlotProvider` parity wiring.
 - Includes parity placeholder deprecation warning behavior from upstream `@react-spectrum/searchfield`.
 - `excludeFromTabOrder`, description/error wiring, and SSR coverage are included.
+- Baseline now includes `Form.validationErrors` integration by field `name`, including invalid-state/error-message semantics and clear-on-input behavior.
 - Advanced upstream visual polish and icon/theming parity remain in progress.

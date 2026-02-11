@@ -1,7 +1,7 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
 import { useSearchField } from "@vue-aria/searchfield";
 import { ClearButton } from "@vue-spectrum/button";
-import { useFormProps } from "@vue-spectrum/form";
+import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
 import {
   TextFieldBase,
@@ -39,8 +39,11 @@ export const SearchField = defineComponent({
       () => slottedProps.value as unknown as Record<string, unknown>
     );
     const provider = useProviderContext();
+    const formContext = useFormContext();
+    const formValidationErrors = useFormValidationErrors();
     const inputRef = ref<HTMLInputElement | null>(null);
     const hasWarnedPlaceholder = ref(false);
+    const isServerErrorCleared = ref(false);
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
 
@@ -87,20 +90,24 @@ export const SearchField = defineComponent({
     ]);
 
     const resolvedFormProps = computed(() =>
-      useFormProps({
-        labelPosition: propsRecord.value.labelPosition as
-          | SpectrumSearchFieldProps["labelPosition"]
-          | undefined,
-        labelAlign: propsRecord.value.labelAlign as
-          | SpectrumSearchFieldProps["labelAlign"]
-          | undefined,
-        necessityIndicator: propsRecord.value.necessityIndicator as
-          | SpectrumSearchFieldProps["necessityIndicator"]
-          | undefined,
-        validationBehavior: propsRecord.value.validationBehavior as
-          | SpectrumSearchFieldProps["validationBehavior"]
-          | undefined,
-      })
+      ({
+        labelPosition:
+          (propsRecord.value.labelPosition as
+            | SpectrumSearchFieldProps["labelPosition"]
+            | undefined) ?? formContext?.value.labelPosition,
+        labelAlign:
+          (propsRecord.value.labelAlign as
+            | SpectrumSearchFieldProps["labelAlign"]
+            | undefined) ?? formContext?.value.labelAlign,
+        necessityIndicator:
+          (propsRecord.value.necessityIndicator as
+            | SpectrumSearchFieldProps["necessityIndicator"]
+            | undefined) ?? formContext?.value.necessityIndicator,
+        validationBehavior:
+          (propsRecord.value.validationBehavior as
+            | SpectrumSearchFieldProps["validationBehavior"]
+            | undefined) ?? formContext?.value.validationBehavior,
+      }) as const
     );
 
     const isDisabled = computed(
@@ -146,6 +153,56 @@ export const SearchField = defineComponent({
     const hasControlledValue = computed(
       () => propsRecord.value.value !== undefined
     );
+    const serverErrorMessageFromForm = computed(() => {
+      const name = propsRecord.value.name as string | undefined;
+      if (!name) {
+        return undefined;
+      }
+
+      const formError = formValidationErrors.value[name];
+      if (typeof formError === "string") {
+        return formError;
+      }
+
+      if (Array.isArray(formError)) {
+        for (const entry of formError) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const serverErrorMessage = computed(() =>
+      isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
+    );
+    const resolvedErrorMessage = computed(() => {
+      const explicitErrorMessage = propsRecord.value.errorMessage;
+      if (typeof explicitErrorMessage === "string" && explicitErrorMessage.length > 0) {
+        return explicitErrorMessage;
+      }
+
+      return serverErrorMessage.value;
+    });
+    const resolvedInvalid = computed(
+      () =>
+        Boolean(propsRecord.value.isInvalid) ||
+        validationState.value === "invalid" ||
+        Boolean(serverErrorMessage.value)
+    );
+    const resolvedValidationStateForAria = computed<
+      SpectrumTextFieldValidationState | undefined
+    >(() => validationState.value ?? (serverErrorMessage.value ? "invalid" : undefined));
+
+    watch(
+      () =>
+        [formValidationErrors.value, propsRecord.value.name as string | undefined] as const,
+      () => {
+        isServerErrorCleared.value = false;
+      },
+      { deep: true }
+    );
 
     const searchField = useSearchField({
       id: computed(() => propsRecord.value.id as string | undefined),
@@ -153,13 +210,9 @@ export const SearchField = defineComponent({
       description: computed(
         () => propsRecord.value.description as string | undefined
       ),
-      errorMessage: computed(
-        () => propsRecord.value.errorMessage as string | undefined
-      ),
-      isInvalid: computed(
-        () => propsRecord.value.isInvalid as boolean | undefined
-      ),
-      validationState,
+      errorMessage: resolvedErrorMessage,
+      isInvalid: resolvedInvalid,
+      validationState: resolvedValidationStateForAria,
       validationBehavior,
       isDisabled,
       isReadOnly,
@@ -212,9 +265,12 @@ export const SearchField = defineComponent({
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
       "aria-errormessage": ariaErrorMessage,
-      onInput: propsRecord.value.onInput as
-        | ((event: Event) => void)
-        | undefined,
+      onInput: (event: Event) => {
+        if (serverErrorMessageFromForm.value) {
+          isServerErrorCleared.value = true;
+        }
+        (propsRecord.value.onInput as ((evt: Event) => void) | undefined)?.(event);
+      },
       onChange: propsRecord.value.onChange as
         | ((value: string) => void)
         | undefined,
@@ -235,7 +291,9 @@ export const SearchField = defineComponent({
     });
 
     const resolvedValidationState = computed<SpectrumTextFieldValidationState | undefined>(
-      () => validationState.value ?? (searchField.isInvalid.value ? "invalid" : undefined)
+      () =>
+        validationState.value ??
+        (resolvedInvalid.value || searchField.isInvalid.value ? "invalid" : undefined)
     );
 
     const resolvedIcon = computed(() => {
@@ -303,8 +361,9 @@ export const SearchField = defineComponent({
         ...(attrsRecord as Record<string, unknown>),
         ...slottedProps.value,
         isDisabled: isDisabled.value,
-        isInvalid: searchField.isInvalid.value,
+        isInvalid: resolvedInvalid.value || searchField.isInvalid.value,
         validationState: resolvedValidationState.value,
+        errorMessage: resolvedErrorMessage.value,
         labelProps: searchField.labelProps.value,
         descriptionProps: searchField.descriptionProps.value,
         errorMessageProps: searchField.errorMessageProps.value,
