@@ -1,6 +1,7 @@
 # React Aria -> Vue Port Tracker
 
 This is the master checklist for parity with React Aria behavior in Vue.
+This tracker is now effectively archived: the React Aria layer is parity-complete baseline and in maintenance mode.
 
 ## Progress Snapshot
 

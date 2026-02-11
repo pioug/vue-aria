@@ -226,7 +226,7 @@ export default defineConfig({
   },
   base: normalizeBase(process.env.VITEPRESS_BASE),
   title: "vue-aria",
-  description: "Vue port of React Aria interaction and accessibility hooks.",
+  description: "Vue port of React Aria hooks and React Spectrum components.",
   lastUpdated: true,
   themeConfig: {
     logo: "/logo.svg",
@@ -234,7 +234,7 @@ export default defineConfig({
       { text: "Guide", link: "/getting-started" },
       { text: "Packages", link: "/packages/overview" },
       { text: "Spectrum", link: "/spectrum/overview" },
-      { text: "Porting", link: "/porting/roadmap" },
+      { text: "Porting", link: "/porting/status" },
       { text: "GitHub", link: "https://github.com/pioug/vue-aria/" },
     ],
     sidebar: [
@@ -309,6 +309,7 @@ export default defineConfig({
       {
         text: "Porting",
         items: [
+          { text: "Status (Source of Truth)", link: "/porting/status" },
           { text: "Roadmap", link: "/porting/roadmap" },
           { text: "Spectrum Components Roadmap", link: "/porting/spectrum-roadmap" },
           { text: "Cross-Browser Demos", link: "/porting/cross-browser-demos" },

@@ -1,0 +1,48 @@
+# Porting Status
+
+This page is the consolidated entry point for migration status and execution model.
+
+## Current Mode
+
+- React Aria layer (`@vue-aria/*`): parity-complete baseline, maintenance/hardening mode.
+- React Spectrum layer (`@vue-spectrum/*`): active migration.
+- Priority: complete React Spectrum v1 parity before expanding S2 parity.
+- Active horizontal lane: `@vue-spectrum/button`, `@vue-spectrum/textfield`, `@vue-spectrum/dialog`.
+
+## Source of Truth
+
+- Canonical Spectrum package checklist: `SPECTRUM_PORTING_TRACKER.md`
+- Spectrum strategy/phases and priorities: `/porting/spectrum-roadmap`
+- React Aria completed tracker: `PORTING_TRACKER.md`
+- React Aria historical roadmap (archived): `/porting/roadmap`
+
+## How Work Is Executed
+
+1. Select a horizontal lane (small set of related components).
+2. Port upstream runtime behavior from `references/react-spectrum`.
+3. Port/adapt upstream test scenarios.
+4. Update component docs with a usable preview and parity notes.
+5. Update trackers/roadmap immediately after each merged batch.
+6. Keep CI gates green before marking progress.
+
+## Definition Of Done (Per Package)
+
+1. Runtime behavior in `packages/@vue-spectrum/<pkg>/src` is parity-aligned.
+2. Test coverage in `packages/@vue-spectrum/<pkg>/test` includes upstream scenarios adapted to Vue.
+3. Docs page exists at `docs/spectrum/<pkg>.md` with preview + parity notes.
+4. Package is exported by `@vue-spectrum/vue-spectrum`.
+5. Validation passes:
+
+```bash
+npm run check
+npm run test
+npm run test:parity
+npm run test:spectrum-parity
+npm run docs:build
+```
+
+## Why This Structure
+
+- One canonical tracker avoids status drift.
+- A strategy roadmap captures decisions and priorities.
+- Package docs stay focused on usage and parity notes, not global planning detail.

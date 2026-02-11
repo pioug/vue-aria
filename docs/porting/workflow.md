@@ -1,37 +1,41 @@
 # Porting Workflow
 
-Use this process for each new hook/component.
+Use this process for each hook/component package.
 
-## 1. Locate Upstream Source
+## 1. Select Scope
 
-- Find package and hook under `references/react-spectrum/packages`.
-- Identify all related helpers and state dependencies.
+- Prefer horizontal lanes for active work (small set of related packages/components).
+- Confirm upstream source package under `references/react-spectrum/packages`.
 
-## 2. Port Minimal Behavior
+## 2. Port Runtime Behavior
 
-- Create package-local file in `packages/@vue-aria/<pkg>/src`.
-- Keep API Vue-native but semantics React Aria-aligned.
+- Implement in `packages/@vue-aria/<pkg>/src` or `packages/@vue-spectrum/<pkg>/src`.
+- Keep Vue-native API shape, but preserve upstream semantics.
 
 ## 3. Port Tests
 
-- Create matching scenarios in `packages/@vue-aria/<pkg>/test`.
+- Port relevant upstream scenarios into package `test/`.
 - Cover keyboard, pointer, and assistive/virtual behavior where relevant.
 
 ## 4. Wire Exports
 
-- Add package `src/index.ts` exports.
-- Update umbrella exports in `packages/@vue-aria/vue-aria/src/index.ts`.
+- Ensure package `src/index.ts` exports are correct.
+- Update umbrella exports in `packages/@vue-aria/vue-aria/src/index.ts` or `packages/@vue-spectrum/vue-spectrum/src/index.ts`.
 
 ## 5. Validate
 
 ```bash
 npm run check
-npm run test
+npm run test -- <targeted-tests>
 npm run test:parity
 npm run test:spectrum-parity
+npm run docs:build
 ```
 
 ## 6. Update Docs
 
 - Add/refresh package docs page.
-- Update roadmap and tracker status.
+- Update canonical trackers and roadmap references:
+  - `PORTING_TRACKER.md` (React Aria layer)
+  - `SPECTRUM_PORTING_TRACKER.md` (React Spectrum layer)
+  - `docs/porting/spectrum-roadmap.md` (strategy/priorities only)

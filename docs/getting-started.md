@@ -6,6 +6,12 @@
 npm install
 ```
 
+## Migration Status
+
+- Consolidated status: `/porting/status`
+- Spectrum strategy: `/porting/spectrum-roadmap`
+- Canonical Spectrum checklist: `SPECTRUM_PORTING_TRACKER.md`
+
 ## Run Docs Locally
 
 ```bash
@@ -20,15 +26,12 @@ npm run docs:build
 
 ## Core Package Layout
 
-The repository mirrors React Aria package boundaries:
+The repository mirrors upstream package boundaries:
 
-- `packages/@vue-aria/types`
-- `packages/@vue-aria/utils`
-- `packages/@vue-aria/ssr`
-- `packages/@vue-aria/focus`
-- `packages/@vue-aria/interactions`
-- `packages/@vue-aria/button`
-- `packages/@vue-aria/vue-aria`
+- `packages/@vue-aria/*` (React Aria hook/state ports)
+- `packages/@vue-spectrum/*` (React Spectrum component ports)
+- `packages/@vue-aria/vue-aria` (hook umbrella exports)
+- `packages/@vue-spectrum/vue-spectrum` (component umbrella exports)
 
 ## First Usage
 
@@ -58,4 +61,6 @@ const { buttonProps, isPressed, isFocusVisible } = useButton({
 
 - `npm run test`
 - `npm run test:parity`
+- `npm run test:spectrum-parity`
+- `npm run docs:build`
 - `npm run check`

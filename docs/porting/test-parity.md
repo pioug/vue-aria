@@ -1,18 +1,19 @@
 # Test Parity
 
-Behavior parity is required for every ported hook.
+Behavior parity is required for every ported package (hooks and components).
 
 ## Rules
 
 1. Read upstream implementation and tests from `references/react-spectrum`.
 2. Port behavior first, then port the corresponding test scenarios.
-3. Do not mark a hook complete until both implementation and test parity pass.
+3. Do not mark a package complete until both implementation and test parity pass.
 
 ## Local Commands
 
 ```bash
 npm run test
 npm run test:parity
+npm run test:spectrum-parity
 ```
 
 ## Current Coverage

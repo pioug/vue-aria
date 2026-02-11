@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: vue-aria
-  text: Accessible interaction primitives for Vue
-  tagline: A package-structured port of React Aria, built for Vue 3 composables.
+  text: React Aria + React Spectrum for Vue
+  tagline: Upstream-aligned package ports with parity-focused tests and docs.
   image:
     src: /logo.svg
     alt: vue-aria
@@ -16,36 +16,27 @@ hero:
       text: Package Docs
       link: /packages/overview
     - theme: alt
-      text: Porting Tracker
-      link: /porting/roadmap
+      text: Migration Status
+      link: /porting/status
 
 features:
-  - title: React Aria-Aligned Structure
-    details: Code is split into `@vue-aria/*` packages so each hook family maps cleanly to the upstream source.
-  - title: Test-Parity Workflow
-    details: Porting requires preserving behavior and bringing over relevant test scenarios for each hook.
-  - title: Vue-Native API Shape
-    details: Hooks expose reactive refs and prop objects designed for Vue templates while keeping accessibility semantics.
+  - title: Two-Layer Port
+    details: "@vue-aria/* hooks are parity-complete baseline; @vue-spectrum/* components are now the active migration track."
+  - title: Horizontal Delivery
+    details: We move lane by lane and only mark progress after runtime behavior, tests, docs, and previews are aligned.
+  - title: Upstream-First Parity
+    details: "Behavior and tests are ported from references/react-spectrum with package structure kept close to the original repo."
 ---
 
-## Current Coverage
+## Current Status
 
-Implemented packages and hooks:
+- React Aria layer: parity-complete baseline (maintenance/hardening mode).
+- React Spectrum layer: active migration with v1 parity prioritized before S2.
+- Focus lane: `@vue-spectrum/button`, `@vue-spectrum/textfield`, and `@vue-spectrum/dialog`.
 
-- `@vue-aria/ssr`: `useId`
-- `@vue-aria/focus`: `useFocusVisible`, `useFocusRing`
-- `@vue-aria/interactions`: `usePress`, `useKeyboard`, `useFocus`, `useFocusWithin`, `useHover`
-- `@vue-aria/button`: `useButton`
-- `@vue-aria/link`: `useLink`
-- `@vue-aria/label`: `useLabel`, `useField`
-- `@vue-aria/separator`: `useSeparator`
-- `@vue-aria/visually-hidden`: `useVisuallyHidden`, `VisuallyHidden`
-- `@vue-aria/utils`: `mergeProps`
+## Where to track progress
 
-## Upstream Reference
-
-The upstream React Aria monorepo is added as a git submodule at:
-
-- `references/react-spectrum`
-
-Use it as the source of truth for behavior and test cases while porting.
+- Source-of-truth docs page: `/porting/status`
+- React Spectrum package checklist: `SPECTRUM_PORTING_TRACKER.md`
+- React Spectrum strategy/phases: `/porting/spectrum-roadmap`
+- React Aria completed tracker: `PORTING_TRACKER.md`

@@ -1,103 +1,58 @@
-# vue-aria (React Aria -> Vue port starter)
+# vue-aria / vue-spectrum
 
-This repository starts a pragmatic port of core React Aria interaction patterns to Vue 3 composables.
+Vue 3 monorepo port of:
 
-The goal is not a 1:1 API clone yet. The goal is to preserve behavior and accessibility semantics while making the API feel native in Vue.
+- `@react-aria/*` -> `@vue-aria/*` (hooks/state layer)
+- `@react-spectrum/*` -> `@vue-spectrum/*` (component layer)
 
-## What is implemented
+The priority is behavior and accessibility parity with upstream, while keeping Vue-native usage and package boundaries close to the original repo.
 
-- `useId`: stable id generation for aria relationships.
-- `useFocusVisible`: global keyboard/pointer modality tracking.
-- `useFocusRing`: focus + focus-visible state and event props.
-- `useFocus`: focus handling on immediate target.
-- `useFocusWithin`: focus handling for target and descendants.
-- `usePress`: unified mouse/touch/keyboard/virtual press interactions.
-- `useHover`: hover handling with touch-emulation suppression.
-- `useKeyboard`: keyboard handling with opt-in propagation.
-- `useButton`: button semantics for native and non-native elements.
-- `useLink`: link semantics for native and non-native elements.
-- `useLabel` / `useField`: label and field description/error wiring.
-- `useSeparator`: accessible separator semantics.
-- `useVisuallyHidden` + `VisuallyHidden`: visually hide content while preserving a11y visibility.
-- `mergeProps`: utility to merge prop objects and chain event handlers.
+## Current migration mode
 
-## Repository layout
+- `@vue-aria/*`: parity-complete baseline, now in maintenance/hardening mode.
+- `@vue-spectrum/*`: active migration.
+- Execution strategy: horizontal lane-by-lane parity (runtime + tests + docs + preview usability), currently focused on `button`, `textfield`, and `dialog`.
 
-The code is organized to mirror React Aria package boundaries:
+## Source of truth
 
-- `packages/@vue-aria/types`
-- `packages/@vue-aria/utils`
-- `packages/@vue-aria/ssr`
-- `packages/@vue-aria/focus`
-- `packages/@vue-aria/interactions`
-- `packages/@vue-aria/button`
-- `packages/@vue-aria/dnd`
-- `packages/@vue-aria/dnd-state`
-- `packages/@vue-aria/virtualizer-state`
-- `packages/@vue-aria/link`
-- `packages/@vue-aria/label`
-- `packages/@vue-aria/separator`
-- `packages/@vue-aria/visually-hidden`
-- `packages/@vue-aria/vue-aria` (umbrella exports)
-
-## Install
-
-```bash
-npm install
-```
+- React Aria tracker (completed baseline): `PORTING_TRACKER.md`
+- React Spectrum tracker (canonical package checklist): `SPECTRUM_PORTING_TRACKER.md`
+- Strategy/phases and current lane: `docs/porting/spectrum-roadmap.md`
+- Documentation status page: `docs/porting/status.md`
 
 ## Upstream reference
 
-The React Aria upstream source is tracked as a git submodule:
+Upstream source is available as a submodule:
 
 - `references/react-spectrum`
 
-This keeps original hook implementations and test suites available locally for parity work.
+It is used as the parity reference for runtime behavior, tests, and package structure.
 
-## Build
+## Repository layout
 
-```bash
-npm run build
-```
+- `packages/@vue-aria/*`: hook/state packages
+- `packages/@vue-spectrum/*`: component packages
+- `packages/@vue-aria/vue-aria`: hook umbrella exports
+- `packages/@vue-spectrum/vue-spectrum`: component umbrella exports
+- `docs/*`: docs site (guides, package docs, Spectrum component docs, porting status)
 
-## Docs Website
-
-```bash
-npm run docs:dev
-```
+## Quality gates
 
 ```bash
+npm run check
+npm run test
+npm run test:parity
+npm run test:spectrum-parity
 npm run docs:build
 ```
 
-## Example usage
+## Local development
 
-```vue
-<script setup lang="ts">
-import { useButton } from "@vue-aria/vue-aria";
-
-const { buttonProps, isPressed, isFocusVisible } = useButton({
-  onPress: (event) => {
-    console.log("pressed via", event.pointerType);
-  },
-});
-</script>
-
-<template>
-  <button
-    v-bind="buttonProps"
-    :data-pressed="isPressed ? '' : undefined"
-    :data-focus-visible="isFocusVisible ? '' : undefined"
-  >
-    Press me
-  </button>
-</template>
+```bash
+npm install
+npm run docs:dev
 ```
 
-## Migration strategy
+## GitHub
 
-1. Port interaction primitives first (`@react-aria/interactions`, `@react-aria/focus`).
-2. Port semantic hooks next (`useButton`, `useLink`, `useCheckbox`, `useTextField`).
-3. Port higher-level patterns last (menus, dialogs, overlays, collections).
-
-That sequence keeps behavior stable while minimizing rewrite risk.
+- Repository: https://github.com/pioug/vue-aria/

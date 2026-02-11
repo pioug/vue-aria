@@ -1,6 +1,12 @@
 # React Spectrum -> Vue Spectrum Port Tracker
 
 This is the master checklist for parity with React Spectrum UI components in Vue.
+It is the canonical source of truth for package completion status.
+
+Companion docs:
+
+- Consolidated status/process: `docs/porting/status.md`
+- Strategy and phases: `docs/porting/spectrum-roadmap.md`
 
 ## Progress Snapshot
 
