@@ -445,6 +445,8 @@ export const ActionGroup = defineComponent({
     const focusedKey = ref<string | null>(null);
     const visibleItemCount = ref<number>(items.value.length);
     const measuredItemWidths = ref<number[]>([]);
+    const collapseButtonText = ref<boolean>(false);
+    const collapsedAtWidth = ref<number | null>(null);
 
     const isItemDisabled = (item: SpectrumActionGroupItemData): boolean =>
       Boolean(isDisabled.value || item.isDisabled || disabledKeys.value.has(String(item.key)));
@@ -453,7 +455,7 @@ export const ActionGroup = defineComponent({
       () => props.overflowMode === "collapse" && orientation.value === "horizontal"
     );
     const hideButtonText = computed(
-      () => props.buttonLabelBehavior === "hide"
+      () => props.buttonLabelBehavior === "hide" || collapseButtonText.value
     );
     const visibleItems = computed(() =>
       shouldOverflowCollapse.value
@@ -538,12 +540,35 @@ export const ActionGroup = defineComponent({
       if (!shouldOverflowCollapse.value) {
         visibleItemCount.value = items.value.length;
         measuredItemWidths.value = [];
+        collapseButtonText.value = false;
+        collapsedAtWidth.value = null;
         return;
       }
 
       const root = rootRef.value;
       if (!root || items.value.length === 0) {
         visibleItemCount.value = items.value.length;
+        return;
+      }
+
+      if (props.buttonLabelBehavior !== "collapse") {
+        collapseButtonText.value = false;
+        collapsedAtWidth.value = null;
+      }
+
+      const containerWidth = root.clientWidth;
+      if (
+        props.buttonLabelBehavior === "collapse" &&
+        collapseButtonText.value &&
+        collapsedAtWidth.value !== null &&
+        containerWidth > collapsedAtWidth.value
+      ) {
+        collapseButtonText.value = false;
+        collapsedAtWidth.value = null;
+        measuredItemWidths.value = [];
+        void nextTick(() => {
+          updateOverflow();
+        });
         return;
       }
 
@@ -563,10 +588,20 @@ export const ActionGroup = defineComponent({
         return;
       }
 
-      const containerWidth = root.clientWidth;
       const totalItemWidth = widths.reduce((sum, width) => sum + width, 0);
       if (totalItemWidth <= containerWidth) {
         visibleItemCount.value = items.value.length;
+        return;
+      }
+
+      if (props.buttonLabelBehavior === "collapse" && !collapseButtonText.value) {
+        collapseButtonText.value = true;
+        collapsedAtWidth.value = containerWidth;
+        measuredItemWidths.value = [];
+        visibleItemCount.value = items.value.length;
+        void nextTick(() => {
+          updateOverflow();
+        });
         return;
       }
 
@@ -621,6 +656,8 @@ export const ActionGroup = defineComponent({
       () => {
         visibleItemCount.value = items.value.length;
         measuredItemWidths.value = [];
+        collapseButtonText.value = false;
+        collapsedAtWidth.value = null;
         void nextTick(() => {
           updateOverflow();
         });

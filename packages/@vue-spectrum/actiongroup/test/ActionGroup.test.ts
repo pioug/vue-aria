@@ -181,6 +181,107 @@ describe("ActionGroup", () => {
     expect(buttons[1]?.getAttribute("aria-label")).toBe("Two");
   });
 
+  it("supports buttonLabelBehavior=collapse by collapsing labels before overflowing", async () => {
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return 250;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          if (this.classList.contains("spectrum-ActionGroup-item--iconOnly")) {
+            return 40;
+          }
+
+          return 120;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        overflowMode: "collapse",
+        buttonLabelBehavior: "collapse",
+      });
+      await nextTick();
+      await nextTick();
+      await nextTick();
+
+      const buttons = tree.getAllByRole("button");
+      expect(buttons).toHaveLength(3);
+      expect(tree.queryByRole("button", { name: "More actions" })).toBeNull();
+      expect(buttons[0]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
+      expect(buttons[1]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
+      expect(buttons[2]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
+      expect(buttons[0]?.getAttribute("aria-label")).toBe("One");
+      expect(buttons[1]?.getAttribute("aria-label")).toBe("Two");
+      expect(buttons[2]?.getAttribute("aria-label")).toBe("Three");
+    } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
+  it("restores button labels for collapse behavior when space increases", async () => {
+    let width = 250;
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return width;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          if (this.classList.contains("spectrum-ActionGroup-item--iconOnly")) {
+            return 40;
+          }
+
+          return 120;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        overflowMode: "collapse",
+        buttonLabelBehavior: "collapse",
+      });
+      await nextTick();
+      await nextTick();
+      await nextTick();
+
+      let buttons = tree.getAllByRole("button");
+      expect(buttons[0]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
+
+      width = 800;
+      window.dispatchEvent(new Event("resize"));
+      await nextTick();
+      await nextTick();
+      await nextTick();
+
+      buttons = tree.getAllByRole("button");
+      expect(buttons[0]?.className).not.toContain("spectrum-ActionGroup-item--iconOnly");
+      expect(buttons[1]?.className).not.toContain("spectrum-ActionGroup-item--iconOnly");
+      expect(buttons[2]?.className).not.toContain("spectrum-ActionGroup-item--iconOnly");
+    } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
   it("collapses overflowing items into an overflow menu", async () => {
     const user = userEvent.setup();
     const onAction = vi.fn();

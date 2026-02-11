@@ -54,4 +54,5 @@ const component = h(ActionGroup, {
 - Baseline now includes overflow collapse/menu behavior (`overflowMode="collapse"`), including collapsing all items into the menu when selection mode is enabled and not all items fit.
 - When fully collapsed, aria labeling props are forwarded to the overflow menu trigger (`aria-label` / `aria-labelledby`).
 - Baseline includes `buttonLabelBehavior="hide"` wiring (`spectrum-ActionGroup-item--iconOnly` with aria-label fallback for accessibility).
-- Advanced `buttonLabelBehavior="collapse"` measurement parity remains in progress.
+- Baseline includes `buttonLabelBehavior="collapse"` behavior: labels collapse to icon-only buttons before overflowing when possible, and labels restore when space increases.
+- Advanced visual/theming parity for collapsed-label presentation remains in progress.
