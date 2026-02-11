@@ -159,6 +159,9 @@ export const Popover = defineComponent({
                     mergeProps(underlayProps.value, {
                       class: classNames("spectrum-Underlay", "is-open"),
                       "data-testid": "popover-underlay",
+                      onMousedown: () => {
+                        state.close();
+                      },
                     })
                   )
                 : null,

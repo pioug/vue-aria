@@ -58,6 +58,29 @@ describe("Popover", () => {
     }
   });
 
+  it("calls onOpenChange(false) when clicking the underlay", async () => {
+    const trigger = createTrigger();
+    const onOpenChange = vi.fn();
+
+    try {
+      const tree = render(Popover, {
+        props: {
+          isOpen: true,
+          triggerRef: trigger,
+          onOpenChange,
+        },
+        slots: {
+          default: () => "Popover content",
+        },
+      });
+
+      await fireEvent.mouseDown(tree.getByTestId("popover-underlay"));
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    } finally {
+      trigger.remove();
+    }
+  });
+
   it("does not render an underlay when non-modal", () => {
     const trigger = createTrigger();
 
@@ -74,6 +97,27 @@ describe("Popover", () => {
       });
 
       expect(tree.queryByTestId("popover-underlay")).toBeNull();
+    } finally {
+      trigger.remove();
+    }
+  });
+
+  it("hides the arrow when hideArrow is true", () => {
+    const trigger = createTrigger();
+
+    try {
+      const tree = render(Popover, {
+        props: {
+          isOpen: true,
+          hideArrow: true,
+          triggerRef: trigger,
+        },
+        slots: {
+          default: () => "Popover content",
+        },
+      });
+
+      expect(tree.queryByTestId("popover-arrow")).toBeNull();
     } finally {
       trigger.remove();
     }

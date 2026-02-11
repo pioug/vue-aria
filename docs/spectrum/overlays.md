@@ -107,6 +107,6 @@ const tray = h(
 ## Notes
 
 - Baseline includes portal mounting behavior and transition lifecycle callback wiring.
-- Baseline now includes `Popover` with `@vue-aria/overlays` positioning/dismiss wiring (`Escape` close, underlay for modal mode, optional non-modal mode, hidden dismiss buttons, and arrow visibility toggle).
+- Baseline now includes `Popover` with `@vue-aria/overlays` positioning/dismiss wiring (`Escape` close, modal-underlay press close behavior, optional non-modal mode, hidden dismiss buttons, and arrow visibility toggle).
 - Baseline now includes `Modal` with `@vue-aria/overlays` modal semantics (`Escape` close, optional outside-dismiss, underlay, and scroll-lock/focus-containment behavior).
 - Baseline now includes `Tray` with dismissable modal-overlay semantics (outside-click close, `Escape` close, optional blur-close via `shouldCloseOnBlur`, hidden dismiss buttons, fixed-height class support, and scroll-lock/focus-containment behavior).
