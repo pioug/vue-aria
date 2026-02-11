@@ -27,6 +27,7 @@ export { IllustratedMessage } from "./IllustratedMessage";
 export { InlineAlert } from "./InlineAlert";
 export { Link } from "./Link";
 export { Meter } from "./Meter";
+export { Menu, MenuItem, MenuTrigger } from "./Menu";
 export { NumberField } from "./NumberField";
 export { ProgressBar } from "./ProgressBar";
 export { ProgressCircle } from "./ProgressCircle";
@@ -70,6 +71,15 @@ export type { S2IllustratedMessageProps } from "./IllustratedMessage";
 export type { S2InlineAlertProps } from "./InlineAlert";
 export type { S2LinkProps } from "./Link";
 export type { S2MeterProps } from "./Meter";
+export type {
+  MenuSize,
+  S2MenuItemData,
+  S2MenuItemProps,
+  S2MenuKey,
+  S2MenuProps,
+  S2MenuSelectionMode,
+  S2MenuTriggerProps,
+} from "./Menu";
 export type { NumberFieldSize, S2NumberFieldProps } from "./NumberField";
 export type { S2ProgressBarProps } from "./ProgressBar";
 export type { S2ProgressCircleProps } from "./ProgressCircle";
