@@ -1,5 +1,6 @@
 import {
   Fragment,
+  cloneVNode,
   computed,
   defineComponent,
   h,
@@ -14,6 +15,7 @@ import {
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
 import { MenuItem } from "./MenuItem";
+import { ContextualHelpTrigger } from "./ContextualHelpTrigger";
 import {
   areSetsEqual,
   keyToString,
@@ -40,8 +42,18 @@ interface NormalizedSpectrumMenuSection {
   key: string;
   heading?: string | undefined;
   ariaLabel?: string | undefined;
-  items: SpectrumMenuItemData[];
+  items: ParsedSpectrumMenuItemData[];
   implicit: boolean;
+}
+
+interface ParsedSpectrumMenuItemData extends SpectrumMenuItemData {
+  contextualHelpUnavailable?: boolean | undefined;
+  contextualHelpContent?: VNode | undefined;
+}
+
+interface ParsedSpectrumMenuSectionData
+  extends Omit<SpectrumMenuSectionData, "items"> {
+  items: ParsedSpectrumMenuItemData[];
 }
 
 function normalizeMenuKey(value: unknown, fallback: MenuKey): MenuKey {
@@ -157,7 +169,14 @@ function extractTextContent(value: unknown): string {
   return "";
 }
 
-function parseMenuItemNode(node: VNode, fallback: MenuKey): SpectrumMenuItemData {
+function parseMenuItemNode(
+  node: VNode,
+  fallback: MenuKey,
+  options?: {
+    contextualHelpUnavailable?: boolean | undefined;
+    contextualHelpContent?: VNode | undefined;
+  }
+): ParsedSpectrumMenuItemData {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const key = normalizeMenuKey(node.key ?? props.id, fallback);
   const slotLabel = extractTextContent(getSlotContent(node)).trim();
@@ -169,14 +188,36 @@ function parseMenuItemNode(node: VNode, fallback: MenuKey): SpectrumMenuItemData
     isDisabled: Boolean(props.isDisabled),
     "aria-label":
       typeof props["aria-label"] === "string" ? props["aria-label"] : undefined,
+    contextualHelpUnavailable: options?.contextualHelpUnavailable,
+    contextualHelpContent: options?.contextualHelpContent,
   };
+}
+
+function parseContextualHelpTriggerNode(
+  node: VNode,
+  fallback: MenuKey
+): ParsedSpectrumMenuItemData | null {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  const children = getSlotChildren(node);
+  const triggerNode = children.find((child) => getComponentName(child) === "MenuItem");
+  if (!triggerNode) {
+    return null;
+  }
+
+  const contentNode = children.find((child) => child !== triggerNode);
+  const isUnavailable = Boolean(props.isUnavailable);
+
+  return parseMenuItemNode(triggerNode, fallback, {
+    contextualHelpUnavailable: isUnavailable,
+    contextualHelpContent: isUnavailable ? contentNode : undefined,
+  });
 }
 
 function parseMenuSlotData(
   nodes: VNode[] | undefined
 ): {
-  items: SpectrumMenuItemData[];
-  sections: SpectrumMenuSectionData[];
+  items: ParsedSpectrumMenuItemData[];
+  sections: ParsedSpectrumMenuSectionData[];
 } {
   if (!nodes || nodes.length === 0) {
     return {
@@ -186,8 +227,8 @@ function parseMenuSlotData(
   }
 
   const topLevel = flattenVNodeChildren(nodes);
-  const items: SpectrumMenuItemData[] = [];
-  const sections: SpectrumMenuSectionData[] = [];
+  const items: ParsedSpectrumMenuItemData[] = [];
+  const sections: ParsedSpectrumMenuSectionData[] = [];
   let itemIndex = 0;
   let sectionIndex = 0;
 
@@ -199,16 +240,35 @@ function parseMenuSlotData(
       continue;
     }
 
+    if (componentName === "ContextualHelpTrigger") {
+      const parsed = parseContextualHelpTriggerNode(node, `item-${itemIndex + 1}`);
+      if (parsed) {
+        items.push(parsed);
+        itemIndex += 1;
+      }
+      continue;
+    }
+
     if (componentName === "MenuSection") {
       const sectionProps = (node.props ?? {}) as Record<string, unknown>;
-      const sectionNodes = getSlotChildren(node).filter(
-        (child) => getComponentName(child) === "MenuItem"
-      );
-      const sectionItems = sectionNodes.map((child) => {
-        const parsed = parseMenuItemNode(child, `item-${itemIndex + 1}`);
-        itemIndex += 1;
-        return parsed;
-      });
+      const sectionItems: ParsedSpectrumMenuItemData[] = [];
+
+      for (const child of getSlotChildren(node)) {
+        const childName = getComponentName(child);
+        if (childName === "MenuItem") {
+          sectionItems.push(parseMenuItemNode(child, `item-${itemIndex + 1}`));
+          itemIndex += 1;
+          continue;
+        }
+
+        if (childName === "ContextualHelpTrigger") {
+          const parsed = parseContextualHelpTriggerNode(child, `item-${itemIndex + 1}`);
+          if (parsed) {
+            sectionItems.push(parsed);
+            itemIndex += 1;
+          }
+        }
+      }
 
       sections.push({
         key: normalizeMenuKey(node.key ?? sectionProps.id, `section-${sectionIndex + 1}`),
@@ -233,8 +293,8 @@ function parseMenuSlotData(
 }
 
 function areMenuItemsEqual(
-  left: SpectrumMenuItemData[],
-  right: SpectrumMenuItemData[]
+  left: ParsedSpectrumMenuItemData[],
+  right: ParsedSpectrumMenuItemData[]
 ): boolean {
   if (left.length !== right.length) {
     return false;
@@ -247,7 +307,9 @@ function areMenuItemsEqual(
       current.key !== candidate.key ||
       current.label !== candidate.label ||
       current.isDisabled !== candidate.isDisabled ||
-      current["aria-label"] !== candidate["aria-label"]
+      current["aria-label"] !== candidate["aria-label"] ||
+      current.contextualHelpUnavailable !== candidate.contextualHelpUnavailable ||
+      Boolean(current.contextualHelpContent) !== Boolean(candidate.contextualHelpContent)
     ) {
       return false;
     }
@@ -257,8 +319,8 @@ function areMenuItemsEqual(
 }
 
 function areMenuSectionsEqual(
-  left: SpectrumMenuSectionData[],
-  right: SpectrumMenuSectionData[]
+  left: ParsedSpectrumMenuSectionData[],
+  right: ParsedSpectrumMenuSectionData[]
 ): boolean {
   if (left.length !== right.length) {
     return false;
@@ -425,8 +487,8 @@ export const Menu = defineComponent({
   setup(props, { attrs, expose, slots }) {
     const rootRef = ref<HTMLUListElement | null>(null);
     const itemRefs = new Map<string, HTMLLIElement>();
-    const slotItems = ref<SpectrumMenuItemData[]>([]);
-    const slotSections = ref<SpectrumMenuSectionData[]>([]);
+    const slotItems = ref<ParsedSpectrumMenuItemData[]>([]);
+    const slotSections = ref<ParsedSpectrumMenuSectionData[]>([]);
 
     const sections = computed<NormalizedSpectrumMenuSection[]>(() => {
       if (props.sections && props.sections.length > 0) {
@@ -481,7 +543,7 @@ export const Menu = defineComponent({
       ];
     });
 
-    const items = computed<SpectrumMenuItemData[]>(() =>
+    const items = computed<ParsedSpectrumMenuItemData[]>(() =>
       sections.value.flatMap((section) => section.items)
     );
     const selectionMode = computed<SpectrumMenuSelectionMode>(
@@ -584,6 +646,10 @@ export const Menu = defineComponent({
 
       const item = items.value.find((candidate) => String(candidate.key) === key);
       if (!item || isItemDisabled(item)) {
+        return;
+      }
+
+      if (item.contextualHelpUnavailable && item.contextualHelpContent) {
         return;
       }
 
@@ -741,10 +807,13 @@ export const Menu = defineComponent({
         );
       }
 
-      const renderMenuItem = (item: SpectrumMenuItemData) => {
+      const renderMenuItem = (item: ParsedSpectrumMenuItemData) => {
         const itemKey = keyToString(item.key) ?? "";
+        const hasContextualHelpDialog = Boolean(
+          item.contextualHelpUnavailable && item.contextualHelpContent
+        );
 
-        return h(MenuItem, {
+        const itemNode = h(MenuItem, {
           key: itemKey,
           ref: (value: unknown) => {
             if (!value) {
@@ -764,6 +833,7 @@ export const Menu = defineComponent({
           isSelected: selectedKeys.value.has(itemKey),
           isFocused: focusedKey.value === itemKey,
           isDisabled: isItemDisabled(item),
+          ariaHaspopup: hasContextualHelpDialog ? "dialog" : undefined,
           tabIndex: focusedKey.value === itemKey ? 0 : -1,
           onFocus: () => {
             focusedKey.value = itemKey;
@@ -771,10 +841,27 @@ export const Menu = defineComponent({
           onHover: () => {
             focusedKey.value = itemKey;
           },
-          onAction: () => {
-            activateKey(itemKey);
-          },
+          onAction: hasContextualHelpDialog
+            ? undefined
+            : () => {
+                activateKey(itemKey);
+              },
         });
+
+        if (!hasContextualHelpDialog || !item.contextualHelpContent) {
+          return itemNode;
+        }
+
+        return h(
+          ContextualHelpTrigger,
+          {
+            key: `contextual-help-${itemKey}`,
+            isUnavailable: true,
+          },
+          {
+            default: () => [itemNode, cloneVNode(item.contextualHelpContent!)],
+          }
+        );
       };
 
       return h(
@@ -832,7 +919,9 @@ export const Menu = defineComponent({
               case "Enter":
               case " ":
                 event.preventDefault();
-                activateKey(focusedKey.value);
+                if (focusedKey.value) {
+                  itemRefs.get(focusedKey.value)?.click();
+                }
                 break;
               case "Escape":
                 event.preventDefault();

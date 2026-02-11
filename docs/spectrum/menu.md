@@ -60,4 +60,5 @@ const component = h(MenuTrigger, {
 - Baseline includes accessibility guardrails from upstream behavior: runtime warning when neither `aria-label` nor `aria-labelledby` is provided to `Menu`, plus section/item `aria-label` semantics for grouped/icon-style menus.
 - Baseline includes trigger-anchored popover positioning support (`placement`) for `MenuTrigger` and `ActionMenu`.
 - Baseline `ActionMenu` parity includes default/custom trigger ARIA labeling (`More actions` fallback), `aria-labelledby` precedence wiring, trigger-id-to-menu `aria-labelledby` linkage, controlled/uncontrolled open-state behavior, disabled handling, and `autoFocus`.
-- Baseline includes `ContextualHelpTrigger` export support; deep contextual-help integration inside menu collection semantics remains in progress.
+- Baseline includes `ContextualHelpTrigger` integration for static menu composition: unavailable items open contextual-help dialogs and suppress menu action callbacks while keeping regular item behavior when available.
+- Advanced contextual-help parity (hover/right-arrow submenu semantics and full upstream icon/overlay behavior) remains in progress.

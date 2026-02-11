@@ -1,8 +1,10 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Dialog } from "@vue-spectrum/dialog";
 import {
+  ContextualHelpTrigger,
   Item,
   Menu,
   MenuItem,
@@ -41,6 +43,11 @@ function renderComponent(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+async function flushOverlay(): Promise<void> {
+  await nextTick();
+  await nextTick();
 }
 
 describe("Menu", () => {
@@ -242,6 +249,141 @@ describe("Menu", () => {
 
     await user.click(menuItems[1] as Element);
     expect(onAction).toHaveBeenCalledTimes(1);
+  });
+
+  it("supports ContextualHelpTrigger with unavailable static items", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    const App = defineComponent({
+      name: "MenuContextualHelpHarness",
+      setup() {
+        return () =>
+          h(
+            Menu,
+            {
+              "aria-label": "menu-contextual-help",
+              onAction,
+            },
+            {
+              default: () => [
+                h(Item, { id: "alpha" }, () => "Alpha"),
+                h(
+                  ContextualHelpTrigger,
+                  { isUnavailable: true },
+                  {
+                    default: () => [
+                      h(Item, { id: "blocked" }, () => "Blocked"),
+                      h(Dialog, null, { default: () => "Blocked help content" }),
+                    ],
+                  }
+                ),
+                h(Item, { id: "omega" }, () => "Omega"),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const menuItems = tree.getAllByRole("menuitem");
+
+    expect(menuItems).toHaveLength(3);
+    expect(menuItems[1]?.getAttribute("aria-haspopup")).toBe("dialog");
+
+    await user.click(menuItems[1] as Element);
+    await flushOverlay();
+
+    expect(onAction).not.toHaveBeenCalledWith("blocked");
+    expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    expect(document.body.textContent).toContain("Blocked help content");
+
+    await user.click(menuItems[0] as Element);
+    expect(onAction).toHaveBeenCalledWith("alpha");
+  });
+
+  it("opens unavailable contextual help item with keyboard activation", async () => {
+    const App = defineComponent({
+      name: "MenuContextualHelpKeyboardHarness",
+      setup() {
+        return () =>
+          h(
+            Menu,
+            {
+              "aria-label": "menu-contextual-help-keyboard",
+            },
+            {
+              default: () => [
+                h(Item, { id: "alpha" }, () => "Alpha"),
+                h(
+                  ContextualHelpTrigger,
+                  { isUnavailable: true },
+                  {
+                    default: () => [
+                      h(Item, { id: "blocked" }, () => "Blocked"),
+                      h(Dialog, null, { default: () => "Keyboard help content" }),
+                    ],
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const menu = tree.getByRole("menu", { name: "menu-contextual-help-keyboard" });
+    const menuItems = tree.getAllByRole("menuitem");
+    (menuItems[1] as HTMLElement).focus();
+
+    fireEvent.keyDown(menu, { key: "Enter" });
+    await flushOverlay();
+
+    expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
+    expect(document.body.textContent).toContain("Keyboard help content");
+  });
+
+  it("treats available ContextualHelpTrigger items as regular selectable items", async () => {
+    const user = userEvent.setup();
+
+    const App = defineComponent({
+      name: "MenuContextualHelpAvailableHarness",
+      setup() {
+        return () =>
+          h(
+            Menu,
+            {
+              "aria-label": "menu-contextual-help-available",
+              selectionMode: "single",
+            },
+            {
+              default: () => [
+                h(Item, { id: "one" }, () => "One"),
+                h(
+                  ContextualHelpTrigger,
+                  null,
+                  {
+                    default: () => [
+                      h(Item, { id: "foo" }, () => "Foo"),
+                      h(Dialog, null, { default: () => "Available help content" }),
+                    ],
+                  }
+                ),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const availableItem = tree.getByRole("menuitemradio", { name: "Foo" });
+
+    expect(availableItem.getAttribute("aria-checked")).toBe("false");
+    expect(availableItem.getAttribute("aria-haspopup")).toBeNull();
+
+    await user.click(availableItem);
+    expect(availableItem.getAttribute("aria-checked")).toBe("true");
+    expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
   });
 
   it("warns when no aria-label or aria-labelledby is provided", () => {

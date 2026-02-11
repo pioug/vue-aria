@@ -17,6 +17,7 @@ export interface SpectrumMenuItemProps {
   onFocus?: (() => void) | undefined;
   onHover?: (() => void) | undefined;
   onAction?: ((key: MenuKey) => void) | undefined;
+  ariaHaspopup?: "dialog" | "menu" | true | undefined;
   UNSAFE_className?: string | undefined;
 }
 
@@ -63,6 +64,10 @@ export const MenuItem = defineComponent({
       type: Function as PropType<((key: MenuKey) => void) | undefined>,
       default: undefined,
     },
+    ariaHaspopup: {
+      type: [String, Boolean] as PropType<"dialog" | "menu" | true | undefined>,
+      default: undefined,
+    },
     UNSAFE_className: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -107,6 +112,7 @@ export const MenuItem = defineComponent({
           role: role.value,
           tabIndex: props.tabIndex ?? -1,
           "aria-label": item["aria-label"],
+          "aria-haspopup": props.ariaHaspopup,
           "aria-disabled": disabled ? "true" : undefined,
           "aria-checked":
             props.selectionMode === "none" ? undefined : String(selected),
