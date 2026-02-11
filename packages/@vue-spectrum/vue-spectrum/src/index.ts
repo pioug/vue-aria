@@ -26,6 +26,10 @@ export { simulateMobile, simulateDesktop } from "@vue-spectrum/test-utils";
 export { ErrorBoundary, generatePowerset } from "@vue-spectrum/story-utils";
 export {
   Provider as S2Provider,
+  Accordion as S2Accordion,
+  Disclosure as S2Disclosure,
+  DisclosurePanel as S2DisclosurePanel,
+  DisclosureTitle as S2DisclosureTitle,
   ActionMenu as S2ActionMenu,
   Button as S2Button,
   LinkButton as S2LinkButton,

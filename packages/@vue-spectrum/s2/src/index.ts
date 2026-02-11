@@ -1,6 +1,12 @@
 export { pressScale } from "./pressScale";
 export { isDocsEnv } from "./macros";
 export { Provider, ColorSchemeContext, useColorSchemeContext } from "./Provider";
+export {
+  Accordion,
+  Disclosure,
+  DisclosurePanel,
+  DisclosureTitle,
+} from "./Accordion";
 export { ActionMenu } from "./ActionMenu";
 export { Button, LinkButton } from "./Button";
 export { ActionButton } from "./ActionButton";
@@ -36,6 +42,12 @@ export { RadioGroup } from "./RadioGroup";
 export { Well } from "./Well";
 
 export type { ProviderBackground, S2ProviderProps } from "./Provider";
+export type {
+  S2AccordionProps,
+  S2DisclosurePanelProps,
+  S2DisclosureProps,
+  S2DisclosureTitleProps,
+} from "./Accordion";
 export type { S2ActionMenuProps } from "./ActionMenu";
 export type {
   ActionButtonSize,
