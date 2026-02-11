@@ -14,8 +14,8 @@ const theme: SpectrumTheme = {
   large: { "spectrum--large": "spectrum--large" },
 };
 
-function renderFakeIcon() {
-  return h("svg", [h("path", { d: "M 10,150 L 70,10 L 130,150 z" })]);
+function renderFakeIcon(props: Record<string, unknown> = {}) {
+  return h("svg", props, [h("path", { d: "M 10,150 L 70,10 L 130,150 z" })]);
 }
 
 const IconHarness = defineComponent({
@@ -131,5 +131,41 @@ describe("Icon", () => {
     });
 
     expect(wrapper.get("svg").classes()).toContain("spectrum-Icon--sizeL");
+  });
+
+  it("merges slot and DOM class/style props", () => {
+    const wrapper = mount(Icon, {
+      props: {
+        color: "negative",
+      },
+      attrs: {
+        class: "dom-class",
+        style: {
+          marginTop: "4px",
+        },
+        "data-testid": "icon-dom",
+      },
+      slots: {
+        default: () => [
+          renderFakeIcon({
+            class: "child-class",
+            style: {
+              opacity: 0.4,
+            },
+          }),
+        ],
+      },
+    });
+
+    const icon = wrapper.get("svg");
+    expect(icon.classes()).toEqual(
+      expect.arrayContaining(["child-class", "spectrum-Icon", "dom-class"])
+    );
+    expect(icon.attributes("data-testid")).toBe("icon-dom");
+    expect(icon.attributes("style")).toContain("opacity: 0.4");
+    expect(icon.attributes("style")).toContain("margin-top: 4px");
+    expect(icon.attributes("style")).toContain(
+      "var(--spectrum-semantic-negative-color-icon)"
+    );
   });
 });

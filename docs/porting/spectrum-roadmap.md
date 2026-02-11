@@ -176,6 +176,6 @@ Theme/tokens source (`@adobe/spectrum-css-temp` parity vs Vue-native token pipel
 ## Immediate Next Steps
 
 1. Deepen `@vue-spectrum/provider` parity (`Provider` wrapper behavior, slot/context behavior, and SSR-focused coverage).
-2. Deepen `@vue-spectrum/icon` parity (slot behavior and class/style integration edge cases), then move it from baseline to complete.
+2. Deepen `@vue-spectrum/icon` parity (class/style integration and ARIA semantics edge cases are now covered; continue slot-behavior edge cases), then move it from baseline to complete.
 3. Continue support package track: `@vue-spectrum/style-macro-s1`, `@vue-spectrum/test-utils`, `@vue-spectrum/story-utils`, and `@vue-spectrum/s2`.
 4. Harden `@vue-spectrum/s2` behavior parity by expanding edge-case tests for controlled state, keyboard interaction, and accessibility labeling across the new primitive wrappers.

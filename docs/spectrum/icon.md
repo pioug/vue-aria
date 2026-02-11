@@ -101,5 +101,5 @@ Clones a custom illustration vnode and applies accessible labeling semantics whe
 
 ## Status
 
-- Runtime behavior and upstream-equivalent test scenarios are ported.
+- Runtime behavior and upstream-equivalent test scenarios are ported, with additional class/style forwarding and ARIA-label semantics edge-case coverage.
 - Package is tracker-complete for the current migration phase.

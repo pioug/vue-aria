@@ -62,6 +62,18 @@ describe("Illustration", () => {
     expect(illustration.attributes("role")).toBeUndefined();
   });
 
+  it("supports aria-labelledby semantics", () => {
+    const wrapper = mount(IllustrationHarness, {
+      props: {
+        labelledby: "illustration-heading",
+      },
+    });
+
+    const illustration = wrapper.get("svg");
+    expect(illustration.attributes("aria-labelledby")).toBe("illustration-heading");
+    expect(illustration.attributes("role")).toBe("img");
+  });
+
   it("supports aria-hidden override", async () => {
     const wrapper = mount(IllustrationHarness, {
       props: {
@@ -82,5 +94,27 @@ describe("Illustration", () => {
     illustration = wrapper.get("svg");
     expect(illustration.attributes("aria-label")).toBe("explicitly not hidden aria-label");
     expect(illustration.attributes("aria-hidden")).toBeUndefined();
+  });
+
+  it("forwards DOM class/style props to the svg node", () => {
+    const wrapper = mount(Illustration, {
+      attrs: {
+        class: "illustration-dom",
+        style: {
+          marginTop: "2px",
+        },
+        "data-testid": "illustration-dom",
+      },
+      slots: {
+        default: () => [
+          renderCustomIllustration(),
+        ],
+      },
+    });
+
+    const illustration = wrapper.get("svg");
+    expect(illustration.classes()).toContain("illustration-dom");
+    expect(illustration.attributes("data-testid")).toBe("illustration-dom");
+    expect(illustration.attributes("style")).toContain("margin-top: 2px");
   });
 });

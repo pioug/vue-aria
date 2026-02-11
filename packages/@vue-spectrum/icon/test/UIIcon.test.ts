@@ -13,8 +13,8 @@ const theme: SpectrumTheme = {
   large: { "spectrum--large": "spectrum--large" },
 };
 
-function renderFakeIcon() {
-  return h("svg", [h("path", { d: "M 10,150 L 70,10 L 130,150 z" })]);
+function renderFakeIcon(props: Record<string, unknown> = {}) {
+  return h("svg", props, [h("path", { d: "M 10,150 L 70,10 L 130,150 z" })]);
 }
 
 const UIIconHarness = defineComponent({
@@ -114,5 +114,35 @@ describe("UIIcon", () => {
     });
 
     expect(wrapper.get("svg").attributes("scale")).toBe("L");
+  });
+
+  it("merges slot and DOM class/style props", () => {
+    const wrapper = mount(UIIcon, {
+      attrs: {
+        class: "dom-class",
+        style: {
+          marginTop: "6px",
+        },
+        "data-testid": "ui-icon-dom",
+      },
+      slots: {
+        default: () => [
+          renderFakeIcon({
+            class: "child-class",
+            style: {
+              opacity: 0.6,
+            },
+          }),
+        ],
+      },
+    });
+
+    const icon = wrapper.get("svg");
+    expect(icon.classes()).toEqual(
+      expect.arrayContaining(["child-class", "spectrum-Icon", "dom-class"])
+    );
+    expect(icon.attributes("data-testid")).toBe("ui-icon-dom");
+    expect(icon.attributes("style")).toContain("opacity: 0.6");
+    expect(icon.attributes("style")).toContain("margin-top: 6px");
   });
 });
