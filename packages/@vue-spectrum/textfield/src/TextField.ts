@@ -26,6 +26,7 @@ export const TextField = defineComponent({
   setup(props, { attrs }) {
     const attrsRecord = attrs as Record<string, unknown>;
     const hasWarnedPlaceholder = ref(false);
+    const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
     watch(
@@ -50,6 +51,7 @@ export const TextField = defineComponent({
       multiLine: false,
       type: props.type,
       pattern: props.pattern,
+      inputRef,
     });
 
     return () =>
@@ -66,6 +68,7 @@ export const TextField = defineComponent({
         descriptionProps: textField.descriptionProps.value,
         errorMessageProps: textField.errorMessageProps.value,
         inputProps: inputProps.value,
+        inputRef,
       } as Record<string, unknown>);
   },
 });

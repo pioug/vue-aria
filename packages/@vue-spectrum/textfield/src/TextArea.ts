@@ -68,6 +68,7 @@ export const TextArea = defineComponent({
     } = useSpectrumTextField(props as SpectrumTextAreaProps, attrsRecord, {
       multiLine: true,
       rows: props.rows,
+      inputRef,
     });
 
     const hasExplicitHeight = () =>

@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { TextArea, TextField } from "../src";
 
@@ -236,6 +236,42 @@ describe("TextField", () => {
     const input = getByRole("textbox");
     expect(input.getAttribute("tabindex")).toBe("-1");
   });
+
+  it("supports form reset with controlled value", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "TextFieldFormResetHarness",
+      setup() {
+        const value = ref("Devon");
+        return () =>
+          h("form", null, [
+            h(TextField, {
+              "data-testid": "name",
+              label: "Name",
+              value: value.value,
+              onChange: (nextValue: string) => {
+                value.value = nextValue;
+              },
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const { getByTestId } = render(Harness);
+    const input = getByTestId("name") as HTMLInputElement;
+    expect(input.value).toBe("Devon");
+
+    await user.click(input);
+    await user.keyboard("[ArrowRight] test");
+    expect(input.value).toBe("Devon test");
+
+    await user.click(getByTestId("reset"));
+    expect(input.value).toBe("Devon");
+  });
 });
 
 describe("TextArea", () => {
@@ -397,5 +433,41 @@ describe("TextArea", () => {
 
     const input = getByRole("textbox");
     expect(input.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("supports form reset with controlled value", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "TextAreaFormResetHarness",
+      setup() {
+        const value = ref("Devon");
+        return () =>
+          h("form", null, [
+            h(TextArea, {
+              "data-testid": "name",
+              label: "Name",
+              value: value.value,
+              onChange: (nextValue: string) => {
+                value.value = nextValue;
+              },
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const { getByTestId } = render(Harness);
+    const input = getByTestId("name") as HTMLTextAreaElement;
+    expect(input.value).toBe("Devon");
+
+    await user.click(input);
+    await user.keyboard("[ArrowRight] test");
+    expect(input.value).toBe("Devon test");
+
+    await user.click(getByTestId("reset"));
+    expect(input.value).toBe("Devon");
   });
 });

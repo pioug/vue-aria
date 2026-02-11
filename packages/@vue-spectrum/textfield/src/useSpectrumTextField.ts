@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, type Ref } from "vue";
 import { useTextField } from "@vue-aria/textfield";
 import { useFormProps } from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
@@ -13,6 +13,7 @@ interface UseSpectrumTextFieldOptions {
   rows?: number | undefined;
   type?: string | undefined;
   pattern?: string | undefined;
+  inputRef?: Ref<HTMLInputElement | HTMLTextAreaElement | null> | undefined;
 }
 
 export function useSpectrumTextField(
@@ -72,6 +73,7 @@ export function useSpectrumTextField(
     value:
       props.value !== undefined ? computed(() => props.value) : undefined,
     defaultValue: props.defaultValue,
+    inputRef: options.inputRef,
     type: computed(() => options.type),
     pattern: computed(() => options.pattern),
     autoComplete: computed(() => props.autoComplete),

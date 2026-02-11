@@ -1,4 +1,4 @@
-import { computed, ref, toValue } from "vue";
+import { computed, ref, toValue, watchEffect } from "vue";
 import { useField } from "@vue-aria/label";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 
@@ -20,6 +20,9 @@ export interface UseTextFieldOptions {
   isReadOnly?: MaybeReactive<boolean | undefined>;
   value?: MaybeReactive<string | undefined>;
   defaultValue?: MaybeReactive<string | undefined>;
+  inputRef?:
+    | MaybeReactive<HTMLInputElement | HTMLTextAreaElement | null | undefined>
+    | undefined;
   type?: MaybeReactive<string | undefined>;
   pattern?: MaybeReactive<string | undefined>;
   autoComplete?: MaybeReactive<string | undefined>;
@@ -117,6 +120,7 @@ export function useTextField(options: UseTextFieldOptions = {}): UseTextFieldRes
     }
     return uncontrolledValue.value;
   });
+  const initialValue = ref(value.value);
 
   const setValue = (nextValue: string) => {
     if (options.value === undefined) {
@@ -124,6 +128,41 @@ export function useTextField(options: UseTextFieldOptions = {}): UseTextFieldRes
     }
     options.onChange?.(nextValue);
   };
+
+  watchEffect((onCleanup) => {
+    if (options.inputRef === undefined) {
+      return;
+    }
+
+    const inputElement = toValue(options.inputRef);
+    if (
+      !inputElement ||
+      typeof HTMLInputElement === "undefined" ||
+      typeof HTMLTextAreaElement === "undefined" ||
+      (!(inputElement instanceof HTMLInputElement) &&
+        !(inputElement instanceof HTMLTextAreaElement))
+    ) {
+      return;
+    }
+
+    const formElement = inputElement.form;
+    if (!formElement) {
+      return;
+    }
+
+    const onFormReset = () => {
+      const resetValue =
+        options.defaultValue === undefined
+          ? initialValue.value
+          : (toValue(options.defaultValue) ?? "");
+      setValue(resetValue);
+    };
+
+    formElement.addEventListener("reset", onFormReset);
+    onCleanup(() => {
+      formElement.removeEventListener("reset", onFormReset);
+    });
+  });
 
   const { labelProps, fieldProps, descriptionProps, errorMessageProps } = useField({
     id: options.id,

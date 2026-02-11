@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
 import { useTextField } from "../src/useTextField";
 
 interface TextFieldHandlers {
@@ -149,5 +150,68 @@ describe("useTextField", () => {
 
     expect(onChange).toHaveBeenCalledWith("line 1\nline 2");
     expect(inputProps.value.value).toBe("line 1\nline 2");
+  });
+
+  it("resets controlled value to initial value on form reset", () => {
+    const onChange = vi.fn();
+    const form = document.createElement("form");
+    const input = document.createElement("input");
+    form.append(input);
+    document.body.append(form);
+
+    try {
+      const value = ref("Devon");
+      const { inputProps } = useTextField({
+        value,
+        inputRef: ref(input),
+        onChange: (nextValue) => {
+          value.value = nextValue;
+          onChange(nextValue);
+        },
+        "aria-label": "mandatory label",
+      });
+      const handlers = inputProps.value as TextFieldHandlers;
+
+      handlers.onChange?.({ target: { value: "Devon test" } } as unknown as Event);
+      expect(value.value).toBe("Devon test");
+
+      form.dispatchEvent(new Event("reset", { bubbles: true }));
+      expect(value.value).toBe("Devon");
+      expect(onChange).toHaveBeenLastCalledWith("Devon");
+    } finally {
+      form.remove();
+    }
+  });
+
+  it("resets to defaultValue when form resets", () => {
+    const onChange = vi.fn();
+    const form = document.createElement("form");
+    const input = document.createElement("input");
+    form.append(input);
+    document.body.append(form);
+
+    try {
+      const value = ref("Devon");
+      const { inputProps } = useTextField({
+        value,
+        defaultValue: "Ada",
+        inputRef: ref(input),
+        onChange: (nextValue) => {
+          value.value = nextValue;
+          onChange(nextValue);
+        },
+        "aria-label": "mandatory label",
+      });
+      const handlers = inputProps.value as TextFieldHandlers;
+
+      handlers.onChange?.({ target: { value: "Devon test" } } as unknown as Event);
+      expect(value.value).toBe("Devon test");
+
+      form.dispatchEvent(new Event("reset", { bubbles: true }));
+      expect(value.value).toBe("Ada");
+      expect(onChange).toHaveBeenLastCalledWith("Ada");
+    } finally {
+      form.remove();
+    }
   });
 });
