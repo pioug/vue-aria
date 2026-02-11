@@ -161,6 +161,25 @@ describe("ActionGroup", () => {
     expect(options[1].getAttribute("aria-checked")).toBe("true");
   });
 
+  it("supports buttonLabelBehavior=hide with icon-only class and aria-label fallback", () => {
+    const customItems: SpectrumActionGroupItemData[] = [
+      { key: "one", label: "One", "aria-label": "Edit item" },
+      { key: "two", label: "Two" },
+    ];
+
+    const tree = renderComponent({
+      items: customItems,
+      buttonLabelBehavior: "hide",
+    });
+
+    const buttons = tree.getAllByRole("button");
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
+    expect(buttons[1]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
+    expect(buttons[0]?.getAttribute("aria-label")).toBe("Edit item");
+    expect(buttons[1]?.getAttribute("aria-label")).toBe("Two");
+  });
+
   it("collapses overflowing items into an overflow menu", async () => {
     const user = userEvent.setup();
     const onAction = vi.fn();

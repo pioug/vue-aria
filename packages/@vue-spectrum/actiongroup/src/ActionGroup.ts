@@ -51,6 +51,18 @@ interface ActionButtonHandle {
   UNSAFE_getDOMNode?: () => HTMLElement | null;
 }
 
+const SCREEN_READER_ONLY_STYLE: Record<string, string> = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: "0",
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: "0",
+};
+
 export interface SpectrumActionGroupProps {
   id?: string | undefined;
   items?: SpectrumActionGroupItemData[] | undefined;
@@ -440,6 +452,9 @@ export const ActionGroup = defineComponent({
     const shouldOverflowCollapse = computed(
       () => props.overflowMode === "collapse" && orientation.value === "horizontal"
     );
+    const hideButtonText = computed(
+      () => props.buttonLabelBehavior === "hide"
+    );
     const visibleItems = computed(() =>
       shouldOverflowCollapse.value
         ? items.value.slice(0, visibleItemCount.value)
@@ -599,6 +614,7 @@ export const ActionGroup = defineComponent({
       [
         () => items.value.length,
         () => props.overflowMode,
+        () => props.buttonLabelBehavior,
         () => orientation.value,
         () => selectionMode.value,
       ],
@@ -794,7 +810,8 @@ export const ActionGroup = defineComponent({
                       : undefined,
                 "aria-checked":
                   selectionMode.value === "none" ? undefined : String(selected),
-                "aria-label": item["aria-label"],
+                "aria-label":
+                  item["aria-label"] ?? (hideButtonText.value ? item.label : undefined),
                 tabindex: focusedKey.value === itemKey ? 0 : -1,
                 isDisabled: disabled,
                 isQuiet: isQuiet.value,
@@ -804,6 +821,7 @@ export const ActionGroup = defineComponent({
                   {
                     "is-selected": selected,
                     "is-disabled": disabled,
+                    "spectrum-ActionGroup-item--iconOnly": hideButtonText.value,
                     "spectrum-ActionButton--emphasized": Boolean(props.isEmphasized),
                   }
                 ),
@@ -820,7 +838,10 @@ export const ActionGroup = defineComponent({
                 },
               },
               {
-                default: () => item.label,
+                default: () =>
+                  hideButtonText.value
+                    ? h("span", { style: SCREEN_READER_ONLY_STYLE }, item.label)
+                    : item.label,
               }
             );
           })
