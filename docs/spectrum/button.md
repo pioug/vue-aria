@@ -47,5 +47,6 @@ const toggle = h(ToggleButton, { defaultSelected: true }, () => "Enabled");
 
 - Uses `@vue-aria/button` and `@vue-aria/interactions` for core press and keyboard semantics.
 - Includes wrappers for action/field/logic/clear/toggle button variants.
-- `Button` now supports upstream-style pending state (`isPending`) with delayed spinner visibility and press suppression while pending.
-- Pending parity work includes locale-specific pending announcements and deeper cross-browser interaction edge cases.
+- `Button` now supports upstream-style pending state (`isPending`) with delayed spinner visibility, localized pending announcements, and press suppression while pending.
+- Native keyboard semantics now include default-prevention parity for non-submit buttons while preserving default browser submit behavior for `type="submit"`.
+- Pending parity work includes deeper cross-browser interaction edge cases.

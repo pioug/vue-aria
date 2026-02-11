@@ -76,6 +76,42 @@ describe("Button package", () => {
   it.each([
     ["ActionButton", ActionButton],
     ["Button", Button],
+    ["LogicButton", LogicButton],
+  ])("%s supports keyboard key events while preserving press behavior", async (_name, component) => {
+    const onPress = vi.fn();
+    const onKeydown = vi.fn();
+    const onKeyup = vi.fn();
+    const wrapper = mount(component as Component, {
+      attachTo: document.body,
+      props: {
+        onPress,
+        onKeydown,
+        onKeyup,
+      } as Record<string, unknown>,
+      slots: {
+        default: () => "Click Me",
+      },
+    });
+
+    const user = userEvent.setup();
+    const element = getInteractiveElement(wrapper);
+    (element.element as HTMLElement).focus();
+    onKeydown.mockClear();
+    onKeyup.mockClear();
+
+    await user.keyboard("{Enter}");
+    expect(onPress).toHaveBeenCalledTimes(1);
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onKeyup).toHaveBeenCalledTimes(1);
+
+    await user.keyboard("A");
+    expect(onKeydown).toHaveBeenCalledTimes(2);
+    expect(onKeyup).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    ["ActionButton", ActionButton],
+    ["Button", Button],
     ["ClearButton", ClearButton],
     ["FieldButton", FieldButton],
     ["LogicButton", LogicButton],
@@ -341,6 +377,78 @@ describe("Button package", () => {
     });
 
     expect(wrapper.get("a").attributes("href")).toBeUndefined();
+  });
+
+  it("Button prevents default keyboard activation for non-submit types", () => {
+    const wrapper = mount(Button, {
+      props: {
+        type: "button",
+      },
+      slots: {
+        default: () => "Click Me",
+      },
+    });
+
+    const element = wrapper.get("button").element as HTMLButtonElement;
+    const keydownEnter = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    const keyupEnter = new KeyboardEvent("keyup", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    const keydownSpace = new KeyboardEvent("keydown", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+    const keyupSpace = new KeyboardEvent("keyup", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+
+    element.dispatchEvent(keydownEnter);
+    element.dispatchEvent(keyupEnter);
+    element.dispatchEvent(keydownSpace);
+    element.dispatchEvent(keyupSpace);
+
+    expect(keydownEnter.defaultPrevented).toBe(true);
+    expect(keyupEnter.defaultPrevented).toBe(true);
+    expect(keydownSpace.defaultPrevented).toBe(true);
+    expect(keyupSpace.defaultPrevented).toBe(true);
+  });
+
+  it("Button allows default keyboard activation for submit type", () => {
+    const wrapper = mount(Button, {
+      props: {
+        type: "submit",
+      },
+      slots: {
+        default: () => "Click Me",
+      },
+    });
+
+    const element = wrapper.get("button").element as HTMLButtonElement;
+    const keydownEnter = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    const keyupSpace = new KeyboardEvent("keyup", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+
+    element.dispatchEvent(keydownEnter);
+    element.dispatchEvent(keyupSpace);
+
+    expect(keydownEnter.defaultPrevented).toBe(false);
+    expect(keyupSpace.defaultPrevented).toBe(false);
   });
 
   it("Button localizes pending aria label", () => {

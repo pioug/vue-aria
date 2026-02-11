@@ -153,12 +153,38 @@ export const LogicButton = defineComponent({
       });
 
       const { styleProps } = useStyleProps(resolvedProps);
-      const domProps = filterDOMProps(resolvedProps as Record<string, unknown>);
+      const domPropsInput = resolvedProps as Record<string, unknown>;
+      const domProps = filterDOMProps(domPropsInput);
+      const domEventProps: Record<string, unknown> = {};
+      const eventPropPairs: Array<[string, string]> = [
+        ["onKeydown", "onKeyDown"],
+        ["onKeyup", "onKeyUp"],
+        ["onFocus", "onFocus"],
+        ["onBlur", "onBlur"],
+        ["onClick", "onClick"],
+      ];
+      for (const [primaryName, alternateName] of eventPropPairs) {
+        const primaryValue = domPropsInput[primaryName];
+        const alternateValue = domPropsInput[alternateName];
+        if (primaryValue !== undefined) {
+          domEventProps[primaryName] = primaryValue;
+          continue;
+        }
+        if (alternateValue !== undefined) {
+          domEventProps[primaryName] = alternateValue;
+        }
+      }
       const children = normalizeChildren(slots.default?.());
 
       return h(
         "button",
-        mergeProps(domProps, styleProps, button.buttonProps.value, hoverProps, {
+        mergeProps(
+          domProps,
+          styleProps,
+          button.buttonProps.value,
+          hoverProps,
+          domEventProps,
+          {
           ref: (value: unknown) => {
             elementRef.value = value as HTMLElement | null;
           },
@@ -182,7 +208,8 @@ export const LogicButton = defineComponent({
             ...((resolvedProps.UNSAFE_style as Record<string, string | number> | undefined) ??
               {}),
           },
-        }),
+          }
+        ),
         [
           h(
             "span",

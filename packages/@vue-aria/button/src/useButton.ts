@@ -42,10 +42,15 @@ export function useButton(options: UseButtonOptions = {}): UseButtonResult {
     }
     return Boolean(toValue(options.isDisabled));
   });
+  const nativeButtonType = computed<NativeButtonType>(() =>
+    options.type === undefined ? "button" : toValue(options.type)
+  );
 
   const { pressProps, isPressed } = usePress({
     isDisabled,
-    disableKeyboard: isNativeButton,
+    disableKeyboard: computed(
+      () => isNativeButton.value && nativeButtonType.value === "submit"
+    ),
     onPressStart: options.onPressStart,
     onPressEnd: options.onPressEnd,
     onPressChange: options.onPressChange,
@@ -60,9 +65,29 @@ export function useButton(options: UseButtonOptions = {}): UseButtonResult {
     const disabled = isDisabled.value;
 
     if (isNativeButton.value) {
+      const onKeydown = (event: KeyboardEvent) => {
+        if (
+          nativeButtonType.value !== "submit" &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
+          event.preventDefault();
+        }
+      };
+      const onKeyup = (event: KeyboardEvent) => {
+        if (
+          nativeButtonType.value !== "submit" &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
+          event.preventDefault();
+        }
+      };
+
       return {
-        ...mergedInteractionProps,
-        type: options.type === undefined ? "button" : toValue(options.type),
+        ...mergeProps(mergedInteractionProps, {
+          onKeydown,
+          onKeyup,
+        }),
+        type: nativeButtonType.value,
         disabled,
       };
     }

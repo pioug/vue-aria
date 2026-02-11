@@ -300,6 +300,26 @@ export const Button = defineComponent({
         delete domPropsInput.href;
       }
 
+      const domEventProps: Record<string, unknown> = {};
+      const eventPropPairs: Array<[string, string]> = [
+        ["onKeydown", "onKeyDown"],
+        ["onKeyup", "onKeyUp"],
+        ["onFocus", "onFocus"],
+        ["onBlur", "onBlur"],
+        ["onClick", "onClick"],
+      ];
+      for (const [primaryName, alternateName] of eventPropPairs) {
+        const primaryValue = domPropsInput[primaryName];
+        const alternateValue = domPropsInput[alternateName];
+        if (primaryValue !== undefined) {
+          domEventProps[primaryName] = primaryValue;
+          continue;
+        }
+        if (alternateValue !== undefined) {
+          domEventProps[primaryName] = alternateValue;
+        }
+      }
+
       const { styleProps } = useStyleProps(resolvedProps);
       const domProps = filterDOMProps(domPropsInput);
       const children = wrapTextChildren(normalizeChildren(slots.default?.()));
@@ -315,7 +335,13 @@ export const Button = defineComponent({
 
       return h(
         elementType,
-        mergeProps(domProps, styleProps, button.buttonProps.value, hoverProps, {
+        mergeProps(
+          domProps,
+          styleProps,
+          button.buttonProps.value,
+          hoverProps,
+          domEventProps,
+          {
           ref: (value: unknown) => {
             elementRef.value = value as HTMLElement | null;
           },
@@ -353,7 +379,8 @@ export const Button = defineComponent({
                 }
               }
             : undefined,
-        }),
+          }
+        ),
         [
           h(
             SlotProvider,

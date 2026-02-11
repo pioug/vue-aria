@@ -85,4 +85,52 @@ describe("useButton", () => {
     expect(isFocused.value).toBe(false);
     expect(isFocusVisible.value).toBe(false);
   });
+
+  it("prevents default keyboard activation for native non-submit buttons", () => {
+    const { buttonProps } = useButton({
+      elementType: "button",
+      type: "button",
+    });
+    const handlers = buttonProps.value as unknown as ButtonHandlers;
+    const keydownEvent = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    const keyupEvent = new KeyboardEvent("keyup", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+
+    handlers.onKeydown(keydownEvent);
+    handlers.onKeyup(keyupEvent);
+
+    expect(keydownEvent.defaultPrevented).toBe(true);
+    expect(keyupEvent.defaultPrevented).toBe(true);
+  });
+
+  it("allows default keyboard activation for native submit buttons", () => {
+    const { buttonProps } = useButton({
+      elementType: "button",
+      type: "submit",
+    });
+    const handlers = buttonProps.value as unknown as ButtonHandlers;
+    const keydownEvent = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    const keyupEvent = new KeyboardEvent("keyup", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+
+    handlers.onKeydown(keydownEvent);
+    handlers.onKeyup(keyupEvent);
+
+    expect(keydownEvent.defaultPrevented).toBe(false);
+    expect(keyupEvent.defaultPrevented).toBe(false);
+  });
 });
