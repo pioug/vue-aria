@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -6,6 +7,29 @@ import {
   type ClassValue,
 } from "@vue-spectrum/utils";
 import { colorSliderPropOptions } from "./types";
+
+const COLORSLIDER_INTL_MESSAGES = {
+  "en-US": {
+    color: "Color",
+    hue: "Hue",
+    saturation: "Saturation",
+    lightness: "Lightness",
+    alpha: "Alpha",
+    red: "Red",
+    green: "Green",
+    blue: "Blue",
+  },
+  "fr-FR": {
+    color: "Couleur",
+    hue: "Teinte",
+    saturation: "Saturation",
+    lightness: "Luminosité",
+    alpha: "Alpha",
+    red: "Rouge",
+    green: "Vert",
+    blue: "Bleu",
+  },
+} as const;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -18,6 +42,10 @@ export const ColorSlider = defineComponent({
     ...colorSliderPropOptions,
   },
   setup(props, { attrs, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLORSLIDER_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
 
@@ -79,7 +107,8 @@ export const ColorSlider = defineComponent({
         UNSAFE_style: props.UNSAFE_style,
       });
 
-      const label = props.label ?? props.channel ?? "Color";
+      const labelKey = props.channel ?? "color";
+      const label = props.label ?? stringFormatter.value.format(labelKey);
 
       return h(
         "div",

@@ -110,6 +110,6 @@ const component = h(ColorPicker, {
 ## Notes
 
 - Baseline includes all top-level React Spectrum color package component names with Vue-native implementations.
-- Current behavior focuses on core color selection/edit flows using hex values and simple slider/area interactions, including locale-aware default labels for `ColorField`/`ColorPicker` swatches, `ColorSwatchPicker` listbox naming, `ColorArea`/`ColorWheel` controls, and `ColorEditor` controls (`Color area`, `Hue`, `Alpha`, `Hex`).
+- Current behavior focuses on core color selection/edit flows using hex values and simple slider/area interactions, including locale-aware default labels for `ColorField`/`ColorPicker` swatches, `ColorSwatchPicker` listbox naming, `ColorSlider` fallback channel labels, `ColorArea`/`ColorWheel` controls, and `ColorEditor` controls (`Color area`, `Hue`, `Alpha`, `Hex`).
 - Baseline test coverage is split into upstream-style per-component files (`ColorArea`, `ColorEditor`, `ColorField`, `ColorPicker`, `ColorSlider`, `ColorSwatchPicker`, `ColorWheel`) plus shared color utility/SSR checks.
 - Advanced parity still pending: full `@react-aria/color` interaction model, richer color-space editing, and full Spectrum visual/theming fidelity.
