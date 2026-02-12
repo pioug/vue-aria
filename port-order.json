@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T15:34:59.959Z",
+  "generatedAt": "2026-02-12T15:35:53.709Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 156,
+  "incompletePackageCount": 155,
   "availableLeafCount": 28,
   "availableLeaves": [
     {
@@ -125,6 +125,11 @@
       "upstreamPath": "packages/@react-types/menu"
     },
     {
+      "packageName": "@vue-types/searchfield",
+      "upstreamPackageName": "@react-types/searchfield",
+      "upstreamPath": "packages/@react-types/searchfield"
+    },
+    {
       "packageName": "@vue-types/select",
       "upstreamPackageName": "@react-types/select",
       "upstreamPath": "packages/@react-types/select"
@@ -133,11 +138,6 @@
       "packageName": "@vue-types/table",
       "upstreamPackageName": "@react-types/table",
       "upstreamPath": "packages/@react-types/table"
-    },
-    {
-      "packageName": "@vue-types/textfield",
-      "upstreamPackageName": "@react-types/textfield",
-      "upstreamPath": "packages/@react-types/textfield"
     },
     {
       "packageName": "@vue-types/tooltip",
