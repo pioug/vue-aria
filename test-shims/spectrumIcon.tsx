@@ -9,6 +9,8 @@ export default function SpectrumIcon(props: SpectrumIconProps) {
   return (
     <svg
       {...otherProps}
-      className={UNSAFE_className} />
+      aria-hidden={props['aria-hidden'] ?? true}
+      className={UNSAFE_className}
+      role={props.role ?? 'img'} />
   );
 }

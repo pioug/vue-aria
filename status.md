@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 108 |
-| Passing tests | 108 |
+| Ported tests | 112 |
+| Passing tests | 112 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -81,7 +81,7 @@
 | @vue-spectrum/actiongroup | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/actiongroup | packages/@react-spectrum/actiongroup |
 | @vue-spectrum/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/autocomplete | packages/@react-spectrum/autocomplete |
 | @vue-spectrum/avatar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/avatar | packages/@react-spectrum/avatar |
-| @vue-spectrum/badge | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/badge | packages/@react-spectrum/badge |
+| @vue-spectrum/badge | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/badge | packages/@react-spectrum/badge |
 | @vue-spectrum/breadcrumbs | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/breadcrumbs | packages/@react-spectrum/breadcrumbs |
 | @vue-spectrum/button | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/button | packages/@react-spectrum/button |
 | @vue-spectrum/buttongroup | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/buttongroup | packages/@react-spectrum/buttongroup |
@@ -93,7 +93,7 @@
 | @vue-spectrum/contextualhelp | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/contextualhelp | packages/@react-spectrum/contextualhelp |
 | @vue-spectrum/datepicker | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/datepicker | packages/@react-spectrum/datepicker |
 | @vue-spectrum/dialog | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dialog | packages/@react-spectrum/dialog |
-| @vue-spectrum/divider | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/divider | packages/@react-spectrum/divider |
+| @vue-spectrum/divider | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/divider | packages/@react-spectrum/divider |
 | @vue-spectrum/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dnd | packages/@react-spectrum/dnd |
 | @vue-spectrum/dropzone | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dropzone | packages/@react-spectrum/dropzone |
 | @vue-spectrum/filetrigger | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/filetrigger | packages/@react-spectrum/filetrigger |
