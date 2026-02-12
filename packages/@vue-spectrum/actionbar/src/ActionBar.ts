@@ -20,7 +20,7 @@ import {
   type ActionGroupKey,
   type SpectrumActionGroupItemData,
 } from "@vue-spectrum/actiongroup";
-import { useProviderProps } from "@vue-spectrum/provider";
+import { useProviderContext } from "@vue-spectrum/provider";
 import { Text } from "@vue-spectrum/text";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
 import { OpenTransition } from "@vue-spectrum/overlays";
@@ -372,9 +372,7 @@ export const ActionBar = defineComponent({
       ACTIONBAR_INTL_MESSAGES,
       "@vue-spectrum/actionbar"
     );
-    const resolvedProviderProps = computed(() =>
-      useProviderProps(props as unknown as Record<string, unknown>)
-    );
+    const providerContext = useProviderContext();
     const rootRef = ref<HTMLDivElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
     const restoreScopeRef = ref<HTMLElement | null>(null);
@@ -490,9 +488,7 @@ export const ActionBar = defineComponent({
       const { styleProps } = useStyleProps(styleInput);
       const domProps = filterDOMProps(attrsRecord);
 
-      const isEmphasized =
-        (resolvedProviderProps.value.isEmphasized as boolean | undefined) ??
-        props.isEmphasized;
+      const isEmphasized = props.isEmphasized ?? providerContext?.value.isEmphasized;
 
       if (!props.items) {
         const parsedItems = parseActionBarSlotItems(

@@ -17,7 +17,7 @@ import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
 import { ActionMenu } from "@vue-spectrum/menu";
-import { useProviderProps } from "@vue-spectrum/provider";
+import { useProviderContext } from "@vue-spectrum/provider";
 import {
   classNames,
   useResizeObserver,
@@ -422,13 +422,10 @@ export const ActionGroup = defineComponent({
       ACTION_GROUP_INTL_MESSAGES,
       "@vue-spectrum/actiongroup"
     );
+    const providerContext = useProviderContext();
     const rootRef = ref<HTMLElement | null>(null);
     const itemRefs = new Map<string, ActionButtonHandle | null>();
     const slotItems = ref<SpectrumActionGroupItemData[]>([]);
-
-    const resolvedProviderProps = computed(() =>
-      useProviderProps(props as unknown as Record<string, unknown>)
-    );
 
     const items = computed<SpectrumActionGroupItemData[]>(
       () => props.items ?? slotItems.value
@@ -452,14 +449,11 @@ export const ActionGroup = defineComponent({
 
     const isDisabled = computed(
       () =>
-        Boolean(
-          (resolvedProviderProps.value.isDisabled as boolean | undefined) ?? props.isDisabled
-        )
+        Boolean(props.isDisabled ?? providerContext?.value.isDisabled)
     );
 
     const isQuiet = computed(
-      () =>
-        Boolean((resolvedProviderProps.value.isQuiet as boolean | undefined) ?? props.isQuiet)
+      () => Boolean(props.isQuiet ?? providerContext?.value.isQuiet)
     );
 
     const disabledKeys = computed(() => normalizeKeySet(props.disabledKeys));

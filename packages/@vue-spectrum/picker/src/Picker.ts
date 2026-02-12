@@ -18,7 +18,7 @@ import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { useFormContext, useFormValidationErrors } from "@vue-spectrum/form";
-import { useProviderProps } from "@vue-spectrum/provider";
+import { useProviderContext } from "@vue-spectrum/provider";
 import {
   classNames,
   useIsMobileDevice,
@@ -454,9 +454,7 @@ export const Picker = defineComponent({
       PICKER_INTL_MESSAGES,
       "@vue-spectrum/picker"
     );
-    const resolvedProviderProps = computed(() =>
-      useProviderProps(props as unknown as Record<string, unknown>)
-    );
+    const providerContext = useProviderContext();
     const formContext = useFormContext();
     const formValidationErrors = useFormValidationErrors();
 
@@ -524,18 +522,15 @@ export const Picker = defineComponent({
     );
 
     const isDisabled = computed(() =>
-      Boolean((resolvedProviderProps.value.isDisabled as boolean | undefined) ?? props.isDisabled)
+      Boolean(props.isDisabled ?? providerContext?.value.isDisabled)
     );
     const isRequired = computed(() =>
-      Boolean(
-        (resolvedProviderProps.value.isRequired as boolean | undefined) ??
-          props.isRequired
-      )
+      Boolean(props.isRequired ?? providerContext?.value.isRequired)
     );
     const resolvedValidationState = computed(() => {
       const value =
         props.validationState ??
-        (resolvedProviderProps.value.validationState as "valid" | "invalid" | undefined);
+        (providerContext?.value.validationState as "valid" | "invalid" | undefined);
       if (value === "valid" || value === "invalid") {
         return value;
       }
