@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T15:11:53.374Z",
+  "generatedAt": "2026-02-12T15:13:47.275Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 176,
+  "incompletePackageCount": 175,
   "availableLeafCount": 35,
   "availableLeaves": [
     {
@@ -70,6 +70,11 @@
       "upstreamPath": "packages/@react-stately/virtualizer"
     },
     {
+      "packageName": "@vue-types/breadcrumbs",
+      "upstreamPackageName": "@react-types/breadcrumbs",
+      "upstreamPath": "packages/@react-types/breadcrumbs"
+    },
+    {
       "packageName": "@vue-types/button",
       "upstreamPackageName": "@react-types/button",
       "upstreamPath": "packages/@react-types/button"
@@ -113,11 +118,6 @@
       "packageName": "@vue-types/layout",
       "upstreamPackageName": "@react-types/layout",
       "upstreamPath": "packages/@react-types/layout"
-    },
-    {
-      "packageName": "@vue-types/link",
-      "upstreamPackageName": "@react-types/link",
-      "upstreamPath": "packages/@react-types/link"
     },
     {
       "packageName": "@vue-types/listbox",
