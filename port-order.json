@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:30:30.634Z",
+  "generatedAt": "2026-02-12T15:31:24.286Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 161,
-  "availableLeafCount": 33,
+  "incompletePackageCount": 160,
+  "availableLeafCount": 32,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -123,11 +123,6 @@
       "packageName": "@vue-types/combobox",
       "upstreamPackageName": "@react-types/combobox",
       "upstreamPath": "packages/@react-types/combobox"
-    },
-    {
-      "packageName": "@vue-types/contextualhelp",
-      "upstreamPackageName": "@react-types/contextualhelp",
-      "upstreamPath": "packages/@react-types/contextualhelp"
     },
     {
       "packageName": "@vue-types/dialog",
