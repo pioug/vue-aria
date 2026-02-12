@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:14:00.492Z",
+  "generatedAt": "2026-02-12T18:14:21.245Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 33,
-  "availableLeafCount": 7,
+  "incompletePackageCount": 32,
+  "availableLeafCount": 10,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -10,19 +10,29 @@
       "upstreamPath": "packages/@react-spectrum/button"
     },
     {
+      "packageName": "@vue-spectrum/checkbox",
+      "upstreamPackageName": "@react-spectrum/checkbox",
+      "upstreamPath": "packages/@react-spectrum/checkbox"
+    },
+    {
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
       "upstreamPath": "packages/@react-spectrum/dropzone"
     },
     {
-      "packageName": "@vue-spectrum/label",
-      "upstreamPackageName": "@react-spectrum/label",
-      "upstreamPath": "packages/@react-spectrum/label"
+      "packageName": "@vue-spectrum/labeledvalue",
+      "upstreamPackageName": "@react-spectrum/labeledvalue",
+      "upstreamPath": "packages/@react-spectrum/labeledvalue"
     },
     {
       "packageName": "@vue-spectrum/listbox",
       "upstreamPackageName": "@react-spectrum/listbox",
       "upstreamPath": "packages/@react-spectrum/listbox"
+    },
+    {
+      "packageName": "@vue-spectrum/radio",
+      "upstreamPackageName": "@react-spectrum/radio",
+      "upstreamPath": "packages/@react-spectrum/radio"
     },
     {
       "packageName": "@vue-spectrum/s2",
@@ -38,6 +48,11 @@
       "packageName": "@vue-spectrum/steplist",
       "upstreamPackageName": "@react-spectrum/steplist",
       "upstreamPath": "packages/@react-spectrum/steplist"
+    },
+    {
+      "packageName": "@vue-spectrum/textfield",
+      "upstreamPackageName": "@react-spectrum/textfield",
+      "upstreamPath": "packages/@react-spectrum/textfield"
     }
   ],
   "hasCycles": false,
