@@ -77,8 +77,18 @@ export function usePress(options: UsePressOptions = {}): UsePressResult {
 
     clearScrollListener();
     if (pointerType === "touch" && typeof window !== "undefined") {
-      const onScroll = () => {
+      const onScroll = (scrollEvent: Event) => {
         if (!isPressed.value || activePointerType.value !== "touch") {
+          return;
+        }
+
+        const scrollTarget = scrollEvent.target;
+        const pressTarget = activePressTarget.value;
+        if (
+          scrollTarget instanceof Element &&
+          pressTarget instanceof Node &&
+          !scrollTarget.contains(pressTarget)
+        ) {
           return;
         }
 

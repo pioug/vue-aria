@@ -206,4 +206,42 @@ describe("usePress", () => {
     );
     expect(onPress).toHaveBeenCalledTimes(1);
   });
+
+  it("does not cancel touch press on scroll events from unrelated regions", () => {
+    const onPressEnd = vi.fn();
+    const onPress = vi.fn();
+    const { pressProps, isPressed } = usePress({ onPressEnd, onPress });
+    const handlers = pressProps as unknown as PressHandlers;
+    const target = document.createElement("button");
+    const unrelatedScrollable = document.createElement("div");
+    document.body.appendChild(target);
+    document.body.appendChild(unrelatedScrollable);
+
+    const pointerDown = new PointerEvent("pointerdown", {
+      button: 0,
+      pointerType: "touch",
+    });
+    Object.defineProperty(pointerDown, "pointerType", { value: "touch" });
+    Object.defineProperty(pointerDown, "target", { value: target });
+    Object.defineProperty(pointerDown, "currentTarget", { value: target });
+    handlers.onPointerdown(pointerDown);
+    expect(isPressed.value).toBe(true);
+
+    unrelatedScrollable.dispatchEvent(new Event("scroll", { bubbles: true }));
+    expect(isPressed.value).toBe(true);
+    expect(onPressEnd).not.toHaveBeenCalled();
+
+    const pointerUp = new PointerEvent("pointerup", {
+      button: 0,
+      pointerType: "touch",
+    });
+    Object.defineProperty(pointerUp, "pointerType", { value: "touch" });
+    Object.defineProperty(pointerUp, "target", { value: target });
+    Object.defineProperty(pointerUp, "currentTarget", { value: target });
+    handlers.onPointerup(pointerUp);
+
+    expect(isPressed.value).toBe(false);
+    expect(onPressEnd).toHaveBeenCalledTimes(1);
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
 });
