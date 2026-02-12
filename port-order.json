@@ -1,18 +1,108 @@
 {
-  "generatedAt": "2026-02-12T18:02:21.309Z",
+  "generatedAt": "2026-02-12T18:03:36.883Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 55,
-  "availableLeafCount": 2,
+  "incompletePackageCount": 54,
+  "availableLeafCount": 20,
   "availableLeaves": [
     {
-      "packageName": "@vue-spectrum/provider",
-      "upstreamPackageName": "@react-spectrum/provider",
-      "upstreamPath": "packages/@react-spectrum/provider"
+      "packageName": "@vue-spectrum/accordion",
+      "upstreamPackageName": "@react-spectrum/accordion",
+      "upstreamPath": "packages/@react-spectrum/accordion"
+    },
+    {
+      "packageName": "@vue-spectrum/avatar",
+      "upstreamPackageName": "@react-spectrum/avatar",
+      "upstreamPath": "packages/@react-spectrum/avatar"
+    },
+    {
+      "packageName": "@vue-spectrum/buttongroup",
+      "upstreamPackageName": "@react-spectrum/buttongroup",
+      "upstreamPath": "packages/@react-spectrum/buttongroup"
+    },
+    {
+      "packageName": "@vue-spectrum/dnd",
+      "upstreamPackageName": "@react-spectrum/dnd",
+      "upstreamPath": "packages/@react-spectrum/dnd"
+    },
+    {
+      "packageName": "@vue-spectrum/dropzone",
+      "upstreamPackageName": "@react-spectrum/dropzone",
+      "upstreamPath": "packages/@react-spectrum/dropzone"
+    },
+    {
+      "packageName": "@vue-spectrum/filetrigger",
+      "upstreamPackageName": "@react-spectrum/filetrigger",
+      "upstreamPath": "packages/@react-spectrum/filetrigger"
+    },
+    {
+      "packageName": "@vue-spectrum/form",
+      "upstreamPackageName": "@react-spectrum/form",
+      "upstreamPath": "packages/@react-spectrum/form"
+    },
+    {
+      "packageName": "@vue-spectrum/icon",
+      "upstreamPackageName": "@react-spectrum/icon",
+      "upstreamPath": "packages/@react-spectrum/icon"
+    },
+    {
+      "packageName": "@vue-spectrum/image",
+      "upstreamPackageName": "@react-spectrum/image",
+      "upstreamPath": "packages/@react-spectrum/image"
+    },
+    {
+      "packageName": "@vue-spectrum/layout",
+      "upstreamPackageName": "@react-spectrum/layout",
+      "upstreamPath": "packages/@react-spectrum/layout"
+    },
+    {
+      "packageName": "@vue-spectrum/link",
+      "upstreamPackageName": "@react-spectrum/link",
+      "upstreamPath": "packages/@react-spectrum/link"
+    },
+    {
+      "packageName": "@vue-spectrum/overlays",
+      "upstreamPackageName": "@react-spectrum/overlays",
+      "upstreamPath": "packages/@react-spectrum/overlays"
+    },
+    {
+      "packageName": "@vue-spectrum/progress",
+      "upstreamPackageName": "@react-spectrum/progress",
+      "upstreamPath": "packages/@react-spectrum/progress"
     },
     {
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
+    },
+    {
+      "packageName": "@vue-spectrum/slider",
+      "upstreamPackageName": "@react-spectrum/slider",
+      "upstreamPath": "packages/@react-spectrum/slider"
+    },
+    {
+      "packageName": "@vue-spectrum/statuslight",
+      "upstreamPackageName": "@react-spectrum/statuslight",
+      "upstreamPath": "packages/@react-spectrum/statuslight"
+    },
+    {
+      "packageName": "@vue-spectrum/steplist",
+      "upstreamPackageName": "@react-spectrum/steplist",
+      "upstreamPath": "packages/@react-spectrum/steplist"
+    },
+    {
+      "packageName": "@vue-spectrum/switch",
+      "upstreamPackageName": "@react-spectrum/switch",
+      "upstreamPath": "packages/@react-spectrum/switch"
+    },
+    {
+      "packageName": "@vue-spectrum/text",
+      "upstreamPackageName": "@react-spectrum/text",
+      "upstreamPath": "packages/@react-spectrum/text"
+    },
+    {
+      "packageName": "@vue-spectrum/view",
+      "upstreamPackageName": "@react-spectrum/view",
+      "upstreamPath": "packages/@react-spectrum/view"
     }
   ],
   "hasCycles": false,
