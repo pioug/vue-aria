@@ -292,3 +292,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally while preserving API shape and global tooltip coordination behavior.
 - User impact: Runtime behavior should be close, but edge cases around mount/unmount timing and delayed close sequencing may differ until dedicated parity tests are added.
 - Removal plan: Port and run upstream tooltip state tests 1:1 against this implementation and refine timing/lifecycle behavior until parity is confirmed.
+
+- Package: `@vue-aria/label`
+- Upstream reference: `packages/@react-aria/label` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Structural port is complete, but type signatures remain React-centric (`ElementType` and `LabelHTMLAttributes` from `react`).
+- Reason: The package was ported incrementally while preserving API/type parity with upstream and existing shared typing contracts.
+- User impact: Consumers may still need React type packages for full type resolution in label helper types.
+- Removal plan: Replace React-centric label type imports with Vue-native equivalents once shared type mapping is complete.

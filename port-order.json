@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:12:50.263Z",
+  "generatedAt": "2026-02-12T16:15:04.218Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 129,
-  "availableLeafCount": 11,
+  "incompletePackageCount": 128,
+  "availableLeafCount": 10,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/disclosure",
@@ -18,11 +18,6 @@
       "packageName": "@vue-aria/interactions",
       "upstreamPackageName": "@react-aria/interactions",
       "upstreamPath": "packages/@react-aria/interactions"
-    },
-    {
-      "packageName": "@vue-aria/label",
-      "upstreamPackageName": "@react-aria/label",
-      "upstreamPath": "packages/@react-aria/label"
     },
     {
       "packageName": "@vue-aria/landmark",
