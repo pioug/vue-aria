@@ -45,4 +45,5 @@ provideSpectrumProvider({
 ## Notes
 
 - This is a migration baseline, not the full final Spectrum token system.
+- Docs manual-testing baseline styles are currently centralized in `docs/.vitepress/theme/spectrum-base.css` to provide cross-component visual structure while runtime package parity progresses.
 - Theme package parity remains in the Phase 1 package track. `theme-default`, `theme-light`, `theme-dark`, and `theme-express` baselines are now in progress.

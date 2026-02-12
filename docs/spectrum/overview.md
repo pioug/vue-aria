@@ -10,6 +10,7 @@ This section documents the Vue port of React Spectrum components:
 - v1 parity first (`@react-spectrum/*` package set).
 - S2 parity stays secondary until v1 completion criteria are met.
 - Active horizontal lane: `button`, `textfield`, `dialog`.
+- Active styling lane: shared base Spectrum docs styles for cross-component manual preview validation.
 
 ## Where Progress Is Tracked
 

@@ -4,6 +4,7 @@ import { h } from "vue";
 import { Provider } from "@vue-spectrum/provider";
 import { theme as defaultTheme } from "@vue-spectrum/theme-default";
 import "./custom.css";
+import "./spectrum-base.css";
 
 const BaseLayout = DefaultTheme.Layout;
 

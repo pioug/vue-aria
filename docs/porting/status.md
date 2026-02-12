@@ -9,6 +9,7 @@ This page is the consolidated entry point for migration status and execution mod
 - Priority: complete React Spectrum v1 parity before any further S2 expansion.
 - S2 execution state: paused/deprioritized (new S2 feature slices are deferred until v1 completion gates pass).
 - Active horizontal lane: v1 packages only (behavior parity, test parity, docs/preview usability, and CI stability).
+- Active styling lane: shared base Spectrum docs styles are being ported in parallel to improve manual component validation (`docs/.vitepress/theme/spectrum-base.css`).
 
 ## Source of Truth
 

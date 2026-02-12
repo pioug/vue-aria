@@ -1,0 +1,1019 @@
+.spectrum-docs-provider {
+  --spectrum-ui-success: #12805c;
+  --spectrum-ui-warning: #a15c00;
+  --spectrum-ui-border-soft: #dfe5f0;
+  --spectrum-ui-bg-raised: #ffffff;
+}
+
+.spectrum-docs-provider :is(
+  [class^="spectrum-"],
+  [class*=" spectrum-"],
+  [class^="react-spectrum-"],
+  [class*=" react-spectrum-"]
+) {
+  box-sizing: border-box;
+  font-family: var(--vp-font-family-base);
+}
+
+.spectrum-docs-provider :is(button, [role="button"], input, textarea, select):focus-visible {
+  outline: 2px solid var(--spectrum-ui-focus);
+  outline-offset: 1px;
+}
+
+.spectrum-docs-provider :is(button, input, textarea, select) {
+  font: inherit;
+}
+
+.spectrum-docs-provider :is(.is-disabled, [disabled], [aria-disabled="true"]) {
+  cursor: not-allowed;
+}
+
+.spectrum-docs-provider :is(.is-invalid) {
+  border-color: rgba(211, 21, 16, 0.55);
+}
+
+.spectrum-docs-provider :is(.is-selected) {
+  background: rgba(20, 115, 230, 0.12);
+}
+
+.spectrum-docs-provider :is(.is-focused, .focus-ring) {
+  box-shadow: 0 0 0 1px var(--spectrum-ui-focus) inset;
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-field,
+  .react-spectrum-SearchAutocomplete-field,
+  .react-spectrum-DatePicker-group,
+  .react-spectrum-DateRangePicker-group,
+  .react-spectrum-DateField-input,
+  .react-spectrum-TimeField-input,
+  .react-spectrum-ColorField-inputGroup,
+  .spectrum-Search,
+  .spectrum-Stepper
+) {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-field:hover,
+  .react-spectrum-SearchAutocomplete-field:hover,
+  .react-spectrum-DatePicker-group:hover,
+  .react-spectrum-DateRangePicker-group:hover,
+  .react-spectrum-DateField-input:hover,
+  .react-spectrum-TimeField-input:hover,
+  .react-spectrum-ColorField-inputGroup:hover,
+  .spectrum-Search:hover,
+  .spectrum-Stepper:hover
+) {
+  border-color: var(--spectrum-ui-border-strong);
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-field:focus-within,
+  .react-spectrum-SearchAutocomplete-field:focus-within,
+  .react-spectrum-DatePicker-group:focus-within,
+  .react-spectrum-DateRangePicker-group:focus-within,
+  .react-spectrum-DateField-input:focus-within,
+  .react-spectrum-TimeField-input:focus-within,
+  .react-spectrum-ColorField-inputGroup:focus-within,
+  .spectrum-Search:focus-within,
+  .spectrum-Stepper:focus-within
+) {
+  border-color: var(--spectrum-ui-focus);
+  box-shadow: 0 0 0 1px var(--spectrum-ui-focus);
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-input,
+  .react-spectrum-SearchAutocomplete-input,
+  .react-spectrum-DatePicker-input,
+  .react-spectrum-DateRangePicker-input,
+  .react-spectrum-DateField-input input,
+  .react-spectrum-TimeField-input input,
+  .react-spectrum-ColorField-input,
+  .spectrum-Search-input,
+  .spectrum-Stepper-input
+) {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--spectrum-ui-text);
+  padding: 0.42rem 0.6rem;
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-button,
+  .react-spectrum-DatePicker-button,
+  .react-spectrum-DateRangePicker-button
+) {
+  flex: 0 0 auto;
+  min-height: 1.9rem;
+  min-width: 1.9rem;
+  margin-inline-end: 0.2rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 6px;
+  background: var(--spectrum-ui-bg-subtle);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .react-spectrum-DateRangePicker-dash {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.85rem;
+}
+
+.spectrum-docs-provider .spectrum-Dropdown {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-Dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  padding: 0.4rem 0.55rem;
+}
+
+.spectrum-docs-provider .spectrum-Dropdown-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spectrum-docs-provider .spectrum-Dropdown-chevron {
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-popover,
+  .react-spectrum-SearchAutocomplete-popover,
+  .react-spectrum-DatePicker-popover,
+  .react-spectrum-DateRangePicker-popover,
+  .react-spectrum-ColorPicker-popover,
+  .spectrum-Dropdown-popover,
+  .spectrum-Picker-tray,
+  .spectrum-Popover,
+  .spectrum-MenuTrigger-popover
+) {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  box-shadow: var(--spectrum-ui-shadow);
+  overflow: auto;
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox-popover,
+  .react-spectrum-SearchAutocomplete-popover,
+  .react-spectrum-DatePicker-popover,
+  .react-spectrum-DateRangePicker-popover,
+  .react-spectrum-ColorPicker-popover,
+  .spectrum-Dropdown-popover,
+  .spectrum-Popover,
+  .spectrum-MenuTrigger-popover
+) {
+  margin-top: 0.3rem;
+  max-height: 20rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Menu, .react-spectrum-ComboBox-listBox, .react-spectrum-SearchAutocomplete-listBox) {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-Menu-section,
+  .react-spectrum-ComboBox-section,
+  .react-spectrum-SearchAutocomplete-section
+) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.spectrum-docs-provider .spectrum-Menu-sectionHeading {
+  margin: 0.25rem 0.4rem;
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.spectrum-docs-provider .spectrum-Menu-divider {
+  height: 1px;
+  margin: 0.35rem 0;
+  background: var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .spectrum-Menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.42rem 0.55rem;
+  color: var(--spectrum-ui-text);
+  background: transparent;
+}
+
+.spectrum-docs-provider .spectrum-Menu-item:hover {
+  background: var(--spectrum-ui-bg-subtle);
+  border-color: var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .spectrum-Menu-itemLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spectrum-docs-provider .spectrum-Menu-description {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.78rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-Menu-checkmark,
+  .spectrum-Menu-submenuIcon,
+  .spectrum-Menu-unavailableIcon
+) {
+  margin-inline-start: auto;
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .react-spectrum-ListView {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-item {
+  border-top: 1px solid var(--spectrum-ui-border-soft);
+  background: var(--spectrum-ui-bg-raised);
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-item:first-child {
+  border-top: none;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-itemCell {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.7rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-itemLabel {
+  font-weight: 500;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-itemDescription {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-TableView, .react-spectrum-TableView) {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--spectrum-ui-bg-raised);
+}
+
+.spectrum-docs-provider :is(.spectrum-Table-head, .spectrum-Table-body) {
+  display: grid;
+}
+
+.spectrum-docs-provider :is(.spectrum-Table-headRow, .spectrum-Table-row) {
+  display: flex;
+  align-items: stretch;
+}
+
+.spectrum-docs-provider .spectrum-Table-headRow {
+  background: var(--spectrum-ui-bg-subtle);
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider :is(.spectrum-Table-headCell, .spectrum-Table-cell) {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.5rem 0.65rem;
+  border-inline-end: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider :is(.spectrum-Table-headCell, .spectrum-Table-cell):last-child {
+  border-inline-end: none;
+}
+
+.spectrum-docs-provider .spectrum-Table-headCell {
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .spectrum-Table-row {
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .spectrum-Table-body .spectrum-Table-row:last-child {
+  border-bottom: none;
+}
+
+.spectrum-docs-provider :is(.spectrum-TreeView, .react-spectrum-TreeView) {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider :is(.spectrum-TreeView-body, .react-spectrum-TreeView-body) {
+  display: grid;
+}
+
+.spectrum-docs-provider :is(.spectrum-TreeView-row, .react-spectrum-TreeView-row) {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider :is(.spectrum-TreeView-row, .react-spectrum-TreeView-row):last-child {
+  border-bottom: none;
+}
+
+.spectrum-docs-provider :is(.spectrum-TreeView-cell, .react-spectrum-TreeView-cell) {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.1rem;
+  padding: 0.4rem 0.65rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-TreeView-toggleButton, .react-spectrum-TreeView-toggleButton) {
+  min-width: 1.6rem;
+  min-height: 1.6rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 6px;
+  background: var(--spectrum-ui-bg-subtle);
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .react-spectrum-TreeView-description {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.8rem;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-wrapper {
+  display: inline-grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.5rem 0.55rem;
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-title {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-navButton {
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 6px;
+  background: var(--spectrum-ui-bg-subtle);
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-body {
+  padding: 0.5rem;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-monthTitle {
+  margin: 0 0 0.4rem;
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-weekday {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.spectrum-docs-provider .react-spectrum-CalendarCell {
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+}
+
+.spectrum-docs-provider .react-spectrum-CalendarCell-button {
+  width: 100%;
+  height: 100%;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .react-spectrum-CalendarCell-button:hover {
+  background: var(--spectrum-ui-bg-subtle);
+  border-color: var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .react-spectrum-CalendarCell.is-selected .react-spectrum-CalendarCell-button {
+  background: var(--spectrum-ui-accent);
+  border-color: var(--spectrum-ui-accent);
+  color: #ffffff;
+}
+
+.spectrum-docs-provider .spectrum-Slider {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.spectrum-docs-provider .spectrum-Slider-labelContainer,
+.spectrum-docs-provider .spectrum-Slider-valueLabelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider .spectrum-Slider-label {
+  font-weight: 500;
+}
+
+.spectrum-docs-provider .spectrum-Slider-value {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-Slider-controls {
+  position: relative;
+  min-height: 1.4rem;
+}
+
+.spectrum-docs-provider .spectrum-Slider-track,
+.spectrum-docs-provider .spectrum-Slider-fill {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  border-radius: 999px;
+}
+
+.spectrum-docs-provider .spectrum-Slider-track {
+  left: 0;
+  right: 0;
+  background: var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .spectrum-Slider-fill {
+  background: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-Slider-handle {
+  position: absolute;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--spectrum-ui-accent);
+  border-radius: 999px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+}
+
+.spectrum-docs-provider .spectrum-Slider-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader {
+  display: grid;
+  gap: 0.38rem;
+  width: min(26rem, 100%);
+}
+
+.spectrum-docs-provider .spectrum-BarLoader-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--spectrum-ui-border-soft);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader-fill {
+  height: 100%;
+  background: var(--spectrum-ui-accent);
+  border-radius: inherit;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader-label {
+  font-weight: 500;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader-percentage {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-CircleLoader {
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid var(--spectrum-ui-border-soft);
+  border-radius: 999px;
+  border-top-color: var(--spectrum-ui-accent);
+  animation: spectrum-docs-spin 800ms linear infinite;
+}
+
+.spectrum-docs-provider :is(.spectrum-CircleLoader-track, .spectrum-CircleLoader-fills) {
+  display: none;
+}
+
+.spectrum-docs-provider .spectrum-ToggleSwitch,
+.spectrum-docs-provider .spectrum-Checkbox,
+.spectrum-docs-provider .spectrum-Radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Checkbox-input, .spectrum-Radio-input, .spectrum-ToggleSwitch-input) {
+  margin: 0;
+  accent-color: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-Checkbox-box,
+.spectrum-docs-provider .spectrum-Radio-button {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--spectrum-ui-border-strong);
+  background: var(--spectrum-ui-bg);
+  flex: 0 0 auto;
+}
+
+.spectrum-docs-provider .spectrum-Radio-button {
+  border-radius: 999px;
+}
+
+.spectrum-docs-provider .spectrum-Checkbox-input:checked + .spectrum-Checkbox-box {
+  border-color: var(--spectrum-ui-accent);
+  background: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-Radio-input:checked + .spectrum-Radio-button {
+  border-color: var(--spectrum-ui-accent);
+  box-shadow: inset 0 0 0 3px var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-ToggleSwitch-switch {
+  position: relative;
+  width: 2rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: var(--spectrum-ui-border);
+  transition: background-color 120ms ease;
+}
+
+.spectrum-docs-provider .spectrum-ToggleSwitch-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: transform 120ms ease;
+}
+
+.spectrum-docs-provider .spectrum-ToggleSwitch-input:checked + .spectrum-ToggleSwitch-switch {
+  background: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-ToggleSwitch-input:checked + .spectrum-ToggleSwitch-switch::after {
+  transform: translateX(0.9rem);
+}
+
+.spectrum-docs-provider .spectrum-Breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.spectrum-docs-provider .spectrum-Breadcrumbs-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Breadcrumbs-itemLink, .spectrum-Breadcrumbs-menuItem) {
+  border: 1px solid var(--spectrum-ui-border-soft);
+  border-radius: 999px;
+  background: var(--spectrum-ui-bg-subtle);
+  color: var(--spectrum-ui-text);
+  padding: 0.18rem 0.5rem;
+  text-decoration: none;
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-Breadcrumbs-itemSeparator {
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .spectrum-Tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+  padding-bottom: 0.4rem;
+}
+
+.spectrum-docs-provider .spectrum-Tabs-item {
+  border: 1px solid var(--spectrum-ui-border-soft);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  min-height: 2rem;
+  padding: 0.25rem 0.65rem;
+}
+
+.spectrum-docs-provider .spectrum-Tabs-item.is-selected {
+  border-color: var(--spectrum-ui-accent);
+  color: var(--spectrum-ui-accent);
+  background: rgba(20, 115, 230, 0.08);
+}
+
+.spectrum-docs-provider .spectrum-Tabs-selectionIndicator {
+  display: none;
+}
+
+.spectrum-docs-provider .spectrum-TabsPanel-tabpanel {
+  border: 1px solid var(--spectrum-ui-border-soft);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  padding: 0.75rem;
+}
+
+.spectrum-docs-provider .spectrum-Tags-container {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  padding: 0.5rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider .spectrum-Tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.spectrum-docs-provider .spectrum-Tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--spectrum-ui-border-soft);
+  border-radius: 999px;
+  background: var(--spectrum-ui-bg-subtle);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-Tag-removeButton {
+  min-width: 1.25rem;
+  min-height: 1.25rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .spectrum-Tags-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Tags-toggle, .spectrum-Tags-action) {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  min-height: 1.85rem;
+  padding: 0.28rem 0.58rem;
+}
+
+.spectrum-docs-provider .spectrum-Tags-empty-state {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.83rem;
+}
+
+.spectrum-docs-provider .spectrum-CardView {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  padding: 0.75rem;
+}
+
+.spectrum-docs-provider .spectrum-CardView-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.spectrum-docs-provider .spectrum-CardView-cell {
+  flex: 1 1 16rem;
+  min-width: 14rem;
+}
+
+.spectrum-docs-provider .spectrum-Card {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg);
+  padding: 0.7rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.spectrum-docs-provider .spectrum-Card-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Card-image, .spectrum-Card-illustration) {
+  min-height: 6rem;
+  border: 1px solid var(--spectrum-ui-border-soft);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f7fbff, #eef3fb);
+}
+
+.spectrum-docs-provider .spectrum-Card-heading {
+  font-weight: 600;
+}
+
+.spectrum-docs-provider .spectrum-Card-detail {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-Dropzone {
+  position: relative;
+  border: 1px dashed var(--spectrum-ui-border-strong);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-subtle);
+  padding: 1rem;
+}
+
+.spectrum-docs-provider .spectrum-Dropzone[data-drop-target="true"] {
+  border-color: var(--spectrum-ui-accent);
+  background: rgba(20, 115, 230, 0.08);
+}
+
+.spectrum-docs-provider .spectrum-Dropzone-banner {
+  margin-top: 0.65rem;
+  border-radius: 8px;
+  padding: 0.35rem 0.55rem;
+  background: rgba(20, 115, 230, 0.1);
+  color: var(--spectrum-ui-accent);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ActionBar {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  padding: 0.55rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ActionBar-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ActionBar-selectedCount {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-subtle);
+  padding: 0.3rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup-item {
+  min-height: 2rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  padding: 0.32rem 0.58rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ContextualHelp-button {
+  min-width: 1.8rem;
+  min-height: 1.8rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 999px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .react-spectrum-ContextualHelp-content {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ContextualHelp-footer {
+  border-top: 1px solid var(--spectrum-ui-border-soft);
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorPicker {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorPicker-button {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  padding: 0.35rem 0.55rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorSwatch {
+  border: 1px solid var(--spectrum-ui-border);
+}
+
+.spectrum-docs-provider .react-spectrum-ColorSlider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-ColorSlider-input, .react-spectrum-ColorWheel-input) {
+  width: 100%;
+}
+
+.spectrum-docs-provider .spectrum-Tooltip {
+  border-radius: 8px;
+  background: #1f2937;
+  color: #ffffff;
+  font-size: 0.76rem;
+  max-width: 20rem;
+  padding: 0.4rem 0.55rem;
+}
+
+.spectrum-docs-provider .spectrum-Tooltip-typeIcon {
+  color: #9fc3ff;
+}
+
+.spectrum-docs-provider .spectrum-Tooltip-tip {
+  display: none;
+}
+
+.spectrum-docs-provider .spectrum-ToastContainer-list {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1300;
+  width: min(22rem, calc(100vw - 2rem));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.spectrum-docs-provider .spectrum-ToastContainer-listitem {
+  margin: 0;
+}
+
+.spectrum-docs-provider .spectrum-Toast {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  box-shadow: var(--spectrum-ui-shadow);
+  padding: 0.55rem 0.65rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-Toast-contentWrapper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45rem;
+  align-items: start;
+}
+
+.spectrum-docs-provider .spectrum-Toast-typeIcon {
+  color: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-Toast-content {
+  font-weight: 500;
+}
+
+.spectrum-docs-provider .spectrum-Toast-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+@media (max-width: 720px) {
+  .spectrum-docs-provider .spectrum-CardView-cell {
+    min-width: 100%;
+  }
+
+  .spectrum-docs-provider :is(.spectrum-Table-headRow, .spectrum-Table-row) {
+    flex-wrap: wrap;
+  }
+
+  .spectrum-docs-provider :is(.spectrum-Table-headCell, .spectrum-Table-cell) {
+    flex: 1 1 50%;
+    border-inline-end: none;
+    border-bottom: 1px solid var(--spectrum-ui-border-soft);
+  }
+}
+
+@keyframes spectrum-docs-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
