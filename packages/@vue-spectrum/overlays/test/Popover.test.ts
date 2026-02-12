@@ -1,6 +1,7 @@
 import { fireEvent, render } from "@testing-library/vue";
 import { h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Popover } from "../src";
 
 function createTrigger(): HTMLButtonElement {
@@ -175,6 +176,37 @@ describe("Popover", () => {
 
       await fireEvent.click(dismissButtons[0] as Element);
       expect(onOpenChange).toHaveBeenCalledWith(false);
+    } finally {
+      trigger.remove();
+    }
+  });
+
+  it("localizes hidden dismiss button labels from provider locale", () => {
+    const trigger = createTrigger();
+
+    try {
+      const tree = render(Provider, {
+        props: {
+          theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+          locale: "fr-FR",
+        },
+        slots: {
+          default: () =>
+            h(
+              Popover,
+              {
+                isOpen: true,
+                triggerRef: trigger,
+              },
+              {
+                default: () => "Popover content",
+              }
+            ),
+        },
+      });
+
+      const dismissButtons = tree.getAllByRole("button", { name: "Rejeter" });
+      expect(dismissButtons).toHaveLength(2);
     } finally {
       trigger.remove();
     }

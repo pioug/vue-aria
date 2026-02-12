@@ -1,6 +1,7 @@
 import { fireEvent, render } from "@testing-library/vue";
 import { h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Tray } from "../src";
 
 describe("Tray", () => {
@@ -80,6 +81,31 @@ describe("Tray", () => {
 
     await fireEvent.click(dismissButtons[0] as Element);
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("localizes hidden dismiss button labels from provider locale", async () => {
+    const tree = render(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(
+            Tray,
+            {
+              isOpen: true,
+            },
+            {
+              default: () => h("div", { role: "dialog" }, "contents"),
+            }
+          ),
+      },
+    });
+
+    await nextTick();
+    const dismissButtons = tree.getAllByRole("button", { name: "Rejeter" });
+    expect(dismissButtons).toHaveLength(2);
   });
 
   it("applies fixed height class", async () => {

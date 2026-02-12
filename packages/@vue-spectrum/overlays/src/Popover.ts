@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, ref, type PropType } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { usePopover, type Placement } from "@vue-aria/overlays";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
@@ -38,6 +39,15 @@ const DISMISS_BUTTON_STYLE: Record<string, string> = {
   whiteSpace: "nowrap",
   border: "0",
 };
+
+const OVERLAYS_INTL_MESSAGES = {
+  "en-US": {
+    dismiss: "Dismiss",
+  },
+  "fr-FR": {
+    dismiss: "Rejeter",
+  },
+} as const;
 
 export const Popover = defineComponent({
   name: "Popover",
@@ -89,6 +99,7 @@ export const Popover = defineComponent({
     },
   },
   setup(props, { attrs, slots, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(OVERLAYS_INTL_MESSAGES);
     const popoverRef = ref<HTMLDivElement | null>(null);
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
     const isOpen = computed<boolean>(() =>
@@ -143,6 +154,7 @@ export const Popover = defineComponent({
       } as Record<string, unknown>;
       const { styleProps } = useStyleProps(styleInput);
       const domProps = filterDOMProps(attrsRecord, { labelable: false });
+      const dismissLabel = stringFormatter.value.format("dismiss");
 
       return h(
         Overlay,
@@ -195,13 +207,13 @@ export const Popover = defineComponent({
                     "button",
                     {
                       type: "button",
-                      "aria-label": "Dismiss",
+                      "aria-label": dismissLabel,
                       style: DISMISS_BUTTON_STYLE,
                       onClick: () => {
                         state.close();
                       },
                     },
-                    "Dismiss"
+                    dismissLabel
                   ),
                   slots.default?.(),
                   !props.hideArrow
@@ -215,13 +227,13 @@ export const Popover = defineComponent({
                     "button",
                     {
                       type: "button",
-                      "aria-label": "Dismiss",
+                      "aria-label": dismissLabel,
                       style: DISMISS_BUTTON_STYLE,
                       onClick: () => {
                         state.close();
                       },
                     },
-                    "Dismiss"
+                    dismissLabel
                   ),
                 ]
               ),
