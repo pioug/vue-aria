@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:11:57.581Z",
+  "generatedAt": "2026-02-12T18:12:32.264Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 37,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 36,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -13,11 +13,6 @@
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
       "upstreamPath": "packages/@react-spectrum/dropzone"
-    },
-    {
-      "packageName": "@vue-spectrum/illustratedmessage",
-      "upstreamPackageName": "@react-spectrum/illustratedmessage",
-      "upstreamPath": "packages/@react-spectrum/illustratedmessage"
     },
     {
       "packageName": "@vue-spectrum/inlinealert",
