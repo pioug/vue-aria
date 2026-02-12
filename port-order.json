@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T18:19:35.809Z",
+  "generatedAt": "2026-02-12T18:20:07.109Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 24,
+  "incompletePackageCount": 23,
   "availableLeafCount": 5,
   "availableLeaves": [
     {
@@ -20,14 +20,14 @@
       "upstreamPath": "packages/@react-spectrum/list"
     },
     {
+      "packageName": "@vue-spectrum/numberfield",
+      "upstreamPackageName": "@react-spectrum/numberfield",
+      "upstreamPath": "packages/@react-spectrum/numberfield"
+    },
+    {
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
-    },
-    {
-      "packageName": "@vue-spectrum/textfield",
-      "upstreamPackageName": "@react-spectrum/textfield",
-      "upstreamPath": "packages/@react-spectrum/textfield"
     }
   ],
   "hasCycles": false,
