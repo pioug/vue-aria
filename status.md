@@ -89,7 +89,7 @@
 | @vue-spectrum/card | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/card | packages/@react-spectrum/card |
 | @vue-spectrum/checkbox | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/checkbox | packages/@react-spectrum/checkbox |
 | @vue-spectrum/color | not_started | 6 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/color | packages/@react-spectrum/color |
-| @vue-spectrum/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/combobox | packages/@react-spectrum/combobox |
+| @vue-spectrum/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/combobox | packages/@react-spectrum/combobox |
 | @vue-spectrum/contextualhelp | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/contextualhelp | packages/@react-spectrum/contextualhelp |
 | @vue-spectrum/datepicker | not_started | 6 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/datepicker | packages/@react-spectrum/datepicker |
 | @vue-spectrum/dialog | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/dialog | packages/@react-spectrum/dialog |

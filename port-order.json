@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:24:01.144Z",
+  "generatedAt": "2026-02-12T18:24:31.291Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 16,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 15,
+  "availableLeafCount": 7,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/autocomplete",
@@ -13,11 +13,6 @@
       "packageName": "@vue-spectrum/calendar",
       "upstreamPackageName": "@react-spectrum/calendar",
       "upstreamPath": "packages/@react-spectrum/calendar"
-    },
-    {
-      "packageName": "@vue-spectrum/combobox",
-      "upstreamPackageName": "@react-spectrum/combobox",
-      "upstreamPath": "packages/@react-spectrum/combobox"
     },
     {
       "packageName": "@vue-spectrum/dialog",
