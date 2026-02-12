@@ -374,6 +374,18 @@ describe("SearchAutocomplete", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("does not match any items when input is only whitespace", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.keyboard(" ");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.getAttribute("aria-expanded")).toBe("false");
+  });
+
   it("closes the menu when no items match after opening", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
@@ -399,6 +411,29 @@ describe("SearchAutocomplete", () => {
     await user.keyboard("T");
 
     expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("keeps menu open when clearing input with menuTrigger input", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      menuTrigger: "input",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("Two");
+
+    let listbox = await tree.findByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+
+    await user.clear(input);
+
+    listbox = await tree.findByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
   });
 
   it("does not focus a disabled matching item on input", async () => {

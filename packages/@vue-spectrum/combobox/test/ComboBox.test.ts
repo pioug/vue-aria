@@ -298,6 +298,18 @@ describe("ComboBox", () => {
     expect(options[0]?.textContent).toContain("Three");
   });
 
+  it("does not match any items when input is only whitespace", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    await user.click(input);
+    await user.type(input, " ");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.getAttribute("aria-expanded")).toBe("false");
+  });
+
   it("does not open the menu if no items match", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
@@ -334,6 +346,29 @@ describe("ComboBox", () => {
     await user.type(input, "O");
 
     expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("keeps menu open when clearing input with menuTrigger input", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      menuTrigger: "input",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.type(input, "Two");
+
+    let listbox = await tree.findByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+
+    await user.clear(input);
+
+    listbox = await tree.findByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
   });
 
   it("does not focus a disabled matching item on input", async () => {
