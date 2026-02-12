@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:20:07.109Z",
+  "generatedAt": "2026-02-12T18:20:36.476Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 23,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 22,
+  "availableLeafCount": 4,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -18,11 +18,6 @@
       "packageName": "@vue-spectrum/list",
       "upstreamPackageName": "@react-spectrum/list",
       "upstreamPath": "packages/@react-spectrum/list"
-    },
-    {
-      "packageName": "@vue-spectrum/numberfield",
-      "upstreamPackageName": "@react-spectrum/numberfield",
-      "upstreamPath": "packages/@react-spectrum/numberfield"
     },
     {
       "packageName": "@vue-spectrum/s2",
