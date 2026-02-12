@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:41:44.600Z",
+  "generatedAt": "2026-02-12T16:43:13.529Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 113,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 112,
+  "availableLeafCount": 13,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -25,6 +25,11 @@
       "upstreamPath": "packages/@react-stately/color"
     },
     {
+      "packageName": "@vue-stately/combobox",
+      "upstreamPackageName": "@react-stately/combobox",
+      "upstreamPath": "packages/@react-stately/combobox"
+    },
+    {
       "packageName": "@vue-stately/data",
       "upstreamPackageName": "@react-stately/data",
       "upstreamPath": "packages/@react-stately/data"
@@ -40,14 +45,24 @@
       "upstreamPath": "packages/@react-stately/dnd"
     },
     {
-      "packageName": "@vue-stately/list",
-      "upstreamPackageName": "@react-stately/list",
-      "upstreamPath": "packages/@react-stately/list"
+      "packageName": "@vue-stately/select",
+      "upstreamPackageName": "@react-stately/select",
+      "upstreamPath": "packages/@react-stately/select"
+    },
+    {
+      "packageName": "@vue-stately/steplist",
+      "upstreamPackageName": "@react-stately/steplist",
+      "upstreamPath": "packages/@react-stately/steplist"
     },
     {
       "packageName": "@vue-stately/table",
       "upstreamPackageName": "@react-stately/table",
       "upstreamPath": "packages/@react-stately/table"
+    },
+    {
+      "packageName": "@vue-stately/tabs",
+      "upstreamPackageName": "@react-stately/tabs",
+      "upstreamPath": "packages/@react-stately/tabs"
     },
     {
       "packageName": "@vue-stately/virtualizer",

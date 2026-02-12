@@ -390,3 +390,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and possible row/cell focus timing differences until full composable conversion.
 - Removal plan: Replace React hook-based grid state composition with Vue refs/computed/watch equivalents and port upstream grid state tests for parity.
+
+- Package: `@vue-stately/list`
+- Upstream reference: `packages/@react-stately/list` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useCallback`, `useEffect`, `useMemo`, `useRef`) for list state, filtering, and focused-key recovery behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential focus/selection synchronization differences until full composable conversion.
+- Removal plan: Replace React hook-based list state composition with Vue refs/computed/watch equivalents and port upstream list state tests for parity.
