@@ -10,6 +10,7 @@ export interface UseTooltipTriggerOptions {
   trigger?: MaybeReactive<"focus" | "hover" | undefined>;
   shouldCloseOnPress?: MaybeReactive<boolean | undefined>;
   delay?: MaybeReactive<number | undefined>;
+  closeDelay?: MaybeReactive<number | undefined>;
 }
 
 export interface UseTooltipTriggerResult {
@@ -18,6 +19,7 @@ export interface UseTooltipTriggerResult {
 }
 
 const DEFAULT_TOOLTIP_DELAY = 1500;
+const DEFAULT_TOOLTIP_CLOSE_DELAY = 500;
 const TOOLTIP_COOLDOWN = 500;
 let tooltipTriggerInstanceId = 0;
 const activeTooltipClosers = new Map<number, (immediate?: boolean) => void>();
@@ -60,6 +62,24 @@ function resolveDelay(value: MaybeReactive<number | undefined> | undefined): num
   return Math.max(0, resolved);
 }
 
+function resolveCloseDelay(value: MaybeReactive<number | undefined> | undefined): number {
+  if (value === undefined) {
+    return DEFAULT_TOOLTIP_CLOSE_DELAY;
+  }
+
+  const rawValue = toValue(value);
+  if (rawValue === undefined) {
+    return DEFAULT_TOOLTIP_CLOSE_DELAY;
+  }
+
+  const resolved = Number(rawValue);
+  if (!Number.isFinite(resolved)) {
+    return 0;
+  }
+
+  return Math.max(0, resolved);
+}
+
 export function useTooltipTrigger(
   options: UseTooltipTriggerOptions,
   state: TooltipTriggerStateLike,
@@ -70,11 +90,19 @@ export function useTooltipTrigger(
   const isHovered = ref(false);
   const isFocused = ref(false);
   const showTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
   const clearShowTimeout = (): void => {
     if (showTimeout.value !== null) {
       clearTimeout(showTimeout.value);
       showTimeout.value = null;
+    }
+  };
+
+  const clearCloseTimeout = (): void => {
+    if (closeTimeout.value !== null) {
+      clearTimeout(closeTimeout.value);
+      closeTimeout.value = null;
     }
   };
 
@@ -85,18 +113,19 @@ export function useTooltipTrigger(
     }
   };
 
-  const startGlobalCooldown = (): void => {
+  const startGlobalCooldown = (delay: number = TOOLTIP_COOLDOWN): void => {
     clearGlobalCooldown();
     globalCooldownTimeout = setTimeout(() => {
       globalCooldownTimeout = null;
       globalWarmedUp = false;
-    }, TOOLTIP_COOLDOWN);
+    }, delay);
   };
 
   const usesDelayedWarmup = (): boolean => resolveDelay(options.delay) > 0;
 
   const scheduleShow = (): void => {
     clearShowTimeout();
+    clearCloseTimeout();
     const delay = resolveDelay(options.delay);
     if (delay <= 0 || globalWarmedUp) {
       handleShow();
@@ -124,8 +153,22 @@ export function useTooltipTrigger(
 
   const closeTooltip = (immediate?: boolean): void => {
     clearShowTimeout();
-    unregisterActiveTooltip();
-    state.close(immediate);
+    const closeDelay = resolveCloseDelay(options.closeDelay);
+    if (immediate || closeDelay <= 0) {
+      clearCloseTimeout();
+      unregisterActiveTooltip();
+      state.close(immediate);
+    } else if (closeTimeout.value === null) {
+      closeTimeout.value = setTimeout(() => {
+        closeTimeout.value = null;
+        unregisterActiveTooltip();
+        state.close(immediate);
+      }, closeDelay);
+    }
+
+    if (usesDelayedWarmup() && globalWarmedUp) {
+      startGlobalCooldown(Math.max(TOOLTIP_COOLDOWN, closeDelay));
+    }
   };
 
   const registerActiveTooltip = (): void => {
@@ -145,6 +188,7 @@ export function useTooltipTrigger(
 
   const handleShow = (): void => {
     if (isHovered.value || isFocused.value) {
+      clearCloseTimeout();
       closeOtherTooltips();
       registerActiveTooltip();
       if (usesDelayedWarmup()) {
@@ -164,6 +208,7 @@ export function useTooltipTrigger(
 
   watchEffect((onCleanup) => {
     if (!state.isOpen.value) {
+      clearCloseTimeout();
       unregisterActiveTooltip();
       return;
     }
@@ -232,6 +277,7 @@ export function useTooltipTrigger(
   if (getCurrentScope()) {
     onScopeDispose(() => {
       clearShowTimeout();
+      clearCloseTimeout();
       unregisterActiveTooltip();
     });
   }

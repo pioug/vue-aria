@@ -24,6 +24,7 @@ export interface SpectrumTooltipTriggerProps {
   trigger?: "focus" | "hover" | undefined;
   shouldCloseOnPress?: boolean | undefined;
   delay?: number | undefined;
+  closeDelay?: number | undefined;
   slot?: string | undefined;
   UNSAFE_className?: string | undefined;
 }
@@ -112,6 +113,10 @@ export const TooltipTrigger = defineComponent({
       type: Number as PropType<number | undefined>,
       default: undefined,
     },
+    closeDelay: {
+      type: Number as PropType<number | undefined>,
+      default: undefined,
+    },
     slot: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -162,6 +167,7 @@ export const TooltipTrigger = defineComponent({
         trigger: computed(() => props.trigger),
         shouldCloseOnPress: computed(() => props.shouldCloseOnPress),
         delay: computed(() => props.delay),
+        closeDelay: computed(() => props.closeDelay),
       },
       state,
       computed(() => triggerElementRef.value)

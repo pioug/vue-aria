@@ -105,6 +105,7 @@ describe("useTooltipTrigger", () => {
       tooltipTrigger = useTooltipTrigger(
         {
           delay: 0,
+          closeDelay: 0,
         },
         state,
         trigger
@@ -125,6 +126,51 @@ describe("useTooltipTrigger", () => {
 
     scope.stop();
     trigger.remove();
+  });
+
+  it("uses a 500ms default close delay for hover close", () => {
+    vi.useFakeTimers();
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+
+    const state = createTooltipState();
+    const scope = effectScope();
+    let tooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+
+    try {
+      scope.run(() => {
+        tooltipTrigger = useTooltipTrigger(
+          {
+            delay: 0,
+          },
+          state,
+          trigger
+        );
+      });
+
+      attachHandlers(trigger, tooltipTrigger.triggerProps.value);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+      );
+      expect(state.open).toHaveBeenCalledWith(false);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerleave", { bubbles: true, pointerType: "mouse" })
+      );
+      expect(state.close).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(499);
+      expect(state.close).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(state.close).toHaveBeenCalledTimes(1);
+    } finally {
+      scope.stop();
+      trigger.remove();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
   });
 
   it("closes other active tooltips before opening a new one", () => {
@@ -188,7 +234,13 @@ describe("useTooltipTrigger", () => {
 
     try {
       scope.run(() => {
-        tooltipTrigger = useTooltipTrigger({}, state, trigger);
+        tooltipTrigger = useTooltipTrigger(
+          {
+            closeDelay: 0,
+          },
+          state,
+          trigger
+        );
       });
 
       attachHandlers(trigger, tooltipTrigger.triggerProps.value);
@@ -222,7 +274,13 @@ describe("useTooltipTrigger", () => {
 
     try {
       scope.run(() => {
-        tooltipTrigger = useTooltipTrigger({}, state, trigger);
+        tooltipTrigger = useTooltipTrigger(
+          {
+            closeDelay: 0,
+          },
+          state,
+          trigger
+        );
       });
 
       attachHandlers(trigger, tooltipTrigger.triggerProps.value);

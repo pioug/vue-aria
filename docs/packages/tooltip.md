@@ -10,7 +10,8 @@ with trigger state.
 ## `useTooltipTrigger`
 
 Returns trigger props and tooltip id wiring (`aria-describedby`) for focus/hover
-and keyboard dismissal behavior.
+and keyboard dismissal behavior, including delayed hover open/close support
+(`delay`, `closeDelay`).
 
 ```ts
 import { useTooltip, useTooltipTrigger } from "@vue-aria/tooltip";
