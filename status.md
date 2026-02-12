@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 125 |
-| Passing tests | 125 |
+| Ported tests | 126 |
+| Passing tests | 126 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -77,7 +77,7 @@
 | @vue-aria/virtualizer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/virtualizer | packages/@react-aria/virtualizer |
 | @vue-aria/visually-hidden | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/visually-hidden | packages/@react-aria/visually-hidden |
 | @vue-spectrum/accordion | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/accordion | packages/@react-spectrum/accordion |
-| @vue-spectrum/actionbar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/actionbar | packages/@react-spectrum/actionbar |
+| @vue-spectrum/actionbar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/actionbar | packages/@react-spectrum/actionbar |
 | @vue-spectrum/actiongroup | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/actiongroup | packages/@react-spectrum/actiongroup |
 | @vue-spectrum/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/autocomplete | packages/@react-spectrum/autocomplete |
 | @vue-spectrum/avatar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/avatar | packages/@react-spectrum/avatar |
