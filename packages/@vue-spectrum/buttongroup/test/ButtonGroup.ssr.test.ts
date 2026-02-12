@@ -5,7 +5,7 @@ import { Button } from "@vue-spectrum/button";
 import { ButtonGroup } from "../src";
 
 describe("ButtonGroup SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "ButtonGroupSSRApp",
       setup() {

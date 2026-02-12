@@ -125,7 +125,7 @@ describe("ButtonGroup", () => {
     expect(buttonGroup.attributes("class")).toContain("spectrum-ButtonGroup--vertical");
   });
 
-  it("goes vertical when there is not enough room after resize", async () => {
+  it("goes vertical if there is not enough room after buttongroup gets a new size", async () => {
     const { wrapper } = renderButtonGroup();
     const buttonGroup = wrapper.get(`[data-testid='${buttonGroupId}']`);
     const groupElement = buttonGroup.element as HTMLElement;
