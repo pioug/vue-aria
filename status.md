@@ -216,7 +216,7 @@
 | @vue-types/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/tabs | packages/@react-types/tabs |
 | @vue-types/text | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/text | packages/@react-types/text |
 | @vue-types/textfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/textfield | packages/@react-types/textfield |
-| @vue-types/tooltip | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tooltip | packages/@react-types/tooltip |
+| @vue-types/tooltip | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/tooltip | packages/@react-types/tooltip |
 | @vue-types/view | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/view | packages/@react-types/view |
 | @vue-types/well | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/well | packages/@react-types/well |
 

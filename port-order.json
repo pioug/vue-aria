@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:35:53.709Z",
+  "generatedAt": "2026-02-12T15:36:55.197Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 155,
-  "availableLeafCount": 28,
+  "incompletePackageCount": 154,
+  "availableLeafCount": 27,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -138,11 +138,6 @@
       "packageName": "@vue-types/table",
       "upstreamPackageName": "@react-types/table",
       "upstreamPath": "packages/@react-types/table"
-    },
-    {
-      "packageName": "@vue-types/tooltip",
-      "upstreamPackageName": "@react-types/tooltip",
-      "upstreamPath": "packages/@react-types/tooltip"
     }
   ],
   "hasCycles": false,
