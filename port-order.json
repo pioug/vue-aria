@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T17:13:32.797Z",
+  "generatedAt": "2026-02-12T17:15:03.334Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 93,
+  "incompletePackageCount": 92,
   "availableLeafCount": 10,
   "availableLeaves": [
     {
@@ -20,11 +20,6 @@
       "upstreamPath": "packages/@react-aria/focus"
     },
     {
-      "packageName": "@vue-aria/form",
-      "upstreamPackageName": "@react-aria/form",
-      "upstreamPath": "packages/@react-aria/form"
-    },
-    {
       "packageName": "@vue-aria/link",
       "upstreamPackageName": "@react-aria/link",
       "upstreamPath": "packages/@react-aria/link"
@@ -33,6 +28,11 @@
       "packageName": "@vue-aria/slider",
       "upstreamPackageName": "@react-aria/slider",
       "upstreamPath": "packages/@react-aria/slider"
+    },
+    {
+      "packageName": "@vue-aria/textfield",
+      "upstreamPackageName": "@react-aria/textfield",
+      "upstreamPath": "packages/@react-aria/textfield"
     },
     {
       "packageName": "@vue-aria/toast",
