@@ -95,7 +95,7 @@
 | @vue-spectrum/dialog | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/dialog | packages/@react-spectrum/dialog |
 | @vue-spectrum/divider | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/divider | packages/@react-spectrum/divider |
 | @vue-spectrum/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dnd | packages/@react-spectrum/dnd |
-| @vue-spectrum/dropzone | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/dropzone | packages/@react-spectrum/dropzone |
+| @vue-spectrum/dropzone | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dropzone | packages/@react-spectrum/dropzone |
 | @vue-spectrum/filetrigger | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/filetrigger | packages/@react-spectrum/filetrigger |
 | @vue-spectrum/form | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/form | packages/@react-spectrum/form |
 | @vue-spectrum/icon | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/icon | packages/@react-spectrum/icon |

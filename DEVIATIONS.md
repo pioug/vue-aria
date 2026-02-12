@@ -978,3 +978,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential tree interaction/focus timing differences until full composable conversion.
 - Removal plan: Replace React runtime assumptions with Vue-native composables/rendering patterns and port upstream tree behavior tests for parity.
+
+- Package: `@vue-spectrum/dropzone`
+- Upstream reference: `packages/@react-spectrum/dropzone` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/rendering semantics and inherited React-based drag-and-drop/dropzone interaction behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential dropzone interaction/announcement timing differences until full composable conversion.
+- Removal plan: Replace React runtime assumptions with Vue-native composables/rendering patterns and port upstream dropzone behavior tests for parity.
