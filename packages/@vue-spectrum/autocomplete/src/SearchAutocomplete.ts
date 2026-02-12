@@ -4,6 +4,7 @@ import {
   defineComponent,
   h,
   isVNode,
+  nextTick,
   onBeforeUnmount,
   onMounted,
   ref,
@@ -707,8 +708,7 @@ export const SearchAutocomplete = defineComponent({
       inputRef.value?.focus();
     };
 
-    const onListBoxScroll = (event: Event) => {
-      const target = event.target as HTMLElement | null;
+    const requestLoadMoreIfNeeded = (target: HTMLElement | null) => {
       if (!target || !props.onLoadMore || isLoadingList.value) {
         loadMoreRequested.value = false;
         return;
@@ -726,6 +726,10 @@ export const SearchAutocomplete = defineComponent({
 
       loadMoreRequested.value = true;
       props.onLoadMore();
+    };
+
+    const onListBoxScroll = (event: Event) => {
+      requestLoadMoreIfNeeded(event.target as HTMLElement | null);
     };
 
     const getItemTextByKey = (key: Key | null): string => {
@@ -815,6 +819,40 @@ export const SearchAutocomplete = defineComponent({
     const isLoadingList = computed(
       () => props.loadingState === "loading" || props.loadingState === "loadingMore"
     );
+
+    watch(
+      () => isLoadingList.value,
+      (loading) => {
+        if (!loading) {
+          loadMoreRequested.value = false;
+        }
+      }
+    );
+
+    watch(
+      () => state.isOpen.value,
+      (isOpen) => {
+        if (!isOpen) {
+          loadMoreRequested.value = false;
+        }
+      },
+      { immediate: true }
+    );
+
+    watch(
+      () => [state.isOpen.value, listBoxRef.value] as const,
+      ([isOpen, listBox]) => {
+        if (!isOpen || !listBox) {
+          return;
+        }
+
+        void nextTick(() => {
+          requestLoadMoreIfNeeded(listBox);
+        });
+      },
+      { immediate: true }
+    );
+
     const shouldShowInputLoadingCandidate = computed(() => {
       if (!isLoadingInput.value) {
         return false;
@@ -1177,6 +1215,9 @@ export const SearchAutocomplete = defineComponent({
                     mergeProps(listBoxProps.value, {
                       ref: (value: unknown) => {
                         listBoxRef.value = value as HTMLElement | null;
+                        if (state.isOpen.value && listBoxRef.value) {
+                          requestLoadMoreIfNeeded(listBoxRef.value);
+                        }
                       },
                       "aria-label":
                         (listBoxProps.value["aria-label"] as string | undefined) ??

@@ -4,6 +4,7 @@ import {
   defineComponent,
   h,
   isVNode,
+  nextTick,
   onBeforeUnmount,
   onMounted,
   ref,
@@ -991,8 +992,7 @@ export const ComboBox = defineComponent({
       });
     };
 
-    const onListBoxScroll = (event: Event) => {
-      const target = event.target as HTMLElement | null;
+    const requestLoadMoreIfNeeded = (target: HTMLElement | null) => {
       if (!target || !props.onLoadMore || isLoadingList.value) {
         loadMoreRequested.value = false;
         return;
@@ -1010,6 +1010,10 @@ export const ComboBox = defineComponent({
 
       loadMoreRequested.value = true;
       props.onLoadMore();
+    };
+
+    const onListBoxScroll = (event: Event) => {
+      requestLoadMoreIfNeeded(event.target as HTMLElement | null);
     };
 
     const getItemTextByKey = (key: Key | null): string => {
@@ -1129,10 +1133,37 @@ export const ComboBox = defineComponent({
     );
 
     watch(
-      () => state.isOpen.value,
-      () => {
-        syncScrollListener();
+      () => isLoadingList.value,
+      (loading) => {
+        if (!loading) {
+          loadMoreRequested.value = false;
+        }
       }
+    );
+
+    watch(
+      () => state.isOpen.value,
+      (isOpen) => {
+        syncScrollListener();
+        if (!isOpen) {
+          loadMoreRequested.value = false;
+        }
+      },
+      { immediate: true }
+    );
+
+    watch(
+      () => [state.isOpen.value, listBoxRef.value] as const,
+      ([isOpen, listBox]) => {
+        if (!isOpen || !listBox) {
+          return;
+        }
+
+        void nextTick(() => {
+          requestLoadMoreIfNeeded(listBox);
+        });
+      },
+      { immediate: true }
     );
 
     expose({
@@ -1386,6 +1417,9 @@ export const ComboBox = defineComponent({
               h("div", mergeProps(listBoxProps.value, {
                 ref: (value: unknown) => {
                   listBoxRef.value = value as HTMLElement | null;
+                  if (state.isOpen.value && listBoxRef.value) {
+                    requestLoadMoreIfNeeded(listBoxRef.value);
+                  }
                 },
                 class: classNames("spectrum-Menu", "react-spectrum-ComboBox-listBox"),
                 onScroll: onListBoxScroll,
