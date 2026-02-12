@@ -41,5 +41,5 @@ const component = h(ContextualHelp, null, {
 
 ## Notes
 
-- Baseline includes quiet action-button trigger, default/help labels, popover dialog rendering, and trigger-anchored placement support.
+- Baseline includes quiet action-button trigger, default/help labels, popover dialog rendering, trigger-anchored placement support, and trigger ref exposure (`UNSAFE_getDOMNode`, `focus()`).
 - Advanced icon assets and animation parity remain in progress.

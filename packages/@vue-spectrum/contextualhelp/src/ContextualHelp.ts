@@ -3,6 +3,7 @@ import {
   defineComponent,
   h,
   isVNode,
+  ref,
   type PropType,
   type VNode,
   type VNodeChild,
@@ -43,6 +44,23 @@ function normalizeChildren(nodes: VNodeChild[] | undefined): VNode[] {
   }
 
   return result;
+}
+
+function toHTMLElement(value: unknown): HTMLElement | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value instanceof HTMLElement) {
+    return value;
+  }
+
+  const maybeEl = (value as { $el?: unknown }).$el;
+  if (maybeEl instanceof HTMLElement) {
+    return maybeEl;
+  }
+
+  return null;
 }
 
 function decorateChildren(children: VNode[]): VNode[] {
@@ -122,8 +140,13 @@ export const ContextualHelp = defineComponent({
     },
   },
   setup(props, { attrs, slots, expose }) {
+    const triggerButtonRef = ref<HTMLElement | null>(null);
+
     expose({
-      UNSAFE_getDOMNode: () => null,
+      UNSAFE_getDOMNode: () => triggerButtonRef.value,
+      focus: () => {
+        triggerButtonRef.value?.focus();
+      },
     });
 
     return () => {
@@ -156,6 +179,9 @@ export const ContextualHelp = defineComponent({
                 ...(attrsRecord as Record<string, unknown>),
                 isQuiet: true,
                 isDisabled: false,
+                ref: (value: unknown) => {
+                  triggerButtonRef.value = toHTMLElement(value);
+                },
                 "aria-label": ariaLabel,
                 "aria-labelledby": ariaLabelledby,
                 UNSAFE_className: classNames(

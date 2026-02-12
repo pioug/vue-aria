@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { Content, Footer, Header } from "@vue-spectrum/view";
 import { Link } from "@vue-spectrum/link";
@@ -12,6 +12,34 @@ async function flushOverlay(): Promise<void> {
 }
 
 describe("ContextualHelp", () => {
+  it("attaches a ref to the trigger button", () => {
+    const contextualHelpRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(
+      null
+    );
+    const App = defineComponent({
+      name: "ContextualHelpRefHarness",
+      setup() {
+        return () =>
+          h(
+            ContextualHelp,
+            {
+              ref: contextualHelpRef,
+            },
+            {
+              default: () => h(Header, null, () => "Test title"),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const button = wrapper.get("button");
+    expect(contextualHelpRef.value?.UNSAFE_getDOMNode()).toBe(
+      button.element as HTMLElement
+    );
+    wrapper.unmount();
+  });
+
   it("renders a quiet action button", () => {
     const wrapper = mount(ContextualHelp, {
       slots: {
