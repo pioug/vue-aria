@@ -4,11 +4,20 @@ import {
   useRangeCalendarState,
   type DateValue,
 } from "@vue-aria/calendar-state";
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { CalendarBase } from "./CalendarBase";
 import { rangeCalendarPropOptions } from "./types";
+
+const RANGECALENDAR_INTL_MESSAGES = {
+  "en-US": {
+    rangeCalendar: "Range calendar",
+  },
+  "fr-FR": {
+    rangeCalendar: "Calendrier de plage",
+  },
+} as const;
 
 export const RangeCalendar = defineComponent({
   name: "RangeCalendar",
@@ -18,6 +27,10 @@ export const RangeCalendar = defineComponent({
   },
   setup(props, { attrs, expose }) {
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(
+      RANGECALENDAR_INTL_MESSAGES,
+      "@vue-spectrum/calendar"
+    );
     const labelId = useId(undefined, "v-spectrum-range-calendar-label");
     const calendarRef = ref<HTMLElement | null>(null);
 
@@ -55,7 +68,9 @@ export const RangeCalendar = defineComponent({
           "aria-label":
             props["aria-label"] ??
             props.ariaLabel ??
-            (props.label ? undefined : "Range calendar"),
+            (props.label
+              ? undefined
+              : stringFormatter.value.format("rangeCalendar")),
           "aria-labelledby":
             props["aria-labelledby"] ??
             props.ariaLabelledby ??

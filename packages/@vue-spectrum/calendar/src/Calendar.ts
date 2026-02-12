@@ -1,11 +1,20 @@
 import { computed, defineComponent, h, ref } from "vue";
 import { useCalendar } from "@vue-aria/calendar";
 import { useCalendarState, type DateValue } from "@vue-aria/calendar-state";
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { CalendarBase } from "./CalendarBase";
 import { calendarPropOptions } from "./types";
+
+const CALENDAR_INTL_MESSAGES = {
+  "en-US": {
+    calendar: "Calendar",
+  },
+  "fr-FR": {
+    calendar: "Calendrier",
+  },
+} as const;
 
 export const Calendar = defineComponent({
   name: "Calendar",
@@ -15,6 +24,10 @@ export const Calendar = defineComponent({
   },
   setup(props, { attrs, expose }) {
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(
+      CALENDAR_INTL_MESSAGES,
+      "@vue-spectrum/calendar"
+    );
     const labelId = useId(undefined, "v-spectrum-calendar-label");
     const calendarRef = ref<HTMLElement | null>(null);
 
@@ -49,7 +62,9 @@ export const Calendar = defineComponent({
           validationState: props.validationState,
           errorMessage: props.errorMessage,
           "aria-label":
-            props["aria-label"] ?? props.ariaLabel ?? (props.label ? undefined : "Calendar"),
+            props["aria-label"] ??
+            props.ariaLabel ??
+            (props.label ? undefined : stringFormatter.value.format("calendar")),
           "aria-labelledby":
             props["aria-labelledby"] ??
             props.ariaLabelledby ??

@@ -1,7 +1,9 @@
 import { parseDate } from "@internationalized/date";
 import { render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { Calendar, RangeCalendar } from "../src";
 
 function getDayButton(grid: HTMLElement, day: string): HTMLElement {
@@ -106,6 +108,25 @@ describe("Calendar", () => {
     ).toBe("Selected date: 2019-06-05");
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it("localizes the default aria-label from i18n locale", () => {
+    const App = defineComponent({
+      name: "CalendarLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(Calendar, {
+            defaultValue: parseDate("2019-06-05"),
+          });
+      },
+    });
+
+    const tree = render(App);
+    expect(
+      tree.getByRole("application", { name: /^Calendrier,/ })
+    ).toBeTruthy();
+  });
 });
 
 describe("RangeCalendar", () => {
@@ -127,5 +148,24 @@ describe("RangeCalendar", () => {
     const range = onChange.mock.calls[0]?.[0];
     expect(range?.start?.toString().endsWith("-05")).toBe(true);
     expect(range?.end?.toString().endsWith("-10")).toBe(true);
+  });
+
+  it("localizes the default aria-label from i18n locale", () => {
+    const App = defineComponent({
+      name: "RangeCalendarLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(RangeCalendar, {
+            defaultValue: null,
+          });
+      },
+    });
+
+    const tree = render(App);
+    expect(
+      tree.getByRole("application", { name: /^Calendrier de plage,/ })
+    ).toBeTruthy();
   });
 });
