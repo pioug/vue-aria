@@ -416,6 +416,100 @@ describe("NumberField", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it("disables the increment stepper when typed value is greater than max", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      maxValue: 15,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.click(input);
+    await user.keyboard("10");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.keyboard("0");
+    expect(incrementButton.getAttribute("aria-disabled")).toBe("true");
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+  });
+
+  it("disables the decrement stepper when typed value is lower than min", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      minValue: -15,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.click(input);
+    await user.keyboard("-10");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.keyboard("0");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBe("true");
+  });
+
+  it("disables increment when typed value reaches the max reachable step", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      minValue: 2,
+      maxValue: 21,
+      step: 3,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.click(input);
+    await user.keyboard("19");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.clear(input);
+    await user.keyboard("20");
+    expect(incrementButton.getAttribute("aria-disabled")).toBe("true");
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+  });
+
+  it("disables decrement when typed value reaches the min step", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      minValue: 2,
+      maxValue: 21,
+      step: 3,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.click(input);
+    await user.keyboard("3");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.clear(input);
+    await user.keyboard("2");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBe("true");
+  });
+
   it("supports controlled rerender", async () => {
     const tree = renderNumberField({
       value: 2,
