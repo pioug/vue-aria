@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T18:10:07.329Z",
+  "generatedAt": "2026-02-12T18:10:42.697Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 41,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 40,
+  "availableLeafCount": 7,
   "availableLeaves": [
-    {
-      "packageName": "@vue-spectrum/badge",
-      "upstreamPackageName": "@react-spectrum/badge",
-      "upstreamPath": "packages/@react-spectrum/badge"
-    },
     {
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
