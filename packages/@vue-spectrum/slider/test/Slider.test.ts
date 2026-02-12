@@ -32,6 +32,53 @@ function setTrackRect(element: Element, width = 100, height = 100): void {
   });
 }
 
+function createPointerEvent(
+  type: string,
+  init: Partial<PointerEventInit> & {
+    pointerId?: number;
+    pointerType?: "mouse" | "touch" | "pen";
+    pageX?: number;
+    pageY?: number;
+  } = {}
+): PointerEvent {
+  if (typeof PointerEvent !== "undefined") {
+    return new PointerEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      ...init,
+    });
+  }
+
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    button: init.button ?? 0,
+    clientX: init.clientX ?? init.pageX ?? 0,
+    clientY: init.clientY ?? init.pageY ?? 0,
+  });
+
+  Object.defineProperties(event, {
+    pointerId: {
+      value: init.pointerId ?? 1,
+      enumerable: true,
+    },
+    pointerType: {
+      value: init.pointerType ?? "mouse",
+      enumerable: true,
+    },
+    pageX: {
+      value: init.pageX ?? init.clientX ?? 0,
+      enumerable: true,
+    },
+    pageY: {
+      value: init.pageY ?? init.clientY ?? 0,
+      enumerable: true,
+    },
+  });
+
+  return event as unknown as PointerEvent;
+}
+
 describe("Slider", () => {
   it("supports aria-label", () => {
     const wrapper = mount(Slider, {
@@ -75,6 +122,77 @@ describe("Slider", () => {
     });
 
     expect(wrapper.find("output").exists()).toBe(false);
+  });
+
+  it("supports disabled", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(
+      defineComponent({
+        name: "SliderDisabledHarness",
+        setup() {
+          return () =>
+            h("div", [
+              h("button", { "data-testid": "before" }, "Before"),
+              h(Slider, {
+                label: "The Label",
+                defaultValue: 20,
+                isDisabled: true,
+              }),
+              h("button", { "data-testid": "after" }, "After"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const input = wrapper.get("input[type='range']");
+    expect(input.attributes("disabled")).toBeDefined();
+
+    const before = wrapper.get("[data-testid='before']").element;
+    const after = wrapper.get("[data-testid='after']").element;
+
+    await user.tab();
+    expect(document.activeElement).toBe(before);
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+  });
+
+  it("can be focused", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(
+      defineComponent({
+        name: "SliderFocusableHarness",
+        setup() {
+          return () =>
+            h("div", [
+              h("button", { "data-testid": "before" }, "Before"),
+              h(Slider, {
+                label: "The Label",
+                defaultValue: 20,
+              }),
+              h("button", { "data-testid": "after" }, "After"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const input = wrapper.get("input[type='range']").element as HTMLInputElement;
+    const before = wrapper.get("[data-testid='before']").element;
+    const after = wrapper.get("[data-testid='after']").element;
+
+    input.focus();
+    expect(document.activeElement).toBe(input);
+
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+    await user.tab({ shift: true });
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(before);
   });
 
   it("supports defaultValue and change", async () => {
@@ -238,6 +356,25 @@ describe("Slider", () => {
     await input.setValue("0.5");
     expect(wrapper.get("output").text()).toBe("50%");
     expect(input.attributes("aria-valuetext")).toBe("50%");
+  });
+
+  it("prefixes the value with a plus sign if needed", async () => {
+    const wrapper = mount(Slider, {
+      props: {
+        label: "The Label",
+        minValue: -50,
+        maxValue: 50,
+        defaultValue: 10,
+      },
+    });
+
+    const input = wrapper.get("input[type='range']");
+    expect(wrapper.get("output").text()).toBe("+10");
+    expect(input.attributes("aria-valuetext")).toBe("+10");
+
+    await input.setValue("0");
+    expect(wrapper.get("output").text()).toBe("0");
+    expect(input.attributes("aria-valuetext")).toBe("0");
   });
 
   it("supports form name and form", () => {
@@ -420,6 +557,81 @@ describe("Slider", () => {
     const input = wrapper.get("input[type='range']");
     expect((input.element as HTMLInputElement).value).toBe("20");
     expect(onChange).toHaveBeenCalledWith(20);
+  });
+
+  it("cannot click on track to move handle when disabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Slider, {
+      props: {
+        label: "The Label",
+        defaultValue: 50,
+        isDisabled: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const controls = wrapper.get(".spectrum-Slider-controls");
+    setTrackRect(controls.element, 100, 100);
+    await controls.trigger("mousedown", { button: 0, clientX: 20, pageX: 20 });
+    await nextTick();
+
+    const input = wrapper.get("input[type='range']");
+    expect((input.element as HTMLInputElement).value).toBe("50");
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(input.element);
+  });
+
+  it("cannot click and drag handle when disabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Slider, {
+      props: {
+        label: "The Label",
+        defaultValue: 50,
+        isDisabled: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const controls = wrapper.get(".spectrum-Slider-controls");
+    const handle = wrapper.get(".spectrum-Slider-handle");
+    const input = wrapper.get("input[type='range']");
+    setTrackRect(controls.element, 100, 100);
+
+    handle.element.dispatchEvent(
+      createPointerEvent("pointerdown", {
+        pointerId: 1,
+        pointerType: "mouse",
+        button: 0,
+        clientX: 50,
+        pageX: 50,
+      })
+    );
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(input.element);
+
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 10,
+        pageX: 10,
+      })
+    );
+    await nextTick();
+    expect(onChange).not.toHaveBeenCalled();
+
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 10,
+        pageX: 10,
+      })
+    );
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("focuses first thumb when clicking label", async () => {
