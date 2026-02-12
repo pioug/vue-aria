@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T18:25:02.906Z",
+  "generatedAt": "2026-02-12T18:25:33.560Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 14,
+  "incompletePackageCount": 13,
   "availableLeafCount": 6,
   "availableLeaves": [
     {
@@ -20,14 +20,14 @@
       "upstreamPath": "packages/@react-spectrum/menu"
     },
     {
-      "packageName": "@vue-spectrum/picker",
-      "upstreamPackageName": "@react-spectrum/picker",
-      "upstreamPath": "packages/@react-spectrum/picker"
-    },
-    {
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
+    },
+    {
+      "packageName": "@vue-spectrum/tabs",
+      "upstreamPackageName": "@react-spectrum/tabs",
+      "upstreamPath": "packages/@react-spectrum/tabs"
     },
     {
       "packageName": "@vue-spectrum/toast",
