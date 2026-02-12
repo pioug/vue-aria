@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 66 |
-| Passing tests | 66 |
+| Ported tests | 67 |
+| Passing tests | 67 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -27,7 +27,7 @@
 | @vue-aria/autocomplete | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/autocomplete | packages/@react-aria/autocomplete |
 | @vue-aria/breadcrumbs | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
 | @vue-aria/button | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
-| @vue-aria/calendar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
+| @vue-aria/calendar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
 | @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
 | @vue-aria/collections | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
 | @vue-aria/color | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/color | packages/@react-aria/color |

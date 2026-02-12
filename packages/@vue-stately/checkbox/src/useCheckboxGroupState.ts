@@ -67,38 +67,38 @@ export interface CheckboxGroupState extends FormValidationState {
  * and manages selection and focus state.
  */
 export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxGroupState {
-  let [selectedValues, setValue] = useControlledState(props.value, props.defaultValue || [], props.onChange);
-  let [initialValues] = useState(selectedValues);
-  let isRequired = !!props.isRequired && selectedValues.length === 0;
+  let [selectedValues, setSelectedValues] = useControlledState(props.value, props.defaultValue || [], props.onChange);
+  let [initialValues] = useState(selectedValues.value);
 
   let invalidValues = useRef(new Map<string, ValidationResult>());
   let validation = useFormValidationState({
     ...props,
-    value: selectedValues
+    value: selectedValues.value
   });
 
-  let isInvalid = validation.displayValidation.isInvalid;
   const state: CheckboxGroupState = {
     ...validation,
-    value: selectedValues,
+    get value() {
+      return selectedValues.value;
+    },
     defaultValue: props.defaultValue ?? initialValues,
     setValue(value) {
       if (props.isReadOnly || props.isDisabled) {
         return;
       }
 
-      setValue(value);
+      setSelectedValues(value);
     },
     isDisabled: props.isDisabled || false,
     isReadOnly: props.isReadOnly || false,
     isSelected(value) {
-      return selectedValues.includes(value);
+      return selectedValues.value.includes(value);
     },
     addValue(value) {
       if (props.isReadOnly || props.isDisabled) {
         return;
       }
-      setValue(selectedValues => {
+      setSelectedValues(selectedValues => {
         if (!selectedValues.includes(value)) {
           return selectedValues.concat(value);
         }
@@ -109,18 +109,18 @@ export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxG
       if (props.isReadOnly || props.isDisabled) {
         return;
       }
-      if (selectedValues.includes(value)) {
-        setValue(selectedValues.filter(existingValue => existingValue !== value));
+      if (selectedValues.value.includes(value)) {
+        setSelectedValues(selectedValues.value.filter(existingValue => existingValue !== value));
       }
     },
     toggleValue(value) {
       if (props.isReadOnly || props.isDisabled) {
         return;
       }
-      if (selectedValues.includes(value)) {
-        setValue(selectedValues.filter(existingValue => existingValue !== value));
+      if (selectedValues.value.includes(value)) {
+        setSelectedValues(selectedValues.value.filter(existingValue => existingValue !== value));
       } else {
-        setValue(selectedValues.concat(value));
+        setSelectedValues(selectedValues.value.concat(value));
       }
     },
     setInvalid(value, v) {
@@ -134,9 +134,15 @@ export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxG
       invalidValues.current = s;
       validation.updateValidation(mergeValidation(...s.values()));
     },
-    validationState: props.validationState ?? (isInvalid ? 'invalid' : null),
-    isInvalid,
-    isRequired
+    get validationState() {
+      return props.validationState ?? (validation.displayValidation.isInvalid ? 'invalid' : null);
+    },
+    get isInvalid() {
+      return validation.displayValidation.isInvalid;
+    },
+    get isRequired() {
+      return !!props.isRequired && selectedValues.value.length === 0;
+    }
   };
 
   return state;
