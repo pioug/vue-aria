@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:05:40.519Z",
+  "generatedAt": "2026-02-12T15:06:47.856Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 180,
-  "availableLeafCount": 39,
+  "incompletePackageCount": 179,
+  "availableLeafCount": 38,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -108,11 +108,6 @@
       "packageName": "@vue-types/illustratedmessage",
       "upstreamPackageName": "@react-types/illustratedmessage",
       "upstreamPath": "packages/@react-types/illustratedmessage"
-    },
-    {
-      "packageName": "@vue-types/label",
-      "upstreamPackageName": "@react-types/label",
-      "upstreamPath": "packages/@react-types/label"
     },
     {
       "packageName": "@vue-types/layout",
