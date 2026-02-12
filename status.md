@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 81 |
-| Passing tests | 81 |
+| Ported tests | 83 |
+| Passing tests | 83 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -58,7 +58,7 @@
 | @vue-aria/select | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/select | packages/@react-aria/select |
 | @vue-aria/selection | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/selection | packages/@react-aria/selection |
 | @vue-aria/separator | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/separator | packages/@react-aria/separator |
-| @vue-aria/slider | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/slider | packages/@react-aria/slider |
+| @vue-aria/slider | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-aria/slider | packages/@react-aria/slider |
 | @vue-aria/spinbutton | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/spinbutton | packages/@react-aria/spinbutton |
 | @vue-aria/ssr | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-aria/ssr | packages/@react-aria/ssr |
 | @vue-aria/steplist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/steplist | packages/@react-aria/steplist |
