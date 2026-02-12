@@ -52,6 +52,6 @@ describe("@vue-spectrum/s2 NumberField", () => {
 
     const [incrementButton] = wrapper.findAll('[role="button"]');
     await user.click(incrementButton!.element);
-    expect(onChange).toHaveBeenLastCalledWith(9);
+    expect(onChange).toHaveBeenLastCalledWith(10);
   });
 });

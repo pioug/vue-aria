@@ -660,7 +660,9 @@ export function useNumberField(
           return;
         }
 
-        if (inputElement.ownerDocument.activeElement === inputElement) {
+        const ownerDocument =
+          inputElement.ownerDocument ?? (typeof document !== "undefined" ? document : null);
+        if (ownerDocument?.activeElement === inputElement) {
           return;
         }
 
@@ -693,7 +695,9 @@ export function useNumberField(
           return;
         }
 
-        if (inputElement.ownerDocument.activeElement === inputElement) {
+        const ownerDocument =
+          inputElement.ownerDocument ?? (typeof document !== "undefined" ? document : null);
+        if (ownerDocument?.activeElement === inputElement) {
           return;
         }
 

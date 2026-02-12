@@ -176,11 +176,11 @@ export function useTableRow<T>(
     onMouseLeave: () => {
       isPressed.value = false;
     },
-    onClick: (event: MouseEvent) => {
+    onClick: (event?: MouseEvent) => {
       isPressed.value = false;
       const rowElement = toValue(rowRef);
       if (rowElement) {
-        const target = event.target;
+        const target = event?.target;
         if (target instanceof HTMLElement) {
           const focusableTarget = target.closest<HTMLElement>(FOCUSABLE_ROW_SELECTOR);
           if (

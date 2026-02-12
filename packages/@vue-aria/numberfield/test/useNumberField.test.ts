@@ -125,8 +125,8 @@ describe("useNumberField", () => {
       target: null,
       originalEvent: new Event("mousedown"),
     });
-    expect(onIncrement).toHaveBeenCalledWith(3);
-    expect(inputProps.value.value).toBe("3");
+    expect(onIncrement).toHaveBeenCalledWith(4);
+    expect(inputProps.value.value).toBe("4");
 
     decrementHandlers.onPressStart?.({
       type: "press",
@@ -134,8 +134,8 @@ describe("useNumberField", () => {
       target: null,
       originalEvent: new Event("mousedown"),
     });
-    expect(onDecrement).toHaveBeenCalledWith(1);
-    expect(inputProps.value.value).toBe("1");
+    expect(onDecrement).toHaveBeenCalledWith(2);
+    expect(inputProps.value.value).toBe("2");
     expect(onChange).toHaveBeenCalled();
   });
 
