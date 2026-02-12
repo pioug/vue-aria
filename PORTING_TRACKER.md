@@ -41,6 +41,7 @@ This tracker is now effectively archived: the React Aria layer is parity-complet
 - [x] `useFocusRing`
 - [x] `usePress`
 - [x] `useHover`
+- [x] `useHover` nested target parity (inner pointer target resolves to attached outer hover target)
 - [x] `useFocus`
 - [x] `useFocusWithin`
 - [x] Focus disabled-transition blur parity (`useFocus`, `useFocusWithin`)

@@ -88,6 +88,43 @@ describe("useHover", () => {
     expect(onHoverChange).toHaveBeenNthCalledWith(2, false);
   });
 
+  it("reports the attached element as hover target for nested pointer events", () => {
+    const onHoverStart = vi.fn();
+    const onHoverEnd = vi.fn();
+    const onHoverChange = vi.fn();
+    const { hoverProps, isHovered } = useHover({
+      onHoverStart,
+      onHoverEnd,
+      onHoverChange,
+    });
+    const handlers = hoverProps as HoverHandlers;
+
+    const element = document.createElement("div");
+    const inner = document.createElement("span");
+    element.appendChild(inner);
+    document.body.appendChild(element);
+
+    handlers.onPointerenter?.(createPointerEvent("pointerenter", inner, element, "mouse"));
+    expect(isHovered.value).toBe(true);
+    handlers.onPointerleave?.(createPointerEvent("pointerleave", inner, element, "mouse"));
+    expect(isHovered.value).toBe(false);
+
+    expect(onHoverStart).toHaveBeenCalledTimes(1);
+    expect(onHoverStart.mock.calls[0][0]).toMatchObject({
+      type: "hoverstart",
+      target: element,
+      pointerType: "mouse",
+    });
+    expect(onHoverEnd).toHaveBeenCalledTimes(1);
+    expect(onHoverEnd.mock.calls[0][0]).toMatchObject({
+      type: "hoverend",
+      target: element,
+      pointerType: "mouse",
+    });
+    expect(onHoverChange).toHaveBeenNthCalledWith(1, true);
+    expect(onHoverChange).toHaveBeenNthCalledWith(2, false);
+  });
+
   it("does not fire hover events for touch", () => {
     const onHoverStart = vi.fn();
     const onHoverEnd = vi.fn();
