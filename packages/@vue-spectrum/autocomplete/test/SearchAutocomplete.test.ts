@@ -303,6 +303,23 @@ describe("SearchAutocomplete", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("retains selected key on blur when input value matches selected item", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("Two");
+  });
+
   it("clears input when clear button is pressed", async () => {
     const user = userEvent.setup();
     const onClear = vi.fn();
