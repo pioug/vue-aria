@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/numberfield",
   "version": "3.8.17",
-  "description": "Vue port of @react-types/numberfield",
+  "description": "Vue port of @vue-types/numberfield",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

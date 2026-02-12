@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/label",
   "version": "3.9.16",
-  "description": "Vue port of @react-types/label",
+  "description": "Vue port of @vue-types/label",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

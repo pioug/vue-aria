@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/checkbox",
+  "name": "@vue-spectrum/checkbox",
   "version": "3.10.6",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,16 +40,16 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/checkbox": "^3.16.4",
-    "-aria/focus": "^3.21.4",
-    "-aria/interactions": "^3.27.0",
-    "-spectrum/form": "^3.7.21",
-    "-spectrum/label": "^3.16.21",
-    "-spectrum/utils": "^3.12.11",
-    "-stately/checkbox": "^3.7.4",
-    "-stately/toggle": "^3.9.4",
-    "-types/checkbox": "^3.10.3",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/checkbox": "^3.16.4",
+    "@vue-aria/focus": "^3.21.4",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-spectrum/form": "^3.7.21",
+    "@vue-spectrum/label": "^3.16.21",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-stately/checkbox": "^3.7.4",
+    "@vue-stately/toggle": "^3.9.4",
+    "@vue-types/checkbox": "^3.10.3",
+    "@vue-types/shared": "^3.33.0",
     "@spectrum-icons/ui": "^3.6.22",
     "@swc/helpers": "^0.5.0",
     "react-aria-components": "^1.15.0"
@@ -59,7 +59,7 @@
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },

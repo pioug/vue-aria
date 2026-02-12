@@ -1,7 +1,7 @@
 {
   "name": "@vue-spectrum/well",
   "version": "3.4.29",
-  "description": "Vue port of @react-spectrum/well",
+  "description": "Vue port of @vue-spectrum/well",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

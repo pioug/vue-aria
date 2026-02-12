@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/breadcrumbs",
   "version": "3.7.18",
-  "description": "Vue port of @react-types/breadcrumbs",
+  "description": "Vue port of @vue-types/breadcrumbs",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

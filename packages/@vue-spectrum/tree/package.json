@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/tree",
+  "name": "@vue-spectrum/tree",
   "version": "3.1.10",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,26 +40,26 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/button": "^3.14.4",
-    "-aria/i18n": "^3.12.15",
-    "-aria/tree": "^3.1.6",
-    "-aria/utils": "^3.33.0",
-    "-spectrum/checkbox": "^3.10.6",
-    "-spectrum/text": "^3.5.24",
-    "-spectrum/utils": "^3.12.11",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/button": "^3.14.4",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/tree": "^3.1.6",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-spectrum/checkbox": "^3.10.6",
+    "@vue-spectrum/text": "^3.5.24",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-types/shared": "^3.33.0",
     "@spectrum-icons/ui": "^3.6.22",
     "@swc/helpers": "^0.5.0",
     "react-aria-components": "^1.15.0"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },
   "devDependencies": {
     "@adobe/spectrum-css-temp": "3.0.0-alpha.1",
-    "-spectrum/style-macro-s1": "3.0.0-alpha.5"
+    "@vue-spectrum/style-macro-s1": "3.0.0-alpha.5"
   },
   "publishConfig": {
     "access": "public"

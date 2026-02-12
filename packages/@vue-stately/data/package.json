@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/data",
   "version": "3.15.1",
-  "description": "Vue port of @react-stately/data",
+  "description": "Vue port of @vue-stately/data",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

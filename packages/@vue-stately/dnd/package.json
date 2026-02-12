@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/dnd",
   "version": "3.7.3",
-  "description": "Vue port of @react-stately/dnd",
+  "description": "Vue port of @vue-stately/dnd",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

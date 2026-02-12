@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/overlays",
   "version": "3.6.22",
-  "description": "Vue port of @react-stately/overlays",
+  "description": "Vue port of @vue-stately/overlays",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

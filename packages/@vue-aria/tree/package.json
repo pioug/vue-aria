@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/tree",
   "version": "3.1.6",
-  "description": "Vue port of @react-aria/tree",
+  "description": "Vue port of @vue-aria/tree",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

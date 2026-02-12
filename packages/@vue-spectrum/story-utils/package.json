@@ -2,7 +2,7 @@
   "name": "@vue-spectrum/story-utils",
   "version": "3.0.0-alpha.1",
   "private": true,
-  "description": "Vue port of @react-spectrum/story-utils",
+  "description": "Vue port of @vue-spectrum/story-utils",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

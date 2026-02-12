@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/breadcrumbs",
   "version": "3.5.31",
-  "description": "Vue port of @react-aria/breadcrumbs",
+  "description": "Vue port of @vue-aria/breadcrumbs",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

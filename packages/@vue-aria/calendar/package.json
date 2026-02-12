@@ -1,5 +1,5 @@
 {
-  "name": "-aria/calendar",
+  "name": "@vue-aria/calendar",
   "version": "3.9.4",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -27,14 +27,14 @@
   },
   "dependencies": {
     "@internationalized/date": "^3.11.0",
-    "-aria/i18n": "^3.12.15",
-    "-aria/interactions": "^3.27.0",
-    "-aria/live-announcer": "^3.4.4",
-    "-aria/utils": "^3.33.0",
-    "-stately/calendar": "^3.9.2",
-    "-types/button": "^3.15.0",
-    "-types/calendar": "^3.8.2",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/live-announcer": "^3.4.4",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-stately/calendar": "^3.9.2",
+    "@vue-types/button": "^3.15.0",
+    "@vue-types/calendar": "^3.8.2",
+    "@vue-types/shared": "^3.33.0",
     "@swc/helpers": "^0.5.0"
   },
   "peerDependencies": {

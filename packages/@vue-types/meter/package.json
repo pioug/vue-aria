@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/meter",
   "version": "3.4.14",
-  "description": "Vue port of @react-types/meter",
+  "description": "Vue port of @vue-types/meter",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

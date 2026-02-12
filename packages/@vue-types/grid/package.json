@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/grid",
   "version": "3.3.7",
-  "description": "Vue port of @react-types/grid",
+  "description": "Vue port of @vue-types/grid",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

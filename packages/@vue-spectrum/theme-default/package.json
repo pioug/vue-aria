@@ -1,7 +1,7 @@
 {
   "name": "@vue-spectrum/theme-default",
   "version": "3.5.23",
-  "description": "Vue port of @react-spectrum/theme-default",
+  "description": "Vue port of @vue-spectrum/theme-default",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

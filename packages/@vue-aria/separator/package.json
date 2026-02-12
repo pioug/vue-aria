@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/separator",
   "version": "3.4.15",
-  "description": "Vue port of @react-aria/separator",
+  "description": "Vue port of @vue-aria/separator",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

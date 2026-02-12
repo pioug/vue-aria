@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/slider",
   "version": "3.8.3",
-  "description": "Vue port of @react-types/slider",
+  "description": "Vue port of @vue-types/slider",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

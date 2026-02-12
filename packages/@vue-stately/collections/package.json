@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/collections",
   "version": "3.12.9",
-  "description": "Vue port of @react-stately/collections",
+  "description": "Vue port of @vue-stately/collections",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/switch",
   "version": "3.7.10",
-  "description": "Vue port of @react-aria/switch",
+  "description": "Vue port of @vue-aria/switch",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

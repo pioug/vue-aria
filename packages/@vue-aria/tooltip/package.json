@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/tooltip",
   "version": "3.9.1",
-  "description": "Vue port of @react-aria/tooltip",
+  "description": "Vue port of @vue-aria/tooltip",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

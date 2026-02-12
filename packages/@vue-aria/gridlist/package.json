@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/gridlist",
   "version": "3.14.3",
-  "description": "Vue port of @react-aria/gridlist",
+  "description": "Vue port of @vue-aria/gridlist",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

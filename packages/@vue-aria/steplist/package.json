@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/steplist",
   "version": "3.0.0-alpha.24",
-  "description": "Vue port of @react-aria/steplist",
+  "description": "Vue port of @vue-aria/steplist",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

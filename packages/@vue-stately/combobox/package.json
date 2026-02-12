@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/combobox",
   "version": "3.12.2",
-  "description": "Vue port of @react-stately/combobox",
+  "description": "Vue port of @vue-stately/combobox",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

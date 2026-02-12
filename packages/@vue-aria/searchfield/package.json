@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/searchfield",
   "version": "3.8.11",
-  "description": "Vue port of @react-aria/searchfield",
+  "description": "Vue port of @vue-aria/searchfield",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

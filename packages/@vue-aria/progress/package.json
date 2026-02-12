@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/progress",
   "version": "3.4.29",
-  "description": "Vue port of @react-aria/progress",
+  "description": "Vue port of @vue-aria/progress",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "module": "dist/module.js",

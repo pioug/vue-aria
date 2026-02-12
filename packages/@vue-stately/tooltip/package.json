@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/tooltip",
   "version": "3.5.10",
-  "description": "Vue port of @react-stately/tooltip",
+  "description": "Vue port of @vue-stately/tooltip",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

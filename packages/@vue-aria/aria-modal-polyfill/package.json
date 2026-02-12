@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/aria-modal-polyfill",
   "version": "3.7.15",
-  "description": "Vue port of @react-aria/aria-modal-polyfill",
+  "description": "Vue port of @vue-aria/aria-modal-polyfill",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/main.js",

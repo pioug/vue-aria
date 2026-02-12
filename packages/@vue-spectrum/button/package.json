@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/button",
+  "name": "@vue-spectrum/button",
   "version": "3.17.6",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,27 +40,27 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/button": "^3.14.4",
-    "-aria/focus": "^3.21.4",
-    "-aria/i18n": "^3.12.15",
-    "-aria/interactions": "^3.27.0",
-    "-aria/utils": "^3.33.0",
-    "-spectrum/progress": "^3.7.22",
-    "-spectrum/text": "^3.5.24",
-    "-spectrum/utils": "^3.12.11",
-    "-stately/toggle": "^3.9.4",
-    "-types/button": "^3.15.0",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/button": "^3.14.4",
+    "@vue-aria/focus": "^3.21.4",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-spectrum/progress": "^3.7.22",
+    "@vue-spectrum/text": "^3.5.24",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-stately/toggle": "^3.9.4",
+    "@vue-types/button": "^3.15.0",
+    "@vue-types/shared": "^3.33.0",
     "@spectrum-icons/ui": "^3.6.22",
     "@swc/helpers": "^0.5.0"
   },
   "devDependencies": {
     "@adobe/spectrum-css-temp": "3.0.0-alpha.1",
-    "-spectrum/test-utils-internal": "3.0.0-alpha.1",
+    "@vue-spectrum/test-utils-internal": "3.0.0-alpha.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },

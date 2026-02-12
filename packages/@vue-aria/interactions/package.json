@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/interactions",
   "version": "3.27.0",
-  "description": "Vue port of @react-aria/interactions",
+  "description": "Vue port of @vue-aria/interactions",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

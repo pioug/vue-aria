@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/live-announcer",
   "version": "3.4.4",
-  "description": "Vue port of @react-aria/live-announcer",
+  "description": "Vue port of @vue-aria/live-announcer",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

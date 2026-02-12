@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/actiongroup",
   "version": "3.4.22",
-  "description": "Vue port of @react-types/actiongroup",
+  "description": "Vue port of @vue-types/actiongroup",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

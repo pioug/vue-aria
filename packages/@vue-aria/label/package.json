@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/label",
   "version": "3.7.24",
-  "description": "Vue port of @react-aria/label",
+  "description": "Vue port of @vue-aria/label",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

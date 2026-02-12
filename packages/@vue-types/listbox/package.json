@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/listbox",
   "version": "3.7.5",
-  "description": "Vue port of @react-types/listbox",
+  "description": "Vue port of @vue-types/listbox",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

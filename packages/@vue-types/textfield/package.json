@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/textfield",
   "version": "3.12.7",
-  "description": "Vue port of @react-types/textfield",
+  "description": "Vue port of @vue-types/textfield",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

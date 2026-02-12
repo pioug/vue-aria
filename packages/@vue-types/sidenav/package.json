@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/sidenav",
   "version": "3.0.0-alpha.1",
-  "description": "Vue port of @react-types/sidenav",
+  "description": "Vue port of @vue-types/sidenav",
   "license": "Apache-2.0",
   "private": true,
   "types": "src/index.d.ts",

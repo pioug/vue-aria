@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/badge",
+  "name": "@vue-spectrum/badge",
   "version": "3.1.32",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,18 +40,18 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/utils": "^3.33.0",
-    "-spectrum/text": "^3.5.24",
-    "-spectrum/utils": "^3.12.11",
-    "-types/badge": "^3.1.22",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-spectrum/text": "^3.5.24",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-types/badge": "^3.1.22",
+    "@vue-types/shared": "^3.33.0",
     "@swc/helpers": "^0.5.0"
   },
   "devDependencies": {
     "@adobe/spectrum-css-temp": "3.0.0-alpha.1"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },

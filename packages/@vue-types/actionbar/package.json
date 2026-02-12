@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/actionbar",
   "version": "3.1.20",
-  "description": "Vue port of @react-types/actionbar",
+  "description": "Vue port of @vue-types/actionbar",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

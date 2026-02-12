@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/numberfield",
   "version": "3.12.4",
-  "description": "Vue port of @react-aria/numberfield",
+  "description": "Vue port of @vue-aria/numberfield",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

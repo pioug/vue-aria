@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/tabs",
   "version": "3.8.8",
-  "description": "Vue port of @react-stately/tabs",
+  "description": "Vue port of @vue-stately/tabs",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/utils",
   "version": "3.11.0",
-  "description": "Vue port of @react-stately/utils",
+  "description": "Vue port of @vue-stately/utils",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/form",
   "version": "3.7.17",
-  "description": "Vue port of @react-types/form",
+  "description": "Vue port of @vue-types/form",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/focus",
   "version": "3.21.4",
-  "description": "Vue port of @react-aria/focus",
+  "description": "Vue port of @vue-aria/focus",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

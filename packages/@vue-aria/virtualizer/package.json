@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/virtualizer",
   "version": "4.1.12",
-  "description": "Vue port of @react-aria/virtualizer",
+  "description": "Vue port of @vue-aria/virtualizer",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

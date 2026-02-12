@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/select",
   "version": "3.12.1",
-  "description": "Vue port of @react-types/select",
+  "description": "Vue port of @vue-types/select",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

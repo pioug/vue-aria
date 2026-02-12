@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/table",
   "version": "3.15.3",
-  "description": "Vue port of @react-stately/table",
+  "description": "Vue port of @vue-stately/table",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

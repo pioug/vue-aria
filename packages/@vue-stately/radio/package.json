@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/radio",
   "version": "3.11.4",
-  "description": "Vue port of @react-stately/radio",
+  "description": "Vue port of @vue-stately/radio",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

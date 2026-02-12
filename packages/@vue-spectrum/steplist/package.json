@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/steplist",
+  "name": "@vue-spectrum/steplist",
   "version": "3.0.0-alpha.22",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,16 +40,16 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/focus": "^3.21.4",
-    "-aria/i18n": "^3.12.15",
-    "-aria/interactions": "^3.27.0",
-    "-aria/steplist": "3.0.0-alpha.24",
-    "-aria/utils": "^3.33.0",
-    "-aria/visually-hidden": "^3.8.30",
-    "-spectrum/utils": "^3.12.11",
-    "-stately/collections": "^3.12.9",
-    "-stately/steplist": "3.0.0-alpha.20",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/focus": "^3.21.4",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/steplist": "3.0.0-alpha.24",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-aria/visually-hidden": "^3.8.30",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-stately/collections": "^3.12.9",
+    "@vue-stately/steplist": "3.0.0-alpha.20",
+    "@vue-types/shared": "^3.33.0",
     "@spectrum-icons/ui": "^3.6.22",
     "@swc/helpers": "^0.5.0"
   },
@@ -57,7 +57,7 @@
     "@adobe/spectrum-css-temp": "3.0.0-alpha.1"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },

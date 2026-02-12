@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/overlays",
   "version": "3.9.3",
-  "description": "Vue port of @react-types/overlays",
+  "description": "Vue port of @vue-types/overlays",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

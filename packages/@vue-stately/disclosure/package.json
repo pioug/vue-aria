@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/disclosure",
   "version": "3.0.10",
-  "description": "Vue port of @react-stately/disclosure",
+  "description": "Vue port of @vue-stately/disclosure",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/provider",
   "version": "3.8.14",
-  "description": "Vue port of @react-types/provider",
+  "description": "Vue port of @vue-types/provider",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

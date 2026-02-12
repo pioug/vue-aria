@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/view",
   "version": "3.4.22",
-  "description": "Vue port of @react-types/view",
+  "description": "Vue port of @vue-types/view",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

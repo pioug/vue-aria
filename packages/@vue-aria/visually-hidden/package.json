@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/visually-hidden",
   "version": "3.8.30",
-  "description": "Vue port of @react-aria/visually-hidden",
+  "description": "Vue port of @vue-aria/visually-hidden",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

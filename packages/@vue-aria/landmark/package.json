@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/landmark",
   "version": "3.0.9",
-  "description": "Vue port of @react-aria/landmark",
+  "description": "Vue port of @vue-aria/landmark",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

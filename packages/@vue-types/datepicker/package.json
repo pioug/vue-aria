@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/datepicker",
   "version": "3.13.4",
-  "description": "Vue port of @react-types/datepicker",
+  "description": "Vue port of @vue-types/datepicker",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

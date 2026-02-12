@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/grid",
   "version": "3.11.8",
-  "description": "Vue port of @react-stately/grid",
+  "description": "Vue port of @vue-stately/grid",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

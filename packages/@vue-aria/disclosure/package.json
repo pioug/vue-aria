@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/disclosure",
   "version": "3.1.2",
-  "description": "Vue port of @react-aria/disclosure",
+  "description": "Vue port of @vue-aria/disclosure",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

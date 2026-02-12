@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/listbox",
   "version": "3.15.2",
-  "description": "Vue port of @react-aria/listbox",
+  "description": "Vue port of @vue-aria/listbox",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

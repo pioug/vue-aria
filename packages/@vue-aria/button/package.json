@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/button",
   "version": "3.14.4",
-  "description": "Vue port of @react-aria/button",
+  "description": "Vue port of @vue-aria/button",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

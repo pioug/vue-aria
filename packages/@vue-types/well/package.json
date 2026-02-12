@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/well",
   "version": "3.3.22",
-  "description": "Vue port of @react-types/well",
+  "description": "Vue port of @vue-types/well",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

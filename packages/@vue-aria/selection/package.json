@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/selection",
   "version": "3.27.1",
-  "description": "Vue port of @react-aria/selection",
+  "description": "Vue port of @vue-aria/selection",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

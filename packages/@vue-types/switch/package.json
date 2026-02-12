@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/switch",
   "version": "3.5.16",
-  "description": "Vue port of @react-types/switch",
+  "description": "Vue port of @vue-types/switch",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/example-theme",
   "version": "1.0.5",
-  "description": "Vue port of @react-aria/example-theme",
+  "description": "Vue port of @vue-aria/example-theme",
   "license": "Apache-2.0",
   "source": "src/index.css",
   "out": "dist/index.css",

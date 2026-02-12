@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/layout",
   "version": "4.5.3",
-  "description": "Vue port of @react-stately/layout",
+  "description": "Vue port of @vue-stately/layout",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

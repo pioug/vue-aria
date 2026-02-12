@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/textfield",
+  "name": "@vue-spectrum/textfield",
   "version": "3.14.4",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,17 +40,17 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/focus": "^3.21.4",
-    "-aria/i18n": "^3.12.15",
-    "-aria/interactions": "^3.27.0",
-    "-aria/textfield": "^3.18.4",
-    "-aria/utils": "^3.33.0",
-    "-spectrum/form": "^3.7.21",
-    "-spectrum/label": "^3.16.21",
-    "-spectrum/utils": "^3.12.11",
-    "-stately/utils": "^3.11.0",
-    "-types/shared": "^3.33.0",
-    "-types/textfield": "^3.12.7",
+    "@vue-aria/focus": "^3.21.4",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/textfield": "^3.18.4",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-spectrum/form": "^3.7.21",
+    "@vue-spectrum/label": "^3.16.21",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-stately/utils": "^3.11.0",
+    "@vue-types/shared": "^3.33.0",
+    "@vue-types/textfield": "^3.12.7",
     "@spectrum-icons/ui": "^3.6.22",
     "@swc/helpers": "^0.5.0"
   },
@@ -59,7 +59,7 @@
     "@spectrum-icons/workflow": "^4.0.0"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },

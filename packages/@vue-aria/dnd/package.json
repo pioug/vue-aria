@@ -1,5 +1,5 @@
 {
-  "name": "-aria/dnd",
+  "name": "@vue-aria/dnd",
   "version": "3.11.5",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -27,15 +27,15 @@
   },
   "dependencies": {
     "@internationalized/string": "^3.2.7",
-    "-aria/i18n": "^3.12.15",
-    "-aria/interactions": "^3.27.0",
-    "-aria/live-announcer": "^3.4.4",
-    "-aria/overlays": "^3.31.1",
-    "-aria/utils": "^3.33.0",
-    "-stately/collections": "^3.12.9",
-    "-stately/dnd": "^3.7.3",
-    "-types/button": "^3.15.0",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/live-announcer": "^3.4.4",
+    "@vue-aria/overlays": "^3.31.1",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-stately/collections": "^3.12.9",
+    "@vue-stately/dnd": "^3.7.3",
+    "@vue-types/button": "^3.15.0",
+    "@vue-types/shared": "^3.33.0",
     "@swc/helpers": "^0.5.0"
   },
   "peerDependencies": {

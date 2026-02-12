@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/datepicker",
   "version": "3.16.0",
-  "description": "Vue port of @react-stately/datepicker",
+  "description": "Vue port of @vue-stately/datepicker",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

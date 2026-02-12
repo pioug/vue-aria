@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/textfield",
   "version": "3.18.4",
-  "description": "Vue port of @react-aria/textfield",
+  "description": "Vue port of @vue-aria/textfield",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

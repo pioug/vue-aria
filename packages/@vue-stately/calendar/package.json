@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/calendar",
   "version": "3.9.2",
-  "description": "Vue port of @react-stately/calendar",
+  "description": "Vue port of @vue-stately/calendar",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

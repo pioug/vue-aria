@@ -1,5 +1,5 @@
 {
-  "name": "-aria/color",
+  "name": "@vue-aria/color",
   "version": "3.1.4",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -26,18 +26,18 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/i18n": "^3.12.15",
-    "-aria/interactions": "^3.27.0",
-    "-aria/numberfield": "^3.12.4",
-    "-aria/slider": "^3.8.4",
-    "-aria/spinbutton": "^3.7.1",
-    "-aria/textfield": "^3.18.4",
-    "-aria/utils": "^3.33.0",
-    "-aria/visually-hidden": "^3.8.30",
-    "-stately/color": "^3.9.4",
-    "-stately/form": "^3.2.3",
-    "-types/color": "^3.1.3",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/numberfield": "^3.12.4",
+    "@vue-aria/slider": "^3.8.4",
+    "@vue-aria/spinbutton": "^3.7.1",
+    "@vue-aria/textfield": "^3.18.4",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-aria/visually-hidden": "^3.8.30",
+    "@vue-stately/color": "^3.9.4",
+    "@vue-stately/form": "^3.2.3",
+    "@vue-types/color": "^3.1.3",
+    "@vue-types/shared": "^3.33.0",
     "@swc/helpers": "^0.5.0"
   },
   "peerDependencies": {

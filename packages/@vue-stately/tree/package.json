@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/tree",
   "version": "3.9.5",
-  "description": "Vue port of @react-stately/tree",
+  "description": "Vue port of @vue-stately/tree",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

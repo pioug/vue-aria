@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/radio",
   "version": "3.9.3",
-  "description": "Vue port of @react-types/radio",
+  "description": "Vue port of @vue-types/radio",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

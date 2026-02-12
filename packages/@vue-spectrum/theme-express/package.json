@@ -1,7 +1,7 @@
 {
   "name": "@vue-spectrum/theme-express",
   "version": "3.0.0-alpha.25",
-  "description": "Vue port of @react-spectrum/theme-express",
+  "description": "Vue port of @vue-spectrum/theme-express",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

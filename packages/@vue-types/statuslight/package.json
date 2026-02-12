@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/statuslight",
   "version": "3.3.22",
-  "description": "Vue port of @react-types/statuslight",
+  "description": "Vue port of @vue-types/statuslight",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

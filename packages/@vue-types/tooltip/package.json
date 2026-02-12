@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/tooltip",
   "version": "3.5.1",
-  "description": "Vue port of @react-types/tooltip",
+  "description": "Vue port of @vue-types/tooltip",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

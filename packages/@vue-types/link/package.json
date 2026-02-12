@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/link",
   "version": "3.6.6",
-  "description": "Vue port of @react-types/link",
+  "description": "Vue port of @vue-types/link",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

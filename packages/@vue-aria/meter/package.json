@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/meter",
   "version": "3.4.29",
-  "description": "Vue port of @react-aria/meter",
+  "description": "Vue port of @vue-aria/meter",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

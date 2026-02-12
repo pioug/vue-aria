@@ -1,5 +1,5 @@
 {
-  "name": "-spectrum/label",
+  "name": "@vue-spectrum/label",
   "version": "3.16.21",
   "description": "Spectrum UI components in React",
   "license": "Apache-2.0",
@@ -40,13 +40,13 @@
     "url": "https://github.com/adobe/react-spectrum"
   },
   "dependencies": {
-    "-aria/i18n": "^3.12.15",
-    "-aria/utils": "^3.33.0",
-    "-spectrum/form": "^3.7.21",
-    "-spectrum/layout": "^3.6.21",
-    "-spectrum/utils": "^3.12.11",
-    "-types/label": "^3.9.16",
-    "-types/shared": "^3.33.0",
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-spectrum/form": "^3.7.21",
+    "@vue-spectrum/layout": "^3.6.21",
+    "@vue-spectrum/utils": "^3.12.11",
+    "@vue-types/label": "^3.9.16",
+    "@vue-types/shared": "^3.33.0",
     "@spectrum-icons/ui": "^3.6.22",
     "@swc/helpers": "^0.5.0"
   },
@@ -54,7 +54,7 @@
     "@adobe/spectrum-css-temp": "3.0.0-alpha.1"
   },
   "peerDependencies": {
-    "-spectrum/provider": "^3.0.0",
+    "@vue-spectrum/provider": "^3.0.0",
     "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
     "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
   },

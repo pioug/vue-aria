@@ -1,7 +1,7 @@
 {
   "name": "@vue-aria/checkbox",
   "version": "3.16.4",
-  "description": "Vue port of @react-aria/checkbox",
+  "description": "Vue port of @vue-aria/checkbox",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

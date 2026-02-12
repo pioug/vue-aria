@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/form",
   "version": "3.2.3",
-  "description": "Vue port of @react-stately/form",
+  "description": "Vue port of @vue-stately/form",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

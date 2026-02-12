@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/steplist",
   "version": "3.0.0-alpha.20",
-  "description": "Vue port of @react-stately/steplist",
+  "description": "Vue port of @vue-stately/steplist",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

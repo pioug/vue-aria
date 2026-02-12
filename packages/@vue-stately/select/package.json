@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/select",
   "version": "3.9.1",
-  "description": "Vue port of @react-stately/select",
+  "description": "Vue port of @vue-stately/select",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",

@@ -1,7 +1,7 @@
 {
   "name": "@vue-types/searchfield",
   "version": "3.6.7",
-  "description": "Vue port of @react-types/searchfield",
+  "description": "Vue port of @vue-types/searchfield",
   "license": "Apache-2.0",
   "types": "src/index.d.ts",
   "repository": {

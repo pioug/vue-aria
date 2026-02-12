@@ -1,7 +1,7 @@
 {
   "name": "@vue-stately/virtualizer",
   "version": "4.4.5",
-  "description": "Vue port of @react-stately/virtualizer",
+  "description": "Vue port of @vue-stately/virtualizer",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "module": "dist/module.js",
