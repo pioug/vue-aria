@@ -194,3 +194,10 @@ Track every divergence from upstream in this file.
 - Reason: This package depends on the current transitional `@vue-types/shared` typing layer and upstream React-specific button typing contracts.
 - User impact: Consumers may need React type packages for full type resolution until shared/button declarations are remapped to Vue-native node, element, and event types.
 - Removal plan: Complete Vue-native type remapping in `@vue-types/shared` and then update this package’s declarations to remove React-specific imports.
+
+- Package: `@vue-types/listbox`
+- Upstream reference: `packages/@react-types/listbox` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Structural port is complete, but declarations remain React-centric (`ReactNode` and shared types that still reference React types).
+- Reason: This package depends on the current transitional `@vue-types/shared` typing layer and upstream React-specific listbox typing contracts.
+- User impact: Consumers may need React type packages for full type resolution until shared/listbox declarations are remapped to Vue-native node types.
+- Removal plan: Complete Vue-native type remapping in `@vue-types/shared` and then update this package’s declarations to remove React-specific imports.

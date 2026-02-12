@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:33:14.488Z",
+  "generatedAt": "2026-02-12T15:34:10.595Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 158,
-  "availableLeafCount": 30,
+  "incompletePackageCount": 157,
+  "availableLeafCount": 29,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -118,11 +118,6 @@
       "packageName": "@vue-types/dialog",
       "upstreamPackageName": "@react-types/dialog",
       "upstreamPath": "packages/@react-types/dialog"
-    },
-    {
-      "packageName": "@vue-types/listbox",
-      "upstreamPackageName": "@react-types/listbox",
-      "upstreamPath": "packages/@react-types/listbox"
     },
     {
       "packageName": "@vue-types/menu",
