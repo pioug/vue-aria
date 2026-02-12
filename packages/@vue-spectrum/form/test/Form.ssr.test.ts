@@ -5,7 +5,7 @@ import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, provideSpectrumProvider } from "@vue-
 import { Form } from "../src";
 
 describe("Form SSR", () => {
-  it("renders without errors on the server", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "FormSSRApp",
       setup() {

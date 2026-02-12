@@ -311,7 +311,7 @@ describe("SearchField", () => {
     expect(input.value).toBe(inputText);
   });
 
-  it("SearchField doesn't show clear button if isReadOnly is true", () => {
+  it('SearchField doesn\'t show clear button if isReadOnly is true', () => {
     const tree = renderComponent({
       isReadOnly: true,
       value: "puppy",

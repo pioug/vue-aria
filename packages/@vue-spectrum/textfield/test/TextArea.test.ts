@@ -189,7 +189,7 @@ describe("TextArea", () => {
     }
   });
 
-  it("default can adjust after text \"grows\"", async () => {
+  it('default can adjust after text "grows"', async () => {
     let scrollHeight = 64;
     const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
       HTMLTextAreaElement.prototype,
@@ -234,7 +234,7 @@ describe("TextArea", () => {
     }
   });
 
-  it("isQuiet can adjust after text \"grows\"", async () => {
+  it('isQuiet can adjust after text "grows"', async () => {
     let scrollHeight = 52;
     const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
       HTMLTextAreaElement.prototype,
