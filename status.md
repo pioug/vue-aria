@@ -187,7 +187,7 @@
 | @vue-types/combobox | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/combobox | packages/@react-types/combobox |
 | @vue-types/contextualhelp | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/contextualhelp | packages/@react-types/contextualhelp |
 | @vue-types/datepicker | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/datepicker | packages/@react-types/datepicker |
-| @vue-types/dialog | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/dialog | packages/@react-types/dialog |
+| @vue-types/dialog | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/dialog | packages/@react-types/dialog |
 | @vue-types/divider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/divider | packages/@react-types/divider |
 | @vue-types/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/form | packages/@react-types/form |
 | @vue-types/grid | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/grid | packages/@react-types/grid |
