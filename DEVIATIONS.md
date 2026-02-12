@@ -348,3 +348,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential provider/hydration behavior differences until full composable conversion.
 - Removal plan: Replace React context/provider and hook usage with Vue provide/inject plus composables, and port upstream i18n tests for parity.
+
+- Package: `@vue-aria/spinbutton`
+- Upstream reference: `packages/@react-aria/spinbutton` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useCallback`, `useEffect`, `useRef`, `useState`) and React-style effect event/global listener utilities.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential press/announcement timing differences until full composable conversion.
+- Removal plan: Replace React hook/event handling with Vue composables and lifecycle primitives in `useSpinButton`, then port upstream spinbutton tests for parity.
