@@ -148,7 +148,7 @@
 | @vue-stately/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/combobox | packages/@react-stately/combobox |
 | @vue-stately/data | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/data | packages/@react-stately/data |
 | @vue-stately/datepicker | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/datepicker | packages/@react-stately/datepicker |
-| @vue-stately/disclosure | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
+| @vue-stately/disclosure | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
 | @vue-stately/dnd | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/dnd | packages/@react-stately/dnd |
 | @vue-stately/flags | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/flags | packages/@react-stately/flags |
 | @vue-stately/form | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/form | packages/@react-stately/form |

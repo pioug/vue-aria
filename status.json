@@ -1902,7 +1902,7 @@
     },
     {
       "packageName": "@vue-stately/disclosure",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 2,
       "portedTests": 0,
       "passingTests": 0,

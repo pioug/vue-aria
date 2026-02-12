@@ -1,9 +1,14 @@
 {
-  "generatedAt": "2026-02-12T16:04:22.924Z",
+  "generatedAt": "2026-02-12T16:06:32.864Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 133,
+  "incompletePackageCount": 132,
   "availableLeafCount": 14,
   "availableLeaves": [
+    {
+      "packageName": "@vue-aria/disclosure",
+      "upstreamPackageName": "@react-aria/disclosure",
+      "upstreamPath": "packages/@react-aria/disclosure"
+    },
     {
       "packageName": "@vue-aria/i18n",
       "upstreamPackageName": "@react-aria/i18n",
@@ -38,11 +43,6 @@
       "packageName": "@vue-stately/data",
       "upstreamPackageName": "@react-stately/data",
       "upstreamPath": "packages/@react-stately/data"
-    },
-    {
-      "packageName": "@vue-stately/disclosure",
-      "upstreamPackageName": "@react-stately/disclosure",
-      "upstreamPath": "packages/@react-stately/disclosure"
     },
     {
       "packageName": "@vue-stately/form",
