@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 27 |
-| Passing tests | 27 |
+| Ported tests | 28 |
+| Passing tests | 28 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -54,7 +54,7 @@
 | @vue-aria/overlays | complete | 11 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/overlays | packages/@react-aria/overlays |
 | @vue-aria/progress | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-aria/progress | packages/@react-aria/progress |
 | @vue-aria/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/radio | packages/@react-aria/radio |
-| @vue-aria/searchfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/searchfield | packages/@react-aria/searchfield |
+| @vue-aria/searchfield | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/searchfield | packages/@react-aria/searchfield |
 | @vue-aria/select | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/select | packages/@react-aria/select |
 | @vue-aria/selection | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/selection | packages/@react-aria/selection |
 | @vue-aria/separator | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/separator | packages/@react-aria/separator |
