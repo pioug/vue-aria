@@ -334,3 +334,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependency requirements and potential state-lifecycle differences until full composable conversion.
 - Removal plan: Replace React hooks with Vue refs/reactive state in `useCheckboxGroupState` and port upstream checkbox group tests for parity.
+
+- Package: `@vue-aria/landmark`
+- Upstream reference: `packages/@react-aria/landmark` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks/subscriptions (`useCallback`, `useEffect`, `useState`, `useSyncExternalStore`) for landmark registration and navigation state.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential lifecycle/event ordering differences until full composable conversion.
+- Removal plan: Replace React hooks/subscription flow with Vue composables/watchers for landmark manager state and port upstream landmark tests to verify parity.

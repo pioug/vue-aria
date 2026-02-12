@@ -44,7 +44,7 @@
 | @vue-aria/i18n | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/i18n | packages/@react-aria/i18n |
 | @vue-aria/interactions | not_started | 13 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/interactions | packages/@react-aria/interactions |
 | @vue-aria/label | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/label | packages/@react-aria/label |
-| @vue-aria/landmark | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/landmark | packages/@react-aria/landmark |
+| @vue-aria/landmark | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/landmark | packages/@react-aria/landmark |
 | @vue-aria/link | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/link | packages/@react-aria/link |
 | @vue-aria/listbox | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/listbox | packages/@react-aria/listbox |
 | @vue-aria/live-announcer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/live-announcer | packages/@react-aria/live-announcer |
