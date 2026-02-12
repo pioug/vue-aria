@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:27:36.058Z",
+  "generatedAt": "2026-02-12T15:28:30.386Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 164,
-  "availableLeafCount": 36,
+  "incompletePackageCount": 163,
+  "availableLeafCount": 35,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -93,11 +93,6 @@
       "packageName": "@vue-stately/virtualizer",
       "upstreamPackageName": "@react-stately/virtualizer",
       "upstreamPath": "packages/@react-stately/virtualizer"
-    },
-    {
-      "packageName": "@vue-types/breadcrumbs",
-      "upstreamPackageName": "@react-types/breadcrumbs",
-      "upstreamPath": "packages/@react-types/breadcrumbs"
     },
     {
       "packageName": "@vue-types/button",

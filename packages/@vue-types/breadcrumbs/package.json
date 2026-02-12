@@ -1,0 +1,21 @@
+{
+  "name": "@vue-types/breadcrumbs",
+  "version": "3.7.18",
+  "description": "Vue port of @react-types/breadcrumbs",
+  "license": "Apache-2.0",
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-types/link": "^3.6.6",
+    "@vue-types/shared": "^3.33.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
