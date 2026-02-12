@@ -180,4 +180,47 @@ describe("useInteractOutside", () => {
       vi.unstubAllGlobals();
     }
   });
+
+  it("supports shadow-dom boundaries for inside vs outside interactions", () => {
+    const onInteractOutside = vi.fn();
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const shadowRoot = host.attachShadow({ mode: "open" });
+    const target = document.createElement("div");
+    const inside = document.createElement("button");
+    target.appendChild(inside);
+    shadowRoot.appendChild(target);
+
+    const scope = effectScope();
+    scope.run(() => {
+      useInteractOutside({
+        ref: ref(target),
+        onInteractOutside,
+      });
+    });
+
+    inside.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+        button: 0,
+      })
+    );
+    inside.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+        button: 0,
+      })
+    );
+    expect(onInteractOutside).not.toHaveBeenCalled();
+
+    document.body.dispatchEvent(createPointerEvent("pointerdown", 0));
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true, button: 0 }));
+    expect(onInteractOutside).toHaveBeenCalledTimes(1);
+    scope.stop();
+    host.remove();
+  });
 });

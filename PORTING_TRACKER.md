@@ -54,6 +54,7 @@ This tracker is now effectively archived: the React Aria layer is parity-complet
 - [x] `useMove` parent/child propagation parity (child move handlers stop parent move start)
 - [x] `useInteractOutside`
 - [x] `useInteractOutside` fallback mouse/touch parity when `PointerEvent` is unavailable (including emulated mouse suppression after touch)
+- [x] `useInteractOutside` shadow-DOM inside/outside interaction parity coverage
 - [x] Press responder edge cases (cancel on scroll baseline parity; pointer capture nuances tracked as future hardening)
 - [x] Virtual click/screen-reader interaction parity tests
 
