@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:31:24.286Z",
+  "generatedAt": "2026-02-12T15:32:16.260Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 160,
-  "availableLeafCount": 32,
+  "incompletePackageCount": 159,
+  "availableLeafCount": 31,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -98,11 +98,6 @@
       "packageName": "@vue-types/button",
       "upstreamPackageName": "@react-types/button",
       "upstreamPath": "packages/@react-types/button"
-    },
-    {
-      "packageName": "@vue-types/buttongroup",
-      "upstreamPackageName": "@react-types/buttongroup",
-      "upstreamPath": "packages/@react-types/buttongroup"
     },
     {
       "packageName": "@vue-types/calendar",
