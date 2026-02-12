@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 19 |
-| Passing tests | 19 |
+| Ported tests | 20 |
+| Passing tests | 20 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -22,7 +22,7 @@
 
 | Package | Status | Upstream tests | Ported tests | Passing tests | Snapshot total | Snapshot passing | Docs total | Docs complete | Deviations | Upstream package | Upstream path |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| @vue-aria/actiongroup | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/actiongroup | packages/@react-aria/actiongroup |
+| @vue-aria/actiongroup | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/actiongroup | packages/@react-aria/actiongroup |
 | @vue-aria/aria-modal-polyfill | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-aria/aria-modal-polyfill | packages/@react-aria/aria-modal-polyfill |
 | @vue-aria/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/autocomplete | packages/@react-aria/autocomplete |
 | @vue-aria/breadcrumbs | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
