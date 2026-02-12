@@ -163,7 +163,7 @@
 | @vue-stately/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/select | packages/@react-stately/select |
 | @vue-stately/selection | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/selection | packages/@react-stately/selection |
 | @vue-stately/slider | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/slider | packages/@react-stately/slider |
-| @vue-stately/steplist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/steplist | packages/@react-stately/steplist |
+| @vue-stately/steplist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/steplist | packages/@react-stately/steplist |
 | @vue-stately/table | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/table | packages/@react-stately/table |
 | @vue-stately/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tabs | packages/@react-stately/tabs |
 | @vue-stately/toast | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/toast | packages/@react-stately/toast |

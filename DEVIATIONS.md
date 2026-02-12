@@ -404,3 +404,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential selected/focused tab synchronization differences until full composable conversion.
 - Removal plan: Replace React effect/ref tab synchronization with Vue refs/watch equivalents and port upstream tab list state tests for parity.
+
+- Package: `@vue-stately/steplist`
+- Upstream reference: `packages/@react-stately/steplist` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useCallback`, `useEffect`, `useMemo`) for step progression and focus/selection synchronization.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential step completion timing differences until full composable conversion.
+- Removal plan: Replace React hook-based step list synchronization with Vue refs/computed/watch equivalents and port upstream step list tests for parity.

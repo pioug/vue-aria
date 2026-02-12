@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:44:56.620Z",
+  "generatedAt": "2026-02-12T16:46:40.323Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 111,
-  "availableLeafCount": 12,
+  "incompletePackageCount": 110,
+  "availableLeafCount": 11,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -48,11 +48,6 @@
       "packageName": "@vue-stately/select",
       "upstreamPackageName": "@react-stately/select",
       "upstreamPath": "packages/@react-stately/select"
-    },
-    {
-      "packageName": "@vue-stately/steplist",
-      "upstreamPackageName": "@react-stately/steplist",
-      "upstreamPath": "packages/@react-stately/steplist"
     },
     {
       "packageName": "@vue-stately/table",
