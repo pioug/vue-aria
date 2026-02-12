@@ -194,7 +194,7 @@
 | @vue-types/illustratedmessage | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/illustratedmessage | packages/@react-types/illustratedmessage |
 | @vue-types/image | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/image | packages/@react-types/image |
 | @vue-types/label | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/label | packages/@react-types/label |
-| @vue-types/layout | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/layout | packages/@react-types/layout |
+| @vue-types/layout | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/layout | packages/@react-types/layout |
 | @vue-types/link | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/link | packages/@react-types/link |
 | @vue-types/list | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/list | packages/@react-types/list |
 | @vue-types/listbox | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/listbox | packages/@react-types/listbox |
