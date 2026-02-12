@@ -30,11 +30,34 @@ function createSyntheticEvent(type: string, target: EventTarget | null): Event {
   return event;
 }
 
+function getEventCoordinates(event: Event): { x: number; y: number } {
+  const pointerEvent = event as MouseEvent;
+  if (
+    typeof pointerEvent.clientX === "number" &&
+    typeof pointerEvent.clientY === "number"
+  ) {
+    return {
+      x: pointerEvent.clientX,
+      y: pointerEvent.clientY,
+    };
+  }
+
+  return { x: 0, y: 0 };
+}
+
 function toPressEvent(originalEvent: Event, pointerType: PointerType): PressEvent {
+  const keyboardEvent = originalEvent as KeyboardEvent;
+  const coordinates = getEventCoordinates(originalEvent);
   return {
     type: "press",
     pointerType,
     target: originalEvent.currentTarget ?? originalEvent.target,
+    shiftKey: Boolean(keyboardEvent.shiftKey),
+    ctrlKey: Boolean(keyboardEvent.ctrlKey),
+    metaKey: Boolean(keyboardEvent.metaKey),
+    altKey: Boolean(keyboardEvent.altKey),
+    x: coordinates.x,
+    y: coordinates.y,
     originalEvent,
   };
 }

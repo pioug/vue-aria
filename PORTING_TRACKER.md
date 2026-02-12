@@ -41,6 +41,7 @@ This tracker is now effectively archived: the React Aria layer is parity-complet
 - [x] `useFocusRing`
 - [x] `usePress`
 - [x] `usePress` touch-scroll cancellation parity for unrelated scroll regions
+- [x] `usePress` modifier-key and coordinate metadata parity on emitted `PressEvent`
 - [x] `useHover`
 - [x] `useHover` nested target parity (inner pointer target resolves to attached outer hover target)
 - [x] `useHover` fallback mouse/touch parity when `PointerEvent` is unavailable

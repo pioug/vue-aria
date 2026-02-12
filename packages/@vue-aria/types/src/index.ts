@@ -34,6 +34,12 @@ export interface PressEvent {
   type: "press";
   pointerType: PointerType;
   target: EventTarget | null;
+  shiftKey?: boolean;
+  ctrlKey?: boolean;
+  metaKey?: boolean;
+  altKey?: boolean;
+  x?: number;
+  y?: number;
   originalEvent: Event;
 }
 
