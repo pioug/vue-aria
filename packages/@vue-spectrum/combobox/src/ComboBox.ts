@@ -744,10 +744,12 @@ export const ComboBox = defineComponent({
     const formRef = ref<HTMLFormElement | null>(null);
     const loadMoreRequested = ref(false);
     const hasWarnedPlaceholder = ref(false);
+    const showInputLoadingIndicator = ref(false);
     const slotModel = ref<NormalizedComboBoxSlotModel>({
       items: [],
       entries: [],
     });
+    let inputLoadingTimer: ReturnType<typeof setTimeout> | null = null;
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
 
@@ -841,9 +843,86 @@ export const ComboBox = defineComponent({
       state
     );
 
-    const isLoading = computed(
+    const isLoadingInput = computed(
+      () => props.loadingState === "loading" || props.loadingState === "filtering"
+    );
+    const isLoadingList = computed(
       () => props.loadingState === "loading" || props.loadingState === "loadingMore"
     );
+    const shouldShowInputLoadingCandidate = computed(() => {
+      if (!isLoadingInput.value) {
+        return false;
+      }
+
+      if (props.loadingState === "loading") {
+        return true;
+      }
+
+      if (props.loadingState === "filtering") {
+        return state.isOpen.value || (props.menuTrigger ?? "input") === "manual";
+      }
+
+      return false;
+    });
+
+    const clearInputLoadingTimer = () => {
+      if (inputLoadingTimer !== null) {
+        clearTimeout(inputLoadingTimer);
+        inputLoadingTimer = null;
+      }
+    };
+
+    const startInputLoadingTimer = () => {
+      clearInputLoadingTimer();
+      showInputLoadingIndicator.value = false;
+      inputLoadingTimer = setTimeout(() => {
+        inputLoadingTimer = null;
+        showInputLoadingIndicator.value = true;
+      }, 500);
+    };
+
+    const syncInputLoadingIndicator = (resetDelay = false) => {
+      if (!shouldShowInputLoadingCandidate.value) {
+        clearInputLoadingTimer();
+        showInputLoadingIndicator.value = false;
+        return;
+      }
+
+      if (showInputLoadingIndicator.value) {
+        return;
+      }
+
+      if (inputLoadingTimer !== null) {
+        if (resetDelay) {
+          startInputLoadingTimer();
+        }
+        return;
+      }
+
+      startInputLoadingTimer();
+    };
+
+    watch(
+      () => shouldShowInputLoadingCandidate.value,
+      () => {
+        syncInputLoadingIndicator();
+      },
+      { immediate: true }
+    );
+
+    watch(
+      () => state.inputValue.value,
+      (nextInputValue, previousInputValue) => {
+        if (nextInputValue === previousInputValue) {
+          return;
+        }
+
+        if (shouldShowInputLoadingCandidate.value && !showInputLoadingIndicator.value) {
+          syncInputLoadingIndicator(true);
+        }
+      }
+    );
+
     const resolvedFormValue = computed<"text" | "key">(() => {
       if (props.allowsCustomValue) {
         return "text";
@@ -911,7 +990,7 @@ export const ComboBox = defineComponent({
 
     const onListBoxScroll = (event: Event) => {
       const target = event.target as HTMLElement | null;
-      if (!target || !props.onLoadMore || isLoading.value) {
+      if (!target || !props.onLoadMore || isLoadingList.value) {
         loadMoreRequested.value = false;
         return;
       }
@@ -1036,6 +1115,7 @@ export const ComboBox = defineComponent({
     onBeforeUnmount(() => {
       detachFormListener();
       detachScrollListener();
+      clearInputLoadingTimer();
     });
 
     watch(
@@ -1169,7 +1249,7 @@ export const ComboBox = defineComponent({
         }
       }
 
-      if (isLoading.value) {
+      if (isLoadingList.value) {
         renderedList.push(
           h(
             "div",
@@ -1191,9 +1271,19 @@ export const ComboBox = defineComponent({
         );
       }
 
+      const loadingIndicator = showInputLoadingIndicator.value
+        ? h(ProgressCircle, {
+            isIndeterminate: true,
+            size: "S",
+            "aria-label": "Loading",
+          })
+        : null;
+
       const shouldShowList =
         state.isOpen.value &&
-        (state.collection.value.length > 0 || Boolean(props.allowsEmptyCollection) || isLoading.value);
+        (state.collection.value.length > 0 ||
+          Boolean(props.allowsEmptyCollection) ||
+          isLoadingList.value);
 
       return h(
         "div",
@@ -1234,6 +1324,7 @@ export const ComboBox = defineComponent({
               autofocus: props.autoFocus,
               class: classNames("react-spectrum-ComboBox-input"),
             })),
+            loadingIndicator,
             h("button", {
               id: buttonProps.value.id as string | undefined,
               ref: (value: unknown) => {
