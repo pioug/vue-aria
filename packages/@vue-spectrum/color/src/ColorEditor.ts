@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -11,6 +12,21 @@ import { ColorSlider } from "./ColorSlider";
 import { colorEditorPropOptions } from "./types";
 import { hexToHsl, hslToHex, parseColor, tryParseColor } from "./utils";
 
+const COLOREDITOR_INTL_MESSAGES = {
+  "en-US": {
+    colorArea: "Color area",
+    hue: "Hue",
+    alpha: "Alpha",
+    hex: "Hex",
+  },
+  "fr-FR": {
+    colorArea: "Zone de couleur",
+    hue: "Teinte",
+    alpha: "Alpha",
+    hex: "Hex",
+  },
+} as const;
+
 export const ColorEditor = defineComponent({
   name: "ColorEditor",
   inheritAttrs: false,
@@ -18,6 +34,10 @@ export const ColorEditor = defineComponent({
     ...colorEditorPropOptions,
   },
   setup(props, { attrs, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLOREDITOR_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
 
     const normalizeColor = (value: string | null | undefined) => {
@@ -95,10 +115,10 @@ export const ColorEditor = defineComponent({
             isDisabled: props.isDisabled,
             isReadOnly: props.isReadOnly,
             onChange: setColor,
-            "aria-label": "Color area",
+            "aria-label": stringFormatter.value.format("colorArea"),
           }),
           h(ColorSlider as any, {
-            label: "Hue",
+            label: stringFormatter.value.format("hue"),
             channel: "hue",
             minValue: 0,
             maxValue: 360,
@@ -110,7 +130,7 @@ export const ColorEditor = defineComponent({
           }),
           props.showAlpha
             ? h(ColorSlider as any, {
-                label: "Alpha",
+                label: stringFormatter.value.format("alpha"),
                 channel: "alpha",
                 minValue: 0,
                 maxValue: 100,
@@ -119,7 +139,7 @@ export const ColorEditor = defineComponent({
               })
             : null,
           h(ColorField as any, {
-            label: props.label ?? "Hex",
+            label: props.label ?? stringFormatter.value.format("hex"),
             value: currentColor.value,
             isDisabled: props.isDisabled,
             isReadOnly: props.isReadOnly,
