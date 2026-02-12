@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:44:23.974Z",
+  "generatedAt": "2026-02-12T15:45:36.029Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 146,
-  "availableLeafCount": 24,
+  "incompletePackageCount": 145,
+  "availableLeafCount": 23,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -108,11 +108,6 @@
       "packageName": "@vue-stately/virtualizer",
       "upstreamPackageName": "@react-stately/virtualizer",
       "upstreamPath": "packages/@react-stately/virtualizer"
-    },
-    {
-      "packageName": "@vue-types/autocomplete",
-      "upstreamPackageName": "@react-types/autocomplete",
-      "upstreamPath": "packages/@react-types/autocomplete"
     },
     {
       "packageName": "@vue-types/color",

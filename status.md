@@ -174,7 +174,7 @@
 | @vue-stately/virtualizer | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/virtualizer | packages/@react-stately/virtualizer |
 | @vue-types/actionbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/actionbar | packages/@react-types/actionbar |
 | @vue-types/actiongroup | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/actiongroup | packages/@react-types/actiongroup |
-| @vue-types/autocomplete | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/autocomplete | packages/@react-types/autocomplete |
+| @vue-types/autocomplete | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/autocomplete | packages/@react-types/autocomplete |
 | @vue-types/avatar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/avatar | packages/@react-types/avatar |
 | @vue-types/badge | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/badge | packages/@react-types/badge |
 | @vue-types/breadcrumbs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/breadcrumbs | packages/@react-types/breadcrumbs |
