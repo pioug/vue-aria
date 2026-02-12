@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 104 |
-| Passing tests | 104 |
+| Ported tests | 105 |
+| Passing tests | 105 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -80,7 +80,7 @@
 | @vue-spectrum/actionbar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/actionbar | packages/@react-spectrum/actionbar |
 | @vue-spectrum/actiongroup | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/actiongroup | packages/@react-spectrum/actiongroup |
 | @vue-spectrum/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/autocomplete | packages/@react-spectrum/autocomplete |
-| @vue-spectrum/avatar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/avatar | packages/@react-spectrum/avatar |
+| @vue-spectrum/avatar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/avatar | packages/@react-spectrum/avatar |
 | @vue-spectrum/badge | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/badge | packages/@react-spectrum/badge |
 | @vue-spectrum/breadcrumbs | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/breadcrumbs | packages/@react-spectrum/breadcrumbs |
 | @vue-spectrum/button | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/button | packages/@react-spectrum/button |
