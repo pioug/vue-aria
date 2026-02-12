@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 140 |
-| Passing tests | 140 |
+| Ported tests | 142 |
+| Passing tests | 142 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -110,7 +110,7 @@
 | @vue-spectrum/listbox | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/listbox | packages/@react-spectrum/listbox |
 | @vue-spectrum/menu | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/menu | packages/@react-spectrum/menu |
 | @vue-spectrum/meter | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/meter | packages/@react-spectrum/meter |
-| @vue-spectrum/numberfield | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/numberfield | packages/@react-spectrum/numberfield |
+| @vue-spectrum/numberfield | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/numberfield | packages/@react-spectrum/numberfield |
 | @vue-spectrum/overlays | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/overlays | packages/@react-spectrum/overlays |
 | @vue-spectrum/picker | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/picker | packages/@react-spectrum/picker |
 | @vue-spectrum/progress | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/progress | packages/@react-spectrum/progress |
