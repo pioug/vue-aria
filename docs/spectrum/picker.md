@@ -51,7 +51,7 @@ const component = h(Picker, {
 
 ## Notes
 
-- Baseline includes trigger + listbox behavior (open/close, keyboard navigation, selection callbacks, controlled/uncontrolled selection, and trigger-anchored popover placement), plus static slot composition via `PickerItem` and `PickerSection`.
+- Baseline includes trigger + listbox behavior (open/close, keyboard navigation, selection callbacks, controlled/uncontrolled selection, trigger-anchored popover placement, and locale-aware default placeholder copy), plus static slot composition via `PickerItem` and `PickerSection`.
 - Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
 - Trigger autofocus baseline is included via `autoFocus`.
 - Mobile tray rendering is included when running on mobile screen widths.

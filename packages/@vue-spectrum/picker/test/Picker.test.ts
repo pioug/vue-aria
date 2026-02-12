@@ -70,6 +70,24 @@ describe("Picker", () => {
     expect(tree.getByText("Select…")).toBeTruthy();
   });
 
+  it("localizes default placeholder from i18n locale", () => {
+    const App = defineComponent({
+      name: "PickerLocalizedPlaceholderHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(Picker, {
+            "aria-label": "picker-test",
+            items,
+          });
+      },
+    });
+
+    const tree = render(App);
+    expect(tree.getByText("Sélectionner…")).toBeTruthy();
+  });
+
   it("focuses trigger on mount when autoFocus is enabled", async () => {
     const tree = renderComponent({
       autoFocus: true,

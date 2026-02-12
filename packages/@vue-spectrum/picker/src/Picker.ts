@@ -91,10 +91,12 @@ export interface SpectrumPickerSectionProps {
 
 const PICKER_INTL_MESSAGES = {
   "en-US": {
+    placeholder: "Select…",
     loading: "Loading…",
     loadingMore: "Loading more…",
   },
   "fr-FR": {
+    placeholder: "Sélectionner…",
     loading: "Chargement...",
     loadingMore: "Chargement supplémentaire...",
   },
@@ -1129,7 +1131,9 @@ export const Picker = defineComponent({
                     "is-placeholder": !selectedItem.value,
                   }),
                 },
-                selectedItem.value?.label ?? props.placeholder ?? "Select…"
+                selectedItem.value?.label ??
+                  props.placeholder ??
+                  stringFormatter.value.format("placeholder")
               ),
               shouldShowTriggerLoading.value
                 ? h(ProgressCircle, {
