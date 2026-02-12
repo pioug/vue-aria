@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 37 |
-| Passing tests | 37 |
+| Ported tests | 38 |
+| Passing tests | 38 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -51,7 +51,7 @@
 | @vue-aria/menu | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/menu | packages/@react-aria/menu |
 | @vue-aria/meter | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/meter | packages/@react-aria/meter |
 | @vue-aria/numberfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/numberfield | packages/@react-aria/numberfield |
-| @vue-aria/overlays | complete | 11 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-aria/overlays | packages/@react-aria/overlays |
+| @vue-aria/overlays | complete | 11 | 4 | 4 | 0 | 0 | 0 | 0 | true | @react-aria/overlays | packages/@react-aria/overlays |
 | @vue-aria/progress | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-aria/progress | packages/@react-aria/progress |
 | @vue-aria/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/radio | packages/@react-aria/radio |
 | @vue-aria/searchfield | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/searchfield | packages/@react-aria/searchfield |
