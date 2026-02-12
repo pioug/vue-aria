@@ -1677,7 +1677,7 @@
     },
     {
       "packageName": "@vue-spectrum/theme-light",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 0,
       "portedTests": 0,
       "passingTests": 0,

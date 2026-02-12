@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:52:36.388Z",
+  "generatedAt": "2026-02-12T15:53:41.303Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 140,
-  "availableLeafCount": 19,
+  "incompletePackageCount": 139,
+  "availableLeafCount": 18,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -38,11 +38,6 @@
       "packageName": "@vue-spectrum/theme-express",
       "upstreamPackageName": "@react-spectrum/theme-express",
       "upstreamPath": "packages/@react-spectrum/theme-express"
-    },
-    {
-      "packageName": "@vue-spectrum/theme-light",
-      "upstreamPackageName": "@react-spectrum/theme-light",
-      "upstreamPath": "packages/@react-spectrum/theme-light"
     },
     {
       "packageName": "@vue-stately/autocomplete",
