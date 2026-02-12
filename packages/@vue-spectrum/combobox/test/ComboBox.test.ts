@@ -38,7 +38,7 @@ function renderComponent(props: Record<string, unknown> = {}) {
 
 function renderWithProvider(
   component: ReturnType<typeof defineComponent>,
-  options: { providerProps?: Record<string, unknown> } = {}
+  options: { locale?: string; providerProps?: Record<string, unknown> } = {}
 ) {
   const ProviderHarness = defineComponent({
     name: "ComboBoxProviderHarness",
@@ -47,6 +47,7 @@ function renderWithProvider(
         theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
         colorScheme: "light",
         scale: "medium",
+        locale: options.locale,
         ...(options.providerProps ?? {}),
       });
 
@@ -1855,6 +1856,26 @@ describe("ComboBox", () => {
     expect(spinner.getAttribute("aria-label")).toBe("Loading more...");
   });
 
+  it("localizes loading-more spinner label with provider locale", () => {
+    const App = defineComponent({
+      name: "ComboBoxLocalizedLoadingMoreHarness",
+      setup() {
+        return () =>
+          h(ComboBox, {
+            label: "Test",
+            items,
+            defaultOpen: true,
+            loadingState: "loadingMore",
+          });
+      },
+    });
+
+    const tree = renderWithProvider(App, { locale: "fr-FR" });
+    expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement supplementaire..."
+    );
+  });
+
   it("delays input loading indicator and hides it for closed filtering state", async () => {
     vi.useFakeTimers();
 
@@ -2093,6 +2114,33 @@ describe("ComboBox", () => {
     expect(options[0]?.textContent).toContain("Loading...");
     expect(within(options[0] as HTMLElement).getByRole("progressbar").getAttribute("aria-label")).toBe(
       "Loading..."
+    );
+  });
+
+  it("localizes loading placeholder and spinner labels with provider locale", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "ComboBoxLocalizedLoadingHarness",
+      setup() {
+        return () =>
+          h(ComboBox, {
+            label: "Combobox",
+            items: [],
+            inputValue: "blah",
+            loadingState: "loading",
+          });
+      },
+    });
+    const tree = renderWithProvider(App, { locale: "fr-FR" });
+
+    await user.click(tree.getByRole("button"));
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]?.textContent).toContain("Chargement en cours...");
+    expect(within(options[0] as HTMLElement).getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement en cours..."
     );
   });
 

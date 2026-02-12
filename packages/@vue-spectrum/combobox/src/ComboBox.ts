@@ -23,6 +23,7 @@ import {
   type MenuTrigger,
   type MenuTriggerAction,
 } from "@vue-aria/combobox-state";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useOption } from "@vue-aria/listbox";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/types";
@@ -151,6 +152,17 @@ const DEFAULT_FILTER: FilterFn = (textValue, inputValue) =>
 
 const PLACEHOLDER_DEPRECATION_WARNING =
   "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/ComboBox.html#help-text";
+
+const COMBOBOX_INTL_MESSAGES = {
+  "en-US": {
+    loading: "Loading...",
+    loadingMore: "Loading more...",
+  },
+  "fr-FR": {
+    loading: "Chargement en cours...",
+    loadingMore: "Chargement supplementaire...",
+  },
+} as const;
 
 function getValidationMessage(
   value: string | string[] | boolean | null | undefined
@@ -806,6 +818,10 @@ export const ComboBox = defineComponent({
     const provider = useProviderContext();
     const formContext = useFormContext();
     const formValidationErrors = useFormValidationErrors();
+    const stringFormatter = useLocalizedStringFormatter(
+      COMBOBOX_INTL_MESSAGES,
+      "@vue-spectrum/combobox"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
@@ -921,6 +937,10 @@ export const ComboBox = defineComponent({
 
       return formContext?.value.validationBehavior ?? "aria";
     });
+    const loadingLabel = computed(() => stringFormatter.value.format("loading"));
+    const loadingMoreLabel = computed(() =>
+      stringFormatter.value.format("loadingMore")
+    );
 
     const controlledSelectedKey =
       props.selectedKey === undefined
@@ -1629,8 +1649,8 @@ export const ComboBox = defineComponent({
                 size: "S",
                 "aria-label":
                   props.loadingState === "loadingMore"
-                    ? "Loading more..."
-                    : "Loading...",
+                    ? loadingMoreLabel.value
+                    : loadingLabel.value,
               }),
               isEmptyLoadingState
                 ? h(
@@ -1638,7 +1658,7 @@ export const ComboBox = defineComponent({
                     {
                       class: classNames("react-spectrum-ComboBox-loadingLabel"),
                     },
-                    "Loading..."
+                    loadingLabel.value
                   )
                 : null,
             ]
@@ -1650,7 +1670,7 @@ export const ComboBox = defineComponent({
         ? h(ProgressCircle, {
             isIndeterminate: true,
             size: "S",
-            "aria-label": "Loading...",
+            "aria-label": loadingLabel.value,
           })
         : null;
 

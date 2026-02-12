@@ -1015,6 +1015,24 @@ describe("SearchAutocomplete", () => {
     expect(tree.getByLabelText("Effacer la recherche")).toBeTruthy();
   });
 
+  it("localizes no-results empty state with provider locale", () => {
+    const App = defineComponent({
+      name: "SearchAutocompleteLocalizedNoResultsHarness",
+      setup() {
+        return () =>
+          h(SearchAutocomplete, {
+            label: "Recherche",
+            defaultItems: [],
+            defaultOpen: true,
+            loadingState: "idle",
+          });
+      },
+    });
+
+    const tree = renderWithProvider(App, { locale: "fr-FR" });
+    expect(tree.getByText("Aucun resultat")).toBeTruthy();
+  });
+
   it("does not open when disabled", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
@@ -1288,6 +1306,26 @@ describe("SearchAutocomplete", () => {
     const spinners = tree.getAllByRole("progressbar");
     expect(spinners.length).toBeGreaterThan(0);
     expect(spinners[0]?.getAttribute("aria-label")).toBe("Loading...");
+  });
+
+  it("localizes loading spinner labels with provider locale", () => {
+    const App = defineComponent({
+      name: "SearchAutocompleteLocalizedLoadingHarness",
+      setup() {
+        return () =>
+          h(SearchAutocomplete, {
+            label: "Recherche",
+            defaultOpen: true,
+            loadingState: "loadingMore",
+            defaultItems: [],
+          });
+      },
+    });
+
+    const tree = renderWithProvider(App, { locale: "fr-FR" });
+    expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement supplementaire..."
+    );
   });
 
   it("delays input loading indicator and hides it for closed filtering state", async () => {

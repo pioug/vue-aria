@@ -62,4 +62,5 @@ const component = h(ComboBox, {
 - Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
 - Controlled/uncontrolled `selectedKey`, `inputValue`, and open-state flows are wired through `@vue-aria/combobox-state`.
 - Baseline now includes grouped-section listbox semantics for slot-defined `ComboBoxSection` content (headings + `role="group"` containers) with filtering-aware section rendering.
+- Async loading labels now follow provider locale for both input and listbox spinners (including loading placeholder text).
 - Advanced popover positioning/mobile tray behavior, full async loading UX parity, and full visual/theming parity remain in progress.

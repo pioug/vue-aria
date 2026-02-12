@@ -85,9 +85,15 @@ const PLACEHOLDER_DEPRECATION_WARNING =
 const searchAutocompleteMessages = {
   "en-US": {
     "Clear search": "Clear search",
+    loading: "Loading...",
+    loadingMore: "Loading more...",
+    noResults: "No results",
   },
   "fr-FR": {
     "Clear search": "Effacer la recherche",
+    loading: "Chargement en cours...",
+    loadingMore: "Chargement supplementaire...",
+    noResults: "Aucun resultat",
   },
 } as const;
 
@@ -1225,6 +1231,11 @@ export const SearchAutocomplete = defineComponent({
         resolvedValidationState.value !== undefined
       );
     });
+    const loadingLabel = computed(() => stringFormatter.value.format("loading"));
+    const loadingMoreLabel = computed(() =>
+      stringFormatter.value.format("loadingMore")
+    );
+    const noResultsLabel = computed(() => stringFormatter.value.format("noResults"));
 
     const shouldShowList = computed(
       () =>
@@ -1371,7 +1382,7 @@ export const SearchAutocomplete = defineComponent({
             {
               class: classNames("spectrum-Menu-item", "is-empty"),
             },
-            "No results"
+            noResultsLabel.value
           )
         );
       }
@@ -1390,8 +1401,8 @@ export const SearchAutocomplete = defineComponent({
                 size: "S",
                 "aria-label":
                   props.loadingState === "loadingMore"
-                    ? "Loading more..."
-                    : "Loading...",
+                    ? loadingMoreLabel.value
+                    : loadingLabel.value,
               }),
             ]
           )
@@ -1412,7 +1423,7 @@ export const SearchAutocomplete = defineComponent({
         ? h(ProgressCircle, {
             isIndeterminate: true,
             size: "S",
-            "aria-label": "Loading...",
+            "aria-label": loadingLabel.value,
           })
         : null;
 
