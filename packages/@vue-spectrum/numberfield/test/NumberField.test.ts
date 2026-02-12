@@ -630,6 +630,36 @@ describe("NumberField", () => {
     expect(hidden?.value).toBe("4");
   });
 
+  it("supports hidden form value wiring and null reset", async () => {
+    const tree = renderNumberField({
+      name: "age",
+      form: "test",
+      value: 30,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.getAttribute("name")).toBeNull();
+
+    let hidden = tree.container.querySelector(
+      'input[type="hidden"][name="age"]'
+    ) as HTMLInputElement | null;
+    expect(hidden).toBeTruthy();
+    expect(hidden?.getAttribute("form")).toBe("test");
+    expect(hidden?.value).toBe("30");
+
+    await tree.rerender({
+      "aria-label": "Amount",
+      name: "age",
+      form: "test",
+      value: null,
+    });
+
+    hidden = tree.container.querySelector(
+      'input[type="hidden"][name="age"]'
+    ) as HTMLInputElement | null;
+    expect(hidden?.value).toBe("");
+  });
+
   it("passes data attributes through to the text input", () => {
     const tree = renderNumberField({
       "data-testid": "number-input",

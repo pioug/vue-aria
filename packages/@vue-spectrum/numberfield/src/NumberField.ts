@@ -377,8 +377,13 @@ export const NumberField = defineComponent({
       },
     });
 
-    return () =>
-      h(
+    return () => {
+      const textInputProps = {
+        ...(numberField.inputProps.value as Record<string, unknown>),
+      };
+      delete textInputProps.name;
+
+      return h(
         Field,
         {
           ...(attrsRecord as Record<string, unknown>),
@@ -434,7 +439,7 @@ export const NumberField = defineComponent({
               [
                 h(
                   "input",
-                  mergeProps(numberField.inputProps.value, inputDataAttributes.value, {
+                  mergeProps(textInputProps, inputDataAttributes.value, {
                     ref: (value: unknown) => {
                       inputRef.value = value as HTMLInputElement | null;
                     },
@@ -474,5 +479,6 @@ export const NumberField = defineComponent({
           ],
         }
       );
+    };
   },
 });
