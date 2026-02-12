@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:47:01.883Z",
+  "generatedAt": "2026-02-12T17:48:27.324Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 69,
-  "availableLeafCount": 6,
+  "incompletePackageCount": 68,
+  "availableLeafCount": 7,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -20,11 +20,6 @@
       "upstreamPath": "packages/@react-aria/datepicker"
     },
     {
-      "packageName": "@vue-aria/gridlist",
-      "upstreamPackageName": "@react-aria/gridlist",
-      "upstreamPath": "packages/@react-aria/gridlist"
-    },
-    {
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
@@ -33,6 +28,16 @@
       "packageName": "@vue-aria/table",
       "upstreamPackageName": "@react-aria/table",
       "upstreamPath": "packages/@react-aria/table"
+    },
+    {
+      "packageName": "@vue-aria/tag",
+      "upstreamPackageName": "@react-aria/tag",
+      "upstreamPath": "packages/@react-aria/tag"
+    },
+    {
+      "packageName": "@vue-aria/tree",
+      "upstreamPackageName": "@react-aria/tree",
+      "upstreamPath": "packages/@react-aria/tree"
     }
   ],
   "hasCycles": false,
