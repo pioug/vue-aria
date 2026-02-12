@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:22:58.751Z",
+  "generatedAt": "2026-02-12T18:23:29.502Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 18,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 17,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/autocomplete",
@@ -38,11 +38,6 @@
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
-    },
-    {
-      "packageName": "@vue-spectrum/searchfield",
-      "upstreamPackageName": "@react-spectrum/searchfield",
-      "upstreamPath": "packages/@react-spectrum/searchfield"
     },
     {
       "packageName": "@vue-spectrum/tag",
