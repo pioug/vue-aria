@@ -76,7 +76,7 @@
 | @vue-aria/utils | complete | 8 | 8 | 8 | 0 | 0 | 0 | 0 | true | @react-aria/utils | packages/@react-aria/utils |
 | @vue-aria/virtualizer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/virtualizer | packages/@react-aria/virtualizer |
 | @vue-aria/visually-hidden | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/visually-hidden | packages/@react-aria/visually-hidden |
-| @vue-spectrum/accordion | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/accordion | packages/@react-spectrum/accordion |
+| @vue-spectrum/accordion | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/accordion | packages/@react-spectrum/accordion |
 | @vue-spectrum/actionbar | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/actionbar | packages/@react-spectrum/actionbar |
 | @vue-spectrum/actiongroup | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/actiongroup | packages/@react-spectrum/actiongroup |
 | @vue-spectrum/autocomplete | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/autocomplete | packages/@react-spectrum/autocomplete |
