@@ -47,7 +47,10 @@ export interface SpectrumComboBoxProps {
   formValue?: "text" | "key" | undefined;
   label?: string | undefined;
   description?: string | undefined;
-  errorMessage?: string | undefined;
+  errorMessage?:
+    | string
+    | ((context: SpectrumComboBoxErrorMessageContext) => string | null | undefined)
+    | undefined;
   items?: SpectrumComboBoxItemData[] | undefined;
   disabledKeys?: Iterable<Key> | undefined;
   selectedKey?: Key | null | undefined;
@@ -93,6 +96,12 @@ export interface SpectrumComboBoxProps {
   isHidden?: boolean | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
+}
+
+export interface SpectrumComboBoxErrorMessageContext {
+  isInvalid: boolean;
+  validationErrors: string[];
+  validationDetails: unknown;
 }
 
 export interface SpectrumComboBoxItemProps {
@@ -615,7 +624,11 @@ export const ComboBox = defineComponent({
       default: undefined,
     },
     errorMessage: {
-      type: String as PropType<string | undefined>,
+      type: [String, Function] as PropType<
+        | string
+        | ((context: SpectrumComboBoxErrorMessageContext) => string | null | undefined)
+        | undefined
+      >,
       default: undefined,
     },
     items: {
@@ -976,9 +989,48 @@ export const ComboBox = defineComponent({
     const ariaValidationErrorMessage = computed(() =>
       resolvedValidationBehavior.value === "aria" ? validationErrorMessage.value : undefined
     );
+    const baseValidationErrors = computed<string[]>(() => {
+      if (serverErrorMessage.value) {
+        return [serverErrorMessage.value];
+      }
+
+      if (ariaValidationErrorMessage.value) {
+        return [ariaValidationErrorMessage.value];
+      }
+
+      if (nativeValidationMessage.value) {
+        return [nativeValidationMessage.value];
+      }
+
+      return [];
+    });
+    const resolvedErrorMessageFromProp = computed<string | undefined>(() => {
+      if (typeof props.errorMessage === "string" && props.errorMessage.trim().length > 0) {
+        return props.errorMessage;
+      }
+
+      if (typeof props.errorMessage !== "function") {
+        return undefined;
+      }
+
+      const context: SpectrumComboBoxErrorMessageContext = {
+        isInvalid:
+          Boolean(props.isInvalid) ||
+          explicitValidationState.value === "invalid" ||
+          baseValidationErrors.value.length > 0,
+        validationErrors: baseValidationErrors.value,
+        validationDetails: nativeValidationDetails.value ?? {},
+      };
+      const value = props.errorMessage(context);
+      if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+      }
+
+      return undefined;
+    });
     const resolvedErrorMessage = computed(
       () =>
-        props.errorMessage ??
+        resolvedErrorMessageFromProp.value ??
         serverErrorMessage.value ??
         ariaValidationErrorMessage.value ??
         nativeValidationMessage.value
@@ -1139,7 +1191,9 @@ export const ComboBox = defineComponent({
 
       if (resolvedValidationBehavior.value === "native") {
         const customValidityMessage =
-          serverErrorMessage.value ?? (validationErrorMessage.value ?? "");
+          resolvedErrorMessageFromProp.value ??
+          serverErrorMessage.value ??
+          (validationErrorMessage.value ?? "");
         inputElement.setCustomValidity(customValidityMessage);
         return;
       }

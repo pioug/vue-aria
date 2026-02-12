@@ -29,13 +29,24 @@ export type SpectrumSearchAutocompleteLoadingState =
   | "loadingMore"
   | "filtering";
 
+export interface SpectrumSearchAutocompleteErrorMessageContext {
+  isInvalid: boolean;
+  validationErrors: string[];
+  validationDetails: unknown;
+}
+
 export interface SpectrumSearchAutocompleteProps {
   id?: string | undefined;
   name?: string | undefined;
   form?: string | undefined;
   label?: string | undefined;
   description?: string | undefined;
-  errorMessage?: string | undefined;
+  errorMessage?:
+    | string
+    | ((
+        context: SpectrumSearchAutocompleteErrorMessageContext
+      ) => string | null | undefined)
+    | undefined;
   items?: SpectrumSearchAutocompleteItemData[] | undefined;
   defaultItems?: SpectrumSearchAutocompleteItemData[] | undefined;
   disabledKeys?: Iterable<Key> | undefined;
@@ -107,7 +118,13 @@ export const searchAutocompletePropOptions = {
     default: undefined,
   },
   errorMessage: {
-    type: String as PropType<string | undefined>,
+    type: [String, Function] as PropType<
+      | string
+      | ((
+          context: SpectrumSearchAutocompleteErrorMessageContext
+        ) => string | null | undefined)
+      | undefined
+    >,
     default: undefined,
   },
   items: {

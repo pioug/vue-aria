@@ -40,6 +40,7 @@ import {
 } from "@vue-spectrum/utils";
 import {
   searchAutocompletePropOptions,
+  type SpectrumSearchAutocompleteErrorMessageContext,
   type SpectrumSearchAutocompleteItemProps,
   type SpectrumSearchAutocompleteItemData,
   type SpectrumSearchAutocompleteSectionProps,
@@ -747,9 +748,48 @@ export const SearchAutocomplete = defineComponent({
     const ariaValidationErrorMessage = computed(() =>
       resolvedValidationBehavior.value === "aria" ? validationErrorMessage.value : undefined
     );
+    const baseValidationErrors = computed<string[]>(() => {
+      if (serverErrorMessage.value) {
+        return [serverErrorMessage.value];
+      }
+
+      if (ariaValidationErrorMessage.value) {
+        return [ariaValidationErrorMessage.value];
+      }
+
+      if (nativeValidationMessage.value) {
+        return [nativeValidationMessage.value];
+      }
+
+      return [];
+    });
+    const resolvedErrorMessageFromProp = computed<string | undefined>(() => {
+      if (typeof props.errorMessage === "string" && props.errorMessage.trim().length > 0) {
+        return props.errorMessage;
+      }
+
+      if (typeof props.errorMessage !== "function") {
+        return undefined;
+      }
+
+      const context: SpectrumSearchAutocompleteErrorMessageContext = {
+        isInvalid:
+          Boolean(props.isInvalid) ||
+          explicitValidationState.value === "invalid" ||
+          baseValidationErrors.value.length > 0,
+        validationErrors: baseValidationErrors.value,
+        validationDetails: nativeValidationDetails.value ?? {},
+      };
+      const value = props.errorMessage(context);
+      if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+      }
+
+      return undefined;
+    });
     const resolvedErrorMessage = computed(
       () =>
-        props.errorMessage ??
+        resolvedErrorMessageFromProp.value ??
         serverErrorMessage.value ??
         ariaValidationErrorMessage.value ??
         nativeValidationMessage.value
@@ -1112,7 +1152,9 @@ export const SearchAutocomplete = defineComponent({
 
       if (resolvedValidationBehavior.value === "native") {
         const customValidityMessage =
-          serverErrorMessage.value ?? (validationErrorMessage.value ?? "");
+          resolvedErrorMessageFromProp.value ??
+          serverErrorMessage.value ??
+          (validationErrorMessage.value ?? "");
         inputElement.setCustomValidity(customValidityMessage);
         return;
       }

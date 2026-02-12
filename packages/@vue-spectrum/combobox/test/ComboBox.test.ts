@@ -1,6 +1,6 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { defineComponent, h, ref } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Form } from "@vue-spectrum/form";
 import {
@@ -948,6 +948,41 @@ describe("ComboBox", () => {
     const input = tree.getByRole("combobox") as HTMLInputElement;
     expect(input.validationMessage).toBe("Invalid value");
     expect(input.checkValidity()).toBe(false);
+  });
+
+  it("supports custom native error message functions", async () => {
+    const Harness = defineComponent({
+      name: "ComboBoxNativeCustomMessageHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(ComboBox, {
+              label: "Item",
+              items,
+              isRequired: true,
+              validationBehavior: "native",
+              errorMessage: (context: { validationDetails?: { valueMissing?: boolean } }) =>
+                (
+                  context.validationDetails as
+                    | { valueMissing?: boolean }
+                    | undefined
+                )?.valueMissing
+                  ? "Please select an item"
+                  : null,
+            }),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(tree.getByText("Please select an item")).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
   });
 
   it("uses aria-required by default and native required when validationBehavior is native", () => {

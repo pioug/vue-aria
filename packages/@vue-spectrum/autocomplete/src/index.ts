@@ -9,6 +9,7 @@ export {
 } from "./SearchAutocomplete";
 
 export type {
+  SpectrumSearchAutocompleteErrorMessageContext,
   SpectrumSearchAutocompleteItemProps,
   SpectrumSearchAutocompleteItemData,
   SpectrumSearchAutocompleteSectionProps,

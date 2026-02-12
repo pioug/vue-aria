@@ -3,6 +3,7 @@ export { ComboBoxItem as Item, ComboBoxSection as Section } from "./ComboBox";
 
 export type {
   SpectrumComboBoxProps,
+  SpectrumComboBoxErrorMessageContext,
   SpectrumComboBoxItemProps,
   SpectrumComboBoxSectionProps,
 } from "./ComboBox";
