@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:16:29.599Z",
+  "generatedAt": "2026-02-12T15:19:04.486Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 173,
-  "availableLeafCount": 37,
+  "incompletePackageCount": 171,
+  "availableLeafCount": 40,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -80,6 +80,11 @@
       "upstreamPath": "packages/@react-stately/form"
     },
     {
+      "packageName": "@vue-stately/overlays",
+      "upstreamPackageName": "@react-stately/overlays",
+      "upstreamPath": "packages/@react-stately/overlays"
+    },
+    {
       "packageName": "@vue-stately/virtualizer",
       "upstreamPackageName": "@react-stately/virtualizer",
       "upstreamPath": "packages/@react-stately/virtualizer"
@@ -115,6 +120,16 @@
       "upstreamPath": "packages/@react-types/combobox"
     },
     {
+      "packageName": "@vue-types/contextualhelp",
+      "upstreamPackageName": "@react-types/contextualhelp",
+      "upstreamPath": "packages/@react-types/contextualhelp"
+    },
+    {
+      "packageName": "@vue-types/dialog",
+      "upstreamPackageName": "@react-types/dialog",
+      "upstreamPath": "packages/@react-types/dialog"
+    },
+    {
       "packageName": "@vue-types/form",
       "upstreamPackageName": "@react-types/form",
       "upstreamPath": "packages/@react-types/form"
@@ -140,6 +155,11 @@
       "upstreamPath": "packages/@react-types/listbox"
     },
     {
+      "packageName": "@vue-types/menu",
+      "upstreamPackageName": "@react-types/menu",
+      "upstreamPath": "packages/@react-types/menu"
+    },
+    {
       "packageName": "@vue-types/meter",
       "upstreamPackageName": "@react-types/meter",
       "upstreamPath": "packages/@react-types/meter"
@@ -148,11 +168,6 @@
       "packageName": "@vue-types/numberfield",
       "upstreamPackageName": "@react-types/numberfield",
       "upstreamPath": "packages/@react-types/numberfield"
-    },
-    {
-      "packageName": "@vue-types/overlays",
-      "upstreamPackageName": "@react-types/overlays",
-      "upstreamPath": "packages/@react-types/overlays"
     },
     {
       "packageName": "@vue-types/radio",
@@ -185,9 +200,9 @@
       "upstreamPath": "packages/@react-types/textfield"
     },
     {
-      "packageName": "@vue-types/view",
-      "upstreamPackageName": "@react-types/view",
-      "upstreamPath": "packages/@react-types/view"
+      "packageName": "@vue-types/tooltip",
+      "upstreamPackageName": "@react-types/tooltip",
+      "upstreamPath": "packages/@react-types/tooltip"
     }
   ],
   "hasCycles": false,
