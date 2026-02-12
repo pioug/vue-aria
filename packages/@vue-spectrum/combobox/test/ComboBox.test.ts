@@ -576,6 +576,42 @@ describe("ComboBox", () => {
     expect(input.value).toBe("");
   });
 
+  it("clears the uncontrolled selection when the input is fully cleared", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const triggerButton = tree.getByRole("button");
+
+    input.focus();
+    await user.keyboard("o");
+    await user.keyboard("{ArrowDown}");
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(input.getAttribute("aria-activedescendant")).toBe(options[0]?.id);
+
+    await user.keyboard("{Enter}");
+    await user.click(triggerButton);
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(onSelectionChange).toHaveBeenCalledWith("1");
+    expect(options[0]?.textContent).toContain("One");
+    expect(options[0]?.getAttribute("aria-selected")).toBe("true");
+
+    await user.clear(input);
+    await Promise.resolve();
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith(null);
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options[0]?.textContent).toContain("One");
+    expect(options[0]?.getAttribute("aria-selected")).not.toBe("true");
+  });
+
   it("calls onBlur when the input loses focus", () => {
     const onBlur = vi.fn();
     const tree = renderComponent({
