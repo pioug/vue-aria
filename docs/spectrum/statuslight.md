@@ -31,19 +31,14 @@ import { StatusLight, Flex, Text } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { StatusLight } from "@vue-spectrum/statuslight";
+</script>
 
-const status = h(
-  StatusLight,
-  {
-    variant: "positive",
-    role: "status",
-    "aria-label": "Build successful",
-  },
-  () => "Build successful"
-);
+<template>
+  <StatusLight />
+</template>
 ```
 
 ## Notes

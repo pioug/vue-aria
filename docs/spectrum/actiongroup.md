@@ -32,19 +32,14 @@ const items = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ActionGroup } from "@vue-spectrum/actiongroup";
+</script>
 
-const component = h(ActionGroup, {
-  "aria-label": "Item actions",
-  selectionMode: "single",
-  items: [
-    { key: "edit", label: "Edit" },
-    { key: "duplicate", label: "Duplicate" },
-    { key: "share", label: "Share" },
-  ],
-});
+<template>
+  <ActionGroup />
+</template>
 ```
 
 ## Notes

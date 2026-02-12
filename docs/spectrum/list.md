@@ -44,22 +44,14 @@ function onSelectionChange(keys: Set<string | number>) {
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ListView } from "@vue-spectrum/list";
+</script>
 
-const component = h(ListView, {
-  "aria-label": "List",
-  selectionMode: "multiple",
-  items: [
-    { key: "foo", label: "Foo" },
-    { key: "bar", label: "Bar", isDisabled: true },
-    { key: "baz", label: "Baz" },
-  ],
-  onSelectionChange: (keys) => {
-    console.log(Array.from(keys));
-  },
-});
+<template>
+  <ListView />
+</template>
 ```
 
 ## Notes

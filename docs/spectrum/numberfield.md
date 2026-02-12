@@ -20,18 +20,14 @@ import { NumberField } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { NumberField } from "@vue-spectrum/numberfield";
+</script>
 
-const field = h(NumberField, {
-  label: "Quantity",
-  minValue: 0,
-  step: 1,
-  onChange: (value) => {
-    console.log("next value", value);
-  },
-});
+<template>
+  <NumberField />
+</template>
 ```
 
 ## Notes

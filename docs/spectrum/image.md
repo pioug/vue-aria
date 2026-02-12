@@ -31,15 +31,14 @@ import { Image, Flex } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Image } from "@vue-spectrum/image";
+</script>
 
-const preview = h(Image, {
-  src: "https://example.com/photo.jpg",
-  alt: "Project screenshot",
-  objectFit: "cover",
-});
+<template>
+  <Image />
+</template>
 ```
 
 ## Notes

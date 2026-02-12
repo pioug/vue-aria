@@ -39,21 +39,14 @@ const items = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ComboBox } from "@vue-spectrum/combobox";
+</script>
 
-const component = h(ComboBox, {
-  label: "Fruits",
-  items: [
-    { key: "apple", label: "Apple" },
-    { key: "orange", label: "Orange" },
-    { key: "pear", label: "Pear" },
-  ],
-  onSelectionChange: (key) => {
-    console.log("selected", key);
-  },
-});
+<template>
+  <ComboBox />
+</template>
 ```
 
 ## Notes

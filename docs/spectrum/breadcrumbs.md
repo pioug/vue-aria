@@ -28,26 +28,14 @@ import { BreadcrumbItem, Breadcrumbs, Flex } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { BreadcrumbItem, Breadcrumbs } from "@vue-spectrum/breadcrumbs";
+</script>
 
-const breadcrumbTree = h(
-  Breadcrumbs,
-  {
-    showRoot: true,
-    onAction: (key) => {
-      console.log("Navigate to", key);
-    },
-  },
-  {
-    default: () => [
-      h(BreadcrumbItem, { key: "home", href: "/" }, () => "Home"),
-      h(BreadcrumbItem, { key: "docs", href: "/docs" }, () => "Docs"),
-      h(BreadcrumbItem, { key: "current" }, () => "Current"),
-    ],
-  }
-);
+<template>
+  <BreadcrumbItem />
+</template>
 ```
 
 ## Notes

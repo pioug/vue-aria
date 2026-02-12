@@ -32,20 +32,14 @@ const steps = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { StepList } from "@vue-spectrum/steplist";
+</script>
 
-const component = h(StepList, {
-  "aria-label": "Checkout flow",
-  items: [
-    { key: "account", label: "Account" },
-    { key: "billing", label: "Billing" },
-    { key: "review", label: "Review" },
-  ],
-  defaultLastCompletedStep: "account",
-  defaultSelectedKey: "billing",
-});
+<template>
+  <StepList />
+</template>
 ```
 
 ## Notes

@@ -27,20 +27,14 @@ import { Tooltip, TooltipTrigger } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
+</script>
 
-const component = h(
-  TooltipTrigger,
-  null,
-  {
-    default: () => [
-      h("button", { type: "button" }, "Trigger"),
-      h(Tooltip, { placement: "bottom" }, () => "Helpful information."),
-    ],
-  }
-);
+<template>
+  <Tooltip />
+</template>
 ```
 
 ## Notes

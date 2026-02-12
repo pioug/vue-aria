@@ -23,11 +23,14 @@ import { Badge, Flex } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Badge } from "@vue-spectrum/badge";
+</script>
 
-const chip = h(Badge, { variant: "positive" }, () => "Complete");
+<template>
+  <Badge />
+</template>
 ```
 
 ## Notes

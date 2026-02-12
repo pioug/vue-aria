@@ -31,24 +31,14 @@ const actions = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ActionBar } from "@vue-spectrum/actionbar";
+</script>
 
-const component = h(ActionBar, {
-  selectedItemCount: 2,
-  items: [
-    { key: "edit", label: "Edit" },
-    { key: "copy", label: "Copy" },
-    { key: "delete", label: "Delete" },
-  ],
-  onAction: (key) => {
-    console.log("action", key);
-  },
-  onClearSelection: () => {
-    console.log("clear");
-  },
-});
+<template>
+  <ActionBar />
+</template>
 ```
 
 ## Notes

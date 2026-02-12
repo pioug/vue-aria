@@ -38,18 +38,15 @@ const selectedRange = ref<string>("none");
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { parseDate } from "@internationalized/date";
 import { Calendar } from "@vue-spectrum/calendar";
+</script>
 
-const component = h(Calendar, {
-  label: "Choose a date",
-  defaultValue: parseDate("2019-06-05"),
-  onChange: (value) => {
-    console.log("next date", value?.toString());
-  },
-});
+<template>
+  <Calendar />
+</template>
 ```
 
 ## Notes

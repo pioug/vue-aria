@@ -44,17 +44,14 @@ const autoFitColumns = repeat("auto-fit", "minmax(100px, 1fr)");
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Flex, Grid, repeat } from "@vue-spectrum/layout";
+</script>
 
-const stack = h(Flex, { direction: "column", gap: 8 }, () => []);
-
-const board = h(Grid, {
-  columns: repeat("auto-fit", "200px"),
-  rowGap: 12,
-  columnGap: 12,
-});
+<template>
+  <Flex />
+</template>
 ```
 
 ## Notes

@@ -36,21 +36,14 @@ const menuItems = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { MenuTrigger } from "@vue-spectrum/menu";
+</script>
 
-const component = h(MenuTrigger, {
-  triggerLabel: "Menu",
-  items: [
-    { key: "edit", label: "Edit" },
-    { key: "copy", label: "Copy" },
-    { key: "delete", label: "Delete" },
-  ],
-  onAction: (key) => {
-    console.log("action", key);
-  },
-});
+<template>
+  <MenuTrigger />
+</template>
 ```
 
 ## Notes

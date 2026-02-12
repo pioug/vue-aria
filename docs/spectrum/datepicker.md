@@ -65,18 +65,15 @@ const dateRangeValue = ref("none");
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { parseDate } from "@internationalized/date";
 import { DatePicker } from "@vue-spectrum/datepicker";
+</script>
 
-const component = h(DatePicker, {
-  label: "Date",
-  defaultValue: parseDate("2019-06-05"),
-  onChange: (value) => {
-    console.log("next date", value?.toString());
-  },
-});
+<template>
+  <DatePicker />
+</template>
 ```
 
 ## Notes

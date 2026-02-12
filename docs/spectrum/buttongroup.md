@@ -32,16 +32,14 @@ import { Button, ButtonGroup, Flex } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Button, ButtonGroup } from "@vue-spectrum/buttongroup";
+</script>
 
-const group = h(ButtonGroup, null, {
-  default: () => [
-    h(Button, { variant: "primary" }, () => "Rate now"),
-    h(Button, { variant: "secondary" }, () => "No thanks"),
-  ],
-});
+<template>
+  <Button />
+</template>
 ```
 
 ## Notes

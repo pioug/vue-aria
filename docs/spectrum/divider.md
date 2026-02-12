@@ -28,15 +28,14 @@ import { Divider, Flex, Heading, Text } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Divider } from "@vue-spectrum/divider";
+</script>
 
-const line = h(Divider, {
-  size: "M",
-  orientation: "horizontal",
-  "aria-label": "Section break",
-});
+<template>
+  <Divider />
+</template>
 ```
 
 ## Notes

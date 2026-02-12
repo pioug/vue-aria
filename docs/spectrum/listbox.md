@@ -63,27 +63,14 @@ function onSelectionChange(keys: Set<string | number>) {
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ListBox } from "@vue-spectrum/listbox";
+</script>
 
-const component = h(ListBox, {
-  "aria-label": "Options",
-  selectionMode: "single",
-  items: [
-    {
-      key: "section-1",
-      heading: "Section",
-      items: [
-        { key: "a", label: "Option A" },
-        { key: "b", label: "Option B", isDisabled: true },
-      ],
-    },
-  ],
-  onSelectionChange: (keys) => {
-    console.log(Array.from(keys));
-  },
-});
+<template>
+  <ListBox />
+</template>
 ```
 
 ## Notes

@@ -33,27 +33,14 @@ import { Flex, Radio, RadioGroup } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Radio, RadioGroup } from "@vue-spectrum/radio";
+</script>
 
-const field = h(
-  RadioGroup,
-  {
-    label: "Favorite pet",
-    defaultValue: "cats",
-    onChange: (value) => {
-      console.log(value);
-    },
-  },
-  {
-    default: () => [
-      h(Radio, { value: "dogs" }, () => "Dogs"),
-      h(Radio, { value: "cats" }, () => "Cats"),
-      h(Radio, { value: "dragons" }, () => "Dragons"),
-    ],
-  }
-);
+<template>
+  <Radio />
+</template>
 ```
 
 ## Notes

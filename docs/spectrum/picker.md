@@ -32,21 +32,14 @@ const options = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Picker } from "@vue-spectrum/picker";
+</script>
 
-const component = h(Picker, {
-  "aria-label": "Example picker",
-  items: [
-    { key: "one", label: "One" },
-    { key: "two", label: "Two" },
-    { key: "three", label: "Three" },
-  ],
-  onSelectionChange: (key) => {
-    console.log("selected", key);
-  },
-});
+<template>
+  <Picker />
+</template>
 ```
 
 ## Notes

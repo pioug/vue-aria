@@ -20,17 +20,14 @@ import { SearchField } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { SearchField } from "@vue-spectrum/searchfield";
+</script>
 
-const field = h(SearchField, {
-  label: "Search",
-  description: "Use keywords to filter results.",
-  onSubmit: (value) => {
-    console.log("submit", value);
-  },
-});
+<template>
+  <SearchField />
+</template>
 ```
 
 ## Notes

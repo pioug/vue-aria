@@ -39,21 +39,14 @@ const items = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { SearchAutocomplete } from "@vue-spectrum/autocomplete";
+</script>
 
-const component = h(SearchAutocomplete, {
-  label: "Search with suggestions",
-  defaultItems: [
-    { key: "aardvark", label: "Aardvark" },
-    { key: "kangaroo", label: "Kangaroo" },
-    { key: "snake", label: "Snake" },
-  ],
-  onSubmit: (value, key) => {
-    console.log("submit", value, key);
-  },
-});
+<template>
+  <SearchAutocomplete />
+</template>
 ```
 
 ## Notes

@@ -21,15 +21,14 @@ import { Avatar, Flex } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Avatar } from "@vue-spectrum/avatar";
+</script>
 
-const profile = h(Avatar, {
-  src: "https://example.com/user.png",
-  alt: "User profile photo",
-  size: "80px",
-});
+<template>
+  <Avatar />
+</template>
 ```
 
 ## Notes

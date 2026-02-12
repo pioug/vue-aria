@@ -24,20 +24,14 @@ import { Flex, Switch } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Switch } from "@vue-spectrum/switch";
+</script>
 
-const field = h(
-  Switch,
-  {
-    defaultSelected: true,
-    onChange: (isSelected) => {
-      console.log("selected", isSelected);
-    },
-  },
-  () => "Enable notifications"
-);
+<template>
+  <Switch />
+</template>
 ```
 
 ## Notes

@@ -23,24 +23,15 @@ import { Content, Header, InlineAlert } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Content, Header } from "@vue-spectrum/view";
 import { InlineAlert } from "@vue-spectrum/inlinealert";
+</script>
 
-const component = h(
-  InlineAlert,
-  {
-    variant: "negative",
-    autoFocus: true,
-  },
-  {
-    default: () => [
-      h(Header, null, () => "Could not save changes"),
-      h(Content, null, () => "Please retry after checking your network connection."),
-    ],
-  }
-);
+<template>
+  <InlineAlert />
+</template>
 ```
 
 ## Notes

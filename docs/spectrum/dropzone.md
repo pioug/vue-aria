@@ -31,28 +31,16 @@ import {
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { DropZone } from "@vue-spectrum/dropzone";
 import { Content, Header } from "@vue-spectrum/view";
 import { IllustratedMessage } from "@vue-spectrum/illustratedmessage";
+</script>
 
-const component = h(
-  DropZone,
-  {
-    isFilled: true,
-    onDrop(event) {
-      // Handle dropped items
-      console.log(event.items);
-    },
-  },
-  {
-    default: () =>
-      h(IllustratedMessage, null, {
-        default: () => [h(Header, null, () => "No files"), h(Content, null, () => "Drop files here")],
-      }),
-  }
-);
+<template>
+  <DropZone />
+</template>
 ```
 
 ## Notes

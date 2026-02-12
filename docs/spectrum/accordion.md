@@ -46,29 +46,14 @@ import {
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import {
-  Accordion,
-  Disclosure,
-  DisclosurePanel,
-  DisclosureTitle,
-} from "@vue-spectrum/accordion";
+</script>
 
-const component = h(Accordion, null, {
-  default: () => [
-    h(
-      Disclosure,
-      { id: "files" },
-      {
-        default: () => [
-          h(DisclosureTitle, () => "Files"),
-          h(DisclosurePanel, () => "Files content"),
-        ],
-      }
-    ),
-  ],
-});
+<template>
+  <Accordion />
+</template>
 ```
 
 ## Notes

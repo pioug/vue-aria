@@ -42,23 +42,14 @@ const previewFieldProps = {
 
 ## Example
 
-```ts
+```vue
+<script setup lang="ts">
 import { Form } from "@vue-spectrum/form";
-import { h } from "vue";
+</script>
 
-const node = h(
-  Form,
-  {
-    "aria-label": "Profile",
-    labelPosition: "side",
-    validationBehavior: "native",
-  },
-  {
-    default: () => [
-      h("input", { name: "email", type: "email", required: true }),
-    ],
-  }
-);
+<template>
+  <Form />
+</template>
 ```
 
 ## Notes

@@ -22,25 +22,15 @@ import { FileTrigger, Button } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { FileTrigger } from "@vue-spectrum/filetrigger";
 import { Button } from "@vue-spectrum/button";
+</script>
 
-const trigger = h(
-  FileTrigger,
-  {
-    acceptedFileTypes: ["image/png"],
-    allowsMultiple: true,
-    onSelect: (files) => {
-      const names = files ? Array.from(files).map((file) => file.name) : [];
-      console.log(names);
-    },
-  },
-  {
-    default: () => h(Button, { variant: "accent" }, () => "Upload"),
-  }
-);
+<template>
+  <FileTrigger />
+</template>
 ```
 
 ## Notes

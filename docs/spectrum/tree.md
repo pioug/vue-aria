@@ -49,62 +49,24 @@ const items = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Collection, TreeView, TreeViewItem, TreeViewItemContent } from "@vue-spectrum/tree";
+</script>
 
-const component = h(TreeView, {
-  "aria-label": "Tree static",
-}, {
-  default: () =>
-    h(Collection, {
-      items: [
-        {
-          id: "documents",
-          name: "Documents",
-          children: [
-            { id: "project-a", name: "Project A" },
-            { id: "document-1", name: "Document 1" },
-          ],
-        },
-        { id: "photos", name: "Photos" },
-      ],
-    }, {
-      default: ({ item }) => h(TreeViewItem, { id: item.id }, {
-        default: () => [
-          h(TreeViewItemContent, null, () => item.name),
-          ...(item.children ?? []).map((child) =>
-            h(TreeViewItem, { id: child.id }, () => child.name)
-          ),
-        ],
-      }),
-    }),
-});
+<template>
+  <TreeView />
+</template>
 ```
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { TreeView } from "@vue-spectrum/tree";
+</script>
 
-const dynamicComponent = h(TreeView, {
-  "aria-label": "Tree dynamic",
-  selectionMode: "multiple",
-  defaultExpandedKeys: ["documents"],
-  items: [
-    {
-      id: "documents",
-      name: "Documents",
-      childItems: [
-        { id: "project-a", name: "Project A" },
-        { id: "document-1", name: "Document 1" },
-      ],
-    },
-    { id: "photos", name: "Photos" },
-  ],
-  onSelectionChange: (keys) => {
-    console.log(Array.from(keys));
-  },
-});
+<template>
+  <TreeView />
+</template>
 ```
 
 ## Notes

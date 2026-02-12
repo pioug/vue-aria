@@ -26,15 +26,15 @@ const range = { start: 10, end: 20 };
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { CalendarDate } from "@internationalized/date";
 import { LabeledValue } from "@vue-spectrum/labeledvalue";
+</script>
 
-const view = h(LabeledValue, {
-  label: "Next billing",
-  value: new CalendarDate(2026, 3, 15),
-});
+<template>
+  <CalendarDate />
+</template>
 ```
 
 ## Notes

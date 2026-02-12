@@ -30,45 +30,33 @@ const items = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Item, TabList, TabPanels, Tabs } from "@vue-spectrum/tabs";
+</script>
 
-const items = [
-  { key: "first", title: "First", children: "First panel" },
-  { key: "second", title: "Second", children: "Second panel" },
-];
-
-const tabs = h(
-  Tabs,
-  {
-    "aria-label": "Demo tabs",
-    items,
-    defaultSelectedKey: "first",
-  },
-  {
-    default: () => [h(TabList), h(TabPanels)],
-  }
-);
+<template>
+  <Tabs aria-label="Example tabs">
+    <TabList />
+    <TabPanels />
+  </Tabs>
+</template>
 ```
 
 `Item` can also be used in scoped tab slots for closer React Spectrum-style composition:
 
-```ts
-h(TabList, null, {
-  default: ({ item }) => h(Item, { title: item.title }),
-});
+```vue
+<template>
+  <TabList />
+</template>
 ```
 
 Static `Item` composition is also supported:
 
-```ts
-h(TabList, null, {
-  default: () => [
-    h(Item, { id: "first", title: "First tab" }),
-    h(Item, { id: "second", title: "Second tab" }),
-  ],
-});
+```vue
+<template>
+  <TabList />
+</template>
 ```
 
 ## Notes

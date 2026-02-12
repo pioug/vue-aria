@@ -30,25 +30,14 @@ import { Flex, RangeSlider, Slider } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { RangeSlider, Slider } from "@vue-spectrum/slider";
+</script>
 
-const single = h(Slider, {
-  label: "Volume",
-  defaultValue: 35,
-  onChange: (value) => {
-    console.log(value);
-  },
-});
-
-const range = h(RangeSlider, {
-  label: "Price range",
-  defaultValue: { start: 20, end: 70 },
-  onChange: (value) => {
-    console.log(value.start, value.end);
-  },
-});
+<template>
+  <RangeSlider />
+</template>
 ```
 
 ## Notes

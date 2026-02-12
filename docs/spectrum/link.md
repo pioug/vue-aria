@@ -25,11 +25,14 @@ import { Flex, Link } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Link } from "@vue-spectrum/link";
+</script>
 
-const docsLink = h(Link, { href: "https://github.com/pioug/vue-aria/" }, () => "Open repository");
+<template>
+  <Link />
+</template>
 ```
 
 ## Notes

@@ -23,18 +23,14 @@ import { Well, Heading, Text } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Well } from "@vue-spectrum/well";
+</script>
 
-const content = h(
-  Well,
-  {
-    role: "region",
-    "aria-label": "Snippet container",
-  },
-  () => "const ok = true;"
-);
+<template>
+  <Well />
+</template>
 ```
 
 ## Notes

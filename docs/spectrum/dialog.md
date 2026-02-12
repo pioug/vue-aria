@@ -44,17 +44,18 @@ import { ActionButton, Dialog, DialogTrigger, Heading } from "@vue-spectrum/vue-
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ActionButton } from "@vue-spectrum/button";
 import { Dialog, DialogTrigger } from "@vue-spectrum/dialog";
+</script>
 
-const component = h(DialogTrigger, null, {
-  default: () => [
-    h(ActionButton, null, () => "Trigger"),
-    h(Dialog, { isDismissable: true }, () => "Dialog content"),
-  ],
-});
+<template>
+  <DialogTrigger>
+    <ActionButton>Open</ActionButton>
+    <Dialog>Dialog content</Dialog>
+  </DialogTrigger>
+</template>
 ```
 
 ## Notes

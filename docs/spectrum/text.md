@@ -26,13 +26,14 @@ import { Heading, Keyboard, Text } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Heading, Text, Keyboard } from "@vue-spectrum/text";
+</script>
 
-const heading = h(Heading, { level: 2 }, () => "Shortcuts");
-const body = h(Text, null, () => "Use ");
-const shortcut = h(Keyboard, null, () => "Cmd+K");
+<template>
+  <Heading />
+</template>
 ```
 
 ## Notes

@@ -94,17 +94,14 @@ const swatchColor = ref("#00FF00");
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ColorPicker } from "@vue-spectrum/color";
+</script>
 
-const component = h(ColorPicker, {
-  label: "Fill",
-  defaultValue: "#ff0000",
-  onChange: (color) => {
-    console.log("next color", color);
-  },
-});
+<template>
+  <ColorPicker />
+</template>
 ```
 
 ## Notes

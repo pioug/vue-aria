@@ -61,26 +61,14 @@ const selected = ref("none");
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { TableView } from "@vue-spectrum/table";
+</script>
 
-const component = h(TableView, {
-  "aria-label": "Table",
-  columns: [
-    { key: "name", title: "Name", isRowHeader: true },
-    { key: "type", title: "Type" },
-    { key: "modified", title: "Modified", allowsSorting: true },
-  ],
-  items: [
-    { key: "games", name: "Games", type: "File folder", modified: "6/7/2020" },
-    { key: "bootmgr", name: "bootmgr", type: "System file", modified: "11/20/2010" },
-  ],
-  selectionMode: "single",
-  onSelectionChange: (keys) => {
-    console.log(Array.from(keys));
-  },
-});
+<template>
+  <TableView />
+</template>
 ```
 
 ## Notes

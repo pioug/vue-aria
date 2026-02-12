@@ -28,12 +28,14 @@ import { Flex, ProgressBar, ProgressCircle, Text } from "@vue-spectrum/vue-spect
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { ProgressBar, ProgressCircle } from "@vue-spectrum/progress";
+</script>
 
-const bar = h(ProgressBar, { label: "Upload", value: 30 });
-const circle = h(ProgressCircle, { "aria-label": "Loading", isIndeterminate: true });
+<template>
+  <ProgressBar />
+</template>
 ```
 
 ## Notes

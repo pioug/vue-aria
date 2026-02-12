@@ -3,19 +3,7 @@
 Vue port baseline of `@react-spectrum/textfield`.
 
 <script setup lang="ts">
-import { h } from "vue";
 import { TextArea, TextField } from "@vue-spectrum/vue-spectrum";
-
-const fieldIcon = h(
-  "span",
-  { class: "spectrum-preview-inline-icon", "aria-hidden": "true" },
-  "#"
-);
-const loadingIndicator = h(
-  "span",
-  { class: "spectrum-preview-inline-loader", "aria-hidden": "true" },
-  "..."
-);
 </script>
 
 ## Preview
@@ -26,13 +14,11 @@ const loadingIndicator = h(
       label="Project name"
       description="Give your project a clear title."
       validationState="valid"
-      :icon="fieldIcon"
     />
     <TextField
       label="Sync status"
       defaultValue="Syncing..."
       isLoading
-      :loadingIndicator="loadingIndicator"
       description="Loading indicator parity preview."
     />
     <TextArea label="Description" rows="4" description="Explain the goal and scope." />
@@ -46,21 +32,14 @@ const loadingIndicator = h(
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { TextArea, TextField } from "@vue-spectrum/textfield";
+</script>
 
-const field = h(TextField, {
-  label: "Name",
-  placeholder: "Your name",
-  isRequired: true,
-});
-
-const area = h(TextArea, {
-  label: "Notes",
-  rows: 4,
-  defaultValue: "Initial text",
-});
+<template>
+  <TextArea />
+</template>
 ```
 
 ## Notes

@@ -31,22 +31,14 @@ const tags = [
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { TagGroup } from "@vue-spectrum/tag";
+</script>
 
-const component = h(TagGroup, {
-  "aria-label": "Project tags",
-  allowsRemoving: true,
-  items: [
-    { key: "a", label: "Design" },
-    { key: "b", label: "Research" },
-    { key: "c", label: "Accessibility" },
-  ],
-  onRemove: (keys) => {
-    console.log("remove", Array.from(keys));
-  },
-});
+<template>
+  <TagGroup />
+</template>
 ```
 
 ## Notes

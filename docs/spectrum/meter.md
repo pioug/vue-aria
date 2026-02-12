@@ -23,15 +23,14 @@ import { Flex, Meter, Text } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Meter } from "@vue-spectrum/meter";
+</script>
 
-const usage = h(Meter, {
-  label: "Storage",
-  value: 48,
-  variant: "informative",
-});
+<template>
+  <Meter />
+</template>
 ```
 
 ## Notes

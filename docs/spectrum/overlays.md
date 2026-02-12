@@ -57,51 +57,14 @@ const popoverTrigger = ref<HTMLElement | null>(null);
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Modal, Overlay, Popover, Tray } from "@vue-spectrum/overlays";
+</script>
 
-const component = h(
-  Overlay,
-  { isOpen: true },
-  {
-    default: () => h("div", { role: "dialog" }, "Modal content"),
-  }
-);
-
-const popover = h(
-  Popover,
-  {
-    isOpen: true,
-    triggerRef: document.getElementById("anchor") ?? undefined,
-    placement: "bottom",
-  },
-  {
-    default: () => h("div", { role: "dialog" }, "Popover content"),
-  }
-);
-
-const modal = h(
-  Modal,
-  {
-    isOpen: true,
-    isDismissable: true,
-  },
-  {
-    default: () => h("div", { role: "dialog" }, "Modal content"),
-  }
-);
-
-const tray = h(
-  Tray,
-  {
-    isOpen: true,
-    isFixedHeight: true,
-  },
-  {
-    default: () => h("div", { role: "dialog" }, "Tray content"),
-  }
-);
+<template>
+  <Modal />
+</template>
 ```
 
 ## Notes

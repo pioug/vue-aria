@@ -30,26 +30,14 @@ import { Checkbox, CheckboxGroup, Flex } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Checkbox, CheckboxGroup } from "@vue-spectrum/checkbox";
+</script>
 
-const field = h(
-  CheckboxGroup,
-  {
-    label: "Favorite pets",
-    defaultValue: ["cats"],
-    onChange: (value) => {
-      console.log(value);
-    },
-  },
-  {
-    default: () => [
-      h(Checkbox, { value: "dogs" }, () => "Dogs"),
-      h(Checkbox, { value: "cats" }, () => "Cats"),
-    ],
-  }
-);
+<template>
+  <Checkbox />
+</template>
 ```
 
 ## Notes

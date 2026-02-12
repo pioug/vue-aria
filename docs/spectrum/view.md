@@ -30,15 +30,14 @@ import { Content, Footer, Header, View } from "@vue-spectrum/vue-spectrum";
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { View, Header, Content, Footer } from "@vue-spectrum/view";
+</script>
 
-const panel = h(View, { elementType: "section" }, () => [
-  h(Header, null, () => "Panel title"),
-  h(Content, null, () => "Panel body"),
-  h(Footer, null, () => "Panel footer"),
-]);
+<template>
+  <View />
+</template>
 ```
 
 ## Notes

@@ -42,24 +42,14 @@ const layout = new GridLayout();
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Card, Content, GridLayout, Heading, Image, Text } from "@vue-spectrum/card";
+</script>
 
-const card = h(
-  Card,
-  {},
-  {
-    default: () => [
-      h(Image, { src: "https://i.imgur.com/Z7AzH2c.jpg" }),
-      h(Heading, () => "File"),
-      h(Text, { slot: "detail" }, () => "PNG"),
-      h(Content, () => "Description"),
-    ],
-  }
-);
-
-const layout = new GridLayout();
+<template>
+  <Card />
+</template>
 ```
 
 ## Notes

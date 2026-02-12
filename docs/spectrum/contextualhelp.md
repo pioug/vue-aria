@@ -24,19 +24,16 @@ import { Content, ContextualHelp, Footer, Header, Link } from "@vue-spectrum/vue
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Content, Footer, Header } from "@vue-spectrum/view";
 import { Link } from "@vue-spectrum/link";
 import { ContextualHelp } from "@vue-spectrum/contextualhelp";
+</script>
 
-const component = h(ContextualHelp, null, {
-  default: () => [
-    h(Header, null, () => "Title"),
-    h(Content, null, () => "Help details."),
-    h(Footer, null, () => h(Link, { href: "#" }, () => "Learn more")),
-  ],
-});
+<template>
+  <Link />
+</template>
 ```
 
 ## Notes

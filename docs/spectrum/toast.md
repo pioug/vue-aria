@@ -27,26 +27,15 @@ const showToast = () => {
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Button } from "@vue-spectrum/button";
 import { ToastContainer, ToastQueue } from "@vue-spectrum/toast";
+</script>
 
-const component = h("div", null, [
-  h(ToastContainer),
-  h(
-    Button,
-    {
-      onPress: () =>
-        ToastQueue.positive("Saved successfully", {
-          actionLabel: "Undo",
-        }),
-    },
-    {
-      default: () => "Show toast",
-    }
-  ),
-]);
+<template>
+  <Button />
+</template>
 ```
 
 ## Notes

@@ -35,12 +35,14 @@ import { ActionButton, Button, ClearButton, FieldButton, LogicButton, ToggleButt
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Button, ToggleButton } from "@vue-spectrum/button";
+</script>
 
-const submitButton = h(Button, { variant: "accent" }, () => "Save");
-const toggle = h(ToggleButton, { defaultSelected: true }, () => "Enabled");
+<template>
+  <Button />
+</template>
 ```
 
 ## Notes

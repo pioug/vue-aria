@@ -64,29 +64,15 @@ const passwordFieldProps = {
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { useField } from "@vue-aria/label";
 import { Field } from "@vue-spectrum/label";
+</script>
 
-const { labelProps, fieldProps, descriptionProps, errorMessageProps } = useField({
-  label: "Email",
-  description: "We never share your email.",
-});
-
-const node = h(
-  Field,
-  {
-    label: "Email",
-    labelProps: labelProps.value,
-    descriptionProps: descriptionProps.value,
-    errorMessageProps: errorMessageProps.value,
-    description: "We never share your email.",
-  },
-  {
-    default: () => [h("input", { ...fieldProps.value, type: "email", name: "email" })],
-  }
-);
+<template>
+  <Field />
+</template>
 ```
 
 ## Notes

@@ -31,23 +31,16 @@ import { Content, Heading, IllustratedMessage } from "@vue-spectrum/vue-spectrum
 
 ## Example
 
-```ts
-import { h } from "vue";
+```vue
+<script setup lang="ts">
 import { Content } from "@vue-spectrum/view";
 import { Heading } from "@vue-spectrum/text";
 import { IllustratedMessage } from "@vue-spectrum/illustratedmessage";
+</script>
 
-const component = h(
-  IllustratedMessage,
-  null,
-  {
-    default: () => [
-      h("svg", { "aria-hidden": "true", viewBox: "0 0 48 48" }, [h("path")]),
-      h(Heading, null, () => "Nothing here"),
-      h(Content, null, () => "Create your first item to get started."),
-    ],
-  }
-);
+<template>
+  <Heading />
+</template>
 ```
 
 ## Notes

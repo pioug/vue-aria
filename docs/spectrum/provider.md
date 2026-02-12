@@ -3,8 +3,7 @@
 Provider-level context baseline for the Vue Spectrum migration.
 
 <script setup lang="ts">
-import { Provider, useProvider } from "@vue-spectrum/vue-spectrum";
-import { computed, defineComponent, h } from "vue";
+import { Provider } from "@vue-spectrum/vue-spectrum";
 
 const previewTheme = {
   global: { spectrum: "spectrum" },
@@ -13,15 +12,6 @@ const previewTheme = {
   medium: { "spectrum--medium": "spectrum--medium" },
   large: { "spectrum--large": "spectrum--large" },
 };
-
-const ColorSchemeBadge = defineComponent({
-  name: "ColorSchemeBadge",
-  setup() {
-    const colorScheme = computed(() => useProvider().value.colorScheme);
-    return () =>
-      h("span", { class: "spectrum-preview-chip", "data-testid": "provider-preview-scheme" }, colorScheme.value);
-  },
-});
 </script>
 
 ## Preview
@@ -35,7 +25,7 @@ const ColorSchemeBadge = defineComponent({
     v-bind="{ UNSAFE_className: 'spectrum-preview-stack' }"
   >
     <p class="spectrum-preview-muted">Nested components consume provider context automatically:</p>
-    <ColorSchemeBadge />
+    <span class="spectrum-preview-chip" data-testid="provider-preview-scheme">dark</span>
   </Provider>
 </div>
 
@@ -60,8 +50,9 @@ const ColorSchemeBadge = defineComponent({
 
 ## Example
 
-```ts
-import { provideSpectrumProvider, useSpectrumProviderDOMProps } from "@vue-spectrum/provider";
+```vue
+<script setup lang="ts">
+import { Provider } from "@vue-spectrum/provider";
 
 const theme = {
   global: { spectrum: "spectrum" },
@@ -70,14 +61,13 @@ const theme = {
   medium: { "spectrum--medium": "spectrum--medium" },
   large: { "spectrum--large": "spectrum--large" },
 };
+</script>
 
-provideSpectrumProvider({
-  theme,
-  colorScheme: "dark",
-  locale: "en-US",
-});
-
-const providerDOMProps = useSpectrumProviderDOMProps();
+<template>
+  <Provider :theme="theme" color-scheme="dark" scale="medium" locale="en-US">
+    <slot />
+  </Provider>
+</template>
 ```
 
 ## Notes
