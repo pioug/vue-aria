@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T17:55:24.343Z",
+  "generatedAt": "2026-02-12T17:56:05.581Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 63,
-  "availableLeafCount": 3,
+  "incompletePackageCount": 62,
+  "availableLeafCount": 2,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
-    },
-    {
-      "packageName": "@vue-aria/table",
-      "upstreamPackageName": "@react-aria/table",
-      "upstreamPath": "packages/@react-aria/table"
     },
     {
       "packageName": "@vue-spectrum/s2",
