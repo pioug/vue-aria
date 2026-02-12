@@ -7,6 +7,7 @@ import {
   ref,
   watch,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -18,6 +19,15 @@ import { ColorSwatch } from "./ColorSwatch";
 import { colorPickerPropOptions } from "./types";
 import { parseColor, tryParseColor } from "./utils";
 
+const COLORPICKER_INTL_MESSAGES = {
+  "en-US": {
+    selectedColor: "Selected color",
+  },
+  "fr-FR": {
+    selectedColor: "Couleur sélectionnée",
+  },
+} as const;
+
 export const ColorPicker = defineComponent({
   name: "ColorPicker",
   inheritAttrs: false,
@@ -25,6 +35,10 @@ export const ColorPicker = defineComponent({
     ...colorPickerPropOptions,
   },
   setup(props, { attrs, expose, slots }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLORPICKER_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
 
@@ -207,7 +221,7 @@ export const ColorPicker = defineComponent({
             [
               h(ColorSwatch as any, {
                 color: currentColor.value,
-                "aria-label": "Selected color",
+                label: stringFormatter.value.format("selectedColor"),
               }),
               h(
                 "span",

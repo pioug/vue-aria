@@ -26,7 +26,11 @@ export const ColorSwatch = defineComponent({
         {
           ...(attrs as Record<string, unknown>),
           role: "img",
-          "aria-label": props["aria-label"] ?? props.label ?? toColorLabel(color),
+          "aria-label":
+            props["aria-label"] ??
+            ((attrs as Record<string, unknown>)["aria-label"] as string | undefined) ??
+            props.label ??
+            toColorLabel(color),
           class: classNames(
             "react-spectrum-ColorSwatch",
             `react-spectrum-ColorSwatch--${size}`,

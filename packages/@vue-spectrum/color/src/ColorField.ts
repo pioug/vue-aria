@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
@@ -10,6 +11,15 @@ import { ColorSwatch } from "./ColorSwatch";
 import { colorFieldPropOptions } from "./types";
 import { parseColor, tryParseColor } from "./utils";
 
+const COLORFIELD_INTL_MESSAGES = {
+  "en-US": {
+    selectedColor: "Selected color",
+  },
+  "fr-FR": {
+    selectedColor: "Couleur sélectionnée",
+  },
+} as const;
+
 export const ColorField = defineComponent({
   name: "ColorField",
   inheritAttrs: false,
@@ -17,6 +27,10 @@ export const ColorField = defineComponent({
     ...colorFieldPropOptions,
   },
   setup(props, { attrs, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLORFIELD_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const labelId = useId(undefined, "v-spectrum-colorfield-label");
@@ -139,7 +153,7 @@ export const ColorField = defineComponent({
           h("div", { class: classNames("react-spectrum-ColorField-inputGroup") }, [
             h(ColorSwatch as any, {
               color: resolvedValue.value ?? "#000000",
-              "aria-label": "Selected color",
+              label: stringFormatter.value.format("selectedColor"),
               size: "M",
             }),
             h("input", {

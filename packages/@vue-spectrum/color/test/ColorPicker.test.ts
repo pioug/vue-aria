@@ -1,6 +1,8 @@
 import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { ColorPicker } from "../src";
 
 describe("ColorPicker", () => {
@@ -17,6 +19,7 @@ describe("ColorPicker", () => {
     });
 
     const button = tree.getByRole("button");
+    expect(tree.getByRole("img", { name: "Selected color" })).toBeTruthy();
     await user.click(button);
 
     const dialog = tree.getByRole("dialog");
@@ -31,5 +34,23 @@ describe("ColorPicker", () => {
 
     await user.keyboard("{Escape}");
     expect(tree.queryByRole("dialog")).toBeNull();
+  });
+
+  it("localizes default swatch label from i18n locale", () => {
+    const App = defineComponent({
+      name: "ColorPickerLocalizedSwatchHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(ColorPicker, {
+            label: "Fill",
+            defaultValue: "#f00",
+          });
+      },
+    });
+
+    const tree = render(App);
+    expect(tree.getByRole("img", { name: "Couleur sélectionnée" })).toBeTruthy();
   });
 });
