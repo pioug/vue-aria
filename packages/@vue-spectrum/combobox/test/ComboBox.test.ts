@@ -348,6 +348,30 @@ describe("ComboBox", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("clears unmatched input on blur when menuTrigger is manual", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      menuTrigger: "manual",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.type(input, "No match");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.value).toBe("No match");
+
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+    expect(input.value).toBe("");
+  });
+
   it("keeps menu open when clearing input with menuTrigger input", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
