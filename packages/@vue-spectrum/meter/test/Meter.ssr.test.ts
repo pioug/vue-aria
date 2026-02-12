@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Meter } from "../src";
 
 describe("Meter SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "MeterSSRApp",
       setup() {

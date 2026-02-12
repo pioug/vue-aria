@@ -277,7 +277,7 @@ describe("LabeledValue", () => {
     expect(staticField.text()).toMatch(/10\u201320/);
   });
 
-  it("renders correctly with VNode value", () => {
+  it("renders correctly with ReactElement value", () => {
     const wrapper = mount(LabeledValue, {
       props: {
         "data-testid": "test-id",

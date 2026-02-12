@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { IllustratedMessage } from "../src";
 
 describe("IllustratedMessage SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "IllustratedMessageSSRApp",
       setup() {

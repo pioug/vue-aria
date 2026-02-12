@@ -45,7 +45,7 @@ describe("Meter", () => {
     expect(progressBar.attributes("class")).toContain("testClass");
   });
 
-  it("handles negative values with minValue and maxValue", () => {
+  it("can handle negative values", () => {
     const wrapper = mount(Meter, {
       props: {
         value: 0,
@@ -57,6 +57,7 @@ describe("Meter", () => {
     const progressBar = wrapper.get("[role=\"meter progressbar\"]");
     expect(progressBar.attributes("aria-valuenow")).toBe("0");
     expect(progressBar.attributes("aria-valuetext")).toBe("50%");
+    expect(progressBar.attributes("role")).toBe("meter progressbar");
   });
 
   it("supports aria-label", () => {
