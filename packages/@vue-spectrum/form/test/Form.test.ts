@@ -1,14 +1,19 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, ref, type PropType, type VNode } from "vue";
+import { defineComponent, h, nextTick, ref, type PropType, type VNode } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_SPECTRUM_THEME_CLASS_MAP,
   provideSpectrumProvider,
   useSpectrumProvider,
 } from "@vue-spectrum/provider";
+import { TextField } from "@vue-spectrum/textfield";
+import { Picker } from "@vue-spectrum/picker";
+import { ContextualHelp } from "@vue-spectrum/contextualhelp";
+import { Content, Header } from "@vue-spectrum/view";
 import { Form, useFormValidationErrors } from "../src";
 
 type RenderFunction = () => VNode;
+type PickerItemData = { key: string; label: string };
 
 const ProviderRoot = defineComponent({
   name: "ProviderRoot",
@@ -37,8 +42,20 @@ function mountWithProvider(render: RenderFunction) {
   });
 }
 
+async function flushOverlay() {
+  await nextTick();
+  await Promise.resolve();
+  await nextTick();
+}
+
+const pickerItems: PickerItemData[] = [
+  { key: "one", label: "One" },
+  { key: "two", label: "Two" },
+  { key: "three", label: "Three" },
+];
+
 describe("Form", () => {
-  it("renders a form with noValidate by default", () => {
+  it("should render a form", () => {
     const wrapper = mountWithProvider(() =>
       h(Form, { "aria-label": "Home", "data-testid": "form" })
     );
@@ -50,7 +67,7 @@ describe("Form", () => {
     expect(form.classes()).toContain("spectrum-Form--positionTop");
   });
 
-  it("renders children inside the form", () => {
+  it("should render children inside the form", () => {
     const wrapper = mountWithProvider(() =>
       h(
         Form,
@@ -66,7 +83,7 @@ describe("Form", () => {
     expect(wrapper.get('[data-testid="child-button"]').text()).toBe("Test");
   });
 
-  it("supports forwarded ref UNSAFE_getDOMNode", () => {
+  it("should attach a optional user provided ref to the form", () => {
     const formRef = ref<{
       UNSAFE_getDOMNode: () => HTMLFormElement | null;
     } | null>(null);
@@ -84,6 +101,33 @@ describe("Form", () => {
     expect(formRef.value?.UNSAFE_getDOMNode()).toBe(form);
   });
 
+  it("should context props should be overridden by child", () => {
+    const wrapper = mountWithProvider(() =>
+      h(
+        Form,
+        {
+          "aria-label": "Context form",
+          necessityIndicator: undefined,
+        },
+        {
+          default: () =>
+            h(TextField, {
+              label: "A text field",
+              necessityIndicator: "label",
+              "data-testid": "tfid4",
+            }),
+        }
+      )
+    );
+
+    const input = wrapper.get('[data-testid="tfid4"]');
+    const labelId = (input.attributes("aria-labelledby") ?? "").split(" ")[0];
+    expect(labelId).toBeTruthy();
+    const label = wrapper.get(`#${labelId}`);
+    expect(label.text()).toContain("A text field");
+    expect(label.text().toLowerCase()).toContain("optional");
+  });
+
   it("supports native validation behavior", () => {
     const wrapper = mountWithProvider(() =>
       h(Form, {
@@ -97,7 +141,7 @@ describe("Form", () => {
     expect(form.attributes("novalidate")).toBeUndefined();
   });
 
-  it("supports form attributes and submit handling", async () => {
+  it("supports form attributes", async () => {
     const onSubmit = vi.fn((event: Event) => event.preventDefault());
 
     const wrapper = mountWithProvider(() =>
@@ -186,6 +230,96 @@ describe("Form", () => {
 
     expect(wrapper.get('[data-testid="form"]').attributes("data-qa")).toBe(
       "form-qa-target"
+    );
+  });
+
+  describe("values", () => {
+    it("default value of a picker is empty", () => {
+      const wrapper = mountWithProvider(() =>
+        h(
+          Form,
+          {
+            "aria-label": "Picker form",
+          },
+          {
+            default: () =>
+              h(Picker, {
+                name: "picker",
+                label: "Test Picker",
+                items: pickerItems,
+              }),
+          }
+        )
+      );
+
+      const form = wrapper.get("form").element as HTMLFormElement;
+      const pickerInput = form.elements.namedItem("picker") as HTMLInputElement | null;
+      expect(pickerInput?.value ?? "").toBe("");
+    });
+
+    it("value of a picker can be set", () => {
+      const wrapper = mountWithProvider(() =>
+        h(
+          Form,
+          {
+            "aria-label": "Picker form",
+          },
+          {
+            default: () =>
+              h(Picker, {
+                name: "picker",
+                label: "Test Picker",
+                items: pickerItems,
+                defaultSelectedKey: "one",
+              }),
+          }
+        )
+      );
+
+      const form = wrapper.get("form").element as HTMLFormElement;
+      const pickerInput = form.elements.namedItem("picker") as HTMLInputElement | null;
+      expect(pickerInput?.value).toBe("one");
+    });
+
+    it(
+      "contextual help should not be disabled nor should its dismiss button be disabled",
+      async () => {
+        const wrapper = mountWithProvider(() =>
+          h(
+            Form,
+            {
+              "aria-label": "Test",
+              isDisabled: true,
+            },
+            {
+              default: () =>
+                h(ContextualHelp, null, {
+                  default: () => [
+                    h(Header, null, () => "What is it good for?"),
+                    h(Content, null, () => "Absolutely nothing."),
+                  ],
+                }),
+            }
+          )
+        );
+
+        const trigger = wrapper.get("button");
+        expect(trigger.attributes("disabled")).toBeUndefined();
+
+        await trigger.trigger("click");
+        await flushOverlay();
+
+        const dialog = document.body.querySelector("[role=\"dialog\"]");
+        expect(dialog).not.toBeNull();
+
+        const dismissButton = dialog?.querySelector("button") as HTMLButtonElement | null;
+        if (dismissButton) {
+          expect(dismissButton.disabled).toBe(false);
+          dismissButton.click();
+          await flushOverlay();
+        }
+        wrapper.unmount();
+      }
     );
   });
 
