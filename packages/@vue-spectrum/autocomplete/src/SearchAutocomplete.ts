@@ -1061,8 +1061,8 @@ export const SearchAutocomplete = defineComponent({
                 size: "S",
                 "aria-label":
                   props.loadingState === "loadingMore"
-                    ? "Loading more"
-                    : "Loading",
+                    ? "Loading more..."
+                    : "Loading...",
               }),
             ]
           )
@@ -1083,7 +1083,7 @@ export const SearchAutocomplete = defineComponent({
         ? h(ProgressCircle, {
             isIndeterminate: true,
             size: "S",
-            "aria-label": "Loading",
+            "aria-label": "Loading...",
           })
         : null;
 

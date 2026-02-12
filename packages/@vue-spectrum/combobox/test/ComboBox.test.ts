@@ -1350,7 +1350,9 @@ describe("ComboBox", () => {
       loadingState: "loadingMore",
     });
 
-    expect(tree.getByRole("progressbar")).toBeTruthy();
+    const spinner = tree.getByRole("progressbar");
+    expect(spinner).toBeTruthy();
+    expect(spinner.getAttribute("aria-label")).toBe("Loading more...");
   });
 
   it("delays input loading indicator and hides it for closed filtering state", async () => {
@@ -1392,7 +1394,9 @@ describe("ComboBox", () => {
 
       vi.advanceTimersByTime(1);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
 
       setLoadingState?.("filtering");
       await Promise.resolve();
@@ -1404,7 +1408,9 @@ describe("ComboBox", () => {
 
       vi.advanceTimersByTime(500);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
     } finally {
       vi.useRealTimers();
     }
@@ -1489,7 +1495,9 @@ describe("ComboBox", () => {
 
       vi.advanceTimersByTime(250);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
     } finally {
       vi.useRealTimers();
     }
@@ -1518,7 +1526,9 @@ describe("ComboBox", () => {
 
       vi.advanceTimersByTime(250);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
     } finally {
       vi.useRealTimers();
     }
@@ -1551,7 +1561,9 @@ describe("ComboBox", () => {
       const tree = render(App);
       vi.advanceTimersByTime(500);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
 
       setLoadingState?.("idle");
       await Promise.resolve();
@@ -1579,6 +1591,9 @@ describe("ComboBox", () => {
     const options = within(listbox).getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]?.textContent).toContain("Loading...");
+    expect(within(options[0] as HTMLElement).getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Loading..."
+    );
   });
 
   it("supports static slot syntax with ComboBoxItem and ComboBoxSection", async () => {

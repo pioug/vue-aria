@@ -1004,7 +1004,9 @@ describe("SearchAutocomplete", () => {
       defaultItems: [],
     });
 
-    expect(tree.getAllByRole("progressbar").length).toBeGreaterThan(0);
+    const spinners = tree.getAllByRole("progressbar");
+    expect(spinners.length).toBeGreaterThan(0);
+    expect(spinners[0]?.getAttribute("aria-label")).toBe("Loading...");
   });
 
   it("delays input loading indicator and hides it for closed filtering state", async () => {
@@ -1046,7 +1048,9 @@ describe("SearchAutocomplete", () => {
 
       vi.advanceTimersByTime(1);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
 
       setLoadingState?.("filtering");
       await Promise.resolve();
@@ -1058,7 +1062,9 @@ describe("SearchAutocomplete", () => {
 
       vi.advanceTimersByTime(500);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
     } finally {
       vi.useRealTimers();
     }
@@ -1129,7 +1135,9 @@ describe("SearchAutocomplete", () => {
 
       vi.advanceTimersByTime(250);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
     } finally {
       vi.useRealTimers();
     }
@@ -1172,7 +1180,9 @@ describe("SearchAutocomplete", () => {
 
       vi.advanceTimersByTime(250);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
     } finally {
       vi.useRealTimers();
     }
@@ -1205,7 +1215,9 @@ describe("SearchAutocomplete", () => {
       const tree = render(App);
       vi.advanceTimersByTime(500);
       await Promise.resolve();
-      expect(tree.getByRole("progressbar")).toBeTruthy();
+      expect(tree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+        "Loading..."
+      );
 
       setLoadingState?.("idle");
       await Promise.resolve();
@@ -1213,6 +1225,21 @@ describe("SearchAutocomplete", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("renders loading-more spinner in the listbox with loading label", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      loadingState: "loadingMore",
+    });
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("o");
+
+    const listbox = tree.getByRole("listbox");
+    const spinner = within(listbox).getByRole("progressbar");
+    expect(spinner.getAttribute("aria-label")).toBe("Loading more...");
   });
 
   it("fires onLoadMore when listbox scrolls near the end", () => {

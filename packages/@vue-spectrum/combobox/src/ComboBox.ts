@@ -1269,8 +1269,8 @@ export const ComboBox = defineComponent({
                 size: "S",
                 "aria-label":
                   props.loadingState === "loadingMore"
-                    ? "Loading more"
-                    : "Loading",
+                    ? "Loading more..."
+                    : "Loading...",
               }),
               isEmptyLoadingState
                 ? h(
@@ -1290,7 +1290,7 @@ export const ComboBox = defineComponent({
         ? h(ProgressCircle, {
             isIndeterminate: true,
             size: "S",
-            "aria-label": "Loading",
+            "aria-label": "Loading...",
           })
         : null;
 
