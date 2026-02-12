@@ -24,7 +24,7 @@
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
 | @vue-aria/actiongroup | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/actiongroup | packages/@react-aria/actiongroup |
 | @vue-aria/aria-modal-polyfill | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-aria/aria-modal-polyfill | packages/@react-aria/aria-modal-polyfill |
-| @vue-aria/autocomplete | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/autocomplete | packages/@react-aria/autocomplete |
+| @vue-aria/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/autocomplete | packages/@react-aria/autocomplete |
 | @vue-aria/breadcrumbs | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
 | @vue-aria/button | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
 | @vue-aria/calendar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |

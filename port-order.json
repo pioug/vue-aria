@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T18:00:23.391Z",
+  "generatedAt": "2026-02-12T18:01:15.420Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 57,
-  "availableLeafCount": 4,
+  "incompletePackageCount": 56,
+  "availableLeafCount": 3,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/autocomplete",
-      "upstreamPackageName": "@react-aria/autocomplete",
-      "upstreamPath": "packages/@react-aria/autocomplete"
-    },
     {
       "packageName": "@vue-aria/dnd",
       "upstreamPackageName": "@react-aria/dnd",
