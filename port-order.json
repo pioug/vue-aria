@@ -1,9 +1,14 @@
 {
-  "generatedAt": "2026-02-12T17:16:45.557Z",
+  "generatedAt": "2026-02-12T17:18:19.892Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 91,
+  "incompletePackageCount": 90,
   "availableLeafCount": 11,
   "availableLeaves": [
+    {
+      "packageName": "@vue-aria/breadcrumbs",
+      "upstreamPackageName": "@react-aria/breadcrumbs",
+      "upstreamPath": "packages/@react-aria/breadcrumbs"
+    },
     {
       "packageName": "@vue-aria/calendar",
       "upstreamPackageName": "@react-aria/calendar",
@@ -23,11 +28,6 @@
       "packageName": "@vue-aria/focus",
       "upstreamPackageName": "@react-aria/focus",
       "upstreamPath": "packages/@react-aria/focus"
-    },
-    {
-      "packageName": "@vue-aria/link",
-      "upstreamPackageName": "@react-aria/link",
-      "upstreamPath": "packages/@react-aria/link"
     },
     {
       "packageName": "@vue-aria/slider",

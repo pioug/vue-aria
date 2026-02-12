@@ -537,3 +537,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and possible toggle interaction timing differences until full composable conversion.
 - Removal plan: Replace React-specific event/attribute types and runtime assumptions with Vue-native equivalents and port upstream toggle interaction tests for parity.
+
+- Package: `@vue-aria/link`
+- Upstream reference: `packages/@react-aria/link` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React event typing (`React.MouseEvent`) and React runtime semantics through focus/press hooks.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and possible press/navigation event timing differences until full composable conversion.
+- Removal plan: Replace React event typing/runtime assumptions with Vue-native event patterns and port upstream link behavior tests for parity.
