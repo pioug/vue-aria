@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 26 |
-| Passing tests | 26 |
+| Ported tests | 27 |
+| Passing tests | 27 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -71,7 +71,7 @@
 | @vue-aria/toast | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/toast | packages/@react-aria/toast |
 | @vue-aria/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toggle | packages/@react-aria/toggle |
 | @vue-aria/toolbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toolbar | packages/@react-aria/toolbar |
-| @vue-aria/tooltip | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tooltip | packages/@react-aria/tooltip |
+| @vue-aria/tooltip | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/tooltip | packages/@react-aria/tooltip |
 | @vue-aria/tree | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tree | packages/@react-aria/tree |
 | @vue-aria/utils | complete | 8 | 8 | 8 | 0 | 0 | 0 | 0 | true | @react-aria/utils | packages/@react-aria/utils |
 | @vue-aria/virtualizer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/virtualizer | packages/@react-aria/virtualizer |
