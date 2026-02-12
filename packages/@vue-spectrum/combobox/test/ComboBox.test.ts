@@ -59,6 +59,14 @@ describe("ComboBox", () => {
     expect(combobox.getAttribute("name")).toBe("test-name");
   });
 
+  it("supports custom data attributes", () => {
+    const tree = renderComponent({
+      "data-testid": "combobox-root",
+    });
+
+    expect(tree.getByTestId("combobox-root")).toBeTruthy();
+  });
+
   it("supports formValue=\"key\" with hidden input value", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
@@ -264,6 +272,20 @@ describe("ComboBox", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("closes the menu when no items match after opening", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.type(input, "One");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    await user.type(input, "z");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.getAttribute("aria-expanded")).toBe("false");
+  });
+
   it("does not open on input when menuTrigger is manual", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
@@ -317,6 +339,22 @@ describe("ComboBox", () => {
       within(readOnlyTree.container as HTMLElement).getByRole("button") as HTMLElement
     );
     expect(readOnlyTree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("does not open on keyboard when readonly and keeps value", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      isReadOnly: true,
+      defaultSelectedKey: "2",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.type(input, "One");
+    await user.keyboard("{ArrowDown}");
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.value).toBe("Two");
   });
 
   it("keeps menu open when clearing input with menuTrigger focus", async () => {

@@ -270,6 +270,20 @@ describe("SearchAutocomplete", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("closes the menu when no items match after opening", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("One");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    await user.keyboard("z");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.getAttribute("aria-expanded")).toBe("false");
+  });
+
   it("does not open on input when menuTrigger is manual", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
