@@ -75,7 +75,7 @@ describe("ProgressCircle", () => {
     );
   });
 
-  it("handles submask defaults", () => {
+  it("shows none of the circle for 0%", () => {
     const wrapper = mount(ProgressCircle, {
       props: {
         ariaLabel: "Progress",
@@ -149,7 +149,7 @@ describe("ProgressCircle", () => {
     );
   });
 
-  it("handles negative values with minValue and maxValue", () => {
+  it("can handle negative values with minValue and maxValue", () => {
     const wrapper = mount(ProgressCircle, {
       props: {
         ariaLabel: "Progress",

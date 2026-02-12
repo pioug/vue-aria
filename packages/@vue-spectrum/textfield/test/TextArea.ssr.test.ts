@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { TextArea } from "../src";
 
 describe("TextArea SSR", () => {
-  it("renders text area", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "TextAreaSSRApp",
       setup() {

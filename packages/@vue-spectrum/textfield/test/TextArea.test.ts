@@ -189,7 +189,7 @@ describe("TextArea", () => {
     }
   });
 
-  it("auto-resizes when content grows", async () => {
+  it("default can adjust after text \"grows\"", async () => {
     let scrollHeight = 64;
     const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
       HTMLTextAreaElement.prototype,
@@ -234,7 +234,7 @@ describe("TextArea", () => {
     }
   });
 
-  it("auto-resizes quiet variant when content grows", async () => {
+  it("isQuiet can adjust after text \"grows\"", async () => {
     let scrollHeight = 52;
     const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
       HTMLTextAreaElement.prototype,
@@ -279,7 +279,7 @@ describe("TextArea", () => {
     }
   });
 
-  it("does not auto-resize when explicit height style is set", async () => {
+  it("default does not change height when a height prop is set", async () => {
     let scrollHeight = 60;
     const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
       HTMLTextAreaElement.prototype,

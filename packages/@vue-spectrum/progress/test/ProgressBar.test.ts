@@ -62,7 +62,7 @@ describe("ProgressBar", () => {
     expect(progressBar.attributes("class")).toContain("testClass");
   });
 
-  it("handles negative values when minValue and maxValue are set", () => {
+  it("Can handle negative values", () => {
     const wrapper = mount(ProgressBar, {
       props: {
         value: 0,
@@ -76,7 +76,7 @@ describe("ProgressBar", () => {
     expect(progressBar.attributes("aria-valuetext")).toBe("50%");
   });
 
-  it("warns user if no aria-label or visible label is provided", () => {
+  it("warns user if no aria-label is provided", () => {
     const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
     mount(ProgressBar, { props: { value: 25 } });
     expect(spyWarn).toHaveBeenCalledWith(

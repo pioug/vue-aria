@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { TextField } from "../src";
 
 describe("TextField SSR", () => {
-  it("renders text field", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "TextFieldSSRApp",
       setup() {
