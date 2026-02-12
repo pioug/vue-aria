@@ -28,7 +28,7 @@
 | @vue-aria/breadcrumbs | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
 | @vue-aria/button | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/button | packages/@react-aria/button |
 | @vue-aria/calendar | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/calendar | packages/@react-aria/calendar |
-| @vue-aria/checkbox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/checkbox | packages/@react-aria/checkbox |
+| @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
 | @vue-aria/collections | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/collections | packages/@react-aria/collections |
 | @vue-aria/color | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/color | packages/@react-aria/color |
 | @vue-aria/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/combobox | packages/@react-aria/combobox |

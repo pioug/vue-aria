@@ -572,3 +572,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet fully Vue-native; consumers should expect inherited React runtime/type dependencies and possible breadcrumb interaction timing differences until full composable conversion.
 - Removal plan: Replace inherited React runtime/type assumptions in dependent interaction layers with Vue-native composables/types and port upstream breadcrumb tests for parity.
+
+- Package: `@vue-aria/checkbox`
+- Upstream reference: `packages/@react-aria/checkbox` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks/types (`useEffect`, `useMemo`, `useRef`, React input/label attribute types) across checkbox and checkbox-group interaction/validation wiring.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential checkbox validation/interaction timing differences until full composable conversion.
+- Removal plan: Replace React hook/type usage with Vue composables/reactivity equivalents and port upstream checkbox behavior tests for parity.
