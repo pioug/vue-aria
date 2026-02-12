@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:26:43.286Z",
+  "generatedAt": "2026-02-12T15:27:36.058Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 165,
-  "availableLeafCount": 37,
+  "incompletePackageCount": 164,
+  "availableLeafCount": 36,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -158,11 +158,6 @@
       "packageName": "@vue-types/menu",
       "upstreamPackageName": "@react-types/menu",
       "upstreamPath": "packages/@react-types/menu"
-    },
-    {
-      "packageName": "@vue-types/meter",
-      "upstreamPackageName": "@react-types/meter",
-      "upstreamPath": "packages/@react-types/meter"
     },
     {
       "packageName": "@vue-types/numberfield",

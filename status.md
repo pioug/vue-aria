@@ -199,7 +199,7 @@
 | @vue-types/list | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/list | packages/@react-types/list |
 | @vue-types/listbox | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/listbox | packages/@react-types/listbox |
 | @vue-types/menu | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/menu | packages/@react-types/menu |
-| @vue-types/meter | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/meter | packages/@react-types/meter |
+| @vue-types/meter | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/meter | packages/@react-types/meter |
 | @vue-types/numberfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/numberfield | packages/@react-types/numberfield |
 | @vue-types/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/overlays | packages/@react-types/overlays |
 | @vue-types/progress | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/progress | packages/@react-types/progress |
