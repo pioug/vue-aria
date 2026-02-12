@@ -592,6 +592,58 @@ describe("ComboBox", () => {
     expect(input.value).toBe("Two");
   });
 
+  it("retains selected key on Tab when input value is unchanged", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const App = defineComponent({
+      name: "ComboBoxRetainSelectedKeyTabApp",
+      setup() {
+        return () =>
+          h("div", [
+            h(ComboBox, {
+              label: "Test",
+              items,
+              allowsCustomValue: true,
+              selectedKey: "2",
+              onSelectionChange,
+            }),
+            h("button", { type: "button" }, "Next"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const nextButton = tree.getByRole("button", { name: "Next" });
+
+    await user.click(input);
+
+    fireEvent.keyDown(input, { key: "Tab" });
+    (nextButton as HTMLElement).focus();
+    fireEvent.keyUp(nextButton as HTMLElement, { key: "Tab" });
+    await Promise.resolve();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("Two");
+  });
+
+  it("retains selected key on Enter when input value is unchanged", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("{Enter}");
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("Two");
+  });
+
   it("does not select the focused item on blur", async () => {
     const user = userEvent.setup();
     const onInputChange = vi.fn();
