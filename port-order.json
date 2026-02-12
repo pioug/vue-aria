@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T17:35:04.003Z",
+  "generatedAt": "2026-02-12T17:36:12.295Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 79,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 78,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
       "upstreamPackageName": "@react-aria/calendar",
       "upstreamPath": "packages/@react-aria/calendar"
-    },
-    {
-      "packageName": "@vue-aria/collections",
-      "upstreamPackageName": "@react-aria/collections",
-      "upstreamPath": "packages/@react-aria/collections"
     },
     {
       "packageName": "@vue-aria/datepicker",

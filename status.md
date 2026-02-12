@@ -29,7 +29,7 @@
 | @vue-aria/button | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
 | @vue-aria/calendar | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/calendar | packages/@react-aria/calendar |
 | @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
-| @vue-aria/collections | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/collections | packages/@react-aria/collections |
+| @vue-aria/collections | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
 | @vue-aria/color | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/color | packages/@react-aria/color |
 | @vue-aria/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/combobox | packages/@react-aria/combobox |
 | @vue-aria/datepicker | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/datepicker | packages/@react-aria/datepicker |
