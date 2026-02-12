@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 67 |
-| Passing tests | 67 |
+| Ported tests | 68 |
+| Passing tests | 68 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -28,7 +28,7 @@
 | @vue-aria/breadcrumbs | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
 | @vue-aria/button | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
 | @vue-aria/calendar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
-| @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
+| @vue-aria/checkbox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
 | @vue-aria/collections | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
 | @vue-aria/color | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/color | packages/@react-aria/color |
 | @vue-aria/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/combobox | packages/@react-aria/combobox |
@@ -162,7 +162,7 @@
 | @vue-stately/searchfield | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
 | @vue-stately/select | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/select | packages/@react-stately/select |
 | @vue-stately/selection | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/selection | packages/@react-stately/selection |
-| @vue-stately/slider | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/slider | packages/@react-stately/slider |
+| @vue-stately/slider | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/slider | packages/@react-stately/slider |
 | @vue-stately/steplist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/steplist | packages/@react-stately/steplist |
 | @vue-stately/table | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/table | packages/@react-stately/table |
 | @vue-stately/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tabs | packages/@react-stately/tabs |

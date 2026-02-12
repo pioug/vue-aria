@@ -196,13 +196,14 @@ export function useSliderState<T extends number | number[]>(props: SliderStateOp
     defaultValue,
     onChange
   );
-  let [initialValues] = useState(values);
-  const [isDraggings, setDraggingsState] = useState<boolean[]>(new Array(values.length).fill(false));
-  const isEditablesRef = useRef<boolean[]>(new Array(values.length).fill(true));
+  let [initialValues] = useState(values.value);
+  const [isDraggings, setDraggingsState] = useState<boolean[]>(new Array(values.value.length).fill(false));
+  const isEditablesRef = useRef<boolean[]>(new Array(values.value.length).fill(true));
   const [focusedIndex, setFocusedIndex] = useState<number | undefined>(undefined);
 
-  const valuesRef = useRef<number[]>(values);
+  const valuesRef = useRef<number[]>(values.value);
   const isDraggingsRef = useRef<boolean[]>(isDraggings);
+  valuesRef.current = values.value;
 
   let setValues = (values: number[]) => {
     valuesRef.current = values;
@@ -219,10 +220,10 @@ export function useSliderState<T extends number | number[]>(props: SliderStateOp
   }
 
   function getThumbMinValue(index: number) {
-    return index === 0 ? minValue : values[index - 1];
+    return index === 0 ? minValue : valuesRef.current[index - 1];
   }
   function getThumbMaxValue(index: number) {
-    return index === values.length - 1 ? maxValue : values[index + 1];
+    return index === valuesRef.current.length - 1 ? maxValue : valuesRef.current[index + 1];
   }
 
   function isThumbEditable(index: number) {
@@ -251,7 +252,7 @@ export function useSliderState<T extends number | number[]>(props: SliderStateOp
       return;
     }
     if (dragging) {
-      valuesRef.current = values;
+      valuesRef.current = values.value;
     }
 
     const wasDragging = isDraggingsRef.current[index];
@@ -283,27 +284,29 @@ export function useSliderState<T extends number | number[]>(props: SliderStateOp
 
   function incrementThumb(index: number, stepSize: number = 1) {
     let s = Math.max(stepSize, step);
-    updateValue(index, snapValueToStep(values[index] + s, minValue, maxValue, step));
+    updateValue(index, snapValueToStep(valuesRef.current[index] + s, minValue, maxValue, step));
   }
 
   function decrementThumb(index: number, stepSize: number = 1) {
     let s = Math.max(stepSize, step);
-    updateValue(index, snapValueToStep(values[index] - s, minValue, maxValue, step));
+    updateValue(index, snapValueToStep(valuesRef.current[index] - s, minValue, maxValue, step));
   }
 
   return {
-    values: values,
+    get values() {
+      return valuesRef.current;
+    },
     defaultValues: props.defaultValue !== undefined ? defaultValue : initialValues,
-    getThumbValue: (index: number) => values[index],
+    getThumbValue: (index: number) => valuesRef.current[index],
     setThumbValue: updateValue,
     setThumbPercent,
-    isThumbDragging: (index: number) => isDraggings[index],
+    isThumbDragging: (index: number) => isDraggingsRef.current[index],
     setThumbDragging: updateDragging,
     focusedThumb: focusedIndex,
     setFocusedThumb: setFocusedIndex,
-    getThumbPercent: (index: number) => getValuePercent(values[index]),
+    getThumbPercent: (index: number) => getValuePercent(valuesRef.current[index]),
     getValuePercent,
-    getThumbValueLabel: (index: number) => getFormattedValue(values[index]),
+    getThumbValueLabel: (index: number) => getFormattedValue(valuesRef.current[index]),
     getFormattedValue,
     getThumbMinValue,
     getThumbMaxValue,
