@@ -310,7 +310,7 @@ describe("Button package", () => {
     expect(document.activeElement).toBe(getInteractiveElement(wrapper).element);
   });
 
-  it("Button shows pending loader after delay and blocks repeated presses", async () => {
+  it("displays a spinner after a short delay when isPending prop is true", async () => {
     vi.useFakeTimers();
     const onPress = vi.fn();
     const user = userEvent.setup({
@@ -364,7 +364,7 @@ describe("Button package", () => {
     vi.useRealTimers();
   });
 
-  it("Button removes href from anchor while pending", () => {
+  it("removes href attribute from anchor element when isPending is true", () => {
     const wrapper = mount(Button, {
       props: {
         elementType: "a",
@@ -379,7 +379,7 @@ describe("Button package", () => {
     expect(wrapper.get("a").attributes("href")).toBeUndefined();
   });
 
-  it("Button prevents default keyboard activation for non-submit types", () => {
+  it("prevents default for non-submit types", () => {
     const wrapper = mount(Button, {
       props: {
         type: "button",
@@ -451,7 +451,7 @@ describe("Button package", () => {
     expect(keyupSpace.defaultPrevented).toBe(false);
   });
 
-  it("Button submit in form using space does not prevent default on keyup", async () => {
+  it("submit in form using space", async () => {
     const user = userEvent.setup();
     let keyupEvent: KeyboardEvent | undefined;
 
@@ -501,7 +501,7 @@ describe("Button package", () => {
     }
   });
 
-  it("Button submit in form using enter does not prevent default on keydown", async () => {
+  it("submit in form using enter", async () => {
     const user = userEvent.setup();
     let keydownEvent: KeyboardEvent | undefined;
 

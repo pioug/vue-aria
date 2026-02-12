@@ -75,7 +75,7 @@ describe("ToggleButton", () => {
     expect(button.attributes("aria-pressed")).toBe("true");
   });
 
-  it("allows custom props to be passed through", () => {
+  it("allows custom props to be passed through to the button", () => {
     const wrapper = mount(ToggleButton, {
       props: {
         "data-foo": "bar",

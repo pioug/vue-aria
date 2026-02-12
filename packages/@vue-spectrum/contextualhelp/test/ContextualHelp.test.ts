@@ -42,7 +42,7 @@ describe("ContextualHelp", () => {
     wrapper.unmount();
   });
 
-  it("renders a quiet action button", () => {
+  it("renders quiet action button", () => {
     const wrapper = mount(ContextualHelp, {
       slots: {
         default: () => h(Header, null, () => "Test title"),
@@ -72,7 +72,7 @@ describe("ContextualHelp", () => {
     wrapper.unmount();
   });
 
-  it("renders content and footer link", async () => {
+  it("renders content", async () => {
     const wrapper = mount(ContextualHelp, {
       attachTo: document.body,
       slots: {
@@ -99,17 +99,45 @@ describe("ContextualHelp", () => {
     await flushOverlay();
 
     expect(document.body.textContent).toContain("Help content");
-    const footer = document.body.querySelector("footer");
-    expect(footer).not.toBeNull();
-    expect(footer?.textContent).toContain("Test link");
-    expect(footer?.className).toContain(
-      "react-spectrum-ContextualHelp-footer"
-    );
 
     wrapper.unmount();
   });
 
-  it("includes default aria-label", () => {
+  it("renders a link", async () => {
+    const wrapper = mount(ContextualHelp, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h(Header, null, () => "Test title"),
+          h(Content, null, () => "Help content"),
+          h(
+            Footer,
+            null,
+            () =>
+              h(
+                Link,
+                null,
+                {
+                  default: () => "Test link",
+                }
+              )
+          ),
+        ],
+      },
+    });
+
+    await wrapper.get("button").trigger("click");
+    await flushOverlay();
+
+    expect(document.body.textContent).toContain("Test link");
+    const footer = document.body.querySelector("footer");
+    expect(footer).not.toBeNull();
+    expect(footer?.className).toContain("react-spectrum-ContextualHelp-footer");
+
+    wrapper.unmount();
+  });
+
+  it("includes a default aria-label", () => {
     const wrapper = mount(ContextualHelp, {
       slots: {
         default: () => h(Header, null, () => "Test title"),
@@ -120,7 +148,7 @@ describe("ContextualHelp", () => {
     expect(button.attributes("aria-label")).toBe("Help");
   });
 
-  it("includes default aria-label for info variant", () => {
+  it("includes a default aria-label for info variant", () => {
     const wrapper = mount(ContextualHelp, {
       props: {
         variant: "info",
@@ -158,7 +186,7 @@ describe("ContextualHelp", () => {
     expect(button.attributes("aria-label")).toBe("Aide");
   });
 
-  it("supports custom aria-label", () => {
+  it("supports a custom aria-label", () => {
     const wrapper = mount(ContextualHelp, {
       props: {
         "aria-label": "test",
@@ -172,7 +200,7 @@ describe("ContextualHelp", () => {
     expect(button.attributes("aria-label")).toBe("test");
   });
 
-  it("supports custom aria-labelledby", () => {
+  it("supports a custom aria-labelledby", () => {
     const wrapper = mount(ContextualHelp, {
       props: {
         "aria-labelledby": "test",
