@@ -188,7 +188,7 @@
 | @vue-types/contextualhelp | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/contextualhelp | packages/@react-types/contextualhelp |
 | @vue-types/datepicker | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/datepicker | packages/@react-types/datepicker |
 | @vue-types/dialog | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/dialog | packages/@react-types/dialog |
-| @vue-types/divider | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/divider | packages/@react-types/divider |
+| @vue-types/divider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/divider | packages/@react-types/divider |
 | @vue-types/form | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/form | packages/@react-types/form |
 | @vue-types/grid | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/grid | packages/@react-types/grid |
 | @vue-types/illustratedmessage | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/illustratedmessage | packages/@react-types/illustratedmessage |
