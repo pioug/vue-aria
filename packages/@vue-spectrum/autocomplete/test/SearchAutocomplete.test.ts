@@ -428,6 +428,43 @@ describe("SearchAutocomplete", () => {
     expect(input.getAttribute("aria-invalid")).toBe("true");
   });
 
+  it("sets aria-invalid when isInvalid is true", () => {
+    const tree = renderComponent({
+      isInvalid: true,
+    });
+
+    const input = tree.getByRole("combobox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("applies invalid and valid state classes on the root", () => {
+    const invalidTree = renderComponent({
+      isInvalid: true,
+    });
+    const invalidRoot = invalidTree.container.querySelector(
+      ".react-spectrum-SearchAutocomplete"
+    );
+    expect(invalidRoot?.classList.contains("is-invalid")).toBe(true);
+    expect(invalidRoot?.classList.contains("is-valid")).toBe(false);
+
+    const validTree = renderComponent({
+      validationState: "valid",
+    });
+    const validRoot = validTree.container.querySelector(
+      ".react-spectrum-SearchAutocomplete"
+    );
+    expect(validRoot?.classList.contains("is-valid")).toBe(true);
+    expect(validRoot?.classList.contains("is-invalid")).toBe(false);
+  });
+
+  it("shows clear button when validationState is provided and input is empty", () => {
+    const tree = renderComponent({
+      validationState: "invalid",
+    });
+
+    expect(tree.getByLabelText("Clear search")).toBeTruthy();
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({

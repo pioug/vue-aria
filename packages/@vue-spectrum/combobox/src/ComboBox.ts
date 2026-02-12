@@ -791,6 +791,13 @@ export const ComboBox = defineComponent({
       return slotModel.value.items;
     });
     const isAsync = computed(() => props.loadingState !== undefined);
+    const resolvedValidationState = computed<"valid" | "invalid" | undefined>(() => {
+      if (props.validationState !== undefined) {
+        return props.validationState;
+      }
+
+      return props.isInvalid ? "invalid" : undefined;
+    });
 
     const controlledSelectedKey =
       props.selectedKey === undefined
@@ -1355,6 +1362,10 @@ export const ComboBox = defineComponent({
               "is-open": state.isOpen.value,
               "is-disabled": Boolean(props.isDisabled),
               "is-readOnly": Boolean(props.isReadOnly),
+              "is-invalid":
+                resolvedValidationState.value === "invalid" && !Boolean(props.isDisabled),
+              "is-valid":
+                resolvedValidationState.value === "valid" && !Boolean(props.isDisabled),
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined
@@ -1368,7 +1379,14 @@ export const ComboBox = defineComponent({
               class: classNames("spectrum-FieldLabel"),
             }), props.label)
             : null,
-          h("div", { class: classNames("react-spectrum-ComboBox-field") }, [
+          h("div", {
+            class: classNames("react-spectrum-ComboBox-field", {
+              "is-invalid":
+                resolvedValidationState.value === "invalid" && !Boolean(props.isDisabled),
+              "is-valid":
+                resolvedValidationState.value === "valid" && !Boolean(props.isDisabled),
+            }),
+          }, [
             h("input", mergeProps(inputProps.value, {
               ref: (value: unknown) => {
                 inputRef.value = value as HTMLInputElement | null;

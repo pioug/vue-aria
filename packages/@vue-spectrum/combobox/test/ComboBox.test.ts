@@ -839,6 +839,31 @@ describe("ComboBox", () => {
     expect(input.getAttribute("aria-invalid")).toBe("true");
   });
 
+  it("sets aria-invalid when isInvalid is true", () => {
+    const tree = renderComponent({
+      isInvalid: true,
+    });
+
+    const input = tree.getByRole("combobox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("applies invalid and valid state classes on the root", () => {
+    const invalidTree = renderComponent({
+      isInvalid: true,
+    });
+    const invalidRoot = invalidTree.container.querySelector(".react-spectrum-ComboBox");
+    expect(invalidRoot?.classList.contains("is-invalid")).toBe(true);
+    expect(invalidRoot?.classList.contains("is-valid")).toBe(false);
+
+    const validTree = renderComponent({
+      validationState: "valid",
+    });
+    const validRoot = validTree.container.querySelector(".react-spectrum-ComboBox");
+    expect(validRoot?.classList.contains("is-valid")).toBe(true);
+    expect(validRoot?.classList.contains("is-invalid")).toBe(false);
+  });
+
   it("uses defaultSelectedKey to initialize selected input text", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({

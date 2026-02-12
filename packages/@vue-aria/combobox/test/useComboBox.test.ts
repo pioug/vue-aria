@@ -72,6 +72,30 @@ describe("useComboBox", () => {
     scope.stop();
   });
 
+  it("sets aria-invalid when isInvalid is true", () => {
+    const scope = effectScope();
+    let inputProps!: ReturnType<typeof useComboBox>["inputProps"];
+    scope.run(() => {
+      const state = useComboBoxState({
+        collection: items,
+      });
+
+      inputProps = useComboBox(
+        {
+          isInvalid: true,
+          inputRef: document.createElement("input"),
+          listBoxRef: document.createElement("ul"),
+          popoverRef: document.createElement("div"),
+          "aria-label": "Animals",
+        },
+        state
+      ).inputProps;
+    });
+
+    expect(inputProps.value["aria-invalid"]).toBe(true);
+    scope.stop();
+  });
+
   it("opens with arrow keys and sets focus strategy", () => {
     const scope = effectScope();
     let inputProps!: ReturnType<typeof useComboBox>["inputProps"];
