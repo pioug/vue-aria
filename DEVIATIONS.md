@@ -271,3 +271,10 @@ Track every divergence from upstream in this file.
 - Reason: This package was ported incrementally to preserve dependency order and keep testing utility surfaces aligned with upstream naming.
 - User impact: This package is not yet Vue-native; consumers should treat it as transitional and expect React-centric testing dependencies.
 - Removal plan: Replace React testing dependencies and re-exports with Vue Test Utils/Vue Testing Library equivalents, then clear this deviation.
+
+- Package: `@vue-spectrum/story-utils`
+- Upstream reference: `packages/@react-spectrum/story-utils` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still contains React-centric story helpers/components (`React.Component`, JSX, and React peer dependencies).
+- Reason: This package was ported incrementally to preserve dependency order and keep story utility APIs aligned with upstream naming.
+- User impact: Story utility helpers are not yet Vue-native; consumers should treat this package as transitional and expect React-centric story tooling dependencies.
+- Removal plan: Replace React-specific story helpers with Vue-compatible Storybook utilities and remove React peer dependency requirements.

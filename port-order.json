@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:55:11.054Z",
+  "generatedAt": "2026-02-12T15:56:47.501Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 138,
-  "availableLeafCount": 17,
+  "incompletePackageCount": 137,
+  "availableLeafCount": 16,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -23,11 +23,6 @@
       "packageName": "@vue-aria/landmark",
       "upstreamPackageName": "@react-aria/landmark",
       "upstreamPath": "packages/@react-aria/landmark"
-    },
-    {
-      "packageName": "@vue-spectrum/story-utils",
-      "upstreamPackageName": "@react-spectrum/story-utils",
-      "upstreamPath": "packages/@react-spectrum/story-utils"
     },
     {
       "packageName": "@vue-spectrum/theme-express",

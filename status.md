@@ -121,7 +121,7 @@
 | @vue-spectrum/slider | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/slider | packages/@react-spectrum/slider |
 | @vue-spectrum/statuslight | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
 | @vue-spectrum/steplist | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/steplist | packages/@react-spectrum/steplist |
-| @vue-spectrum/story-utils | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
+| @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
 | @vue-spectrum/switch | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/switch | packages/@react-spectrum/switch |
 | @vue-spectrum/table | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/table | packages/@react-spectrum/table |
