@@ -6,6 +6,7 @@ import {
   ref,
   watch,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -15,6 +16,17 @@ import {
 import { ColorThumb } from "./ColorThumb";
 import { colorAreaPropOptions } from "./types";
 import { hexToHsl, hslToHex, parseColor, tryParseColor } from "./utils";
+
+const COLORAREA_INTL_MESSAGES = {
+  "en-US": {
+    colorArea: "Color area",
+    colorPosition: "Color position",
+  },
+  "fr-FR": {
+    colorArea: "Zone de couleur",
+    colorPosition: "Position de la couleur",
+  },
+} as const;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -37,6 +49,10 @@ export const ColorArea = defineComponent({
     ...colorAreaPropOptions,
   },
   setup(props, { attrs, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLORAREA_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
 
     const normalizeColor = (value: string | null | undefined) => {
@@ -145,7 +161,11 @@ export const ColorArea = defineComponent({
           },
           tabindex: props.isDisabled ? undefined : 0,
           role: "application",
-          "aria-label": props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Color area",
+          "aria-label":
+            props["aria-label"] ??
+            props.ariaLabel ??
+            props.label ??
+            stringFormatter.value.format("colorArea"),
           "aria-labelledby": props["aria-labelledby"] ?? props.ariaLabelledby,
           "aria-describedby": props["aria-describedby"] ?? props.ariaDescribedby,
           class: classNames(
@@ -177,7 +197,7 @@ export const ColorArea = defineComponent({
             color: parseColor(currentColor.value),
             x: thumbX.value,
             y: thumbY.value,
-            "aria-label": "Color position",
+            ariaLabel: stringFormatter.value.format("colorPosition"),
           }),
         ]
       );

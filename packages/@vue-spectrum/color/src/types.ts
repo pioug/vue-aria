@@ -111,6 +111,7 @@ export interface SpectrumColorThumbProps {
   x?: number | undefined;
   y?: number | undefined;
   "aria-label"?: string | undefined;
+  ariaLabel?: string | undefined;
   isHidden?: boolean | undefined;
   size?: number | undefined;
   UNSAFE_className?: string | undefined;
@@ -437,6 +438,10 @@ export const colorThumbPropOptions = {
     default: undefined,
   },
   "aria-label": {
+    type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  ariaLabel: {
     type: String as PropType<string | undefined>,
     default: undefined,
   },

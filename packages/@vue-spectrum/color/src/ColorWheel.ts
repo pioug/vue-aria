@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -9,6 +10,17 @@ import { ColorThumb } from "./ColorThumb";
 import { colorWheelPropOptions } from "./types";
 import { hexToHsl, hslToHex, tryParseColor } from "./utils";
 
+const COLORWHEEL_INTL_MESSAGES = {
+  "en-US": {
+    hue: "Hue",
+    hueThumb: "Hue thumb",
+  },
+  "fr-FR": {
+    hue: "Teinte",
+    hueThumb: "Curseur de teinte",
+  },
+} as const;
+
 export const ColorWheel = defineComponent({
   name: "ColorWheel",
   inheritAttrs: false,
@@ -16,6 +28,10 @@ export const ColorWheel = defineComponent({
     ...colorWheelPropOptions,
   },
   setup(props, { attrs, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLORWHEEL_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
 
     const normalizeColor = (value: string | null | undefined): string => {
@@ -107,7 +123,7 @@ export const ColorWheel = defineComponent({
               x: ((hueValue.value % 360) / 360) * 100,
               y: 50,
               size: 10,
-              "aria-label": "Hue thumb",
+              ariaLabel: stringFormatter.value.format("hueThumb"),
             }),
           ]),
           h("input", {
@@ -117,7 +133,11 @@ export const ColorWheel = defineComponent({
             step: 1,
             value: hueValue.value,
             disabled: props.isDisabled,
-            "aria-label": props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Hue",
+            "aria-label":
+              props["aria-label"] ??
+              props.ariaLabel ??
+              props.label ??
+              stringFormatter.value.format("hue"),
             "aria-labelledby": props["aria-labelledby"] ?? props.ariaLabelledby,
             "aria-describedby": props["aria-describedby"] ?? props.ariaDescribedby,
             class: classNames("react-spectrum-ColorWheel-input"),

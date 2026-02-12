@@ -21,7 +21,10 @@ export const ColorThumb = defineComponent({
       return h("span", {
         ...(attrs as Record<string, unknown>),
         role: "presentation",
-        "aria-label": props["aria-label"],
+        "aria-label":
+          props.ariaLabel ??
+          props["aria-label"] ??
+          ((attrs as Record<string, unknown>)["aria-label"] as string | undefined),
         class: classNames(
           "react-spectrum-ColorThumb",
           styleProps.class as ClassValue | undefined,
