@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:23:29.502Z",
+  "generatedAt": "2026-02-12T18:24:01.144Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 17,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 16,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/autocomplete",
@@ -38,11 +38,6 @@
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
-    },
-    {
-      "packageName": "@vue-spectrum/tag",
-      "upstreamPackageName": "@react-spectrum/tag",
-      "upstreamPath": "packages/@react-spectrum/tag"
     },
     {
       "packageName": "@vue-spectrum/toast",

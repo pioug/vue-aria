@@ -1572,7 +1572,7 @@
     },
     {
       "packageName": "@vue-spectrum/tag",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 2,
       "portedTests": 0,
       "passingTests": 0,
@@ -1580,7 +1580,7 @@
       "snapshotPassing": 0,
       "docsTotal": 0,
       "docsComplete": 0,
-      "hasDeviations": false,
+      "hasDeviations": true,
       "upstreamPackageName": "@react-spectrum/tag",
       "upstreamPath": "packages/@react-spectrum/tag",
       "upstreamUrl": "https://github.com/adobe/react-spectrum/tree/1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1/packages/@react-spectrum/tag"

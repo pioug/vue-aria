@@ -126,7 +126,7 @@
 | @vue-spectrum/switch | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
 | @vue-spectrum/table | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/table | packages/@react-spectrum/table |
 | @vue-spectrum/tabs | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tabs | packages/@react-spectrum/tabs |
-| @vue-spectrum/tag | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tag | packages/@react-spectrum/tag |
+| @vue-spectrum/tag | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
 | @vue-spectrum/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/test-utils | packages/@react-spectrum/test-utils |
 | @vue-spectrum/text | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/text | packages/@react-spectrum/text |
 | @vue-spectrum/textfield | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/textfield | packages/@react-spectrum/textfield |
