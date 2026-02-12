@@ -1,43 +1,43 @@
 {
-  "generatedAt": "2026-02-12T13:33:39.553Z",
+  "generatedAt": "2026-02-12T13:47:55.459Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 197,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 189,
+  "availableLeafCount": 41,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/aria-modal-polyfill",
-      "upstreamPackageName": "@react-aria/aria-modal-polyfill",
-      "upstreamPath": "packages/@react-aria/aria-modal-polyfill"
-    },
-    {
-      "packageName": "@vue-aria/example-theme",
-      "upstreamPackageName": "@react-aria/example-theme",
-      "upstreamPath": "packages/@react-aria/example-theme"
-    },
-    {
-      "packageName": "@vue-aria/live-announcer",
-      "upstreamPackageName": "@react-aria/live-announcer",
-      "upstreamPath": "packages/@react-aria/live-announcer"
-    },
-    {
-      "packageName": "@vue-aria/ssr",
-      "upstreamPackageName": "@react-aria/ssr",
-      "upstreamPath": "packages/@react-aria/ssr"
-    },
     {
       "packageName": "@vue-aria/test-utils",
       "upstreamPackageName": "@react-aria/test-utils",
       "upstreamPath": "packages/@react-aria/test-utils"
     },
     {
-      "packageName": "@vue-spectrum/style-macro-s1",
-      "upstreamPackageName": "@react-spectrum/style-macro-s1",
-      "upstreamPath": "packages/@react-spectrum/style-macro-s1"
+      "packageName": "@vue-aria/utils",
+      "upstreamPackageName": "@react-aria/utils",
+      "upstreamPath": "packages/@react-aria/utils"
     },
     {
-      "packageName": "@vue-stately/flags",
-      "upstreamPackageName": "@react-stately/flags",
-      "upstreamPath": "packages/@react-stately/flags"
+      "packageName": "@vue-stately/autocomplete",
+      "upstreamPackageName": "@react-stately/autocomplete",
+      "upstreamPath": "packages/@react-stately/autocomplete"
+    },
+    {
+      "packageName": "@vue-stately/collections",
+      "upstreamPackageName": "@react-stately/collections",
+      "upstreamPath": "packages/@react-stately/collections"
+    },
+    {
+      "packageName": "@vue-stately/data",
+      "upstreamPackageName": "@react-stately/data",
+      "upstreamPath": "packages/@react-stately/data"
+    },
+    {
+      "packageName": "@vue-stately/disclosure",
+      "upstreamPackageName": "@react-stately/disclosure",
+      "upstreamPath": "packages/@react-stately/disclosure"
+    },
+    {
+      "packageName": "@vue-stately/form",
+      "upstreamPackageName": "@react-stately/form",
+      "upstreamPath": "packages/@react-stately/form"
     },
     {
       "packageName": "@vue-stately/toast",
@@ -45,14 +45,169 @@
       "upstreamPath": "packages/@react-stately/toast"
     },
     {
-      "packageName": "@vue-stately/utils",
-      "upstreamPackageName": "@react-stately/utils",
-      "upstreamPath": "packages/@react-stately/utils"
+      "packageName": "@vue-stately/virtualizer",
+      "upstreamPackageName": "@react-stately/virtualizer",
+      "upstreamPath": "packages/@react-stately/virtualizer"
     },
     {
-      "packageName": "@vue-types/shared",
-      "upstreamPackageName": "@react-types/shared",
-      "upstreamPath": "packages/@react-types/shared"
+      "packageName": "@vue-types/actionbar",
+      "upstreamPackageName": "@react-types/actionbar",
+      "upstreamPath": "packages/@react-types/actionbar"
+    },
+    {
+      "packageName": "@vue-types/actiongroup",
+      "upstreamPackageName": "@react-types/actiongroup",
+      "upstreamPath": "packages/@react-types/actiongroup"
+    },
+    {
+      "packageName": "@vue-types/avatar",
+      "upstreamPackageName": "@react-types/avatar",
+      "upstreamPath": "packages/@react-types/avatar"
+    },
+    {
+      "packageName": "@vue-types/badge",
+      "upstreamPackageName": "@react-types/badge",
+      "upstreamPath": "packages/@react-types/badge"
+    },
+    {
+      "packageName": "@vue-types/button",
+      "upstreamPackageName": "@react-types/button",
+      "upstreamPath": "packages/@react-types/button"
+    },
+    {
+      "packageName": "@vue-types/buttongroup",
+      "upstreamPackageName": "@react-types/buttongroup",
+      "upstreamPath": "packages/@react-types/buttongroup"
+    },
+    {
+      "packageName": "@vue-types/calendar",
+      "upstreamPackageName": "@react-types/calendar",
+      "upstreamPath": "packages/@react-types/calendar"
+    },
+    {
+      "packageName": "@vue-types/checkbox",
+      "upstreamPackageName": "@react-types/checkbox",
+      "upstreamPath": "packages/@react-types/checkbox"
+    },
+    {
+      "packageName": "@vue-types/combobox",
+      "upstreamPackageName": "@react-types/combobox",
+      "upstreamPath": "packages/@react-types/combobox"
+    },
+    {
+      "packageName": "@vue-types/divider",
+      "upstreamPackageName": "@react-types/divider",
+      "upstreamPath": "packages/@react-types/divider"
+    },
+    {
+      "packageName": "@vue-types/form",
+      "upstreamPackageName": "@react-types/form",
+      "upstreamPath": "packages/@react-types/form"
+    },
+    {
+      "packageName": "@vue-types/grid",
+      "upstreamPackageName": "@react-types/grid",
+      "upstreamPath": "packages/@react-types/grid"
+    },
+    {
+      "packageName": "@vue-types/illustratedmessage",
+      "upstreamPackageName": "@react-types/illustratedmessage",
+      "upstreamPath": "packages/@react-types/illustratedmessage"
+    },
+    {
+      "packageName": "@vue-types/image",
+      "upstreamPackageName": "@react-types/image",
+      "upstreamPath": "packages/@react-types/image"
+    },
+    {
+      "packageName": "@vue-types/label",
+      "upstreamPackageName": "@react-types/label",
+      "upstreamPath": "packages/@react-types/label"
+    },
+    {
+      "packageName": "@vue-types/layout",
+      "upstreamPackageName": "@react-types/layout",
+      "upstreamPath": "packages/@react-types/layout"
+    },
+    {
+      "packageName": "@vue-types/link",
+      "upstreamPackageName": "@react-types/link",
+      "upstreamPath": "packages/@react-types/link"
+    },
+    {
+      "packageName": "@vue-types/listbox",
+      "upstreamPackageName": "@react-types/listbox",
+      "upstreamPath": "packages/@react-types/listbox"
+    },
+    {
+      "packageName": "@vue-types/numberfield",
+      "upstreamPackageName": "@react-types/numberfield",
+      "upstreamPath": "packages/@react-types/numberfield"
+    },
+    {
+      "packageName": "@vue-types/overlays",
+      "upstreamPackageName": "@react-types/overlays",
+      "upstreamPath": "packages/@react-types/overlays"
+    },
+    {
+      "packageName": "@vue-types/progress",
+      "upstreamPackageName": "@react-types/progress",
+      "upstreamPath": "packages/@react-types/progress"
+    },
+    {
+      "packageName": "@vue-types/provider",
+      "upstreamPackageName": "@react-types/provider",
+      "upstreamPath": "packages/@react-types/provider"
+    },
+    {
+      "packageName": "@vue-types/radio",
+      "upstreamPackageName": "@react-types/radio",
+      "upstreamPath": "packages/@react-types/radio"
+    },
+    {
+      "packageName": "@vue-types/select",
+      "upstreamPackageName": "@react-types/select",
+      "upstreamPath": "packages/@react-types/select"
+    },
+    {
+      "packageName": "@vue-types/slider",
+      "upstreamPackageName": "@react-types/slider",
+      "upstreamPath": "packages/@react-types/slider"
+    },
+    {
+      "packageName": "@vue-types/statuslight",
+      "upstreamPackageName": "@react-types/statuslight",
+      "upstreamPath": "packages/@react-types/statuslight"
+    },
+    {
+      "packageName": "@vue-types/switch",
+      "upstreamPackageName": "@react-types/switch",
+      "upstreamPath": "packages/@react-types/switch"
+    },
+    {
+      "packageName": "@vue-types/tabs",
+      "upstreamPackageName": "@react-types/tabs",
+      "upstreamPath": "packages/@react-types/tabs"
+    },
+    {
+      "packageName": "@vue-types/text",
+      "upstreamPackageName": "@react-types/text",
+      "upstreamPath": "packages/@react-types/text"
+    },
+    {
+      "packageName": "@vue-types/textfield",
+      "upstreamPackageName": "@react-types/textfield",
+      "upstreamPath": "packages/@react-types/textfield"
+    },
+    {
+      "packageName": "@vue-types/view",
+      "upstreamPackageName": "@react-types/view",
+      "upstreamPath": "packages/@react-types/view"
+    },
+    {
+      "packageName": "@vue-types/well",
+      "upstreamPackageName": "@react-types/well",
+      "upstreamPath": "packages/@react-types/well"
     }
   ],
   "hasCycles": false,

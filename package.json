@@ -9,11 +9,20 @@
   ],
   "upstreamBaselineSha": "1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1",
   "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate:status": "node scripts/generate-status-md.mjs",
     "validate:status": "node scripts/validate-status.mjs",
     "sync:status": "node scripts/sync-status-from-upstream.mjs",
     "compute:port-order": "node scripts/compute-port-order.mjs",
     "start:next-package": "node scripts/start-next-package.mjs",
     "status:refresh": "npm run sync:status && npm run generate:status && npm run validate:status"
+  },
+  "devDependencies": {
+    "@vue/server-renderer": "^3.5.13",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.0.0",
+    "vitest": "^3.0.0",
+    "vue": "^3.5.13"
   }
 }

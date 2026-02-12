@@ -1,0 +1,17 @@
+{
+  "name": "@vue-types/shared",
+  "version": "3.33.0",
+  "description": "Vue port of @react-types/shared",
+  "license": "Apache-2.0",
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
