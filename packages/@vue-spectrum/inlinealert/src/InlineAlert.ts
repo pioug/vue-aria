@@ -6,8 +6,10 @@ import {
   ref,
   type PropType,
 } from "vue";
+import { useFocusRing } from "@vue-aria/focus";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
+import { useProviderProps } from "@vue-spectrum/provider";
 import {
   classNames,
   SlotProvider,
@@ -89,6 +91,7 @@ export const InlineAlert = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const elementRef = ref<HTMLElement | null>(null);
     const shouldAutoFocus = ref(Boolean(props.autoFocus));
+    const { focusProps, isFocusVisible } = useFocusRing();
     const stringFormatter = useLocalizedStringFormatter(INLINE_ALERT_INTL_MESSAGES);
 
     onMounted(() => {
@@ -119,14 +122,22 @@ export const InlineAlert = defineComponent({
         } as Record<string, unknown> & { id?: string; slot?: string },
         "inlinealert"
       );
-      const { styleProps } = useStyleProps(
+      const resolvedProps = useProviderProps(
         slotProps as {
+          variant?: InlineAlertVariant;
+          autoFocus?: boolean;
           UNSAFE_className?: string;
           UNSAFE_style?: Record<string, string | number>;
         } & Record<string, unknown>
       );
-      const domProps = filterDOMProps(slotProps as Record<string, unknown>);
-      const variant = (slotProps.variant as InlineAlertVariant | undefined) ?? "neutral";
+      const { styleProps } = useStyleProps(
+        resolvedProps as {
+          UNSAFE_className?: string;
+          UNSAFE_style?: Record<string, string | number>;
+        } & Record<string, unknown>
+      );
+      const domProps = filterDOMProps(resolvedProps as Record<string, unknown>);
+      const variant = (resolvedProps.variant as InlineAlertVariant | undefined) ?? "neutral";
       const showVariantIcon = variant !== "neutral";
       const iconSymbol = showVariantIcon
         ? INLINE_ALERT_ICON_SYMBOL[variant as Exclude<InlineAlertVariant, "neutral">]
@@ -137,15 +148,19 @@ export const InlineAlert = defineComponent({
           )
         : undefined;
 
-      const rootProps = mergeProps(domProps, styleProps, {
+      const rootProps = mergeProps(domProps, styleProps, focusProps, {
         ref: (value: unknown) => {
           elementRef.value = value as HTMLElement | null;
         },
         role: "alert",
-        tabIndex: slotProps.autoFocus ? -1 : undefined,
+        tabIndex: resolvedProps.autoFocus ? -1 : undefined,
+        autofocus: resolvedProps.autoFocus ? true : undefined,
         class: classNames(
           "spectrum-InLineAlert",
           `spectrum-InLineAlert--${variant}`,
+          {
+            "focus-ring": isFocusVisible.value,
+          },
           styleProps.class as ClassValue | undefined,
           domProps.class as ClassValue | undefined
         ),

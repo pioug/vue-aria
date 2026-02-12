@@ -2,7 +2,7 @@
 
 This file enforces the active package lock for the React Spectrum v1 migration lane.
 
-- Active package lock: `@react-spectrum/inlinealert`
+- Active package lock: `@react-spectrum/contextualhelp`
 - Execution mode: `single-package`
 - Updated: `2026-02-12`
 
