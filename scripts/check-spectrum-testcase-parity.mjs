@@ -137,11 +137,22 @@ function analyzePackageTests(upstreamPackage, localPackage) {
   }
 
   const missingNamedCases = [...upstreamTitles].filter((title) => !localTitles.has(title));
+  const localOnlyNamedCases = [...localTitles].filter((title) => !upstreamTitles.has(title));
+  const matchedNamedCases = [...upstreamTitles].filter((title) => localTitles.has(title));
+  const upstreamNamedCases = upstreamTitles.size;
+  const localNamedCases = localTitles.size;
+  const matchedNamedCaseCount = matchedNamedCases.length;
   const caseDelta = localCaseCalls - upstreamCaseCalls;
-  const coverage =
+  const rawCoverage =
     upstreamCaseCalls > 0
       ? (localCaseCalls / upstreamCaseCalls) * 100
       : localCaseCalls > 0
+        ? 100
+        : 0;
+  const namedCoverage =
+    upstreamNamedCases > 0
+      ? (matchedNamedCaseCount / upstreamNamedCases) * 100
+      : localNamedCases > 0
         ? 100
         : 0;
 
@@ -151,9 +162,15 @@ function analyzePackageTests(upstreamPackage, localPackage) {
     upstreamCaseCalls,
     localCaseCalls,
     caseDelta,
-    coverage,
+    rawCoverage,
+    upstreamNamedCases,
+    localNamedCases,
+    matchedNamedCaseCount,
+    localOnlyNamedCaseCount: localOnlyNamedCases.length,
+    namedCoverage,
     missingTestFiles,
     missingNamedCases,
+    localOnlyNamedCases,
   };
 }
 
@@ -165,6 +182,10 @@ function summarizeTotals(rows) {
   const totals = {
     upstreamCaseCalls: 0,
     localCaseCalls: 0,
+    upstreamNamedCases: 0,
+    localNamedCases: 0,
+    matchedNamedCaseCount: 0,
+    localOnlyNamedCaseCount: 0,
     upstreamFiles: 0,
     localFiles: 0,
   };
@@ -172,6 +193,10 @@ function summarizeTotals(rows) {
   for (const row of rows) {
     totals.upstreamCaseCalls += row.analysis.upstreamCaseCalls;
     totals.localCaseCalls += row.analysis.localCaseCalls;
+    totals.upstreamNamedCases += row.analysis.upstreamNamedCases;
+    totals.localNamedCases += row.analysis.localNamedCases;
+    totals.matchedNamedCaseCount += row.analysis.matchedNamedCaseCount;
+    totals.localOnlyNamedCaseCount += row.analysis.localOnlyNamedCaseCount;
     totals.upstreamFiles += row.analysis.upstreamFiles;
     totals.localFiles += row.analysis.localFiles;
   }
@@ -189,8 +214,14 @@ function buildMarkdownReport(rows) {
   const v1Totals = summarizeTotals(v1Rows);
   const checkedRows = rows.filter((row) => row.checked);
   const checkedTotals = summarizeTotals(checkedRows);
-  const allRemaining = Math.max(0, allTotals.upstreamCaseCalls - allTotals.localCaseCalls);
-  const v1Remaining = Math.max(0, v1Totals.upstreamCaseCalls - v1Totals.localCaseCalls);
+  const allRawRemaining = Math.max(0, allTotals.upstreamCaseCalls - allTotals.localCaseCalls);
+  const v1RawRemaining = Math.max(0, v1Totals.upstreamCaseCalls - v1Totals.localCaseCalls);
+  const allNamedRemaining = Math.max(0, allTotals.upstreamNamedCases - allTotals.matchedNamedCaseCount);
+  const v1NamedRemaining = Math.max(0, v1Totals.upstreamNamedCases - v1Totals.matchedNamedCaseCount);
+  const checkedNamedRemaining = Math.max(
+    0,
+    checkedTotals.upstreamNamedCases - checkedTotals.matchedNamedCaseCount
+  );
 
   const lines = [];
   lines.push("# Spectrum Test-Case Parity Tracker");
@@ -201,25 +232,52 @@ function buildMarkdownReport(rows) {
   lines.push("");
   lines.push(`- Generated (UTC): \`${isoDate}\``);
   lines.push(
-    `- All packages test-case parity: \`${allTotals.localCaseCalls} / ${allTotals.upstreamCaseCalls}\` (remaining \`${allRemaining}\`, coverage \`${formatPercent(
+    `- All packages raw call ratio: \`${allTotals.localCaseCalls} / ${allTotals.upstreamCaseCalls}\` (remaining \`${allRawRemaining}\`, coverage \`${formatPercent(
       allTotals.upstreamCaseCalls > 0 ? (allTotals.localCaseCalls / allTotals.upstreamCaseCalls) * 100 : 0
     )}\`)`
   );
   lines.push(
-    `- V1-only test-case parity (excluding \`s2\`): \`${v1Totals.localCaseCalls} / ${v1Totals.upstreamCaseCalls}\` (remaining \`${v1Remaining}\`, coverage \`${formatPercent(
+    `- All packages named-case parity (upstream matched): \`${allTotals.matchedNamedCaseCount} / ${allTotals.upstreamNamedCases}\` (remaining \`${allNamedRemaining}\`, coverage \`${formatPercent(
+      allTotals.upstreamNamedCases > 0
+        ? (allTotals.matchedNamedCaseCount / allTotals.upstreamNamedCases) * 100
+        : 0
+    )}\`)`
+  );
+  lines.push(
+    `- All packages local-only named cases: \`${allTotals.localOnlyNamedCaseCount}\``
+  );
+  lines.push(
+    `- V1-only raw call ratio (excluding \`s2\`): \`${v1Totals.localCaseCalls} / ${v1Totals.upstreamCaseCalls}\` (remaining \`${v1RawRemaining}\`, coverage \`${formatPercent(
       v1Totals.upstreamCaseCalls > 0 ? (v1Totals.localCaseCalls / v1Totals.upstreamCaseCalls) * 100 : 0
     )}\`)`
   );
   lines.push(
-    `- Checked-package test-case parity: \`${checkedTotals.localCaseCalls} / ${checkedTotals.upstreamCaseCalls}\``
+    `- V1-only named-case parity (excluding \`s2\`): \`${v1Totals.matchedNamedCaseCount} / ${v1Totals.upstreamNamedCases}\` (remaining \`${v1NamedRemaining}\`, coverage \`${formatPercent(
+      v1Totals.upstreamNamedCases > 0
+        ? (v1Totals.matchedNamedCaseCount / v1Totals.upstreamNamedCases) * 100
+        : 0
+    )}\`)`
+  );
+  lines.push(
+    `- Checked-package raw call ratio: \`${checkedTotals.localCaseCalls} / ${checkedTotals.upstreamCaseCalls}\``
+  );
+  lines.push(
+    `- Checked-package named-case parity: \`${checkedTotals.matchedNamedCaseCount} / ${checkedTotals.upstreamNamedCases}\` (remaining \`${checkedNamedRemaining}\`, coverage \`${formatPercent(
+      checkedTotals.upstreamNamedCases > 0
+        ? (checkedTotals.matchedNamedCaseCount / checkedTotals.upstreamNamedCases) * 100
+        : 0
+    )}\`)`
+  );
+  lines.push(
+    "- Note: raw call coverage can exceed 100% when local adds extra split/regression cases."
   );
   lines.push("");
   lines.push("## Package Matrix");
   lines.push("");
   lines.push(
-    "| package | status | upstream files | local files | upstream cases | local cases | delta | coverage | missing upstream test files |"
+    "| package | status | upstream files | local files | upstream calls | local calls | call delta | call coverage | upstream named | matched named | missing named | local-only named | named coverage | missing upstream test files |"
   );
-  lines.push("| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |");
+  lines.push("| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |");
 
   for (const row of rows) {
     const status = row.checked ? "checked" : "pending";
@@ -230,13 +288,15 @@ function buildMarkdownReport(rows) {
 
     lines.push(
       `| \`${row.upstream}\` | ${status} | ${row.analysis.upstreamFiles} | ${row.analysis.localFiles} | ${row.analysis.upstreamCaseCalls} | ${row.analysis.localCaseCalls} | ${row.analysis.caseDelta} | ${formatPercent(
-        row.analysis.coverage
+        row.analysis.rawCoverage
+      )} | ${row.analysis.upstreamNamedCases} | ${row.analysis.matchedNamedCaseCount} | ${row.analysis.missingNamedCases.length} | ${row.analysis.localOnlyNamedCaseCount} | ${formatPercent(
+        row.analysis.namedCoverage
       )} | ${missingFiles} |`
     );
   }
 
   lines.push("");
-  lines.push("## Missing Named Test Cases (Sample)");
+  lines.push("## Missing Upstream Named Test Cases (Sample)");
   lines.push("");
 
   const rowsWithMissingTitles = rows
@@ -250,6 +310,31 @@ function buildMarkdownReport(rows) {
       const sample = row.analysis.missingNamedCases.slice(0, 5).map((title) => `\`${title}\``).join(", ");
       lines.push(
         `- \`${row.upstream}\`: ${row.analysis.missingNamedCases.length} missing named cases (sample: ${sample})`
+      );
+    }
+  }
+
+  lines.push("");
+  lines.push("## Local-Only Named Test Cases (Sample)");
+  lines.push("");
+
+  const rowsWithLocalOnlyTitles = rows
+    .filter((row) => row.analysis.localOnlyNamedCases.length > 0)
+    .sort(
+      (left, right) =>
+        right.analysis.localOnlyNamedCases.length - left.analysis.localOnlyNamedCases.length
+    );
+
+  if (rowsWithLocalOnlyTitles.length === 0) {
+    lines.push("- None.");
+  } else {
+    for (const row of rowsWithLocalOnlyTitles.slice(0, 20)) {
+      const sample = row.analysis.localOnlyNamedCases
+        .slice(0, 5)
+        .map((title) => `\`${title}\``)
+        .join(", ");
+      lines.push(
+        `- \`${row.upstream}\`: ${row.analysis.localOnlyNamedCases.length} local-only named cases (sample: ${sample})`
       );
     }
   }
@@ -285,15 +370,25 @@ const analyzedRows = selectedRows.map((row) => ({
 }));
 
 const totals = summarizeTotals(analyzedRows);
-const remaining = Math.max(0, totals.upstreamCaseCalls - totals.localCaseCalls);
+const rawRemaining = Math.max(0, totals.upstreamCaseCalls - totals.localCaseCalls);
+const namedRemaining = Math.max(0, totals.upstreamNamedCases - totals.matchedNamedCaseCount);
 
 console.log("Spectrum test-case parity summary:");
 console.log(
-  `- Cases: ${totals.localCaseCalls} / ${totals.upstreamCaseCalls} (${formatPercent(
+  `- Raw calls: ${totals.localCaseCalls} / ${totals.upstreamCaseCalls} (${formatPercent(
     totals.upstreamCaseCalls > 0 ? (totals.localCaseCalls / totals.upstreamCaseCalls) * 100 : 0
   )})`
 );
-console.log(`- Remaining case gap (non-negative): ${remaining}`);
+console.log(`- Remaining raw call gap (non-negative): ${rawRemaining}`);
+console.log(
+  `- Named parity (upstream matched): ${totals.matchedNamedCaseCount} / ${totals.upstreamNamedCases} (${formatPercent(
+    totals.upstreamNamedCases > 0
+      ? (totals.matchedNamedCaseCount / totals.upstreamNamedCases) * 100
+      : 0
+  )})`
+);
+console.log(`- Remaining named-case gap (non-negative): ${namedRemaining}`);
+console.log(`- Local-only named cases: ${totals.localOnlyNamedCaseCount}`);
 
 const rowsWithMissingFiles = analyzedRows.filter(
   (row) => row.analysis.missingTestFiles.length > 0
@@ -311,11 +406,29 @@ const rowsWithMissingTitles = analyzedRows.filter(
   (row) => row.analysis.missingNamedCases.length > 0
 );
 if (rowsWithMissingTitles.length > 0) {
-  console.log("- Packages with missing named test cases (sample):");
+  console.log("- Packages with missing upstream named test cases (sample):");
   for (const row of rowsWithMissingTitles.slice(0, 15)) {
     const sample = row.analysis.missingNamedCases.slice(0, 3).join(" | ");
     console.log(
       `  - ${row.upstream}: ${row.analysis.missingNamedCases.length} missing (sample: ${sample})`
+    );
+  }
+}
+
+const rowsWithLocalOnlyTitles = analyzedRows.filter(
+  (row) => row.analysis.localOnlyNamedCases.length > 0
+);
+if (rowsWithLocalOnlyTitles.length > 0) {
+  console.log("- Packages with local-only named test cases (sample):");
+  for (const row of rowsWithLocalOnlyTitles
+    .sort(
+      (left, right) =>
+        right.analysis.localOnlyNamedCases.length - left.analysis.localOnlyNamedCases.length
+    )
+    .slice(0, 15)) {
+    const sample = row.analysis.localOnlyNamedCases.slice(0, 3).join(" | ");
+    console.log(
+      `  - ${row.upstream}: ${row.analysis.localOnlyNamedCases.length} local-only (sample: ${sample})`
     );
   }
 }
