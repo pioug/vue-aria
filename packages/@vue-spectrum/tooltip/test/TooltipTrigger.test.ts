@@ -15,7 +15,10 @@ function mountTooltipTrigger(
 ) {
   return mount(TooltipTrigger, {
     attachTo: document.body,
-    props,
+    props: {
+      delay: 0,
+      ...props,
+    },
     slots: {
       default: () => [
         h("button", { "aria-label": "trigger" }, "Trigger"),
@@ -90,6 +93,44 @@ describe("TooltipTrigger", () => {
 
       vi.advanceTimersByTime(1);
       await flushOverlay();
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("uses a default hover delay when delay is omitted", async () => {
+    vi.useFakeTimers();
+    const onOpenChange = vi.fn();
+    const wrapper = mount(TooltipTrigger, {
+      attachTo: document.body,
+      props: {
+        onOpenChange,
+      },
+      slots: {
+        default: () => [
+          h("button", { "aria-label": "trigger" }, "Trigger"),
+          h(Tooltip, () => "Helpful information."),
+        ],
+      },
+    });
+
+    try {
+      const button = wrapper.get("button");
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1499);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1);
+      await flushOverlay();
+
       expect(onOpenChange).toHaveBeenCalledWith(true);
       expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
     } finally {
@@ -187,6 +228,7 @@ describe("TooltipTrigger", () => {
             TooltipTrigger,
             {
               onOpenChange,
+              delay: 0,
             },
             {
               default: () => [

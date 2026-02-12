@@ -17,6 +17,8 @@ export interface UseTooltipTriggerResult {
   tooltipProps: ReadonlyRef<Record<string, unknown>>;
 }
 
+const DEFAULT_TOOLTIP_DELAY = 1500;
+
 function resolveBoolean(value: MaybeReactive<boolean | undefined> | undefined, fallback: boolean): boolean {
   if (value === undefined) {
     return fallback;
@@ -37,10 +39,15 @@ function resolveTrigger(
 
 function resolveDelay(value: MaybeReactive<number | undefined> | undefined): number {
   if (value === undefined) {
-    return 0;
+    return DEFAULT_TOOLTIP_DELAY;
   }
 
-  const resolved = Number(toValue(value));
+  const rawValue = toValue(value);
+  if (rawValue === undefined) {
+    return DEFAULT_TOOLTIP_DELAY;
+  }
+
+  const resolved = Number(rawValue);
   if (!Number.isFinite(resolved)) {
     return 0;
   }
