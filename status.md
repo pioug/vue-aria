@@ -70,7 +70,7 @@
 | @vue-aria/textfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/textfield | packages/@react-aria/textfield |
 | @vue-aria/toast | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toast | packages/@react-aria/toast |
 | @vue-aria/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toggle | packages/@react-aria/toggle |
-| @vue-aria/toolbar | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toolbar | packages/@react-aria/toolbar |
+| @vue-aria/toolbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toolbar | packages/@react-aria/toolbar |
 | @vue-aria/tooltip | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tooltip | packages/@react-aria/tooltip |
 | @vue-aria/tree | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tree | packages/@react-aria/tree |
 | @vue-aria/utils | complete | 8 | 8 | 8 | 0 | 0 | 0 | 0 | true | @react-aria/utils | packages/@react-aria/utils |
