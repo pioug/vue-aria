@@ -292,6 +292,41 @@ describe("useTooltipTrigger", () => {
     trigger.remove();
   });
 
+  it("ignores hover when trigger is focus-only", () => {
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+
+    const state = createTooltipState();
+
+    const scope = effectScope();
+    let tooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+
+    scope.run(() => {
+      tooltipTrigger = useTooltipTrigger(
+        {
+          trigger: "focus",
+          delay: 0,
+        },
+        state,
+        trigger
+      );
+    });
+
+    attachHandlers(trigger, tooltipTrigger.triggerProps.value);
+
+    trigger.dispatchEvent(
+      new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+    );
+    expect(state.open).not.toHaveBeenCalled();
+
+    trigger.focus();
+    trigger.dispatchEvent(new FocusEvent("focus"));
+    expect(state.open).toHaveBeenCalledWith(true);
+
+    scope.stop();
+    trigger.remove();
+  });
+
   it("closes on press start by default", () => {
     const trigger = document.createElement("button");
     document.body.appendChild(trigger);

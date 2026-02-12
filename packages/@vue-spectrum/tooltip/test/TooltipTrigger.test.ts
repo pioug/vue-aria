@@ -519,6 +519,31 @@ describe("TooltipTrigger", () => {
     }
   });
 
+  it("opens only on focus when trigger is set to focus", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      trigger: "focus",
+      onOpenChange,
+    });
+
+    try {
+      const button = wrapper.get("button");
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+      expect(onOpenChange).not.toHaveBeenCalledWith(true);
+
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("keeps only one tooltip visible across multiple triggers", async () => {
     const Root = {
       render() {
