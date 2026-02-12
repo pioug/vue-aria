@@ -1,13 +1,63 @@
 {
-  "generatedAt": "2026-02-12T17:10:18.982Z",
+  "generatedAt": "2026-02-12T17:11:54.489Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 95,
-  "availableLeafCount": 1,
+  "incompletePackageCount": 94,
+  "availableLeafCount": 11,
   "availableLeaves": [
     {
-      "packageName": "@vue-aria/interactions",
-      "upstreamPackageName": "@react-aria/interactions",
-      "upstreamPath": "packages/@react-aria/interactions"
+      "packageName": "@vue-aria/calendar",
+      "upstreamPackageName": "@react-aria/calendar",
+      "upstreamPath": "packages/@react-aria/calendar"
+    },
+    {
+      "packageName": "@vue-aria/collections",
+      "upstreamPackageName": "@react-aria/collections",
+      "upstreamPath": "packages/@react-aria/collections"
+    },
+    {
+      "packageName": "@vue-aria/focus",
+      "upstreamPackageName": "@react-aria/focus",
+      "upstreamPath": "packages/@react-aria/focus"
+    },
+    {
+      "packageName": "@vue-aria/form",
+      "upstreamPackageName": "@react-aria/form",
+      "upstreamPath": "packages/@react-aria/form"
+    },
+    {
+      "packageName": "@vue-aria/link",
+      "upstreamPackageName": "@react-aria/link",
+      "upstreamPath": "packages/@react-aria/link"
+    },
+    {
+      "packageName": "@vue-aria/slider",
+      "upstreamPackageName": "@react-aria/slider",
+      "upstreamPath": "packages/@react-aria/slider"
+    },
+    {
+      "packageName": "@vue-aria/toast",
+      "upstreamPackageName": "@react-aria/toast",
+      "upstreamPath": "packages/@react-aria/toast"
+    },
+    {
+      "packageName": "@vue-aria/toggle",
+      "upstreamPackageName": "@react-aria/toggle",
+      "upstreamPath": "packages/@react-aria/toggle"
+    },
+    {
+      "packageName": "@vue-aria/tooltip",
+      "upstreamPackageName": "@react-aria/tooltip",
+      "upstreamPath": "packages/@react-aria/tooltip"
+    },
+    {
+      "packageName": "@vue-aria/virtualizer",
+      "upstreamPackageName": "@react-aria/virtualizer",
+      "upstreamPath": "packages/@react-aria/virtualizer"
+    },
+    {
+      "packageName": "@vue-aria/visually-hidden",
+      "upstreamPackageName": "@react-aria/visually-hidden",
+      "upstreamPath": "packages/@react-aria/visually-hidden"
     }
   ],
   "hasCycles": false,
