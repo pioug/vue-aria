@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T16:15:04.218Z",
+  "generatedAt": "2026-02-12T16:17:17.559Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 128,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 127,
+  "availableLeafCount": 9,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/disclosure",
-      "upstreamPackageName": "@react-aria/disclosure",
-      "upstreamPath": "packages/@react-aria/disclosure"
-    },
     {
       "packageName": "@vue-aria/i18n",
       "upstreamPackageName": "@react-aria/i18n",

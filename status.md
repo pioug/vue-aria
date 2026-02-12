@@ -34,7 +34,7 @@
 | @vue-aria/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/combobox | packages/@react-aria/combobox |
 | @vue-aria/datepicker | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/datepicker | packages/@react-aria/datepicker |
 | @vue-aria/dialog | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/dialog | packages/@react-aria/dialog |
-| @vue-aria/disclosure | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/disclosure | packages/@react-aria/disclosure |
+| @vue-aria/disclosure | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/disclosure | packages/@react-aria/disclosure |
 | @vue-aria/dnd | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/dnd | packages/@react-aria/dnd |
 | @vue-aria/example-theme | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/example-theme | packages/@react-aria/example-theme |
 | @vue-aria/focus | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/focus | packages/@react-aria/focus |

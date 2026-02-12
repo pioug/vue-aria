@@ -299,3 +299,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally while preserving API/type parity with upstream and existing shared typing contracts.
 - User impact: Consumers may still need React type packages for full type resolution in label helper types.
 - Removal plan: Replace React-centric label type imports with Vue-native equivalents once shared type mapping is complete.
+
+- Package: `@vue-aria/disclosure`
+- Upstream reference: `packages/@react-aria/disclosure` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still relies on React/ReactDOM runtime semantics (`useEffect`/`useLayoutEffect`/`useRef` and `react-dom` `flushSync`).
+- Reason: The package was ported incrementally to keep dependency order moving while preserving upstream source structure.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and possible behavioral differences until full composable conversion.
+- Removal plan: Replace React hook and `flushSync` usage with Vue composables/lifecycle equivalents and port upstream disclosure tests to verify parity.
