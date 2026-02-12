@@ -157,7 +157,7 @@
 | @vue-stately/list | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/list | packages/@react-stately/list |
 | @vue-stately/menu | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/menu | packages/@react-stately/menu |
 | @vue-stately/numberfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/numberfield | packages/@react-stately/numberfield |
-| @vue-stately/overlays | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/overlays | packages/@react-stately/overlays |
+| @vue-stately/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/overlays | packages/@react-stately/overlays |
 | @vue-stately/radio | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/radio | packages/@react-stately/radio |
 | @vue-stately/searchfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
 | @vue-stately/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/select | packages/@react-stately/select |
