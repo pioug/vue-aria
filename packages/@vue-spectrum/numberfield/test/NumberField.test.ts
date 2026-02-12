@@ -1380,6 +1380,53 @@ describe("NumberField", () => {
     expect(input.getAttribute("aria-describedby")).toBeNull();
   });
 
+  it("commits native required validation changes from stepper presses", async () => {
+    const Harness = defineComponent({
+      name: "NumberFieldNativeStepperValidationHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(NumberField, {
+              label: "Amount",
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(input.validity.valid).toBe(false);
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+
+    expect(form.checkValidity()).toBe(false);
+    await nextTick();
+
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Constraints not satisfied")).toBeTruthy();
+
+    const [incrementButton] = tree.getAllByRole("button");
+    await fireEvent.pointerDown(incrementButton, {
+      pointerType: "mouse",
+      button: 0,
+      buttons: 1,
+      isPrimary: true,
+    });
+    await fireEvent.pointerUp(incrementButton, {
+      pointerType: "mouse",
+      button: 0,
+      buttons: 0,
+      isPrimary: true,
+    });
+    await nextTick();
+
+    expect(input.validity.valid).toBe(true);
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+  });
+
   it("supports validate function in native behavior", async () => {
     const Harness = defineComponent({
       name: "NumberFieldNativeValidateHarness",

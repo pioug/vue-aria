@@ -1,4 +1,12 @@
-import { computed, defineComponent, h, ref, watch, watchEffect } from "vue";
+import {
+  computed,
+  defineComponent,
+  h,
+  nextTick,
+  ref,
+  watch,
+  watchEffect,
+} from "vue";
 import { useNumberField } from "@vue-aria/numberfield";
 import { useHover } from "@vue-aria/interactions";
 import { mergeProps } from "@vue-aria/utils";
@@ -232,6 +240,23 @@ export const NumberField = defineComponent({
 
       return dataAttributes;
     });
+    const isStepperPressing = ref(false);
+
+    const syncNativeValidationState = () => {
+      if (validationBehavior.value !== "native") {
+        return;
+      }
+
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      nativeValidationDetails.value = inputElement.validity;
+      if (inputElement.validity.valid) {
+        nativeValidationMessage.value = undefined;
+      }
+    };
 
     const numberField = useNumberField({
       id: computed(() => props.id),
@@ -277,9 +302,50 @@ export const NumberField = defineComponent({
           isServerErrorCleared.value = true;
         }
         props.onChange?.(value);
+        if (isStepperPressing.value) {
+          void nextTick(() => {
+            syncNativeValidationState();
+          });
+        }
       },
       inputRef,
     });
+
+    const withStepperPressTracking = (
+      buttonProps: Record<string, unknown>
+    ): Record<string, unknown> => {
+      const onPressStart =
+        typeof buttonProps.onPressStart === "function"
+          ? (buttonProps.onPressStart as (event: unknown) => void)
+          : undefined;
+      const onPressEnd =
+        typeof buttonProps.onPressEnd === "function"
+          ? (buttonProps.onPressEnd as (event: unknown) => void)
+          : undefined;
+
+      return {
+        ...buttonProps,
+        onPressStart: (event: unknown) => {
+          isStepperPressing.value = true;
+          onPressStart?.(event);
+        },
+        onPressEnd: (event: unknown) => {
+          onPressEnd?.(event);
+          isStepperPressing.value = false;
+        },
+      };
+    };
+
+    const incrementButtonProps = computed(() =>
+      withStepperPressTracking(
+        numberField.incrementButtonProps.value as Record<string, unknown>
+      )
+    );
+    const decrementButtonProps = computed(() =>
+      withStepperPressTracking(
+        numberField.decrementButtonProps.value as Record<string, unknown>
+      )
+    );
 
     const { hoverProps, isHovered } = useHover({
       isDisabled,
@@ -450,20 +516,14 @@ export const NumberField = defineComponent({
                   ? h(StepButton as any, {
                       direction: "up",
                       isQuiet: props.isQuiet,
-                      ...(numberField.incrementButtonProps.value as Record<
-                        string,
-                        unknown
-                      >),
+                      ...(incrementButtonProps.value as Record<string, unknown>),
                     } as Record<string, unknown>)
                   : null,
                 showStepper.value
                   ? h(StepButton as any, {
                       direction: "down",
                       isQuiet: props.isQuiet,
-                      ...(numberField.decrementButtonProps.value as Record<
-                        string,
-                        unknown
-                      >),
+                      ...(decrementButtonProps.value as Record<string, unknown>),
                     } as Record<string, unknown>)
                   : null,
                 props.name
