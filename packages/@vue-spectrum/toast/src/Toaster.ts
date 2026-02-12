@@ -6,6 +6,7 @@ import {
   Teleport,
   type PropType,
 } from "vue";
+import { useFocusRing } from "@vue-aria/focus";
 import { useUNSAFE_PortalContext } from "@vue-aria/overlays";
 import { useToastRegion } from "@vue-aria/toast";
 import { mergeProps } from "@vue-aria/utils";
@@ -45,6 +46,7 @@ export const Toaster = defineComponent({
   setup(props, { attrs, slots }) {
     const regionRef = ref<HTMLElement | null>(null);
     const portalContext = useUNSAFE_PortalContext();
+    const { focusProps, isFocusVisible } = useFocusRing();
     const { regionProps } = useToastRegion(
       {
         "aria-label":
@@ -76,15 +78,23 @@ export const Toaster = defineComponent({
       return h(Teleport, { to: portalContainer ?? "body" }, [
         h(
           "div",
-          mergeProps(regionProps.value as Record<string, unknown>, attrsRecord, {
-            ref: regionRef,
-            class: classNames(
-              "react-spectrum-ToastContainer",
-              attrsRecord.class as ClassValue | undefined
-            ),
-            "data-position": position.value,
-            "data-placement": placement.value,
-          }),
+          mergeProps(
+            regionProps.value as Record<string, unknown>,
+            focusProps,
+            attrsRecord,
+            {
+              ref: regionRef,
+              class: classNames(
+                "react-spectrum-ToastContainer",
+                {
+                  "focus-ring": isFocusVisible.value,
+                },
+                attrsRecord.class as ClassValue | undefined
+              ),
+              "data-position": position.value,
+              "data-placement": placement.value,
+            }
+          ),
           slots.default?.()
         ),
       ]);

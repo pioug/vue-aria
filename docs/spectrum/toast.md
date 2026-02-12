@@ -52,5 +52,5 @@ const component = h("div", null, [
 ## Notes
 
 - Baseline includes global queue helpers (`neutral`, `positive`, `negative`, `info`) and a single active container.
-- Action button behavior, close-button behavior, timeout behavior (including hover/focus timer pause-resume), event interception, programmatic close behavior (via returned close callbacks from `ToastQueue.*`), focus restoration to the previously focused element after toast dismissal, multi-toast focus handoff on dismissal, `F6` keyboard focus transfer into the toast region, and portal-container routing via `UNSAFE_PortalProvider` are covered by starter tests.
+- Action button behavior, close-button behavior, timeout behavior (including hover/focus timer pause-resume), event interception, programmatic close behavior (via returned close callbacks from `ToastQueue.*`), focus restoration to the previously focused element after toast dismissal, multi-toast focus handoff on dismissal, `F6` keyboard focus transfer into the toast region (including focused-region `focus-ring` class behavior), and portal-container routing via `UNSAFE_PortalProvider` are covered by starter tests.
 - Advanced icon assets and transition styling remain in progress.

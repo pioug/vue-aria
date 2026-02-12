@@ -266,6 +266,7 @@ describe("ToastContainer", () => {
     const region = document.body.querySelector("[role=\"region\"]");
     expect(region).not.toBeNull();
     expect(document.activeElement).toBe(region);
+    expect(region?.classList.contains("focus-ring")).toBe(true);
 
     wrapper.unmount();
   });
