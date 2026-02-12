@@ -41,14 +41,6 @@ function createPointerEvent(
     pageY?: number;
   } = {}
 ): PointerEvent {
-  if (typeof PointerEvent !== "undefined") {
-    return new PointerEvent(type, {
-      bubbles: true,
-      cancelable: true,
-      ...init,
-    });
-  }
-
   const event = new MouseEvent(type, {
     bubbles: true,
     cancelable: true,
@@ -580,6 +572,82 @@ describe("Slider", () => {
     expect((input.element as HTMLInputElement).value).toBe("50");
     expect(onChange).not.toHaveBeenCalled();
     expect(document.activeElement).not.toBe(input.element);
+  });
+
+  it("can click and drag handle", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Slider, {
+      props: {
+        label: "The Label",
+        defaultValue: 50,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const controls = wrapper.get(".spectrum-Slider-controls");
+    const handle = wrapper.get(".spectrum-Slider-handle");
+    const input = wrapper.get("input[type='range']");
+    setTrackRect(controls.element, 100, 100);
+
+    handle.element.dispatchEvent(
+      createPointerEvent("pointerdown", {
+        pointerId: 1,
+        pointerType: "mouse",
+        button: 0,
+        clientX: 50,
+        pageX: 50,
+      })
+    );
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(input.element);
+
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 10,
+        pageX: 10,
+      })
+    );
+    await nextTick();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(10);
+
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: -10,
+        pageX: -10,
+      })
+    );
+    await nextTick();
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith(0);
+
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 120,
+        pageX: 120,
+      })
+    );
+    await nextTick();
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenLastCalledWith(100);
+
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 120,
+        pageX: 120,
+      })
+    );
+    expect(onChange).toHaveBeenCalledTimes(3);
   });
 
   it("cannot click and drag handle when disabled", async () => {
