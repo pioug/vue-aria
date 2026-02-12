@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:09:47.868Z",
+  "generatedAt": "2026-02-12T18:10:07.329Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 42,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 41,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/badge",
@@ -43,11 +43,6 @@
       "packageName": "@vue-spectrum/steplist",
       "upstreamPackageName": "@react-spectrum/steplist",
       "upstreamPath": "packages/@react-spectrum/steplist"
-    },
-    {
-      "packageName": "@vue-spectrum/view",
-      "upstreamPackageName": "@react-spectrum/view",
-      "upstreamPath": "packages/@react-spectrum/view"
     }
   ],
   "hasCycles": false,

@@ -138,7 +138,7 @@
 | @vue-spectrum/tooltip | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tooltip | packages/@react-spectrum/tooltip |
 | @vue-spectrum/tree | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tree | packages/@react-spectrum/tree |
 | @vue-spectrum/utils | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/utils | packages/@react-spectrum/utils |
-| @vue-spectrum/view | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/view | packages/@react-spectrum/view |
+| @vue-spectrum/view | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/view | packages/@react-spectrum/view |
 | @vue-spectrum/well | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/well | packages/@react-spectrum/well |
 | @vue-stately/autocomplete | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/autocomplete | packages/@react-stately/autocomplete |
 | @vue-stately/calendar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/calendar | packages/@react-stately/calendar |
