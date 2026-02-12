@@ -10,6 +10,7 @@ export default defineConfig({
     alias: [
       {find: /\.\.\/intl\/\*\.json$/, replacement: path.resolve(rootDir, 'test-shims/intlMessages.ts')},
       {find: /^@adobe\/spectrum-css-temp\/.*\.css$/, replacement: path.resolve(rootDir, 'test-shims/spectrumCssModule.ts')},
+      {find: /^@spectrum-icons\/ui\/.*$/, replacement: path.resolve(rootDir, 'test-shims/spectrumIcon.tsx')},
       {find: '@internationalized/message', replacement: path.resolve(rootDir, 'test-shims/internationalizedMessage.ts')},
       {find: '@internationalized/string', replacement: path.resolve(rootDir, 'test-shims/internationalizedString.ts')},
       {find: '@internationalized/number', replacement: path.resolve(rootDir, 'test-shims/internationalizedNumber.ts')},
