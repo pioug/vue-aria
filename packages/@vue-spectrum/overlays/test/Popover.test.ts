@@ -1,4 +1,5 @@
 import { fireEvent, render } from "@testing-library/vue";
+import { h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Popover } from "../src";
 
@@ -78,6 +79,36 @@ describe("Popover", () => {
       expect(onOpenChange).toHaveBeenCalledWith(false);
     } finally {
       trigger.remove();
+    }
+  });
+
+  it("calls onOpenChange(false) when focus leaves the popover", async () => {
+    const trigger = createTrigger();
+    const outside = document.createElement("button");
+    outside.textContent = "Outside";
+    document.body.append(outside);
+    const onOpenChange = vi.fn();
+
+    try {
+      const tree = render(Popover, {
+        props: {
+          isOpen: true,
+          triggerRef: trigger,
+          onOpenChange,
+        },
+        slots: {
+          default: () => h("input", { "aria-label": "popover-input" }),
+        },
+      });
+
+      const input = tree.getByLabelText("popover-input");
+      await fireEvent.focusIn(input);
+      await fireEvent.focusOut(input, { relatedTarget: outside });
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    } finally {
+      trigger.remove();
+      outside.remove();
     }
   });
 
