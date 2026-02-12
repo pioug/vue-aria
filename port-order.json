@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:44:34.631Z",
+  "generatedAt": "2026-02-12T17:45:49.845Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 71,
-  "availableLeafCount": 6,
+  "incompletePackageCount": 70,
+  "availableLeafCount": 5,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -28,11 +28,6 @@
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
-    },
-    {
-      "packageName": "@vue-aria/toast",
-      "upstreamPackageName": "@react-aria/toast",
-      "upstreamPath": "packages/@react-aria/toast"
     }
   ],
   "hasCycles": false,
