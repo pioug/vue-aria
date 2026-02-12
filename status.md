@@ -50,7 +50,7 @@
 | @vue-aria/live-announcer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/live-announcer | packages/@react-aria/live-announcer |
 | @vue-aria/menu | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/menu | packages/@react-aria/menu |
 | @vue-aria/meter | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/meter | packages/@react-aria/meter |
-| @vue-aria/numberfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/numberfield | packages/@react-aria/numberfield |
+| @vue-aria/numberfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/numberfield | packages/@react-aria/numberfield |
 | @vue-aria/overlays | not_started | 11 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/overlays | packages/@react-aria/overlays |
 | @vue-aria/progress | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/progress | packages/@react-aria/progress |
 | @vue-aria/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/radio | packages/@react-aria/radio |

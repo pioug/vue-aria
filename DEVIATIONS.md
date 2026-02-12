@@ -642,3 +642,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential searchfield key handling timing differences until full composable conversion.
 - Removal plan: Replace React attribute/runtime assumptions with Vue-native composables/event typing and port upstream searchfield behavior tests for parity.
+
+- Package: `@vue-aria/numberfield`
+- Upstream reference: `packages/@react-aria/numberfield` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/event/rendering semantics (`useState`, `useMemo`, `useCallback`, React clipboard/input handler types, `flushSync` from `react-dom`) across numberfield formatting, announcements, and spinbutton interaction handling.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential numberfield commit/announcement timing differences until full composable conversion.
+- Removal plan: Replace React hook/event/flush semantics with Vue-native composables/reactivity/DOM update patterns and port upstream numberfield behavior tests for parity.

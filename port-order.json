@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T17:38:37.836Z",
+  "generatedAt": "2026-02-12T17:39:44.199Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 76,
+  "incompletePackageCount": 75,
   "availableLeafCount": 6,
   "availableLeaves": [
     {
@@ -10,14 +10,14 @@
       "upstreamPath": "packages/@react-aria/calendar"
     },
     {
+      "packageName": "@vue-aria/color",
+      "upstreamPackageName": "@react-aria/color",
+      "upstreamPath": "packages/@react-aria/color"
+    },
+    {
       "packageName": "@vue-aria/datepicker",
       "upstreamPackageName": "@react-aria/datepicker",
       "upstreamPath": "packages/@react-aria/datepicker"
-    },
-    {
-      "packageName": "@vue-aria/numberfield",
-      "upstreamPackageName": "@react-aria/numberfield",
-      "upstreamPath": "packages/@react-aria/numberfield"
     },
     {
       "packageName": "@vue-aria/overlays",
