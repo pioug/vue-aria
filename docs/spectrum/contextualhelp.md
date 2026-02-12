@@ -41,5 +41,5 @@ const component = h(ContextualHelp, null, {
 
 ## Notes
 
-- Baseline includes quiet action-button trigger, default/help labels, popover dialog rendering, trigger-anchored placement support, trigger ref exposure (`UNSAFE_getDOMNode`, `focus()`), and portal-container routing via `UNSAFE_PortalProvider` (including nested null override behavior).
+- Baseline includes quiet action-button trigger, default/help labels, popover dialog rendering with hidden arrow parity, trigger-anchored placement support, trigger ref exposure (`UNSAFE_getDOMNode`, `focus()`), and portal-container routing via `UNSAFE_PortalProvider` (including nested null override behavior).
 - Advanced icon assets and animation parity remain in progress.

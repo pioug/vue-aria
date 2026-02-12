@@ -65,6 +65,7 @@ describe("ContextualHelp", () => {
 
     expect(document.body.querySelector("[role=\"dialog\"]")).not.toBeNull();
     expect(document.body.querySelector("[data-testid=\"popover\"]")).not.toBeNull();
+    expect(document.body.querySelector("[data-testid=\"popover-arrow\"]")).toBeNull();
     expect(document.body.textContent).toContain("Test title");
 
     wrapper.unmount();

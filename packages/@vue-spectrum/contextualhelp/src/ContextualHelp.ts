@@ -170,6 +170,7 @@ export const ContextualHelp = defineComponent({
           ...attrsRecord,
           type: "popover",
           placement: props.placement ?? "bottom start",
+          hideArrow: true,
         },
         {
           default: () => [
