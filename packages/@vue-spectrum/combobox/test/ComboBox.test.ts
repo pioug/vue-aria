@@ -518,6 +518,50 @@ describe("ComboBox", () => {
     expect(input.value).toBe("Three");
   });
 
+  it("does not fire selection change when inputValue and selectedKey are both controlled", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const App = defineComponent({
+      name: "ComboBoxControlledInputAndSelectionApp",
+      setup() {
+        const selectedKey = ref<string | number | null>("2");
+        const inputValue = ref("Two");
+
+        return () =>
+          h(ComboBox, {
+            label: "Test",
+            items,
+            selectedKey: selectedKey.value,
+            inputValue: inputValue.value,
+            onSelectionChange: (nextKey) => {
+              onSelectionChange(nextKey);
+              selectedKey.value = nextKey;
+            },
+            onInputChange: (nextInputValue: string) => {
+              onInputChange(nextInputValue);
+              inputValue.value = nextInputValue;
+              if (nextInputValue === "") {
+                selectedKey.value = null;
+              }
+            },
+          });
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.clear(input);
+    await Promise.resolve();
+
+    expect(onInputChange).toHaveBeenCalledTimes(1);
+    expect(onInputChange).toHaveBeenCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("");
+  });
+
   it("calls onBlur when the input loses focus", () => {
     const onBlur = vi.fn();
     const tree = renderComponent({
