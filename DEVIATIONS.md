@@ -425,3 +425,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential drag/drop state timing differences until full composable conversion.
 - Removal plan: Replace React hook-based drag/drop state management with Vue refs/computed/watch equivalents and port upstream dnd state tests for parity.
+
+- Package: `@vue-stately/combobox`
+- Upstream reference: `packages/@react-stately/combobox` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useCallback`, `useEffect`, `useMemo`, `useRef`, `useState`) for combobox filtering, input synchronization, and overlay open/close state behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential input/selection synchronization timing differences until full composable conversion.
+- Removal plan: Replace React hook-based combobox state composition with Vue refs/computed/watch/lifecycle equivalents and port upstream combobox state tests for parity.
