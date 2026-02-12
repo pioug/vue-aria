@@ -17,7 +17,7 @@ describe("Image", () => {
     );
   });
 
-  it("calls onError callback", async () => {
+  it("on error callback", async () => {
     const onError = vi.fn();
     const wrapper = mount(Image, {
       props: {
@@ -31,7 +31,7 @@ describe("Image", () => {
     expect(onError).toHaveBeenCalled();
   });
 
-  it("supports crossOrigin anonymous", () => {
+  it("anonymous", () => {
     const wrapper = mount(Image, {
       props: {
         src: "https://i.imgur.com/Z7AzH2c.png",
@@ -43,7 +43,7 @@ describe("Image", () => {
     expect(wrapper.get("img").attributes("crossorigin")).toBe("anonymous");
   });
 
-  it("supports crossOrigin use-credentials", () => {
+  it("use-credentials", () => {
     const wrapper = mount(Image, {
       props: {
         src: "https://i.imgur.com/Z7AzH2c.png",
@@ -55,7 +55,7 @@ describe("Image", () => {
     expect(wrapper.get("img").attributes("crossorigin")).toBe("use-credentials");
   });
 
-  it("does not include crossOrigin when unset", () => {
+  it("unset", () => {
     const wrapper = mount(Image, {
       props: {
         src: "https://i.imgur.com/Z7AzH2c.png",

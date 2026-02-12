@@ -9,7 +9,7 @@ import {
 } from "../src";
 
 describe("Accordion SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "AccordionSSRApp",
       setup() {

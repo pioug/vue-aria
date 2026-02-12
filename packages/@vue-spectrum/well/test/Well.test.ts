@@ -45,7 +45,7 @@ describe("Well", () => {
     expect(wrapper.text()).toContain("My Well");
   });
 
-  it("exposes UNSAFE_getDOMNode through component refs", () => {
+  it("v3 forward ref exists and supports children and props", () => {
     const wellRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(
       null
     );
@@ -74,7 +74,7 @@ describe("Well", () => {
     );
   });
 
-  it("supports aria-label with a role", () => {
+  it("v3 supports aria-label with a role", () => {
     const wrapper = mount(Well, {
       props: {
         role: "region",
@@ -89,7 +89,7 @@ describe("Well", () => {
     expect(wrapper.attributes("aria-label")).toBe("well");
   });
 
-  it("warns if label is provided without a role", () => {
+  it("v3 warns user if label is provided without a role", () => {
     const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     mount(Well, {

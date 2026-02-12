@@ -94,7 +94,7 @@ describe("Link", () => {
     expect(link.getAttribute("class")).toContain("test-class");
   });
 
-  it("wraps string children to span", () => {
+  it("Wraps string to span", () => {
     const { getByRole } = render(Link, {
       slots: {
         default: "Click me",
@@ -123,7 +123,7 @@ describe("Link", () => {
     expect(link.href).toBe("https://adobe.com/");
   });
 
-  it("wraps custom child element", async () => {
+  it("Wraps custom child element", async () => {
     const user = userEvent.setup();
     const onPressSpy = vi.fn();
     const linkRef = ref<HTMLAnchorElement | null>(null);
@@ -171,7 +171,7 @@ describe("Link", () => {
     expect(link.getAttribute("data-testid")).toBe("test");
   });
 
-  it("supports autoFocus", async () => {
+  it("supports autofocus", async () => {
     const { getByRole } = render(Link, {
       props: {
         autoFocus: true,

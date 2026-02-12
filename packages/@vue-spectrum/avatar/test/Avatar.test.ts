@@ -15,7 +15,7 @@ describe("Avatar", () => {
     expect(image.attributes("src")).toBe("http://localhost/some_image.png");
   });
 
-  it("renders an avatar image with alt text", () => {
+  it("can render an avatar image with an alt", () => {
     const wrapper = mount(Avatar, {
       props: {
         src: "http://localhost/some_image.png",
@@ -26,7 +26,7 @@ describe("Avatar", () => {
     expect(wrapper.get("img").attributes("alt")).toBe("Test avatar");
   });
 
-  it("supports custom size values with units", () => {
+  it("supports custom sizes in units, such as pixels", () => {
     const wrapper = mount(Avatar, {
       props: {
         src: "http://localhost/some_image.png",
@@ -39,7 +39,7 @@ describe("Avatar", () => {
     expect(style).toContain("width: 80px");
   });
 
-  it("supports custom numeric sizes", () => {
+  it("supports custom sizes in numbers", () => {
     const wrapper = mount(Avatar, {
       props: {
         src: "http://localhost/some_image.png",
@@ -87,7 +87,7 @@ describe("Avatar", () => {
     );
   });
 
-  it("supports disabled state", () => {
+  it("renders a disabled avatar image", () => {
     const wrapper = mount(Avatar, {
       props: {
         src: "http://localhost/some_image.png",

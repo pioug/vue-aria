@@ -63,7 +63,7 @@ function renderAccordion(
 }
 
 describe("Accordion", () => {
-  it("renders disclosure headings and region relationships", () => {
+  it("renders properly", () => {
     const wrapper = renderAccordion();
     const headings = wrapper.findAll("h3");
     const buttons = wrapper.findAll("button");
@@ -87,7 +87,7 @@ describe("Accordion", () => {
     expect(firstPanel.attributes("hidden")).toBe("until-found");
   });
 
-  it("toggles disclosure on mouse click", async () => {
+  it("toggle accordion on mouse click", async () => {
     const user = userEvent.setup();
     const onExpandedChange = vi.fn();
     const wrapper = renderAccordion({ onExpandedChange });
@@ -104,7 +104,7 @@ describe("Accordion", () => {
     expect(onExpandedChange).toHaveBeenCalledTimes(2);
   });
 
-  it("allows users to open and close disclosures with Enter", async () => {
+  it("allows users to open and close disclosure with enter / space key", async () => {
     const user = userEvent.setup();
     const onExpandedChange = vi.fn();
     const wrapper = renderAccordion({ onExpandedChange });
@@ -120,7 +120,6 @@ describe("Accordion", () => {
     await user.keyboard("{Enter}");
     expect(onExpandedChange).toHaveBeenCalledTimes(2);
     expect(selectedItem.attributes("aria-expanded")).toBe("false");
-
   });
 
   it("allows users to navigate accordion headers through the tab key", async () => {

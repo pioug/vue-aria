@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Content } from "../src";
 
 describe("Content SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "ContentSSRApp",
       setup() {

@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Footer } from "../src";
 
 describe("Footer SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "FooterSSRApp",
       setup() {
