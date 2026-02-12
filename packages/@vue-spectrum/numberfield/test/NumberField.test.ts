@@ -145,6 +145,44 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenLastCalledWith(5);
   });
 
+  it("only commits on blur when the value changes", async () => {
+    const onChange = vi.fn();
+    const tree = renderNumberField({
+      defaultValue: 5,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await fireEvent.focus(input);
+    await fireEvent.blur(input);
+    expect(onChange).not.toHaveBeenCalled();
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "7");
+    await fireEvent.blur(input);
+    expect(onChange).toHaveBeenLastCalledWith(7);
+  });
+
+  it("does not lose precision for decimal step values", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      minValue: 0.1,
+      maxValue: 24,
+      step: 0.1,
+      onChange,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    await user.click(input);
+    await user.keyboard("24");
+    await user.tab();
+
+    expect(input.value).toBe("24");
+    expect(onChange).toHaveBeenLastCalledWith(24);
+  });
+
   it("commits pasted text when the full input value is selected", async () => {
     const onChange = vi.fn();
     const tree = renderNumberField({
