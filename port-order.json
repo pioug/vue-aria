@@ -1,15 +1,9 @@
 {
-  "generatedAt": "2026-02-12T18:33:56.938Z",
+  "generatedAt": "2026-02-12T18:34:53.466Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 1,
-  "availableLeafCount": 1,
-  "availableLeaves": [
-    {
-      "packageName": "@vue-spectrum/s2",
-      "upstreamPackageName": "@react-spectrum/s2",
-      "upstreamPath": "packages/@react-spectrum/s2"
-    }
-  ],
+  "incompletePackageCount": 0,
+  "availableLeafCount": 0,
+  "availableLeaves": [],
   "hasCycles": false,
   "cyclePackages": []
 }

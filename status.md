@@ -116,7 +116,7 @@
 | @vue-spectrum/progress | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/progress | packages/@react-spectrum/progress |
 | @vue-spectrum/provider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/provider | packages/@react-spectrum/provider |
 | @vue-spectrum/radio | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/radio | packages/@react-spectrum/radio |
-| @vue-spectrum/s2 | not_started | 19 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/s2 | packages/@react-spectrum/s2 |
+| @vue-spectrum/s2 | complete | 19 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/s2 | packages/@react-spectrum/s2 |
 | @vue-spectrum/searchfield | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/searchfield | packages/@react-spectrum/searchfield |
 | @vue-spectrum/slider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/slider | packages/@react-spectrum/slider |
 | @vue-spectrum/statuslight | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
