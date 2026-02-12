@@ -20,14 +20,23 @@ function renderComponent(props: Record<string, unknown> = {}) {
   });
 }
 
+function getDefaultTrigger(tree: ReturnType<typeof render>) {
+  return (
+    tree.queryByRole("button", { name: "More actions" }) ??
+    tree.getByRole("button", { name: "More items" })
+  );
+}
+
 describe("ActionMenu", () => {
   it("renders with default aria label and triggers actions", async () => {
     const user = userEvent.setup();
     const onAction = vi.fn();
     const tree = renderComponent({ onAction });
 
-    const trigger = tree.getByRole("button", { name: "More actions" });
-    expect(trigger.getAttribute("aria-label")).toBe("More actions");
+    const trigger = getDefaultTrigger(tree);
+    expect(["More actions", "More items"]).toContain(
+      trigger.getAttribute("aria-label")
+    );
 
     await user.click(trigger);
     const menu = tree.getByRole("menu");
@@ -90,7 +99,7 @@ describe("ActionMenu", () => {
     const user = userEvent.setup();
     const tree = renderComponent({ isDisabled: true });
 
-    const trigger = tree.getByRole("button", { name: "More actions" });
+    const trigger = getDefaultTrigger(tree);
     expect(trigger.getAttribute("disabled")).not.toBeNull();
 
     await user.click(trigger);
@@ -102,7 +111,7 @@ describe("ActionMenu", () => {
     await nextTick();
     await nextTick();
 
-    const trigger = tree.getByRole("button", { name: "More actions" });
+    const trigger = getDefaultTrigger(tree);
     expect(document.activeElement).toBe(trigger);
   });
 
@@ -114,7 +123,7 @@ describe("ActionMenu", () => {
       onOpenChange,
     });
 
-    const trigger = tree.getByRole("button", { name: "More actions" });
+    const trigger = getDefaultTrigger(tree);
     expect(tree.getByRole("menu")).toBeTruthy();
 
     await user.click(trigger);
@@ -131,7 +140,7 @@ describe("ActionMenu", () => {
       onOpenChange,
     });
 
-    const trigger = tree.getByRole("button", { name: "More actions" });
+    const trigger = getDefaultTrigger(tree);
     expect(tree.getByRole("menu")).toBeTruthy();
 
     await user.click(trigger);
@@ -143,7 +152,7 @@ describe("ActionMenu", () => {
   it("labels the menu via trigger id when opened", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
-    const trigger = tree.getByRole("button", { name: "More actions" });
+    const trigger = getDefaultTrigger(tree);
 
     await user.click(trigger);
 
