@@ -670,6 +670,65 @@ describe("TooltipTrigger", () => {
     }
   });
 
+  it("supports a ref on Tooltip rendered via TooltipTrigger", async () => {
+    let tooltipRef: { UNSAFE_getDOMNode?: () => HTMLElement | null } | undefined;
+
+    const wrapper = mount(TooltipTrigger, {
+      attachTo: document.body,
+      props: {
+        delay: 0,
+        closeDelay: 0,
+      },
+      slots: {
+        default: () => [
+          h("button", { "aria-label": "trigger" }, "Trigger"),
+          h(
+            Tooltip,
+            {
+              ref: (value: unknown) => {
+                tooltipRef =
+                  (value as { UNSAFE_getDOMNode?: () => HTMLElement | null } | null) ?? undefined;
+              },
+            },
+            () => "Helpful information."
+          ),
+        ],
+      },
+    });
+
+    try {
+      const button = wrapper.get("button");
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      const tooltip = document.body.querySelector("[role=\"tooltip\"]") as HTMLElement | null;
+      expect(tooltip).not.toBeNull();
+      expect(tooltipRef).toBeDefined();
+      const resolvedTooltipNode = tooltipRef?.UNSAFE_getDOMNode?.();
+      expect(resolvedTooltipNode).toBe(tooltip);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("describes the trigger by tooltip id when open", async () => {
+    const wrapper = mountTooltipTrigger();
+
+    try {
+      const button = wrapper.get("button");
+      expect(button.attributes("aria-describedby")).toBeUndefined();
+
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      const describedBy = button.attributes("aria-describedby");
+      expect(describedBy).toBeTruthy();
+      expect(document.body.querySelector(`#${describedBy}`)).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("does not open when disabled", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mountTooltipTrigger({
@@ -768,6 +827,64 @@ describe("TooltipTrigger", () => {
     expect(tooltips[0]?.textContent).toContain("Second tooltip");
 
     wrapper.unmount();
+  });
+
+  it("allows two tooltips to be visible when one trigger is controlled open", async () => {
+    const Root = {
+      render() {
+        return h("div", null, [
+          h(
+            TooltipTrigger,
+            {
+              isOpen: true,
+              delay: 0,
+              closeDelay: 0,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "first trigger" }, "First"),
+                h(Tooltip, () => "First tooltip"),
+              ],
+            }
+          ),
+          h(
+            TooltipTrigger,
+            {
+              delay: 0,
+              closeDelay: 0,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "second trigger" }, "Second"),
+                h(Tooltip, () => "Second tooltip"),
+              ],
+            }
+          ),
+        ]);
+      },
+    };
+
+    const wrapper = mount(Root, {
+      attachTo: document.body,
+    });
+
+    try {
+      await flushOverlay();
+      let tooltips = document.body.querySelectorAll("[role=\"tooltip\"]");
+      expect(tooltips).toHaveLength(1);
+      expect(tooltips[0]?.textContent).toContain("First tooltip");
+
+      const secondButton = wrapper.get("[aria-label=\"second trigger\"]");
+      await secondButton.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+
+      tooltips = document.body.querySelectorAll("[role=\"tooltip\"]");
+      expect(tooltips).toHaveLength(2);
+      expect(document.body.textContent).toContain("First tooltip");
+      expect(document.body.textContent).toContain("Second tooltip");
+    } finally {
+      wrapper.unmount();
+    }
   });
 
   it("renders tooltip content in portal container from UNSAFE_PortalProvider", async () => {
