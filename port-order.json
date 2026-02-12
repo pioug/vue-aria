@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:11:04.738Z",
+  "generatedAt": "2026-02-12T18:11:37.026Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 39,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 38,
+  "availableLeafCount": 7,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -18,11 +18,6 @@
       "packageName": "@vue-spectrum/layout",
       "upstreamPackageName": "@react-spectrum/layout",
       "upstreamPath": "packages/@react-spectrum/layout"
-    },
-    {
-      "packageName": "@vue-spectrum/meter",
-      "upstreamPackageName": "@react-spectrum/meter",
-      "upstreamPath": "packages/@react-spectrum/meter"
     },
     {
       "packageName": "@vue-spectrum/overlays",
