@@ -52,7 +52,7 @@
 | @vue-aria/meter | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/meter | packages/@react-aria/meter |
 | @vue-aria/numberfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/numberfield | packages/@react-aria/numberfield |
 | @vue-aria/overlays | not_started | 11 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/overlays | packages/@react-aria/overlays |
-| @vue-aria/progress | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/progress | packages/@react-aria/progress |
+| @vue-aria/progress | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/progress | packages/@react-aria/progress |
 | @vue-aria/radio | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/radio | packages/@react-aria/radio |
 | @vue-aria/searchfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/searchfield | packages/@react-aria/searchfield |
 | @vue-aria/select | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/select | packages/@react-aria/select |

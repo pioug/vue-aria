@@ -1,0 +1,42 @@
+{
+  "name": "@vue-aria/progress",
+  "version": "3.4.29",
+  "description": "Vue port of @react-aria/progress",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "module": "dist/module.js",
+  "exports": {
+    "source": "./src/index.ts",
+    "types": [
+      "./dist/types.d.ts",
+      "./src/index.ts"
+    ],
+    "import": "./dist/import.mjs",
+    "require": "./dist/index.js"
+  },
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/label": "^3.7.24",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-types/progress": "^3.5.17",
+    "@vue-types/shared": "^3.33.0",
+    "@swc/helpers": "^0.5.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

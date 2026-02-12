@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T16:28:42.321Z",
+  "generatedAt": "2026-02-12T16:30:32.513Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 121,
+  "incompletePackageCount": 120,
   "availableLeafCount": 10,
   "availableLeaves": [
     {
@@ -10,9 +10,9 @@
       "upstreamPath": "packages/@react-aria/interactions"
     },
     {
-      "packageName": "@vue-aria/progress",
-      "upstreamPackageName": "@react-aria/progress",
-      "upstreamPath": "packages/@react-aria/progress"
+      "packageName": "@vue-aria/meter",
+      "upstreamPackageName": "@react-aria/meter",
+      "upstreamPath": "packages/@react-aria/meter"
     },
     {
       "packageName": "@vue-aria/spinbutton",
