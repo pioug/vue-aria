@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, ref } from "vue";
-import { describe, expect, it } from "vitest";
+import { defineComponent, h, nextTick, ref } from "vue";
+import { describe, expect, it, vi } from "vitest";
 import { Provider } from "@vue-spectrum/provider";
 import { RangeSlider } from "../src";
 import { press, testKeypresses } from "./utils";
@@ -14,6 +14,22 @@ function createTheme() {
     medium: { "spectrum--medium": "spectrum--medium" },
     large: { "spectrum--large": "spectrum--large" },
   };
+}
+
+function setTrackRect(element: Element, width = 100, height = 100): void {
+  Object.defineProperty(element, "getBoundingClientRect", {
+    value: () => ({
+      top: 0,
+      left: 0,
+      width,
+      height,
+      right: width,
+      bottom: height,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    }),
+  });
 }
 
 describe("RangeSlider", () => {
@@ -57,6 +73,87 @@ describe("RangeSlider", () => {
     });
 
     expect(wrapper.find("output").exists()).toBe(false);
+  });
+
+  it("supports disabled", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(
+      defineComponent({
+        name: "RangeSliderDisabledHarness",
+        setup() {
+          return () =>
+            h("div", [
+              h("button", { "data-testid": "before" }, "Before"),
+              h(RangeSlider, {
+                label: "The Label",
+                isDisabled: true,
+              }),
+              h("button", { "data-testid": "after" }, "After"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const inputs = wrapper.findAll("input[type='range']");
+    expect(inputs).toHaveLength(2);
+    expect(inputs[0].attributes("disabled")).toBeDefined();
+    expect(inputs[1].attributes("disabled")).toBeDefined();
+
+    const before = wrapper.get("[data-testid='before']").element;
+    const after = wrapper.get("[data-testid='after']").element;
+
+    await user.tab();
+    expect(document.activeElement).toBe(before);
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+  });
+
+  it("can be focused", async () => {
+    const user = userEvent.setup();
+    const wrapper = mount(
+      defineComponent({
+        name: "RangeSliderFocusableHarness",
+        setup() {
+          return () =>
+            h("div", [
+              h("button", { "data-testid": "before" }, "Before"),
+              h(RangeSlider, {
+                label: "The Label",
+                defaultValue: {
+                  start: 20,
+                  end: 50,
+                },
+              }),
+              h("button", { "data-testid": "after" }, "After"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const inputs = wrapper.findAll("input[type='range']");
+    const before = wrapper.get("[data-testid='before']").element;
+    const after = wrapper.get("[data-testid='after']").element;
+
+    await user.tab();
+    expect(document.activeElement).toBe(before);
+    await user.tab();
+    expect(document.activeElement).toBe(inputs[0].element);
+    await user.tab();
+    expect(document.activeElement).toBe(inputs[1].element);
+    await user.tab();
+    expect(document.activeElement).toBe(after);
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(inputs[1].element);
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(inputs[0].element);
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(before);
   });
 
   it("supports defaultValue", async () => {
@@ -126,6 +223,33 @@ describe("RangeSlider", () => {
     const inputs = wrapper.findAll("input[type='range']");
     expect(inputs[0].attributes("aria-valuetext")).toBe("10");
     expect(inputs[1].attributes("aria-valuetext")).toBe("40");
+  });
+
+  it("prefixes the value with a plus sign if needed", async () => {
+    const wrapper = mount(RangeSlider, {
+      props: {
+        label: "The Label",
+        minValue: -50,
+        maxValue: 50,
+        defaultValue: {
+          start: 10,
+          end: 20,
+        },
+      },
+    });
+
+    const inputs = wrapper.findAll("input[type='range']");
+    expect(wrapper.get("output").text()).toBe("+10 \u2013 +20");
+    expect(inputs[0].attributes("aria-valuetext")).toBe("+10");
+    expect(inputs[1].attributes("aria-valuetext")).toBe("+20");
+
+    await inputs[0].setValue("-35");
+    expect(wrapper.get("output").text()).toBe("-35 \u2013 +20");
+    expect(inputs[0].attributes("aria-valuetext")).toBe("-35");
+
+    await inputs[1].setValue("0");
+    expect(wrapper.get("output").text()).toBe("-35 \u2013 0");
+    expect(inputs[1].attributes("aria-valuetext")).toBe("0");
   });
 
   it("supports startName/endName and form", () => {
@@ -265,5 +389,84 @@ describe("RangeSlider", () => {
       { left: press.PageUp, result: +4 },
       { left: press.PageDown, result: -4 },
     ]);
+  });
+
+  it("can click on track to move nearest handle", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeSlider, {
+      props: {
+        label: "The Label",
+        defaultValue: {
+          start: 40,
+          end: 70,
+        },
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const controls = wrapper.get(".spectrum-Slider-controls");
+    setTrackRect(controls.element, 100, 100);
+    const tracks = wrapper.findAll(".spectrum-Slider-track");
+    const inputs = wrapper.findAll("input[type='range']");
+    expect(tracks).toHaveLength(3);
+
+    await tracks[0].trigger("mousedown", { button: 0, clientX: 20, pageX: 20 });
+    await nextTick();
+    expect(document.activeElement).toBe(inputs[0].element);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 70 });
+    await controls.trigger("mouseup", { button: 0, clientX: 20, pageX: 20 });
+
+    await tracks[1].trigger("mousedown", { button: 0, clientX: 40, pageX: 40 });
+    await nextTick();
+    expect(document.activeElement).toBe(inputs[0].element);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 40, end: 70 });
+    await controls.trigger("mouseup", { button: 0, clientX: 40, pageX: 40 });
+
+    await tracks[1].trigger("mousedown", { button: 0, clientX: 60, pageX: 60 });
+    await nextTick();
+    expect(document.activeElement).toBe(inputs[1].element);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 40, end: 60 });
+    await controls.trigger("mouseup", { button: 0, clientX: 60, pageX: 60 });
+
+    await tracks[2].trigger("mousedown", { button: 0, clientX: 90, pageX: 90 });
+    await nextTick();
+    expect(document.activeElement).toBe(inputs[1].element);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 40, end: 90 });
+    await controls.trigger("mouseup", { button: 0, clientX: 90, pageX: 90 });
+  });
+
+  it("cannot click on track to move nearest handle when disabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeSlider, {
+      props: {
+        label: "The Label",
+        defaultValue: {
+          start: 40,
+          end: 70,
+        },
+        isDisabled: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const controls = wrapper.get(".spectrum-Slider-controls");
+    setTrackRect(controls.element, 100, 100);
+    const tracks = wrapper.findAll(".spectrum-Slider-track");
+    const inputs = wrapper.findAll("input[type='range']");
+    expect(tracks).toHaveLength(3);
+
+    await tracks[0].trigger("mousedown", { button: 0, clientX: 20, pageX: 20 });
+    await tracks[1].trigger("mousedown", { button: 0, clientX: 40, pageX: 40 });
+    await tracks[1].trigger("mousedown", { button: 0, clientX: 60, pageX: 60 });
+    await tracks[2].trigger("mousedown", { button: 0, clientX: 90, pageX: 90 });
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect((inputs[0].element as HTMLInputElement).value).toBe("40");
+    expect((inputs[1].element as HTMLInputElement).value).toBe("70");
+    expect(document.activeElement).not.toBe(inputs[0].element);
+    expect(document.activeElement).not.toBe(inputs[1].element);
   });
 });
