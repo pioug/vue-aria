@@ -198,7 +198,7 @@
 | @vue-types/link | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/link | packages/@react-types/link |
 | @vue-types/list | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/list | packages/@react-types/list |
 | @vue-types/listbox | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/listbox | packages/@react-types/listbox |
-| @vue-types/menu | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/menu | packages/@react-types/menu |
+| @vue-types/menu | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/menu | packages/@react-types/menu |
 | @vue-types/meter | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/meter | packages/@react-types/meter |
 | @vue-types/numberfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/numberfield | packages/@react-types/numberfield |
 | @vue-types/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/overlays | packages/@react-types/overlays |
