@@ -50,6 +50,17 @@ describe("NumberField", () => {
     expect(buttons[1].getAttribute("tabindex")).toBe("-1");
   });
 
+  it("supports visible label wiring and upstream roledescription text", () => {
+    const tree = render(NumberField, {
+      props: {
+        label: "Stepper label",
+      },
+    });
+
+    const input = tree.getByRole("textbox", { name: "Stepper label" });
+    expect(input.getAttribute("aria-roledescription")).toBe("Number field");
+  });
+
   it("exposes UNSAFE_getDOMNode and focus through component ref", async () => {
     const numberFieldRef = ref<{
       UNSAFE_getDOMNode?: () => HTMLElement | null;

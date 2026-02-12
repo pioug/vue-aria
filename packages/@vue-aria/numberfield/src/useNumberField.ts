@@ -633,7 +633,7 @@ export function useNumberField(
         handleWheel(event);
       },
       role: null,
-      "aria-roledescription": "numberField",
+      "aria-roledescription": "Number field",
       "aria-valuenow": null,
       "aria-valuetext": null,
       "aria-valuemin": null,
