@@ -576,6 +576,61 @@ describe("ComboBox", () => {
     expect(input.value).toBe("");
   });
 
+  it("updates the visible option list when controlled items change", async () => {
+    const initialItems: SpectrumComboBoxItemData[] = [
+      { key: "1", label: "Aardvark" },
+      { key: "2", label: "Kangaroo" },
+      { key: "3", label: "Snake" },
+    ];
+    const nextItems: SpectrumComboBoxItemData[] = [
+      { key: "1", label: "New Text" },
+      { key: "2", label: "Item 2" },
+      { key: "3", label: "Item 3" },
+    ];
+    let setItems: ((updatedItems: SpectrumComboBoxItemData[]) => void) | undefined;
+
+    const App = defineComponent({
+      name: "ComboBoxControlledItemsUpdateApp",
+      setup() {
+        const list = ref<SpectrumComboBoxItemData[]>(initialItems);
+        setItems = (updatedItems: SpectrumComboBoxItemData[]) => {
+          list.value = updatedItems;
+        };
+
+        return () =>
+          h(ComboBox, {
+            label: "Test",
+            items: list.value,
+            menuTrigger: "focus",
+          });
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox");
+    input.focus();
+    await Promise.resolve();
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options.map((option) => option.textContent)).toEqual([
+      "Aardvark",
+      "Kangaroo",
+      "Snake",
+    ]);
+
+    setItems?.(nextItems);
+    await Promise.resolve();
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options.map((option) => option.textContent)).toEqual([
+      "New Text",
+      "Item 2",
+      "Item 3",
+    ]);
+  });
+
   it("updates mapped slot items and selected input text when list items change", async () => {
     const user = userEvent.setup();
     const initialItems: SpectrumComboBoxItemData[] = [
