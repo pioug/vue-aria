@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T18:26:36.016Z",
+  "generatedAt": "2026-02-12T18:27:12.182Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 11,
-  "availableLeafCount": 4,
+  "incompletePackageCount": 10,
+  "availableLeafCount": 3,
   "availableLeaves": [
-    {
-      "packageName": "@vue-spectrum/calendar",
-      "upstreamPackageName": "@react-spectrum/calendar",
-      "upstreamPath": "packages/@react-spectrum/calendar"
-    },
     {
       "packageName": "@vue-spectrum/dialog",
       "upstreamPackageName": "@react-spectrum/dialog",
