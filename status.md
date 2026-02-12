@@ -218,5 +218,5 @@
 | @vue-types/textfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/textfield | packages/@react-types/textfield |
 | @vue-types/tooltip | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tooltip | packages/@react-types/tooltip |
 | @vue-types/view | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/view | packages/@react-types/view |
-| @vue-types/well | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/well | packages/@react-types/well |
+| @vue-types/well | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/well | packages/@react-types/well |
 

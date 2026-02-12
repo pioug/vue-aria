@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:06:47.856Z",
+  "generatedAt": "2026-02-12T15:09:04.264Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 179,
-  "availableLeafCount": 38,
+  "incompletePackageCount": 178,
+  "availableLeafCount": 37,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -188,11 +188,6 @@
       "packageName": "@vue-types/view",
       "upstreamPackageName": "@react-types/view",
       "upstreamPath": "packages/@react-types/view"
-    },
-    {
-      "packageName": "@vue-types/well",
-      "upstreamPackageName": "@react-types/well",
-      "upstreamPath": "packages/@react-types/well"
     }
   ],
   "hasCycles": false,
