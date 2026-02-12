@@ -1,4 +1,5 @@
 import { computed, ref, toValue, watch, watchEffect } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { announce } from "@vue-aria/live-announcer";
 import { filterDOMProps } from "@vue-aria/utils";
 import { mergeProps } from "@vue-aria/utils";
@@ -19,6 +20,17 @@ function resolveBoolean(value: unknown): boolean {
   return Boolean(value);
 }
 
+const CALENDAR_BASE_INTL_MESSAGES = {
+  "en-US": {
+    next: "Next",
+    previous: "Previous",
+  },
+  "fr-FR": {
+    next: "Suivant",
+    previous: "Précédent",
+  },
+} as const;
+
 export function useCalendarBase(
   options: UseCalendarBaseOptions,
   state: UseCalendarBaseState
@@ -26,6 +38,7 @@ export function useCalendarBase(
   const errorMessageId = useId(undefined, "v-aria-calendar-error");
   const visibleRangeDescription = useVisibleRangeDescription(state);
   const selectedDateDescription = useSelectedDateDescription(state);
+  const stringFormatter = useLocalizedStringFormatter(CALENDAR_BASE_INTL_MESSAGES);
 
   watchEffect(() => {
     hookData.set(state as object, {
@@ -123,7 +136,7 @@ export function useCalendarBase(
 
   const nextButtonProps = computed<Record<string, unknown>>(() => ({
     onPress: () => state.focusNextPage(),
-    "aria-label": "Next",
+    "aria-label": stringFormatter.value.format("next"),
     isDisabled: nextDisabled.value,
     onFocusChange: (isFocused: boolean) => {
       nextFocused.value = isFocused;
@@ -132,7 +145,7 @@ export function useCalendarBase(
 
   const prevButtonProps = computed<Record<string, unknown>>(() => ({
     onPress: () => state.focusPreviousPage(),
-    "aria-label": "Previous",
+    "aria-label": stringFormatter.value.format("previous"),
     isDisabled: previousDisabled.value,
     onFocusChange: (isFocused: boolean) => {
       previousFocused.value = isFocused;

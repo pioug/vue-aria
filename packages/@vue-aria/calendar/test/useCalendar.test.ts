@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { nextTick, ref } from "vue";
+import { mount } from "@vue/test-utils";
+import { defineComponent, h, nextTick, ref } from "vue";
+import { provideI18n } from "@vue-aria/i18n";
 import { destroyAnnouncer } from "@vue-aria/live-announcer";
 import { hookData, useCalendar } from "../src";
 import type { CalendarDateLike, UseCalendarBaseState } from "../src/types";
@@ -114,5 +116,51 @@ describe("useCalendar", () => {
 
     const data = hookData.get(state as object);
     expect(data?.selectedDateDescription).toContain("Selected date:");
+  });
+
+  it("localizes paging aria labels from provided locale", () => {
+    const labels: { next?: string; previous?: string } = {};
+
+    const Child = defineComponent({
+      name: "CalendarLocaleChild",
+      setup() {
+        const date = createDate("2026-02-01");
+        const state: UseCalendarBaseState = {
+          visibleRange: ref({ start: date, end: date }),
+          timeZone: ref("UTC"),
+          isFocused: ref(false),
+          value: ref(date),
+          isNextVisibleRangeInvalid: () => false,
+          isPreviousVisibleRangeInvalid: () => false,
+          focusNextPage: vi.fn(),
+          focusPreviousPage: vi.fn(),
+          setFocused: vi.fn(),
+        };
+
+        const { nextButtonProps, prevButtonProps } = useCalendar(
+          {
+            "aria-label": "Booking calendar",
+          },
+          state
+        );
+
+        labels.next = nextButtonProps.value["aria-label"] as string;
+        labels.previous = prevButtonProps.value["aria-label"] as string;
+        return () => h("div");
+      },
+    });
+
+    const App = defineComponent({
+      name: "CalendarLocaleHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+        return () => h(Child);
+      },
+    });
+
+    mount(App);
+
+    expect(labels.next).toBe("Suivant");
+    expect(labels.previous).toBe("Précédent");
   });
 });

@@ -30,6 +30,6 @@ import {
 ### Behavior
 
 - Exposes application role and visible-range labeling for calendar groups.
-- Provides previous/next paging button semantics with disabled-state wiring.
+- Provides previous/next paging button semantics with disabled-state wiring and locale-aware paging aria labels.
 - Supports range-calendar blur/touch/pointer stop-drag behavior.
 - Provides gridcell/button semantics with selection, focus, invalid, and unavailable flags.
