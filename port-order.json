@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:39:44.199Z",
+  "generatedAt": "2026-02-12T17:40:57.728Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 75,
-  "availableLeafCount": 6,
+  "incompletePackageCount": 74,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -20,14 +20,29 @@
       "upstreamPath": "packages/@react-aria/datepicker"
     },
     {
+      "packageName": "@vue-aria/grid",
+      "upstreamPackageName": "@react-aria/grid",
+      "upstreamPath": "packages/@react-aria/grid"
+    },
+    {
+      "packageName": "@vue-aria/listbox",
+      "upstreamPackageName": "@react-aria/listbox",
+      "upstreamPath": "packages/@react-aria/listbox"
+    },
+    {
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
     },
     {
-      "packageName": "@vue-aria/selection",
-      "upstreamPackageName": "@react-aria/selection",
-      "upstreamPath": "packages/@react-aria/selection"
+      "packageName": "@vue-aria/steplist",
+      "upstreamPackageName": "@react-aria/steplist",
+      "upstreamPath": "packages/@react-aria/steplist"
+    },
+    {
+      "packageName": "@vue-aria/tabs",
+      "upstreamPackageName": "@react-aria/tabs",
+      "upstreamPath": "packages/@react-aria/tabs"
     },
     {
       "packageName": "@vue-aria/toast",
