@@ -1,0 +1,23 @@
+{
+  "name": "@vue-types/datepicker",
+  "version": "3.13.4",
+  "description": "Vue port of @react-types/datepicker",
+  "license": "Apache-2.0",
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.11.0",
+    "@vue-types/calendar": "^3.8.2",
+    "@vue-types/overlays": "^3.9.3",
+    "@vue-types/shared": "^3.33.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  }
+}

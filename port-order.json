@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:45:36.029Z",
+  "generatedAt": "2026-02-12T15:46:40.194Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 145,
-  "availableLeafCount": 23,
+  "incompletePackageCount": 144,
+  "availableLeafCount": 22,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -113,11 +113,6 @@
       "packageName": "@vue-types/color",
       "upstreamPackageName": "@react-types/color",
       "upstreamPath": "packages/@react-types/color"
-    },
-    {
-      "packageName": "@vue-types/datepicker",
-      "upstreamPackageName": "@react-types/datepicker",
-      "upstreamPath": "packages/@react-types/datepicker"
     }
   ],
   "hasCycles": false,
