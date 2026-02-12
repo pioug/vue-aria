@@ -206,7 +206,7 @@
 | @vue-types/provider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/provider | packages/@react-types/provider |
 | @vue-types/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/radio | packages/@react-types/radio |
 | @vue-types/searchfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/searchfield | packages/@react-types/searchfield |
-| @vue-types/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/select | packages/@react-types/select |
+| @vue-types/select | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/select | packages/@react-types/select |
 | @vue-types/shared | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/shared | packages/@react-types/shared |
 | @vue-types/sidenav | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/sidenav | packages/@react-types/sidenav |
 | @vue-types/slider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/slider | packages/@react-types/slider |

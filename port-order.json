@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:40:45.198Z",
+  "generatedAt": "2026-02-12T15:41:30.859Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 150,
-  "availableLeafCount": 25,
+  "incompletePackageCount": 149,
+  "availableLeafCount": 24,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -118,11 +118,6 @@
       "packageName": "@vue-types/combobox",
       "upstreamPackageName": "@react-types/combobox",
       "upstreamPath": "packages/@react-types/combobox"
-    },
-    {
-      "packageName": "@vue-types/select",
-      "upstreamPackageName": "@react-types/select",
-      "upstreamPath": "packages/@react-types/select"
     },
     {
       "packageName": "@vue-types/table",
