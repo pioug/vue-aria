@@ -992,18 +992,63 @@ export const ComboBox = defineComponent({
       formRef.value = formElement;
     };
 
+    const onDocumentScroll = (event: Event) => {
+      if (!state.isOpen.value) {
+        return;
+      }
+
+      const target = event.target;
+      if (
+        target instanceof Node &&
+        listBoxRef.value &&
+        listBoxRef.value.contains(target)
+      ) {
+        return;
+      }
+
+      state.close();
+    };
+
+    const detachScrollListener = () => {
+      if (typeof window === "undefined") {
+        return;
+      }
+
+      window.removeEventListener("scroll", onDocumentScroll, true);
+    };
+
+    const syncScrollListener = () => {
+      if (typeof window === "undefined") {
+        return;
+      }
+
+      detachScrollListener();
+      if (state.isOpen.value) {
+        window.addEventListener("scroll", onDocumentScroll, true);
+      }
+    };
+
     onMounted(() => {
       attachFormListener();
+      syncScrollListener();
     });
 
     onBeforeUnmount(() => {
       detachFormListener();
+      detachScrollListener();
     });
 
     watch(
       () => props.form,
       () => {
         attachFormListener();
+      }
+    );
+
+    watch(
+      () => state.isOpen.value,
+      () => {
+        syncScrollListener();
       }
     );
 

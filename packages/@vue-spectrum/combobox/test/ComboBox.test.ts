@@ -451,6 +451,20 @@ describe("ComboBox", () => {
     expect((input as HTMLInputElement).value).toBe("One");
   });
 
+  it("closes menu on page scroll", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const triggerButton = tree.getByRole("button");
+
+    await user.click(triggerButton);
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    fireEvent.scroll(document.body);
+    await Promise.resolve();
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
   it("clears aria-activedescendant on ArrowLeft and ArrowRight", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
