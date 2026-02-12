@@ -413,6 +413,17 @@ describe("ComboBox", () => {
     expect(input.value).toBe("Three");
   });
 
+  it("calls onBlur when the input loses focus", () => {
+    const onBlur = vi.fn();
+    const tree = renderComponent({
+      onBlur,
+    });
+    const input = tree.getByRole("combobox");
+
+    fireEvent.blur(input);
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
   it("updates the input field when controlled inputValue changes", async () => {
     const user = userEvent.setup();
     const App = defineComponent({

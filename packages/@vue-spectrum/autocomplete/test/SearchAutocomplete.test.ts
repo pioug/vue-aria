@@ -270,6 +270,17 @@ describe("SearchAutocomplete", () => {
     expect(input.value).toBe("Three");
   });
 
+  it("calls onBlur when the input loses focus", () => {
+    const onBlur = vi.fn();
+    const tree = renderComponent({
+      onBlur,
+    });
+    const input = tree.getByRole("combobox");
+
+    fireEvent.blur(input);
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
   it("clears input when clear button is pressed", async () => {
     const user = userEvent.setup();
     const onClear = vi.fn();
