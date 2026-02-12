@@ -10,11 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-export {runAfterTransition} from './runAfterTransition';
-export {getOwnerDocument, getOwnerWindow, isShadowRoot} from './domHelpers';
-export {getActiveElement, getEventTarget, isFocusWithin, nodeContains} from './shadowdom/DOMFunctions';
-export {chain} from './chain';
-export {mergeRefs} from './mergeRefs';
-export {mergeIds, useId, useSlotId} from './useId';
-export {mergeProps} from './mergeProps';
-export {useObjectRef} from './useObjectRef';
+/**
+ * Calls all functions in the order they were chained with the same arguments.
+ */
+export function chain(...callbacks: any[]): (...args: any[]) => void {
+  return (...args: any[]) => {
+    for (const callback of callbacks) {
+      if (typeof callback === 'function') {
+        callback(...args);
+      }
+    }
+  };
+}

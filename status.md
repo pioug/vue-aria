@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 9 |
-| Passing tests | 9 |
+| Ported tests | 12 |
+| Passing tests | 12 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -73,7 +73,7 @@
 | @vue-aria/toolbar | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toolbar | packages/@react-aria/toolbar |
 | @vue-aria/tooltip | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tooltip | packages/@react-aria/tooltip |
 | @vue-aria/tree | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tree | packages/@react-aria/tree |
-| @vue-aria/utils | in_progress | 8 | 3 | 3 | 0 | 0 | 0 | 0 | false | @react-aria/utils | packages/@react-aria/utils |
+| @vue-aria/utils | in_progress | 8 | 6 | 6 | 0 | 0 | 0 | 0 | false | @react-aria/utils | packages/@react-aria/utils |
 | @vue-aria/virtualizer | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/virtualizer | packages/@react-aria/virtualizer |
 | @vue-aria/visually-hidden | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/visually-hidden | packages/@react-aria/visually-hidden |
 | @vue-spectrum/accordion | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/accordion | packages/@react-spectrum/accordion |
