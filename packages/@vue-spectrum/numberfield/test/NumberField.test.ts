@@ -912,6 +912,131 @@ describe("NumberField", () => {
     expect(event.defaultPrevented).toBe(true);
   });
 
+  it("beforeinput allows inserting text within the numeric portion", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      formatOptions: {
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "code",
+      },
+    });
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("12");
+    await fireEvent.blur(input);
+    expect(input.value).toContain("USD");
+    expect(input.value).toContain("12.00");
+
+    await fireEvent.focus(input);
+    input.setSelectionRange(5, 5);
+
+    const event = new InputEvent("beforeinput", {
+      cancelable: true,
+      data: "2",
+      inputType: "insertText",
+    });
+    const proceed = input.dispatchEvent(event);
+    expect(proceed).toBe(true);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("beforeinput allows replacing the whole numeric portion", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      formatOptions: {
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "code",
+      },
+    });
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("12");
+    await fireEvent.blur(input);
+    expect(input.value).toContain("USD");
+    expect(input.value).toContain("12.00");
+
+    await fireEvent.focus(input);
+    input.setSelectionRange(4, 10);
+
+    const event = new InputEvent("beforeinput", {
+      cancelable: true,
+      data: "2",
+      inputType: "insertText",
+    });
+    const proceed = input.dispatchEvent(event);
+    expect(proceed).toBe(true);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("beforeinput allows history undo/redo operations", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      formatOptions: {
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "code",
+      },
+    });
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("12");
+    await fireEvent.blur(input);
+    expect(input.value).toContain("USD");
+    expect(input.value).toContain("12.00");
+
+    await fireEvent.focus(input);
+    input.setSelectionRange(2, 2);
+
+    const undoEvent = new InputEvent("beforeinput", {
+      cancelable: true,
+      inputType: "historyUndo",
+    });
+    const undoProceed = input.dispatchEvent(undoEvent);
+    expect(undoProceed).toBe(true);
+    expect(undoEvent.defaultPrevented).toBe(false);
+
+    const redoEvent = new InputEvent("beforeinput", {
+      cancelable: true,
+      inputType: "historyRedo",
+    });
+    const redoProceed = input.dispatchEvent(redoEvent);
+    expect(redoProceed).toBe(true);
+    expect(redoEvent.defaultPrevented).toBe(false);
+  });
+
+  it("beforeinput allows deleting a leading plus sign", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      formatOptions: {
+        style: "unit",
+        unit: "percent",
+        signDisplay: "always",
+      },
+    });
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("12");
+    await fireEvent.blur(input);
+    expect(input.value).toBe("+12%");
+
+    await fireEvent.focus(input);
+    input.setSelectionRange(0, 0);
+
+    const event = new InputEvent("beforeinput", {
+      cancelable: true,
+      inputType: "deleteContentForward",
+    });
+    const proceed = input.dispatchEvent(event);
+    expect(proceed).toBe(true);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
   it("supports custom increment and decrement aria labels", () => {
     const tree = renderNumberField({
       label: "Count",
