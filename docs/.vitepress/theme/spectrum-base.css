@@ -1620,6 +1620,812 @@
   border-color: rgba(20, 115, 230, 0.35);
 }
 
+/* Parity aliases for spectrum-* class variants */
+
+.spectrum-docs-provider :is(
+  .spectrum-Button,
+  .spectrum-ActionButton,
+  .spectrum-FieldButton,
+  .spectrum-ClearButton,
+  .spectrum-menu-trigger-button,
+  .spectrum-submenu-trigger-button
+) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+  padding: 0.32rem 0.62rem;
+  text-decoration: none;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-Button,
+  .spectrum-ActionButton,
+  .spectrum-FieldButton,
+  .spectrum-ClearButton,
+  .spectrum-menu-trigger-button,
+  .spectrum-submenu-trigger-button
+):hover {
+  border-color: var(--spectrum-ui-border-strong);
+  background: var(--spectrum-ui-bg-subtle);
+}
+
+.spectrum-docs-provider :is(.spectrum-Button, .spectrum-ActionButton).is-selected {
+  border-color: var(--spectrum-ui-accent);
+  background: rgba(20, 115, 230, 0.1);
+  color: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider :is(.spectrum-Button, .spectrum-ActionButton, .spectrum-FieldButton, .spectrum-ClearButton).is-disabled,
+.spectrum-docs-provider :is(.spectrum-Button, .spectrum-ActionButton, .spectrum-FieldButton, .spectrum-ClearButton)[disabled] {
+  opacity: 0.55;
+}
+
+.spectrum-docs-provider .spectrum-Button--iconOnly {
+  min-width: 2rem;
+  padding-inline: 0.4rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-ActionButton-label, .spectrum-Button-label) {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup-itemIcon {
+  flex: 0 0 auto;
+}
+
+.spectrum-docs-provider .spectrum-FieldButton--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+.spectrum-docs-provider .spectrum-FieldButton--invalid {
+  border-color: rgba(211, 21, 16, 0.55);
+}
+
+.spectrum-docs-provider [class*="spectrum-Icon--size"] {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.spectrum-docs-provider .spectrum-Icon--sizeL {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.spectrum-docs-provider .spectrum-Icon--sizeXL {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.spectrum-docs-provider .spectrum-Textfield {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-Textfield-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.spectrum-docs-provider .spectrum-Textfield-wrapper:focus-within {
+  border-color: var(--spectrum-ui-focus);
+  box-shadow: 0 0 0 1px var(--spectrum-ui-focus);
+}
+
+.spectrum-docs-provider .spectrum-Textfield-wrapper:hover {
+  border-color: var(--spectrum-ui-border-strong);
+}
+
+.spectrum-docs-provider :is(.spectrum-Textfield-input, .spectrum-SearchAutocomplete-input) {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--spectrum-ui-text);
+  padding: 0.42rem 0.6rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-Textfield-icon,
+  .spectrum-Textfield-inputIcon,
+  .spectrum-Textfield-loadingIcon,
+  .spectrum-Textfield-validationIcon,
+  .spectrum-SearchAutocomplete-icon
+) {
+  color: var(--spectrum-ui-text-muted);
+  margin-inline: 0.2rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Textfield--invalid, .spectrum-Textfield-wrapper.is-invalid) .spectrum-Textfield-wrapper,
+.spectrum-docs-provider .spectrum-Textfield--invalid .spectrum-Textfield-wrapper {
+  border-color: rgba(211, 21, 16, 0.55);
+}
+
+.spectrum-docs-provider :is(.spectrum-Textfield--valid, .spectrum-Textfield-wrapper.is-valid) .spectrum-Textfield-wrapper,
+.spectrum-docs-provider .spectrum-Textfield--valid .spectrum-Textfield-wrapper {
+  border-color: rgba(18, 128, 92, 0.5);
+}
+
+.spectrum-docs-provider .spectrum-Textfield--quiet .spectrum-Textfield-wrapper,
+.spectrum-docs-provider .spectrum-Textfield-wrapper--quiet {
+  border-radius: 0;
+  border-inline: none;
+  border-top: none;
+  background: transparent;
+}
+
+.spectrum-docs-provider .spectrum-Textfield--multiline .spectrum-Textfield-wrapper {
+  align-items: stretch;
+}
+
+.spectrum-docs-provider .spectrum-Textfield--multiline .spectrum-Textfield-input {
+  min-height: 5.2rem;
+  resize: vertical;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ComboBox-field,
+  .spectrum-SearchAutocomplete-field,
+  .spectrum-DatePicker-group,
+  .spectrum-DateRangePicker-group,
+  .spectrum-DateField-input,
+  .spectrum-TimeField-input
+) {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 8px;
+  background: var(--spectrum-ui-bg);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ComboBox-field:hover,
+  .spectrum-SearchAutocomplete-field:hover,
+  .spectrum-DatePicker-group:hover,
+  .spectrum-DateRangePicker-group:hover,
+  .spectrum-DateField-input:hover,
+  .spectrum-TimeField-input:hover
+) {
+  border-color: var(--spectrum-ui-border-strong);
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ComboBox-field:focus-within,
+  .spectrum-SearchAutocomplete-field:focus-within,
+  .spectrum-DatePicker-group:focus-within,
+  .spectrum-DateRangePicker-group:focus-within,
+  .spectrum-DateField-input:focus-within,
+  .spectrum-TimeField-input:focus-within
+) {
+  border-color: var(--spectrum-ui-focus);
+  box-shadow: 0 0 0 1px var(--spectrum-ui-focus);
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ComboBox-input,
+  .spectrum-SearchAutocomplete-input,
+  .spectrum-DatePicker-input,
+  .spectrum-DateRangePicker-input
+) {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--spectrum-ui-text);
+  padding: 0.42rem 0.6rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ComboBox-button,
+  .spectrum-DatePicker-button,
+  .spectrum-DateRangePicker-button
+) {
+  flex: 0 0 auto;
+  min-height: 1.9rem;
+  min-width: 1.9rem;
+  margin-inline-end: 0.2rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 6px;
+  background: var(--spectrum-ui-bg-subtle);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .spectrum-DateRangePicker-dash {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.85rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ComboBox-popover,
+  .spectrum-SearchAutocomplete-popover,
+  .spectrum-DatePicker-popover,
+  .spectrum-DateRangePicker-popover
+) {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  box-shadow: var(--spectrum-ui-shadow);
+  overflow: auto;
+  margin-top: 0.3rem;
+  max-height: 20rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-ComboBox-listBox, .spectrum-SearchAutocomplete-listBox) {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-ComboBox-section, .spectrum-SearchAutocomplete-section) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.spectrum-docs-provider :is(.spectrum-ComboBox-loadingLabel, .spectrum-picker-loading) {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.8rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-ListView,
+  .spectrum-listview-row-disabled,
+  .spectrum-listview-checkbox-
+) {
+  color: inherit;
+}
+
+.spectrum-docs-provider .spectrum-ListView {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider .spectrum-ListView-item {
+  border-top: 1px solid var(--spectrum-ui-border-soft);
+  background: var(--spectrum-ui-bg-raised);
+}
+
+.spectrum-docs-provider .spectrum-ListView-item:first-child {
+  border-top: none;
+}
+
+.spectrum-docs-provider .spectrum-ListView-itemCell {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.7rem;
+}
+
+.spectrum-docs-provider .spectrum-ListView-itemLabel {
+  font-weight: 500;
+}
+
+.spectrum-docs-provider .spectrum-ListView-itemDescription {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-ListView-item--wrap .spectrum-ListView-itemCell,
+.spectrum-docs-provider .spectrum-ListView--wrap .spectrum-ListView-itemCell {
+  align-items: flex-start;
+}
+
+.spectrum-docs-provider .spectrum-ListView-item--truncate .spectrum-ListView-itemLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spectrum-docs-provider .spectrum-ListView-empty {
+  padding: 0.6rem 0.7rem;
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-ListView--quiet {
+  border-inline: none;
+  border-radius: 0;
+}
+
+.spectrum-docs-provider .spectrum-Accordion {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-Accordion-item {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider .spectrum-Accordion-item--quiet {
+  border-inline: none;
+  border-radius: 0;
+}
+
+.spectrum-docs-provider .spectrum-Accordion-itemHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  min-height: 2.2rem;
+  border: none;
+  background: transparent;
+  color: var(--spectrum-ui-text);
+  padding: 0.42rem 0.6rem;
+}
+
+.spectrum-docs-provider .spectrum-Accordion-itemHeading {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.spectrum-docs-provider .spectrum-Accordion-itemContent {
+  border-top: 1px solid var(--spectrum-ui-border-soft);
+  padding: 0.5rem 0.6rem;
+}
+
+.spectrum-docs-provider .spectrum-Accordion-itemIndicator {
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .spectrum-Accordion-itemIndicator--rtl {
+  transform: rotate(180deg);
+}
+
+.spectrum-docs-provider :is(.spectrum-Calendar-wrapper, .spectrum-range-calendar-label, .spectrum-calendar-label) {
+  display: inline-grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-Calendar {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  overflow: hidden;
+}
+
+.spectrum-docs-provider .spectrum-Calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.5rem 0.55rem;
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .spectrum-Calendar-title {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.spectrum-docs-provider .spectrum-Calendar-navButton {
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 6px;
+  background: var(--spectrum-ui-bg-subtle);
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .spectrum-Calendar-body {
+  padding: 0.5rem;
+}
+
+.spectrum-docs-provider .spectrum-Calendar-monthTitle {
+  margin: 0 0 0.4rem;
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.spectrum-docs-provider .spectrum-Calendar-grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.spectrum-docs-provider .spectrum-Calendar-weekday {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.spectrum-docs-provider .spectrum-CalendarCell {
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+}
+
+.spectrum-docs-provider .spectrum-CalendarCell-button {
+  width: 100%;
+  height: 100%;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .spectrum-CalendarCell-button:hover {
+  background: var(--spectrum-ui-bg-subtle);
+  border-color: var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider .spectrum-CalendarCell.is-selected .spectrum-CalendarCell-button {
+  background: var(--spectrum-ui-accent);
+  border-color: var(--spectrum-ui-accent);
+  color: #ffffff;
+}
+
+.spectrum-docs-provider .spectrum-DialogOverlay,
+.spectrum-docs-provider .spectrum-Modal,
+.spectrum-docs-provider .spectrum-Modal-wrapper,
+.spectrum-docs-provider .spectrum-Popover-wrapper,
+.spectrum-docs-provider .spectrum-Tray-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+}
+
+.spectrum-docs-provider .spectrum-Underlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.36);
+}
+
+.spectrum-docs-provider :is(.spectrum-Dialog, .spectrum-ContextualHelp-dialog) {
+  position: relative;
+  z-index: 1;
+  width: min(38rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  box-shadow: var(--spectrum-ui-shadow);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .spectrum-Dialog--small {
+  width: min(24rem, calc(100vw - 2rem));
+}
+
+.spectrum-docs-provider .spectrum-Dialog--medium {
+  width: min(30rem, calc(100vw - 2rem));
+}
+
+.spectrum-docs-provider :is(.spectrum-Dialog--fullscreen, .spectrum-Dialog--fullscreenTakeover) {
+  width: calc(100vw - 1rem);
+  height: calc(100vh - 1rem);
+  max-height: none;
+}
+
+.spectrum-docs-provider .spectrum-Dialog-grid {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+}
+
+.spectrum-docs-provider .spectrum-Dialog-closeButton {
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-end: 0.5rem;
+  min-width: 1.8rem;
+  min-height: 1.8rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 999px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .spectrum-Dialog-typeIcon {
+  color: var(--spectrum-ui-accent);
+}
+
+.spectrum-docs-provider .spectrum-ContextualHelp-dialog {
+  width: min(24rem, calc(100vw - 2rem));
+}
+
+.spectrum-docs-provider :is(.spectrum-ContextualHelp-button, .spectrum-contextual-help-button) {
+  min-width: 1.8rem;
+  min-height: 1.8rem;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 999px;
+  background: var(--spectrum-ui-bg);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .spectrum-ContextualHelp-content {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem;
+}
+
+.spectrum-docs-provider .spectrum-ContextualHelp-footer {
+  border-top: 1px solid var(--spectrum-ui-border-soft);
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionBar {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  padding: 0.55rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionBar-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionBar-selectedCount {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionBar-actionGroup {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionBar-announcer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.spectrum-docs-provider .spectrum-ActionBar--emphasized {
+  border-color: rgba(20, 115, 230, 0.45);
+  background: rgba(20, 115, 230, 0.08);
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup--vertical {
+  flex-direction: column;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup--justified .spectrum-ActionGroup-item {
+  flex: 1 1 auto;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup--compact {
+  gap: 0.2rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup-item--iconOnly {
+  min-width: 2rem;
+  padding-inline: 0.42rem;
+}
+
+.spectrum-docs-provider .spectrum-ActionGroup-menu {
+  display: inline-flex;
+}
+
+.spectrum-docs-provider .spectrum-ActionMenu {
+  display: inline-flex;
+}
+
+.spectrum-docs-provider .spectrum-TabsPanel {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider .spectrum-TabsPanel-collapseWrapper {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.spectrum-docs-provider .spectrum-Tabs-picker {
+  width: min(16rem, 100%);
+}
+
+.spectrum-docs-provider .spectrum-Tabs-itemLabel {
+  min-width: 0;
+}
+
+.spectrum-docs-provider :is(.spectrum-Tabs--quiet, .spectrum-Tabs--compact) {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.spectrum-docs-provider .spectrum-Tabs--compact .spectrum-Tabs-item {
+  min-height: 1.7rem;
+  padding: 0.18rem 0.45rem;
+}
+
+.spectrum-docs-provider .spectrum-Tabs--emphasized .spectrum-Tabs-item.is-selected {
+  background: rgba(20, 115, 230, 0.15);
+}
+
+.spectrum-docs-provider .spectrum-Tabs--isCollapsed .spectrum-Tabs-item {
+  display: none;
+}
+
+.spectrum-docs-provider :is(.spectrum-tabs-picker, .spectrum-tabs-picker-label) {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Checkbox-label, .spectrum-Radio-label, .spectrum-ToggleSwitch-label) {
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider :is(.spectrum-Checkbox--quiet, .spectrum-Radio--quiet, .spectrum-ToggleSwitch--quiet) {
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider :is(.spectrum-Checkbox-checkmark, .spectrum-Checkbox-partialCheckmark) {
+  color: #ffffff;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader--small .spectrum-BarLoader-track {
+  height: 6px;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader--large .spectrum-BarLoader-track {
+  height: 10px;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader--indeterminate .spectrum-BarLoader-fill {
+  width: 45%;
+  animation: spectrum-docs-indeterminate-bar 1000ms ease-in-out infinite;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-BarLoader--staticBlack .spectrum-BarLoader-fill,
+  .spectrum-BarLoader--overBackground .spectrum-BarLoader-fill
+) {
+  background: #111827;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader--staticWhite .spectrum-BarLoader-fill {
+  background: #ffffff;
+}
+
+.spectrum-docs-provider .spectrum-BarLoader--sideLabel {
+  align-items: center;
+}
+
+.spectrum-docs-provider .spectrum-CircleLoader--small {
+  width: 1rem;
+  height: 1rem;
+}
+
+.spectrum-docs-provider .spectrum-CircleLoader--large {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-CircleLoader--staticBlack,
+  .spectrum-CircleLoader--overBackground
+) {
+  border-top-color: #111827;
+}
+
+.spectrum-docs-provider .spectrum-CircleLoader--staticWhite {
+  border-color: rgba(255, 255, 255, 0.45);
+  border-top-color: #ffffff;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-CircleLoader-fill,
+  .spectrum-CircleLoader-fillMask1,
+  .spectrum-CircleLoader-fillMask2,
+  .spectrum-CircleLoader-fillSubMask1,
+  .spectrum-CircleLoader-fillSubMask2
+) {
+  display: none;
+}
+
+.spectrum-docs-provider .spectrum-Stepper--isQuiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+.spectrum-docs-provider .spectrum-Stepper--showStepper {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.spectrum-docs-provider :is(.spectrum-Stepper-button--stepUp, .spectrum-Stepper-button--stepDown) {
+  min-height: 1.12rem;
+}
+
+.spectrum-docs-provider .spectrum-Stepper-button-icon {
+  font-size: 0.62rem;
+  color: inherit;
+}
+
+.spectrum-docs-provider .spectrum-menu {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .spectrum-menu-trigger {
+  display: inline-flex;
+}
+
+.spectrum-docs-provider .spectrum-submenu {
+  display: none;
+}
+
+.spectrum-docs-provider .spectrum-submenu-open {
+  display: block;
+}
+
+.spectrum-docs-provider [class*="spectrum-MenuTrigger-popover--"],
+.spectrum-docs-provider [class*="spectrum-Dropdown-popover--"] {
+  min-width: 12rem;
+}
+
+.spectrum-docs-provider .spectrum-Dropdown-progressCircle {
+  margin-inline-start: auto;
+}
+
+.spectrum-docs-provider :is(.spectrum-picker-error, .spectrum-datefield-error, .spectrum-timefield-error) {
+  color: var(--spectrum-ui-danger);
+  font-size: 0.78rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-datefield-description,
+  .spectrum-timefield-description
+) {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.78rem;
+}
+
+.spectrum-docs-provider :is(
+  .spectrum-datefield-label,
+  .spectrum-timefield-label
+) {
+  font-weight: 500;
+  color: var(--spectrum-ui-text);
+}
+
 @media (max-width: 720px) {
   .spectrum-docs-provider .spectrum-CardView-cell {
     min-width: 100%;
@@ -1642,5 +2448,14 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes spectrum-docs-indeterminate-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
   }
 }
