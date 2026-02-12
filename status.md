@@ -149,7 +149,7 @@
 | @vue-stately/data | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/data | packages/@react-stately/data |
 | @vue-stately/datepicker | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/datepicker | packages/@react-stately/datepicker |
 | @vue-stately/disclosure | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
-| @vue-stately/dnd | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/dnd | packages/@react-stately/dnd |
+| @vue-stately/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/dnd | packages/@react-stately/dnd |
 | @vue-stately/flags | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/flags | packages/@react-stately/flags |
 | @vue-stately/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/form | packages/@react-stately/form |
 | @vue-stately/grid | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/grid | packages/@react-stately/grid |
