@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:40:57.728Z",
+  "generatedAt": "2026-02-12T17:42:07.991Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 74,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 73,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -23,11 +23,6 @@
       "packageName": "@vue-aria/grid",
       "upstreamPackageName": "@react-aria/grid",
       "upstreamPath": "packages/@react-aria/grid"
-    },
-    {
-      "packageName": "@vue-aria/listbox",
-      "upstreamPackageName": "@react-aria/listbox",
-      "upstreamPath": "packages/@react-aria/listbox"
     },
     {
       "packageName": "@vue-aria/overlays",

@@ -656,3 +656,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential selection focus/keyboard timing differences until full composable conversion.
 - Removal plan: Replace React hook/event assumptions with Vue-native composables/event typing and port upstream selectable collection tests for parity.
+
+- Package: `@vue-aria/listbox`
+- Upstream reference: `packages/@react-aria/listbox` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React-derived typing (`ReactNode`) and inherited React-based selection/interaction runtime semantics from dependencies.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential listbox option focus/selection timing differences until full composable conversion.
+- Removal plan: Replace React-derived typing and inherited interaction assumptions with Vue-native equivalents and port upstream listbox behavior tests for parity.
