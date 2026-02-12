@@ -684,3 +684,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential toast dismissal/focus timing differences until full composable conversion.
 - Removal plan: Replace React hook-based toast region/item behavior with Vue-native composables/reactivity and port upstream toast behavior tests for parity.
+
+- Package: `@vue-aria/grid`
+- Upstream reference: `packages/@react-aria/grid` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/event semantics (`useMemo`, `useCallback`, `useRef`, React focus/keyboard event typing) across grid navigation, selection announcement, and cell focus behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential grid navigation/selection timing differences until full composable conversion.
+- Removal plan: Replace React hook/event assumptions with Vue-native composables/event typing and port upstream grid behavior tests for parity.

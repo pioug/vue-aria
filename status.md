@@ -39,7 +39,7 @@
 | @vue-aria/example-theme | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/example-theme | packages/@react-aria/example-theme |
 | @vue-aria/focus | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/focus | packages/@react-aria/focus |
 | @vue-aria/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/form | packages/@react-aria/form |
-| @vue-aria/grid | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/grid | packages/@react-aria/grid |
+| @vue-aria/grid | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/grid | packages/@react-aria/grid |
 | @vue-aria/gridlist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/gridlist | packages/@react-aria/gridlist |
 | @vue-aria/i18n | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/i18n | packages/@react-aria/i18n |
 | @vue-aria/interactions | complete | 13 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/interactions | packages/@react-aria/interactions |
