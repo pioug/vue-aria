@@ -824,6 +824,26 @@ describe("NumberField", () => {
     expect(input.selectionEnd).toBe(1);
   });
 
+  async function prepareCurrencyFieldForBeforeInput() {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      formatOptions: {
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "code",
+      },
+    });
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("12");
+    await fireEvent.blur(input);
+    expect(input.value).toContain("USD");
+    expect(input.value).toContain("12.00");
+    await fireEvent.focus(input);
+    return input;
+  }
+
   it("beforeinput allows deleting a whole currency symbol selection", async () => {
     const user = userEvent.setup();
     const tree = renderNumberField({
@@ -1031,6 +1051,90 @@ describe("NumberField", () => {
     const event = new InputEvent("beforeinput", {
       cancelable: true,
       inputType: "deleteContentForward",
+    });
+    const proceed = input.dispatchEvent(event);
+    expect(proceed).toBe(true);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it.each([
+    "deleteHardLineBackward",
+    "deleteSoftLineBackward",
+    "deleteContentForward",
+    "deleteContent",
+    "deleteByCut",
+    "deleteByDrag",
+  ])(
+    "beforeinput allows deleting a whole currency symbol selection with %s",
+    async (inputType) => {
+      const input = await prepareCurrencyFieldForBeforeInput();
+      input.setSelectionRange(0, 3);
+
+      const event = new InputEvent("beforeinput", {
+        cancelable: true,
+        inputType,
+      });
+      const proceed = input.dispatchEvent(event);
+      expect(proceed).toBe(true);
+      expect(event.defaultPrevented).toBe(false);
+    }
+  );
+
+  it.each([
+    "deleteHardLineBackward",
+    "deleteSoftLineBackward",
+    "deleteContentForward",
+    "deleteContent",
+    "deleteByCut",
+    "deleteByDrag",
+  ])(
+    "beforeinput prevents deleting a partial currency symbol selection with %s",
+    async (inputType) => {
+      const input = await prepareCurrencyFieldForBeforeInput();
+      input.setSelectionRange(1, 3);
+
+      const event = new InputEvent("beforeinput", {
+        cancelable: true,
+        inputType,
+      });
+      const proceed = input.dispatchEvent(event);
+      expect(proceed).toBe(false);
+      expect(event.defaultPrevented).toBe(true);
+    }
+  );
+
+  it.each([
+    "insertFromPaste",
+    "insertFromDrop",
+    "insertFromYank",
+    "insertReplacementText",
+  ])("beforeinput prevents %s inside currency symbol", async (inputType) => {
+    const input = await prepareCurrencyFieldForBeforeInput();
+    input.setSelectionRange(1, 1);
+
+    const event = new InputEvent("beforeinput", {
+      cancelable: true,
+      data: "2",
+      inputType,
+    });
+    const proceed = input.dispatchEvent(event);
+    expect(proceed).toBe(false);
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it.each([
+    "insertFromPaste",
+    "insertFromDrop",
+    "insertFromYank",
+    "insertReplacementText",
+  ])("beforeinput allows %s within numeric region", async (inputType) => {
+    const input = await prepareCurrencyFieldForBeforeInput();
+    input.setSelectionRange(5, 5);
+
+    const event = new InputEvent("beforeinput", {
+      cancelable: true,
+      data: "2",
+      inputType,
     });
     const proceed = input.dispatchEvent(event);
     expect(proceed).toBe(true);
