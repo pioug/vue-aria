@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T18:29:21.113Z",
+  "generatedAt": "2026-02-12T18:29:52.772Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 6,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 5,
+  "availableLeafCount": 4,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/actiongroup",
       "upstreamPackageName": "@react-spectrum/actiongroup",
       "upstreamPath": "packages/@react-spectrum/actiongroup"
-    },
-    {
-      "packageName": "@vue-spectrum/breadcrumbs",
-      "upstreamPackageName": "@react-spectrum/breadcrumbs",
-      "upstreamPath": "packages/@react-spectrum/breadcrumbs"
     },
     {
       "packageName": "@vue-spectrum/color",

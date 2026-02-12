@@ -82,7 +82,7 @@
 | @vue-spectrum/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/autocomplete | packages/@react-spectrum/autocomplete |
 | @vue-spectrum/avatar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/avatar | packages/@react-spectrum/avatar |
 | @vue-spectrum/badge | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/badge | packages/@react-spectrum/badge |
-| @vue-spectrum/breadcrumbs | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/breadcrumbs | packages/@react-spectrum/breadcrumbs |
+| @vue-spectrum/breadcrumbs | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/breadcrumbs | packages/@react-spectrum/breadcrumbs |
 | @vue-spectrum/button | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/button | packages/@react-spectrum/button |
 | @vue-spectrum/buttongroup | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/buttongroup | packages/@react-spectrum/buttongroup |
 | @vue-spectrum/calendar | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/calendar | packages/@react-spectrum/calendar |
