@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:13:47.275Z",
+  "generatedAt": "2026-02-12T15:16:29.599Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 175,
-  "availableLeafCount": 35,
+  "incompletePackageCount": 173,
+  "availableLeafCount": 37,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -38,6 +38,21 @@
       "packageName": "@vue-spectrum/test-utils",
       "upstreamPackageName": "@react-spectrum/test-utils",
       "upstreamPath": "packages/@react-spectrum/test-utils"
+    },
+    {
+      "packageName": "@vue-spectrum/theme-dark",
+      "upstreamPackageName": "@react-spectrum/theme-dark",
+      "upstreamPath": "packages/@react-spectrum/theme-dark"
+    },
+    {
+      "packageName": "@vue-spectrum/theme-default",
+      "upstreamPackageName": "@react-spectrum/theme-default",
+      "upstreamPath": "packages/@react-spectrum/theme-default"
+    },
+    {
+      "packageName": "@vue-spectrum/theme-light",
+      "upstreamPackageName": "@react-spectrum/theme-light",
+      "upstreamPath": "packages/@react-spectrum/theme-light"
     },
     {
       "packageName": "@vue-stately/autocomplete",
@@ -125,6 +140,11 @@
       "upstreamPath": "packages/@react-types/listbox"
     },
     {
+      "packageName": "@vue-types/meter",
+      "upstreamPackageName": "@react-types/meter",
+      "upstreamPath": "packages/@react-types/meter"
+    },
+    {
       "packageName": "@vue-types/numberfield",
       "upstreamPackageName": "@react-types/numberfield",
       "upstreamPath": "packages/@react-types/numberfield"
@@ -133,16 +153,6 @@
       "packageName": "@vue-types/overlays",
       "upstreamPackageName": "@react-types/overlays",
       "upstreamPath": "packages/@react-types/overlays"
-    },
-    {
-      "packageName": "@vue-types/progress",
-      "upstreamPackageName": "@react-types/progress",
-      "upstreamPath": "packages/@react-types/progress"
-    },
-    {
-      "packageName": "@vue-types/provider",
-      "upstreamPackageName": "@react-types/provider",
-      "upstreamPath": "packages/@react-types/provider"
     },
     {
       "packageName": "@vue-types/radio",
