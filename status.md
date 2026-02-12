@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 86 |
-| Passing tests | 86 |
+| Ported tests | 90 |
+| Passing tests | 90 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -63,7 +63,7 @@
 | @vue-aria/ssr | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-aria/ssr | packages/@react-aria/ssr |
 | @vue-aria/steplist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/steplist | packages/@react-aria/steplist |
 | @vue-aria/switch | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/switch | packages/@react-aria/switch |
-| @vue-aria/table | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/table | packages/@react-aria/table |
+| @vue-aria/table | complete | 4 | 4 | 4 | 0 | 0 | 0 | 0 | true | @react-aria/table | packages/@react-aria/table |
 | @vue-aria/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tabs | packages/@react-aria/tabs |
 | @vue-aria/tag | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/tag | packages/@react-aria/tag |
 | @vue-aria/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/test-utils | packages/@react-aria/test-utils |
