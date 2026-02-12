@@ -93,7 +93,7 @@
 | @vue-spectrum/contextualhelp | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/contextualhelp | packages/@react-spectrum/contextualhelp |
 | @vue-spectrum/datepicker | not_started | 6 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/datepicker | packages/@react-spectrum/datepicker |
 | @vue-spectrum/dialog | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/dialog | packages/@react-spectrum/dialog |
-| @vue-spectrum/divider | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/divider | packages/@react-spectrum/divider |
+| @vue-spectrum/divider | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/divider | packages/@react-spectrum/divider |
 | @vue-spectrum/dnd | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/dnd | packages/@react-spectrum/dnd |
 | @vue-spectrum/dropzone | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/dropzone | packages/@react-spectrum/dropzone |
 | @vue-spectrum/filetrigger | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/filetrigger | packages/@react-spectrum/filetrigger |
