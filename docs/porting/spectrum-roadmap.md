@@ -14,7 +14,7 @@ For live package-by-package completion, use the canonical tracker:
 - Prioritize React Spectrum v1 parity before S2 expansion.
 - Deprioritize S2 execution: no new S2 feature lanes while v1 parity remains incomplete.
 - Keep one active package at a time via `SPECTRUM_WIP.md` (`npm run check:spectrum-workflow`).
-- Track migration progress by test-case parity totals using `SPECTRUM_TESTCASE_TRACKER.md` (`npm run update:spectrum-case-tracker`).
+- Track migration progress by upstream named-case parity using `SPECTRUM_TESTCASE_TRACKER.md` (`npm run update:spectrum-case-tracker`).
 - Run docs style alias mining in dedicated batches (`npm run docs:style-alias-gaps`) and apply aliases in `docs/.vitepress/theme/spectrum-base.css`.
 
 ## Current Priority
@@ -67,6 +67,7 @@ A package is considered complete only when all conditions are met:
 
 - Avoid status duplication across multiple docs.
 - Treat `SPECTRUM_PORTING_TRACKER.md` as the only canonical checklist.
-- Treat `SPECTRUM_TESTCASE_TRACKER.md` as the canonical case-count indicator.
+- Treat `SPECTRUM_TESTCASE_TRACKER.md` as the canonical upstream parity indicator.
+- Keep local-only test counts as optional diagnostics (`npm run update:spectrum-case-tracker:diagnostics`), not as primary progress targets.
 - Keep WIP to one package lock at a time in `SPECTRUM_WIP.md`.
 - Update this roadmap only for strategy/priority changes, not granular package counts.
