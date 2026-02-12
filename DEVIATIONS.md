@@ -565,3 +565,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential scroll/measurement timing differences until full component conversion.
 - Removal plan: Replace React rendering/hook flows with Vue component/composable equivalents and port upstream virtualizer behavior tests for parity.
+
+- Package: `@vue-aria/breadcrumbs`
+- Upstream reference: `packages/@react-aria/breadcrumbs` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React-derived type/runtime semantics via linked dependencies (`@vue-aria/link` and shared type contracts) for breadcrumb item interaction behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet fully Vue-native; consumers should expect inherited React runtime/type dependencies and possible breadcrumb interaction timing differences until full composable conversion.
+- Removal plan: Replace inherited React runtime/type assumptions in dependent interaction layers with Vue-native composables/types and port upstream breadcrumb tests for parity.

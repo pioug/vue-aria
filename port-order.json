@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T17:24:30.358Z",
+  "generatedAt": "2026-02-12T17:27:21.650Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 87,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 86,
+  "availableLeafCount": 7,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/breadcrumbs",
-      "upstreamPackageName": "@react-aria/breadcrumbs",
-      "upstreamPath": "packages/@react-aria/breadcrumbs"
-    },
     {
       "packageName": "@vue-aria/calendar",
       "upstreamPackageName": "@react-aria/calendar",
