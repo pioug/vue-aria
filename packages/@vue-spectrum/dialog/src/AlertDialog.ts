@@ -167,6 +167,7 @@ export const AlertDialog = defineComponent({
                   "span",
                   {
                     class: classNames("spectrum-Dialog-typeIcon"),
+                    role: "img",
                     "aria-label": "Alert",
                   },
                   "!"

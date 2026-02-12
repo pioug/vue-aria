@@ -193,4 +193,39 @@ describe("AlertDialog", () => {
     expect(wrapper.get("[data-testid=\"rsp-AlertDialog-secondaryButton\"]")).toBeTruthy();
     expect(wrapper.get("[data-testid=\"rsp-AlertDialog-confirmButton\"]")).toBeTruthy();
   });
+
+  it.each(["warning", "error"] as const)(
+    "renders alert type icon for %s variant",
+    (variant) => {
+      const wrapper = mount(AlertDialog, {
+        props: {
+          variant,
+          title: "the title",
+          primaryActionLabel: "confirm",
+        },
+        slots: {
+          default: () => "Content body",
+        },
+      });
+
+      const icon = wrapper.get(".spectrum-Dialog-typeIcon");
+      expect(icon.attributes("role")).toBe("img");
+      expect(icon.attributes("aria-label")).toBe("Alert");
+    }
+  );
+
+  it("does not render alert type icon for confirmation variant", () => {
+    const wrapper = mount(AlertDialog, {
+      props: {
+        variant: "confirmation",
+        title: "the title",
+        primaryActionLabel: "confirm",
+      },
+      slots: {
+        default: () => "Content body",
+      },
+    });
+
+    expect(wrapper.find(".spectrum-Dialog-typeIcon").exists()).toBe(false);
+  });
 });

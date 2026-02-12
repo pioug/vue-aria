@@ -59,7 +59,7 @@ const component = h(DialogTrigger, null, {
 
 ## Notes
 
-- Baseline includes modal/tray/popover trigger shells, dialog container management, and alert-dialog action parity (primary/secondary/cancel callbacks, disabled-action suppression, `autoFocusButton` targeting for primary/secondary/cancel, and action-button/root test-id coverage).
+- Baseline includes modal/tray/popover trigger shells, dialog container management, and alert-dialog action parity (primary/secondary/cancel callbacks, disabled-action suppression, warning/error alert-type icon semantics, `autoFocusButton` targeting for primary/secondary/cancel, and action-button/root test-id coverage).
 - Baseline now includes mobile popover fallback parity in `DialogTrigger` (`type="popover"` renders as `modal` on mobile, with `mobileType="tray"` override support) and matches upstream dismissability by forcing outside-click dismissal when that fallback resolves to `modal`.
 - Baseline `DialogTrigger` dismissal behavior now covers outside-click gating parity across overlay modes (dismissable modal closes, non-dismissable modal stays open, popover/tray close on outside interaction) plus hidden dismiss-button close paths with focus restoration.
 - Baseline `DialogTrigger` state parity now includes controlled/uncontrolled open flows (`isOpen`/`onOpenChange` and `defaultOpen`), keyboard-dismiss disabling (`isKeyboardDismissDisabled`), custom close-button wiring through injected close callbacks, and built-in `Dialog` dismiss-button close paths.
