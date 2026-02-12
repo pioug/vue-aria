@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T15:42:31.692Z",
+  "generatedAt": "2026-02-12T15:43:22.660Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 148,
+  "incompletePackageCount": 147,
   "availableLeafCount": 25,
   "availableLeaves": [
     {
@@ -110,14 +110,14 @@
       "upstreamPath": "packages/@react-stately/virtualizer"
     },
     {
+      "packageName": "@vue-types/autocomplete",
+      "upstreamPackageName": "@react-types/autocomplete",
+      "upstreamPath": "packages/@react-types/autocomplete"
+    },
+    {
       "packageName": "@vue-types/color",
       "upstreamPackageName": "@react-types/color",
       "upstreamPath": "packages/@react-types/color"
-    },
-    {
-      "packageName": "@vue-types/combobox",
-      "upstreamPackageName": "@react-types/combobox",
-      "upstreamPath": "packages/@react-types/combobox"
     },
     {
       "packageName": "@vue-types/datepicker",

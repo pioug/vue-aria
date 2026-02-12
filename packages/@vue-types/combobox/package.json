@@ -1,0 +1,20 @@
+{
+  "name": "@vue-types/combobox",
+  "version": "3.13.11",
+  "description": "Vue port of @react-types/combobox",
+  "license": "Apache-2.0",
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-types/shared": "^3.33.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
