@@ -9,6 +9,7 @@ import {
   onMounted,
   ref,
   watch,
+  watchEffect,
   type VNode,
   type VNodeChild,
   type PropType,
@@ -25,7 +26,11 @@ import { useOption } from "@vue-aria/listbox";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/types";
 import { ClearButton } from "@vue-spectrum/button";
-import { useFormProps } from "@vue-spectrum/form";
+import {
+  useFormContext,
+  useFormProps,
+  useFormValidationErrors,
+} from "@vue-spectrum/form";
 import { useProviderContext } from "@vue-spectrum/provider";
 import { ProgressCircle } from "@vue-spectrum/progress";
 import {
@@ -84,6 +89,24 @@ const searchAutocompleteMessages = {
     "Clear search": "Effacer la recherche",
   },
 } as const;
+
+function getValidationMessage(
+  value: string | string[] | boolean | null | undefined
+): string | undefined {
+  if (typeof value === "string" && value.trim().length > 0) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    for (const entry of value) {
+      if (typeof entry === "string" && entry.trim().length > 0) {
+        return entry;
+      }
+    }
+  }
+
+  return undefined;
+}
 
 function normalizeSearchAutocompleteKey(value: unknown, fallback: Key): Key {
   if (typeof value === "string" || typeof value === "number") {
@@ -529,6 +552,8 @@ export const SearchAutocomplete = defineComponent({
   },
   setup(props, { attrs, expose, slots }) {
     const provider = useProviderContext();
+    const formContext = useFormContext();
+    const formValidationErrors = useFormValidationErrors();
     const stringFormatter = useLocalizedStringFormatter(
       searchAutocompleteMessages,
       "@vue-spectrum/autocomplete"
@@ -541,6 +566,9 @@ export const SearchAutocomplete = defineComponent({
     const loadMoreRequested = ref(false);
     const hasWarnedPlaceholder = ref(false);
     const showInputLoadingIndicator = ref(false);
+    const nativeValidationMessage = ref<string | undefined>(undefined);
+    const nativeValidationDetails = ref<unknown>(undefined);
+    const isServerErrorCleared = ref(false);
     const slotModel = ref<NormalizedSearchAutocompleteSlotModel>({
       items: [],
       entries: [],
@@ -554,6 +582,7 @@ export const SearchAutocomplete = defineComponent({
         isReadOnly: props.isReadOnly,
         isRequired: props.isRequired,
         validationState: props.validationState,
+        validationBehavior: props.validationBehavior,
       })
     );
     const resolvedIsDisabled = computed(() => {
@@ -622,13 +651,9 @@ export const SearchAutocomplete = defineComponent({
     });
 
     const isAsync = computed(() => props.loadingState !== undefined);
-    const resolvedValidationState = computed<"valid" | "invalid" | undefined>(() => {
+    const explicitValidationState = computed<"valid" | "invalid" | undefined>(() => {
       if (props.validationState !== undefined) {
         return props.validationState;
-      }
-
-      if (props.isInvalid) {
-        return "invalid";
       }
 
       const fromForm = resolvedFormProps.value.validationState;
@@ -641,9 +666,13 @@ export const SearchAutocomplete = defineComponent({
         ? fromProvider
         : undefined;
     });
-    const resolvedIsInvalid = computed(
-      () => Boolean(props.isInvalid) || resolvedValidationState.value === "invalid"
-    );
+    const resolvedValidationBehavior = computed<"aria" | "native">(() => {
+      if (props.validationBehavior !== undefined) {
+        return props.validationBehavior;
+      }
+
+      return formContext?.value.validationBehavior ?? "aria";
+    });
     const controlledSelectedKey =
       props.selectedKey === undefined
         ? undefined
@@ -689,6 +718,55 @@ export const SearchAutocomplete = defineComponent({
       shouldCloseOnBlur: computed(() => props.shouldCloseOnBlur),
       isReadOnly: resolvedIsReadOnly,
     });
+    const serverErrorMessageFromForm = computed(() => {
+      if (!props.name) {
+        return undefined;
+      }
+
+      const formError = formValidationErrors.value[props.name];
+      if (typeof formError === "string") {
+        return formError;
+      }
+
+      if (Array.isArray(formError)) {
+        for (const entry of formError) {
+          if (typeof entry === "string" && entry.trim().length > 0) {
+            return entry;
+          }
+        }
+      }
+
+      return undefined;
+    });
+    const serverErrorMessage = computed(() =>
+      isServerErrorCleared.value ? undefined : serverErrorMessageFromForm.value
+    );
+    const validationErrorMessage = computed(() =>
+      getValidationMessage(props.validate?.(state.inputValue.value))
+    );
+    const ariaValidationErrorMessage = computed(() =>
+      resolvedValidationBehavior.value === "aria" ? validationErrorMessage.value : undefined
+    );
+    const resolvedErrorMessage = computed(
+      () =>
+        props.errorMessage ??
+        serverErrorMessage.value ??
+        ariaValidationErrorMessage.value ??
+        nativeValidationMessage.value
+    );
+    const resolvedIsInvalid = computed(
+      () =>
+        Boolean(props.isInvalid) ||
+        explicitValidationState.value === "invalid" ||
+        Boolean(serverErrorMessage.value) ||
+        Boolean(ariaValidationErrorMessage.value) ||
+        Boolean(nativeValidationMessage.value)
+    );
+    const resolvedValidationState = computed<"valid" | "invalid" | undefined>(
+      () =>
+        explicitValidationState.value ??
+        (resolvedIsInvalid.value ? "invalid" : undefined)
+    );
 
     const submitCurrentValue = (key: Key | null = state.selectedKey.value) => {
       let value = state.inputValue.value;
@@ -713,9 +791,10 @@ export const SearchAutocomplete = defineComponent({
         id: props.id,
         label: props.label,
         description: props.description,
-        errorMessage: props.errorMessage,
+        errorMessage: resolvedErrorMessage,
         isInvalid: resolvedIsInvalid,
         validationState: resolvedValidationState,
+        validationBehavior: resolvedValidationBehavior,
         isDisabled: resolvedIsDisabled,
         isReadOnly: resolvedIsReadOnly,
         isRequired: resolvedIsRequired,
@@ -835,6 +914,9 @@ export const SearchAutocomplete = defineComponent({
       }
 
       state.close();
+      nativeValidationMessage.value = undefined;
+      nativeValidationDetails.value = undefined;
+      isServerErrorCleared.value = false;
     };
 
     const resolveFormElement = (): HTMLFormElement | null => {
@@ -996,11 +1078,99 @@ export const SearchAutocomplete = defineComponent({
           return;
         }
 
+        if (serverErrorMessageFromForm.value) {
+          isServerErrorCleared.value = true;
+        }
+
+        if (
+          resolvedValidationBehavior.value === "native" &&
+          inputRef.value?.validity.valid
+        ) {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = inputRef.value.validity;
+        }
+
         if (shouldShowInputLoadingCandidate.value && !showInputLoadingIndicator.value) {
           syncInputLoadingIndicator(true);
         }
       }
     );
+
+    watch(
+      () => [formValidationErrors.value, props.name] as const,
+      () => {
+        isServerErrorCleared.value = false;
+      },
+      { deep: true }
+    );
+
+    watchEffect(() => {
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      if (resolvedValidationBehavior.value === "native") {
+        const customValidityMessage =
+          serverErrorMessage.value ?? (validationErrorMessage.value ?? "");
+        inputElement.setCustomValidity(customValidityMessage);
+        return;
+      }
+
+      inputElement.setCustomValidity("");
+    });
+
+    watch(
+      () => resolvedValidationBehavior.value,
+      (nextBehavior) => {
+        if (nextBehavior !== "native") {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = undefined;
+        }
+      },
+      { immediate: true }
+    );
+
+    watchEffect((onCleanup) => {
+      const inputElement = inputRef.value;
+      if (!inputElement) {
+        return;
+      }
+
+      const onNativeInvalid = () => {
+        if (resolvedValidationBehavior.value !== "native") {
+          return;
+        }
+
+        nativeValidationMessage.value =
+          inputElement.validationMessage || "Constraints not satisfied";
+        nativeValidationDetails.value = inputElement.validity;
+      };
+      const onNativeBlur = () => {
+        if (resolvedValidationBehavior.value !== "native") {
+          return;
+        }
+
+        if (inputElement.validity.valid) {
+          nativeValidationMessage.value = undefined;
+          nativeValidationDetails.value = inputElement.validity;
+        }
+      };
+      const onNativeFormReset = () => {
+        nativeValidationMessage.value = undefined;
+        nativeValidationDetails.value = undefined;
+      };
+
+      inputElement.addEventListener("invalid", onNativeInvalid);
+      inputElement.addEventListener("blur", onNativeBlur);
+      inputElement.form?.addEventListener("reset", onNativeFormReset);
+
+      onCleanup(() => {
+        inputElement.removeEventListener("invalid", onNativeInvalid);
+        inputElement.removeEventListener("blur", onNativeBlur);
+        inputElement.form?.removeEventListener("reset", onNativeFormReset);
+      });
+    });
 
     const shouldShowClearButton = computed(() => {
       if (resolvedIsReadOnly.value) {
@@ -1257,7 +1427,10 @@ export const SearchAutocomplete = defineComponent({
                 placeholder: props.placeholder,
                 disabled: resolvedIsDisabled.value,
                 readonly: resolvedIsReadOnly.value,
-                required: resolvedIsRequired.value,
+                required:
+                  resolvedIsRequired.value && resolvedValidationBehavior.value === "native"
+                    ? true
+                    : undefined,
                 autofocus: props.autoFocus,
                 type: "search",
                 autocorrect: "off",
@@ -1281,13 +1454,13 @@ export const SearchAutocomplete = defineComponent({
                 props.description
               )
             : null,
-          props.errorMessage
+          resolvedErrorMessage.value
             ? h(
                 "div",
                 mergeProps(errorMessageProps.value, {
                   class: classNames("spectrum-FieldError"),
                 }),
-                props.errorMessage
+                resolvedErrorMessage.value
               )
             : null,
           shouldShowList.value

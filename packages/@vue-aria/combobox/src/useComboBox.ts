@@ -22,6 +22,7 @@ export interface UseComboBoxOptions {
   errorMessage?: MaybeReactive<string | undefined>;
   isInvalid?: MaybeReactive<boolean | undefined>;
   validationState?: MaybeReactive<"valid" | "invalid" | undefined>;
+  validationBehavior?: MaybeReactive<"aria" | "native" | undefined>;
   isDisabled?: MaybeReactive<boolean | undefined>;
   isReadOnly?: MaybeReactive<boolean | undefined>;
   isRequired?: MaybeReactive<boolean | undefined>;
@@ -178,6 +179,7 @@ export function useComboBox<T extends ListBoxItem>(
       errorMessage: options.errorMessage,
       isInvalid: options.isInvalid,
       validationState: options.validationState,
+      validationBehavior: options.validationBehavior,
       isDisabled: options.isDisabled,
       isReadOnly: options.isReadOnly,
       isRequired: options.isRequired,

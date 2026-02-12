@@ -96,6 +96,32 @@ describe("useComboBox", () => {
     scope.stop();
   });
 
+  it("supports native validation behavior required semantics", () => {
+    const scope = effectScope();
+    let inputProps!: ReturnType<typeof useComboBox>["inputProps"];
+    scope.run(() => {
+      const state = useComboBoxState({
+        collection: items,
+      });
+
+      inputProps = useComboBox(
+        {
+          isRequired: true,
+          validationBehavior: "native",
+          inputRef: document.createElement("input"),
+          listBoxRef: document.createElement("ul"),
+          popoverRef: document.createElement("div"),
+          "aria-label": "Animals",
+        },
+        state
+      ).inputProps;
+    });
+
+    expect(inputProps.value.required).toBe(true);
+    expect(inputProps.value["aria-required"]).toBeUndefined();
+    scope.stop();
+  });
+
   it("opens with arrow keys and sets focus strategy", () => {
     const scope = effectScope();
     let inputProps!: ReturnType<typeof useComboBox>["inputProps"];

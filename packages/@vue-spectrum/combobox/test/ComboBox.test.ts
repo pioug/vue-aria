@@ -925,6 +925,49 @@ describe("ComboBox", () => {
     expect(input.getAttribute("aria-invalid")).toBe("true");
   });
 
+  it("applies validate callback errors in aria mode", () => {
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+      validate: (value: { selectedKey: string | number | null; inputValue: string }) =>
+        value.selectedKey === "2" ? "Invalid value" : null,
+    });
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(tree.getByText("Invalid value")).toBeTruthy();
+  });
+
+  it("applies validate callback custom validity in native mode", () => {
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+      validationBehavior: "native",
+      validate: (value: { selectedKey: string | number | null; inputValue: string }) =>
+        value.selectedKey === "2" ? "Invalid value" : null,
+    });
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.validationMessage).toBe("Invalid value");
+    expect(input.checkValidity()).toBe(false);
+  });
+
+  it("uses aria-required by default and native required when validationBehavior is native", () => {
+    const ariaTree = renderComponent({
+      isRequired: true,
+    });
+    const ariaInput = ariaTree.getByRole("combobox");
+    expect(ariaInput.getAttribute("aria-required")).toBe("true");
+    expect((ariaInput as HTMLInputElement).required).toBe(false);
+    ariaTree.unmount();
+
+    const nativeTree = renderComponent({
+      isRequired: true,
+      validationBehavior: "native",
+    });
+    const nativeInput = nativeTree.getByRole("combobox") as HTMLInputElement;
+    expect(nativeInput.required).toBe(true);
+    expect(nativeInput.getAttribute("aria-required")).toBeNull();
+  });
+
   it("applies invalid and valid state classes on the root", () => {
     const invalidTree = renderComponent({
       isInvalid: true,
