@@ -160,7 +160,7 @@
 | @vue-stately/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/overlays | packages/@react-stately/overlays |
 | @vue-stately/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/radio | packages/@react-stately/radio |
 | @vue-stately/searchfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
-| @vue-stately/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/select | packages/@react-stately/select |
+| @vue-stately/select | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/select | packages/@react-stately/select |
 | @vue-stately/selection | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/selection | packages/@react-stately/selection |
 | @vue-stately/slider | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/slider | packages/@react-stately/slider |
 | @vue-stately/steplist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/steplist | packages/@react-stately/steplist |
