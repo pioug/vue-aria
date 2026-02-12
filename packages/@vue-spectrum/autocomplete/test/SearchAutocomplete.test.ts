@@ -127,6 +127,42 @@ describe("SearchAutocomplete", () => {
     expect(options[0]?.textContent).toContain("Two");
   });
 
+  it("updates controlled items with a custom onInputChange filter", async () => {
+    const user = userEvent.setup();
+    const sourceItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "The first item" },
+      { key: "2", label: "The second item" },
+      { key: "3", label: "The third item" },
+    ];
+
+    const App = defineComponent({
+      name: "SearchAutocompleteCustomFilterApp",
+      setup() {
+        const list = ref<SpectrumSearchAutocompleteItemData[]>(sourceItems);
+
+        return () =>
+          h(SearchAutocomplete, {
+            label: "SearchAutocomplete",
+            items: list.value,
+            onInputChange: (value: string) => {
+              list.value = sourceItems.filter((item) => item.label.includes(value));
+            },
+          });
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("second");
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]?.textContent).toContain("The second item");
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({
