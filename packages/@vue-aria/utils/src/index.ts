@@ -13,8 +13,10 @@
 export {runAfterTransition} from './runAfterTransition';
 export {getOwnerDocument, getOwnerWindow, isShadowRoot} from './domHelpers';
 export {getActiveElement, getEventTarget, isFocusWithin, nodeContains} from './shadowdom/DOMFunctions';
+export {createShadowTreeWalker, ShadowTreeWalker} from './shadowdom/ShadowTreeWalker';
 export {chain} from './chain';
 export {mergeRefs} from './mergeRefs';
 export {mergeIds, useId, useSlotId} from './useId';
 export {mergeProps} from './mergeProps';
 export {useObjectRef} from './useObjectRef';
+export {useViewportSize} from './useViewportSize';
