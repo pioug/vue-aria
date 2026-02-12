@@ -18,8 +18,11 @@ export interface UseTooltipTriggerResult {
 }
 
 const DEFAULT_TOOLTIP_DELAY = 1500;
+const TOOLTIP_COOLDOWN = 500;
 let tooltipTriggerInstanceId = 0;
 const activeTooltipClosers = new Map<number, (immediate?: boolean) => void>();
+let globalWarmedUp = false;
+let globalCooldownTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function resolveBoolean(value: MaybeReactive<boolean | undefined> | undefined, fallback: boolean): boolean {
   if (value === undefined) {
@@ -75,10 +78,27 @@ export function useTooltipTrigger(
     }
   };
 
+  const clearGlobalCooldown = (): void => {
+    if (globalCooldownTimeout !== null) {
+      clearTimeout(globalCooldownTimeout);
+      globalCooldownTimeout = null;
+    }
+  };
+
+  const startGlobalCooldown = (): void => {
+    clearGlobalCooldown();
+    globalCooldownTimeout = setTimeout(() => {
+      globalCooldownTimeout = null;
+      globalWarmedUp = false;
+    }, TOOLTIP_COOLDOWN);
+  };
+
+  const usesDelayedWarmup = (): boolean => resolveDelay(options.delay) > 0;
+
   const scheduleShow = (): void => {
     clearShowTimeout();
     const delay = resolveDelay(options.delay);
-    if (delay <= 0) {
+    if (delay <= 0 || globalWarmedUp) {
       handleShow();
       return;
     }
@@ -90,7 +110,16 @@ export function useTooltipTrigger(
   };
 
   const unregisterActiveTooltip = (): void => {
-    activeTooltipClosers.delete(instanceId);
+    const removed = activeTooltipClosers.delete(instanceId);
+    if (
+      removed &&
+      usesDelayedWarmup() &&
+      globalWarmedUp &&
+      globalCooldownTimeout === null &&
+      activeTooltipClosers.size === 0
+    ) {
+      startGlobalCooldown();
+    }
   };
 
   const closeTooltip = (immediate?: boolean): void => {
@@ -118,6 +147,10 @@ export function useTooltipTrigger(
     if (isHovered.value || isFocused.value) {
       closeOtherTooltips();
       registerActiveTooltip();
+      if (usesDelayedWarmup()) {
+        globalWarmedUp = true;
+        clearGlobalCooldown();
+      }
       state.open(isFocused.value);
     }
   };

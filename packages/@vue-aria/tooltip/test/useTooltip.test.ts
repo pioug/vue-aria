@@ -211,6 +211,61 @@ describe("useTooltipTrigger", () => {
     }
   });
 
+  it("reopens immediately during cooldown and requires delay after cooldown", () => {
+    vi.useFakeTimers();
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+
+    const state = createTooltipState();
+    const scope = effectScope();
+    let tooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+
+    try {
+      scope.run(() => {
+        tooltipTrigger = useTooltipTrigger({}, state, trigger);
+      });
+
+      attachHandlers(trigger, tooltipTrigger.triggerProps.value);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+      );
+      vi.advanceTimersByTime(1500);
+      expect(state.open).toHaveBeenCalledTimes(1);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerleave", { bubbles: true, pointerType: "mouse" })
+      );
+      expect(state.close).toHaveBeenCalledTimes(1);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+      );
+      expect(state.open).toHaveBeenCalledTimes(2);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerleave", { bubbles: true, pointerType: "mouse" })
+      );
+      vi.advanceTimersByTime(500);
+
+      trigger.dispatchEvent(
+        new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+      );
+      expect(state.open).toHaveBeenCalledTimes(2);
+
+      vi.advanceTimersByTime(1499);
+      expect(state.open).toHaveBeenCalledTimes(2);
+
+      vi.advanceTimersByTime(1);
+      expect(state.open).toHaveBeenCalledTimes(3);
+    } finally {
+      scope.stop();
+      trigger.remove();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("opens on focus and closes on blur", () => {
     const trigger = document.createElement("button");
     document.body.appendChild(trigger);

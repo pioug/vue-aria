@@ -140,6 +140,61 @@ describe("TooltipTrigger", () => {
     }
   });
 
+  it("reopens immediately during cooldown and waits again after cooldown", async () => {
+    vi.useFakeTimers();
+    const wrapper = mount(TooltipTrigger, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h("button", { "aria-label": "trigger" }, "Trigger"),
+          h(Tooltip, () => "Helpful information."),
+        ],
+      },
+    });
+
+    try {
+      const button = wrapper.get("button");
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1500);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+      await button.trigger("pointerleave", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+      await button.trigger("pointerleave", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(500);
+      await flushOverlay();
+
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1499);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+    } finally {
+      wrapper.unmount();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("does not open when hover leaves before delayed open", async () => {
     vi.useFakeTimers();
     const onOpenChange = vi.fn();
