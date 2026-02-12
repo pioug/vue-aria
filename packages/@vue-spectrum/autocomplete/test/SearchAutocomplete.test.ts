@@ -139,6 +139,75 @@ describe("SearchAutocomplete", () => {
     expect(root?.classList.contains("is-invalid")).toBe(true);
   });
 
+  it("shows form validationErrors message when field name matches", () => {
+    const App = defineComponent({
+      name: "SearchAutocompleteFormValidationErrorsApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                query: "Enter a valid query.",
+              },
+            },
+            {
+              default: () =>
+                h(SearchAutocomplete, {
+                  label: "Query",
+                  name: "query",
+                  defaultItems: items,
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("combobox");
+    expect(tree.getByText("Enter a valid query.")).toBeTruthy();
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("applies native Form.validationErrors and clears on input change", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "SearchAutocompleteNativeFormValidationErrorsApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: {
+                query: "Enter a valid query.",
+              },
+            },
+            {
+              default: () =>
+                h(SearchAutocomplete, {
+                  label: "Query",
+                  name: "query",
+                  defaultItems: items,
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(tree.getByText("Enter a valid query.")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await user.click(input);
+    await user.keyboard("O");
+    await nextTick();
+
+    expect(input.validity.valid).toBe(true);
+    expect(tree.queryByText("Enter a valid query.")).toBeNull();
+  });
+
   it("supports custom icon", () => {
     const tree = renderComponent({
       icon: "icon",

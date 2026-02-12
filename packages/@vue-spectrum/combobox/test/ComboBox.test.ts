@@ -136,6 +136,75 @@ describe("ComboBox", () => {
     expect(root?.classList.contains("is-invalid")).toBe(true);
   });
 
+  it("shows form validationErrors message when field name matches", () => {
+    const App = defineComponent({
+      name: "ComboBoxFormValidationErrorsApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationErrors: {
+                animal: "Pick a valid animal.",
+              },
+            },
+            {
+              default: () =>
+                h(ComboBox, {
+                  label: "Animal",
+                  name: "animal",
+                  items,
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("combobox");
+    expect(tree.getByText("Pick a valid animal.")).toBeTruthy();
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("applies native Form.validationErrors and clears on input change", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "ComboBoxNativeFormValidationErrorsApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationBehavior: "native",
+              validationErrors: {
+                animal: "Pick a valid animal.",
+              },
+            },
+            {
+              default: () =>
+                h(ComboBox, {
+                  label: "Animal",
+                  name: "animal",
+                  items,
+                }),
+            }
+          );
+      },
+    });
+    const tree = renderWithProvider(App);
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(tree.getByText("Pick a valid animal.")).toBeTruthy();
+    expect(input.validity.valid).toBe(false);
+
+    await user.click(input);
+    await user.keyboard("O");
+    await nextTick();
+
+    expect(input.validity.valid).toBe(true);
+    expect(tree.queryByText("Pick a valid animal.")).toBeNull();
+  });
+
   it("supports custom data attributes", () => {
     const tree = renderComponent({
       "data-testid": "combobox-root",
