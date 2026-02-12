@@ -1,23 +1,33 @@
 {
-  "generatedAt": "2026-02-12T18:28:49.093Z",
+  "generatedAt": "2026-02-12T18:29:21.113Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 7,
-  "availableLeafCount": 3,
+  "incompletePackageCount": 6,
+  "availableLeafCount": 5,
   "availableLeaves": [
+    {
+      "packageName": "@vue-spectrum/actiongroup",
+      "upstreamPackageName": "@react-spectrum/actiongroup",
+      "upstreamPath": "packages/@react-spectrum/actiongroup"
+    },
+    {
+      "packageName": "@vue-spectrum/breadcrumbs",
+      "upstreamPackageName": "@react-spectrum/breadcrumbs",
+      "upstreamPath": "packages/@react-spectrum/breadcrumbs"
+    },
     {
       "packageName": "@vue-spectrum/color",
       "upstreamPackageName": "@react-spectrum/color",
       "upstreamPath": "packages/@react-spectrum/color"
     },
     {
-      "packageName": "@vue-spectrum/menu",
-      "upstreamPackageName": "@react-spectrum/menu",
-      "upstreamPath": "packages/@react-spectrum/menu"
-    },
-    {
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
+    },
+    {
+      "packageName": "@vue-spectrum/table",
+      "upstreamPackageName": "@react-spectrum/table",
+      "upstreamPath": "packages/@react-spectrum/table"
     }
   ],
   "hasCycles": false,

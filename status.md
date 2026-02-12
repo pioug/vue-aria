@@ -108,7 +108,7 @@
 | @vue-spectrum/link | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/link | packages/@react-spectrum/link |
 | @vue-spectrum/list | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/list | packages/@react-spectrum/list |
 | @vue-spectrum/listbox | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/listbox | packages/@react-spectrum/listbox |
-| @vue-spectrum/menu | not_started | 6 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/menu | packages/@react-spectrum/menu |
+| @vue-spectrum/menu | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/menu | packages/@react-spectrum/menu |
 | @vue-spectrum/meter | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/meter | packages/@react-spectrum/meter |
 | @vue-spectrum/numberfield | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/numberfield | packages/@react-spectrum/numberfield |
 | @vue-spectrum/overlays | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/overlays | packages/@react-spectrum/overlays |
