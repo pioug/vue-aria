@@ -1,18 +1,28 @@
 {
-  "generatedAt": "2026-02-12T16:27:08.515Z",
+  "generatedAt": "2026-02-12T16:28:42.321Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 122,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 121,
+  "availableLeafCount": 10,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/i18n",
-      "upstreamPackageName": "@react-aria/i18n",
-      "upstreamPath": "packages/@react-aria/i18n"
-    },
     {
       "packageName": "@vue-aria/interactions",
       "upstreamPackageName": "@react-aria/interactions",
       "upstreamPath": "packages/@react-aria/interactions"
+    },
+    {
+      "packageName": "@vue-aria/progress",
+      "upstreamPackageName": "@react-aria/progress",
+      "upstreamPath": "packages/@react-aria/progress"
+    },
+    {
+      "packageName": "@vue-aria/spinbutton",
+      "upstreamPackageName": "@react-aria/spinbutton",
+      "upstreamPath": "packages/@react-aria/spinbutton"
+    },
+    {
+      "packageName": "@vue-spectrum/utils",
+      "upstreamPackageName": "@react-spectrum/utils",
+      "upstreamPath": "packages/@react-spectrum/utils"
     },
     {
       "packageName": "@vue-stately/calendar",

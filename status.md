@@ -41,7 +41,7 @@
 | @vue-aria/form | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/form | packages/@react-aria/form |
 | @vue-aria/grid | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/grid | packages/@react-aria/grid |
 | @vue-aria/gridlist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/gridlist | packages/@react-aria/gridlist |
-| @vue-aria/i18n | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/i18n | packages/@react-aria/i18n |
+| @vue-aria/i18n | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/i18n | packages/@react-aria/i18n |
 | @vue-aria/interactions | not_started | 13 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/interactions | packages/@react-aria/interactions |
 | @vue-aria/label | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/label | packages/@react-aria/label |
 | @vue-aria/landmark | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/landmark | packages/@react-aria/landmark |

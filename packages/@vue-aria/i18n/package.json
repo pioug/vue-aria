@@ -1,0 +1,71 @@
+{
+  "name": "@vue-aria/i18n",
+  "version": "3.12.15",
+  "description": "Vue port of @react-aria/i18n",
+  "license": "Apache-2.0",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": [
+        "./dist/types.d.ts",
+        "./src/index.ts"
+      ],
+      "import": "./dist/import.mjs",
+      "require": "./dist/main.js"
+    },
+    "./server": {
+      "source": "./src/server.tsx",
+      "import": "./server/index.mjs",
+      "require": "./server/index.js"
+    }
+  },
+  "server-module": "server/index.mjs",
+  "server-main": "server/index.js",
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "targets": {
+    "main": {},
+    "module": {},
+    "server-module": {
+      "source": "src/server.tsx",
+      "outputFormat": "esmodule",
+      "isLibrary": true,
+      "includeNodeModules": false
+    },
+    "server-main": {
+      "source": "src/server.tsx",
+      "outputFormat": "commonjs",
+      "isLibrary": true,
+      "includeNodeModules": false
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "server"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.11.0",
+    "@internationalized/message": "^3.1.8",
+    "@internationalized/number": "^3.6.5",
+    "@internationalized/string": "^3.2.7",
+    "@vue-aria/ssr": "^3.9.10",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-types/shared": "^3.33.0",
+    "@swc/helpers": "^0.5.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
+    "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
