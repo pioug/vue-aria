@@ -33,3 +33,4 @@ export {getOffset} from './getOffset';
 export {filterDOMProps} from './filterDOMProps';
 export {isVirtualClick, isVirtualPointerEvent} from './isVirtualEvent';
 export {inertValue} from './inertValue';
+export {clamp, snapValueToStep} from '../../../@vue-stately/utils/src';
