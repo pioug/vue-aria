@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Dialog } from "../src";
 
 describe("Dialog", () => {
@@ -161,5 +162,20 @@ describe("Dialog", () => {
 
     await wrapper.get("button[aria-label=\"Dismiss\"]").trigger("click");
     expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("localizes dismiss button aria-label from provider locale", () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () => h(Dialog, { isDismissable: true }, () => "contents"),
+      },
+    });
+
+    const dismissButton = wrapper.get("button.spectrum-Dialog-closeButton");
+    expect(dismissButton.attributes("aria-label")).toBe("Rejeter");
   });
 });

@@ -1,4 +1,5 @@
 import { defineComponent, h, nextTick, onMounted, ref, type PropType } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { Button } from "@vue-spectrum/button";
@@ -30,6 +31,15 @@ export interface SpectrumAlertDialogProps {
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
+
+const ALERT_DIALOG_INTL_MESSAGES = {
+  "en-US": {
+    alert: "Alert",
+  },
+  "fr-FR": {
+    alert: "Alerte",
+  },
+} as const;
 
 function resolveConfirmVariant(
   variant: AlertDialogVariant | undefined
@@ -105,6 +115,7 @@ export const AlertDialog = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const context = useDialogContext();
     const dialogRef = ref<{ UNSAFE_getDOMNode?: () => HTMLElement | null } | null>(null);
+    const stringFormatter = useLocalizedStringFormatter(ALERT_DIALOG_INTL_MESSAGES);
 
     const close = (): void => {
       context?.onClose?.();
@@ -163,12 +174,12 @@ export const AlertDialog = defineComponent({
           default: () => [
             h(Heading, null, () => props.title),
             props.variant === "error" || props.variant === "warning"
-              ? h(
+                ? h(
                   "span",
                   {
                     class: classNames("spectrum-Dialog-typeIcon"),
                     role: "img",
-                    "aria-label": "Alert",
+                    "aria-label": stringFormatter.value.format("alert"),
                   },
                   "!"
                 )

@@ -1,5 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
+import { h } from "vue";
 import { AlertDialog } from "../src";
 
 describe("AlertDialog", () => {
@@ -213,6 +215,28 @@ describe("AlertDialog", () => {
       expect(icon.attributes("aria-label")).toBe("Alert");
     }
   );
+
+  it("localizes alert icon aria-label from provider locale", () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(AlertDialog, {
+            variant: "warning",
+            title: "the title",
+            primaryActionLabel: "confirm",
+          }, {
+            default: () => "Content body",
+          }),
+      },
+    });
+
+    const icon = wrapper.get(".spectrum-Dialog-typeIcon");
+    expect(icon.attributes("aria-label")).toBe("Alerte");
+  });
 
   it("does not render alert type icon for confirmation variant", () => {
     const wrapper = mount(AlertDialog, {

@@ -13,6 +13,7 @@ import {
   type VNode,
   type VNodeChild,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { mergeProps } from "@vue-aria/utils";
 import { classNames } from "@vue-spectrum/utils";
@@ -146,6 +147,15 @@ const DISMISS_BUTTON_STYLE: Record<string, string> = {
 const UNMOUNT_OPEN_WARNING =
   "A DialogTrigger unmounted while open. This is likely due to being placed within a trigger that unmounts or inside a conditional. Consider using a DialogContainer instead.";
 
+const DIALOG_TRIGGER_INTL_MESSAGES = {
+  "en-US": {
+    dismiss: "Dismiss",
+  },
+  "fr-FR": {
+    dismiss: "Rejeter",
+  },
+} as const;
+
 export const DialogTrigger = defineComponent({
   name: "DialogTrigger",
   inheritAttrs: false,
@@ -204,6 +214,7 @@ export const DialogTrigger = defineComponent({
     },
   },
   setup(props, { slots }) {
+    const stringFormatter = useLocalizedStringFormatter(DIALOG_TRIGGER_INTL_MESSAGES);
     const triggerRef = ref<HTMLElement | null>(null);
     const overlayRootRef = ref<HTMLElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
@@ -561,6 +572,7 @@ export const DialogTrigger = defineComponent({
           : null;
       const shouldRenderDismissButtons =
         effectiveType.value === "popover" || effectiveType.value === "tray";
+      const dismissLabel = stringFormatter.value.format("dismiss");
 
       const renderedTrigger = cloneVNode(
         triggerNode,
@@ -632,12 +644,12 @@ export const DialogTrigger = defineComponent({
                           "button",
                           {
                             type: "button",
-                            "aria-label": "Dismiss",
+                            "aria-label": dismissLabel,
                             tabIndex: -1,
                             style: DISMISS_BUTTON_STYLE,
                             onClick: close,
                           },
-                          "Dismiss"
+                          dismissLabel
                         )
                       : null,
                     renderedContent,
@@ -646,12 +658,12 @@ export const DialogTrigger = defineComponent({
                           "button",
                           {
                             type: "button",
-                            "aria-label": "Dismiss",
+                            "aria-label": dismissLabel,
                             tabIndex: -1,
                             style: DISMISS_BUTTON_STYLE,
                             onClick: close,
                           },
-                          "Dismiss"
+                          dismissLabel
                         )
                       : null,
                   ]

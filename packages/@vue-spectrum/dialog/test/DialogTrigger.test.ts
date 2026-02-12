@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Dialog, DialogTrigger } from "../src";
 
 async function flushOverlay(): Promise<void> {
@@ -721,6 +722,38 @@ describe("DialogTrigger", () => {
 
       expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
       expect(document.activeElement).toBe(trigger);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("localizes hidden dismiss button labels from provider locale", async () => {
+    const wrapper = mount(Provider, {
+      attachTo: document.body,
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(DialogTrigger, { type: "popover" }, {
+            default: () => [
+              h("button", { type: "button" }, "Trigger"),
+              h(Dialog, null, () => "contents"),
+            ],
+          }),
+      },
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dismissButtons = Array.from(
+        document.body.querySelectorAll<HTMLButtonElement>("button[aria-label=\"Rejeter\"]")
+      );
+      expect(dismissButtons.length).toBeGreaterThan(0);
+      expect(dismissButtons[0]?.textContent).toBe("Rejeter");
     } finally {
       wrapper.unmount();
     }

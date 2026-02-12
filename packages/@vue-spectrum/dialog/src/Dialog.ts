@@ -11,6 +11,7 @@ import {
   type VNode,
 } from "vue";
 import { useDialog } from "@vue-aria/dialog";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
@@ -48,6 +49,15 @@ const typeSizeMap: Record<DialogType, string | undefined> = {
   fullscreen: "fullscreen",
   fullscreenTakeover: "fullscreenTakeover",
 };
+
+const DIALOG_INTL_MESSAGES = {
+  "en-US": {
+    dismiss: "Dismiss",
+  },
+  "fr-FR": {
+    dismiss: "Rejeter",
+  },
+} as const;
 
 function isHeadingNode(node: VNode): boolean {
   if (typeof node.type === "string") {
@@ -119,6 +129,7 @@ export const Dialog = defineComponent({
     const context = useDialogContext();
     const elementRef = ref<HTMLElement | null>(null);
     const generatedHeadingId = useId(undefined, "v-spectrum-dialog-heading");
+    const stringFormatter = useLocalizedStringFormatter(DIALOG_INTL_MESSAGES);
 
     const resolvedType = computed<DialogType>(() => props.type ?? context?.type ?? "modal");
     const resolvedDismissable = computed<boolean>(
@@ -267,7 +278,7 @@ export const Dialog = defineComponent({
                     {
                       type: "button",
                       class: classNames("spectrum-Dialog-closeButton"),
-                      "aria-label": "Dismiss",
+                      "aria-label": stringFormatter.value.format("dismiss"),
                       onClick: onDismiss,
                     },
                     "×"
