@@ -1315,6 +1315,56 @@ describe("SearchAutocomplete", () => {
     }
   });
 
+  it("does not fire onLoadMore on reopen when listbox is no longer at the end", async () => {
+    const user = userEvent.setup();
+    let listBoxScrollHeight = 100;
+    const onLoadMore = vi.fn(() => {
+      listBoxScrollHeight = 200;
+    });
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return listBoxScrollHeight;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 100;
+        }
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        loadingState: "idle",
+        onLoadMore,
+      });
+      const input = tree.getByRole("combobox") as HTMLInputElement;
+
+      input.focus();
+      await user.keyboard("{ArrowDown}");
+      tree.getByRole("listbox");
+      await Promise.resolve();
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+      await fireEvent.blur(input);
+      expect(tree.queryByRole("listbox")).toBeNull();
+
+      input.focus();
+      await user.keyboard("{ArrowDown}");
+      tree.getByRole("listbox");
+      await Promise.resolve();
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("supports static slot syntax with SearchAutocompleteItem and SearchAutocompleteSection", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();

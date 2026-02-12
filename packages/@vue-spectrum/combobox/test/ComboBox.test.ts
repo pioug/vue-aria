@@ -1380,6 +1380,54 @@ describe("ComboBox", () => {
     }
   });
 
+  it("does not fire onLoadMore on reopen when listbox is no longer at the end", async () => {
+    const user = userEvent.setup();
+    let listBoxScrollHeight = 100;
+    const onLoadMore = vi.fn(() => {
+      listBoxScrollHeight = 200;
+    });
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return listBoxScrollHeight;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 100;
+        }
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        loadingState: "idle",
+        onLoadMore,
+      });
+      const button = tree.getByRole("button");
+
+      await user.click(button);
+      tree.getByRole("listbox");
+      await Promise.resolve();
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+      await user.click(button);
+      expect(tree.queryByRole("listbox")).toBeNull();
+
+      await user.click(button);
+      tree.getByRole("listbox");
+      await Promise.resolve();
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("renders loading indicator", () => {
     const tree = renderComponent({
       defaultOpen: true,
