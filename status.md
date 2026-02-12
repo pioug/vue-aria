@@ -178,7 +178,7 @@
 | @vue-types/avatar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/avatar | packages/@react-types/avatar |
 | @vue-types/badge | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/badge | packages/@react-types/badge |
 | @vue-types/breadcrumbs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/breadcrumbs | packages/@react-types/breadcrumbs |
-| @vue-types/button | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/button | packages/@react-types/button |
+| @vue-types/button | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/button | packages/@react-types/button |
 | @vue-types/buttongroup | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/buttongroup | packages/@react-types/buttongroup |
 | @vue-types/calendar | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/calendar | packages/@react-types/calendar |
 | @vue-types/card | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/card | packages/@react-types/card |
