@@ -7,7 +7,7 @@ import {
   type VNodeChild,
   type VNodeRef,
 } from "vue";
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { ProgressCircle } from "@vue-spectrum/progress";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
@@ -20,6 +20,17 @@ export type SpectrumCardViewLoadingState =
   | "loading"
   | "loadingMore"
   | "filtering";
+
+const CARDVIEW_INTL_MESSAGES = {
+  "en-US": {
+    loading: "Loading…",
+    loadingMore: "Loading more…",
+  },
+  "fr-FR": {
+    loading: "Chargement en cours…",
+    loadingMore: "Chargement d’autres d’éléments…",
+  },
+} as const;
 
 export interface SpectrumCardViewProps<T = unknown> {
   items?: T[] | undefined;
@@ -174,6 +185,10 @@ export const CardView = defineComponent({
     const activeCellIndex = ref(0);
     const cellRefs = ref<Array<HTMLElement | null>>([]);
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(
+      CARDVIEW_INTL_MESSAGES,
+      "@vue-spectrum/card"
+    );
     const isRTL = computed(() => locale.value.direction === "rtl");
     const internalSelectedKeys = ref<Set<unknown>>(
       toKeySet(props.defaultSelectedKeys)
@@ -406,7 +421,7 @@ export const CardView = defineComponent({
         pushCenteredRow("loading", [
           h(ProgressCircle, {
             isIndeterminate: true,
-            ariaLabel: "Loading…",
+            ariaLabel: stringFormatter.value.format("loading"),
           }),
         ]);
       } else {
@@ -414,7 +429,10 @@ export const CardView = defineComponent({
           pushCenteredRow("loading-more", [
             h(ProgressCircle, {
               isIndeterminate: true,
-              ariaLabel: rowCount > 0 ? "Loading more…" : "Loading…",
+              ariaLabel:
+                rowCount > 0
+                  ? stringFormatter.value.format("loadingMore")
+                  : stringFormatter.value.format("loading"),
             }),
           ]);
         }

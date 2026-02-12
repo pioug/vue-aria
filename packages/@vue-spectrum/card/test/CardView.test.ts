@@ -1077,6 +1077,60 @@ describe("CardView", () => {
     );
   });
 
+  it("localizes loading labels from i18n locale", () => {
+    const LoadingHarness = defineComponent({
+      name: "CardViewLoadingLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(
+            CardView,
+            {
+              items: [],
+              layout: new GridLayout(),
+              loadingState: "loading",
+              ariaLabel: "Test CardView",
+            },
+            {
+              default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+            }
+          );
+      },
+    });
+
+    const loadingWrapper = mount(LoadingHarness);
+    expect(loadingWrapper.get("[role=\"progressbar\"]").attributes("aria-label")).toBe(
+      "Chargement en cours…"
+    );
+
+    const LoadingMoreHarness = defineComponent({
+      name: "CardViewLoadingMoreLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(
+            CardView,
+            {
+              items: longDynamicItems,
+              layout: new GridLayout(),
+              loadingState: "loadingMore",
+              ariaLabel: "Test CardView",
+            },
+            {
+              default: ({ item }: { item: DynamicCardItem }) => createDynamicCard(item),
+            }
+          );
+      },
+    });
+
+    const loadingMoreWrapper = mount(LoadingMoreHarness);
+    expect(
+      loadingMoreWrapper.get("[role=\"progressbar\"]").attributes("aria-label")
+    ).toBe("Chargement d’autres d’éléments…");
+  });
+
   it("does not render loading row when filtering", () => {
     const wrapper = mount(CardView, {
       props: {
