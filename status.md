@@ -113,7 +113,7 @@
 | @vue-spectrum/numberfield | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/numberfield | packages/@react-spectrum/numberfield |
 | @vue-spectrum/overlays | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/overlays | packages/@react-spectrum/overlays |
 | @vue-spectrum/picker | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/picker | packages/@react-spectrum/picker |
-| @vue-spectrum/progress | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/progress | packages/@react-spectrum/progress |
+| @vue-spectrum/progress | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/progress | packages/@react-spectrum/progress |
 | @vue-spectrum/provider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/provider | packages/@react-spectrum/provider |
 | @vue-spectrum/radio | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/radio | packages/@react-spectrum/radio |
 | @vue-spectrum/s2 | not_started | 19 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/s2 | packages/@react-spectrum/s2 |

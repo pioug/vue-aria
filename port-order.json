@@ -1,9 +1,14 @@
 {
-  "generatedAt": "2026-02-12T18:10:42.697Z",
+  "generatedAt": "2026-02-12T18:11:04.738Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 40,
-  "availableLeafCount": 7,
+  "incompletePackageCount": 39,
+  "availableLeafCount": 8,
   "availableLeaves": [
+    {
+      "packageName": "@vue-spectrum/button",
+      "upstreamPackageName": "@react-spectrum/button",
+      "upstreamPath": "packages/@react-spectrum/button"
+    },
     {
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
@@ -15,14 +20,14 @@
       "upstreamPath": "packages/@react-spectrum/layout"
     },
     {
+      "packageName": "@vue-spectrum/meter",
+      "upstreamPackageName": "@react-spectrum/meter",
+      "upstreamPath": "packages/@react-spectrum/meter"
+    },
+    {
       "packageName": "@vue-spectrum/overlays",
       "upstreamPackageName": "@react-spectrum/overlays",
       "upstreamPath": "packages/@react-spectrum/overlays"
-    },
-    {
-      "packageName": "@vue-spectrum/progress",
-      "upstreamPackageName": "@react-spectrum/progress",
-      "upstreamPath": "packages/@react-spectrum/progress"
     },
     {
       "packageName": "@vue-spectrum/s2",
