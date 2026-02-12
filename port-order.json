@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:36:12.295Z",
+  "generatedAt": "2026-02-12T17:37:28.077Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 78,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 77,
+  "availableLeafCount": 7,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -33,11 +33,6 @@
       "packageName": "@vue-aria/selection",
       "upstreamPackageName": "@react-aria/selection",
       "upstreamPath": "packages/@react-aria/selection"
-    },
-    {
-      "packageName": "@vue-aria/slider",
-      "upstreamPackageName": "@react-aria/slider",
-      "upstreamPath": "packages/@react-aria/slider"
     },
     {
       "packageName": "@vue-aria/toast",

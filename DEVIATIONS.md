@@ -628,3 +628,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential collection document synchronization timing differences until full conversion.
 - Removal plan: Replace React context/portal/store wiring with Vue provide/inject/teleport/reactivity equivalents and port upstream collection builder behavior tests for parity.
+
+- Package: `@vue-aria/slider`
+- Upstream reference: `packages/@react-aria/slider` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/event typing semantics (`useRef`, `useEffect`, React pointer/mouse/touch/change event types, React label/output attribute types) across slider track and thumb interactions.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential slider drag/focus timing differences until full composable conversion.
+- Removal plan: Replace React hook/event/attribute assumptions with Vue-native composables/event typing and port upstream slider behavior tests for parity.
