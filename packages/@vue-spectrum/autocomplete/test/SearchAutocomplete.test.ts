@@ -163,6 +163,62 @@ describe("SearchAutocomplete", () => {
     expect(options[0]?.textContent).toContain("The second item");
   });
 
+  it("updates the visible option list when controlled items change", async () => {
+    const initialItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "Aardvark" },
+      { key: "2", label: "Kangaroo" },
+      { key: "3", label: "Snake" },
+    ];
+    const nextItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "New Text" },
+      { key: "2", label: "Item 2" },
+      { key: "3", label: "Item 3" },
+    ];
+    let setItems:
+      | ((nextItems: SpectrumSearchAutocompleteItemData[]) => void)
+      | undefined;
+
+    const App = defineComponent({
+      name: "SearchAutocompleteControlledItemsUpdateApp",
+      setup() {
+        const list = ref<SpectrumSearchAutocompleteItemData[]>(initialItems);
+        setItems = (nextItems: SpectrumSearchAutocompleteItemData[]) => {
+          list.value = nextItems;
+        };
+        return () =>
+          h(SearchAutocomplete, {
+            label: "SearchAutocomplete",
+            items: list.value,
+            menuTrigger: "focus",
+          });
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox");
+    input.focus();
+    await Promise.resolve();
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options.map((option) => option.textContent)).toEqual([
+      "Aardvark",
+      "Kangaroo",
+      "Snake",
+    ]);
+
+    setItems?.(nextItems);
+    await Promise.resolve();
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options.map((option) => option.textContent)).toEqual([
+      "New Text",
+      "Item 2",
+      "Item 3",
+    ]);
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({
