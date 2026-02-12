@@ -463,4 +463,59 @@ describe("TooltipTrigger", () => {
       wrapper.unmount();
     }
   });
+
+  it("keeps only one tooltip visible across multiple triggers", async () => {
+    const Root = {
+      render() {
+        return h("div", null, [
+          h(
+            TooltipTrigger,
+            {
+              delay: 0,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "first trigger" }, "First"),
+                h(Tooltip, () => "First tooltip"),
+              ],
+            }
+          ),
+          h(
+            TooltipTrigger,
+            {
+              delay: 0,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "second trigger" }, "Second"),
+                h(Tooltip, () => "Second tooltip"),
+              ],
+            }
+          ),
+        ]);
+      },
+    };
+
+    const wrapper = mount(Root, {
+      attachTo: document.body,
+    });
+
+    const firstButton = wrapper.get("[aria-label=\"first trigger\"]");
+    await firstButton.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+
+    let tooltips = document.body.querySelectorAll("[role=\"tooltip\"]");
+    expect(tooltips).toHaveLength(1);
+    expect(tooltips[0]?.textContent).toContain("First tooltip");
+
+    const secondButton = wrapper.get("[aria-label=\"second trigger\"]");
+    await secondButton.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+
+    tooltips = document.body.querySelectorAll("[role=\"tooltip\"]");
+    expect(tooltips).toHaveLength(1);
+    expect(tooltips[0]?.textContent).toContain("Second tooltip");
+
+    wrapper.unmount();
+  });
 });

@@ -18,6 +18,8 @@ export interface UseTooltipTriggerResult {
 }
 
 const DEFAULT_TOOLTIP_DELAY = 1500;
+let tooltipTriggerInstanceId = 0;
+const activeTooltipClosers = new Map<number, (immediate?: boolean) => void>();
 
 function resolveBoolean(value: MaybeReactive<boolean | undefined> | undefined, fallback: boolean): boolean {
   if (value === undefined) {
@@ -60,6 +62,7 @@ export function useTooltipTrigger(
   state: TooltipTriggerStateLike,
   refValue: MaybeReactive<HTMLElement | null | undefined>
 ): UseTooltipTriggerResult {
+  const instanceId = ++tooltipTriggerInstanceId;
   const tooltipId = useId(undefined, "v-aria-tooltip");
   const isHovered = ref(false);
   const isFocused = ref(false);
@@ -86,8 +89,35 @@ export function useTooltipTrigger(
     }, delay);
   };
 
+  const unregisterActiveTooltip = (): void => {
+    activeTooltipClosers.delete(instanceId);
+  };
+
+  const closeTooltip = (immediate?: boolean): void => {
+    clearShowTimeout();
+    unregisterActiveTooltip();
+    state.close(immediate);
+  };
+
+  const registerActiveTooltip = (): void => {
+    activeTooltipClosers.set(instanceId, closeTooltip);
+  };
+
+  const closeOtherTooltips = (): void => {
+    for (const [id, closeOtherTooltip] of Array.from(activeTooltipClosers.entries())) {
+      if (id === instanceId) {
+        continue;
+      }
+
+      closeOtherTooltip(true);
+      activeTooltipClosers.delete(id);
+    }
+  };
+
   const handleShow = (): void => {
     if (isHovered.value || isFocused.value) {
+      closeOtherTooltips();
+      registerActiveTooltip();
       state.open(isFocused.value);
     }
   };
@@ -95,19 +125,22 @@ export function useTooltipTrigger(
   const handleHide = (immediate?: boolean): void => {
     clearShowTimeout();
     if (!isHovered.value && !isFocused.value) {
-      state.close(immediate);
+      closeTooltip(immediate);
     }
   };
 
   watchEffect((onCleanup) => {
     if (!state.isOpen.value) {
+      unregisterActiveTooltip();
       return;
     }
+
+    registerActiveTooltip();
 
     const onKeydown = (event: KeyboardEvent): void => {
       if (event.key === "Escape" && toValue(refValue)) {
         event.stopPropagation();
-        state.close(true);
+        closeTooltip(true);
       }
     };
 
@@ -166,6 +199,7 @@ export function useTooltipTrigger(
   if (getCurrentScope()) {
     onScopeDispose(() => {
       clearShowTimeout();
+      unregisterActiveTooltip();
     });
   }
 

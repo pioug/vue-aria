@@ -127,6 +127,56 @@ describe("useTooltipTrigger", () => {
     trigger.remove();
   });
 
+  it("closes other active tooltips before opening a new one", () => {
+    const firstTrigger = document.createElement("button");
+    const secondTrigger = document.createElement("button");
+    document.body.appendChild(firstTrigger);
+    document.body.appendChild(secondTrigger);
+
+    const firstState = createTooltipState();
+    const secondState = createTooltipState();
+
+    const scope = effectScope();
+    let firstTooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+    let secondTooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+
+    scope.run(() => {
+      firstTooltipTrigger = useTooltipTrigger(
+        {
+          delay: 0,
+        },
+        firstState,
+        firstTrigger
+      );
+      secondTooltipTrigger = useTooltipTrigger(
+        {
+          delay: 0,
+        },
+        secondState,
+        secondTrigger
+      );
+    });
+
+    attachHandlers(firstTrigger, firstTooltipTrigger.triggerProps.value);
+    attachHandlers(secondTrigger, secondTooltipTrigger.triggerProps.value);
+
+    firstTrigger.dispatchEvent(
+      new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+    );
+    expect(firstState.open).toHaveBeenCalledWith(false);
+
+    secondTrigger.dispatchEvent(
+      new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+    );
+
+    expect(firstState.close).toHaveBeenCalledWith(true);
+    expect(secondState.open).toHaveBeenCalledWith(false);
+
+    scope.stop();
+    firstTrigger.remove();
+    secondTrigger.remove();
+  });
+
   it("uses a 1500ms default hover delay when delay is not provided", () => {
     vi.useFakeTimers();
     const trigger = document.createElement("button");
