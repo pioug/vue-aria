@@ -645,6 +645,8 @@ export const SearchAutocomplete = defineComponent({
         label: props.label,
         description: props.description,
         errorMessage: props.errorMessage,
+        isInvalid: props.isInvalid,
+        validationState: props.validationState,
         isDisabled: props.isDisabled,
         isReadOnly: props.isReadOnly,
         isRequired: props.isRequired,

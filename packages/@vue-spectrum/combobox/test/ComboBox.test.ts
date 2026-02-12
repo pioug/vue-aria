@@ -830,6 +830,15 @@ describe("ComboBox", () => {
     expect(options[1]?.getAttribute("aria-selected")).toBe("false");
   });
 
+  it("sets aria-invalid when validationState is invalid", () => {
+    const tree = renderComponent({
+      validationState: "invalid",
+    });
+
+    const input = tree.getByRole("combobox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
   it("uses defaultSelectedKey to initialize selected input text", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({

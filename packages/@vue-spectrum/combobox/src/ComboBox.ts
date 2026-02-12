@@ -61,6 +61,8 @@ export interface SpectrumComboBoxProps {
   isDisabled?: boolean | undefined;
   isReadOnly?: boolean | undefined;
   isRequired?: boolean | undefined;
+  isInvalid?: boolean | undefined;
+  validationState?: "valid" | "invalid" | undefined;
   loadingState?: "idle" | "loading" | "loadingMore" | "filtering" | undefined;
   onLoadMore?: (() => void) | undefined;
   ariaLabel?: string | undefined;
@@ -667,6 +669,14 @@ export const ComboBox = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    isInvalid: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    validationState: {
+      type: String as PropType<"valid" | "invalid" | undefined>,
+      default: undefined,
+    },
     loadingState: {
       type: String as PropType<"idle" | "loading" | "loadingMore" | "filtering" | undefined>,
       default: undefined,
@@ -829,6 +839,8 @@ export const ComboBox = defineComponent({
         label: props.label,
         description: props.description,
         errorMessage: props.errorMessage,
+        isInvalid: props.isInvalid,
+        validationState: props.validationState,
         isDisabled: props.isDisabled,
         isReadOnly: props.isReadOnly,
         isRequired: props.isRequired,

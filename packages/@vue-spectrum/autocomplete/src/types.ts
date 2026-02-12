@@ -57,6 +57,8 @@ export interface SpectrumSearchAutocompleteProps {
   isDisabled?: boolean | undefined;
   isReadOnly?: boolean | undefined;
   isRequired?: boolean | undefined;
+  isInvalid?: boolean | undefined;
+  validationState?: "valid" | "invalid" | undefined;
   loadingState?: SpectrumSearchAutocompleteLoadingState | undefined;
   onLoadMore?: (() => void) | undefined;
   ariaLabel?: string | undefined;
@@ -188,6 +190,14 @@ export const searchAutocompletePropOptions = {
   },
   isRequired: {
     type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  isInvalid: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  validationState: {
+    type: String as PropType<"valid" | "invalid" | undefined>,
     default: undefined,
   },
   loadingState: {

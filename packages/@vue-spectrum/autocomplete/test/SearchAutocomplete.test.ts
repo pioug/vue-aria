@@ -419,6 +419,15 @@ describe("SearchAutocomplete", () => {
     expect(options[0]?.getAttribute("aria-selected")).toBe("false");
   });
 
+  it("sets aria-invalid when validationState is invalid", () => {
+    const tree = renderComponent({
+      validationState: "invalid",
+    });
+
+    const input = tree.getByRole("combobox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({

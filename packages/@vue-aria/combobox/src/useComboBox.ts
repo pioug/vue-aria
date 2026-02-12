@@ -20,6 +20,8 @@ export interface UseComboBoxOptions {
   label?: MaybeReactive<string | undefined>;
   description?: MaybeReactive<string | undefined>;
   errorMessage?: MaybeReactive<string | undefined>;
+  isInvalid?: MaybeReactive<boolean | undefined>;
+  validationState?: MaybeReactive<"valid" | "invalid" | undefined>;
   isDisabled?: MaybeReactive<boolean | undefined>;
   isReadOnly?: MaybeReactive<boolean | undefined>;
   isRequired?: MaybeReactive<boolean | undefined>;
@@ -174,6 +176,8 @@ export function useComboBox<T extends ListBoxItem>(
       label: options.label,
       description: options.description,
       errorMessage: options.errorMessage,
+      isInvalid: options.isInvalid,
+      validationState: options.validationState,
       isDisabled: options.isDisabled,
       isReadOnly: options.isReadOnly,
       isRequired: options.isRequired,
