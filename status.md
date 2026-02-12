@@ -100,7 +100,7 @@
 | @vue-spectrum/form | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/form | packages/@react-spectrum/form |
 | @vue-spectrum/icon | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/icon | packages/@react-spectrum/icon |
 | @vue-spectrum/illustratedmessage | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/illustratedmessage | packages/@react-spectrum/illustratedmessage |
-| @vue-spectrum/image | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/image | packages/@react-spectrum/image |
+| @vue-spectrum/image | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/image | packages/@react-spectrum/image |
 | @vue-spectrum/inlinealert | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/inlinealert | packages/@react-spectrum/inlinealert |
 | @vue-spectrum/label | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/label | packages/@react-spectrum/label |
 | @vue-spectrum/labeledvalue | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/labeledvalue | packages/@react-spectrum/labeledvalue |

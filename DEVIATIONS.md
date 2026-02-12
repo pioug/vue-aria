@@ -838,3 +838,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential link interaction/focus timing differences until full composable conversion.
 - Removal plan: Replace React runtime assumptions with Vue-native composables/rendering patterns and port upstream link behavior tests for parity.
+
+- Package: `@vue-spectrum/image`
+- Upstream reference: `packages/@react-spectrum/image` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/rendering semantics and inherited React-based image loading/styling behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential image render/loading timing differences until full composable conversion.
+- Removal plan: Replace React runtime assumptions with Vue-native composables/rendering patterns and port upstream image behavior tests for parity.

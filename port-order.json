@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:07:19.746Z",
+  "generatedAt": "2026-02-12T18:08:00.539Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 48,
-  "availableLeafCount": 14,
+  "incompletePackageCount": 47,
+  "availableLeafCount": 13,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/accordion",
@@ -23,11 +23,6 @@
       "packageName": "@vue-spectrum/icon",
       "upstreamPackageName": "@react-spectrum/icon",
       "upstreamPath": "packages/@react-spectrum/icon"
-    },
-    {
-      "packageName": "@vue-spectrum/image",
-      "upstreamPackageName": "@react-spectrum/image",
-      "upstreamPath": "packages/@react-spectrum/image"
     },
     {
       "packageName": "@vue-spectrum/layout",
