@@ -169,6 +169,125 @@ function isAndroid(): boolean {
   return /Android/i.test(userAgent);
 }
 
+interface InputPartRange {
+  start: number;
+  end: number;
+  editable: boolean;
+}
+
+const EDITABLE_PART_TYPES = new Set<string>([
+  "integer",
+  "fraction",
+  "decimal",
+  "group",
+  "minusSign",
+  "plusSign",
+  "exponentInteger",
+  "exponentMinusSign",
+  "exponentSeparator",
+]);
+
+function buildInputPartRanges(
+  displayValue: string,
+  formatter: Intl.NumberFormat,
+  parsedValue: number
+): InputPartRange[] | null {
+  const formattedValue = formatter.format(parsedValue);
+  if (formattedValue.length !== displayValue.length) {
+    return null;
+  }
+
+  let index = 0;
+  const ranges: InputPartRange[] = [];
+  for (const part of formatter.formatToParts(parsedValue)) {
+    const start = index;
+    index += part.value.length;
+    ranges.push({
+      start,
+      end: index,
+      editable: EDITABLE_PART_TYPES.has(part.type),
+    });
+  }
+
+  if (index !== displayValue.length) {
+    return null;
+  }
+
+  return ranges;
+}
+
+function getBeforeInputEditRange(
+  inputElement: HTMLInputElement,
+  inputType: string
+): { start: number; end: number } {
+  let start = inputElement.selectionStart ?? 0;
+  let end = inputElement.selectionEnd ?? start;
+  if (start > end) {
+    [start, end] = [end, start];
+  }
+
+  if (start === end) {
+    if (
+      inputType === "deleteContentBackward" ||
+      inputType === "deleteSoftLineBackward" ||
+      inputType === "deleteHardLineBackward"
+    ) {
+      return {
+        start: Math.max(0, start - 1),
+        end: start,
+      };
+    }
+
+    if (inputType === "deleteContentForward") {
+      return {
+        start,
+        end: Math.min(inputElement.value.length, end + 1),
+      };
+    }
+  }
+
+  return { start, end };
+}
+
+function isEditableInsertionPosition(
+  position: number,
+  ranges: InputPartRange[]
+): boolean {
+  return ranges.some(
+    (range) => range.editable && position >= range.start && position <= range.end
+  );
+}
+
+function canEditRange(
+  range: { start: number; end: number },
+  ranges: InputPartRange[]
+): boolean {
+  if (range.start === range.end) {
+    return isEditableInsertionPosition(range.start, ranges);
+  }
+
+  for (const segment of ranges) {
+    if (segment.editable) {
+      continue;
+    }
+
+    const overlapStart = Math.max(range.start, segment.start);
+    const overlapEnd = Math.min(range.end, segment.end);
+    const overlapsSegment = overlapStart < overlapEnd;
+    if (!overlapsSegment) {
+      continue;
+    }
+
+    const fullyCoversSegment =
+      range.start <= segment.start && range.end >= segment.end;
+    if (!fullyCoversSegment) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function useNumberField(
   options: UseNumberFieldOptions = {}
 ): UseNumberFieldResult {
@@ -557,6 +676,43 @@ export function useNumberField(
       event.preventDefault();
       const pastedText = event.clipboardData?.getData("text/plain")?.trim() ?? "";
       commit(pastedText);
+    },
+    onBeforeInput: (event) => {
+      options.onBeforeInput?.(event);
+      if (!event.cancelable) {
+        return;
+      }
+
+      const inputType = event.inputType ?? "";
+      if (inputType === "historyUndo" || inputType === "historyRedo") {
+        return;
+      }
+
+      const inputElement =
+        (event.target as HTMLInputElement | null) ??
+        (options.inputRef === undefined ? undefined : toValue(options.inputRef));
+      if (!inputElement) {
+        return;
+      }
+
+      const parsedValue = parseNumber(inputElement.value);
+      if (parsedValue === undefined) {
+        return;
+      }
+
+      const ranges = buildInputPartRanges(
+        inputElement.value,
+        numberFormatter.value,
+        parsedValue
+      );
+      if (!ranges) {
+        return;
+      }
+
+      const editRange = getBeforeInputEditRange(inputElement, inputType);
+      if (!canEditRange(editRange, ranges)) {
+        event.preventDefault();
+      }
     },
     onCompositionStart: (event) => {
       const inputElement =
