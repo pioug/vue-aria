@@ -13,6 +13,7 @@ import {
   ComboBoxSection,
   Item,
   Section,
+  type SpectrumComboBoxErrorMessageContext,
   type SpectrumComboBoxItemData,
 } from "../src";
 
@@ -1030,7 +1031,7 @@ describe("ComboBox", () => {
               items,
               isRequired: true,
               validationBehavior: "native",
-              errorMessage: (context: { validationDetails?: { valueMissing?: boolean } }) =>
+              errorMessage: (context: SpectrumComboBoxErrorMessageContext) =>
                 (
                   context.validationDetails as
                     | { valueMissing?: boolean }

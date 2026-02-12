@@ -13,6 +13,7 @@ import {
   SearchAutocomplete,
   SearchAutocompleteItem,
   SearchAutocompleteSection,
+  type SpectrumSearchAutocompleteErrorMessageContext,
   type SpectrumSearchAutocompleteItemData,
 } from "../src";
 
@@ -591,7 +592,7 @@ describe("SearchAutocomplete", () => {
               defaultItems: items,
               isRequired: true,
               validationBehavior: "native",
-              errorMessage: (context: { validationDetails?: { valueMissing?: boolean } }) =>
+              errorMessage: (context: SpectrumSearchAutocompleteErrorMessageContext) =>
                 (
                   context.validationDetails as
                     | { valueMissing?: boolean }
