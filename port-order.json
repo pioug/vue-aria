@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:33:04.202Z",
+  "generatedAt": "2026-02-12T17:34:04.334Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 81,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 80,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -23,11 +23,6 @@
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
-    },
-    {
-      "packageName": "@vue-aria/radio",
-      "upstreamPackageName": "@react-aria/radio",
-      "upstreamPath": "packages/@react-aria/radio"
     },
     {
       "packageName": "@vue-aria/selection",

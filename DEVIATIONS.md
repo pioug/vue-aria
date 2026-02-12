@@ -607,3 +607,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential button/toggle interaction timing differences until full composable conversion.
 - Removal plan: Replace React element/attribute/ref typing and inherited interaction assumptions with Vue-native equivalents and port upstream button/toggle behavior tests for parity.
+
+- Package: `@vue-aria/radio`
+- Upstream reference: `packages/@react-aria/radio` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React input/label attribute typing and memoized handler semantics (`useMemo`) together with inherited React-based focus/interaction utilities.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential radio group keyboard/focus timing differences until full composable conversion.
+- Removal plan: Replace React attribute/memoization assumptions and inherited interaction semantics with Vue-native composables/types and port upstream radio behavior tests for parity.
