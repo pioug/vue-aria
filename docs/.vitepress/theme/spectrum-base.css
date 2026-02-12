@@ -1060,12 +1060,12 @@
 
 .spectrum-docs-provider.spectrum--light,
 .spectrum-docs-provider.spectrum--lightest {
-  color: var(--spectrum-ui-text);
+  color: inherit;
 }
 
 .spectrum-docs-provider.spectrum--dark,
 .spectrum-docs-provider.spectrum--darkest {
-  color: #e6edf7;
+  color: inherit;
   --spectrum-ui-bg: #1f2937;
   --spectrum-ui-bg-raised: #111827;
   --spectrum-ui-bg-subtle: #0f172a;
