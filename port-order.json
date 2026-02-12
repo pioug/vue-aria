@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:57:32.590Z",
+  "generatedAt": "2026-02-12T16:58:45.776Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 104,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 103,
+  "availableLeafCount": 6,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -25,9 +25,14 @@
       "upstreamPath": "packages/@react-stately/table"
     },
     {
-      "packageName": "@vue-stately/virtualizer",
-      "upstreamPackageName": "@react-stately/virtualizer",
-      "upstreamPath": "packages/@react-stately/virtualizer"
+      "packageName": "@vue-types/card",
+      "upstreamPackageName": "@react-types/card",
+      "upstreamPath": "packages/@react-types/card"
+    },
+    {
+      "packageName": "@vue-types/sidenav",
+      "upstreamPackageName": "@react-types/sidenav",
+      "upstreamPath": "packages/@react-types/sidenav"
     }
   ],
   "hasCycles": false,

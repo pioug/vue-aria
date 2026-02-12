@@ -453,3 +453,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential color-field synchronization timing differences until full composable conversion.
 - Removal plan: Replace React hook-based color state composition with Vue refs/computed/watch equivalents and port upstream color state tests for parity.
+
+- Package: `@vue-stately/virtualizer`
+- Upstream reference: `packages/@react-stately/virtualizer` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useCallback`, `useMemo`, `useRef`, `useState`, `useLayoutEffect`) for visible-rect synchronization and scrolling state updates.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential visible-view update timing differences until full composable conversion.
+- Removal plan: Replace React hook-based virtualizer state composition with Vue refs/computed/watch/lifecycle equivalents and port upstream virtualizer tests for parity.
