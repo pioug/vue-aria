@@ -614,3 +614,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential radio group keyboard/focus timing differences until full composable conversion.
 - Removal plan: Replace React attribute/memoization assumptions and inherited interaction semantics with Vue-native composables/types and port upstream radio behavior tests for parity.
+
+- Package: `@vue-aria/textfield`
+- Upstream reference: `packages/@react-aria/textfield` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/type semantics (`React.version`, React change/input handler types, `useState`/`useEffect`/`useRef`) across textfield value formatting and validation wiring.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential text input formatting/validation timing differences until full composable conversion.
+- Removal plan: Replace React runtime/type/event assumptions with Vue-native composables/event typing and port upstream textfield behavior tests for parity.

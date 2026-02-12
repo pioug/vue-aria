@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:34:04.334Z",
+  "generatedAt": "2026-02-12T17:35:04.003Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 80,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 79,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -20,9 +20,19 @@
       "upstreamPath": "packages/@react-aria/datepicker"
     },
     {
+      "packageName": "@vue-aria/numberfield",
+      "upstreamPackageName": "@react-aria/numberfield",
+      "upstreamPath": "packages/@react-aria/numberfield"
+    },
+    {
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
+    },
+    {
+      "packageName": "@vue-aria/searchfield",
+      "upstreamPackageName": "@react-aria/searchfield",
+      "upstreamPath": "packages/@react-aria/searchfield"
     },
     {
       "packageName": "@vue-aria/selection",
@@ -33,11 +43,6 @@
       "packageName": "@vue-aria/slider",
       "upstreamPackageName": "@react-aria/slider",
       "upstreamPath": "packages/@react-aria/slider"
-    },
-    {
-      "packageName": "@vue-aria/textfield",
-      "upstreamPackageName": "@react-aria/textfield",
-      "upstreamPath": "packages/@react-aria/textfield"
     },
     {
       "packageName": "@vue-aria/toast",

@@ -67,7 +67,7 @@
 | @vue-aria/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tabs | packages/@react-aria/tabs |
 | @vue-aria/tag | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tag | packages/@react-aria/tag |
 | @vue-aria/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/test-utils | packages/@react-aria/test-utils |
-| @vue-aria/textfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/textfield | packages/@react-aria/textfield |
+| @vue-aria/textfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/textfield | packages/@react-aria/textfield |
 | @vue-aria/toast | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toast | packages/@react-aria/toast |
 | @vue-aria/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toggle | packages/@react-aria/toggle |
 | @vue-aria/toolbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toolbar | packages/@react-aria/toolbar |
