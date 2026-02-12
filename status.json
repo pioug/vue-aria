@@ -777,7 +777,7 @@
     },
     {
       "packageName": "@vue-aria/utils",
-      "status": "in_progress",
+      "status": "complete",
       "upstreamTests": 8,
       "portedTests": 8,
       "passingTests": 8,

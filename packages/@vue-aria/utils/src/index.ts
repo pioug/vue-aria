@@ -36,6 +36,7 @@ export {useValueEffect} from './useValueEffect';
 export {useLabels} from './useLabels';
 export {useDescription} from './useDescription';
 export {focusWithoutScrolling} from './focusWithoutScrolling';
+export {openLink, getSyntheticLinkProps, useSyntheticLinkProps, RouterProvider, shouldClientNavigate, useRouter, useLinkProps, handleLinkClick} from './openLink';
 export {getScrollParent} from './getScrollParent';
 export {getScrollParents} from './getScrollParents';
 export {isScrollable} from './isScrollable';
@@ -49,5 +50,7 @@ export {filterDOMProps} from './filterDOMProps';
 export {isVirtualClick, isVirtualPointerEvent} from './isVirtualEvent';
 export {inertValue} from './inertValue';
 export {clamp, snapValueToStep} from '../../../@vue-stately/utils/src';
+export {useDeepMemo} from './useDeepMemo';
+export {useEnterAnimation, useExitAnimation} from './animation';
 
 export type {LoadMoreSentinelProps} from './useLoadMoreSentinel';
