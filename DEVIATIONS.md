@@ -278,3 +278,10 @@ Track every divergence from upstream in this file.
 - Reason: This package was ported incrementally to preserve dependency order and keep story utility APIs aligned with upstream naming.
 - User impact: Story utility helpers are not yet Vue-native; consumers should treat this package as transitional and expect React-centric story tooling dependencies.
 - Removal plan: Replace React-specific story helpers with Vue-compatible Storybook utilities and remove React peer dependency requirements.
+
+- Package: `@vue-stately/autocomplete`
+- Upstream reference: `packages/@react-stately/autocomplete` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: State hook is structurally ported, but type surface remains React-centric (`ReactNode`) and internal state mechanics were adapted from React `useState` to Vue refs.
+- Reason: The package was ported incrementally while preserving API shape and dependency order.
+- User impact: Consumers may still need React types for full type resolution, and subtle state timing semantics may differ from upstream in edge cases.
+- Removal plan: Replace remaining React-centric type references with Vue-native equivalents and add parity tests to verify Vue state timing behavior.

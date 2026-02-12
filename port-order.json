@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:58:00.960Z",
+  "generatedAt": "2026-02-12T16:01:24.083Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 136,
-  "availableLeafCount": 15,
+  "incompletePackageCount": 135,
+  "availableLeafCount": 14,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -28,11 +28,6 @@
       "packageName": "@vue-spectrum/theme-express",
       "upstreamPackageName": "@react-spectrum/theme-express",
       "upstreamPath": "packages/@react-spectrum/theme-express"
-    },
-    {
-      "packageName": "@vue-stately/autocomplete",
-      "upstreamPackageName": "@react-stately/autocomplete",
-      "upstreamPath": "packages/@react-stately/autocomplete"
     },
     {
       "packageName": "@vue-stately/calendar",
