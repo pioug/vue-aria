@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T18:09:05.294Z",
+  "generatedAt": "2026-02-12T18:09:24.765Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 44,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 43,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
       "upstreamPath": "packages/@react-spectrum/dropzone"
-    },
-    {
-      "packageName": "@vue-spectrum/icon",
-      "upstreamPackageName": "@react-spectrum/icon",
-      "upstreamPath": "packages/@react-spectrum/icon"
     },
     {
       "packageName": "@vue-spectrum/layout",

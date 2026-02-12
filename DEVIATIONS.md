@@ -866,3 +866,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential form layout/validation presentation timing differences until full composable conversion.
 - Removal plan: Replace React runtime assumptions with Vue-native composables/rendering patterns and port upstream form behavior tests for parity.
+
+- Package: `@vue-spectrum/icon`
+- Upstream reference: `packages/@react-spectrum/icon` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/rendering semantics and inherited React Spectrum icon theming/styling behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential icon render/theming timing differences until full composable conversion.
+- Removal plan: Replace React runtime assumptions with Vue-native composables/rendering patterns and port upstream icon behavior tests for parity.
