@@ -1,4 +1,4 @@
-import { computed, toValue } from "vue";
+import { computed, ref, toValue } from "vue";
 import { useId } from "@vue-aria/ssr";
 import { nodeContains, mergeProps } from "@vue-aria/utils";
 import { useTextField } from "@vue-aria/textfield";
@@ -74,6 +74,7 @@ export function useComboBox<T extends ListBoxItem>(
 
   const isDisabled = computed(() => resolveBoolean(options.isDisabled));
   const isReadOnly = computed(() => resolveBoolean(options.isReadOnly));
+  const suppressActiveDescendant = ref(false);
 
   const focusBoundaryItem = (strategy: Exclude<FocusStrategy, null>): void => {
     const disabledKeys = state.disabledKeys.value;
@@ -104,17 +105,20 @@ export function useComboBox<T extends ListBoxItem>(
         break;
       case "ArrowDown":
         event.preventDefault();
+        suppressActiveDescendant.value = false;
         state.open("first", "manual");
         focusBoundaryItem("first");
         break;
       case "ArrowUp":
         event.preventDefault();
+        suppressActiveDescendant.value = false;
         state.open("last", "manual");
         focusBoundaryItem("last");
         break;
       case "ArrowLeft":
       case "ArrowRight":
         state.setFocusedKey(null);
+        suppressActiveDescendant.value = true;
         break;
       default:
         break;
@@ -184,7 +188,10 @@ export function useComboBox<T extends ListBoxItem>(
     const isFocusedKeyDisabled =
       focusedKey !== null && state.isDisabledKey(focusedKey);
     const activeDescendant =
-      state.isOpen.value && focusedKey !== null && !isFocusedKeyDisabled
+      state.isOpen.value &&
+      focusedKey !== null &&
+      !isFocusedKeyDisabled &&
+      !suppressActiveDescendant.value
         ? `${listBoxId.value}-option-${normalizeKey(focusedKey)}`
         : undefined;
 

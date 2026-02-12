@@ -346,6 +346,25 @@ describe("ComboBox", () => {
     expect((input as HTMLInputElement).value).toBe("One");
   });
 
+  it("clears aria-activedescendant on ArrowLeft and ArrowRight", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent();
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).not.toBeNull();
+
+    await user.keyboard("{ArrowRight}");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
+
+    await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).not.toBeNull();
+
+    await user.keyboard("{ArrowLeft}");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
+  });
+
   it("supports controlled selectedKey", () => {
     const tree = renderComponent({
       selectedKey: "2",
