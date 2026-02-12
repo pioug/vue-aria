@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T17:32:05.981Z",
+  "generatedAt": "2026-02-12T17:33:04.202Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 82,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 81,
+  "availableLeafCount": 9,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/button",
-      "upstreamPackageName": "@react-aria/button",
-      "upstreamPath": "packages/@react-aria/button"
-    },
     {
       "packageName": "@vue-aria/calendar",
       "upstreamPackageName": "@react-aria/calendar",

@@ -1,0 +1,44 @@
+{
+  "name": "@vue-aria/button",
+  "version": "3.14.4",
+  "description": "Vue port of @react-aria/button",
+  "license": "Apache-2.0",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "exports": {
+    "source": "./src/index.ts",
+    "types": [
+      "./dist/types.d.ts",
+      "./src/index.ts"
+    ],
+    "import": "./dist/import.mjs",
+    "require": "./dist/main.js"
+  },
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-aria/interactions": "^3.27.0",
+    "@vue-aria/toolbar": "3.0.0-beta.23",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-stately/toggle": "^3.9.4",
+    "@vue-types/button": "^3.15.0",
+    "@vue-types/shared": "^3.33.0",
+    "@swc/helpers": "^0.5.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
+    "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
