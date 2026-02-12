@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:10:10.713Z",
+  "generatedAt": "2026-02-12T15:11:53.374Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 177,
-  "availableLeafCount": 36,
+  "incompletePackageCount": 176,
+  "availableLeafCount": 35,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -168,11 +168,6 @@
       "packageName": "@vue-types/tabs",
       "upstreamPackageName": "@react-types/tabs",
       "upstreamPath": "packages/@react-types/tabs"
-    },
-    {
-      "packageName": "@vue-types/text",
-      "upstreamPackageName": "@react-types/text",
-      "upstreamPath": "packages/@react-types/text"
     },
     {
       "packageName": "@vue-types/textfield",

@@ -214,7 +214,7 @@
 | @vue-types/switch | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/switch | packages/@react-types/switch |
 | @vue-types/table | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/table | packages/@react-types/table |
 | @vue-types/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tabs | packages/@react-types/tabs |
-| @vue-types/text | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/text | packages/@react-types/text |
+| @vue-types/text | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/text | packages/@react-types/text |
 | @vue-types/textfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/textfield | packages/@react-types/textfield |
 | @vue-types/tooltip | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tooltip | packages/@react-types/tooltip |
 | @vue-types/view | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/view | packages/@react-types/view |
