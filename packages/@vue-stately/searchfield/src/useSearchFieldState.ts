@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {SearchFieldProps} from '@react-types/searchfield';
-import {useControlledState} from '@react-stately/utils';
+import {SearchFieldProps} from '@vue-types/searchfield';
+import {useControlledState} from '@vue-stately/utils';
 
 export interface SearchFieldState {
   /** The current value of the search field. */
