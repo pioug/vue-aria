@@ -8,6 +8,7 @@ import {
   type VNode,
   type VNodeChild,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type { Placement } from "@vue-aria/overlays";
 import { ActionButton } from "@vue-spectrum/button";
 import { classNames, ClearSlots, SlotProvider, type ClassValue } from "@vue-spectrum/utils";
@@ -23,6 +24,17 @@ export interface SpectrumContextualHelpProps {
   slot?: string | undefined;
   UNSAFE_className?: string | undefined;
 }
+
+const CONTEXTUAL_HELP_INTL_MESSAGES = {
+  "en-US": {
+    info: "Information",
+    help: "Help",
+  },
+  "fr-FR": {
+    info: "Informations",
+    help: "Aide",
+  },
+} as const;
 
 function normalizeChildren(nodes: VNodeChild[] | undefined): VNode[] {
   if (!nodes) {
@@ -141,6 +153,7 @@ export const ContextualHelp = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const triggerButtonRef = ref<HTMLElement | null>(null);
+    const stringFormatter = useLocalizedStringFormatter(CONTEXTUAL_HELP_INTL_MESSAGES);
 
     expose({
       UNSAFE_getDOMNode: () => triggerButtonRef.value,
@@ -152,7 +165,7 @@ export const ContextualHelp = defineComponent({
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
       const variant = props.variant ?? "help";
-      const defaultAriaLabel = variant === "info" ? "Information" : "Help";
+      const defaultAriaLabel = stringFormatter.value.format(variant);
       const ariaLabelledby =
         props.ariaLabelledby ??
         props["aria-labelledby"] ??

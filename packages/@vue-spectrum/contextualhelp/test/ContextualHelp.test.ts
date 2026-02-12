@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Content, Footer, Header } from "@vue-spectrum/view";
 import { Link } from "@vue-spectrum/link";
 import { ContextualHelp } from "../src";
@@ -131,6 +132,30 @@ describe("ContextualHelp", () => {
 
     const button = wrapper.get("button");
     expect(button.attributes("aria-label")).toBe("Information");
+  });
+
+  it("localizes default aria labels from provider locale", () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(
+            ContextualHelp,
+            {
+              variant: "help",
+            },
+            {
+              default: () => h(Header, null, () => "Test title"),
+            }
+          ),
+      },
+    });
+
+    const button = wrapper.get("button");
+    expect(button.attributes("aria-label")).toBe("Aide");
   });
 
   it("supports custom aria-label", () => {
