@@ -61,6 +61,12 @@ npm run update:spectrum-case-tracker
 # Optional: include local-only named-case diagnostics in report/console output.
 npm run update:spectrum-case-tracker:diagnostics
 
+# Dry-run missing upstream named-case scaffolding (no writes).
+npm run scaffold:spectrum-missing-tests
+
+# Write __upstream-missing__.test.ts scaffolds for all mapped packages.
+npm run scaffold:spectrum-missing-tests -- --write
+
 # Mine docs style alias gaps and write report.
 npm run docs:style-alias-gaps
 ```

@@ -10,6 +10,7 @@ For live package-by-package completion, use the canonical tracker:
 
 - Keep repository/package structure close to upstream.
 - Port complete package slices: behavior, upstream-equivalent tests, docs/preview, exports, and tracker updates in one pass.
+- Reuse parity helpers only when an equivalent reusable helper exists upstream for that scope; otherwise keep tests local/explicit.
 - Run horizontal lanes to deliver visible, end-to-end progress faster.
 - Prioritize React Spectrum v1 parity before S2 expansion.
 - Deprioritize S2 execution: no new S2 feature lanes while v1 parity remains incomplete.

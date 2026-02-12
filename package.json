@@ -19,6 +19,7 @@
     "test:spectrum-case-parity:diagnostics": "node scripts/check-spectrum-testcase-parity.mjs --include-local-only",
     "update:spectrum-case-tracker": "node scripts/check-spectrum-testcase-parity.mjs --write",
     "update:spectrum-case-tracker:diagnostics": "node scripts/check-spectrum-testcase-parity.mjs --write --include-local-only",
+    "scaffold:spectrum-missing-tests": "node scripts/scaffold-spectrum-missing-tests.mjs",
     "docs:style-alias-gaps": "node scripts/mine-spectrum-style-alias-gaps.mjs --write",
     "scaffold:spectrum-package": "node scripts/scaffold-spectrum-package.mjs",
     "test:cross-browser": "playwright test",
