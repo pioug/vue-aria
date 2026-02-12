@@ -795,6 +795,35 @@ describe("NumberField", () => {
     expect(input.value).toBe("1");
   });
 
+  it("reverts invalid composition text on compositionend", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      onChange: vi.fn(),
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    await user.click(input);
+    await user.keyboard("123");
+    input.setSelectionRange(1, 1);
+
+    await fireEvent.compositionStart(input);
+    const beforeInputEvent = new InputEvent("beforeinput", {
+      cancelable: false,
+      data: "ü",
+      inputType: "insertCompositionText",
+    });
+    await fireEvent(input, beforeInputEvent);
+
+    // JSDOM does not mutate the value/selection for composition text, so emulate it.
+    input.value = "1ü23";
+    input.setSelectionRange(2, 2);
+
+    await fireEvent.compositionEnd(input);
+    expect(input.value).toBe("123");
+    expect(input.selectionStart).toBe(1);
+    expect(input.selectionEnd).toBe(1);
+  });
+
   it("supports custom increment and decrement aria labels", () => {
     const tree = renderNumberField({
       label: "Count",

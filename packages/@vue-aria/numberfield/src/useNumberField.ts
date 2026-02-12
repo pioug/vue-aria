@@ -463,6 +463,9 @@ export function useNumberField(
   });
 
   const isFocused = ref(false);
+  const compositionStartValue = ref<string | null>(null);
+  const compositionSelectionStart = ref<number | null>(null);
+  const compositionSelectionEnd = ref<number | null>(null);
 
   const handleWheel = (event: WheelEvent) => {
     if (
@@ -554,6 +557,51 @@ export function useNumberField(
       event.preventDefault();
       const pastedText = event.clipboardData?.getData("text/plain")?.trim() ?? "";
       commit(pastedText);
+    },
+    onCompositionStart: (event) => {
+      const inputElement =
+        options.inputRef === undefined ? undefined : toValue(options.inputRef);
+      if (inputElement) {
+        compositionStartValue.value = inputElement.value;
+        compositionSelectionStart.value = inputElement.selectionStart;
+        compositionSelectionEnd.value = inputElement.selectionEnd;
+      } else {
+        compositionStartValue.value = inputValue.value;
+        compositionSelectionStart.value = null;
+        compositionSelectionEnd.value = null;
+      }
+      options.onCompositionStart?.(event);
+    },
+    onCompositionEnd: (event) => {
+      const inputElement =
+        options.inputRef === undefined ? undefined : toValue(options.inputRef);
+      if (
+        inputElement &&
+        compositionStartValue.value !== null &&
+        !numberParser.value.isValidPartialNumber(
+          inputElement.value,
+          minValue.value,
+          maxValue.value
+        )
+      ) {
+        inputElement.value = compositionStartValue.value;
+        inputValue.value = compositionStartValue.value;
+
+        if (
+          compositionSelectionStart.value !== null &&
+          compositionSelectionEnd.value !== null
+        ) {
+          inputElement.setSelectionRange(
+            compositionSelectionStart.value,
+            compositionSelectionEnd.value
+          );
+        }
+      }
+
+      compositionStartValue.value = null;
+      compositionSelectionStart.value = null;
+      compositionSelectionEnd.value = null;
+      options.onCompositionEnd?.(event);
     },
   });
 

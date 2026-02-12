@@ -251,8 +251,13 @@ export function useTextField(options: UseTextFieldOptions = {}): UseTextFieldRes
       onCompositionStart: options.onCompositionStart,
       onCompositionEnd: options.onCompositionEnd,
       onCompositionUpdate: options.onCompositionUpdate,
+      // Vue DOM listeners use lowercase event suffixes in render-function props.
+      onCompositionstart: options.onCompositionStart,
+      onCompositionend: options.onCompositionEnd,
+      onCompositionupdate: options.onCompositionUpdate,
       onSelect: options.onSelect,
       onBeforeInput: options.onBeforeInput,
+      onBeforeinput: options.onBeforeInput,
     };
 
     if (inputElementType.value === "input") {
