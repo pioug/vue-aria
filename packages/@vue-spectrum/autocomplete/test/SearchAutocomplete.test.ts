@@ -282,6 +282,27 @@ describe("SearchAutocomplete", () => {
     expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
+  it("closes and keeps custom input value on blur", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const tree = renderComponent({
+      allowsCustomValue: true,
+      onInputChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("Thr");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(onInputChange).toHaveBeenLastCalledWith("Thr");
+    expect(input.value).toBe("Thr");
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
   it("clears input when clear button is pressed", async () => {
     const user = userEvent.setup();
     const onClear = vi.fn();

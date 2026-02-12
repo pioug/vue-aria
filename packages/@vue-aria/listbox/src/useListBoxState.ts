@@ -262,7 +262,10 @@ export function useListBoxState<T extends ListBoxItem>(
     }
 
     const firstSelected = selectedKeys.value.values().next().value;
-    if (firstSelected !== undefined) {
+    if (
+      firstSelected !== undefined &&
+      collection.value.some((item) => item.key === firstSelected)
+    ) {
       focusedKey.value = firstSelected;
       return;
     }

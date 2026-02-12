@@ -57,7 +57,12 @@ function resolveBoolean(
     return fallback;
   }
 
-  return Boolean(toValue(value));
+  const resolved = toValue(value);
+  if (resolved === undefined) {
+    return fallback;
+  }
+
+  return Boolean(resolved);
 }
 
 function resolveString(

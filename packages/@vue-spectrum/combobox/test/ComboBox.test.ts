@@ -482,6 +482,51 @@ describe("ComboBox", () => {
     expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
+  it("closes and resets to selected value on blur", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await fireEvent.update(input, "On");
+
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("Two");
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("commits custom value on blur with allowsCustomValue and controlled selectedKey", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.clear(input);
+    await user.type(input, "On");
+
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith(null);
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
   it("updates the input field when controlled inputValue changes", async () => {
     const user = userEvent.setup();
     const App = defineComponent({

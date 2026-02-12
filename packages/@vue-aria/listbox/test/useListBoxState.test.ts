@@ -90,4 +90,21 @@ describe("useListBoxState", () => {
     expect(state.selectedKeys.value.has("c")).toBe(false);
     expect(state.selectedKeys.value.has("a")).toBe(true);
   });
+
+  it("falls back focused key when selected key is filtered out of collection", async () => {
+    const collection = ref([{ key: "a" }, { key: "b" }]);
+    const selectedKeys = ref<Iterable<string>>(["b"]);
+    const state = useListBoxState({
+      collection,
+      selectionMode: "single",
+      selectedKeys,
+    });
+
+    expect(state.focusedKey.value).toBe("b");
+
+    collection.value = [{ key: "a" }];
+    await nextTick();
+
+    expect(state.focusedKey.value).toBe("a");
+  });
 });
