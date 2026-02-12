@@ -118,7 +118,7 @@
 | @vue-spectrum/radio | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/radio | packages/@react-spectrum/radio |
 | @vue-spectrum/s2 | not_started | 19 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/s2 | packages/@react-spectrum/s2 |
 | @vue-spectrum/searchfield | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/searchfield | packages/@react-spectrum/searchfield |
-| @vue-spectrum/slider | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/slider | packages/@react-spectrum/slider |
+| @vue-spectrum/slider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/slider | packages/@react-spectrum/slider |
 | @vue-spectrum/statuslight | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
 | @vue-spectrum/steplist | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/steplist | packages/@react-spectrum/steplist |
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |

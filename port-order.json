@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:18:27.649Z",
+  "generatedAt": "2026-02-12T18:19:03.151Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 26,
-  "availableLeafCount": 7,
+  "incompletePackageCount": 25,
+  "availableLeafCount": 6,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -28,11 +28,6 @@
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
-    },
-    {
-      "packageName": "@vue-spectrum/slider",
-      "upstreamPackageName": "@react-spectrum/slider",
-      "upstreamPath": "packages/@react-spectrum/slider"
     },
     {
       "packageName": "@vue-spectrum/textfield",
