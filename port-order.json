@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T15:38:57.336Z",
+  "generatedAt": "2026-02-12T15:39:45.274Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 152,
+  "incompletePackageCount": 151,
   "availableLeafCount": 25,
   "availableLeaves": [
     {
@@ -85,6 +85,11 @@
       "upstreamPath": "packages/@react-stately/overlays"
     },
     {
+      "packageName": "@vue-stately/searchfield",
+      "upstreamPackageName": "@react-stately/searchfield",
+      "upstreamPath": "packages/@react-stately/searchfield"
+    },
+    {
       "packageName": "@vue-stately/slider",
       "upstreamPackageName": "@react-stately/slider",
       "upstreamPath": "packages/@react-stately/slider"
@@ -113,11 +118,6 @@
       "packageName": "@vue-types/combobox",
       "upstreamPackageName": "@react-types/combobox",
       "upstreamPath": "packages/@react-types/combobox"
-    },
-    {
-      "packageName": "@vue-types/searchfield",
-      "upstreamPackageName": "@react-types/searchfield",
-      "upstreamPath": "packages/@react-types/searchfield"
     },
     {
       "packageName": "@vue-types/select",

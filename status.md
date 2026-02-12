@@ -205,7 +205,7 @@
 | @vue-types/progress | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/progress | packages/@react-types/progress |
 | @vue-types/provider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/provider | packages/@react-types/provider |
 | @vue-types/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/radio | packages/@react-types/radio |
-| @vue-types/searchfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/searchfield | packages/@react-types/searchfield |
+| @vue-types/searchfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/searchfield | packages/@react-types/searchfield |
 | @vue-types/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/select | packages/@react-types/select |
 | @vue-types/shared | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/shared | packages/@react-types/shared |
 | @vue-types/sidenav | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/sidenav | packages/@react-types/sidenav |
