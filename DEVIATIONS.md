@@ -320,3 +320,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependency requirements and potential state-timing differences until full composable conversion.
 - Removal plan: Replace React hooks with Vue refs/computed patterns in `useRadioGroupState` and add parity tests against upstream behavior.
+
+- Package: `@vue-stately/numberfield`
+- Upstream reference: `packages/@react-stately/numberfield` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useCallback`, `useMemo`, `useState`) for number field state/format synchronization.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependency requirements and potential controlled/uncontrolled timing differences until full composable conversion.
+- Removal plan: Replace React hooks with Vue refs/computed/watch equivalents in `useNumberFieldState` and add parity tests for stepping/formatting behavior.

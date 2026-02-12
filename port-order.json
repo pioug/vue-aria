@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:22:59.011Z",
+  "generatedAt": "2026-02-12T16:24:20.216Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 125,
-  "availableLeafCount": 11,
+  "incompletePackageCount": 124,
+  "availableLeafCount": 10,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -43,11 +43,6 @@
       "packageName": "@vue-stately/datepicker",
       "upstreamPackageName": "@react-stately/datepicker",
       "upstreamPath": "packages/@react-stately/datepicker"
-    },
-    {
-      "packageName": "@vue-stately/numberfield",
-      "upstreamPackageName": "@react-stately/numberfield",
-      "upstreamPath": "packages/@react-stately/numberfield"
     },
     {
       "packageName": "@vue-stately/slider",
