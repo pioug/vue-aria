@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T17:05:47.579Z",
+  "generatedAt": "2026-02-12T17:07:17.565Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 98,
+  "incompletePackageCount": 97,
   "availableLeafCount": 3,
   "availableLeaves": [
     {
@@ -15,9 +15,9 @@
       "upstreamPath": "packages/@react-stately/datepicker"
     },
     {
-      "packageName": "@vue-stately/table",
-      "upstreamPackageName": "@react-stately/table",
-      "upstreamPath": "packages/@react-stately/table"
+      "packageName": "@vue-stately/layout",
+      "upstreamPackageName": "@react-stately/layout",
+      "upstreamPath": "packages/@react-stately/layout"
     }
   ],
   "hasCycles": false,
