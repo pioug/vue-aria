@@ -516,3 +516,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential interaction event/focus timing differences until full composable conversion.
 - Removal plan: Replace React runtime/context/event handling with Vue composables/lifecycle and Vue-native event/ref patterns, then port and run upstream interaction tests for parity.
+
+- Package: `@vue-aria/visually-hidden`
+- Upstream reference: `packages/@react-aria/visually-hidden` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks/JSX types (`useMemo`, `useState`, `ReactNode`, JSX element constructors) in the visually hidden helper/component.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and possible rendering/ref behavior differences until full component conversion.
+- Removal plan: Replace React hook/JSX usage with Vue composables/render-function patterns and port upstream visually-hidden tests for parity.
