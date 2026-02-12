@@ -279,6 +279,9 @@ export function useNumberField(
   const uncontrolledNumberValue = ref<number | undefined>(
     normalizeNumber(toResolvedNumber(options.defaultValue))
   );
+  const initialControlledResetValue = ref<number | undefined>(
+    options.value !== undefined ? normalizeNumber(toResolvedNumber(options.value)) : undefined
+  );
   const inputValue = ref(formatNumber(uncontrolledNumberValue.value));
 
   const currentNumberValue = computed<number | undefined>(() => {
@@ -302,7 +305,9 @@ export function useNumberField(
 
     const onFormReset = () => {
       if (options.value !== undefined) {
-        inputValue.value = formatNumber(currentNumberValue.value);
+        const resetValue = initialControlledResetValue.value;
+        inputValue.value = formatNumber(resetValue);
+        options.onChange?.(resetValue);
         return;
       }
 

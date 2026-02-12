@@ -1110,6 +1110,45 @@ describe("NumberField", () => {
     expect(input.value).toBe("10");
   });
 
+  it("supports controlled form reset", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "NumberFieldControlledResetHarness",
+      setup() {
+        const value = ref(10);
+
+        return () =>
+          h("form", null, [
+            h(NumberField, {
+              "data-testid": "input",
+              label: "Value",
+              value: value.value,
+              onChange: (next: number | undefined) => {
+                value.value = next ?? 0;
+              },
+            }),
+            h("input", {
+              type: "reset",
+              "data-testid": "reset",
+            }),
+          ]);
+      },
+    });
+
+    const tree = render(Harness);
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    expect(input.value).toBe("10");
+
+    await fireEvent.focus(input);
+    await fireEvent.update(input, "100");
+    await fireEvent.blur(input);
+    expect(input.value).toBe("100");
+
+    await user.click(tree.getByTestId("reset"));
+    await nextTick();
+    expect(input.value).toBe("10");
+  });
+
   it("can be reset to blank with null-like controlled value", async () => {
     const Harness = defineComponent({
       name: "NumberFieldNullResetHarness",
