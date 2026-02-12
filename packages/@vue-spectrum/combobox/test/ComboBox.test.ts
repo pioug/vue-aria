@@ -616,6 +616,74 @@ describe("ComboBox", () => {
     expect(input.value).toBe("");
   });
 
+  it("commits focused item on Tab and Shift+Tab while moving focus out", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const App = defineComponent({
+      name: "ComboBoxTabCommitApp",
+      setup() {
+        return () =>
+          h("div", [
+            h(
+              "button",
+              { type: "button", "data-testid": "before-button" },
+              "Before"
+            ),
+            h(ComboBox, {
+              label: "Test",
+              items,
+              onInputChange,
+              onSelectionChange,
+            }),
+            h(
+              "button",
+              { type: "button", "data-testid": "after-button" },
+              "After"
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const triggerButton = tree.getAllByRole("button")[1] as HTMLElement;
+    const beforeButton = tree.getByTestId("before-button");
+    const afterButton = tree.getByTestId("after-button");
+
+    input.focus();
+    await user.click(triggerButton);
+    await user.keyboard("{ArrowDown}");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    fireEvent.keyDown(input, { key: "Tab" });
+    (afterButton as HTMLElement).focus();
+    fireEvent.keyUp(afterButton as HTMLElement, { key: "Tab" });
+    await Promise.resolve();
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(onSelectionChange).toHaveBeenLastCalledWith("1");
+    expect(onInputChange).toHaveBeenLastCalledWith("One");
+    expect(input.value).toBe("One");
+    expect(document.activeElement).toBe(afterButton);
+
+    input.focus();
+    await user.click(triggerButton);
+    await user.keyboard("{ArrowDown}");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    fireEvent.keyDown(input, { key: "Tab", shiftKey: true });
+    (beforeButton as HTMLElement).focus();
+    fireEvent.keyUp(beforeButton as HTMLElement, { key: "Tab", shiftKey: true });
+    await Promise.resolve();
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(onSelectionChange).toHaveBeenLastCalledWith("1");
+    expect(onInputChange).toHaveBeenLastCalledWith("One");
+    expect(input.value).toBe("One");
+    expect(document.activeElement).toBe(beforeButton);
+  });
+
   it("updates the input field when controlled inputValue changes", async () => {
     const user = userEvent.setup();
     const App = defineComponent({
