@@ -481,6 +481,16 @@ const SearchAutocompleteOption = defineComponent({
       const optionProps = toVueOptionProps(
         option.optionProps.value as Record<string, unknown>
       );
+      const onMousedown = optionProps.onMousedown as
+        | ((event: MouseEvent) => void)
+        | undefined;
+      if (onMousedown) {
+        optionProps.onMousedown = (event: MouseEvent) => {
+          // Keep focus on the input while pointer-pressing listbox options.
+          event.preventDefault();
+          onMousedown(event);
+        };
+      }
 
       return h(
         "div",

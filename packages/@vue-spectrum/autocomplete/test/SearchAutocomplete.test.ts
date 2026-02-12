@@ -364,6 +364,50 @@ describe("SearchAutocomplete", () => {
     expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
+  it("keeps input focus while pressing an option with mouse down", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const onOpenChange = vi.fn();
+    const onBlur = vi.fn();
+    const tree = renderComponent({
+      onInputChange,
+      onSelectionChange,
+      onOpenChange,
+      onBlur,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toBe(input);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true, "manual");
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+
+    await user.pointer({ target: options[0] as HTMLElement, keys: "[MouseLeft>]" });
+    await Promise.resolve();
+
+    expect(onInputChange).not.toHaveBeenCalled();
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onOpenChange).toHaveBeenLastCalledWith(true, "manual");
+    expect(input.value).toBe("");
+    expect(document.activeElement).toBe(input);
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    await user.pointer({ target: options[0] as HTMLElement, keys: "[/MouseLeft]" });
+    await Promise.resolve();
+
+    expect(input.value).toBe("One");
+    expect(onInputChange).toHaveBeenCalledTimes(1);
+    expect(onInputChange).toHaveBeenCalledWith("One");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith("1");
+    expect(document.activeElement).toBe(input);
+    expect(onBlur).not.toHaveBeenCalled();
+  });
+
   it("clears input when clear button is pressed", async () => {
     const user = userEvent.setup();
     const onClear = vi.fn();
