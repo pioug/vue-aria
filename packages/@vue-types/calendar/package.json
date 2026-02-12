@@ -1,0 +1,21 @@
+{
+  "name": "@vue-types/calendar",
+  "version": "3.8.2",
+  "description": "Vue port of @react-types/calendar",
+  "license": "Apache-2.0",
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.11.0",
+    "@vue-types/shared": "^3.33.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  }
+}
