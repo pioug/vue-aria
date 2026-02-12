@@ -72,7 +72,7 @@
 | @vue-aria/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toggle | packages/@react-aria/toggle |
 | @vue-aria/toolbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/toolbar | packages/@react-aria/toolbar |
 | @vue-aria/tooltip | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tooltip | packages/@react-aria/tooltip |
-| @vue-aria/tree | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tree | packages/@react-aria/tree |
+| @vue-aria/tree | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tree | packages/@react-aria/tree |
 | @vue-aria/utils | complete | 8 | 8 | 8 | 0 | 0 | 0 | 0 | true | @react-aria/utils | packages/@react-aria/utils |
 | @vue-aria/virtualizer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/virtualizer | packages/@react-aria/virtualizer |
 | @vue-aria/visually-hidden | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/visually-hidden | packages/@react-aria/visually-hidden |
