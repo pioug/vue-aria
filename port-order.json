@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:00:18.935Z",
+  "generatedAt": "2026-02-12T15:01:38.585Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 185,
-  "availableLeafCount": 44,
+  "incompletePackageCount": 184,
+  "availableLeafCount": 43,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -68,11 +68,6 @@
       "packageName": "@vue-stately/virtualizer",
       "upstreamPackageName": "@react-stately/virtualizer",
       "upstreamPath": "packages/@react-stately/virtualizer"
-    },
-    {
-      "packageName": "@vue-types/actiongroup",
-      "upstreamPackageName": "@react-types/actiongroup",
-      "upstreamPath": "packages/@react-types/actiongroup"
     },
     {
       "packageName": "@vue-types/avatar",
