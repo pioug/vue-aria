@@ -4,6 +4,8 @@ import type { MoveEvent } from "@vue-aria/types";
 
 interface MoveHandlers {
   onPointerdown?: (event: PointerEvent) => void;
+  onMousedown?: (event: MouseEvent) => void;
+  onTouchstart?: (event: Event) => void;
   onKeydown?: (event: KeyboardEvent) => void;
 }
 
@@ -23,6 +25,38 @@ function createPointerEvent(
   Object.defineProperty(event, "button", { value: options.button ?? 0 });
   Object.defineProperty(event, "pageX", { value: options.pageX });
   Object.defineProperty(event, "pageY", { value: options.pageY });
+  return event;
+}
+
+function createMouseEvent(
+  type: string,
+  options: {
+    button?: number;
+    pageX: number;
+    pageY: number;
+  }
+): MouseEvent {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    button: options.button ?? 0,
+  });
+  Object.defineProperty(event, "pageX", { value: options.pageX });
+  Object.defineProperty(event, "pageY", { value: options.pageY });
+  return event;
+}
+
+function createTouchEvent(
+  type: string,
+  identifier: number,
+  pageX: number,
+  pageY: number
+): Event {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  const touches = [{ identifier, pageX, pageY }];
+  Object.defineProperty(event, "changedTouches", {
+    value: touches,
+  });
   return event;
 }
 
@@ -324,5 +358,74 @@ describe("useMove", () => {
 
     expect(childOnMove).toHaveBeenCalledTimes(1);
     expect(parentOnMove).not.toHaveBeenCalled();
+  });
+
+  it("falls back to mouse events when PointerEvent is unavailable", () => {
+    vi.stubGlobal("PointerEvent", undefined);
+
+    try {
+      const events: MoveEvent[] = [];
+      const addEvent = (event: MoveEvent) => events.push(event);
+      const { moveProps } = useMove({
+        onMoveStart: addEvent,
+        onMove: addEvent,
+        onMoveEnd: addEvent,
+      });
+      const handlers = moveProps as MoveHandlers;
+
+      handlers.onMousedown?.(
+        createMouseEvent("mousedown", {
+          button: 0,
+          pageX: 1,
+          pageY: 30,
+        })
+      );
+
+      window.dispatchEvent(createMouseEvent("mousemove", { pageX: 10, pageY: 25 }));
+      window.dispatchEvent(createMouseEvent("mouseup", { pageX: 10, pageY: 25 }));
+
+      expect(events).toHaveLength(3);
+      expect(events[0]).toMatchObject({ type: "movestart", pointerType: "mouse" });
+      expect(events[1]).toMatchObject({
+        type: "move",
+        pointerType: "mouse",
+        deltaX: 9,
+        deltaY: -5,
+      });
+      expect(events[2]).toMatchObject({ type: "moveend", pointerType: "mouse" });
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("falls back to touch events when PointerEvent is unavailable", () => {
+    vi.stubGlobal("PointerEvent", undefined);
+
+    try {
+      const events: MoveEvent[] = [];
+      const addEvent = (event: MoveEvent) => events.push(event);
+      const { moveProps } = useMove({
+        onMoveStart: addEvent,
+        onMove: addEvent,
+        onMoveEnd: addEvent,
+      });
+      const handlers = moveProps as MoveHandlers;
+
+      handlers.onTouchstart?.(createTouchEvent("touchstart", 5, 1, 30));
+      window.dispatchEvent(createTouchEvent("touchmove", 5, 10, 25));
+      window.dispatchEvent(createTouchEvent("touchend", 5, 10, 25));
+
+      expect(events).toHaveLength(3);
+      expect(events[0]).toMatchObject({ type: "movestart", pointerType: "touch" });
+      expect(events[1]).toMatchObject({
+        type: "move",
+        pointerType: "touch",
+        deltaX: 9,
+        deltaY: -5,
+      });
+      expect(events[2]).toMatchObject({ type: "moveend", pointerType: "touch" });
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
