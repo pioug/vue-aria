@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T18:28:16.700Z",
+  "generatedAt": "2026-02-12T18:28:49.093Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 8,
-  "availableLeafCount": 4,
+  "incompletePackageCount": 7,
+  "availableLeafCount": 3,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/color",
       "upstreamPackageName": "@react-spectrum/color",
       "upstreamPath": "packages/@react-spectrum/color"
-    },
-    {
-      "packageName": "@vue-spectrum/datepicker",
-      "upstreamPackageName": "@react-spectrum/datepicker",
-      "upstreamPath": "packages/@react-spectrum/datepicker"
     },
     {
       "packageName": "@vue-spectrum/menu",
