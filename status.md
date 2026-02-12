@@ -61,7 +61,7 @@
 | @vue-aria/slider | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/slider | packages/@react-aria/slider |
 | @vue-aria/spinbutton | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/spinbutton | packages/@react-aria/spinbutton |
 | @vue-aria/ssr | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-aria/ssr | packages/@react-aria/ssr |
-| @vue-aria/steplist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/steplist | packages/@react-aria/steplist |
+| @vue-aria/steplist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/steplist | packages/@react-aria/steplist |
 | @vue-aria/switch | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/switch | packages/@react-aria/switch |
 | @vue-aria/table | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/table | packages/@react-aria/table |
 | @vue-aria/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tabs | packages/@react-aria/tabs |
