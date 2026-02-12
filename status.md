@@ -141,7 +141,7 @@
 | @vue-spectrum/view | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/view | packages/@react-spectrum/view |
 | @vue-spectrum/well | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/well | packages/@react-spectrum/well |
 | @vue-stately/autocomplete | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/autocomplete | packages/@react-stately/autocomplete |
-| @vue-stately/calendar | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/calendar | packages/@react-stately/calendar |
+| @vue-stately/calendar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/calendar | packages/@react-stately/calendar |
 | @vue-stately/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/checkbox | packages/@react-stately/checkbox |
 | @vue-stately/collections | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/collections | packages/@react-stately/collections |
 | @vue-stately/color | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/color | packages/@react-stately/color |

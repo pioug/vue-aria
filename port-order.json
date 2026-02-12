@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:52:14.123Z",
+  "generatedAt": "2026-02-12T16:54:39.967Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 107,
-  "availableLeafCount": 8,
+  "incompletePackageCount": 106,
+  "availableLeafCount": 7,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -13,11 +13,6 @@
       "packageName": "@vue-spectrum/utils",
       "upstreamPackageName": "@react-spectrum/utils",
       "upstreamPath": "packages/@react-spectrum/utils"
-    },
-    {
-      "packageName": "@vue-stately/calendar",
-      "upstreamPackageName": "@react-stately/calendar",
-      "upstreamPath": "packages/@react-stately/calendar"
     },
     {
       "packageName": "@vue-stately/color",
