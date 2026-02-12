@@ -64,7 +64,8 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
   let isFocusedRef = useRef(false);
   let focusedKeyRef = useRef<Key | null>(null);
   let childFocusStrategyRef = useRef<FocusStrategy | null>(null);
-  let [, setFocusedKey] = useState<Key | null>(null);
+  let [, setFocusedKeyForRender] = useState<Key | null>(null);
+  let [, setSelectionVersion] = useState(0);
   let selectedKeysProp = useMemo(() => convertSelection(props.selectedKeys), [props.selectedKeys]);
   let defaultSelectedKeys = useMemo(() => convertSelection(props.defaultSelectedKeys, new Selection()), [props.defaultSelectedKeys]);
   let [selectedKeys, setSelectedKeysState] = useControlledState(
@@ -73,7 +74,9 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
     props.onSelectionChange
   );
   let selectedKeysRef = useRef(selectedKeys.value);
-  selectedKeysRef.current = selectedKeys.value;
+  if (selectedKeysProp !== undefined) {
+    selectedKeysRef.current = selectedKeysProp;
+  }
   let disabledKeysProp = useMemo(() =>
     props.disabledKeys ? new Set(props.disabledKeys) : new Set<Key>()
   , [props.disabledKeys]);
@@ -114,7 +117,7 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
     setFocusedKey(k, childFocusStrategy = 'first') {
       focusedKeyRef.current = k;
       childFocusStrategyRef.current = childFocusStrategy;
-      setFocusedKey(k);
+      setFocusedKeyForRender(k);
     },
     get selectedKeys() {
       return selectedKeysRef.current;
@@ -124,6 +127,7 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
       if (allowDuplicateSelectionEvents || !equalSelections(keys, currentSelection)) {
         selectedKeysRef.current = keys;
         setSelectedKeysState(keys);
+        setSelectionVersion(version => version + 1);
       }
     },
     disabledKeys: disabledKeysProp,
