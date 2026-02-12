@@ -82,7 +82,7 @@ describe("ActionBar", () => {
     expect(tree.queryByRole("toolbar")).toBeNull();
   });
 
-  it("opens when selected items are present", () => {
+  it("should open when there are selected items", () => {
     const tree = renderWithProvider(
       h(ActionBar, {
         selectedItemCount: 1,
@@ -101,6 +101,43 @@ describe("ActionBar", () => {
     expect(tree.getByLabelText("Clear selection").tagName).toBe("BUTTON");
   });
 
+  it("should update the selected count when selecting more items", async () => {
+    const user = userEvent.setup();
+
+    const Harness = defineComponent({
+      name: "ActionBarSelectedCountHarness",
+      setup() {
+        const selectedItemCount = ref(1);
+
+        return () =>
+          h("div", [
+            h(
+              "button",
+              {
+                type: "button",
+                "data-testid": "add-selection",
+                onClick: () => {
+                  selectedItemCount.value += 1;
+                },
+              },
+              "add selection"
+            ),
+            h(ActionBar, {
+              selectedItemCount: selectedItemCount.value,
+              items,
+            }),
+          ]);
+      },
+    });
+
+    const tree = renderWithProvider(h(Harness));
+    expect(tree.getByRole("status").textContent).toBe("1 selected");
+
+    await user.click(tree.getByTestId("add-selection"));
+
+    expect(tree.getByRole("status").textContent).toBe("2 selected");
+  });
+
   it("localizes built-in labels with provider locale", () => {
     const tree = renderWithProvider(
       h(ActionBar, {
@@ -116,7 +153,7 @@ describe("ActionBar", () => {
     expect(tree.getByRole("status").textContent).toMatch(/2.*selectionnes/);
   });
 
-  it("shows all-selected copy", () => {
+  it("should work with select all", () => {
     const tree = renderWithProvider(
       h(ActionBar, {
         selectedItemCount: "all",
@@ -128,7 +165,7 @@ describe("ActionBar", () => {
     expect(tree.getByRole("status").textContent).toBe("All selected");
   });
 
-  it("fires onAction when an action is pressed", async () => {
+  it("should fire onAction when clicking on an action", async () => {
     const user = userEvent.setup();
     const onAction = vi.fn();
 
@@ -146,6 +183,21 @@ describe("ActionBar", () => {
     await user.click(actions[0]);
 
     expect(onAction).toHaveBeenCalledWith("edit");
+  });
+
+  it("should respect disabledKeys when passed in", () => {
+    const tree = renderWithProvider(
+      h(ActionBar, {
+        selectedItemCount: 1,
+        items,
+        disabledKeys: ["edit"],
+      })
+    );
+
+    const toolbar = tree.getByRole("toolbar", { name: "Actions" });
+    const actions = within(toolbar).getAllByRole("button");
+    expect(actions[0]?.getAttribute("disabled")).not.toBeNull();
+    expect(actions[1]?.getAttribute("disabled")).toBeNull();
   });
 
   it("collapses actions into an overflow menu when action buttons do not fit", async () => {
@@ -182,7 +234,7 @@ describe("ActionBar", () => {
       await Promise.resolve();
       await Promise.resolve();
 
-      const moreButton = tree.getByRole("button", { name: "More actions" });
+      const moreButton = tree.getByRole("button", { name: "More items" });
       await user.click(moreButton);
 
       await user.click(tree.getByRole("menuitem", { name: "Copy" }));
@@ -231,7 +283,7 @@ describe("ActionBar", () => {
     expect(onClearSelection).toHaveBeenCalledTimes(1);
   });
 
-  it("closes and restores focus when pressing clear", async () => {
+  it("should close and restore focus when pressing the clear button", async () => {
     const user = userEvent.setup();
     const { tree, onClearSelection } = renderFocusRestoreHarness();
     const rowCheckbox = tree.getByRole("checkbox", { name: "row checkbox" });
@@ -250,7 +302,7 @@ describe("ActionBar", () => {
     expect(document.activeElement).toBe(rowCheckbox);
   });
 
-  it("closes and restores focus when pressing Escape", async () => {
+  it("should close when pressing the escape key", async () => {
     const user = userEvent.setup();
     const { tree, onClearSelection } = renderFocusRestoreHarness();
     const rowCheckbox = tree.getByRole("checkbox", { name: "row checkbox" });
