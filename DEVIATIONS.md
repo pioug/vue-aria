@@ -740,3 +740,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential table navigation/selection/resizing timing differences until full composable conversion.
 - Removal plan: Replace React hook/event assumptions and inherited grid interaction flows with Vue-native composables/event typing and port upstream table behavior tests for parity.
+
+- Package: `@vue-aria/overlays`
+- Upstream reference: `packages/@react-aria/overlays` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/rendering semantics (`useState`, `useEffect`, `useMemo`, `useRef`, React context/portal APIs, React event typing) for modal, popover, and overlay focus/position behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential overlay focus containment/position/scroll-lock timing differences until full composable conversion.
+- Removal plan: Replace React context/portal/hook/event assumptions with Vue provide/inject/teleport/composables and port upstream overlays behavior tests for parity.

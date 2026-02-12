@@ -1,13 +1,28 @@
 {
-  "generatedAt": "2026-02-12T17:56:05.581Z",
+  "generatedAt": "2026-02-12T17:57:04.194Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 62,
-  "availableLeafCount": 2,
+  "incompletePackageCount": 61,
+  "availableLeafCount": 5,
   "availableLeaves": [
     {
-      "packageName": "@vue-aria/overlays",
-      "upstreamPackageName": "@react-aria/overlays",
-      "upstreamPath": "packages/@react-aria/overlays"
+      "packageName": "@vue-aria/dialog",
+      "upstreamPackageName": "@react-aria/dialog",
+      "upstreamPath": "packages/@react-aria/dialog"
+    },
+    {
+      "packageName": "@vue-aria/dnd",
+      "upstreamPackageName": "@react-aria/dnd",
+      "upstreamPath": "packages/@react-aria/dnd"
+    },
+    {
+      "packageName": "@vue-aria/menu",
+      "upstreamPackageName": "@react-aria/menu",
+      "upstreamPath": "packages/@react-aria/menu"
+    },
+    {
+      "packageName": "@vue-spectrum/provider",
+      "upstreamPackageName": "@react-spectrum/provider",
+      "upstreamPath": "packages/@react-spectrum/provider"
     },
     {
       "packageName": "@vue-spectrum/s2",
