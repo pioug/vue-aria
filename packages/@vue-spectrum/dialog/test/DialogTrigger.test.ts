@@ -792,6 +792,96 @@ describe("DialogTrigger", () => {
     }
   });
 
+  it("renders modal overlays in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-provider-modal-container");
+    document.body.append(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(DialogTrigger, { type: "modal" }, {
+                  default: () => [
+                    h("button", { type: "button" }, "Trigger"),
+                    h(Dialog, null, () => "contents"),
+                  ],
+                }),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-provider-modal-container\"]")).toBe(
+        customContainer
+      );
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("renders tray overlays in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-provider-tray-container");
+    document.body.append(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(DialogTrigger, { type: "tray" }, {
+                  default: () => [
+                    h("button", { type: "button" }, "Trigger"),
+                    h(Dialog, null, () => "contents"),
+                  ],
+                }),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-provider-tray-container\"]")).toBe(
+        customContainer
+      );
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
   it("supports nested UNSAFE_PortalProvider null override for dialog overlays", async () => {
     const customContainer = document.createElement("div");
     customContainer.setAttribute("data-testid", "custom-provider-container");
