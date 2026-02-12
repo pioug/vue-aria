@@ -26,6 +26,9 @@ export {useGlobalListeners} from './useGlobalListeners';
 export {useFormReset} from './useFormReset';
 export {useSyncRef} from './useSyncRef';
 export {useResizeObserver} from './useResizeObserver';
+export {useDrag1D} from './useDrag1D';
+export {useLoadMore} from './useLoadMore';
+export {useLoadMoreSentinel, useLoadMoreSentinel as UNSTABLE_useLoadMoreSentinel} from './useLoadMoreSentinel';
 export {useLayoutEffect} from './useLayoutEffect';
 export {useUpdateEffect} from './useUpdateEffect';
 export {useUpdateLayoutEffect} from './useUpdateLayoutEffect';
@@ -45,3 +48,5 @@ export {filterDOMProps} from './filterDOMProps';
 export {isVirtualClick, isVirtualPointerEvent} from './isVirtualEvent';
 export {inertValue} from './inertValue';
 export {clamp, snapValueToStep} from '../../../@vue-stately/utils/src';
+
+export type {LoadMoreSentinelProps} from './useLoadMoreSentinel';
