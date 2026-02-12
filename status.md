@@ -48,7 +48,7 @@
 | @vue-aria/link | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/link | packages/@react-aria/link |
 | @vue-aria/listbox | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/listbox | packages/@react-aria/listbox |
 | @vue-aria/live-announcer | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/live-announcer | packages/@react-aria/live-announcer |
-| @vue-aria/menu | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/menu | packages/@react-aria/menu |
+| @vue-aria/menu | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/menu | packages/@react-aria/menu |
 | @vue-aria/meter | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/meter | packages/@react-aria/meter |
 | @vue-aria/numberfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/numberfield | packages/@react-aria/numberfield |
 | @vue-aria/overlays | complete | 11 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/overlays | packages/@react-aria/overlays |
