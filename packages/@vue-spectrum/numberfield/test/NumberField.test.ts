@@ -510,6 +510,28 @@ describe("NumberField", () => {
     expect(decrementButton.getAttribute("aria-disabled")).toBe("true");
   });
 
+  it("re-enables steppers when an out-of-range value is cleared", async () => {
+    const user = userEvent.setup();
+    const tree = renderNumberField({
+      defaultValue: 1,
+      maxValue: 1,
+    });
+
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+    const [incrementButton, decrementButton] = tree.getAllByRole("button");
+
+    expect(input.value).toBe("1");
+    expect(incrementButton.getAttribute("aria-disabled")).toBe("true");
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+
+    await user.click(input);
+    await user.clear(input);
+
+    expect(input.value).toBe("");
+    expect(incrementButton.getAttribute("aria-disabled")).toBeNull();
+    expect(decrementButton.getAttribute("aria-disabled")).toBeNull();
+  });
+
   it("supports controlled rerender", async () => {
     const tree = renderNumberField({
       value: 2,
