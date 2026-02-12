@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:38:33.788Z",
+  "generatedAt": "2026-02-12T16:40:14.844Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 115,
-  "availableLeafCount": 11,
+  "incompletePackageCount": 114,
+  "availableLeafCount": 10,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -48,11 +48,6 @@
       "packageName": "@vue-stately/list",
       "upstreamPackageName": "@react-stately/list",
       "upstreamPath": "packages/@react-stately/list"
-    },
-    {
-      "packageName": "@vue-stately/tree",
-      "upstreamPackageName": "@react-stately/tree",
-      "upstreamPath": "packages/@react-stately/tree"
     },
     {
       "packageName": "@vue-stately/virtualizer",

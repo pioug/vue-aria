@@ -169,7 +169,7 @@
 | @vue-stately/toast | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/toast | packages/@react-stately/toast |
 | @vue-stately/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/toggle | packages/@react-stately/toggle |
 | @vue-stately/tooltip | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tooltip | packages/@react-stately/tooltip |
-| @vue-stately/tree | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/tree | packages/@react-stately/tree |
+| @vue-stately/tree | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tree | packages/@react-stately/tree |
 | @vue-stately/utils | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-stately/utils | packages/@react-stately/utils |
 | @vue-stately/virtualizer | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/virtualizer | packages/@react-stately/virtualizer |
 | @vue-types/actionbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/actionbar | packages/@react-types/actionbar |
