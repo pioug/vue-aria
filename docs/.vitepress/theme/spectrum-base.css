@@ -3094,6 +3094,212 @@
   color: inherit;
 }
 
+/* React Spectrum runtime class aliases */
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ComboBox,
+  .react-spectrum-SearchAutocomplete,
+  .react-spectrum-DateField,
+  .react-spectrum-DatePicker,
+  .react-spectrum-DateRangePicker,
+  .react-spectrum-TimeField
+) {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ColorArea,
+  .react-spectrum-ColorEditor,
+  .react-spectrum-ColorField,
+  .react-spectrum-ColorSlider,
+  .react-spectrum-ColorSwatchPicker,
+  .react-spectrum-ColorWheel
+) {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorSlider-value {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorSwatchPicker-item {
+  display: inline-flex;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.2rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorSwatchPicker-item.is-selected {
+  border-color: var(--spectrum-ui-accent);
+  background: rgba(20, 115, 230, 0.08);
+}
+
+.spectrum-docs-provider .react-spectrum-ColorThumb {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.3);
+}
+
+.spectrum-docs-provider .react-spectrum-ColorWheel-ring {
+  border: 1px solid var(--spectrum-ui-border-soft);
+  border-radius: 999px;
+}
+
+.spectrum-docs-provider .react-spectrum-ColorPicker-buttonLabel {
+  min-width: 0;
+}
+
+.spectrum-docs-provider .react-spectrum-ComboBox-loadingLabel {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.8rem;
+}
+
+.spectrum-docs-provider .react-spectrum-SearchAutocomplete-icon {
+  color: var(--spectrum-ui-text-muted);
+  margin-inline: 0.2rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ActionBar--emphasized {
+  border-color: rgba(20, 115, 230, 0.45);
+  background: rgba(20, 115, 230, 0.08);
+}
+
+.spectrum-docs-provider .react-spectrum-ActionBar-actionGroup {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider .react-spectrum-ActionBar-announcer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.spectrum-docs-provider .react-spectrum-ContextualHelp-dialog {
+  width: min(24rem, calc(100vw - 2rem));
+}
+
+.spectrum-docs-provider .react-spectrum-ListView--loadingMore {
+  position: relative;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView--loadingMore::after {
+  content: "";
+  display: block;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 115, 230, 0) 0%,
+    rgba(20, 115, 230, 0.75) 50%,
+    rgba(20, 115, 230, 0) 100%
+  );
+  animation: spectrum-docs-indeterminate-bar 1000ms ease-in-out infinite;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView--quiet {
+  border-inline: none;
+  border-radius: 0;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-item--wrap .react-spectrum-ListView-itemCell,
+.spectrum-docs-provider .react-spectrum-ListView--wrap .react-spectrum-ListView-itemCell {
+  align-items: flex-start;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-item--truncate .react-spectrum-ListView-itemLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-itemCheckbox {
+  flex: 0 0 auto;
+}
+
+.spectrum-docs-provider .react-spectrum-ListView-empty {
+  padding: 0.6rem 0.7rem;
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-TableView-head, .react-spectrum-TableView-body) {
+  display: grid;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-TableView-headRow, .react-spectrum-TableView-row) {
+  display: flex;
+  align-items: stretch;
+}
+
+.spectrum-docs-provider .react-spectrum-TableView-headRow {
+  background: var(--spectrum-ui-bg-subtle);
+  border-bottom: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider :is(.react-spectrum-TableView-headCell, .react-spectrum-TableView-cell) {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.5rem 0.65rem;
+  border-inline-end: 1px solid var(--spectrum-ui-border-soft);
+}
+
+.spectrum-docs-provider :is(.react-spectrum-TableView-headCell, .react-spectrum-TableView-cell):last-child {
+  border-inline-end: none;
+}
+
+.spectrum-docs-provider .react-spectrum-TableView-headCell {
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--spectrum-ui-text-muted);
+}
+
+.spectrum-docs-provider .react-spectrum-TableView-empty {
+  color: var(--spectrum-ui-text-muted);
+  padding: 0.55rem 0.65rem;
+}
+
+.spectrum-docs-provider .react-spectrum-Toast {
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 10px;
+  background: var(--spectrum-ui-bg-raised);
+  box-shadow: var(--spectrum-ui-shadow);
+  padding: 0.55rem 0.65rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-TreeView-empty, .react-spectrum-TreeView-itemContent) {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.8rem;
+}
+
+.spectrum-docs-provider .react-spectrum-Calendar-month {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spectrum-docs-provider :is(
+  .react-spectrum-ColorSwatch--,
+  .react-spectrum-ListView--,
+  .react-spectrum-ListView-item--,
+  .react-spectrum-Toast--,
+  .react-spectrum-toast
+) {
+  color: inherit;
+}
+
 @media (max-width: 720px) {
   .spectrum-docs-provider .spectrum-CardView-cell {
     min-width: 100%;
