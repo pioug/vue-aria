@@ -159,7 +159,7 @@
 | @vue-stately/numberfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/numberfield | packages/@react-stately/numberfield |
 | @vue-stately/overlays | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/overlays | packages/@react-stately/overlays |
 | @vue-stately/radio | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/radio | packages/@react-stately/radio |
-| @vue-stately/searchfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
+| @vue-stately/searchfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
 | @vue-stately/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/select | packages/@react-stately/select |
 | @vue-stately/selection | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/selection | packages/@react-stately/selection |
 | @vue-stately/slider | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/slider | packages/@react-stately/slider |

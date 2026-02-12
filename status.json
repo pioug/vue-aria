@@ -2067,7 +2067,7 @@
     },
     {
       "packageName": "@vue-stately/searchfield",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 1,
       "portedTests": 0,
       "passingTests": 0,
