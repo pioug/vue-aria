@@ -1,10 +1,20 @@
 import { computed, defineComponent, h, type PropType } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import type {
   MenuKey,
   SpectrumMenuItemData,
   SpectrumMenuSelectionMode,
 } from "./types";
+
+const MENU_ITEM_INTL_MESSAGES = {
+  "en-US": {
+    unavailable: "Unavailable, expand for details",
+  },
+  "fr-FR": {
+    unavailable: "Indisponible, developper pour plus de details",
+  },
+} as const;
 
 export interface SpectrumMenuItemProps {
   item?: SpectrumMenuItemData | undefined;
@@ -84,6 +94,10 @@ export const MenuItem = defineComponent({
     },
   },
   setup(props, { slots }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      MENU_ITEM_INTL_MESSAGES,
+      "@vue-spectrum/menu"
+    );
     const role = computed(() => {
       if (props.selectionMode === "single") {
         return "menuitemradio";
@@ -163,7 +177,9 @@ export const MenuItem = defineComponent({
                 {
                   role: "img",
                   class: classNames("spectrum-Menu-unavailableIcon"),
-                  "aria-label": props.unavailableIndicatorLabel ?? "Unavailable",
+                  "aria-label":
+                    props.unavailableIndicatorLabel ??
+                    stringFormatter.value.format("unavailable"),
                 },
                 "ℹ"
               )

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Dialog } from "@vue-spectrum/dialog";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import {
   ContextualHelpTrigger,
   Item,
@@ -290,7 +291,11 @@ describe("Menu", () => {
 
     expect(menuItems).toHaveLength(3);
     expect(menuItems[1]?.getAttribute("aria-haspopup")).toBe("dialog");
-    expect(within(menuItems[1] as HTMLElement).getByRole("img")).toBeTruthy();
+    const unavailableIndicator = within(menuItems[1] as HTMLElement).getByRole("img");
+    expect(unavailableIndicator).toBeTruthy();
+    expect(unavailableIndicator.getAttribute("aria-label")).toBe(
+      "Unavailable, expand for details"
+    );
 
     await user.click(menuItems[1] as Element);
     await flushOverlay();
@@ -305,6 +310,45 @@ describe("Menu", () => {
 
     await user.click(menuItems[0] as Element);
     expect(onAction).toHaveBeenCalledWith("alpha");
+  });
+
+  it("localizes unavailable indicator label from provider locale", () => {
+    const tree = render(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(
+            Menu,
+            {
+              "aria-label": "menu-contextual-help-localized",
+            },
+            {
+              default: () => [
+                h(Item, { id: "alpha" }, () => "Alpha"),
+                h(
+                  ContextualHelpTrigger,
+                  { isUnavailable: true },
+                  {
+                    default: () => [
+                      h(Item, { id: "blocked" }, () => "Blocked"),
+                      h(Dialog, null, { default: () => "Blocked help content" }),
+                    ],
+                  }
+                ),
+              ],
+            }
+          ),
+      },
+    });
+
+    const unavailableItem = tree.getByRole("menuitem", { name: /Blocked/ });
+    const unavailableIndicator = within(unavailableItem).getByRole("img");
+    expect(unavailableIndicator.getAttribute("aria-label")).toBe(
+      "Indisponible, developper pour plus de details"
+    );
   });
 
   it("opens unavailable contextual help item with keyboard activation", async () => {
