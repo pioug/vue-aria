@@ -2,6 +2,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
 import {
   DEFAULT_SPECTRUM_THEME_CLASS_MAP,
   provideSpectrumProvider,
@@ -36,7 +37,7 @@ function renderComponent(props: Record<string, unknown> = {}) {
 
 function renderWithProvider(
   component: ReturnType<typeof defineComponent>,
-  options: { locale?: string } = {}
+  options: { locale?: string; providerProps?: Record<string, unknown> } = {}
 ) {
   const ProviderHarness = defineComponent({
     name: "SearchAutocompleteProviderHarness",
@@ -46,6 +47,7 @@ function renderWithProvider(
         colorScheme: "light",
         scale: "medium",
         locale: options.locale,
+        ...(options.providerProps ?? {}),
       });
 
       return () => h(component);
@@ -86,6 +88,55 @@ describe("SearchAutocomplete", () => {
 
     const searchAutocomplete = tree.getByRole("combobox");
     expect(searchAutocomplete.getAttribute("name")).toBe("test-name");
+  });
+
+  it("inherits disabled state from provider context", () => {
+    const App = defineComponent({
+      name: "SearchAutocompleteProviderDisabledApp",
+      setup() {
+        return () =>
+          h(SearchAutocomplete, {
+            label: "Test",
+            defaultItems: items,
+          });
+      },
+    });
+
+    const tree = renderWithProvider(App, {
+      providerProps: { isDisabled: true },
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.disabled).toBe(true);
+  });
+
+  it("inherits form validationState for aria-invalid and classes", () => {
+    const App = defineComponent({
+      name: "SearchAutocompleteFormValidationStateApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationState: "invalid",
+            },
+            {
+              default: () => [
+                h(SearchAutocomplete, {
+                  label: "Test",
+                  defaultItems: items,
+                  name: "animal",
+                }),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = renderWithProvider(App);
+    const input = tree.getByRole("combobox");
+    const root = tree.container.querySelector(".react-spectrum-SearchAutocomplete");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(root?.classList.contains("is-invalid")).toBe(true);
   });
 
   it("supports custom icon", () => {

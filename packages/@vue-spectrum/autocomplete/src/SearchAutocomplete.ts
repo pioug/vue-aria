@@ -25,6 +25,8 @@ import { useOption } from "@vue-aria/listbox";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/types";
 import { ClearButton } from "@vue-spectrum/button";
+import { useFormProps } from "@vue-spectrum/form";
+import { useProviderContext } from "@vue-spectrum/provider";
 import { ProgressCircle } from "@vue-spectrum/progress";
 import {
   classNames,
@@ -526,6 +528,7 @@ export const SearchAutocomplete = defineComponent({
     ...searchAutocompletePropOptions,
   },
   setup(props, { attrs, expose, slots }) {
+    const provider = useProviderContext();
     const stringFormatter = useLocalizedStringFormatter(
       searchAutocompleteMessages,
       "@vue-spectrum/autocomplete"
@@ -545,6 +548,50 @@ export const SearchAutocomplete = defineComponent({
     let inputLoadingTimer: ReturnType<typeof setTimeout> | null = null;
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
+    const resolvedFormProps = computed<Record<string, unknown>>(() =>
+      useFormProps({
+        isDisabled: props.isDisabled,
+        isReadOnly: props.isReadOnly,
+        isRequired: props.isRequired,
+        validationState: props.validationState,
+      })
+    );
+    const resolvedIsDisabled = computed(() => {
+      if (props.isDisabled !== undefined) {
+        return props.isDisabled;
+      }
+
+      const fromForm = resolvedFormProps.value.isDisabled;
+      if (typeof fromForm === "boolean") {
+        return fromForm;
+      }
+
+      return provider?.value.isDisabled ?? false;
+    });
+    const resolvedIsReadOnly = computed(() => {
+      if (props.isReadOnly !== undefined) {
+        return props.isReadOnly;
+      }
+
+      const fromForm = resolvedFormProps.value.isReadOnly;
+      if (typeof fromForm === "boolean") {
+        return fromForm;
+      }
+
+      return provider?.value.isReadOnly ?? false;
+    });
+    const resolvedIsRequired = computed(() => {
+      if (props.isRequired !== undefined) {
+        return props.isRequired;
+      }
+
+      const fromForm = resolvedFormProps.value.isRequired;
+      if (typeof fromForm === "boolean") {
+        return fromForm;
+      }
+
+      return provider?.value.isRequired ?? false;
+    });
 
     watch(
       () => props.placeholder,
@@ -580,8 +627,23 @@ export const SearchAutocomplete = defineComponent({
         return props.validationState;
       }
 
-      return props.isInvalid ? "invalid" : undefined;
+      if (props.isInvalid) {
+        return "invalid";
+      }
+
+      const fromForm = resolvedFormProps.value.validationState;
+      if (fromForm === "valid" || fromForm === "invalid") {
+        return fromForm;
+      }
+
+      const fromProvider = provider?.value.validationState;
+      return fromProvider === "valid" || fromProvider === "invalid"
+        ? fromProvider
+        : undefined;
     });
+    const resolvedIsInvalid = computed(
+      () => Boolean(props.isInvalid) || resolvedValidationState.value === "invalid"
+    );
     const controlledSelectedKey =
       props.selectedKey === undefined
         ? undefined
@@ -611,7 +673,7 @@ export const SearchAutocomplete = defineComponent({
       isOpen: controlledIsOpen,
       defaultOpen: props.defaultOpen,
       onOpenChange: (isOpen, trigger) => {
-        if (props.isDisabled || props.isReadOnly) {
+        if (resolvedIsDisabled.value || resolvedIsReadOnly.value) {
           return;
         }
 
@@ -625,7 +687,7 @@ export const SearchAutocomplete = defineComponent({
       ),
       allowsCustomValue: computed(() => props.allowsCustomValue ?? true),
       shouldCloseOnBlur: computed(() => props.shouldCloseOnBlur),
-      isReadOnly: computed(() => props.isReadOnly),
+      isReadOnly: resolvedIsReadOnly,
     });
 
     const submitCurrentValue = (key: Key | null = state.selectedKey.value) => {
@@ -652,11 +714,11 @@ export const SearchAutocomplete = defineComponent({
         label: props.label,
         description: props.description,
         errorMessage: props.errorMessage,
-        isInvalid: props.isInvalid,
-        validationState: props.validationState,
-        isDisabled: props.isDisabled,
-        isReadOnly: props.isReadOnly,
-        isRequired: props.isRequired,
+        isInvalid: resolvedIsInvalid,
+        validationState: resolvedValidationState,
+        isDisabled: resolvedIsDisabled,
+        isReadOnly: resolvedIsReadOnly,
+        isRequired: resolvedIsRequired,
         inputRef,
         popoverRef,
         listBoxRef,
@@ -666,14 +728,18 @@ export const SearchAutocomplete = defineComponent({
         onFocus: props.onFocus,
         onBlur: props.onBlur,
         onKeydown: (event) => {
-          if (props.isReadOnly && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+          if (resolvedIsReadOnly.value && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
             event.preventDefault();
             state.close();
             props.onKeydown?.(event);
             return;
           }
 
-          if (event.key === "Escape" && !props.isDisabled && !props.isReadOnly) {
+          if (
+            event.key === "Escape" &&
+            !resolvedIsDisabled.value &&
+            !resolvedIsReadOnly.value
+          ) {
             if (state.inputValue.value.length > 0) {
               state.setSelectedKey(null);
               state.setInputValue("");
@@ -697,7 +763,7 @@ export const SearchAutocomplete = defineComponent({
     );
 
     watch(
-      () => [props.isDisabled, props.isReadOnly, state.isOpen.value] as const,
+      () => [resolvedIsDisabled.value, resolvedIsReadOnly.value, state.isOpen.value] as const,
       ([isDisabled, isReadOnly, isOpen]) => {
         if ((isDisabled || isReadOnly) && isOpen) {
           state.close();
@@ -706,7 +772,7 @@ export const SearchAutocomplete = defineComponent({
     );
 
     const clearSearch = () => {
-      if (props.isDisabled || props.isReadOnly) {
+      if (resolvedIsDisabled.value || resolvedIsReadOnly.value) {
         return;
       }
 
@@ -937,7 +1003,7 @@ export const SearchAutocomplete = defineComponent({
     );
 
     const shouldShowClearButton = computed(() => {
-      if (props.isReadOnly) {
+      if (resolvedIsReadOnly.value) {
         return false;
       }
 
@@ -1125,7 +1191,7 @@ export const SearchAutocomplete = defineComponent({
             "aria-label": stringFormatter.value.format("Clear search"),
             onPress: clearSearch,
             preventFocus: true,
-            isDisabled: Boolean(props.isDisabled),
+            isDisabled: resolvedIsDisabled.value,
             UNSAFE_className: classNames("spectrum-ClearButton"),
           })
         : null;
@@ -1148,12 +1214,12 @@ export const SearchAutocomplete = defineComponent({
             "react-spectrum-SearchAutocomplete",
             {
               "is-open": state.isOpen.value,
-              "is-disabled": Boolean(props.isDisabled),
-              "is-readOnly": Boolean(props.isReadOnly),
+              "is-disabled": resolvedIsDisabled.value,
+              "is-readOnly": resolvedIsReadOnly.value,
               "is-invalid":
-                resolvedValidationState.value === "invalid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "invalid" && !resolvedIsDisabled.value,
               "is-valid":
-                resolvedValidationState.value === "valid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "valid" && !resolvedIsDisabled.value,
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined
@@ -1174,9 +1240,9 @@ export const SearchAutocomplete = defineComponent({
           h("div", {
             class: classNames("react-spectrum-SearchAutocomplete-field", {
               "is-invalid":
-                resolvedValidationState.value === "invalid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "invalid" && !resolvedIsDisabled.value,
               "is-valid":
-                resolvedValidationState.value === "valid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "valid" && !resolvedIsDisabled.value,
             }),
           }, [
             resolvedIcon.value,
@@ -1189,9 +1255,9 @@ export const SearchAutocomplete = defineComponent({
                 name: props.name,
                 form: props.form,
                 placeholder: props.placeholder,
-                disabled: props.isDisabled,
-                readonly: props.isReadOnly,
-                required: props.isRequired,
+                disabled: resolvedIsDisabled.value,
+                readonly: resolvedIsReadOnly.value,
+                required: resolvedIsRequired.value,
                 autofocus: props.autoFocus,
                 type: "search",
                 autocorrect: "off",

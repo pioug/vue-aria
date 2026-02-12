@@ -2,6 +2,11 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { Form } from "@vue-spectrum/form";
+import {
+  DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+  provideSpectrumProvider,
+} from "@vue-spectrum/provider";
 import {
   ComboBox,
   ComboBoxItem,
@@ -28,6 +33,27 @@ function renderComponent(props: Record<string, unknown> = {}) {
       ...props,
     },
   });
+}
+
+function renderWithProvider(
+  component: ReturnType<typeof defineComponent>,
+  options: { providerProps?: Record<string, unknown> } = {}
+) {
+  const ProviderHarness = defineComponent({
+    name: "ComboBoxProviderHarness",
+    setup() {
+      provideSpectrumProvider({
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        colorScheme: "light",
+        scale: "medium",
+        ...(options.providerProps ?? {}),
+      });
+
+      return () => h(component);
+    },
+  });
+
+  return render(ProviderHarness);
 }
 
 describe("ComboBox", () => {
@@ -57,6 +83,57 @@ describe("ComboBox", () => {
 
     const combobox = tree.getByRole("combobox");
     expect(combobox.getAttribute("name")).toBe("test-name");
+  });
+
+  it("inherits disabled state from provider context", () => {
+    const App = defineComponent({
+      name: "ComboBoxProviderDisabledApp",
+      setup() {
+        return () =>
+          h(ComboBox, {
+            label: "Test",
+            items,
+          });
+      },
+    });
+
+    const tree = renderWithProvider(App, {
+      providerProps: { isDisabled: true },
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button") as HTMLButtonElement;
+    expect(input.disabled).toBe(true);
+    expect(button.disabled).toBe(true);
+  });
+
+  it("inherits form validationState for aria-invalid and classes", () => {
+    const App = defineComponent({
+      name: "ComboBoxFormValidationStateApp",
+      setup() {
+        return () =>
+          h(
+            Form,
+            {
+              validationState: "invalid",
+            },
+            {
+              default: () => [
+                h(ComboBox, {
+                  label: "Test",
+                  items,
+                  name: "animal",
+                }),
+              ],
+            }
+          );
+      },
+    });
+
+    const tree = renderWithProvider(App);
+    const input = tree.getByRole("combobox");
+    const root = tree.container.querySelector(".react-spectrum-ComboBox");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(root?.classList.contains("is-invalid")).toBe(true);
   });
 
   it("supports custom data attributes", () => {

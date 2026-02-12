@@ -26,6 +26,8 @@ import { useOption } from "@vue-aria/listbox";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/types";
 import { ProgressCircle } from "@vue-spectrum/progress";
+import { useFormProps } from "@vue-spectrum/form";
+import { useProviderContext } from "@vue-spectrum/provider";
 import {
   classNames,
   useStyleProps,
@@ -747,6 +749,7 @@ export const ComboBox = defineComponent({
     },
   },
   setup(props, { attrs, expose, slots }) {
+    const provider = useProviderContext();
     const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
@@ -763,6 +766,51 @@ export const ComboBox = defineComponent({
     let inputLoadingTimer: ReturnType<typeof setTimeout> | null = null;
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
+    const resolvedFormProps = computed<Record<string, unknown>>(() =>
+      useFormProps({
+        isDisabled: props.isDisabled,
+        isReadOnly: props.isReadOnly,
+        isRequired: props.isRequired,
+        validationState: props.validationState,
+      })
+    );
+
+    const resolvedIsDisabled = computed(() => {
+      if (props.isDisabled !== undefined) {
+        return props.isDisabled;
+      }
+
+      const fromForm = resolvedFormProps.value.isDisabled;
+      if (typeof fromForm === "boolean") {
+        return fromForm;
+      }
+
+      return provider?.value.isDisabled ?? false;
+    });
+    const resolvedIsReadOnly = computed(() => {
+      if (props.isReadOnly !== undefined) {
+        return props.isReadOnly;
+      }
+
+      const fromForm = resolvedFormProps.value.isReadOnly;
+      if (typeof fromForm === "boolean") {
+        return fromForm;
+      }
+
+      return provider?.value.isReadOnly ?? false;
+    });
+    const resolvedIsRequired = computed(() => {
+      if (props.isRequired !== undefined) {
+        return props.isRequired;
+      }
+
+      const fromForm = resolvedFormProps.value.isRequired;
+      if (typeof fromForm === "boolean") {
+        return fromForm;
+      }
+
+      return provider?.value.isRequired ?? false;
+    });
 
     watch(
       () => props.placeholder,
@@ -796,8 +844,23 @@ export const ComboBox = defineComponent({
         return props.validationState;
       }
 
-      return props.isInvalid ? "invalid" : undefined;
+      if (props.isInvalid) {
+        return "invalid";
+      }
+
+      const fromForm = resolvedFormProps.value.validationState;
+      if (fromForm === "valid" || fromForm === "invalid") {
+        return fromForm;
+      }
+
+      const fromProvider = provider?.value.validationState;
+      return fromProvider === "valid" || fromProvider === "invalid"
+        ? fromProvider
+        : undefined;
     });
+    const resolvedIsInvalid = computed(
+      () => Boolean(props.isInvalid) || resolvedValidationState.value === "invalid"
+    );
 
     const controlledSelectedKey =
       props.selectedKey === undefined
@@ -830,7 +893,7 @@ export const ComboBox = defineComponent({
       ),
       allowsCustomValue: computed(() => props.allowsCustomValue),
       shouldCloseOnBlur: computed(() => props.shouldCloseOnBlur),
-      isReadOnly: computed(() => props.isReadOnly),
+      isReadOnly: resolvedIsReadOnly,
     });
 
     const {
@@ -846,11 +909,11 @@ export const ComboBox = defineComponent({
         label: props.label,
         description: props.description,
         errorMessage: props.errorMessage,
-        isInvalid: props.isInvalid,
-        validationState: props.validationState,
-        isDisabled: props.isDisabled,
-        isReadOnly: props.isReadOnly,
-        isRequired: props.isRequired,
+        isInvalid: resolvedIsInvalid,
+        validationState: resolvedValidationState,
+        isDisabled: resolvedIsDisabled,
+        isReadOnly: resolvedIsReadOnly,
+        isRequired: resolvedIsRequired,
         menuTrigger: computed(() => props.menuTrigger),
         inputRef,
         popoverRef,
@@ -1360,12 +1423,12 @@ export const ComboBox = defineComponent({
             "react-spectrum-ComboBox",
             {
               "is-open": state.isOpen.value,
-              "is-disabled": Boolean(props.isDisabled),
-              "is-readOnly": Boolean(props.isReadOnly),
+              "is-disabled": resolvedIsDisabled.value,
+              "is-readOnly": resolvedIsReadOnly.value,
               "is-invalid":
-                resolvedValidationState.value === "invalid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "invalid" && !resolvedIsDisabled.value,
               "is-valid":
-                resolvedValidationState.value === "valid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "valid" && !resolvedIsDisabled.value,
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined
@@ -1382,9 +1445,9 @@ export const ComboBox = defineComponent({
           h("div", {
             class: classNames("react-spectrum-ComboBox-field", {
               "is-invalid":
-                resolvedValidationState.value === "invalid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "invalid" && !resolvedIsDisabled.value,
               "is-valid":
-                resolvedValidationState.value === "valid" && !Boolean(props.isDisabled),
+                resolvedValidationState.value === "valid" && !resolvedIsDisabled.value,
             }),
           }, [
             h("input", mergeProps(inputProps.value, {
@@ -1394,9 +1457,9 @@ export const ComboBox = defineComponent({
               name: resolvedFormValue.value === "text" ? props.name : undefined,
               form: props.form,
               placeholder: props.placeholder,
-              disabled: props.isDisabled,
-              readonly: props.isReadOnly,
-              required: props.isRequired,
+              disabled: resolvedIsDisabled.value,
+              readonly: resolvedIsReadOnly.value,
+              required: resolvedIsRequired.value,
               autofocus: props.autoFocus,
               class: classNames("react-spectrum-ComboBox-input"),
             })),
