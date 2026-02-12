@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 23 |
-| Passing tests | 23 |
+| Ported tests | 24 |
+| Passing tests | 24 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -43,7 +43,7 @@
 | @vue-aria/gridlist | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/gridlist | packages/@react-aria/gridlist |
 | @vue-aria/i18n | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/i18n | packages/@react-aria/i18n |
 | @vue-aria/interactions | complete | 13 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/interactions | packages/@react-aria/interactions |
-| @vue-aria/label | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/label | packages/@react-aria/label |
+| @vue-aria/label | complete | 2 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/label | packages/@react-aria/label |
 | @vue-aria/landmark | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/landmark | packages/@react-aria/landmark |
 | @vue-aria/link | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/link | packages/@react-aria/link |
 | @vue-aria/listbox | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/listbox | packages/@react-aria/listbox |
