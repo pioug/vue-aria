@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:29:33.628Z",
+  "generatedAt": "2026-02-12T15:30:30.634Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 162,
-  "availableLeafCount": 34,
+  "incompletePackageCount": 161,
+  "availableLeafCount": 33,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -133,11 +133,6 @@
       "packageName": "@vue-types/dialog",
       "upstreamPackageName": "@react-types/dialog",
       "upstreamPath": "packages/@react-types/dialog"
-    },
-    {
-      "packageName": "@vue-types/illustratedmessage",
-      "upstreamPackageName": "@react-types/illustratedmessage",
-      "upstreamPath": "packages/@react-types/illustratedmessage"
     },
     {
       "packageName": "@vue-types/listbox",
