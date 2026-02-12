@@ -12,11 +12,11 @@ Companion docs:
 
 - Completed packages: `24 / 64`
 - Remaining packages: `40`
-- Test-case parity (v1-only, excluding `s2`): `1355 / 1897` (remaining `542`, coverage `71.4%`)
-- Test-case tracker: `SPECTRUM_TESTCASE_TRACKER.md` (auto-generated via `npm run update:spectrum-case-tracker`)
-- Current stage: phase-1 foundation migration
+- Upstream named-case parity source of truth: `SPECTRUM_TESTCASE_TRACKER.md` (auto-generated via `npm run update:spectrum-case-tracker`)
+- Primary progress metric: upstream named-case parity (`matched / upstream named`), with missing upstream named cases as the actionable gap.
+- Secondary metric: raw call ratio (informational only).
+- Optional diagnostics: local-only named-case output (`npm run test:spectrum-case-parity:diagnostics` and `npm run update:spectrum-case-tracker:diagnostics`).
 - Priority mode: complete React Spectrum v1 package parity first; S2 feature work is paused until v1 reaches completion gates.
-- Active focus lane: v1 package parity/hardening with shared docs base-style porting (runtime + tests + docs usability/styling + CI stability), including broad docs runtime class alias coverage for both `spectrum-*` and `react-spectrum-*` selectors in `docs/.vitepress/theme/spectrum-base.css`.
 - Active package lock (single-WIP rule): `@react-spectrum/inlinealert` in `SPECTRUM_WIP.md`.
 - Docs style alias gap report: `docs/porting/style-alias-gaps.md` (generated via `npm run docs:style-alias-gaps`).
 
@@ -33,7 +33,7 @@ Companion docs:
 3. Add docs page in `docs/spectrum/<pkg>.md` with usage, accessibility notes, and parity caveats.
 4. Add/verify exports in umbrella entry (`@vue-spectrum/vue-spectrum`).
 5. Mark package complete only after `npm run check`, `npm run test`, `npm run test:cross-browser`, and docs build pass.
-6. Track and refresh test-case parity metrics with `npm run update:spectrum-case-tracker`.
+6. Track and refresh upstream named-case parity with `npm run update:spectrum-case-tracker` (use diagnostics mode only for local-only debugging).
 
 ## Execution Protocol
 
@@ -55,8 +55,8 @@ Companion docs:
 
 ## Foundation, Theme, and Infrastructure
 
-- In progress baseline: `@react-spectrum/provider` (Provider component, alias hooks, nested-direction warning parity, and expanded component-level tests now ported including OS light/dark defaults plus nested ancestor color-scheme update coverage), `@react-spectrum/utils` (classNames compatibility flags, slot utilities, `getWrappedElement`, media/device hooks, breakpoint utilities, DOM-ref utilities, style-prop conversion helpers, and `@react-aria/utils` parity re-exports `useValueEffect`/`useResizeObserver` now ported, with additional slot-id override coverage for `useId`-generated slot props), `@react-spectrum/theme-default` (baseline `theme` export now ported with provider-compatible theme sections and starter integration tests/docs), `@react-spectrum/theme-light` (baseline `theme` export now ported with provider-compatible sections and light/dark class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-dark` (baseline `theme` export now ported with provider-compatible sections and dark-biased class-variant coverage plus starter integration tests/docs), `@react-spectrum/theme-express` (baseline `theme` export now ported on top of `theme-default` with express global + scale class variants and starter integration tests/docs), `@react-spectrum/style-macro-s1` (baseline package layout/runtime helpers now ported with starter merge/helper tests and docs), `@react-spectrum/test-utils` (baseline package layout now ported with screen-width test helpers and starter docs/tests), `@react-spectrum/story-utils` (baseline package layout now ported with Vue `ErrorBoundary` + `generatePowerset` equivalents and starter docs/tests), `@react-spectrum/s2` (baseline package now includes shared utility exports `pressScale`/`isDocsEnv`/`createIcon`/`createIllustration` and first component primitives `Provider`/`Accordion`/`AccordionItem`/`AccordionItemHeader`/`AccordionItemTitle`/`AccordionItemPanel`/`Disclosure`/`DisclosurePanel`/`DisclosureTitle`/`ActionBar`/`ActionMenu`/`AlertDialog`/`Breadcrumbs`/`Breadcrumb`/`BreadcrumbItem`/`Button`/`LinkButton`/`ActionButton`/`ActionButtonGroup`/`Avatar`/`Badge`/`ButtonGroup`/`Card`/`CardView`/`ComboBox`/`ComboBoxItem`/`ComboBoxSection`/`ColorArea`/`ColorField`/`ColorSlider`/`ColorSwatch`/`ColorSwatchPicker`/`ColorWheel`/`Heading`/`Header`/`Content`/`Text`/`Keyboard`/`Footer`/`Checkbox`/`CheckboxGroup`/`CloseButton`/`ContextualHelp`/`DateField`/`DatePicker`/`DateRangePicker`/`TimeField`/`Dialog`/`CustomDialog`/`FullscreenDialog`/`DialogTrigger`/`DialogContainer`/`useDialogContainer`/`Divider`/`DropZone`/`Form`/`Image`/`IllustratedMessage`/`InlineAlert`/`Link`/`Meter`/`Menu`/`MenuItem`/`MenuTrigger`/`NumberField`/`Picker`/`PickerItem`/`PickerSection`/`ProgressBar`/`ProgressCircle`/`SearchField`/`TableView`/`TableHeader`/`TableBody`/`Column`/`Row`/`Cell`/`TreeView`/`TreeViewItem`/`TreeViewItemContent`/`TreeViewLoadMoreItem`/`Radio`/`RadioGroup`/`SelectBox`/`SelectBoxGroup`/`Slider`/`RangeSlider`/`StatusLight`/`Switch`/`TagGroup`/`Tag`/`TextField`/`TextArea`/`ToastContainer`/`ToastQueue`/`ToggleButton`/`ToggleButtonGroup`/`Tooltip`/`TooltipTrigger`/`Well`, plus starter docs/tests, keyboard parity hardening for `SelectBoxGroup` navigation/selection edge cases, sortable-header callback coverage for `TableView`, trigger/menu action-flow coverage for `MenuTrigger`, `isHidden` unmount coverage for content primitives, baseline date/time-range wrapper coverage, baseline tag-grid/removal coverage, baseline tooltip trigger coverage, baseline action-bar wrapper coverage, baseline breadcrumb export-name parity coverage, baseline dialog wrapper/hook coverage, baseline color wrapper coverage, and baseline form/contextual-help/dropzone coverage)
-- Priority note: `@react-spectrum/s2` is currently paused for new scope until v1 package parity (`64 / 64`) is complete and quality gates pass.
+- Scope note: this section tracks package completion checkboxes only. Detailed runtime/test notes should live in per-package docs and commits to avoid stale tracker prose.
+- Priority note: `@react-spectrum/s2` is paused for new scope until v1 completion gates in `docs/porting/spectrum-roadmap.md` are met.
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
 - [x] `@react-spectrum/icon` -> `@vue-spectrum/icon`

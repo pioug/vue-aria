@@ -67,6 +67,9 @@ npm run scaffold:spectrum-missing-tests
 # Write __upstream-missing__.test.ts scaffolds for all mapped packages.
 npm run scaffold:spectrum-missing-tests -- --write
 
+# Optional: include S2 in scaffold generation.
+npm run scaffold:spectrum-missing-tests -- --write --include-s2
+
 # Mine docs style alias gaps and write report.
 npm run docs:style-alias-gaps
 ```

@@ -11,7 +11,8 @@ This page is the consolidated entry point for migration status and execution mod
 - Active horizontal lane: v1 packages only (behavior parity, test parity, docs/preview usability, and CI stability).
 - Active styling lane: shared Spectrum docs base styles include broad runtime alias coverage for both `spectrum-*` and `react-spectrum-*` classes (`docs/.vitepress/theme/spectrum-base.css`), and alias gaps are mined in batch via `npm run docs:style-alias-gaps` (`docs/porting/style-alias-gaps.md`).
 - Active WIP lock: exactly one package is active at a time via `SPECTRUM_WIP.md` and `npm run check:spectrum-workflow`.
-- Progress indicator baseline: test-case parity totals in `SPECTRUM_TESTCASE_TRACKER.md` (`npm run update:spectrum-case-tracker`).
+- Progress indicator baseline: upstream named-case parity in `SPECTRUM_TESTCASE_TRACKER.md` (`npm run update:spectrum-case-tracker`).
+- Diagnostics mode (optional only): local-only named-case details via `npm run test:spectrum-case-parity:diagnostics`.
 
 ## Source of Truth
 

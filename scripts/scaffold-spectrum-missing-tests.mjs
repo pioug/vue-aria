@@ -15,6 +15,7 @@ const localRoot = path.join(root, "packages", "@vue-spectrum");
 
 const args = new Set(process.argv.slice(2));
 const shouldWrite = args.has("--write");
+const includeS2 = args.has("--include-s2");
 const selectedPackageArg = process.argv.find((arg) => arg.startsWith("--package="));
 const selectedPackage = selectedPackageArg?.slice("--package=".length) ?? null;
 
@@ -142,7 +143,7 @@ if (!fs.existsSync(referenceRoot)) {
 const trackerRows = parseTrackerRows(readFile(trackerPath));
 const selectedRows = selectedPackage
   ? trackerRows.filter((row) => row.upstream === selectedPackage || row.local === selectedPackage)
-  : trackerRows;
+  : trackerRows.filter((row) => includeS2 || row.upstream !== "s2");
 
 if (selectedRows.length === 0) {
   throw new Error(
@@ -226,4 +227,8 @@ if (!shouldWrite) {
 } else {
   console.log(`- Scaffold files written: ${filesWritten}`);
   console.log(`- Scaffold files removed: ${filesRemoved}`);
+}
+
+if (!includeS2 && !selectedPackage) {
+  console.log("- Note: S2 is skipped by default. Use --include-s2 to include it.");
 }
