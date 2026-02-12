@@ -3,6 +3,7 @@ import {
   defineComponent,
   h,
   nextTick,
+  onBeforeUnmount,
   onMounted,
   ref,
   type PropType,
@@ -177,6 +178,31 @@ export const Switch = defineComponent({
       onChange: props.onChange,
     });
 
+    const onFormReset = (): void => {
+      void nextTick(() => {
+        const nextSelected = Boolean(props.defaultSelected);
+        if (props.isSelected !== undefined) {
+          props.onChange?.(nextSelected);
+          return;
+        }
+
+        state.setSelected(nextSelected);
+      });
+    };
+
+    const onDocumentReset = (event: Event): void => {
+      if (!(event.target instanceof HTMLFormElement)) {
+        return;
+      }
+
+      const input = inputRef.value;
+      if (!input || input.form !== event.target) {
+        return;
+      }
+
+      onFormReset();
+    };
+
     const { inputProps, labelProps } = useSwitch(
       {
         value: computed(() => props.value),
@@ -202,13 +228,21 @@ export const Switch = defineComponent({
     const { focusProps, isFocusVisible } = useFocusRing();
 
     onMounted(() => {
-      if (!props.autoFocus) {
-        return;
+      if (typeof document !== "undefined") {
+        document.addEventListener("reset", onDocumentReset, true);
       }
 
       void nextTick(() => {
-        inputRef.value?.focus();
+        if (props.autoFocus) {
+          inputRef.value?.focus();
+        }
       });
+    });
+
+    onBeforeUnmount(() => {
+      if (typeof document !== "undefined") {
+        document.removeEventListener("reset", onDocumentReset, true);
+      }
     });
 
     expose({

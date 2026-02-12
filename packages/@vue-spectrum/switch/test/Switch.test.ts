@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { mount } from "@vue/test-utils";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Switch } from "../src";
 
@@ -175,7 +175,9 @@ describe("Switch", () => {
       },
     });
 
-    const wrapper = mount(Harness);
+    const wrapper = mount(Harness, {
+      attachTo: document.body,
+    });
     const input = getSwitchInput(wrapper);
     expect(input.attributes("aria-labelledby")).toBe("label-id");
     expect(input.attributes("aria-describedby")).toBe("description-id");
@@ -225,5 +227,109 @@ describe("Switch", () => {
     await user.click(input.element);
     expect((input.element as HTMLInputElement).checked).toBe(true);
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("supports form reset", async () => {
+    const user = userEvent.setup();
+
+    const Harness = defineComponent({
+      name: "SwitchFormResetHarness",
+      setup() {
+        const isSelected = ref(false);
+
+        return () =>
+          h(
+            "form",
+            {
+              onReset: () => {
+                isSelected.value = false;
+              },
+            },
+            [
+              h(
+                Switch,
+                {
+                  "data-testid": "switch",
+                  isSelected: isSelected.value,
+                  onChange: (value: boolean) => {
+                    isSelected.value = value;
+                  },
+                },
+                () => "Switch"
+              ),
+              h("input", {
+                type: "reset",
+                "data-testid": "reset",
+              }),
+            ]
+          );
+      },
+    });
+
+    const wrapper = mount(Harness);
+    const input = wrapper.get("[data-testid='switch'] input").element as HTMLInputElement;
+
+    expect(input.checked).toBe(false);
+    await user.click(input);
+    expect(input.checked).toBe(true);
+
+    const reset = wrapper.get("[data-testid='reset']").element;
+    await user.click(reset);
+    await wrapper.get("form").trigger("reset");
+    await nextTick();
+    expect(input.checked).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("resets to defaultSelected when submitting form action", async () => {
+    const user = userEvent.setup();
+
+    const Harness = defineComponent({
+      name: "SwitchSubmitResetHarness",
+      setup() {
+        const defaultSelected = ref(false);
+
+        return () =>
+          h(
+            "form",
+            {
+              onSubmit: (event: Event) => {
+                event.preventDefault();
+                defaultSelected.value = true;
+                (event.currentTarget as HTMLFormElement | null)?.reset();
+              },
+            },
+            [
+              h(
+                Switch,
+                {
+                  "data-testid": "switch",
+                  defaultSelected: defaultSelected.value,
+                },
+                () => "Switch"
+              ),
+              h("input", {
+                type: "submit",
+                "data-testid": "submit",
+              }),
+            ]
+          );
+      },
+    });
+
+    const wrapper = mount(Harness, {
+      attachTo: document.body,
+    });
+    const input = wrapper.get("[data-testid='switch'] input").element as HTMLInputElement;
+
+    expect(input.checked).toBe(false);
+
+    const submit = wrapper.get("[data-testid='submit']").element;
+    await user.click(submit);
+    await nextTick();
+    await nextTick();
+
+    expect(input.checked).toBe(true);
+    wrapper.unmount();
   });
 });
