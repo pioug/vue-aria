@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:14:21.245Z",
+  "generatedAt": "2026-02-12T18:14:58.058Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 32,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 31,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -18,11 +18,6 @@
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
       "upstreamPath": "packages/@react-spectrum/dropzone"
-    },
-    {
-      "packageName": "@vue-spectrum/labeledvalue",
-      "upstreamPackageName": "@react-spectrum/labeledvalue",
-      "upstreamPath": "packages/@react-spectrum/labeledvalue"
     },
     {
       "packageName": "@vue-spectrum/listbox",
