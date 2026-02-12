@@ -5,6 +5,9 @@ import { useHover } from "../src/useHover";
 interface HoverHandlers {
   onPointerenter?: (event: PointerEvent) => void;
   onPointerleave?: (event: PointerEvent) => void;
+  onMouseenter?: (event: MouseEvent) => void;
+  onMouseleave?: (event: MouseEvent) => void;
+  onTouchstart?: (event: Event) => void;
 }
 
 function createPointerEvent(
@@ -15,6 +18,17 @@ function createPointerEvent(
 ): PointerEvent {
   const event = new PointerEvent(type, { bubbles: true, cancelable: true });
   Object.defineProperty(event, "pointerType", { value: pointerType });
+  Object.defineProperty(event, "target", { value: target });
+  Object.defineProperty(event, "currentTarget", { value: currentTarget });
+  return event;
+}
+
+function createMouseEvent(
+  type: string,
+  target: EventTarget,
+  currentTarget: EventTarget
+): MouseEvent {
+  const event = new MouseEvent(type, { bubbles: true, cancelable: true });
   Object.defineProperty(event, "target", { value: target });
   Object.defineProperty(event, "currentTarget", { value: currentTarget });
   return event;
@@ -244,5 +258,61 @@ describe("useHover", () => {
     expect(onHoverEnd).toHaveBeenCalledTimes(1);
     expect(onHoverChange).toHaveBeenNthCalledWith(1, true);
     expect(onHoverChange).toHaveBeenNthCalledWith(2, false);
+  });
+
+  it("falls back to mouse events when PointerEvent is unavailable", () => {
+    vi.stubGlobal("PointerEvent", undefined);
+
+    try {
+      const onHoverStart = vi.fn();
+      const onHoverEnd = vi.fn();
+      const onHoverChange = vi.fn();
+      const { hoverProps, isHovered } = useHover({
+        onHoverStart,
+        onHoverEnd,
+        onHoverChange,
+      });
+      const handlers = hoverProps as HoverHandlers;
+
+      const element = document.createElement("div");
+      document.body.appendChild(element);
+
+      handlers.onMouseenter?.(createMouseEvent("mouseenter", element, element));
+      expect(isHovered.value).toBe(true);
+      handlers.onMouseleave?.(createMouseEvent("mouseleave", element, element));
+      expect(isHovered.value).toBe(false);
+
+      expect(onHoverStart).toHaveBeenCalledTimes(1);
+      expect(onHoverEnd).toHaveBeenCalledTimes(1);
+      expect(onHoverChange).toHaveBeenNthCalledWith(1, true);
+      expect(onHoverChange).toHaveBeenNthCalledWith(2, false);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("ignores fallback mouse hover immediately after touchstart", () => {
+    vi.stubGlobal("PointerEvent", undefined);
+
+    try {
+      const onHoverStart = vi.fn();
+      const { hoverProps, isHovered } = useHover({ onHoverStart });
+      const handlers = hoverProps as HoverHandlers;
+
+      const element = document.createElement("div");
+      document.body.appendChild(element);
+
+      handlers.onTouchstart?.(new Event("touchstart", { bubbles: true }));
+      handlers.onMouseenter?.(createMouseEvent("mouseenter", element, element));
+      expect(isHovered.value).toBe(false);
+      expect(onHoverStart).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(100);
+      handlers.onMouseenter?.(createMouseEvent("mouseenter", element, element));
+      expect(isHovered.value).toBe(true);
+      expect(onHoverStart).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

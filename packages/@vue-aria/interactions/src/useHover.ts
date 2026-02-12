@@ -51,11 +51,22 @@ function toHoverEvent(
   return { type, pointerType, target, originalEvent };
 }
 
+function isTargetWithinCurrentTarget(event: Event): boolean {
+  const currentTarget = event.currentTarget;
+  const target = event.target;
+  return (
+    currentTarget instanceof Element &&
+    target instanceof Element &&
+    currentTarget.contains(target)
+  );
+}
+
 export function useHover(options: UseHoverOptions = {}): UseHoverResult {
   const isHovered = ref(false);
   const targetRef = ref<EventTarget | null>(null);
   const pointerTypeRef = ref<PointerType>("mouse");
   const disposeDocumentListener = ref<(() => void) | null>(null);
+  const hasPointerEvents = typeof PointerEvent !== "undefined";
 
   const stopGlobalListener = () => {
     disposeDocumentListener.value?.();
@@ -78,20 +89,16 @@ export function useHover(options: UseHoverOptions = {}): UseHoverResult {
     options.onHoverChange?.(false);
   };
 
-  const triggerHoverStart = (event: PointerEvent, pointerType: PointerType) => {
+  const triggerHoverStart = (event: Event, pointerType: PointerType) => {
     if (isDisabled(options) || pointerType === "touch" || isHovered.value) {
       return;
     }
 
-    const currentTarget = event.currentTarget;
-    const target = event.target;
-    if (
-      !(currentTarget instanceof Element) ||
-      !(target instanceof Element) ||
-      !currentTarget.contains(target)
-    ) {
+    if (!isTargetWithinCurrentTarget(event)) {
       return;
     }
+
+    const currentTarget = event.currentTarget as Element;
 
     isHovered.value = true;
     pointerTypeRef.value = pointerType;
@@ -134,13 +141,7 @@ export function useHover(options: UseHoverOptions = {}): UseHoverResult {
       return;
     }
 
-    const currentTarget = event.currentTarget;
-    const target = event.target;
-    if (
-      !(currentTarget instanceof Element) ||
-      !(target instanceof Element) ||
-      !currentTarget.contains(target)
-    ) {
+    if (!isTargetWithinCurrentTarget(event)) {
       return;
     }
 
@@ -178,10 +179,31 @@ export function useHover(options: UseHoverOptions = {}): UseHoverResult {
   }
 
   return {
-    hoverProps: {
-      onPointerenter: onPointerEnter,
-      onPointerleave: onPointerLeave,
-    },
+    hoverProps: hasPointerEvents
+      ? {
+          onPointerenter: onPointerEnter,
+          onPointerleave: onPointerLeave,
+        }
+      : {
+          onMouseenter: (event: MouseEvent) => {
+            if (globalIgnoreEmulatedMouseEvents) {
+              return;
+            }
+            triggerHoverStart(event, "mouse");
+          },
+          onMouseleave: (event: MouseEvent) => {
+            if (isDisabled(options) || globalIgnoreEmulatedMouseEvents) {
+              return;
+            }
+            if (!isTargetWithinCurrentTarget(event)) {
+              return;
+            }
+            triggerHoverEnd(event, "mouse");
+          },
+          onTouchstart: () => {
+            setGlobalIgnoreEmulatedMouseEvents();
+          },
+        },
     isHovered,
   };
 }
