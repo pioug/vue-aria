@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T16:35:30.390Z",
+  "generatedAt": "2026-02-12T16:37:00.895Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 117,
+  "incompletePackageCount": 116,
   "availableLeafCount": 8,
   "availableLeaves": [
     {
@@ -20,11 +20,6 @@
       "upstreamPath": "packages/@react-stately/calendar"
     },
     {
-      "packageName": "@vue-stately/collections",
-      "upstreamPackageName": "@react-stately/collections",
-      "upstreamPath": "packages/@react-stately/collections"
-    },
-    {
       "packageName": "@vue-stately/color",
       "upstreamPackageName": "@react-stately/color",
       "upstreamPath": "packages/@react-stately/color"
@@ -38,6 +33,11 @@
       "packageName": "@vue-stately/datepicker",
       "upstreamPackageName": "@react-stately/datepicker",
       "upstreamPath": "packages/@react-stately/datepicker"
+    },
+    {
+      "packageName": "@vue-stately/selection",
+      "upstreamPackageName": "@react-stately/selection",
+      "upstreamPath": "packages/@react-stately/selection"
     },
     {
       "packageName": "@vue-stately/virtualizer",

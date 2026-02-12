@@ -143,7 +143,7 @@
 | @vue-stately/autocomplete | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/autocomplete | packages/@react-stately/autocomplete |
 | @vue-stately/calendar | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/calendar | packages/@react-stately/calendar |
 | @vue-stately/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/checkbox | packages/@react-stately/checkbox |
-| @vue-stately/collections | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/collections | packages/@react-stately/collections |
+| @vue-stately/collections | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/collections | packages/@react-stately/collections |
 | @vue-stately/color | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/color | packages/@react-stately/color |
 | @vue-stately/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/combobox | packages/@react-stately/combobox |
 | @vue-stately/data | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/data | packages/@react-stately/data |
