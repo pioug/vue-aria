@@ -302,6 +302,55 @@ describe("SearchAutocomplete", () => {
     ]);
   });
 
+  it("does not overwrite typed input when items update while focused", async () => {
+    const user = userEvent.setup();
+    const initialItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "Aardvark" },
+      { key: "2", label: "Kangaroo" },
+      { key: "3", label: "Snake" },
+    ];
+    const nextItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "New Text" },
+      { key: "2", label: "Item 2" },
+      { key: "3", label: "Item 3" },
+    ];
+    let setItems:
+      | ((nextItems: SpectrumSearchAutocompleteItemData[]) => void)
+      | undefined;
+
+    const App = defineComponent({
+      name: "SearchAutocompleteFocusedItemsUpdateApp",
+      setup() {
+        const list = ref<SpectrumSearchAutocompleteItemData[]>(initialItems);
+        setItems = (updatedItems: SpectrumSearchAutocompleteItemData[]) => {
+          list.value = updatedItems;
+        };
+
+        return () =>
+          h(SearchAutocomplete, {
+            label: "SearchAutocomplete",
+            items: list.value,
+            defaultSelectedKey: "1",
+            menuTrigger: "focus",
+          });
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("Aardvark");
+
+    input.focus();
+    await user.clear(input);
+    await user.keyboard("Aa");
+    expect(input.value).toBe("Aa");
+
+    setItems?.(nextItems);
+    await Promise.resolve();
+
+    expect(input.value).toBe("Aa");
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({
