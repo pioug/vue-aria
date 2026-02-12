@@ -841,6 +841,36 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenCalledTimes(1);
   });
 
+  it("supports locale-specific group separators for es-ES", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "NumberFieldEsLocaleHarness",
+      setup() {
+        provideSpectrumProvider({
+          theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+          colorScheme: "light",
+          scale: "medium",
+          locale: "es-ES",
+        });
+
+        return () =>
+          h(NumberField, {
+            "aria-label": "Amount",
+          });
+      },
+    });
+
+    const tree = render(Harness);
+    const input = tree.getByRole("textbox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.keyboard("123.456.789");
+    expect(input.value).toBe("123.456.789");
+
+    await fireEvent.blur(input);
+    expect(input.value).toBe("123.456.789");
+  });
+
   it("repeats stepper increments while the button is held", async () => {
     vi.useFakeTimers();
 
