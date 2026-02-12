@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:01:33.229Z",
+  "generatedAt": "2026-02-12T17:02:56.775Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 101,
-  "availableLeafCount": 4,
+  "incompletePackageCount": 100,
+  "availableLeafCount": 5,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -10,9 +10,14 @@
       "upstreamPath": "packages/@react-aria/interactions"
     },
     {
-      "packageName": "@vue-spectrum/utils",
-      "upstreamPackageName": "@react-spectrum/utils",
-      "upstreamPath": "packages/@react-spectrum/utils"
+      "packageName": "@vue-spectrum/divider",
+      "upstreamPackageName": "@react-spectrum/divider",
+      "upstreamPath": "packages/@react-spectrum/divider"
+    },
+    {
+      "packageName": "@vue-spectrum/well",
+      "upstreamPackageName": "@react-spectrum/well",
+      "upstreamPath": "packages/@react-spectrum/well"
     },
     {
       "packageName": "@vue-stately/datepicker",

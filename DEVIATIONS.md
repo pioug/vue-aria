@@ -474,3 +474,10 @@ Track every divergence from upstream in this file.
 - Reason: This package depends on transitional shared typing layers and upstream React-specific side navigation type contracts.
 - User impact: Consumers may still need React type packages for full type resolution in side navigation typing surfaces.
 - Removal plan: Replace React-centric declaration types with Vue-native node/attribute typing aliases after shared type remapping is complete.
+
+- Package: `@vue-spectrum/utils`
+- Upstream reference: `packages/@react-spectrum/utils` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/context semantics across slot, breakpoint, DOM-ref, and wrapped-element helpers (`useContext`, `useMemo`, `useRef`, `forwardRef`, `cloneElement`, JSX rendering contracts).
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential slot/context/ref behavior differences until full composable conversion.
+- Removal plan: Replace React runtime/context patterns with Vue provide/inject, refs, and render-function equivalents, then port upstream utility tests for parity.
