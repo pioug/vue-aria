@@ -849,6 +849,72 @@ describe("ComboBox", () => {
     expect(options[1]?.getAttribute("aria-selected")).toBe("true");
   });
 
+  it("supports matching defaultSelectedKey and defaultInputValue", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+      defaultInputValue: "Two",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button");
+    expect(input.value).toBe("Two");
+
+    input.focus();
+    await user.click(button);
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options[1]?.textContent).toContain("Two");
+    expect(options[1]?.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("keeps defaultInputValue when it does not match defaultSelectedKey", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+      defaultInputValue: "One",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("One");
+
+    input.focus();
+    await user.clear(input);
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+
+    await user.click(options[2]!);
+    expect(input.value).toBe("Three");
+    expect(tree.queryByRole("listbox")).toBeNull();
+  });
+
+  it("closes the menu when clicking an already selected item", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+      onOpenChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button");
+    expect(input.value).toBe("Two");
+
+    input.focus();
+    await user.click(button);
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(onOpenChange).toHaveBeenCalledWith(true, "manual");
+
+    await user.click(options[1]!);
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(onOpenChange).toHaveBeenLastCalledWith(false, undefined);
+  });
+
   it("clears the uncontrolled selection when the input is fully cleared", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
