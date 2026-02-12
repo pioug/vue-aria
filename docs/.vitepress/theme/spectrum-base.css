@@ -5,6 +5,26 @@
   --spectrum-ui-bg-raised: #ffffff;
 }
 
+/* Theme/provider alias coverage for docs previews. */
+.spectrum-docs-provider :is(
+  .spectrum-provider,
+  .spectrum-theme,
+  .spectrum--express,
+  .spectrum--express-medium,
+  .spectrum--express-large
+) {
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider :is(.spectrum-UIIcon, [class*="spectrum-UIIcon-"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1rem;
+  block-size: 1rem;
+  color: currentColor;
+}
+
 .spectrum-docs-provider :is(
   [class^="spectrum-"],
   [class*=" spectrum-"],

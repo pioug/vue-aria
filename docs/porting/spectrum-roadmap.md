@@ -9,16 +9,20 @@ For live package-by-package completion, use the canonical tracker:
 ## Strategy
 
 - Keep repository/package structure close to upstream.
-- Port behavior first, then upstream-equivalent tests, then docs.
+- Port complete package slices: behavior, upstream-equivalent tests, docs/preview, exports, and tracker updates in one pass.
 - Run horizontal lanes to deliver visible, end-to-end progress faster.
 - Prioritize React Spectrum v1 parity before S2 expansion.
 - Deprioritize S2 execution: no new S2 feature lanes while v1 parity remains incomplete.
+- Keep one active package at a time via `SPECTRUM_WIP.md` (`npm run check:spectrum-workflow`).
+- Track migration progress by test-case parity totals using `SPECTRUM_TESTCASE_TRACKER.md` (`npm run update:spectrum-case-tracker`).
+- Run docs style alias mining in dedicated batches (`npm run docs:style-alias-gaps`) and apply aliases in `docs/.vitepress/theme/spectrum-base.css`.
 
 ## Current Priority
 
 - Active lane: v1 package completion and hardening across remaining incomplete `@vue-spectrum/*` packages.
 - Objective in this lane: usable docs previews + behavior/test parity hardening + CI stability for v1.
 - S2 lane status: paused except regression or unblocker fixes.
+- Active package lock: see `SPECTRUM_WIP.md`.
 
 ## Phases
 
@@ -63,4 +67,6 @@ A package is considered complete only when all conditions are met:
 
 - Avoid status duplication across multiple docs.
 - Treat `SPECTRUM_PORTING_TRACKER.md` as the only canonical checklist.
+- Treat `SPECTRUM_TESTCASE_TRACKER.md` as the canonical case-count indicator.
+- Keep WIP to one package lock at a time in `SPECTRUM_WIP.md`.
 - Update this roadmap only for strategy/priority changes, not granular package counts.

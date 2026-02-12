@@ -12,9 +12,13 @@ Companion docs:
 
 - Completed packages: `24 / 64`
 - Remaining packages: `40`
+- Test-case parity (v1-only, excluding `s2`): `1355 / 1897` (remaining `542`, coverage `71.4%`)
+- Test-case tracker: `SPECTRUM_TESTCASE_TRACKER.md` (auto-generated via `npm run update:spectrum-case-tracker`)
 - Current stage: phase-1 foundation migration
 - Priority mode: complete React Spectrum v1 package parity first; S2 feature work is paused until v1 reaches completion gates.
 - Active focus lane: v1 package parity/hardening with shared docs base-style porting (runtime + tests + docs usability/styling + CI stability), including broad docs runtime class alias coverage for both `spectrum-*` and `react-spectrum-*` selectors in `docs/.vitepress/theme/spectrum-base.css`.
+- Active package lock (single-WIP rule): `@react-spectrum/inlinealert` in `SPECTRUM_WIP.md`.
+- Docs style alias gap report: `docs/porting/style-alias-gaps.md` (generated via `npm run docs:style-alias-gaps`).
 
 ## Upstream Source of Truth
 
@@ -29,6 +33,14 @@ Companion docs:
 3. Add docs page in `docs/spectrum/<pkg>.md` with usage, accessibility notes, and parity caveats.
 4. Add/verify exports in umbrella entry (`@vue-spectrum/vue-spectrum`).
 5. Mark package complete only after `npm run check`, `npm run test`, `npm run test:cross-browser`, and docs build pass.
+6. Track and refresh test-case parity metrics with `npm run update:spectrum-case-tracker`.
+
+## Execution Protocol
+
+1. Keep exactly one active package in `SPECTRUM_WIP.md`.
+2. Deliver full package slices only: runtime + tests + docs + exports + tracker updates in the same slice.
+3. Commit after each completed slice before switching the active package lock.
+4. Keep workflow enforcement green (`npm run check:spectrum-workflow`).
 
 ## Program Setup (Not Counted In 64 Packages)
 
@@ -187,7 +199,7 @@ Companion docs:
 - In progress baseline: `@react-spectrum/calendar` now has Vue `Calendar` and `RangeCalendar` primitives with baseline month paging behavior, selected-date/range semantics, click and keyboard date selection flow, locale-aware fallback aria-label behavior when no visible labels are provided, dedicated upstream-style `CalendarBase` + `RangeCalendar` test-file coverage, and starter/SSR tests plus docs/umbrella wiring; advanced visual/theming parity and deeper locale-formatting parity remain.
 - In progress baseline: `@react-spectrum/color` now has Vue `ColorArea`, `ColorWheel`, `ColorSlider`, `ColorField`, `ColorSwatch`, `ColorPicker`, `ColorEditor`, `ColorSwatchPicker`, and `ColorThumb` primitives with baseline hex-color parsing/editing flows, picker popover behavior, locale-aware default labels for `ColorField`/`ColorPicker` swatches, `ColorSwatchPicker` listbox naming, `ColorSlider` fallback channel labels, `ColorArea`/`ColorWheel` controls, and `ColorEditor` controls (`Color area`, `Hue`, `Alpha`, `Hex`), dedicated upstream-style per-component test-file coverage (`ColorArea`/`ColorEditor`/`ColorField`/`ColorPicker`/`ColorSlider`/`ColorSwatchPicker`/`ColorWheel`), and starter/SSR tests plus docs/umbrella wiring; advanced color-space interactions and full visual/theming parity remain.
 - In progress baseline: `@react-spectrum/datepicker` now has Vue `DateField`, `TimeField`, `DatePicker`, and `DateRangePicker` primitives with baseline native date/time field behavior, popover calendar selection for single and range values, dedicated upstream-style split test-file coverage (`DateField`/`TimeField`/`DatePickerBase`/`DateRangePicker`) including expanded `DateField`/`TimeField` parity tests for ARIA labeling/description/error wiring, invalid-state attributes, read-only/disabled change suppression, granularity-derived `step` behavior, and ref helper exposure, plus additional `DatePicker`/`DateRangePicker` parity tests for controlled open-state callbacks, `shouldCloseOnSelect={false}` behavior, root data-attribute passthrough, and ref helper exposure, with starter/SSR tests and docs/umbrella wiring; segmented-field parity, full range-time behavior, and deeper visual/theming parity remain.
-- In progress baseline: `@react-spectrum/filetrigger` now has Vue `FileTrigger` primitive with baseline parity-style tests/docs and umbrella wiring (pressable-child trigger behavior, hidden file-input wiring, accepted-file/multiple/capture/directory options, ref exposure utilities, and SSR coverage); advanced upstream interoperability edge cases remain.
+- Parity-complete baseline: `@react-spectrum/filetrigger` now has Vue `FileTrigger` primitive with parity-style tests/docs and umbrella wiring (pressable-child trigger behavior, hidden file-input wiring, accepted-file/multiple/capture/directory options, ref exposure utilities, and SSR coverage).
 - [x] `@react-spectrum/checkbox` -> `@vue-spectrum/checkbox`
 - [x] `@react-spectrum/radio` -> `@vue-spectrum/radio`
 - [x] `@react-spectrum/switch` -> `@vue-spectrum/switch`

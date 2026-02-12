@@ -9,11 +9,15 @@ This page is the consolidated entry point for migration status and execution mod
 - Priority: complete React Spectrum v1 parity before any further S2 expansion.
 - S2 execution state: paused/deprioritized (new S2 feature slices are deferred until v1 completion gates pass).
 - Active horizontal lane: v1 packages only (behavior parity, test parity, docs/preview usability, and CI stability).
-- Active styling lane: shared Spectrum docs base styles now include broad runtime alias coverage for both `spectrum-*` and `react-spectrum-*` classes to improve manual component validation (`docs/.vitepress/theme/spectrum-base.css`); remaining unmapped class-like tokens are largely theme/token placeholders rather than runtime component classes.
+- Active styling lane: shared Spectrum docs base styles include broad runtime alias coverage for both `spectrum-*` and `react-spectrum-*` classes (`docs/.vitepress/theme/spectrum-base.css`), and alias gaps are mined in batch via `npm run docs:style-alias-gaps` (`docs/porting/style-alias-gaps.md`).
+- Active WIP lock: exactly one package is active at a time via `SPECTRUM_WIP.md` and `npm run check:spectrum-workflow`.
+- Progress indicator baseline: test-case parity totals in `SPECTRUM_TESTCASE_TRACKER.md` (`npm run update:spectrum-case-tracker`).
 
 ## Source of Truth
 
 - Canonical Spectrum package checklist: `SPECTRUM_PORTING_TRACKER.md`
+- Canonical test-case parity counts: `SPECTRUM_TESTCASE_TRACKER.md`
+- Active package lock and slice discipline: `SPECTRUM_WIP.md`
 - Spectrum strategy/phases and priorities: `/porting/spectrum-roadmap`
 - React Aria completed tracker: `PORTING_TRACKER.md`
 - React Aria historical roadmap (archived): `/porting/roadmap`
@@ -26,6 +30,7 @@ This page is the consolidated entry point for migration status and execution mod
 4. Update component docs with a usable preview and parity notes.
 5. Update trackers/roadmap immediately after each merged batch.
 6. Keep CI gates green before marking progress.
+7. Regenerate case-count progress (`npm run update:spectrum-case-tracker`) after parity slices.
 
 ## Definition Of Done (Per Package)
 
@@ -40,6 +45,8 @@ npm run check
 npm run test
 npm run test:parity
 npm run test:spectrum-parity
+npm run test:spectrum-case-parity
+npm run check:spectrum-workflow
 npm run docs:build
 ```
 

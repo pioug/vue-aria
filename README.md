@@ -18,6 +18,8 @@ The priority is behavior and accessibility parity with upstream, while keeping V
 
 - React Aria tracker (completed baseline): `PORTING_TRACKER.md`
 - React Spectrum tracker (canonical package checklist): `SPECTRUM_PORTING_TRACKER.md`
+- React Spectrum test-case tracker (canonical parity counts): `SPECTRUM_TESTCASE_TRACKER.md`
+- React Spectrum active WIP lock and slice rules: `SPECTRUM_WIP.md`
 - Strategy/phases and current lane: `docs/porting/spectrum-roadmap.md`
 - Documentation status page: `docs/porting/status.md`
 
@@ -44,7 +46,19 @@ npm run check
 npm run test
 npm run test:parity
 npm run test:spectrum-parity
+npm run test:spectrum-case-parity
+npm run check:spectrum-workflow
 npm run docs:build
+```
+
+## Porting workflow commands
+
+```bash
+# Refresh test-case parity counts/report.
+npm run update:spectrum-case-tracker
+
+# Mine docs style alias gaps and write report.
+npm run docs:style-alias-gaps
 ```
 
 ## Local development
