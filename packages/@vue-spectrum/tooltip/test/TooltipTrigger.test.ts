@@ -272,6 +272,79 @@ describe("TooltipTrigger", () => {
     }
   });
 
+  it("does not warm up a second trigger when the first is left during warmup", async () => {
+    vi.useFakeTimers();
+    const Root = {
+      render() {
+        return h("div", null, [
+          h(
+            TooltipTrigger,
+            {
+              closeDelay: 0,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "first trigger" }, "First"),
+                h(Tooltip, () => "First tooltip"),
+              ],
+            }
+          ),
+          h(
+            TooltipTrigger,
+            {
+              closeDelay: 0,
+            },
+            {
+              default: () => [
+                h("button", { "aria-label": "second trigger" }, "Second"),
+                h(Tooltip, () => "Second tooltip"),
+              ],
+            }
+          ),
+        ]);
+      },
+    };
+
+    const wrapper = mount(Root, {
+      attachTo: document.body,
+    });
+
+    try {
+      const firstButton = wrapper.get("[aria-label=\"first trigger\"]");
+      const secondButton = wrapper.get("[aria-label=\"second trigger\"]");
+
+      await firstButton.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(750);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      await firstButton.trigger("pointerleave", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      await secondButton.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1499);
+      await flushOverlay();
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+      vi.advanceTimersByTime(1);
+      await flushOverlay();
+      const tooltip = document.body.querySelector("[role=\"tooltip\"]");
+      expect(tooltip).not.toBeNull();
+      expect(tooltip?.textContent).toContain("Second tooltip");
+    } finally {
+      wrapper.unmount();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("does not open when hover leaves before delayed open", async () => {
     vi.useFakeTimers();
     const onOpenChange = vi.fn();

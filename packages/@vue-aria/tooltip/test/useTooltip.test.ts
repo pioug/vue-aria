@@ -324,6 +324,69 @@ describe("useTooltipTrigger", () => {
     }
   });
 
+  it("does not complete warmup when the first trigger is left early", () => {
+    vi.useFakeTimers();
+    const firstTrigger = document.createElement("button");
+    const secondTrigger = document.createElement("button");
+    document.body.appendChild(firstTrigger);
+    document.body.appendChild(secondTrigger);
+
+    const firstState = createTooltipState();
+    const secondState = createTooltipState();
+    const scope = effectScope();
+    let firstTooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+    let secondTooltipTrigger!: ReturnType<typeof useTooltipTrigger>;
+
+    try {
+      scope.run(() => {
+        firstTooltipTrigger = useTooltipTrigger(
+          {
+            closeDelay: 0,
+          },
+          firstState,
+          firstTrigger
+        );
+        secondTooltipTrigger = useTooltipTrigger(
+          {
+            closeDelay: 0,
+          },
+          secondState,
+          secondTrigger
+        );
+      });
+
+      attachHandlers(firstTrigger, firstTooltipTrigger.triggerProps.value);
+      attachHandlers(secondTrigger, secondTooltipTrigger.triggerProps.value);
+
+      firstTrigger.dispatchEvent(
+        new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+      );
+      vi.advanceTimersByTime(750);
+      expect(firstState.open).not.toHaveBeenCalled();
+
+      firstTrigger.dispatchEvent(
+        new PointerEvent("pointerleave", { bubbles: true, pointerType: "mouse" })
+      );
+      expect(firstState.open).not.toHaveBeenCalled();
+
+      secondTrigger.dispatchEvent(
+        new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" })
+      );
+
+      vi.advanceTimersByTime(1499);
+      expect(secondState.open).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(secondState.open).toHaveBeenCalledTimes(1);
+    } finally {
+      scope.stop();
+      firstTrigger.remove();
+      secondTrigger.remove();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("opens on focus and closes on blur", () => {
     const trigger = document.createElement("button");
     document.body.appendChild(trigger);
