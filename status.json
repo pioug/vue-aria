@@ -1872,7 +1872,7 @@
     },
     {
       "packageName": "@vue-stately/data",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 3,
       "portedTests": 0,
       "passingTests": 0,
@@ -1880,7 +1880,7 @@
       "snapshotPassing": 0,
       "docsTotal": 0,
       "docsComplete": 0,
-      "hasDeviations": false,
+      "hasDeviations": true,
       "upstreamPackageName": "@react-stately/data",
       "upstreamPath": "packages/@react-stately/data",
       "upstreamUrl": "https://github.com/adobe/react-spectrum/tree/1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1/packages/@react-stately/data"

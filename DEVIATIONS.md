@@ -439,3 +439,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential date-focus/visible-range timing differences until full composable conversion.
 - Removal plan: Replace React hook-based calendar state composition with Vue refs/computed/watch/lifecycle equivalents and port upstream calendar state tests for parity.
+
+- Package: `@vue-stately/data`
+- Upstream reference: `packages/@react-stately/data` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useEffect`, `useReducer`, `useRef`, `useMemo`, `useState`) for async list loading, list filtering, and tree data mutation state handling.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential async update/selection timing differences until full composable conversion.
+- Removal plan: Replace React hook-based data state composition with Vue refs/computed/watch/lifecycle equivalents and port upstream data state tests for parity.
