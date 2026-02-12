@@ -1,13 +1,18 @@
 {
-  "generatedAt": "2026-02-12T17:15:03.334Z",
+  "generatedAt": "2026-02-12T17:16:45.557Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 92,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 91,
+  "availableLeafCount": 11,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
       "upstreamPackageName": "@react-aria/calendar",
       "upstreamPath": "packages/@react-aria/calendar"
+    },
+    {
+      "packageName": "@vue-aria/checkbox",
+      "upstreamPackageName": "@react-aria/checkbox",
+      "upstreamPath": "packages/@react-aria/checkbox"
     },
     {
       "packageName": "@vue-aria/collections",
@@ -30,6 +35,11 @@
       "upstreamPath": "packages/@react-aria/slider"
     },
     {
+      "packageName": "@vue-aria/switch",
+      "upstreamPackageName": "@react-aria/switch",
+      "upstreamPath": "packages/@react-aria/switch"
+    },
+    {
       "packageName": "@vue-aria/textfield",
       "upstreamPackageName": "@react-aria/textfield",
       "upstreamPath": "packages/@react-aria/textfield"
@@ -38,11 +48,6 @@
       "packageName": "@vue-aria/toast",
       "upstreamPackageName": "@react-aria/toast",
       "upstreamPath": "packages/@react-aria/toast"
-    },
-    {
-      "packageName": "@vue-aria/toggle",
-      "upstreamPackageName": "@react-aria/toggle",
-      "upstreamPath": "packages/@react-aria/toggle"
     },
     {
       "packageName": "@vue-aria/tooltip",
