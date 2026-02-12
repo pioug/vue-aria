@@ -536,10 +536,12 @@ export const SearchAutocomplete = defineComponent({
     const formRef = ref<HTMLFormElement | null>(null);
     const loadMoreRequested = ref(false);
     const hasWarnedPlaceholder = ref(false);
+    const showInputLoadingIndicator = ref(false);
     const slotModel = ref<NormalizedSearchAutocompleteSlotModel>({
       items: [],
       entries: [],
     });
+    let inputLoadingTimer: ReturnType<typeof setTimeout> | null = null;
     const isProduction =
       typeof process !== "undefined" && process.env.NODE_ENV === "production";
 
@@ -794,6 +796,10 @@ export const SearchAutocomplete = defineComponent({
 
     onBeforeUnmount(() => {
       detachFormListener();
+      if (inputLoadingTimer !== null) {
+        clearTimeout(inputLoadingTimer);
+        inputLoadingTimer = null;
+      }
     });
 
     watch(
@@ -808,6 +814,79 @@ export const SearchAutocomplete = defineComponent({
     );
     const isLoadingList = computed(
       () => props.loadingState === "loading" || props.loadingState === "loadingMore"
+    );
+    const shouldShowInputLoadingCandidate = computed(() => {
+      if (!isLoadingInput.value) {
+        return false;
+      }
+
+      if (props.loadingState === "loading") {
+        return true;
+      }
+
+      if (props.loadingState === "filtering") {
+        return state.isOpen.value || (props.menuTrigger ?? "input") === "manual";
+      }
+
+      return false;
+    });
+
+    const clearInputLoadingTimer = () => {
+      if (inputLoadingTimer !== null) {
+        clearTimeout(inputLoadingTimer);
+        inputLoadingTimer = null;
+      }
+    };
+
+    const startInputLoadingTimer = () => {
+      clearInputLoadingTimer();
+      showInputLoadingIndicator.value = false;
+      inputLoadingTimer = setTimeout(() => {
+        inputLoadingTimer = null;
+        showInputLoadingIndicator.value = true;
+      }, 500);
+    };
+
+    const syncInputLoadingIndicator = (resetDelay = false) => {
+      if (!shouldShowInputLoadingCandidate.value) {
+        clearInputLoadingTimer();
+        showInputLoadingIndicator.value = false;
+        return;
+      }
+
+      if (showInputLoadingIndicator.value) {
+        return;
+      }
+
+      if (inputLoadingTimer !== null) {
+        if (resetDelay) {
+          startInputLoadingTimer();
+        }
+        return;
+      }
+
+      startInputLoadingTimer();
+    };
+
+    watch(
+      () => shouldShowInputLoadingCandidate.value,
+      () => {
+        syncInputLoadingIndicator();
+      },
+      { immediate: true }
+    );
+
+    watch(
+      () => state.inputValue.value,
+      (nextInputValue, previousInputValue) => {
+        if (nextInputValue === previousInputValue) {
+          return;
+        }
+
+        if (shouldShowInputLoadingCandidate.value && !showInputLoadingIndicator.value) {
+          syncInputLoadingIndicator(true);
+        }
+      }
     );
 
     const shouldShowClearButton = computed(() => {
@@ -1000,7 +1079,7 @@ export const SearchAutocomplete = defineComponent({
           })
         : null;
 
-      const loadingIndicator = isLoadingInput.value
+      const loadingIndicator = showInputLoadingIndicator.value
         ? h(ProgressCircle, {
             isIndeterminate: true,
             size: "S",

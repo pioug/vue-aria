@@ -1007,6 +1007,134 @@ describe("SearchAutocomplete", () => {
     expect(tree.getAllByRole("progressbar").length).toBeGreaterThan(0);
   });
 
+  it("delays input loading indicator and hides it for closed filtering state", async () => {
+    vi.useFakeTimers();
+
+    try {
+      let setLoadingState: ((state: "loading" | "filtering" | "idle") => void) | undefined;
+      let setMenuTrigger: ((trigger: "input" | "manual") => void) | undefined;
+
+      const App = defineComponent({
+        name: "SearchAutocompleteLoadingIndicatorStateApp",
+        setup() {
+          const loadingState = ref<"loading" | "filtering" | "idle">("loading");
+          const menuTrigger = ref<"input" | "manual">("input");
+
+          setLoadingState = (nextState: "loading" | "filtering" | "idle") => {
+            loadingState.value = nextState;
+          };
+          setMenuTrigger = (nextTrigger: "input" | "manual") => {
+            menuTrigger.value = nextTrigger;
+          };
+
+          return () =>
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              loadingState: loadingState.value,
+              menuTrigger: menuTrigger.value,
+            });
+        },
+      });
+
+      const tree = render(App);
+
+      expect(tree.queryByRole("progressbar")).toBeNull();
+      vi.advanceTimersByTime(499);
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      vi.advanceTimersByTime(1);
+      await Promise.resolve();
+      expect(tree.getByRole("progressbar")).toBeTruthy();
+
+      setLoadingState?.("filtering");
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      setMenuTrigger?.("manual");
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      vi.advanceTimersByTime(500);
+      await Promise.resolve();
+      expect(tree.getByRole("progressbar")).toBeTruthy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("cancels pending loading indicator timer when loading ends early", async () => {
+    vi.useFakeTimers();
+
+    try {
+      let setLoadingState: ((state: "loading" | "idle") => void) | undefined;
+
+      const App = defineComponent({
+        name: "SearchAutocompleteLoadingIndicatorCancelApp",
+        setup() {
+          const loadingState = ref<"loading" | "idle">("loading");
+          setLoadingState = (nextState: "loading" | "idle") => {
+            loadingState.value = nextState;
+          };
+
+          return () =>
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              loadingState: loadingState.value,
+              menuTrigger: "manual",
+            });
+        },
+      });
+
+      const tree = render(App);
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      setLoadingState?.("idle");
+      await Promise.resolve();
+
+      vi.advanceTimersByTime(300);
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("resets loading indicator delay when input text changes", async () => {
+    vi.useFakeTimers();
+
+    try {
+      const tree = renderComponent({
+        loadingState: "loading",
+        menuTrigger: "manual",
+      });
+      const input = tree.getByRole("combobox") as HTMLInputElement;
+
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      fireEvent.update(input, "O");
+      await Promise.resolve();
+
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      expect(tree.getByRole("progressbar")).toBeTruthy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("fires onLoadMore when listbox scrolls near the end", () => {
     const onLoadMore = vi.fn();
     const scrollHeightSpy = vi
