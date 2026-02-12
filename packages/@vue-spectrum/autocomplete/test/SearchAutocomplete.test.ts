@@ -320,6 +320,50 @@ describe("SearchAutocomplete", () => {
     expect(input.value).toBe("Two");
   });
 
+  it("fires input interaction callbacks once per user action", async () => {
+    const user = userEvent.setup();
+    const onKeydown = vi.fn();
+    const onFocus = vi.fn();
+    const onInputChange = vi.fn();
+    const onBlur = vi.fn();
+    const App = defineComponent({
+      name: "SearchAutocompleteSingleFireEventsApp",
+      setup() {
+        return () =>
+          h("div", [
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              onKeydown,
+              onFocus,
+              onInputChange,
+              onBlur,
+            }),
+            h("button", { type: "button" }, "Next"),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+    await user.keyboard("w");
+
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(onInputChange).toHaveBeenCalledTimes(1);
+    expect(onBlur).toHaveBeenCalledTimes(0);
+
+    const nextButton = tree.getByRole("button", { name: "Next" });
+    fireEvent.keyDown(input, { key: "Tab" });
+    (nextButton as HTMLElement).focus();
+    fireEvent.keyUp(nextButton as HTMLElement, { key: "Tab" });
+    await Promise.resolve();
+
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
   it("clears input when clear button is pressed", async () => {
     const user = userEvent.setup();
     const onClear = vi.fn();
