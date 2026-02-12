@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T18:05:09.204Z",
+  "generatedAt": "2026-02-12T18:05:55.492Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 52,
-  "availableLeafCount": 18,
+  "incompletePackageCount": 51,
+  "availableLeafCount": 17,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/accordion",
       "upstreamPackageName": "@react-spectrum/accordion",
       "upstreamPath": "packages/@react-spectrum/accordion"
-    },
-    {
-      "packageName": "@vue-spectrum/avatar",
-      "upstreamPackageName": "@react-spectrum/avatar",
-      "upstreamPath": "packages/@react-spectrum/avatar"
     },
     {
       "packageName": "@vue-spectrum/buttongroup",
