@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 5 |
-| Passing tests | 5 |
+| Ported tests | 6 |
+| Passing tests | 6 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -166,7 +166,7 @@
 | @vue-stately/steplist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/steplist | packages/@react-stately/steplist |
 | @vue-stately/table | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/table | packages/@react-stately/table |
 | @vue-stately/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/tabs | packages/@react-stately/tabs |
-| @vue-stately/toast | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/toast | packages/@react-stately/toast |
+| @vue-stately/toast | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/toast | packages/@react-stately/toast |
 | @vue-stately/toggle | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/toggle | packages/@react-stately/toggle |
 | @vue-stately/tooltip | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/tooltip | packages/@react-stately/tooltip |
 | @vue-stately/tree | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/tree | packages/@react-stately/tree |
