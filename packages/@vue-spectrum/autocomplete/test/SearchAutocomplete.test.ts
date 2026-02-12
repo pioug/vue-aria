@@ -616,6 +616,44 @@ describe("SearchAutocomplete", () => {
     expect(input.getAttribute("aria-describedby")).toBeTruthy();
   });
 
+  it("only surfaces native required errors after checkValidity, not on blur alone", async () => {
+    const user = userEvent.setup();
+    const Harness = defineComponent({
+      name: "SearchAutocompleteNativeRequiredBlurHarness",
+      setup() {
+        return () =>
+          h("form", { "data-testid": "form" }, [
+            h(SearchAutocomplete, {
+              label: "Query",
+              defaultItems: items,
+              isRequired: true,
+              validationBehavior: "native",
+            }),
+            h("button", { type: "button" }, "Next"),
+          ]);
+      },
+    });
+    const tree = render(Harness);
+
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const form = tree.getByTestId("form") as HTMLFormElement;
+
+    expect(input.required).toBe(true);
+    expect(input.getAttribute("aria-required")).toBeNull();
+    expect(input.validity.valid).toBe(false);
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+
+    input.focus();
+    await user.tab();
+    expect(input.getAttribute("aria-describedby")).toBeNull();
+
+    form.checkValidity();
+    await nextTick();
+
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(tree.getByText("Constraints not satisfied")).toBeTruthy();
+  });
+
   it("uses aria-required by default and native required when validationBehavior is native", () => {
     const ariaTree = renderComponent({
       isRequired: true,
