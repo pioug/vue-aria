@@ -43,6 +43,7 @@ This tracker is now effectively archived: the React Aria layer is parity-complet
 - [x] `useHover`
 - [x] `useFocus`
 - [x] `useFocusWithin`
+- [x] Focus disabled-transition blur parity (`useFocus`, `useFocusWithin`)
 - [x] `useKeyboard`
 - [x] `useLongPress`
 - [x] `useMove`

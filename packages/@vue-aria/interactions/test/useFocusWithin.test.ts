@@ -147,4 +147,32 @@ describe("useFocusWithin", () => {
     expect(onFocusWithinChange).toHaveBeenNthCalledWith(1, true);
     expect(onFocusWithinChange).toHaveBeenNthCalledWith(2, false);
   });
+
+  it("fires blur when focus moves outside", () => {
+    const events: Array<{ type: string; isFocused?: boolean; target?: EventTarget | null }> = [];
+    const { focusWithinProps } = useFocusWithin({
+      onFocusWithin: (event) => events.push({ type: event.type, target: event.target }),
+      onBlurWithin: (event) => events.push({ type: event.type, target: event.target }),
+      onFocusWithinChange: (isFocused) =>
+        events.push({ type: "focuschange", isFocused }),
+    });
+    const handlers = focusWithinProps as FocusWithinHandlers;
+
+    const parent = document.createElement("div");
+    const child = document.createElement("button");
+    const outside = document.createElement("input");
+    parent.appendChild(child);
+    document.body.appendChild(parent);
+    document.body.appendChild(outside);
+
+    handlers.onFocusin?.(createFocusEvent("focus", child, parent));
+    handlers.onFocusout?.(createFocusEvent("blur", parent, parent, outside));
+
+    expect(events).toEqual([
+      { type: "focus", target: child },
+      { type: "focuschange", isFocused: true },
+      { type: "blur", target: parent },
+      { type: "focuschange", isFocused: false },
+    ]);
+  });
 });

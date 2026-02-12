@@ -1,3 +1,4 @@
+import { nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useFocus } from "../src/useFocus";
 
@@ -86,5 +87,34 @@ describe("useFocus", () => {
     expect(onFocus).not.toHaveBeenCalled();
     expect(onBlur).not.toHaveBeenCalled();
     expect(onFocusChange).not.toHaveBeenCalled();
+  });
+
+  it("fires blur when disabled while focused", async () => {
+    const disabled = ref(false);
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const onFocusChange = vi.fn();
+    const { focusProps } = useFocus({
+      isDisabled: disabled,
+      onFocus,
+      onBlur,
+      onFocusChange,
+    });
+
+    const handlers = focusProps as FocusHandlers;
+    const element = document.createElement("button");
+    document.body.appendChild(element);
+    element.focus();
+
+    handlers.onFocus?.(createFocusEvent("focus", element, element));
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(onBlur).toHaveBeenCalledTimes(0);
+
+    disabled.value = true;
+    await nextTick();
+
+    expect(onBlur).toHaveBeenCalledTimes(1);
+    expect(onFocusChange).toHaveBeenNthCalledWith(1, true);
+    expect(onFocusChange).toHaveBeenNthCalledWith(2, false);
   });
 });

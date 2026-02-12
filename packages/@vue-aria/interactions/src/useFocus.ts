@@ -1,4 +1,4 @@
-import { toValue } from "vue";
+import { ref, toValue, watch } from "vue";
 import type { MaybeReactive } from "@vue-aria/types";
 
 export interface UseFocusOptions {
@@ -28,6 +28,19 @@ function getActiveElement(target: EventTarget | null): Element | null {
 export function useFocus(options: UseFocusOptions = {}): UseFocusResult {
   const isDisabled = () =>
     options.isDisabled ? Boolean(toValue(options.isDisabled)) : false;
+  const isFocused = ref(false);
+  const activeTarget = ref<EventTarget | null>(null);
+
+  const endFocus = (event: FocusEvent) => {
+    if (!isFocused.value) {
+      return;
+    }
+
+    isFocused.value = false;
+    activeTarget.value = null;
+    options.onBlur?.(event);
+    options.onFocusChange?.(false);
+  };
 
   const onBlur = (event: FocusEvent) => {
     if (isDisabled()) {
@@ -38,8 +51,7 @@ export function useFocus(options: UseFocusOptions = {}): UseFocusResult {
       return;
     }
 
-    options.onBlur?.(event);
-    options.onFocusChange?.(false);
+    endFocus(event);
   };
 
   const onFocus = (event: FocusEvent) => {
@@ -56,9 +68,29 @@ export function useFocus(options: UseFocusOptions = {}): UseFocusResult {
       return;
     }
 
+    isFocused.value = true;
+    activeTarget.value = event.target;
     options.onFocus?.(event);
     options.onFocusChange?.(true);
   };
+
+  watch(
+    () => isDisabled(),
+    (disabled) => {
+      if (!disabled || !isFocused.value) {
+        return;
+      }
+
+      const target = activeTarget.value;
+      const syntheticBlur = new FocusEvent("blur", {
+        relatedTarget: null,
+        bubbles: true,
+      });
+      Object.defineProperty(syntheticBlur, "target", { value: target });
+      Object.defineProperty(syntheticBlur, "currentTarget", { value: target });
+      endFocus(syntheticBlur);
+    }
+  );
 
   return {
     focusProps: {
