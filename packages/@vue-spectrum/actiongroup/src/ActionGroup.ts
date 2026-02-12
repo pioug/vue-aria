@@ -13,7 +13,7 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
 import { ActionMenu } from "@vue-spectrum/menu";
@@ -63,6 +63,15 @@ const SCREEN_READER_ONLY_STYLE: Record<string, string> = {
   whiteSpace: "nowrap",
   border: "0",
 };
+
+const ACTION_GROUP_INTL_MESSAGES = {
+  "en-US": {
+    more: "More items",
+  },
+  "fr-FR": {
+    more: "Plus d'elements",
+  },
+} as const;
 
 export interface SpectrumActionGroupProps {
   id?: string | undefined;
@@ -409,6 +418,10 @@ export const ActionGroup = defineComponent({
   },
   setup(props, { attrs, expose, slots }) {
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(
+      ACTION_GROUP_INTL_MESSAGES,
+      "@vue-spectrum/actiongroup"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const itemRefs = new Map<string, ActionButtonHandle | null>();
     const slotItems = ref<SpectrumActionGroupItemData[]>([]);
@@ -745,6 +758,7 @@ export const ActionGroup = defineComponent({
         (propsRecord.ariaLabelledby as string | undefined) ??
         (attrsRecord["aria-labelledby"] as string | undefined) ??
         (attrsRecord.ariaLabelledby as string | undefined);
+      const overflowMenuLabel = stringFormatter.value.format("more");
       const hasOverflowMenu = overflowItems.value.length > 0;
       const collapseToMenuOnly =
         shouldOverflowCollapse.value && hasOverflowMenu && visibleItems.value.length === 0;
@@ -920,11 +934,11 @@ export const ActionGroup = defineComponent({
                     selectedKeys: selectedKeys.value,
                     disabledKeys: disabledKeys.value,
                     isDisabled: isDisabled.value,
-                    triggerLabel: "More",
+                    triggerLabel: overflowMenuLabel,
                     triggerAriaLabel:
                       collapseToMenuOnly
-                        ? (ariaLabelledby ? undefined : ariaLabel ?? "More actions")
-                        : "More actions",
+                        ? (ariaLabelledby ? undefined : ariaLabel ?? overflowMenuLabel)
+                        : overflowMenuLabel,
                     triggerAriaLabelledby:
                       collapseToMenuOnly ? ariaLabelledby : undefined,
                     UNSAFE_className: classNames(

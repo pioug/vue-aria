@@ -423,7 +423,7 @@ describe("ActionGroup", () => {
 
       const buttons = tree.getAllByRole("button");
       expect(buttons).toHaveLength(3);
-      expect(tree.queryByRole("button", { name: "More actions" })).toBeNull();
+      expect(tree.queryByRole("button", { name: "More items" })).toBeNull();
       expect(buttons[0]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
       expect(buttons[1]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
       expect(buttons[2]?.className).toContain("spectrum-ActionGroup-item--iconOnly");
@@ -522,7 +522,7 @@ describe("ActionGroup", () => {
       const buttons = tree.getAllByRole("button");
       expect(buttons).toHaveLength(2);
       expect(buttons[0]?.textContent).toContain("One");
-      expect(buttons[1]?.textContent).toContain("More");
+      expect(buttons[1]?.textContent).toContain("More items");
 
       await user.click(buttons[1] as HTMLElement);
       const menu = tree.getByRole("menu");
@@ -531,6 +531,47 @@ describe("ActionGroup", () => {
 
       await user.click(tree.getByRole("menuitem", { name: "Three" }));
       expect(onAction).toHaveBeenCalledWith("three");
+    } finally {
+      clientWidthSpy.mockRestore();
+      offsetWidthSpy.mockRestore();
+    }
+  });
+
+  it("localizes the overflow menu trigger label with provider locale", async () => {
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionGroup")) {
+          return 220;
+        }
+
+        return 0;
+      });
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-ActionButton")) {
+          return 100;
+        }
+
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent(
+        {
+          overflowMode: "collapse",
+        },
+        {
+          locale: "fr-FR",
+        }
+      );
+      await nextTick();
+      await nextTick();
+
+      const buttons = tree.getAllByRole("button");
+      expect(buttons).toHaveLength(2);
+      expect(buttons[1]?.textContent).toContain("Plus d'elements");
     } finally {
       clientWidthSpy.mockRestore();
       offsetWidthSpy.mockRestore();
