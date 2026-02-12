@@ -200,7 +200,7 @@
 | @vue-types/listbox | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/listbox | packages/@react-types/listbox |
 | @vue-types/menu | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/menu | packages/@react-types/menu |
 | @vue-types/meter | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/meter | packages/@react-types/meter |
-| @vue-types/numberfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/numberfield | packages/@react-types/numberfield |
+| @vue-types/numberfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/numberfield | packages/@react-types/numberfield |
 | @vue-types/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/overlays | packages/@react-types/overlays |
 | @vue-types/progress | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/progress | packages/@react-types/progress |
 | @vue-types/provider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/provider | packages/@react-types/provider |
