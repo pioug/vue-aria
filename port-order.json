@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T18:22:02.541Z",
+  "generatedAt": "2026-02-12T18:22:31.154Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 20,
-  "availableLeafCount": 3,
+  "incompletePackageCount": 19,
+  "availableLeafCount": 2,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
       "upstreamPackageName": "@react-spectrum/button",
       "upstreamPath": "packages/@react-spectrum/button"
-    },
-    {
-      "packageName": "@vue-spectrum/card",
-      "upstreamPackageName": "@react-spectrum/card",
-      "upstreamPath": "packages/@react-spectrum/card"
     },
     {
       "packageName": "@vue-spectrum/s2",

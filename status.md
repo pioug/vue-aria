@@ -86,7 +86,7 @@
 | @vue-spectrum/button | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/button | packages/@react-spectrum/button |
 | @vue-spectrum/buttongroup | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/buttongroup | packages/@react-spectrum/buttongroup |
 | @vue-spectrum/calendar | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/calendar | packages/@react-spectrum/calendar |
-| @vue-spectrum/card | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/card | packages/@react-spectrum/card |
+| @vue-spectrum/card | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/card | packages/@react-spectrum/card |
 | @vue-spectrum/checkbox | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/checkbox | packages/@react-spectrum/checkbox |
 | @vue-spectrum/color | not_started | 6 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/color | packages/@react-spectrum/color |
 | @vue-spectrum/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/combobox | packages/@react-spectrum/combobox |
