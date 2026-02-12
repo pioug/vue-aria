@@ -66,6 +66,7 @@ missing upstream test files = `none`
 4. Docs page and preview are available and reflect the upstream-like API/composition model.
 5. Base component visual parity lane is covered:
 shared docs base styles and aliases are sufficient for usable Spectrum-like appearance.
+and the package is marked `ready` in `SPECTRUM_STYLE_TRACKER.md`.
 6. Quality gates pass (`check`, tests, parity scripts, docs build).
 
 ## Guardrails
@@ -73,6 +74,7 @@ shared docs base styles and aliases are sufficient for usable Spectrum-like appe
 - Avoid status duplication across multiple docs.
 - Treat `SPECTRUM_PORTING_TRACKER.md` as the only canonical checklist.
 - Treat `SPECTRUM_TESTCASE_TRACKER.md` as the canonical upstream parity indicator.
+- Treat `SPECTRUM_STYLE_TRACKER.md` as the canonical style-readiness gate for checked packages.
 - Keep local-only test counts as optional diagnostics (`npm run update:spectrum-case-tracker:diagnostics`), not as primary progress targets.
 - Keep WIP to one package lock at a time in `SPECTRUM_WIP.md`.
 - Update this roadmap only for strategy/priority changes, not granular package counts.

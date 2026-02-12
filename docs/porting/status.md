@@ -18,6 +18,7 @@ This page is the consolidated entry point for migration status and execution mod
 
 - Canonical Spectrum package checklist: `SPECTRUM_PORTING_TRACKER.md`
 - Canonical test-case parity counts: `SPECTRUM_TESTCASE_TRACKER.md`
+- Canonical style readiness gate: `SPECTRUM_STYLE_TRACKER.md`
 - Active package lock and slice discipline: `SPECTRUM_WIP.md`
 - Spectrum strategy/phases and priorities: `/porting/spectrum-roadmap`
 - React Aria completed tracker: `PORTING_TRACKER.md`
@@ -41,7 +42,7 @@ This page is the consolidated entry point for migration status and execution mod
 missing upstream named cases = `0`
 missing upstream test files = `none`
 4. Docs page exists at `docs/spectrum/<pkg>.md` with preview + parity notes.
-5. Base component styling is usable and aligned with the shared Spectrum docs style lane.
+5. Base component styling is usable and aligned with the shared Spectrum docs style lane (`SPECTRUM_STYLE_TRACKER.md` = `ready`).
 6. Package is exported by `@vue-spectrum/vue-spectrum`.
 7. Validation passes:
 

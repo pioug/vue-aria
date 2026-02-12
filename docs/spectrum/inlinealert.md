@@ -9,10 +9,10 @@ import { Content, Header, InlineAlert } from "@vue-spectrum/vue-spectrum";
 ## Preview
 
 <div class="spectrum-preview">
-  <InlineAlert class="spectrum-preview-panel" variant="notice">
-    <Header>Storage almost full</Header>
+  <InlineAlert>
+    <Header>Payment Information</Header>
     <Content>
-      Remove old files or upgrade your storage plan to avoid sync interruptions.
+      Enter your billing address, shipping address, and payment method to complete your purchase.
     </Content>
   </InlineAlert>
 </div>
@@ -109,3 +109,4 @@ The title and content should be localized by the app. Variant icon labels are lo
 ## Notes
 
 - Includes upstream-equivalent alert semantics, variant classes, localized variant icon labels, and `autoFocus` behavior.
+- Style parity is actively being tuned to match upstream visual structure more closely.

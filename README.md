@@ -30,6 +30,7 @@ missing upstream test files = `none`
 - React Aria tracker (completed baseline): `PORTING_TRACKER.md`
 - React Spectrum tracker (canonical package checklist): `SPECTRUM_PORTING_TRACKER.md`
 - React Spectrum test-case tracker (canonical upstream parity counts): `SPECTRUM_TESTCASE_TRACKER.md`
+- React Spectrum style readiness tracker (completion gate): `SPECTRUM_STYLE_TRACKER.md`
 - React Spectrum active WIP lock and slice rules: `SPECTRUM_WIP.md`
 - Strategy/phases and current lane: `docs/porting/spectrum-roadmap.md`
 - Documentation status page: `docs/porting/status.md`

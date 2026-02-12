@@ -12,6 +12,7 @@ const spectrumReferencePath = path.join(
   "@react-spectrum"
 );
 const caseTrackerPath = path.join(root, "SPECTRUM_TESTCASE_TRACKER.md");
+const styleTrackerPath = path.join(root, "SPECTRUM_STYLE_TRACKER.md");
 const umbrellaEntryPath = path.join(
   root,
   "packages",
@@ -134,6 +135,60 @@ function parseCaseTracker(content) {
   return rows;
 }
 
+function parseStyleTracker(content) {
+  const lines = content.split(/\r?\n/);
+  const rows = new Map();
+  let headerIndex = null;
+  let inMatrix = false;
+
+  for (const line of lines) {
+    if (!inMatrix && line.startsWith("| package | status |")) {
+      const header = parseMarkdownTableCells(line);
+      headerIndex = new Map(header.map((name, index) => [name, index]));
+      inMatrix = true;
+      continue;
+    }
+
+    if (!inMatrix) {
+      continue;
+    }
+
+    if (!line.startsWith("|")) {
+      if (rows.size > 0) {
+        break;
+      }
+      continue;
+    }
+
+    if (line.startsWith("| ---")) {
+      continue;
+    }
+
+    if (!headerIndex) {
+      continue;
+    }
+
+    const cells = parseMarkdownTableCells(line);
+    const packageIndex = headerIndex.get("package");
+    const statusIndex = headerIndex.get("status");
+
+    if (packageIndex === undefined || statusIndex === undefined) {
+      continue;
+    }
+
+    const packageCell = cells[packageIndex] ?? "";
+    if (!packageCell.startsWith("`") || !packageCell.endsWith("`")) {
+      continue;
+    }
+
+    rows.set(packageCell.slice(1, -1), {
+      status: cells[statusIndex] ?? "pending",
+    });
+  }
+
+  return rows;
+}
+
 const errors = [];
 
 if (!fs.existsSync(trackerPath)) {
@@ -168,10 +223,19 @@ if (!fs.existsSync(trackerPath)) {
   const caseTrackerRows = fs.existsSync(caseTrackerPath)
     ? parseCaseTracker(readFile(caseTrackerPath))
     : null;
+  const styleTrackerRows = fs.existsSync(styleTrackerPath)
+    ? parseStyleTracker(readFile(styleTrackerPath))
+    : null;
 
   if (!caseTrackerRows) {
     errors.push(
       `Missing testcase tracker file: ${path.relative(root, caseTrackerPath)}`
+    );
+  }
+
+  if (!styleTrackerRows) {
+    errors.push(
+      `Missing style tracker file: ${path.relative(root, styleTrackerPath)}`
     );
   }
 
@@ -230,6 +294,19 @@ if (!fs.existsSync(trackerPath)) {
             `Completed package has missing upstream test files: @react-spectrum/${row.upstream} (${caseParity.missingFiles})`
           );
         }
+      }
+    }
+
+    if (styleTrackerRows) {
+      const styleParity = styleTrackerRows.get(row.upstream);
+      if (!styleParity) {
+        errors.push(
+          `Completed package missing style readiness row: @react-spectrum/${row.upstream}`
+        );
+      } else if (styleParity.status !== "ready") {
+        errors.push(
+          `Completed package style readiness is not ready: @react-spectrum/${row.upstream} (found ${styleParity.status})`
+        );
       }
     }
   }
