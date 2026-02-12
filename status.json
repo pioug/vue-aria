@@ -2307,7 +2307,7 @@
     },
     {
       "packageName": "@vue-types/avatar",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 0,
       "portedTests": 0,
       "passingTests": 0,
