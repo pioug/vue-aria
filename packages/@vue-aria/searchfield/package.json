@@ -1,0 +1,45 @@
+{
+  "name": "@vue-aria/searchfield",
+  "version": "3.8.11",
+  "description": "Vue port of @react-aria/searchfield",
+  "license": "Apache-2.0",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "exports": {
+    "source": "./src/index.ts",
+    "types": [
+      "./dist/types.d.ts",
+      "./src/index.ts"
+    ],
+    "import": "./dist/import.mjs",
+    "require": "./dist/main.js"
+  },
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-aria/i18n": "^3.12.15",
+    "@vue-aria/textfield": "^3.18.4",
+    "@vue-aria/utils": "^3.33.0",
+    "@vue-stately/searchfield": "^3.5.18",
+    "@vue-types/button": "^3.15.0",
+    "@vue-types/searchfield": "^3.6.7",
+    "@vue-types/shared": "^3.33.0",
+    "@swc/helpers": "^0.5.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
+    "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

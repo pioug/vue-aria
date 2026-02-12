@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:37:28.077Z",
+  "generatedAt": "2026-02-12T17:38:37.836Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 77,
-  "availableLeafCount": 7,
+  "incompletePackageCount": 76,
+  "availableLeafCount": 6,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -23,11 +23,6 @@
       "packageName": "@vue-aria/overlays",
       "upstreamPackageName": "@react-aria/overlays",
       "upstreamPath": "packages/@react-aria/overlays"
-    },
-    {
-      "packageName": "@vue-aria/searchfield",
-      "upstreamPackageName": "@react-aria/searchfield",
-      "upstreamPath": "packages/@react-aria/searchfield"
     },
     {
       "packageName": "@vue-aria/selection",

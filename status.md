@@ -54,7 +54,7 @@
 | @vue-aria/overlays | not_started | 11 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/overlays | packages/@react-aria/overlays |
 | @vue-aria/progress | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/progress | packages/@react-aria/progress |
 | @vue-aria/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/radio | packages/@react-aria/radio |
-| @vue-aria/searchfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/searchfield | packages/@react-aria/searchfield |
+| @vue-aria/searchfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/searchfield | packages/@react-aria/searchfield |
 | @vue-aria/select | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/select | packages/@react-aria/select |
 | @vue-aria/selection | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/selection | packages/@react-aria/selection |
 | @vue-aria/separator | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/separator | packages/@react-aria/separator |
