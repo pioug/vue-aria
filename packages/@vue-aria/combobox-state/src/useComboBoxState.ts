@@ -278,11 +278,12 @@ export function useComboBoxState<T extends ListBoxItem>(
   };
 
   const setInputValueInternal = (value: string, shouldNotify: boolean): void => {
+    const previousValue = inputValue.value;
     if (!isInputControlled.value) {
       uncontrolledInputValue.value = value;
     }
 
-    if (shouldNotify) {
+    if (shouldNotify && previousValue !== value) {
       options.onInputChange?.(value);
     }
   };

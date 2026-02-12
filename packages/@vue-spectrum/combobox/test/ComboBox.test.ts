@@ -372,6 +372,29 @@ describe("ComboBox", () => {
     expect(input.value).toBe("");
   });
 
+  it("clears input on blur when value matches a disabled option", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      disabledKeys: ["3"],
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    await user.click(input);
+    await user.type(input, "Three");
+    expect(input.value).toBe("Three");
+
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+    expect(input.value).toBe("");
+  });
+
   it("keeps menu open when clearing input with menuTrigger input", async () => {
     const user = userEvent.setup();
     const tree = renderComponent({
@@ -567,6 +590,30 @@ describe("ComboBox", () => {
 
     expect(onSelectionChange).not.toHaveBeenCalled();
     expect(input.value).toBe("Two");
+  });
+
+  it("does not select the focused item on blur", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button");
+
+    await user.click(button);
+    await user.keyboard("{ArrowDown}");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    fireEvent.blur(input, { relatedTarget: document.body });
+    await Promise.resolve();
+
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(onInputChange).not.toHaveBeenCalled();
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("");
   });
 
   it("updates the input field when controlled inputValue changes", async () => {
