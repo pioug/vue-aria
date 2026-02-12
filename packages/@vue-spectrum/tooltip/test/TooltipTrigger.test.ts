@@ -319,6 +319,26 @@ describe("TooltipTrigger", () => {
     wrapper.unmount();
   });
 
+  it("closes when the page scrolls", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+    });
+
+    const button = wrapper.get("button");
+    await button.trigger("pointerenter", { pointerType: "mouse" });
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    window.dispatchEvent(new Event("scroll"));
+    await flushOverlay();
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
   it("hides when hover leaves even if focused", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mountTooltipTrigger({

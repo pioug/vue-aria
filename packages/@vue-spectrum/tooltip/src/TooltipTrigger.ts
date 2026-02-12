@@ -174,6 +174,9 @@ export const TooltipTrigger = defineComponent({
       offset: 8,
       isOpen,
       shouldUpdatePosition: isOpen,
+      onClose: () => {
+        state.close(true);
+      },
     });
 
     expose({
