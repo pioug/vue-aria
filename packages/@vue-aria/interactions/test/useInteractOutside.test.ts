@@ -118,4 +118,66 @@ describe("useInteractOutside", () => {
     expect(onInteractOutside).not.toHaveBeenCalled();
     scope.stop();
   });
+
+  it("falls back to mouse events when PointerEvent is unavailable", () => {
+    vi.stubGlobal("PointerEvent", undefined);
+
+    try {
+      const onInteractOutside = vi.fn();
+      const onInteractOutsideStart = vi.fn();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+
+      const scope = effectScope();
+      scope.run(() => {
+        useInteractOutside({
+          ref: ref(target),
+          onInteractOutside,
+          onInteractOutsideStart,
+        });
+      });
+
+      target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+      target.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+      expect(onInteractOutside).not.toHaveBeenCalled();
+
+      document.body.dispatchEvent(
+        new MouseEvent("mousedown", { bubbles: true, button: 0 })
+      );
+      document.body.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+      expect(onInteractOutsideStart).toHaveBeenCalledTimes(1);
+      expect(onInteractOutside).toHaveBeenCalledTimes(1);
+      scope.stop();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("ignores emulated mouseup events after touchend in fallback mode", () => {
+    vi.stubGlobal("PointerEvent", undefined);
+
+    try {
+      const onInteractOutside = vi.fn();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+
+      const scope = effectScope();
+      scope.run(() => {
+        useInteractOutside({
+          ref: ref(target),
+          onInteractOutside,
+        });
+      });
+
+      document.body.dispatchEvent(new Event("touchstart", { bubbles: true, cancelable: true }));
+      document.body.dispatchEvent(new Event("touchend", { bubbles: true, cancelable: true }));
+      expect(onInteractOutside).toHaveBeenCalledTimes(1);
+
+      document.body.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+      expect(onInteractOutside).toHaveBeenCalledTimes(1);
+      scope.stop();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 });
