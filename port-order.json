@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:14:58.058Z",
+  "generatedAt": "2026-02-12T18:16:14.293Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 31,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 30,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -23,11 +23,6 @@
       "packageName": "@vue-spectrum/listbox",
       "upstreamPackageName": "@react-spectrum/listbox",
       "upstreamPath": "packages/@react-spectrum/listbox"
-    },
-    {
-      "packageName": "@vue-spectrum/radio",
-      "upstreamPackageName": "@react-spectrum/radio",
-      "upstreamPath": "packages/@react-spectrum/radio"
     },
     {
       "packageName": "@vue-spectrum/s2",
