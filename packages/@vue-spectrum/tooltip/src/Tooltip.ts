@@ -7,6 +7,15 @@ import { useProviderContext } from "@vue-spectrum/provider";
 export type TooltipVariant = "neutral" | "info" | "positive" | "negative";
 export type TooltipPlacement = "top" | "bottom" | "left" | "right" | "start" | "end";
 
+const TOOLTIP_VARIANT_ICON_SYMBOL: Record<
+  Exclude<TooltipVariant, "neutral">,
+  string
+> = {
+  info: "i",
+  positive: "✓",
+  negative: "!",
+};
+
 export interface SpectrumTooltipProps {
   variant?: TooltipVariant | undefined;
   placement?: TooltipPlacement | undefined;
@@ -99,6 +108,9 @@ export const Tooltip = defineComponent({
             : placement;
       const isOpen = Boolean(props.isOpen);
       const showVariantIcon = Boolean(props.showIcon && variant !== "neutral");
+      const iconSymbol = showVariantIcon
+        ? TOOLTIP_VARIANT_ICON_SYMBOL[variant as Exclude<TooltipVariant, "neutral">]
+        : undefined;
       const ariaLabel =
         props.ariaLabel ??
         props["aria-label"] ??
@@ -137,7 +149,7 @@ export const Tooltip = defineComponent({
                   class: classNames("spectrum-Tooltip-typeIcon"),
                   "aria-hidden": "true",
                 },
-                "!"
+                iconSymbol
               )
             : null,
           slots.default
