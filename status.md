@@ -123,7 +123,7 @@
 | @vue-spectrum/steplist | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/steplist | packages/@react-spectrum/steplist |
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
-| @vue-spectrum/switch | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/switch | packages/@react-spectrum/switch |
+| @vue-spectrum/switch | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
 | @vue-spectrum/table | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/table | packages/@react-spectrum/table |
 | @vue-spectrum/tabs | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tabs | packages/@react-spectrum/tabs |
 | @vue-spectrum/tag | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tag | packages/@react-spectrum/tag |

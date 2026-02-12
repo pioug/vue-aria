@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:06:13.454Z",
+  "generatedAt": "2026-02-12T18:06:59.153Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 50,
-  "availableLeafCount": 16,
+  "incompletePackageCount": 49,
+  "availableLeafCount": 15,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/accordion",
@@ -68,11 +68,6 @@
       "packageName": "@vue-spectrum/steplist",
       "upstreamPackageName": "@react-spectrum/steplist",
       "upstreamPath": "packages/@react-spectrum/steplist"
-    },
-    {
-      "packageName": "@vue-spectrum/switch",
-      "upstreamPackageName": "@react-spectrum/switch",
-      "upstreamPath": "packages/@react-spectrum/switch"
     },
     {
       "packageName": "@vue-spectrum/text",
