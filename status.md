@@ -147,7 +147,7 @@
 | @vue-stately/color | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/color | packages/@react-stately/color |
 | @vue-stately/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/combobox | packages/@react-stately/combobox |
 | @vue-stately/data | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/data | packages/@react-stately/data |
-| @vue-stately/datepicker | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/datepicker | packages/@react-stately/datepicker |
+| @vue-stately/datepicker | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/datepicker | packages/@react-stately/datepicker |
 | @vue-stately/disclosure | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
 | @vue-stately/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/dnd | packages/@react-stately/dnd |
 | @vue-stately/flags | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/flags | packages/@react-stately/flags |
