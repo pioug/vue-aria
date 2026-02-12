@@ -32,6 +32,53 @@ function setTrackRect(element: Element, width = 100, height = 100): void {
   });
 }
 
+function createPointerEvent(
+  type: string,
+  init: Partial<PointerEventInit> & {
+    pointerId?: number;
+    pointerType?: "mouse" | "touch" | "pen";
+    pageX?: number;
+    pageY?: number;
+  } = {}
+): PointerEvent {
+  if (typeof PointerEvent !== "undefined") {
+    return new PointerEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      ...init,
+    });
+  }
+
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    button: init.button ?? 0,
+    clientX: init.clientX ?? init.pageX ?? 0,
+    clientY: init.clientY ?? init.pageY ?? 0,
+  });
+
+  Object.defineProperties(event, {
+    pointerId: {
+      value: init.pointerId ?? 1,
+      enumerable: true,
+    },
+    pointerType: {
+      value: init.pointerType ?? "mouse",
+      enumerable: true,
+    },
+    pageX: {
+      value: init.pageX ?? init.clientX ?? 0,
+      enumerable: true,
+    },
+    pageY: {
+      value: init.pageY ?? init.clientY ?? 0,
+      enumerable: true,
+    },
+  });
+
+  return event as unknown as PointerEvent;
+}
+
 describe("RangeSlider", () => {
   it("supports aria-label", () => {
     const wrapper = mount(RangeSlider, {
@@ -252,6 +299,35 @@ describe("RangeSlider", () => {
     expect(inputs[1].attributes("aria-valuetext")).toBe("0");
   });
 
+  it("supports custom formatOptions", async () => {
+    const wrapper = mount(RangeSlider, {
+      props: {
+        label: "The Label",
+        minValue: 0,
+        maxValue: 1,
+        step: 0.01,
+        defaultValue: {
+          start: 0.2,
+          end: 0.6,
+        },
+        formatOptions: { style: "percent" },
+      },
+    });
+
+    const inputs = wrapper.findAll("input[type='range']");
+    expect(wrapper.get("output").text()).toBe("20% \u2013 60%");
+    expect(inputs[0].attributes("aria-valuetext")).toBe("20%");
+    expect(inputs[1].attributes("aria-valuetext")).toBe("60%");
+
+    await inputs[0].setValue("0.3");
+    expect(wrapper.get("output").text()).toBe("30% \u2013 60%");
+    expect(inputs[0].attributes("aria-valuetext")).toBe("30%");
+
+    await inputs[1].setValue("0.7");
+    expect(wrapper.get("output").text()).toBe("30% \u2013 70%");
+    expect(inputs[1].attributes("aria-valuetext")).toBe("70%");
+  });
+
   it("supports startName/endName and form", () => {
     const wrapper = mount(RangeSlider, {
       props: {
@@ -468,5 +544,88 @@ describe("RangeSlider", () => {
     expect((inputs[1].element as HTMLInputElement).value).toBe("70");
     expect(document.activeElement).not.toBe(inputs[0].element);
     expect(document.activeElement).not.toBe(inputs[1].element);
+  });
+
+  it("cannot click and drag handle when disabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeSlider, {
+      props: {
+        label: "The Label",
+        defaultValue: {
+          start: 20,
+          end: 50,
+        },
+        isDisabled: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const controls = wrapper.get(".spectrum-Slider-controls");
+    const handles = wrapper.findAll(".spectrum-Slider-handle");
+    const inputs = wrapper.findAll("input[type='range']");
+    setTrackRect(controls.element, 100, 100);
+    expect(handles).toHaveLength(2);
+
+    await handles[0].trigger("mousedown", { button: 0, clientX: 20, pageX: 20 });
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 10,
+        pageX: 10,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: 10,
+        pageX: 10,
+      })
+    );
+    await nextTick();
+
+    await handles[1].trigger("mousedown", { button: 0, clientX: 50, pageX: 50 });
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerId: 2,
+        pointerType: "mouse",
+        clientX: 60,
+        pageX: 60,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerId: 2,
+        pointerType: "mouse",
+        clientX: 60,
+        pageX: 60,
+      })
+    );
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect((inputs[0].element as HTMLInputElement).value).toBe("20");
+    expect((inputs[1].element as HTMLInputElement).value).toBe("50");
+    expect(document.activeElement).not.toBe(inputs[0].element);
+    expect(document.activeElement).not.toBe(inputs[1].element);
+  });
+
+  it("focuses the first thumb when clicking the label", async () => {
+    const wrapper = mount(RangeSlider, {
+      props: {
+        label: "The Label",
+        defaultValue: {
+          start: 40,
+          end: 70,
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const inputs = wrapper.findAll("input[type='range']");
+    await wrapper.get("label").trigger("click");
+    expect(document.activeElement).toBe(inputs[0].element);
   });
 });
