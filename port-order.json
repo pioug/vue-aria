@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:26:03.984Z",
+  "generatedAt": "2026-02-12T18:26:36.016Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 12,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 11,
+  "availableLeafCount": 4,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/calendar",
@@ -23,11 +23,6 @@
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
-    },
-    {
-      "packageName": "@vue-spectrum/toast",
-      "upstreamPackageName": "@react-spectrum/toast",
-      "upstreamPath": "packages/@react-spectrum/toast"
     }
   ],
   "hasCycles": false,
