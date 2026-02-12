@@ -32,6 +32,7 @@ export {useLoadMoreSentinel, useLoadMoreSentinel as UNSTABLE_useLoadMoreSentinel
 export {useLayoutEffect} from './useLayoutEffect';
 export {useUpdateEffect} from './useUpdateEffect';
 export {useUpdateLayoutEffect} from './useUpdateLayoutEffect';
+export {useValueEffect} from './useValueEffect';
 export {useLabels} from './useLabels';
 export {useDescription} from './useDescription';
 export {focusWithoutScrolling} from './focusWithoutScrolling';
