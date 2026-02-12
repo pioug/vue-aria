@@ -33,7 +33,7 @@
 | @vue-aria/color | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/color | packages/@react-aria/color |
 | @vue-aria/combobox | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/combobox | packages/@react-aria/combobox |
 | @vue-aria/datepicker | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/datepicker | packages/@react-aria/datepicker |
-| @vue-aria/dialog | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/dialog | packages/@react-aria/dialog |
+| @vue-aria/dialog | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/dialog | packages/@react-aria/dialog |
 | @vue-aria/disclosure | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/disclosure | packages/@react-aria/disclosure |
 | @vue-aria/dnd | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/dnd | packages/@react-aria/dnd |
 | @vue-aria/example-theme | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/example-theme | packages/@react-aria/example-theme |

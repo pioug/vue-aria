@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T17:57:04.194Z",
+  "generatedAt": "2026-02-12T17:57:48.559Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 61,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 60,
+  "availableLeafCount": 4,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/dialog",
-      "upstreamPackageName": "@react-aria/dialog",
-      "upstreamPath": "packages/@react-aria/dialog"
-    },
     {
       "packageName": "@vue-aria/dnd",
       "upstreamPackageName": "@react-aria/dnd",
