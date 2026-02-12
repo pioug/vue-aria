@@ -1,13 +1,38 @@
 {
-  "generatedAt": "2026-02-12T13:52:47.086Z",
+  "generatedAt": "2026-02-12T15:00:18.935Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 187,
-  "availableLeafCount": 40,
+  "incompletePackageCount": 185,
+  "availableLeafCount": 44,
   "availableLeaves": [
     {
-      "packageName": "@vue-aria/utils",
-      "upstreamPackageName": "@react-aria/utils",
-      "upstreamPath": "packages/@react-aria/utils"
+      "packageName": "@vue-aria/i18n",
+      "upstreamPackageName": "@react-aria/i18n",
+      "upstreamPath": "packages/@react-aria/i18n"
+    },
+    {
+      "packageName": "@vue-aria/interactions",
+      "upstreamPackageName": "@react-aria/interactions",
+      "upstreamPath": "packages/@react-aria/interactions"
+    },
+    {
+      "packageName": "@vue-aria/label",
+      "upstreamPackageName": "@react-aria/label",
+      "upstreamPath": "packages/@react-aria/label"
+    },
+    {
+      "packageName": "@vue-aria/landmark",
+      "upstreamPackageName": "@react-aria/landmark",
+      "upstreamPath": "packages/@react-aria/landmark"
+    },
+    {
+      "packageName": "@vue-aria/separator",
+      "upstreamPackageName": "@react-aria/separator",
+      "upstreamPath": "packages/@react-aria/separator"
+    },
+    {
+      "packageName": "@vue-spectrum/story-utils",
+      "upstreamPackageName": "@react-spectrum/story-utils",
+      "upstreamPath": "packages/@react-spectrum/story-utils"
     },
     {
       "packageName": "@vue-spectrum/test-utils",
@@ -43,11 +68,6 @@
       "packageName": "@vue-stately/virtualizer",
       "upstreamPackageName": "@react-stately/virtualizer",
       "upstreamPath": "packages/@react-stately/virtualizer"
-    },
-    {
-      "packageName": "@vue-types/actionbar",
-      "upstreamPackageName": "@react-types/actionbar",
-      "upstreamPath": "packages/@react-types/actionbar"
     },
     {
       "packageName": "@vue-types/actiongroup",
