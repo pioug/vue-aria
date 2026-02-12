@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { computed, defineComponent, h, nextTick, type PropType } from "vue";
+import { computed, defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { describe, expect, it } from "vitest";
 import { mergeProps } from "@vue-aria/utils";
 import { useField } from "@vue-aria/label";
@@ -108,6 +108,30 @@ describe("Field", () => {
     expect(input.attributes("aria-describedby")).toBeUndefined();
   });
 
+  it("supports a ref", () => {
+    const fieldRef = ref<{ $el?: Element } | null>(null);
+    const App = defineComponent({
+      name: "FieldRefHarness",
+      setup() {
+        return () =>
+          h(
+            Field,
+            {
+              ref: fieldRef,
+              label: "Field label",
+            },
+            {
+              default: () => h("input", { type: "text" }),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(App);
+    const fieldRoot = wrapper.get(".spectrum-Field").element;
+    expect(fieldRef.value?.$el).toBe(fieldRoot);
+  });
+
   it("supports contextualHelp", () => {
     const wrapper = renderField({ contextualHelp: true });
 
@@ -147,7 +171,7 @@ describe("Field", () => {
     );
   });
 
-  it("renders description help text and wires aria-describedby", () => {
+  it("renders when description is provided", () => {
     const wrapper = renderField({ description: "Help text" });
 
     const helpText = wrapper.get(".spectrum-HelpText-text");
@@ -157,7 +181,9 @@ describe("Field", () => {
     expect(input.attributes("aria-describedby")).toBe(helpText.attributes("id"));
   });
 
-  it("shows description when description and error message are provided but not invalid", () => {
+  it(
+    "renders when description and error message are provided but validationState is not invalid",
+    () => {
     const wrapper = renderField({
       description: "Help text",
       errorMessage: "Error message",
@@ -165,18 +191,22 @@ describe("Field", () => {
 
     expect(wrapper.text()).toContain("Help text");
     expect(wrapper.text()).not.toContain("Error message");
-  });
+    }
+  );
 
-  it("shows description when invalid without an error message", () => {
+  it(
+    "renders when description is provided and validationState is invalid but no error message is provided",
+    () => {
     const wrapper = renderField({
       description: "Help text",
       validationState: "invalid",
     });
 
     expect(wrapper.text()).toContain("Help text");
-  });
+    }
+  );
 
-  it("does not render description when none is provided", () => {
+  it("does not render when no description is provided", () => {
     const wrapper = renderField();
     expect(wrapper.find(".spectrum-HelpText-text").exists()).toBe(false);
 
@@ -184,7 +214,7 @@ describe("Field", () => {
     expect(input.attributes("aria-describedby")).toBeUndefined();
   });
 
-  it("renders description when no visible label is provided", () => {
+  it("renders when no visible label is provided", () => {
     const wrapper = renderField({
       label: null,
       ariaLabel: "Field label",
@@ -198,7 +228,7 @@ describe("Field", () => {
     expect(input.attributes("aria-describedby")).toBe(helpText.attributes("id"));
   });
 
-  it("renders error message when invalid", () => {
+  it("renders when error message is provided and validationState is invalid", () => {
     const wrapper = renderField({
       errorMessage: "Error message",
       validationState: "invalid",
@@ -211,7 +241,7 @@ describe("Field", () => {
     expect(input.attributes("aria-describedby")).toBe(errorText.attributes("id"));
   });
 
-  it("does not render error message when not invalid", () => {
+  it("does not render when error message is provided but validationState is not invalid", () => {
     const wrapper = renderField({
       errorMessage: "Error message",
     });
@@ -220,9 +250,22 @@ describe("Field", () => {
     expect(wrapper.get("input").attributes("aria-describedby")).toBeUndefined();
   });
 
-  it("does not lose focus when validation state changes", async () => {
+  it("does not render when validationState is invalid but no error message is provided", () => {
+    const wrapper = renderField({
+      validationState: "invalid",
+    });
+
+    expect(wrapper.find(".spectrum-HelpText-text").exists()).toBe(false);
+    expect(wrapper.get("input").attributes("aria-describedby")).toBeUndefined();
+  });
+
+  it("does not lose focus when no visible label and validation state changes", async () => {
     const wrapper = mount(ExampleField, {
       attachTo: document.body,
+      props: {
+        label: null,
+        ariaLabel: "Field label",
+      },
     });
 
     const input = wrapper.get("input");
