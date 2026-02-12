@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T18:01:15.420Z",
+  "generatedAt": "2026-02-12T18:02:21.309Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 56,
-  "availableLeafCount": 3,
+  "incompletePackageCount": 55,
+  "availableLeafCount": 2,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/dnd",
-      "upstreamPackageName": "@react-aria/dnd",
-      "upstreamPath": "packages/@react-aria/dnd"
-    },
     {
       "packageName": "@vue-spectrum/provider",
       "upstreamPackageName": "@react-spectrum/provider",
