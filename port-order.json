@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T15:25:41.624Z",
+  "generatedAt": "2026-02-12T15:26:43.286Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 166,
+  "incompletePackageCount": 165,
   "availableLeafCount": 37,
   "availableLeaves": [
     {
@@ -140,11 +140,6 @@
       "upstreamPath": "packages/@react-types/dialog"
     },
     {
-      "packageName": "@vue-types/grid",
-      "upstreamPackageName": "@react-types/grid",
-      "upstreamPath": "packages/@react-types/grid"
-    },
-    {
       "packageName": "@vue-types/illustratedmessage",
       "upstreamPackageName": "@react-types/illustratedmessage",
       "upstreamPath": "packages/@react-types/illustratedmessage"
@@ -178,6 +173,11 @@
       "packageName": "@vue-types/select",
       "upstreamPackageName": "@react-types/select",
       "upstreamPath": "packages/@react-types/select"
+    },
+    {
+      "packageName": "@vue-types/table",
+      "upstreamPackageName": "@react-types/table",
+      "upstreamPath": "packages/@react-types/table"
     },
     {
       "packageName": "@vue-types/textfield",
