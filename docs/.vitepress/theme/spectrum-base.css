@@ -386,6 +386,15 @@
   font-size: 0.8rem;
 }
 
+.spectrum-docs-provider :is(
+  .spectrum-TreeView-description,
+  .spectrum-TreeView-empty,
+  .spectrum-TreeView-itemContent
+) {
+  color: var(--spectrum-ui-text-muted);
+  font-size: 0.8rem;
+}
+
 .spectrum-docs-provider .react-spectrum-Calendar-wrapper {
   display: inline-grid;
   gap: 0.35rem;
@@ -945,6 +954,25 @@
   display: none;
 }
 
+.spectrum-docs-provider .spectrum-Tooltip--bottom {
+  margin-top: 0.3rem;
+}
+
+.spectrum-docs-provider .spectrum-Tooltip--left {
+  margin-inline-end: 0.3rem;
+}
+
+.spectrum-docs-provider .spectrum-Tooltip--right {
+  margin-inline-start: 0.3rem;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-ToastContainer, .spectrum-ToastContainer) {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  pointer-events: none;
+}
+
 .spectrum-docs-provider .spectrum-ToastContainer-list {
   position: fixed;
   right: 1rem;
@@ -956,10 +984,27 @@
   padding: 0;
   display: grid;
   gap: 0.45rem;
+  pointer-events: auto;
 }
 
 .spectrum-docs-provider .spectrum-ToastContainer-listitem {
   margin: 0;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-ToastContainer, .spectrum-ToastContainer)[data-position="top"] .spectrum-ToastContainer-list {
+  top: 1rem;
+  bottom: auto;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-ToastContainer, .spectrum-ToastContainer)[data-placement="start"] .spectrum-ToastContainer-list {
+  left: 1rem;
+  right: auto;
+}
+
+.spectrum-docs-provider :is(.react-spectrum-ToastContainer, .spectrum-ToastContainer)[data-placement="center"] .spectrum-ToastContainer-list {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
 }
 
 .spectrum-docs-provider .spectrum-Toast {
@@ -1282,6 +1327,18 @@
   margin: 0.55rem 0;
 }
 
+.spectrum-docs-provider .spectrum-Rule--small {
+  margin: 0.35rem 0;
+}
+
+.spectrum-docs-provider .spectrum-Rule--medium {
+  margin: 0.55rem 0;
+}
+
+.spectrum-docs-provider .spectrum-Rule--large {
+  margin: 0.85rem 0;
+}
+
 .spectrum-docs-provider .spectrum-Rule--vertical {
   border: 0;
   border-inline-start: 1px solid var(--spectrum-ui-border-soft);
@@ -1327,6 +1384,10 @@
 
 .spectrum-docs-provider .spectrum-StatusLight--info::before {
   background: #1473e6;
+}
+
+.spectrum-docs-provider .spectrum-StatusLight--celery::before {
+  background: #478500;
 }
 
 .spectrum-docs-provider .spectrum-StatusLight.is-disabled {
@@ -1492,6 +1553,10 @@
   margin-top: 0.4rem;
 }
 
+.spectrum-docs-provider .spectrum-Popover--bottom {
+  margin-top: 0.3rem;
+}
+
 .spectrum-docs-provider .spectrum-Popover-tip {
   color: var(--spectrum-ui-border-soft);
 }
@@ -1620,6 +1685,33 @@
   border-color: rgba(20, 115, 230, 0.35);
 }
 
+.spectrum-docs-provider .spectrum-Steplist--vertical {
+  grid-auto-flow: row;
+}
+
+.spectrum-docs-provider .spectrum-Steplist--small .spectrum-Steplist-link {
+  min-height: 1.9rem;
+  padding: 0.28rem 0.45rem;
+}
+
+.spectrum-docs-provider .spectrum-Steplist--medium .spectrum-Steplist-link {
+  min-height: 2.1rem;
+}
+
+.spectrum-docs-provider .spectrum-Steplist--large .spectrum-Steplist-link {
+  min-height: 2.35rem;
+  padding: 0.5rem 0.65rem;
+}
+
+.spectrum-docs-provider .spectrum-Steplist--xlarge .spectrum-Steplist-link {
+  min-height: 2.7rem;
+  padding: 0.58rem 0.75rem;
+}
+
+.spectrum-docs-provider .spectrum-Steplist--emphasized .spectrum-Steplist-link.is-selected {
+  background: rgba(20, 115, 230, 0.14);
+}
+
 /* Parity aliases for spectrum-* class variants */
 
 .spectrum-docs-provider :is(
@@ -1691,6 +1783,11 @@
 }
 
 .spectrum-docs-provider [class*="spectrum-Icon--size"] {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.spectrum-docs-provider .spectrum-Icon--size {
   width: 1.1rem;
   height: 1.1rem;
 }
@@ -2102,7 +2199,6 @@
 }
 
 .spectrum-docs-provider .spectrum-DialogOverlay,
-.spectrum-docs-provider .spectrum-Modal,
 .spectrum-docs-provider .spectrum-Modal-wrapper,
 .spectrum-docs-provider .spectrum-Popover-wrapper,
 .spectrum-docs-provider .spectrum-Tray-wrapper {
@@ -2117,6 +2213,25 @@
   position: absolute;
   inset: 0;
   background: rgba(15, 23, 42, 0.36);
+}
+
+.spectrum-docs-provider .spectrum-Modal {
+  position: relative;
+  z-index: 1;
+  width: min(38rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  border: 1px solid var(--spectrum-ui-border);
+  border-radius: 12px;
+  background: var(--spectrum-ui-bg-raised);
+  box-shadow: var(--spectrum-ui-shadow);
+  color: var(--spectrum-ui-text);
+}
+
+.spectrum-docs-provider .spectrum-Modal--fullscreen {
+  width: calc(100vw - 1rem);
+  height: calc(100vh - 1rem);
+  max-height: none;
 }
 
 .spectrum-docs-provider :is(.spectrum-Dialog, .spectrum-ContextualHelp-dialog) {
@@ -2500,6 +2615,9 @@
 .spectrum-docs-provider :is(
   .spectrum-ClearButton--,
   .spectrum-LogicButton--,
+  .spectrum-button-icon,
+  .spectrum-button-spinner,
+  .spectrum-button-text,
   .spectrum-Dialog--,
   .spectrum-DialogOverlay--,
   .spectrum-Modal--,
@@ -2513,7 +2631,9 @@
   .spectrum-Tooltip--,
   .spectrum-StatusLight--,
   .spectrum-HelpText--,
-  .spectrum-ColorSwatch--
+  .spectrum-ColorSwatch--,
+  .spectrum-Toast--,
+  .spectrum-toast
 ) {
   color: inherit;
 }
