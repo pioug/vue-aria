@@ -124,7 +124,7 @@
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
 | @vue-spectrum/switch | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
-| @vue-spectrum/table | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/table | packages/@react-spectrum/table |
+| @vue-spectrum/table | complete | 8 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/table | packages/@react-spectrum/table |
 | @vue-spectrum/tabs | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tabs | packages/@react-spectrum/tabs |
 | @vue-spectrum/tag | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
 | @vue-spectrum/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/test-utils | packages/@react-spectrum/test-utils |
