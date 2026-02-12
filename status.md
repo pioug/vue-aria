@@ -210,7 +210,7 @@
 | @vue-types/shared | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/shared | packages/@react-types/shared |
 | @vue-types/sidenav | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/sidenav | packages/@react-types/sidenav |
 | @vue-types/slider | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/slider | packages/@react-types/slider |
-| @vue-types/statuslight | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/statuslight | packages/@react-types/statuslight |
+| @vue-types/statuslight | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/statuslight | packages/@react-types/statuslight |
 | @vue-types/switch | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/switch | packages/@react-types/switch |
 | @vue-types/table | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/table | packages/@react-types/table |
 | @vue-types/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tabs | packages/@react-types/tabs |

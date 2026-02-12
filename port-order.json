@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:09:04.264Z",
+  "generatedAt": "2026-02-12T15:10:10.713Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 178,
-  "availableLeafCount": 37,
+  "incompletePackageCount": 177,
+  "availableLeafCount": 36,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -158,11 +158,6 @@
       "packageName": "@vue-types/slider",
       "upstreamPackageName": "@react-types/slider",
       "upstreamPath": "packages/@react-types/slider"
-    },
-    {
-      "packageName": "@vue-types/statuslight",
-      "upstreamPackageName": "@react-types/statuslight",
-      "upstreamPath": "packages/@react-types/statuslight"
     },
     {
       "packageName": "@vue-types/switch",
