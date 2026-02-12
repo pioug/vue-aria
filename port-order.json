@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:12:58.827Z",
+  "generatedAt": "2026-02-12T18:13:35.505Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 35,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 34,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/button",
@@ -43,11 +43,6 @@
       "packageName": "@vue-spectrum/steplist",
       "upstreamPackageName": "@react-spectrum/steplist",
       "upstreamPath": "packages/@react-spectrum/steplist"
-    },
-    {
-      "packageName": "@vue-spectrum/tooltip",
-      "upstreamPackageName": "@react-spectrum/tooltip",
-      "upstreamPath": "packages/@react-spectrum/tooltip"
     }
   ],
   "hasCycles": false,

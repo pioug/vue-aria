@@ -135,7 +135,7 @@
 | @vue-spectrum/theme-express | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/theme-express | packages/@react-spectrum/theme-express |
 | @vue-spectrum/theme-light | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/theme-light | packages/@react-spectrum/theme-light |
 | @vue-spectrum/toast | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/toast | packages/@react-spectrum/toast |
-| @vue-spectrum/tooltip | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tooltip | packages/@react-spectrum/tooltip |
+| @vue-spectrum/tooltip | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tooltip | packages/@react-spectrum/tooltip |
 | @vue-spectrum/tree | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tree | packages/@react-spectrum/tree |
 | @vue-spectrum/utils | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/utils | packages/@react-spectrum/utils |
 | @vue-spectrum/view | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/view | packages/@react-spectrum/view |
