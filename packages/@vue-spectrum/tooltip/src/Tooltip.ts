@@ -2,9 +2,10 @@ import { defineComponent, h, ref, type PropType } from "vue";
 import { useTooltip } from "@vue-aria/tooltip";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
+import { useProviderContext } from "@vue-spectrum/provider";
 
 export type TooltipVariant = "neutral" | "info" | "positive" | "negative";
-export type TooltipPlacement = "top" | "bottom" | "left" | "right";
+export type TooltipPlacement = "top" | "bottom" | "left" | "right" | "start" | "end";
 
 export interface SpectrumTooltipProps {
   variant?: TooltipVariant | undefined;
@@ -67,6 +68,7 @@ export const Tooltip = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const elementRef = ref<HTMLElement | null>(null);
     const { tooltipProps } = useTooltip({});
+    const provider = useProviderContext();
 
     expose({
       UNSAFE_getDOMNode: () => elementRef.value,
@@ -84,6 +86,17 @@ export const Tooltip = defineComponent({
       const mergedProps = mergeProps(domProps, tooltipProps.value);
       const variant = props.variant ?? "neutral";
       const placement = props.placement ?? "top";
+      const direction = provider?.value.direction ?? "ltr";
+      const resolvedPlacement =
+        placement === "start"
+          ? direction === "rtl"
+            ? "right"
+            : "left"
+          : placement === "end"
+            ? direction === "rtl"
+              ? "left"
+              : "right"
+            : placement;
       const isOpen = Boolean(props.isOpen);
       const showVariantIcon = Boolean(props.showIcon && variant !== "neutral");
       const ariaLabel =
@@ -104,10 +117,10 @@ export const Tooltip = defineComponent({
           class: classNames(
             "spectrum-Tooltip",
             `spectrum-Tooltip--${variant}`,
-            `spectrum-Tooltip--${placement}`,
+            `spectrum-Tooltip--${resolvedPlacement}`,
             {
               "is-open": isOpen,
-              [`is-open--${placement}`]: isOpen,
+              [`is-open--${resolvedPlacement}`]: isOpen,
             },
             styleProps.class as ClassValue | undefined,
             domProps.class as ClassValue | undefined

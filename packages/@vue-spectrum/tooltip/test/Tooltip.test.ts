@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, ref } from "vue";
 import { describe, expect, it } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Tooltip } from "../src";
 
 describe("Tooltip", () => {
@@ -61,5 +62,54 @@ describe("Tooltip", () => {
     const wrapper = mount(App);
     const tooltip = wrapper.get("[role=\"tooltip\"]");
     expect(tooltipRef.value?.UNSAFE_getDOMNode()).toBe(tooltip.element);
+  });
+
+  it("maps start/end placement to logical left/right in LTR", () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+      },
+      slots: {
+        default: () =>
+          h(
+            Tooltip,
+            {
+              isOpen: true,
+              placement: "start",
+            },
+            {
+              default: () => "This is a tooltip",
+            }
+          ),
+      },
+    });
+
+    const tooltip = wrapper.get("[role=\"tooltip\"]");
+    expect(tooltip.classes()).toContain("spectrum-Tooltip--left");
+  });
+
+  it("maps start/end placement to logical right/left in RTL", () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        direction: "rtl",
+      },
+      slots: {
+        default: () =>
+          h(
+            Tooltip,
+            {
+              isOpen: true,
+              placement: "start",
+            },
+            {
+              default: () => "This is a tooltip",
+            }
+          ),
+      },
+    });
+
+    const tooltip = wrapper.get("[role=\"tooltip\"]");
+    expect(tooltip.classes()).toContain("spectrum-Tooltip--right");
   });
 });

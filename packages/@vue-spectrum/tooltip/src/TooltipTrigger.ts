@@ -35,7 +35,7 @@ interface TooltipTriggerStateLike {
   close: (immediate?: boolean) => void;
 }
 
-type TooltipPlacement = "top" | "bottom" | "left" | "right";
+type TooltipPlacement = "top" | "bottom" | "left" | "right" | "start" | "end";
 
 function normalizeChildren(nodes: VNodeChild[] | undefined): VNode[] {
   if (!nodes) {
@@ -78,7 +78,14 @@ function toHTMLElement(value: unknown): HTMLElement | null {
 }
 
 function isTooltipPlacement(value: unknown): value is TooltipPlacement {
-  return value === "top" || value === "bottom" || value === "left" || value === "right";
+  return (
+    value === "top" ||
+    value === "bottom" ||
+    value === "left" ||
+    value === "right" ||
+    value === "start" ||
+    value === "end"
+  );
 }
 
 export const TooltipTrigger = defineComponent({
