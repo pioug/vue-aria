@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Form } from "@vue-spectrum/form";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Item, Tag, TagGroup, type SpectrumTagItemData } from "../src";
 
 const items: SpectrumTagItemData[] = [
@@ -526,6 +527,87 @@ describe("TagGroup", () => {
     } finally {
       rectSpy.mockRestore();
     }
+  });
+
+  it("localizes maxRows toggle labels from provider locale", async () => {
+    const user = userEvent.setup();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.classList.contains("spectrum-Tag")) {
+          const text = this.textContent ?? "";
+          if (text.includes("Tag 1") || text.includes("Tag 2")) {
+            return { top: 10 } as DOMRect;
+          }
+          if (text.includes("Tag 3") || text.includes("Tag 4")) {
+            return { top: 20 } as DOMRect;
+          }
+          if (text.includes("Tag 5") || text.includes("Tag 6")) {
+            return { top: 30 } as DOMRect;
+          }
+          if (text.includes("Tag 7")) {
+            return { top: 40 } as DOMRect;
+          }
+        }
+
+        return { top: 0 } as DOMRect;
+      });
+
+    try {
+      const sevenItems: SpectrumTagItemData[] = [
+        { key: "1", label: "Tag 1" },
+        { key: "2", label: "Tag 2" },
+        { key: "3", label: "Tag 3" },
+        { key: "4", label: "Tag 4" },
+        { key: "5", label: "Tag 5" },
+        { key: "6", label: "Tag 6" },
+        { key: "7", label: "Tag 7" },
+      ];
+
+      const tree = render(Provider, {
+        props: {
+          theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+          locale: "fr-FR",
+        },
+        slots: {
+          default: () =>
+            h(TagGroup, {
+              items: sevenItems,
+              maxRows: 2,
+              "aria-label": "tag group",
+            }),
+        },
+      });
+
+      await nextTick();
+      await nextTick();
+
+      const toggle = tree.getByRole("button", { name: "Tout afficher (7)" });
+      expect(toggle).toBeTruthy();
+
+      await user.click(toggle);
+      expect(tree.getByRole("button", { name: "Afficher moins" })).toBeTruthy();
+    } finally {
+      rectSpy.mockRestore();
+    }
+  });
+
+  it("localizes default empty state text from provider locale", () => {
+    const tree = render(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(TagGroup, {
+            items: [],
+            "aria-label": "tag group",
+          }),
+      },
+    });
+
+    expect(tree.getByText("Aucun")).toBeTruthy();
   });
 
   it("supports action button and labels the action group", async () => {

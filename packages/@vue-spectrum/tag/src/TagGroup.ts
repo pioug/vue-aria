@@ -11,7 +11,7 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import {
@@ -272,6 +272,25 @@ function areTagItemsEqual(
   return true;
 }
 
+function formatTagCountLabel(template: string, tagCount: number): string {
+  return template.replace("{tagCount}", String(tagCount));
+}
+
+const TAG_GROUP_INTL_MESSAGES = {
+  "en-US": {
+    showAllButtonLabel: "Show all ({tagCount})",
+    hideButtonLabel: "Show less",
+    actions: "Actions",
+    noTags: "None",
+  },
+  "fr-FR": {
+    showAllButtonLabel: "Tout afficher ({tagCount})",
+    hideButtonLabel: "Afficher moins",
+    actions: "Actions",
+    noTags: "Aucun",
+  },
+} as const;
+
 export const TagGroup = defineComponent({
   name: "TagGroup",
   inheritAttrs: false,
@@ -399,6 +418,7 @@ export const TagGroup = defineComponent({
   },
   setup(props, { attrs, expose, slots }) {
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(TAG_GROUP_INTL_MESSAGES);
     const formValidationErrors = useFormValidationErrors();
     const rootRef = ref<HTMLDivElement | null>(null);
     const gridRef = ref<HTMLDivElement | null>(null);
@@ -679,12 +699,15 @@ export const TagGroup = defineComponent({
           : hasOverflowFromMaxRows
             ? items.value.slice(0, measuredCollapsedCount.value ?? items.value.length)
             : items.value;
-      const showAllLabel = `Show all (${items.value.length})`;
-      const showLessLabel = "Show less";
+      const showAllLabel = formatTagCountLabel(
+        stringFormatter.value.format("showAllButtonLabel"),
+        items.value.length
+      );
+      const showLessLabel = stringFormatter.value.format("hideButtonLabel");
       const showActions = hasOverflowFromMaxRows || Boolean(props.actionLabel);
       const emptyStateContent = props.renderEmptyState
         ? props.renderEmptyState()
-        : props.emptyStateLabel ?? "No tags";
+        : props.emptyStateLabel ?? stringFormatter.value.format("noTags");
       const normalizedEmptyStateContent =
         emptyStateContent === null || emptyStateContent === undefined
           ? ""
@@ -838,7 +861,7 @@ export const TagGroup = defineComponent({
                   id: actionGroupId.value,
                   role: "group",
                   class: classNames("spectrum-Tags-actions"),
-                  "aria-label": "Actions",
+                  "aria-label": stringFormatter.value.format("actions"),
                   "aria-labelledby": `${gridId.value} ${actionGroupId.value}`,
                 },
                 [
