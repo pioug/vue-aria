@@ -488,3 +488,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential ref/render behavior differences until full component conversion.
 - Removal plan: Replace React forwardRef/JSX rendering with Vue component + template-ref equivalents and port upstream divider tests for parity.
+
+- Package: `@vue-spectrum/well`
+- Upstream reference: `packages/@react-spectrum/well` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime rendering/ref semantics (`forwardRef`, JSX rendering) in the well component implementation.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential ref/render behavior differences until full component conversion.
+- Removal plan: Replace React forwardRef/JSX rendering with Vue component + template-ref equivalents and port upstream well tests for parity.

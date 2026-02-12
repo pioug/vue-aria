@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T17:04:34.704Z",
+  "generatedAt": "2026-02-12T17:05:47.579Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 99,
-  "availableLeafCount": 4,
+  "incompletePackageCount": 98,
+  "availableLeafCount": 3,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
       "upstreamPackageName": "@react-aria/interactions",
       "upstreamPath": "packages/@react-aria/interactions"
-    },
-    {
-      "packageName": "@vue-spectrum/well",
-      "upstreamPackageName": "@react-spectrum/well",
-      "upstreamPath": "packages/@react-spectrum/well"
     },
     {
       "packageName": "@vue-stately/datepicker",
