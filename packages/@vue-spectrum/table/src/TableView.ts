@@ -5,6 +5,7 @@ import {
   nextTick,
   onMounted,
   ref,
+  shallowRef,
   watch,
   type PropType,
 } from "vue";
@@ -26,6 +27,7 @@ import type {
   NormalizedSpectrumTableCell,
   NormalizedSpectrumTableColumn,
   NormalizedSpectrumTableRow,
+  ParsedSpectrumTableDefinition,
   SpectrumSortDescriptor,
   SpectrumTableCellData,
   SpectrumTableColumnData,
@@ -50,6 +52,64 @@ const FOCUSABLE_ROW_SELECTOR = [
   "[tabindex]:not([tabindex=\"-1\"]):not([disabled])",
   "[contenteditable=\"true\"]",
 ].join(",");
+
+function areParsedTableDefinitionsEqual(
+  left: ParsedSpectrumTableDefinition | null,
+  right: ParsedSpectrumTableDefinition | null
+): boolean {
+  if (left === right) {
+    return true;
+  }
+
+  if (!left || !right) {
+    return left === right;
+  }
+
+  if (left.columns.length !== right.columns.length || left.rows.length !== right.rows.length) {
+    return false;
+  }
+
+  for (let columnIndex = 0; columnIndex < left.columns.length; columnIndex += 1) {
+    const current = left.columns[columnIndex];
+    const candidate = right.columns[columnIndex];
+    if (
+      current.key !== candidate.key ||
+      current.textValue !== candidate.textValue ||
+      current.allowsSorting !== candidate.allowsSorting ||
+      current.isRowHeader !== candidate.isRowHeader ||
+      current.colSpan !== candidate.colSpan
+    ) {
+      return false;
+    }
+  }
+
+  for (let rowIndex = 0; rowIndex < left.rows.length; rowIndex += 1) {
+    const current = left.rows[rowIndex];
+    const candidate = right.rows[rowIndex];
+    if (
+      current.key !== candidate.key ||
+      current.textValue !== candidate.textValue ||
+      current.isDisabled !== candidate.isDisabled ||
+      current.cells.length !== candidate.cells.length
+    ) {
+      return false;
+    }
+
+    for (let cellIndex = 0; cellIndex < current.cells.length; cellIndex += 1) {
+      const currentCell = current.cells[cellIndex];
+      const candidateCell = candidate.cells[cellIndex];
+      if (
+        currentCell.key !== candidateCell.key ||
+        currentCell.textValue !== candidateCell.textValue ||
+        currentCell.colSpan !== candidateCell.colSpan
+      ) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
 
 export interface SpectrumTableViewProps {
   id?: string | undefined;
@@ -571,9 +631,7 @@ export const TableView = defineComponent({
       props.defaultSortDescriptor ?? null
     );
 
-    const parsedSlotDefinition = computed(() =>
-      parseTableSlotDefinition(slots.default?.() ?? [])
-    );
+    const parsedSlotDefinition = shallowRef<ParsedSpectrumTableDefinition | null>(null);
 
     const tableDefinition = computed(() =>
       normalizeTableDefinition({
@@ -745,6 +803,11 @@ export const TableView = defineComponent({
     });
 
     return () => {
+      const nextParsedSlotDefinition = parseTableSlotDefinition(slots.default?.() ?? []);
+      if (!areParsedTableDefinitionsEqual(nextParsedSlotDefinition, parsedSlotDefinition.value)) {
+        parsedSlotDefinition.value = nextParsedSlotDefinition;
+      }
+
       const domProps = filterDOMProps(attrs as Record<string, unknown>, {
         labelable: true,
       });
