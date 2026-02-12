@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T15:21:04.778Z",
+  "generatedAt": "2026-02-12T15:23:07.183Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 169,
+  "incompletePackageCount": 167,
   "availableLeafCount": 38,
   "availableLeaves": [
     {
@@ -85,6 +85,11 @@
       "upstreamPath": "packages/@react-stately/overlays"
     },
     {
+      "packageName": "@vue-stately/slider",
+      "upstreamPackageName": "@react-stately/slider",
+      "upstreamPath": "packages/@react-stately/slider"
+    },
+    {
       "packageName": "@vue-stately/virtualizer",
       "upstreamPackageName": "@react-stately/virtualizer",
       "upstreamPath": "packages/@react-stately/virtualizer"
@@ -113,6 +118,11 @@
       "packageName": "@vue-types/checkbox",
       "upstreamPackageName": "@react-types/checkbox",
       "upstreamPath": "packages/@react-types/checkbox"
+    },
+    {
+      "packageName": "@vue-types/color",
+      "upstreamPackageName": "@react-types/color",
+      "upstreamPath": "packages/@react-types/color"
     },
     {
       "packageName": "@vue-types/combobox",
@@ -173,16 +183,6 @@
       "packageName": "@vue-types/select",
       "upstreamPackageName": "@react-types/select",
       "upstreamPath": "packages/@react-types/select"
-    },
-    {
-      "packageName": "@vue-types/slider",
-      "upstreamPackageName": "@react-types/slider",
-      "upstreamPath": "packages/@react-types/slider"
-    },
-    {
-      "packageName": "@vue-types/tabs",
-      "upstreamPackageName": "@react-types/tabs",
-      "upstreamPath": "packages/@react-types/tabs"
     },
     {
       "packageName": "@vue-types/textfield",

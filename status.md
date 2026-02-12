@@ -209,11 +209,11 @@
 | @vue-types/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/select | packages/@react-types/select |
 | @vue-types/shared | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/shared | packages/@react-types/shared |
 | @vue-types/sidenav | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/sidenav | packages/@react-types/sidenav |
-| @vue-types/slider | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/slider | packages/@react-types/slider |
+| @vue-types/slider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/slider | packages/@react-types/slider |
 | @vue-types/statuslight | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/statuslight | packages/@react-types/statuslight |
 | @vue-types/switch | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/switch | packages/@react-types/switch |
 | @vue-types/table | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/table | packages/@react-types/table |
-| @vue-types/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tabs | packages/@react-types/tabs |
+| @vue-types/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/tabs | packages/@react-types/tabs |
 | @vue-types/text | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/text | packages/@react-types/text |
 | @vue-types/textfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/textfield | packages/@react-types/textfield |
 | @vue-types/tooltip | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tooltip | packages/@react-types/tooltip |
