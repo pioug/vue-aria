@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:24:20.216Z",
+  "generatedAt": "2026-02-12T16:25:42.021Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 124,
-  "availableLeafCount": 10,
+  "incompletePackageCount": 123,
+  "availableLeafCount": 9,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -23,11 +23,6 @@
       "packageName": "@vue-stately/calendar",
       "upstreamPackageName": "@react-stately/calendar",
       "upstreamPath": "packages/@react-stately/calendar"
-    },
-    {
-      "packageName": "@vue-stately/checkbox",
-      "upstreamPackageName": "@react-stately/checkbox",
-      "upstreamPath": "packages/@react-stately/checkbox"
     },
     {
       "packageName": "@vue-stately/collections",
