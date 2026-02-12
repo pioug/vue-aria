@@ -192,6 +192,45 @@ describe("SearchAutocomplete", () => {
     expect(onSubmit).toHaveBeenCalledWith("custom", null);
   });
 
+  it("updates the input field when controlled inputValue changes", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "SearchAutocompleteControlledInputValueApp",
+      setup() {
+        const inputValue = ref("One");
+        return () =>
+          h("div", [
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              inputValue: inputValue.value,
+              onInputChange: (nextValue: string) => {
+                inputValue.value = nextValue;
+              },
+            }),
+            h(
+              "button",
+              {
+                type: "button",
+                "data-testid": "set-three",
+                onClick: () => {
+                  inputValue.value = "Three";
+                },
+              },
+              "Set Three"
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("One");
+
+    await user.click(tree.getByTestId("set-three"));
+    expect(input.value).toBe("Three");
+  });
+
   it("clears input when clear button is pressed", async () => {
     const user = userEvent.setup();
     const onClear = vi.fn();

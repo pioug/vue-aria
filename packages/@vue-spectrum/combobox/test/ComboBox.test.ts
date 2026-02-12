@@ -374,6 +374,45 @@ describe("ComboBox", () => {
     expect(input.value).toBe("Two");
   });
 
+  it("updates the input field when controlled inputValue changes", async () => {
+    const user = userEvent.setup();
+    const App = defineComponent({
+      name: "ComboBoxControlledInputValueApp",
+      setup() {
+        const inputValue = ref("One");
+        return () =>
+          h("div", [
+            h(ComboBox, {
+              label: "Test",
+              items,
+              inputValue: inputValue.value,
+              onInputChange: (nextValue: string) => {
+                inputValue.value = nextValue;
+              },
+            }),
+            h(
+              "button",
+              {
+                type: "button",
+                "data-testid": "set-three",
+                onClick: () => {
+                  inputValue.value = "Three";
+                },
+              },
+              "Set Three"
+            ),
+          ]);
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("One");
+
+    await user.click(tree.getByTestId("set-three"));
+    expect(input.value).toBe("Three");
+  });
+
   it("does not open when disabled or readOnly", async () => {
     const user = userEvent.setup();
 

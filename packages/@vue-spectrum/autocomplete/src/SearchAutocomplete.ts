@@ -562,11 +562,21 @@ export const SearchAutocomplete = defineComponent({
     });
 
     const isAsync = computed(() => props.loadingState !== undefined);
+    const controlledSelectedKey =
+      props.selectedKey === undefined
+        ? undefined
+        : computed(() => props.selectedKey);
+    const controlledInputValue =
+      props.inputValue === undefined
+        ? undefined
+        : computed(() => props.inputValue);
+    const controlledIsOpen =
+      props.isOpen === undefined ? undefined : computed(() => props.isOpen);
 
     const state = useComboBoxState<NormalizedSearchAutocompleteItem>({
       collection: normalizedItems,
-      disabledKeys: props.disabledKeys,
-      selectedKey: props.selectedKey,
+      disabledKeys: computed(() => props.disabledKeys),
+      selectedKey: controlledSelectedKey,
       defaultSelectedKey: props.defaultSelectedKey,
       onSelectionChange: (key) => {
         props.onSelectionChange?.(key);
@@ -575,10 +585,10 @@ export const SearchAutocomplete = defineComponent({
           props.onSubmit?.(selectedItem?.label ?? "", key);
         }
       },
-      inputValue: props.inputValue,
+      inputValue: controlledInputValue,
       defaultInputValue: props.defaultInputValue,
       onInputChange: props.onInputChange,
-      isOpen: props.isOpen,
+      isOpen: controlledIsOpen,
       defaultOpen: props.defaultOpen,
       onOpenChange: (isOpen, trigger) => {
         if (props.isDisabled || props.isReadOnly) {
@@ -588,14 +598,14 @@ export const SearchAutocomplete = defineComponent({
         props.onOpenChange?.(isOpen, trigger);
       },
       defaultFilter: props.defaultFilter ?? DEFAULT_FILTER,
-      completionMode: props.completionMode,
-      menuTrigger: props.menuTrigger ?? "input",
+      completionMode: computed(() => props.completionMode),
+      menuTrigger: computed(() => props.menuTrigger ?? "input"),
       allowsEmptyCollection: computed(
         () => props.allowsEmptyCollection ?? isAsync.value
       ),
       allowsCustomValue: computed(() => props.allowsCustomValue ?? true),
-      shouldCloseOnBlur: props.shouldCloseOnBlur,
-      isReadOnly: props.isReadOnly,
+      shouldCloseOnBlur: computed(() => props.shouldCloseOnBlur),
+      isReadOnly: computed(() => props.isReadOnly),
     });
 
     const submitCurrentValue = (key: Key | null = state.selectedKey.value) => {

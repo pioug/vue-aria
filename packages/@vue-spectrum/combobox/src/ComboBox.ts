@@ -768,25 +768,36 @@ export const ComboBox = defineComponent({
       return slotModel.value.items;
     });
 
+    const controlledSelectedKey =
+      props.selectedKey === undefined
+        ? undefined
+        : computed(() => props.selectedKey);
+    const controlledInputValue =
+      props.inputValue === undefined
+        ? undefined
+        : computed(() => props.inputValue);
+    const controlledIsOpen =
+      props.isOpen === undefined ? undefined : computed(() => props.isOpen);
+
     const state = useComboBoxState<NormalizedComboBoxItem>({
       collection: normalizedItems,
-      disabledKeys: props.disabledKeys,
-      selectedKey: props.selectedKey,
+      disabledKeys: computed(() => props.disabledKeys),
+      selectedKey: controlledSelectedKey,
       defaultSelectedKey: props.defaultSelectedKey,
       onSelectionChange: props.onSelectionChange,
-      inputValue: props.inputValue,
+      inputValue: controlledInputValue,
       defaultInputValue: props.defaultInputValue,
       onInputChange: props.onInputChange,
-      isOpen: props.isOpen,
+      isOpen: controlledIsOpen,
       defaultOpen: props.defaultOpen,
       onOpenChange: props.onOpenChange,
       defaultFilter: props.defaultFilter ?? DEFAULT_FILTER,
-      completionMode: props.completionMode,
-      menuTrigger: props.menuTrigger,
-      allowsEmptyCollection: props.allowsEmptyCollection,
-      allowsCustomValue: props.allowsCustomValue,
-      shouldCloseOnBlur: props.shouldCloseOnBlur,
-      isReadOnly: props.isReadOnly,
+      completionMode: computed(() => props.completionMode),
+      menuTrigger: computed(() => props.menuTrigger),
+      allowsEmptyCollection: computed(() => props.allowsEmptyCollection),
+      allowsCustomValue: computed(() => props.allowsCustomValue),
+      shouldCloseOnBlur: computed(() => props.shouldCloseOnBlur),
+      isReadOnly: computed(() => props.isReadOnly),
     });
 
     const {
