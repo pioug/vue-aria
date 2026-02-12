@@ -165,7 +165,7 @@
 | @vue-stately/slider | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/slider | packages/@react-stately/slider |
 | @vue-stately/steplist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/steplist | packages/@react-stately/steplist |
 | @vue-stately/table | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/table | packages/@react-stately/table |
-| @vue-stately/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/tabs | packages/@react-stately/tabs |
+| @vue-stately/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tabs | packages/@react-stately/tabs |
 | @vue-stately/toast | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/toast | packages/@react-stately/toast |
 | @vue-stately/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/toggle | packages/@react-stately/toggle |
 | @vue-stately/tooltip | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tooltip | packages/@react-stately/tooltip |
