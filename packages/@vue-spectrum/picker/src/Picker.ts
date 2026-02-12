@@ -265,6 +265,29 @@ function parsePickerSlotItems(nodes: VNode[] | undefined): SpectrumPickerItemDat
   return items;
 }
 
+function arePickerItemArraysEqual(
+  left: SpectrumPickerItemData[],
+  right: SpectrumPickerItemData[]
+): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  for (let index = 0; index < left.length; index += 1) {
+    const current = left[index];
+    const candidate = right[index];
+    if (
+      current.key !== candidate.key ||
+      current.label !== candidate.label ||
+      current.isDisabled !== candidate.isDisabled
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function getValidationMessage(
   result: string | string[] | boolean | null | undefined
 ): string | undefined {
@@ -473,11 +496,9 @@ export const Picker = defineComponent({
     const loadingIndicatorId = useId(undefined, "v-spectrum-picker-loading");
     const errorMessageId = useId(undefined, "v-spectrum-picker-error");
 
-    const parsedSlotItems = computed<SpectrumPickerItemData[]>(() =>
-      parsePickerSlotItems(slots.default?.() as VNode[] | undefined)
-    );
+    const slotItems = ref<SpectrumPickerItemData[]>([]);
     const items = computed<SpectrumPickerItemData[]>(() =>
-      props.items ?? parsedSlotItems.value
+      props.items ?? slotItems.value
     );
     const itemByKey = computed(() => {
       const map = new Map<string, SpectrumPickerItemData>();
@@ -1014,6 +1035,15 @@ export const Picker = defineComponent({
     });
 
     return () => {
+      if (!props.items) {
+        const parsedItems = parsePickerSlotItems(
+          slots.default?.() as VNode[] | undefined
+        );
+        if (!arePickerItemArraysEqual(parsedItems, slotItems.value)) {
+          slotItems.value = parsedItems;
+        }
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const styleInput = {
         ...attrsRecord,
