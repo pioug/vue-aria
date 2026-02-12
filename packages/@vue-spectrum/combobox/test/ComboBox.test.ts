@@ -759,6 +759,96 @@ describe("ComboBox", () => {
     expect(input.value).toBe("Aa");
   });
 
+  it("updates input value and selection freely in uncontrolled mode", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button");
+    expect(input.value).toBe("");
+
+    input.focus();
+    await user.click(button);
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+
+    await user.keyboard("Two");
+    expect(input.value).toBe("Two");
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    await user.clear(input);
+    expect(input.value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options[1]?.textContent).toContain("Two");
+    expect(options[1]?.getAttribute("aria-selected")).not.toBe("true");
+
+    await user.click(options[0]!);
+    expect(input.value).toBe("One");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(onInputChange).toHaveBeenLastCalledWith("One");
+    expect(onSelectionChange).toHaveBeenLastCalledWith("1");
+
+    await user.click(button);
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options[0]?.textContent).toContain("One");
+    expect(options[0]?.getAttribute("aria-selected")).toBe("true");
+
+    await user.clear(input);
+    expect(input.value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+    expect(onSelectionChange).toHaveBeenLastCalledWith(null);
+  });
+
+  it("does not set selected item from defaultInputValue", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultInputValue: "Two",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button");
+    expect(input.value).toBe("Two");
+
+    input.focus();
+    await user.click(button);
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options[1]?.textContent).toContain("Two");
+    expect(options[1]?.getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("uses defaultSelectedKey to initialize selected input text", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultSelectedKey: "2",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    const button = tree.getByRole("button");
+    expect(input.value).toBe("Two");
+
+    input.focus();
+    await user.click(button);
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options[1]?.textContent).toContain("Two");
+    expect(options[1]?.getAttribute("aria-selected")).toBe("true");
+  });
+
   it("clears the uncontrolled selection when the input is fully cleared", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
