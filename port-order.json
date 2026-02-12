@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T18:12:32.264Z",
+  "generatedAt": "2026-02-12T18:12:58.827Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 36,
+  "incompletePackageCount": 35,
   "availableLeafCount": 9,
   "availableLeaves": [
     {
@@ -30,11 +30,6 @@
       "upstreamPath": "packages/@react-spectrum/listbox"
     },
     {
-      "packageName": "@vue-spectrum/overlays",
-      "upstreamPackageName": "@react-spectrum/overlays",
-      "upstreamPath": "packages/@react-spectrum/overlays"
-    },
-    {
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
@@ -48,6 +43,11 @@
       "packageName": "@vue-spectrum/steplist",
       "upstreamPackageName": "@react-spectrum/steplist",
       "upstreamPath": "packages/@react-spectrum/steplist"
+    },
+    {
+      "packageName": "@vue-spectrum/tooltip",
+      "upstreamPackageName": "@react-spectrum/tooltip",
+      "upstreamPath": "packages/@react-spectrum/tooltip"
     }
   ],
   "hasCycles": false,
