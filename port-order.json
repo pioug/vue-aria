@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:03:36.883Z",
+  "generatedAt": "2026-02-12T18:04:23.759Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 54,
-  "availableLeafCount": 20,
+  "incompletePackageCount": 53,
+  "availableLeafCount": 19,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/accordion",
@@ -28,11 +28,6 @@
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
       "upstreamPath": "packages/@react-spectrum/dropzone"
-    },
-    {
-      "packageName": "@vue-spectrum/filetrigger",
-      "upstreamPackageName": "@react-spectrum/filetrigger",
-      "upstreamPath": "packages/@react-spectrum/filetrigger"
     },
     {
       "packageName": "@vue-spectrum/form",

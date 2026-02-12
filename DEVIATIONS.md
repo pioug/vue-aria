@@ -796,3 +796,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential provider theming/locale/modal context timing differences until full composable conversion.
 - Removal plan: Replace React context/ref assumptions and provider wiring with Vue provide/inject/composables and port upstream provider behavior tests for parity.
+
+- Package: `@vue-spectrum/filetrigger`
+- Upstream reference: `packages/@react-spectrum/filetrigger` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/render semantics together with inherited React-based button/file-input interaction behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential file-trigger interaction timing differences until full composable conversion.
+- Removal plan: Replace React runtime assumptions and inherited interaction wiring with Vue-native composables/events and port upstream filetrigger behavior tests for parity.
