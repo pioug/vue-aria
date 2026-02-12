@@ -4,6 +4,7 @@ import {
   h,
   inject,
   provide,
+  ref,
   type PropType,
 } from "vue";
 import type { ReadonlyRef } from "@vue-aria/types";
@@ -148,7 +149,9 @@ export const Form = defineComponent({
       default: undefined,
     },
   },
-  setup(props, { attrs, slots }) {
+  setup(props, { attrs, slots, expose }) {
+    const formRef = ref<HTMLFormElement | null>(null);
+
     provideSpectrumProvider({
       isQuiet: computed(() => props.isQuiet),
       isEmphasized: computed(() => props.isEmphasized),
@@ -189,6 +192,20 @@ export const Form = defineComponent({
       };
     });
 
-    return () => h("form", formProps.value, slots.default?.());
+    expose({
+      UNSAFE_getDOMNode: () => formRef.value,
+    });
+
+    return () =>
+      h(
+        "form",
+        {
+          ...formProps.value,
+          ref: (value: unknown) => {
+            formRef.value = value as HTMLFormElement | null;
+          },
+        },
+        slots.default?.()
+      );
   },
 });

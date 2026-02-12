@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, type PropType, type VNode } from "vue";
+import { defineComponent, h, ref, type PropType, type VNode } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_SPECTRUM_THEME_CLASS_MAP,
@@ -64,6 +64,24 @@ describe("Form", () => {
     );
 
     expect(wrapper.get('[data-testid="child-button"]').text()).toBe("Test");
+  });
+
+  it("supports forwarded ref UNSAFE_getDOMNode", () => {
+    const formRef = ref<{
+      UNSAFE_getDOMNode: () => HTMLFormElement | null;
+    } | null>(null);
+
+    const wrapper = mountWithProvider(() =>
+      h(Form, {
+        ref: formRef,
+        "aria-label": "Home",
+        "data-testid": "form",
+      })
+    );
+
+    const form = wrapper.get('[data-testid="form"]').element as HTMLFormElement;
+    expect(typeof formRef.value?.UNSAFE_getDOMNode).toBe("function");
+    expect(formRef.value?.UNSAFE_getDOMNode()).toBe(form);
   });
 
   it("supports native validation behavior", () => {

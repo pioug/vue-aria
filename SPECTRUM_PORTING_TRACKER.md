@@ -48,7 +48,7 @@ Companion docs:
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
 - [x] `@react-spectrum/icon` -> `@vue-spectrum/icon`
-- [x] `@react-spectrum/form` -> `@vue-spectrum/form`
+- [x] `@react-spectrum/form` -> `@vue-spectrum/form` (includes forwarded ref `UNSAFE_getDOMNode` parity coverage)
 - [x] `@react-spectrum/label` -> `@vue-spectrum/label`
 - [x] `@react-spectrum/layout` -> `@vue-spectrum/layout`
 - [x] `@react-spectrum/text` -> `@vue-spectrum/text`
