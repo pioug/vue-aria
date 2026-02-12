@@ -45,5 +45,5 @@ const component = h(
 
 ## Notes
 
-- Baseline includes alert semantics (`role="alert"`), variant classes, variant-specific icon semantics (`info`/`positive`/`notice`/`negative` with accessible labels), and `autoFocus` behavior.
+- Baseline includes alert semantics (`role="alert"`), variant classes, variant-specific icon semantics (`info`/`positive`/`notice`/`negative` with localized accessible labels), and `autoFocus` behavior.
 - Advanced icon/theming parity remains in progress.

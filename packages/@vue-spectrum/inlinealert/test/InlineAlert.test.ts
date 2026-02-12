@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { Content, Header } from "@vue-spectrum/view";
-import { nextTick } from "vue";
+import { h, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
 import { InlineAlert } from "../src";
 
@@ -145,6 +146,33 @@ describe("InlineAlert", () => {
       expect(icon.attributes("aria-label")).toBe(label);
     }
   );
+
+  it("localizes variant icon label from provider locale", () => {
+    const wrapper = mount(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(
+            InlineAlert,
+            {
+              variant: "info",
+            },
+            {
+              default: () => [
+                h(Header, null, () => "Title"),
+                h(Content, null, () => "Content"),
+              ],
+            }
+          ),
+      },
+    });
+
+    const icon = wrapper.get(".spectrum-InLineAlert-icon");
+    expect(icon.attributes("aria-label")).toBe("Informations");
+  });
 
   it("supports autoFocus", async () => {
     const wrapper = mount(InlineAlert, {

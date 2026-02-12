@@ -6,6 +6,7 @@ import {
   ref,
   type PropType,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -41,6 +42,16 @@ const INLINE_ALERT_ICON_LABEL: Record<
   notice: "Warning",
   negative: "Error",
 };
+
+const INLINE_ALERT_INTL_MESSAGES = {
+  "en-US": INLINE_ALERT_ICON_LABEL,
+  "fr-FR": {
+    info: "Informations",
+    positive: "Succès",
+    notice: "Avertissement",
+    negative: "Erreur",
+  },
+} as const;
 
 export interface SpectrumInlineAlertProps {
   variant?: InlineAlertVariant | undefined;
@@ -78,6 +89,7 @@ export const InlineAlert = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const elementRef = ref<HTMLElement | null>(null);
     const shouldAutoFocus = ref(Boolean(props.autoFocus));
+    const stringFormatter = useLocalizedStringFormatter(INLINE_ALERT_INTL_MESSAGES);
 
     onMounted(() => {
       if (!shouldAutoFocus.value) {
@@ -120,7 +132,9 @@ export const InlineAlert = defineComponent({
         ? INLINE_ALERT_ICON_SYMBOL[variant as Exclude<InlineAlertVariant, "neutral">]
         : undefined;
       const iconLabel = showVariantIcon
-        ? INLINE_ALERT_ICON_LABEL[variant as Exclude<InlineAlertVariant, "neutral">]
+        ? stringFormatter.value.format(
+            variant as Exclude<InlineAlertVariant, "neutral">
+          )
         : undefined;
 
       const rootProps = mergeProps(domProps, styleProps, {
