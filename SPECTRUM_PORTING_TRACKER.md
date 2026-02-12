@@ -14,7 +14,7 @@ Companion docs:
 - Remaining packages: `42`
 - Current stage: phase-1 foundation migration
 - Priority mode: complete React Spectrum v1 package parity first; S2 feature work is paused until v1 reaches completion gates.
-- Active focus lane: v1 package parity/hardening with shared docs base-style porting (runtime + tests + docs usability/styling + CI stability).
+- Active focus lane: v1 package parity/hardening with shared docs base-style porting (runtime + tests + docs usability/styling + CI stability), including broad docs runtime class alias coverage for both `spectrum-*` and `react-spectrum-*` selectors in `docs/.vitepress/theme/spectrum-base.css`.
 
 ## Upstream Source of Truth
 

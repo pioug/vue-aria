@@ -46,4 +46,5 @@ provideSpectrumProvider({
 
 - This is a migration baseline, not the full final Spectrum token system.
 - Docs manual-testing baseline styles are currently centralized in `docs/.vitepress/theme/spectrum-base.css` to provide cross-component visual structure while runtime package parity progresses.
+- The docs baseline now includes broad alias coverage for both `spectrum-*` and `react-spectrum-*` runtime classes used by ported Vue Spectrum packages; remaining unmapped class-like entries are mostly token/theme placeholders.
 - Theme package parity remains in the Phase 1 package track. `theme-default`, `theme-light`, `theme-dark`, and `theme-express` baselines are now in progress.
