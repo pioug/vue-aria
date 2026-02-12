@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 51 |
-| Passing tests | 51 |
+| Ported tests | 52 |
+| Passing tests | 52 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -148,7 +148,7 @@
 | @vue-stately/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/combobox | packages/@react-stately/combobox |
 | @vue-stately/data | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/data | packages/@react-stately/data |
 | @vue-stately/datepicker | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/datepicker | packages/@react-stately/datepicker |
-| @vue-stately/disclosure | complete | 2 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
+| @vue-stately/disclosure | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
 | @vue-stately/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/dnd | packages/@react-stately/dnd |
 | @vue-stately/flags | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/flags | packages/@react-stately/flags |
 | @vue-stately/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/form | packages/@react-stately/form |
