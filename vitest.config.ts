@@ -9,6 +9,8 @@ export default defineConfig({
     conditions: ['source'],
     alias: [
       {find: /\.\.\/intl\/\*\.json$/, replacement: path.resolve(rootDir, 'test-shims/intlMessages.ts')},
+      {find: /^@adobe\/spectrum-css-temp\/.*\.css$/, replacement: path.resolve(rootDir, 'test-shims/spectrumCssModule.ts')},
+      {find: '@internationalized/message', replacement: path.resolve(rootDir, 'test-shims/internationalizedMessage.ts')},
       {find: '@internationalized/string', replacement: path.resolve(rootDir, 'test-shims/internationalizedString.ts')},
       {find: '@internationalized/number', replacement: path.resolve(rootDir, 'test-shims/internationalizedNumber.ts')},
       {find: 'use-sync-external-store/shim/index.js', replacement: path.resolve(rootDir, 'test-shims/useSyncExternalStore.ts')},
