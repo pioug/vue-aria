@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-02-12T13:47:55.459Z",
+  "generatedAt": "2026-02-12T13:50:21.302Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 189,
+  "incompletePackageCount": 188,
   "availableLeafCount": 41,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/test-utils",
-      "upstreamPackageName": "@react-aria/test-utils",
-      "upstreamPath": "packages/@react-aria/test-utils"
-    },
     {
       "packageName": "@vue-aria/utils",
       "upstreamPackageName": "@react-aria/utils",
       "upstreamPath": "packages/@react-aria/utils"
+    },
+    {
+      "packageName": "@vue-spectrum/test-utils",
+      "upstreamPackageName": "@react-spectrum/test-utils",
+      "upstreamPath": "packages/@react-spectrum/test-utils"
     },
     {
       "packageName": "@vue-stately/autocomplete",

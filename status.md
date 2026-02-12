@@ -66,14 +66,14 @@
 | @vue-aria/table | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/table | packages/@react-aria/table |
 | @vue-aria/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tabs | packages/@react-aria/tabs |
 | @vue-aria/tag | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tag | packages/@react-aria/tag |
-| @vue-aria/test-utils | in_progress | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/test-utils | packages/@react-aria/test-utils |
+| @vue-aria/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/test-utils | packages/@react-aria/test-utils |
 | @vue-aria/textfield | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/textfield | packages/@react-aria/textfield |
 | @vue-aria/toast | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toast | packages/@react-aria/toast |
 | @vue-aria/toggle | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toggle | packages/@react-aria/toggle |
 | @vue-aria/toolbar | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/toolbar | packages/@react-aria/toolbar |
 | @vue-aria/tooltip | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tooltip | packages/@react-aria/tooltip |
 | @vue-aria/tree | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tree | packages/@react-aria/tree |
-| @vue-aria/utils | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/utils | packages/@react-aria/utils |
+| @vue-aria/utils | in_progress | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/utils | packages/@react-aria/utils |
 | @vue-aria/virtualizer | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/virtualizer | packages/@react-aria/virtualizer |
 | @vue-aria/visually-hidden | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/visually-hidden | packages/@react-aria/visually-hidden |
 | @vue-spectrum/accordion | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/accordion | packages/@react-spectrum/accordion |
