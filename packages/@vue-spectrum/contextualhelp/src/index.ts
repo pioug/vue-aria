@@ -11,4 +11,4 @@
  */
 
 export {ContextualHelp} from './ContextualHelp';
-export type {SpectrumContextualHelpProps} from '-types/contextualhelp';
+export type {SpectrumContextualHelpProps} from '@vue-types/contextualhelp';

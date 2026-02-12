@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {isScrollable} from '-aria/utils';
+import {classNames} from '@vue-spectrum/utils';
+import {isScrollable} from '@vue-aria/utils';
 import React, {JSX} from 'react';
 import underlayStyles from '@adobe/spectrum-css-temp/components/underlay/vars.css';
 

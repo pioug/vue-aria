@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMRef} from '-types/shared';
+import {DOMRef} from '@vue-types/shared';
 import {ListBoxBase, useListBoxLayout} from './ListBoxBase';
 import React, {ReactElement} from 'react';
-import {SpectrumListBoxProps} from '-types/listbox';
-import {useDOMRef} from '-spectrum/utils';
-import {useListState} from '-stately/list';
+import {SpectrumListBoxProps} from '@vue-types/listbox';
+import {useDOMRef} from '@vue-spectrum/utils';
+import {useListState} from '@vue-stately/list';
 
 // forwardRef doesn't support generic parameters, so cast the result to the correct type
 // https://stackoverflow.com/questions/58469229/react-with-typescript-generics-while-using-react-forwardref

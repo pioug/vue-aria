@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React, {forwardRef} from 'react';
-import {TextProps} from '-types/text';
-import {useDOMRef, useSlotProps, useStyleProps} from '-spectrum/utils';
+import {TextProps} from '@vue-types/text';
+import {useDOMRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
 
 /**
  * Text represents text with no specific semantic meaning.

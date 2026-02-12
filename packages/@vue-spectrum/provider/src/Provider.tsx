@@ -16,14 +16,14 @@ import {
   useDOMRef,
   useMatchedBreakpoints,
   useStyleProps
-} from '-spectrum/utils';
+} from '@vue-spectrum/utils';
 import clsx from 'clsx';
 import {Context} from './context';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps, RouterProvider} from '-aria/utils';
-import {I18nProvider, useLocale} from '-aria/i18n';
-import {ModalProvider, useModalProvider} from '-aria/overlays';
-import {ProviderContext, ProviderProps} from '-types/provider';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps, RouterProvider} from '@vue-aria/utils';
+import {I18nProvider, useLocale} from '@vue-aria/i18n';
+import {ModalProvider, useModalProvider} from '@vue-aria/overlays';
+import {ProviderContext, ProviderProps} from '@vue-types/provider';
 import React, {useContext, useEffect, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/page/vars.css';
 import typographyStyles from '@adobe/spectrum-css-temp/components/typography/index.css';

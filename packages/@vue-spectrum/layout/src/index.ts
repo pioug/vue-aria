@@ -14,5 +14,5 @@
 
 export {repeat, minmax, fitContent, Grid} from './Grid';
 export {Flex} from './Flex';
-export type {DimensionValue} from '-types/shared';
-export type {FlexProps, GridProps} from '-types/layout';
+export type {DimensionValue} from '@vue-types/shared';
+export type {FlexProps, GridProps} from '@vue-types/layout';

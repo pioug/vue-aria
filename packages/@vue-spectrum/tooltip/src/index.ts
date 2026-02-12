@@ -14,4 +14,4 @@
 
 export {Tooltip} from './Tooltip';
 export {TooltipTrigger} from './TooltipTrigger';
-export type {SpectrumTooltipProps, SpectrumTooltipTriggerProps} from '-types/tooltip';
+export type {SpectrumTooltipProps, SpectrumTooltipTriggerProps} from '@vue-types/tooltip';

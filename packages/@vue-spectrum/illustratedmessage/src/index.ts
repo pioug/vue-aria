@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {IllustratedMessage} from './IllustratedMessage';
-export type {SpectrumIllustratedMessageProps} from '-types/illustratedmessage';
+export type {SpectrumIllustratedMessageProps} from '@vue-types/illustratedmessage';

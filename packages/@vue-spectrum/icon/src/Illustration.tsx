@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps, StyleProps} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {AriaLabelingProps, DOMProps, StyleProps} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React, {JSX, ReactElement} from 'react';
-import {useSlotProps, useStyleProps} from '-spectrum/utils';
+import {useSlotProps, useStyleProps} from '@vue-spectrum/utils';
 
 export interface IllustrationProps extends DOMProps, AriaLabelingProps, StyleProps {
   /**

@@ -11,17 +11,17 @@
  */
 
 import CheckmarkMedium from '@spectrum-icons/ui/CheckmarkMedium';
-import {classNames, ClearSlots, SlotProvider} from '-spectrum/utils';
-import {FocusRing} from '-aria/focus';
-import {Grid} from '-spectrum/layout';
-import {isFocusVisible, useHover} from '-aria/interactions';
+import {classNames, ClearSlots, SlotProvider} from '@vue-spectrum/utils';
+import {FocusRing} from '@vue-aria/focus';
+import {Grid} from '@vue-spectrum/layout';
+import {isFocusVisible, useHover} from '@vue-aria/interactions';
 import {ListBoxContext} from './ListBoxContext';
-import {mergeProps} from '-aria/utils';
-import {Node} from '-types/shared';
+import {mergeProps} from '@vue-aria/utils';
+import {Node} from '@vue-types/shared';
 import React, {JSX, useContext, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {Text} from '-spectrum/text';
-import {useOption} from '-aria/listbox';
+import {Text} from '@vue-spectrum/text';
+import {useOption} from '@vue-aria/listbox';
 
 interface OptionProps<T> {
   item: Node<T>

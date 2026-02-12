@@ -12,13 +12,13 @@
 
 import {CalendarCell} from './CalendarCell';
 import {CalendarDate, endOfMonth} from '@internationalized/date';
-import {CalendarPropsBase} from '-types/calendar';
-import {CalendarState, RangeCalendarState} from '-stately/calendar';
-import {classNames} from '-spectrum/utils';
-import {DOMProps, StyleProps} from '-types/shared';
+import {CalendarPropsBase} from '@vue-types/calendar';
+import {CalendarState, RangeCalendarState} from '@vue-stately/calendar';
+import {classNames} from '@vue-spectrum/utils';
+import {DOMProps, StyleProps} from '@vue-types/shared';
 import React, {JSX} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/calendar/vars.css';
-import {useCalendarGrid} from '-aria/calendar';
+import {useCalendarGrid} from '@vue-aria/calendar';
 
 interface CalendarMonthProps extends CalendarPropsBase, DOMProps, StyleProps {
   state: CalendarState | RangeCalendarState,

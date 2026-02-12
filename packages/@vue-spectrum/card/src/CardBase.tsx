@@ -11,17 +11,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaCardProps, SpectrumCardProps} from '-types/card';
-import {Checkbox} from '-spectrum/checkbox';
-import {classNames, SlotProvider, useDOMRef, useHasChild, useStyleProps} from '-spectrum/utils';
-import {DOMRef, Node} from '-types/shared';
-import {filterDOMProps, mergeProps, nodeContains, useLayoutEffect, useResizeObserver, useSlotId} from '-aria/utils';
-import {FocusRing, getFocusableTreeWalker} from '-aria/focus';
+import {AriaCardProps, SpectrumCardProps} from '@vue-types/card';
+import {Checkbox} from '@vue-spectrum/checkbox';
+import {classNames, SlotProvider, useDOMRef, useHasChild, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, Node} from '@vue-types/shared';
+import {filterDOMProps, mergeProps, nodeContains, useLayoutEffect, useResizeObserver, useSlotId} from '@vue-aria/utils';
+import {FocusRing, getFocusableTreeWalker} from '@vue-aria/focus';
 import React, {HTMLAttributes, useCallback, useMemo, useRef, useState} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/card/vars.css';
 import {useCardViewContext} from './CardViewContext';
-import {useFocusWithin, useHover} from '-aria/interactions';
-import {useProviderProps} from '-spectrum/provider';
+import {useFocusWithin, useHover} from '@vue-aria/interactions';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 interface CardBaseProps<T> extends SpectrumCardProps {
   articleProps?: HTMLAttributes<HTMLElement>,

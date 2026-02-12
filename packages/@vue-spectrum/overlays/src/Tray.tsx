@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaModalOverlayProps, DismissButton, useModalOverlay} from '-aria/overlays';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef, RefObject, StyleProps} from '-types/shared';
+import {AriaModalOverlayProps, DismissButton, useModalOverlay} from '@vue-aria/overlays';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, RefObject, StyleProps} from '@vue-types/shared';
 import {Overlay} from './Overlay';
-import {OverlayProps} from '-types/overlays';
-import {OverlayTriggerState} from '-stately/overlays';
+import {OverlayProps} from '@vue-types/overlays';
+import {OverlayTriggerState} from '@vue-stately/overlays';
 import overrideStyles from './overlays.css';
 import React, {ForwardedRef, forwardRef, ReactNode, useRef} from 'react';
 import trayStyles from '@adobe/spectrum-css-temp/components/tray/vars.css';
 import {Underlay} from './Underlay';
-import {useObjectRef, useViewportSize} from '-aria/utils';
+import {useObjectRef, useViewportSize} from '@vue-aria/utils';
 
 interface TrayProps extends AriaModalOverlayProps, StyleProps, Omit<OverlayProps, 'nodeRef' | 'shouldContainFocus'> {
   children: ReactNode,

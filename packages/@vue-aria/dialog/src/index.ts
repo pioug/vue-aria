@@ -10,5 +10,5 @@
  * governing permissions and limitations under the License.
  */
 export {useDialog} from './useDialog';
-export type {AriaDialogProps} from '-types/dialog';
+export type {AriaDialogProps} from '@vue-types/dialog';
 export type {DialogAria} from './useDialog';

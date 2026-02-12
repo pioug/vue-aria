@@ -11,4 +11,4 @@
  */
 export {useComboBox} from './useComboBox';
 export type {AriaComboBoxOptions, ComboBoxAria} from './useComboBox';
-export type {AriaComboBoxProps} from '-types/combobox';
+export type {AriaComboBoxProps} from '@vue-types/combobox';

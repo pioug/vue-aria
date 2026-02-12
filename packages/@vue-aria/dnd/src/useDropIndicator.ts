@@ -11,15 +11,15 @@
  */
 
 import * as DragManager from './DragManager';
-import {DroppableCollectionState} from '-stately/dnd';
-import {DropTarget, FocusableElement, Key, RefObject} from '-types/shared';
+import {DroppableCollectionState} from '@vue-stately/dnd';
+import {DropTarget, FocusableElement, Key, RefObject} from '@vue-types/shared';
 import {getDroppableCollectionId} from './utils';
 import {HTMLAttributes} from 'react';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {useDroppableItem} from './useDroppableItem';
-import {useId} from '-aria/utils';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useId} from '@vue-aria/utils';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface DropIndicatorProps {
   /** The drop target that the drop indicator represents. */
@@ -47,7 +47,7 @@ export function useDropIndicator(props: DropIndicatorProps, state: DroppableColl
   let {target} = props;
   let {collection} = state;
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/dnd');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/dnd');
   let dragSession = DragManager.useDragSession();
   let {dropProps} = useDroppableItem(props, state, ref);
   let id = useId();

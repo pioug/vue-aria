@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, dimensionValue, useDOMRef, useSlotProps, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, dimensionValue, useDOMRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React, {forwardRef} from 'react';
-import {SpectrumAvatarProps} from '-types/avatar';
+import {SpectrumAvatarProps} from '@vue-types/avatar';
 import styles from '@adobe/spectrum-css-temp/components/avatar/vars.css';
-import {useProviderProps} from '-spectrum/provider';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 const DEFAULT_SIZE = 'avatar-size-100';
 const SIZE_RE = /^size-\d+/;

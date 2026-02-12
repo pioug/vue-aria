@@ -16,4 +16,4 @@ export {FieldButton} from './FieldButton';
 export {LogicButton} from './LogicButton';
 export {ClearButton} from './ClearButton';
 export {ToggleButton} from './ToggleButton';
-export type {SpectrumActionButtonProps, SpectrumButtonProps, SpectrumLogicButtonProps, SpectrumToggleButtonProps} from '-types/button';
+export type {SpectrumActionButtonProps, SpectrumButtonProps, SpectrumLogicButtonProps, SpectrumToggleButtonProps} from '@vue-types/button';

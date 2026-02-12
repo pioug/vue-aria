@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {getChildNodes} from '-stately/collections';
+import {classNames} from '@vue-spectrum/utils';
+import {getChildNodes} from '@vue-stately/collections';
 import {MenuItem} from './MenuItem';
-import {Node} from '-types/shared';
+import {Node} from '@vue-types/shared';
 import React, {Fragment, JSX} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {TreeState} from '-stately/tree';
-import {useMenuSection} from '-aria/menu';
-import {useSeparator} from '-aria/separator';
+import {TreeState} from '@vue-stately/tree';
+import {useMenuSection} from '@vue-aria/menu';
+import {useSeparator} from '@vue-aria/separator';
 
 interface MenuSectionProps<T> {
   item: Node<T>,

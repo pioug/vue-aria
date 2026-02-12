@@ -10,9 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaCalendarProps, DateValue} from '-types/calendar';
+import {AriaCalendarProps, DateValue} from '@vue-types/calendar';
 import {CalendarAria, useCalendarBase} from './useCalendarBase';
-import {CalendarState} from '-stately/calendar';
+import {CalendarState} from '@vue-stately/calendar';
 
 /**
  * Provides the behavior and accessibility implementation for a calendar component.

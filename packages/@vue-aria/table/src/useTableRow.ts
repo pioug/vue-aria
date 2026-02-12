@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {FocusableElement, RefObject} from '-types/shared';
-import {getLastItem} from '-stately/collections';
+import {FocusableElement, RefObject} from '@vue-types/shared';
+import {getLastItem} from '@vue-stately/collections';
 import {getRowLabelledBy} from './utils';
-import type {GridNode} from '-types/grid';
-import {GridRowAria, GridRowProps, useGridRow} from '-aria/grid';
+import type {GridNode} from '@vue-types/grid';
+import {GridRowAria, GridRowProps, useGridRow} from '@vue-aria/grid';
 import {HTMLAttributes} from 'react';
-import {mergeProps, useSyntheticLinkProps} from '-aria/utils';
-import {TableCollection} from '-types/table';
-import {tableNestedRows} from '-stately/flags';
-import {TableState, TreeGridState} from '-stately/table';
-import {useLocale} from '-aria/i18n';
+import {mergeProps, useSyntheticLinkProps} from '@vue-aria/utils';
+import {TableCollection} from '@vue-types/table';
+import {tableNestedRows} from '@vue-stately/flags';
+import {TableState, TreeGridState} from '@vue-stately/table';
+import {useLocale} from '@vue-aria/i18n';
 
 const EXPANSION_KEYS = {
   expand: {

@@ -16,7 +16,7 @@ export {useMenuItem} from './useMenuItem';
 export {useMenuSection} from './useMenuSection';
 export {useSubmenuTrigger} from './useSubmenuTrigger';
 
-export type {AriaMenuProps} from '-types/menu';
+export type {AriaMenuProps} from '@vue-types/menu';
 export type {AriaMenuTriggerProps, MenuTriggerAria} from './useMenuTrigger';
 export type {AriaMenuOptions, MenuAria} from './useMenu';
 export type {AriaMenuItemProps, MenuItemAria} from './useMenuItem';

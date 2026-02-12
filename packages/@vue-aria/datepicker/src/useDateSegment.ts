@@ -11,15 +11,15 @@
  */
 
 import {CalendarDate, toCalendar} from '@internationalized/date';
-import {DateFieldState, DateSegment} from '-stately/datepicker';
-import {getActiveElement, getScrollParent, isIOS, isMac, mergeProps, nodeContains, scrollIntoViewport, useEvent, useId, useLabels, useLayoutEffect} from '-aria/utils';
+import {DateFieldState, DateSegment} from '@vue-stately/datepicker';
+import {getActiveElement, getScrollParent, isIOS, isMac, mergeProps, nodeContains, scrollIntoViewport, useEvent, useId, useLabels, useLayoutEffect} from '@vue-aria/utils';
 import {hookData} from './useDateField';
 import {NumberParser} from '@internationalized/number';
 import React, {CSSProperties, useMemo, useRef} from 'react';
-import {RefObject} from '-types/shared';
-import {useDateFormatter, useFilter, useLocale} from '-aria/i18n';
+import {RefObject} from '@vue-types/shared';
+import {useDateFormatter, useFilter, useLocale} from '@vue-aria/i18n';
 import {useDisplayNames} from './useDisplayNames';
-import {useSpinButton} from '-aria/spinbutton';
+import {useSpinButton} from '@vue-aria/spinbutton';
 
 export interface DateSegmentAria {
   /** Props for the segment element. */

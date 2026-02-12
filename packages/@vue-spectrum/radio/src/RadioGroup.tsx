@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useDOMRef} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {Field} from '-spectrum/label';
+import {classNames, useDOMRef} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
 import {RadioContext} from './context';
 import React from 'react';
-import {SpectrumRadioGroupProps} from '-types/radio';
+import {SpectrumRadioGroupProps} from '@vue-types/radio';
 import styles from '@adobe/spectrum-css-temp/components/fieldgroup/vars.css';
-import {useFormProps} from '-spectrum/form';
-import {useProviderProps} from '-spectrum/provider';
-import {useRadioGroup} from '-aria/radio';
-import {useRadioGroupState} from '-stately/radio';
+import {useFormProps} from '@vue-spectrum/form';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useRadioGroup} from '@vue-aria/radio';
+import {useRadioGroupState} from '@vue-stately/radio';
 
 /**
  * Radio groups allow users to select a single option from a list of mutually exclusive options.

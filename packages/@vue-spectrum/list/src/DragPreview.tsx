@@ -9,13 +9,13 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import {classNames, SlotProvider} from '-spectrum/utils';
-import {Grid} from '-spectrum/layout';
-import {GridNode} from '-types/grid';
+import {classNames, SlotProvider} from '@vue-spectrum/utils';
+import {Grid} from '@vue-spectrum/layout';
+import {GridNode} from '@vue-types/grid';
 import listStyles from './styles.css';
 import React, {JSX} from 'react';
 import type {SpectrumListViewProps} from './ListView';
-import {Text} from '-spectrum/text';
+import {Text} from '@vue-spectrum/text';
 
 interface DragPreviewProps<T> {
   item: GridNode<any>,

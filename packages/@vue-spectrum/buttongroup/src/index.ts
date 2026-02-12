@@ -11,4 +11,4 @@
  */
 /// <reference types="css-module-types" />
 export {ButtonGroup} from './ButtonGroup';
-export type {SpectrumButtonGroupProps} from '-types/buttongroup';
+export type {SpectrumButtonGroupProps} from '@vue-types/buttongroup';

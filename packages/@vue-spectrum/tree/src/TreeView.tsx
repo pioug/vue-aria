@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaTreeProps} from '-aria/tree';
+import {AriaTreeProps} from '@vue-aria/tree';
 import {
   ButtonContext,
   Tree,
@@ -23,16 +23,16 @@ import {
   TreeRenderProps,
   useContextProps
 } from 'react-aria-components';
-import {Checkbox} from '-spectrum/checkbox';
+import {Checkbox} from '@vue-spectrum/checkbox';
 import ChevronLeftMedium from '@spectrum-icons/ui/ChevronLeftMedium';
 import ChevronRightMedium from '@spectrum-icons/ui/ChevronRightMedium';
-import {DOMRef, Expandable, Key, SelectionBehavior, SpectrumSelectionProps, StyleProps} from '-types/shared';
-import {focusRing, style} from '-spectrum/style-macro-s1' with {type: 'macro'};
-import {isAndroid} from '-aria/utils';
+import {DOMRef, Expandable, Key, SelectionBehavior, SpectrumSelectionProps, StyleProps} from '@vue-types/shared';
+import {focusRing, style} from '@vue-spectrum/style-macro-s1' with {type: 'macro'};
+import {isAndroid} from '@vue-aria/utils';
 import React, {createContext, JSX, JSXElementConstructor, ReactElement, ReactNode, useRef} from 'react';
-import {SlotProvider, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {useButton} from '-aria/button';
-import {useLocale} from '-aria/i18n';
+import {SlotProvider, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {useButton} from '@vue-aria/button';
+import {useLocale} from '@vue-aria/i18n';
 
 export interface SpectrumTreeViewProps<T> extends Omit<AriaTreeProps<T>, 'children' | 'render'>, StyleProps, SpectrumSelectionProps, Expandable {
   /** Provides content to display when there are no items in the tree. */

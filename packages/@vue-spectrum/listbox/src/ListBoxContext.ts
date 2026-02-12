@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {ListState} from '-stately/list';
+import {ListState} from '@vue-stately/list';
 import React, {ReactNode} from 'react';
 
 interface ListBoxContextValue {

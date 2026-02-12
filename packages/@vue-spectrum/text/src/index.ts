@@ -15,4 +15,4 @@
 export {Text} from './Text';
 export {Heading} from './Heading';
 export {Keyboard} from './Keyboard';
-export type {HeadingProps, KeyboardProps, TextProps} from '-types/text';
+export type {HeadingProps, KeyboardProps, TextProps} from '@vue-types/text';

@@ -12,12 +12,12 @@
 
 import {AriaMenuItemProps} from './useMenuItem';
 import {AriaMenuOptions} from './useMenu';
-import type {AriaPopoverProps, OverlayProps} from '-aria/overlays';
-import {FocusableElement, FocusStrategy, KeyboardEvent, Node, PressEvent, RefObject} from '-types/shared';
-import {focusWithoutScrolling, getActiveElement, getEventTarget, isFocusWithin, nodeContains, useEvent, useId, useLayoutEffect} from '-aria/utils';
-import type {SubmenuTriggerState} from '-stately/menu';
+import type {AriaPopoverProps, OverlayProps} from '@vue-aria/overlays';
+import {FocusableElement, FocusStrategy, KeyboardEvent, Node, PressEvent, RefObject} from '@vue-types/shared';
+import {focusWithoutScrolling, getActiveElement, getEventTarget, isFocusWithin, nodeContains, useEvent, useId, useLayoutEffect} from '@vue-aria/utils';
+import type {SubmenuTriggerState} from '@vue-stately/menu';
 import {useCallback, useRef} from 'react';
-import {useLocale} from '-aria/i18n';
+import {useLocale} from '@vue-aria/i18n';
 import {useSafelyMouseToSubmenu} from './useSafelyMouseToSubmenu';
 
 export interface AriaSubmenuTriggerProps {

@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useSlotProps} from '-spectrum/utils';
-import {ClearButton} from '-spectrum/button';
+import {classNames, useSlotProps} from '@vue-spectrum/utils';
+import {ClearButton} from '@vue-spectrum/button';
 import Magnifier from '@spectrum-icons/ui/Magnifier';
 import React, {forwardRef, ReactElement, Ref, useEffect, useRef} from 'react';
-import {SpectrumSearchFieldProps} from '-types/searchfield';
+import {SpectrumSearchFieldProps} from '@vue-types/searchfield';
 import styles from '@adobe/spectrum-css-temp/components/search/vars.css';
-import {TextFieldBase} from '-spectrum/textfield';
-import {TextFieldRef} from '-types/textfield';
-import {useFormProps} from '-spectrum/form';
-import {useProviderProps} from '-spectrum/provider';
-import {useSearchField} from '-aria/searchfield';
-import {useSearchFieldState} from '-stately/searchfield';
+import {TextFieldBase} from '@vue-spectrum/textfield';
+import {TextFieldRef} from '@vue-types/textfield';
+import {useFormProps} from '@vue-spectrum/form';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useSearchField} from '@vue-aria/searchfield';
+import {useSearchFieldState} from '@vue-stately/searchfield';
 
 /**
  * A SearchField is a text field designed for searches.

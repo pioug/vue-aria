@@ -13,5 +13,5 @@
 /// <reference types="css-module-types" />
 
 export {Provider, useProvider, useProviderProps} from './Provider';
-export type {ProviderContext} from '-types/provider';
-export type {ProviderProps} from '-types/provider';
+export type {ProviderContext} from '@vue-types/provider';
+export type {ProviderProps} from '@vue-types/provider';

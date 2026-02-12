@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {AriaListBoxOptions} from '-aria/listbox';
-import {AriaSearchAutocompleteProps} from '-types/autocomplete';
-import {ComboBoxState} from '-stately/combobox';
-import {DOMAttributes, KeyboardDelegate, LayoutDelegate, RefObject, ValidationResult} from '-types/shared';
+import {AriaButtonProps} from '@vue-types/button';
+import {AriaListBoxOptions} from '@vue-aria/listbox';
+import {AriaSearchAutocompleteProps} from '@vue-types/autocomplete';
+import {ComboBoxState} from '@vue-stately/combobox';
+import {DOMAttributes, KeyboardDelegate, LayoutDelegate, RefObject, ValidationResult} from '@vue-types/shared';
 import {InputHTMLAttributes} from 'react';
-import {mergeProps} from '-aria/utils';
-import {useComboBox} from '-aria/combobox';
-import {useSearchField} from '-aria/searchfield';
+import {mergeProps} from '@vue-aria/utils';
+import {useComboBox} from '@vue-aria/combobox';
+import {useSearchField} from '@vue-aria/searchfield';
 
 export interface SearchAutocompleteAria<T> extends ValidationResult {
   /** Props for the label element. */

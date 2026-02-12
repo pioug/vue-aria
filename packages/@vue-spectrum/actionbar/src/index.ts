@@ -12,6 +12,6 @@
 /// <reference types="css-module-types" />
 export {ActionBar} from './ActionBar';
 export {ActionBarContainer} from './ActionBarContainer';
-export {Item} from '-stately/collections';
-export type {SpectrumActionBarContainerProps} from '-types/actionbar';
-export type {SpectrumActionBarProps} from '-types/actionbar';
+export {Item} from '@vue-stately/collections';
+export type {SpectrumActionBarContainerProps} from '@vue-types/actionbar';
+export type {SpectrumActionBarProps} from '@vue-types/actionbar';

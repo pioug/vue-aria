@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {Link} from './Link';
-export type {SpectrumLinkProps} from '-types/link';
+export type {SpectrumLinkProps} from '@vue-types/link';

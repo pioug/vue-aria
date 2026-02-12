@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {Key} from '-types/shared';
-import {TreeState} from '-stately/tree';
+import {Key} from '@vue-types/shared';
+import {TreeState} from '@vue-stately/tree';
 
 interface MenuData {
   onClose?: () => void,

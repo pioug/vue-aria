@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaTabPanelProps, SpectrumTabListProps, SpectrumTabPanelsProps, SpectrumTabsProps} from '-types/tabs';
-import {classNames, SlotProvider, unwrapDOMRef, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMProps, DOMRef, DOMRefValue, Key, Node, Orientation, RefObject, StyleProps} from '-types/shared';
-import {filterDOMProps, mergeProps, useId, useLayoutEffect, useResizeObserver} from '-aria/utils';
-import {FocusRing} from '-aria/focus';
-import {Item, Picker} from '-spectrum/picker';
-import {ListCollection} from '-stately/list';
+import {AriaTabPanelProps, SpectrumTabListProps, SpectrumTabPanelsProps, SpectrumTabsProps} from '@vue-types/tabs';
+import {classNames, SlotProvider, unwrapDOMRef, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMProps, DOMRef, DOMRefValue, Key, Node, Orientation, RefObject, StyleProps} from '@vue-types/shared';
+import {filterDOMProps, mergeProps, useId, useLayoutEffect, useResizeObserver} from '@vue-aria/utils';
+import {FocusRing} from '@vue-aria/focus';
+import {Item, Picker} from '@vue-spectrum/picker';
+import {ListCollection} from '@vue-stately/list';
 import React, {
   CSSProperties,
   HTMLAttributes,
@@ -28,15 +28,15 @@ import React, {
   useRef,
   useState
 } from 'react';
-import {SpectrumPickerProps} from '-types/select';
+import {SpectrumPickerProps} from '@vue-types/select';
 import styles from '@adobe/spectrum-css-temp/components/tabs/vars.css';
-import {TabListState, useTabListState} from '-stately/tabs';
-import {Text} from '-spectrum/text';
-import {useCollection} from '-stately/collections';
-import {useHover} from '-aria/interactions';
-import {useLocale} from '-aria/i18n';
-import {useProvider, useProviderProps} from '-spectrum/provider';
-import {useTab, useTabList, useTabPanel} from '-aria/tabs';
+import {TabListState, useTabListState} from '@vue-stately/tabs';
+import {Text} from '@vue-spectrum/text';
+import {useCollection} from '@vue-stately/collections';
+import {useHover} from '@vue-aria/interactions';
+import {useLocale} from '@vue-aria/i18n';
+import {useProvider, useProviderProps} from '@vue-spectrum/provider';
+import {useTab, useTabList, useTabPanel} from '@vue-aria/tabs';
 
 interface TabsContext<T> {
   tabProps: SpectrumTabsProps<T>,

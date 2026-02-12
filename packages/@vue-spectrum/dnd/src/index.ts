@@ -14,7 +14,7 @@
 
 export type {DragAndDropOptions, DragAndDropHooks} from './useDragAndDrop';
 export {useDragAndDrop} from './useDragAndDrop';
-export {DIRECTORY_DRAG_TYPE} from '-aria/dnd';
+export {DIRECTORY_DRAG_TYPE} from '@vue-aria/dnd';
 
 export type {
   DirectoryDropItem,
@@ -39,4 +39,4 @@ export type {
   ItemDropTarget,
   RootDropTarget,
   TextDropItem
-} from '-types/shared';
+} from '@vue-types/shared';

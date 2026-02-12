@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {FocusableProvider} from '-aria/focus';
-import {Overlay} from '-spectrum/overlays';
+import {FocusableProvider} from '@vue-aria/focus';
+import {Overlay} from '@vue-spectrum/overlays';
 import React, {JSX, ReactElement, useRef, useState} from 'react';
-import {SpectrumTooltipTriggerProps} from '-types/tooltip';
+import {SpectrumTooltipTriggerProps} from '@vue-types/tooltip';
 import {TooltipContext} from './context';
-import {useLayoutEffect} from '-aria/utils';
-import {useOverlayPosition} from '-aria/overlays';
-import {useTooltipTrigger} from '-aria/tooltip';
-import {useTooltipTriggerState} from '-stately/tooltip';
+import {useLayoutEffect} from '@vue-aria/utils';
+import {useOverlayPosition} from '@vue-aria/overlays';
+import {useTooltipTrigger} from '@vue-aria/tooltip';
+import {useTooltipTriggerState} from '@vue-stately/tooltip';
 
 const DEFAULT_OFFSET = -1; // Offset needed to reach 4px/5px (med/large) distance between tooltip and trigger button
 const DEFAULT_CROSS_OFFSET = 0;

@@ -1,10 +1,10 @@
-import {createFocusManager, getFocusableTreeWalker} from '-aria/focus';
-import {DateFieldState, DatePickerState, DateRangePickerState} from '-stately/datepicker';
-import {DOMAttributes, FocusableElement, KeyboardEvent, RefObject} from '-types/shared';
-import {getEventTarget, mergeProps, nodeContains} from '-aria/utils';
-import {useLocale} from '-aria/i18n';
+import {createFocusManager, getFocusableTreeWalker} from '@vue-aria/focus';
+import {DateFieldState, DatePickerState, DateRangePickerState} from '@vue-stately/datepicker';
+import {DOMAttributes, FocusableElement, KeyboardEvent, RefObject} from '@vue-types/shared';
+import {getEventTarget, mergeProps, nodeContains} from '@vue-aria/utils';
+import {useLocale} from '@vue-aria/i18n';
 import {useMemo} from 'react';
-import {usePress} from '-aria/interactions';
+import {usePress} from '@vue-aria/interactions';
 
 export function useDatePickerGroup(state: DatePickerState | DateRangePickerState | DateFieldState, ref: RefObject<Element | null>, disableArrowNavigation?: boolean): DOMAttributes<FocusableElement> {
   let {direction} = useLocale();

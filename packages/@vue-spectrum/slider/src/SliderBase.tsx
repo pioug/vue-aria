@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, SlotProvider, useFocusableRef, useStyleProps} from '-spectrum/utils';
-import {FocusableRef, RefObject} from '-types/shared';
+import {classNames, SlotProvider, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
+import {FocusableRef, RefObject} from '@vue-types/shared';
 import React, {CSSProperties, ReactNode, useRef} from 'react';
-import {SliderState, useSliderState} from '-stately/slider';
-import {SpectrumBarSliderBase} from '-types/slider';
+import {SliderState, useSliderState} from '@vue-stately/slider';
+import {SpectrumBarSliderBase} from '@vue-types/slider';
 import styles from '@adobe/spectrum-css-temp/components/slider/vars.css';
-import {useNumberFormatter} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
-import {useSlider} from '-aria/slider';
+import {useNumberFormatter} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useSlider} from '@vue-aria/slider';
 
 export interface SliderBaseChildArguments {
   inputRef: RefObject<HTMLInputElement | null>,

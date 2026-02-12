@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {DOMAttributes, DropActivateEvent, DropEnterEvent, DropEvent, DropExitEvent, DropMoveEvent, DropOperation, FocusableElement, DragTypes as IDragTypes, RefObject} from '-types/shared';
+import {AriaButtonProps} from '@vue-types/button';
+import {DOMAttributes, DropActivateEvent, DropEnterEvent, DropEvent, DropExitEvent, DropMoveEvent, DropOperation, FocusableElement, DragTypes as IDragTypes, RefObject} from '@vue-types/shared';
 import {DragEvent, useRef, useState} from 'react';
 import * as DragManager from './DragManager';
 import {DragTypes, globalAllowedDropOperations, globalDndState, readFromDataTransfer, setGlobalDnDState, setGlobalDropEffect} from './utils';
 import {DROP_EFFECT_TO_DROP_OPERATION, DROP_OPERATION, DROP_OPERATION_ALLOWED, DROP_OPERATION_TO_DROP_EFFECT} from './constants';
-import {getEventTarget, isIPad, isMac, nodeContains, useEffectEvent, useLayoutEffect} from '-aria/utils';
+import {getEventTarget, isIPad, isMac, nodeContains, useEffectEvent, useLayoutEffect} from '@vue-aria/utils';
 import {useVirtualDrop} from './useVirtualDrop';
 
 export interface DropOptions {

@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {ColorScheme, Scale, Theme} from '-types/provider';
-import {useMediaQuery} from '-spectrum/utils';
+import {ColorScheme, Scale, Theme} from '@vue-types/provider';
+import {useMediaQuery} from '@vue-spectrum/utils';
 
 export function useColorScheme(theme: Theme, defaultColorScheme: ColorScheme): ColorScheme {
   let matchesDark = useMediaQuery('(prefers-color-scheme: dark)');

@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps, StyleProps} from '-types/shared';
-import {classNames, useSlotProps, useStyleProps} from '-spectrum/utils';
-import {filterDOMProps} from '-aria/utils';
-import {ProviderContext, useProvider} from '-spectrum/provider';
+import {AriaLabelingProps, DOMProps, StyleProps} from '@vue-types/shared';
+import {classNames, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
+import {filterDOMProps} from '@vue-aria/utils';
+import {ProviderContext, useProvider} from '@vue-spectrum/provider';
 import React, {JSX, ReactElement} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/icon/vars.css';
 

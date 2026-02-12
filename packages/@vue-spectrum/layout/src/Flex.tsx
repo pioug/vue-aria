@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, passthroughStyle, responsiveDimensionValue, StyleHandlers, useBreakpoint, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {FlexProps} from '-types/layout';
+import {classNames, passthroughStyle, responsiveDimensionValue, StyleHandlers, useBreakpoint, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {FlexProps} from '@vue-types/layout';
 import React, {forwardRef} from 'react';
 import styles from './flex-gap.css';
 

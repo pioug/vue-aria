@@ -11,8 +11,8 @@
  */
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef, SpectrumFieldValidation, SpectrumHelpTextProps, StyleProps, Validation} from '-types/shared';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, SpectrumFieldValidation, SpectrumHelpTextProps, StyleProps, Validation} from '@vue-types/shared';
 import React, {HTMLAttributes, ReactNode} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/helptext/vars.css';
 

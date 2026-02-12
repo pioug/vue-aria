@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import {AriaMenuOptions} from './useMenu';
-import {FocusableElement, RefObject} from '-types/shared';
-import {focusWithoutScrolling, useId} from '-aria/utils';
+import {FocusableElement, RefObject} from '@vue-types/shared';
+import {focusWithoutScrolling, useId} from '@vue-aria/utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {MenuTriggerState} from '-stately/menu';
-import {MenuTriggerType} from '-types/menu';
-import {PressProps, useLongPress} from '-aria/interactions';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useOverlayTrigger} from '-aria/overlays';
+import {MenuTriggerState} from '@vue-stately/menu';
+import {MenuTriggerType} from '@vue-types/menu';
+import {PressProps, useLongPress} from '@vue-aria/interactions';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useOverlayTrigger} from '@vue-aria/overlays';
 
 export interface AriaMenuTriggerProps {
   /** The type of menu that the menu trigger opens. */
@@ -100,7 +100,7 @@ export function useMenuTrigger<T>(props: AriaMenuTriggerProps, state: MenuTrigge
     }
   };
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/menu');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/menu');
   let {longPressProps} = useLongPress({
     isDisabled: isDisabled || trigger !== 'longPress',
     accessibilityDescription: stringFormatter.format('longPressMessage'),

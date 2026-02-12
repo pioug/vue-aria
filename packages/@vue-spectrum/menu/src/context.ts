@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMProps, FocusStrategy, HoverEvents, KeyboardEvents, PressEvents, RefObject} from '-types/shared';
+import {DOMProps, FocusStrategy, HoverEvents, KeyboardEvents, PressEvents, RefObject} from '@vue-types/shared';
 import React, {HTMLAttributes, useContext} from 'react';
-import {RootMenuTriggerState} from '-stately/menu';
-import {TreeState} from '-stately/tree';
+import {RootMenuTriggerState} from '@vue-stately/menu';
+import {TreeState} from '@vue-stately/tree';
 
 export interface MenuContextValue extends Omit<HTMLAttributes<HTMLElement>, 'autoFocus' | 'onKeyDown'>, Pick<KeyboardEvents, 'onKeyDown'> {
   onClose?: () => void,

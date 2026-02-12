@@ -10,23 +10,23 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {classNames, useFocusableRef, useStyleProps} from '-spectrum/utils';
-import {Field} from '-spectrum/label';
-import {FocusableRef, RefObject} from '-types/shared';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
-import {NumberFieldState, useNumberFieldState} from '-stately/numberfield';
+import {AriaButtonProps} from '@vue-types/button';
+import {classNames, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
+import {Field} from '@vue-spectrum/label';
+import {FocusableRef, RefObject} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
+import {NumberFieldState, useNumberFieldState} from '@vue-stately/numberfield';
 import React, {HTMLAttributes, InputHTMLAttributes, Ref, useRef} from 'react';
-import {SpectrumNumberFieldProps} from '-types/numberfield';
+import {SpectrumNumberFieldProps} from '@vue-types/numberfield';
 import {StepButton} from './StepButton';
 import stepperStyle from '@adobe/spectrum-css-temp/components/stepper/vars.css';
-import {TextFieldBase} from '-spectrum/textfield';
-import {useFormProps} from '-spectrum/form';
-import {useHover} from '-aria/interactions';
-import {useLocale} from '-aria/i18n';
-import {useNumberField} from '-aria/numberfield';
-import {useProvider, useProviderProps} from '-spectrum/provider';
+import {TextFieldBase} from '@vue-spectrum/textfield';
+import {useFormProps} from '@vue-spectrum/form';
+import {useHover} from '@vue-aria/interactions';
+import {useLocale} from '@vue-aria/i18n';
+import {useNumberField} from '@vue-aria/numberfield';
+import {useProvider, useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * NumberFields allow users to enter a number, and increment or decrement the value using stepper buttons.

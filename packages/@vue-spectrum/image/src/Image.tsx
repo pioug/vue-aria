@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useDOMRef, useSlotProps, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, useDOMRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React from 'react';
-import {SpectrumImageProps} from '-types/image';
+import {SpectrumImageProps} from '@vue-types/image';
 import styles from '@adobe/spectrum-css-temp/components/image/vars.css';
-import {useProviderProps} from '-spectrum/provider';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * Image is used to insert and display an image within a component.

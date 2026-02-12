@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaPopoverProps, DismissButton, PopoverAria, usePopover} from '-aria/overlays';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef, RefObject, StyleProps} from '-types/shared';
-import {FocusWithinProps, useFocusWithin} from '-aria/interactions';
-import {mergeProps, useLayoutEffect, useObjectRef} from '-aria/utils';
+import {AriaPopoverProps, DismissButton, PopoverAria, usePopover} from '@vue-aria/overlays';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, RefObject, StyleProps} from '@vue-types/shared';
+import {FocusWithinProps, useFocusWithin} from '@vue-aria/interactions';
+import {mergeProps, useLayoutEffect, useObjectRef} from '@vue-aria/utils';
 import {Overlay} from './Overlay';
-import {OverlayTriggerState} from '-stately/overlays';
+import {OverlayTriggerState} from '@vue-stately/overlays';
 import overrideStyles from './overlays.css';
 import React, {ForwardedRef, forwardRef, ReactNode, useRef, useState} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/popover/vars.css';

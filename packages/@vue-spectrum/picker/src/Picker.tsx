@@ -20,26 +20,26 @@ import {
   useIsMobileDevice,
   useSlotProps,
   useUnwrapDOMRef
-} from '-spectrum/utils';
-import {DOMRef, DOMRefValue, FocusableRefValue, LabelPosition} from '-types/shared';
-import {Field} from '-spectrum/label';
-import {FieldButton} from '-spectrum/button';
-import {HiddenSelect, useSelect} from '-aria/select';
+} from '@vue-spectrum/utils';
+import {DOMRef, DOMRefValue, FocusableRefValue, LabelPosition} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {FieldButton} from '@vue-spectrum/button';
+import {HiddenSelect, useSelect} from '@vue-aria/select';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListBoxBase, useListBoxLayout} from '-spectrum/listbox';
-import {mergeProps, useId, useLayoutEffect, useResizeObserver} from '-aria/utils';
-import {Popover, Tray} from '-spectrum/overlays';
-import {PressResponder, useHover} from '-aria/interactions';
-import {ProgressCircle} from '-spectrum/progress';
+import {ListBoxBase, useListBoxLayout} from '@vue-spectrum/listbox';
+import {mergeProps, useId, useLayoutEffect, useResizeObserver} from '@vue-aria/utils';
+import {Popover, Tray} from '@vue-spectrum/overlays';
+import {PressResponder, useHover} from '@vue-aria/interactions';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {ReactElement, useCallback, useRef, useState} from 'react';
-import {SpectrumPickerProps} from '-types/select';
+import {SpectrumPickerProps} from '@vue-types/select';
 import styles from '@adobe/spectrum-css-temp/components/dropdown/vars.css';
-import {Text} from '-spectrum/text';
-import {useFormProps} from '-spectrum/form';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProvider, useProviderProps} from '-spectrum/provider';
-import {useSelectState} from '-stately/select';
+import {Text} from '@vue-spectrum/text';
+import {useFormProps} from '@vue-spectrum/form';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProvider, useProviderProps} from '@vue-spectrum/provider';
+import {useSelectState} from '@vue-stately/select';
 
 /**
  * Pickers allow users to choose a single option from a collapsible list of options when space is limited.
@@ -50,7 +50,7 @@ export const Picker = React.forwardRef(function Picker<T extends object>(props: 
   props = useSlotProps(props, 'picker');
   props = useProviderProps(props);
   props = useFormProps(props);
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/picker');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/picker');
   let {
     autoComplete,
     isDisabled,

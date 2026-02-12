@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {DateFieldState, DateSegment} from '-stately/datepicker';
-import {DatePickerBase, DateValue} from '-types/datepicker';
+import {classNames} from '@vue-spectrum/utils';
+import {DateFieldState, DateSegment} from '@vue-stately/datepicker';
+import {DatePickerBase, DateValue} from '@vue-types/datepicker';
 import React, {JSX, useRef} from 'react';
 import styles from './styles.css';
-import {useDateSegment} from '-aria/datepicker';
+import {useDateSegment} from '@vue-aria/datepicker';
 
 interface DatePickerSegmentProps extends DatePickerBase<DateValue> {
   segment: DateSegment,

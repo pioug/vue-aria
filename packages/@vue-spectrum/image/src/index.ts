@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {Image} from './Image';
-export type {SpectrumImageProps} from '-types/image';
+export type {SpectrumImageProps} from '@vue-types/image';

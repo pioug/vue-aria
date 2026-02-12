@@ -10,19 +10,19 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
-import {classNames, ClearSlots, SlotProvider} from '-spectrum/utils';
-import {Dialog, DialogTrigger} from '-spectrum/dialog';
-import {FocusableRef} from '-types/shared';
+import {ActionButton} from '@vue-spectrum/button';
+import {classNames, ClearSlots, SlotProvider} from '@vue-spectrum/utils';
+import {Dialog, DialogTrigger} from '@vue-spectrum/dialog';
+import {FocusableRef} from '@vue-types/shared';
 import HelpOutline from '@spectrum-icons/workflow/HelpOutline';
 import helpStyles from '@adobe/spectrum-css-temp/components/contextualhelp/vars.css';
 import InfoOutline from '@spectrum-icons/workflow/InfoOutline';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeProps, useLabels} from '-aria/utils';
+import {mergeProps, useLabels} from '@vue-aria/utils';
 import React from 'react';
-import {SpectrumContextualHelpProps} from '-types/contextualhelp';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {SpectrumContextualHelpProps} from '@vue-types/contextualhelp';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 /**
  * Contextual help shows a user extra information about the state of an adjacent component, or a total view.
@@ -35,7 +35,7 @@ export const ContextualHelp = React.forwardRef(function ContextualHelp(props: Sp
     ...otherProps
   } = props;
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/contextualhelp');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/contextualhelp');
 
   let icon = variant === 'info' ? <InfoOutline /> : <HelpOutline />;
 

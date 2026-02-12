@@ -27,8 +27,8 @@ import {
   useDropIndicator,
   useDroppableCollection,
   useDroppableItem
-} from '-aria/dnd';
-import {DraggableCollectionProps, DragItem, DroppableCollectionProps, Key, RefObject} from '-types/shared';
+} from '@vue-aria/dnd';
+import {DraggableCollectionProps, DragItem, DroppableCollectionProps, Key, RefObject} from '@vue-types/shared';
 import {
   DraggableCollectionState,
   DraggableCollectionStateOptions,
@@ -36,7 +36,7 @@ import {
   DroppableCollectionStateOptions,
   useDraggableCollectionState,
   useDroppableCollectionState
-} from '-stately/dnd';
+} from '@vue-stately/dnd';
 import {JSX, useMemo} from 'react';
 
 interface DraggableCollectionStateOpts<T> extends Omit<DraggableCollectionStateOptions<T>, 'getItems'> {}

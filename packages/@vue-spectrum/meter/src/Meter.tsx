@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {ProgressBarBase} from '-spectrum/progress';
+import {classNames} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {ProgressBarBase} from '@vue-spectrum/progress';
 import React from 'react';
-import {SpectrumMeterProps} from '-types/meter';
+import {SpectrumMeterProps} from '@vue-types/meter';
 import styles from '@adobe/spectrum-css-temp/components/barloader/vars.css';
-import {useMeter} from '-aria/meter';
+import {useMeter} from '@vue-aria/meter';
 
 /**
  * Meters are visual representations of a quantity or an achievement.

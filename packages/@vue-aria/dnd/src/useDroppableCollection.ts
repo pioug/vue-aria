@@ -32,16 +32,16 @@ import {
   KeyboardDelegate,
   Node,
   RefObject
-} from '-types/shared';
+} from '@vue-types/shared';
 import * as DragManager from './DragManager';
-import {DroppableCollectionState} from '-stately/dnd';
+import {DroppableCollectionState} from '@vue-stately/dnd';
 import {HTMLAttributes, useCallback, useEffect, useRef} from 'react';
-import {mergeProps, useId, useLayoutEffect} from '-aria/utils';
+import {mergeProps, useId, useLayoutEffect} from '@vue-aria/utils';
 import {navigate} from './DropTargetKeyboardNavigation';
-import {setInteractionModality} from '-aria/interactions';
+import {setInteractionModality} from '@vue-aria/interactions';
 import {useAutoScroll} from './useAutoScroll';
 import {useDrop} from './useDrop';
-import {useLocale} from '-aria/i18n';
+import {useLocale} from '@vue-aria/i18n';
 
 export interface DroppableCollectionOptions extends DroppableCollectionProps {
   /** A delegate object that implements behavior for keyboard focus movement. */

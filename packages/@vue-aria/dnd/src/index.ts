@@ -51,7 +51,7 @@ export type {
   ItemDropTarget,
   RootDropTarget,
   TextDropItem
-} from '-types/shared';
+} from '@vue-types/shared';
 
 export {DIRECTORY_DRAG_TYPE} from './utils';
 export {useDrag} from './useDrag';

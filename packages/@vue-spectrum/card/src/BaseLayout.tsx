@@ -11,11 +11,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {Direction, Key, KeyboardDelegate, Node} from '-types/shared';
-import {getChildNodes, getFirstItem} from '-stately/collections';
-import {GridCollection} from '-stately/grid';
-import {InvalidationContext, Layout, LayoutInfo, Rect, Size} from '-stately/virtualizer';
-import {Scale} from '-types/provider';
+import {Direction, Key, KeyboardDelegate, Node} from '@vue-types/shared';
+import {getChildNodes, getFirstItem} from '@vue-stately/collections';
+import {GridCollection} from '@vue-stately/grid';
+import {InvalidationContext, Layout, LayoutInfo, Rect, Size} from '@vue-stately/virtualizer';
+import {Scale} from '@vue-types/provider';
 
 export interface BaseLayoutOptions {
   collator?: Intl.Collator,

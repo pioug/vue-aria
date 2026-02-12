@@ -11,8 +11,8 @@
  */
 
 import * as DragManager from './DragManager';
-import {DroppableCollectionState} from '-stately/dnd';
-import {DropTarget, FocusableElement, RefObject} from '-types/shared';
+import {DroppableCollectionState} from '@vue-stately/dnd';
+import {DropTarget, FocusableElement, RefObject} from '@vue-types/shared';
 import {getDroppableCollectionRef, getTypes, globalDndState, isInternalDropOperation} from './utils';
 import {HTMLAttributes, useEffect} from 'react';
 import {useVirtualDrop} from './useVirtualDrop';

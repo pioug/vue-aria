@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaDialogProps} from '-types/dialog';
-import {DOMAttributes, FocusableElement, RefObject} from '-types/shared';
-import {filterDOMProps, getActiveElement, isFocusWithin, useSlotId} from '-aria/utils';
-import {focusSafely} from '-aria/interactions';
+import {AriaDialogProps} from '@vue-types/dialog';
+import {DOMAttributes, FocusableElement, RefObject} from '@vue-types/shared';
+import {filterDOMProps, getActiveElement, isFocusWithin, useSlotId} from '@vue-aria/utils';
+import {focusSafely} from '@vue-aria/interactions';
 import {useEffect, useRef} from 'react';
-import {useOverlayFocusContain} from '-aria/overlays';
+import {useOverlayFocusContain} from '@vue-aria/overlays';
 
 export interface DialogAria {
   /** Props for the dialog container element. */

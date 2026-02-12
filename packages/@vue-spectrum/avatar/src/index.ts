@@ -11,4 +11,4 @@
  */
 /// <reference types="css-module-types" />
 export {Avatar} from './Avatar';
-export type {SpectrumAvatarProps} from '-types/avatar';
+export type {SpectrumAvatarProps} from '@vue-types/avatar';

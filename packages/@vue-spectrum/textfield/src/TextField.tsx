@@ -11,11 +11,11 @@
  */
 
 import React, {forwardRef, Ref, useEffect, useRef} from 'react';
-import {SpectrumTextFieldProps, TextFieldRef} from '-types/textfield';
+import {SpectrumTextFieldProps, TextFieldRef} from '@vue-types/textfield';
 import {TextFieldBase} from './TextFieldBase';
-import {useFormProps} from '-spectrum/form';
-import {useProviderProps} from '-spectrum/provider';
-import {useTextField} from '-aria/textfield';
+import {useFormProps} from '@vue-spectrum/form';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useTextField} from '@vue-aria/textfield';
 
 /**
  * TextFields are text inputs that allow users to input custom text entries

@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {KeyboardProps} from '-types/text';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {KeyboardProps} from '@vue-types/text';
 import React, {forwardRef} from 'react';
-import {useDOMRef, useSlotProps, useStyleProps} from '-spectrum/utils';
+import {useDOMRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
 
 /**
  * Keyboard represents text that specifies a keyboard command.

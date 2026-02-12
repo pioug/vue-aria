@@ -14,5 +14,5 @@
 
 export {ListBox} from './ListBox';
 export {useListBoxLayout, ListBoxBase} from './ListBoxBase';
-export {Item, Section} from '-stately/collections';
-export type {SpectrumListBoxProps} from '-types/listbox';
+export {Item, Section} from '@vue-stately/collections';
+export type {SpectrumListBoxProps} from '@vue-types/listbox';

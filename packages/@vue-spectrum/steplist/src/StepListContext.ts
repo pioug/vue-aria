@@ -11,6 +11,6 @@
  */
 
 import React from 'react';
-import {StepListState} from '-stately/steplist';
+import {StepListState} from '@vue-stately/steplist';
 
 export const StepListContext = React.createContext<StepListState<unknown> | null>(null);

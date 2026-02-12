@@ -11,5 +11,5 @@
  */
 /// <reference types="css-module-types" />
 export {ActionGroup} from './ActionGroup';
-export {Item} from '-stately/collections';
-export type {SpectrumActionGroupProps} from '-types/actiongroup';
+export {Item} from '@vue-stately/collections';
+export type {SpectrumActionGroupProps} from '@vue-types/actiongroup';

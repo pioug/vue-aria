@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, dimensionValue, useFocusableRef, useStyleProps} from '-spectrum/utils';
+import {classNames, dimensionValue, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
 import {ColorThumb} from './ColorThumb';
 import {ColorWheelContext, useContextProps} from 'react-aria-components';
-import {FocusableRef} from '-types/shared';
+import {FocusableRef} from '@vue-types/shared';
 import React, {useCallback, useRef, useState} from 'react';
-import {SpectrumColorWheelProps} from '-types/color';
+import {SpectrumColorWheelProps} from '@vue-types/color';
 import styles from '@adobe/spectrum-css-temp/components/colorwheel/vars.css';
-import {useColorWheel} from '-aria/color';
-import {useColorWheelState} from '-stately/color';
-import {useFocusRing} from '-aria/focus';
-import {useLayoutEffect, useResizeObserver} from '-aria/utils';
-import {useProviderProps} from '-spectrum/provider';
+import {useColorWheel} from '@vue-aria/color';
+import {useColorWheelState} from '@vue-stately/color';
+import {useFocusRing} from '@vue-aria/focus';
+import {useLayoutEffect, useResizeObserver} from '@vue-aria/utils';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 const WHEEL_THICKNESS = 24;
 

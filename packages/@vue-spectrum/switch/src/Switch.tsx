@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useFocusableRef, useStyleProps} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
+import {classNames, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
 import React, {forwardRef, useRef} from 'react';
-import {SpectrumSwitchProps} from '-types/switch';
+import {SpectrumSwitchProps} from '@vue-types/switch';
 import styles from '@adobe/spectrum-css-temp/components/toggle/vars.css';
-import {useHover} from '-aria/interactions';
-import {useProviderProps} from '-spectrum/provider';
-import {useSwitch} from '-aria/switch';
-import {useToggleState} from '-stately/toggle';
+import {useHover} from '@vue-aria/interactions';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useSwitch} from '@vue-aria/switch';
+import {useToggleState} from '@vue-stately/toggle';
 
 /**
  * Switches allow users to turn an individual option on or off.

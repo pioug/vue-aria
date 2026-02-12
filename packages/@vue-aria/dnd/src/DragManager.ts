@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {announce} from '-aria/live-announcer';
-import {ariaHideOutside} from '-aria/overlays';
-import {DragEndEvent, DragItem, DropActivateEvent, DropEnterEvent, DropEvent, DropExitEvent, DropItem, DropOperation, DropTarget as DroppableCollectionTarget, FocusableElement} from '-types/shared';
-import {getActiveElement, getEventTarget, isVirtualClick, isVirtualPointerEvent, nodeContains} from '-aria/utils';
+import {announce} from '@vue-aria/live-announcer';
+import {ariaHideOutside} from '@vue-aria/overlays';
+import {DragEndEvent, DragItem, DropActivateEvent, DropEnterEvent, DropEvent, DropExitEvent, DropItem, DropOperation, DropTarget as DroppableCollectionTarget, FocusableElement} from '@vue-types/shared';
+import {getActiveElement, getEventTarget, isVirtualClick, isVirtualPointerEvent, nodeContains} from '@vue-aria/utils';
 import {getDragModality, getTypes} from './utils';
 import type {LocalizedStringFormatter} from '@internationalized/string';
 import {RefObject, useEffect, useState} from 'react';

@@ -10,24 +10,24 @@
  * governing permissions and limitations under the License.
  */
 
-import {announce} from '-aria/live-announcer';
-import {AriaButtonProps} from '-types/button';
-import {AriaComboBoxProps, SelectionMode} from '-types/combobox';
-import {ariaHideOutside} from '-aria/overlays';
-import {AriaListBoxOptions, getItemId, listData} from '-aria/listbox';
-import {BaseEvent, DOMAttributes, KeyboardDelegate, LayoutDelegate, PressEvent, RefObject, RouterOptions, ValidationResult} from '-types/shared';
-import {chain, getActiveElement, getEventTarget, getOwnerDocument, isAppleDevice, mergeProps, nodeContains, useEvent, useFormReset, useId, useLabels, useRouter, useUpdateEffect} from '-aria/utils';
-import {ComboBoxState} from '-stately/combobox';
-import {dispatchVirtualFocus} from '-aria/focus';
+import {announce} from '@vue-aria/live-announcer';
+import {AriaButtonProps} from '@vue-types/button';
+import {AriaComboBoxProps, SelectionMode} from '@vue-types/combobox';
+import {ariaHideOutside} from '@vue-aria/overlays';
+import {AriaListBoxOptions, getItemId, listData} from '@vue-aria/listbox';
+import {BaseEvent, DOMAttributes, KeyboardDelegate, LayoutDelegate, PressEvent, RefObject, RouterOptions, ValidationResult} from '@vue-types/shared';
+import {chain, getActiveElement, getEventTarget, getOwnerDocument, isAppleDevice, mergeProps, nodeContains, useEvent, useFormReset, useId, useLabels, useRouter, useUpdateEffect} from '@vue-aria/utils';
+import {ComboBoxState} from '@vue-stately/combobox';
+import {dispatchVirtualFocus} from '@vue-aria/focus';
 import {FocusEvent, InputHTMLAttributes, KeyboardEvent, TouchEvent, useEffect, useMemo, useRef, useState} from 'react';
-import {getChildNodes, getItemCount} from '-stately/collections';
+import {getChildNodes, getItemCount} from '@vue-stately/collections';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListKeyboardDelegate, useSelectableCollection} from '-aria/selection';
-import {privateValidationStateProp} from '-stately/form';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useMenuTrigger} from '-aria/menu';
-import {useTextField} from '-aria/textfield';
+import {ListKeyboardDelegate, useSelectableCollection} from '@vue-aria/selection';
+import {privateValidationStateProp} from '@vue-stately/form';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useMenuTrigger} from '@vue-aria/menu';
+import {useTextField} from '@vue-aria/textfield';
 
 export interface AriaComboBoxOptions<T, M extends SelectionMode = 'single'> extends Omit<AriaComboBoxProps<T, M>, 'children'> {
   /** The ref for the input element. */
@@ -87,7 +87,7 @@ export function useComboBox<T, M extends SelectionMode = 'single'>(props: AriaCo
   let backupBtnRef = useRef(null);
   buttonRef = buttonRef ?? backupBtnRef;
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/combobox');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/combobox');
   let {menuTriggerProps, menuProps} = useMenuTrigger<T>(
     {
       type: 'listbox',

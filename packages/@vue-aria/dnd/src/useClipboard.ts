@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {chain, useEffectEvent} from '-aria/utils';
-import {DOMAttributes, DragItem, DropItem} from '-types/shared';
+import {chain, useEffectEvent} from '@vue-aria/utils';
+import {DOMAttributes, DragItem, DropItem} from '@vue-types/shared';
 import {readFromDataTransfer, writeToDataTransfer} from './utils';
 import {useEffect, useRef} from 'react';
-import {useFocus} from '-aria/interactions';
+import {useFocus} from '@vue-aria/interactions';
 
 export interface ClipboardProps {
   /** A function that returns the items to copy. */

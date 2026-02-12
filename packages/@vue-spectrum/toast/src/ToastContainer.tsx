@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaToastRegionProps} from '-aria/toast';
-import {classNames} from '-spectrum/utils';
-import {DOMProps} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {AriaToastRegionProps} from '@vue-aria/toast';
+import {classNames} from '@vue-spectrum/utils';
+import {DOMProps} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import {flushSync} from 'react-dom';
 import React, {ReactElement, useEffect, useMemo, useRef} from 'react';
 import {SpectrumToastValue, Toast} from './Toast';
 import toastContainerStyles from './toastContainer.css';
 import {Toaster} from './Toaster';
-import {ToastOptions, ToastQueue, useToastQueue} from '-stately/toast';
+import {ToastOptions, ToastQueue, useToastQueue} from '@vue-stately/toast';
 import {useSyncExternalStore} from 'use-sync-external-store/shim/index.js';
 
 export type ToastPlacement = 'top' | 'top end' | 'bottom' | 'bottom end';

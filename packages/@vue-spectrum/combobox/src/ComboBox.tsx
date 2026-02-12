@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import ChevronDownMedium from '@spectrum-icons/ui/ChevronDownMedium';
 import {
   classNames,
@@ -19,19 +19,19 @@ import {
   useIsMobileDevice,
   useResizeObserver,
   useUnwrapDOMRef
-} from '-spectrum/utils';
+} from '@vue-spectrum/utils';
 import comboboxStyles from './combobox.css';
-import {DOMRefValue, FocusableRef, FocusableRefValue} from '-types/shared';
-import {Field} from '-spectrum/label';
-import {FieldButton} from '-spectrum/button';
-import {FocusRing} from '-aria/focus';
+import {DOMRefValue, FocusableRef, FocusableRefValue} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {FieldButton} from '@vue-spectrum/button';
+import {FocusRing} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListBoxBase, useListBoxLayout} from '-spectrum/listbox';
+import {ListBoxBase, useListBoxLayout} from '@vue-spectrum/listbox';
 import {MobileComboBox} from './MobileComboBox';
-import {Popover} from '-spectrum/overlays';
-import {PressResponder, useHover} from '-aria/interactions';
-import {ProgressCircle} from '-spectrum/progress';
+import {Popover} from '@vue-spectrum/overlays';
+import {PressResponder, useHover} from '@vue-aria/interactions';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {
   ForwardedRef,
   InputHTMLAttributes,
@@ -42,16 +42,16 @@ import React, {
   useRef,
   useState
 } from 'react';
-import {SpectrumComboBoxProps} from '-types/combobox';
+import {SpectrumComboBoxProps} from '@vue-types/combobox';
 import styles from '@adobe/spectrum-css-temp/components/inputgroup/vars.css';
-import {TextFieldBase} from '-spectrum/textfield';
+import {TextFieldBase} from '@vue-spectrum/textfield';
 import textfieldStyles from '@adobe/spectrum-css-temp/components/textfield/vars.css';
-import {useComboBox} from '-aria/combobox';
-import {useComboBoxState} from '-stately/combobox';
-import {useFilter, useLocalizedStringFormatter} from '-aria/i18n';
-import {useFormProps} from '-spectrum/form';
-import {useLayoutEffect} from '-aria/utils';
-import {useProvider, useProviderProps} from '-spectrum/provider';
+import {useComboBox} from '@vue-aria/combobox';
+import {useComboBoxState} from '@vue-stately/combobox';
+import {useFilter, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useFormProps} from '@vue-spectrum/form';
+import {useLayoutEffect} from '@vue-aria/utils';
+import {useProvider, useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * ComboBoxes combine a text entry with a picker menu, allowing users to filter longer lists to only the selections matching a query.
@@ -95,7 +95,7 @@ const ComboBoxBase = React.forwardRef(function ComboBoxBase(props: SpectrumCombo
     formValue = 'text';
   }
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/combobox');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/combobox');
   let isAsync = loadingState != null;
   let popoverRef = useRef<DOMRefValue<HTMLDivElement>>(null);
   let unwrappedPopoverRef = useUnwrapDOMRef(popoverRef);
@@ -240,7 +240,7 @@ const ComboBoxInput = React.forwardRef(function ComboBoxInput(props: ComboBoxInp
     menuTrigger
   } = props;
   let {hoverProps, isHovered} = useHover({});
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/combobox');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/combobox');
   let timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   let [showLoading, setShowLoading] = useState(false);
 

@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, ClearSlots, SlotProvider, useFocusableRef, useSlotProps, useStyleProps} from '-spectrum/utils';
+import {classNames, ClearSlots, SlotProvider, useFocusableRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
 import CornerTriangle from '@spectrum-icons/ui/CornerTriangle';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
 import React from 'react';
-import {SpectrumActionButtonProps} from '-types/button';
+import {SpectrumActionButtonProps} from '@vue-types/button';
 import styles from '@adobe/spectrum-css-temp/components/button/vars.css';
-import {Text} from '-spectrum/text';
-import {useButton} from '-aria/button';
-import {useHover} from '-aria/interactions';
-import {useProviderProps} from '-spectrum/provider';
+import {Text} from '@vue-spectrum/text';
+import {useButton} from '@vue-aria/button';
+import {useHover} from '@vue-aria/interactions';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * ActionButtons allow users to perform an action.

@@ -11,32 +11,32 @@
  */
 
 import CalendarIcon from '@spectrum-icons/workflow/Calendar';
-import {classNames} from '-spectrum/utils';
-import {Content} from '-spectrum/view';
+import {classNames} from '@vue-spectrum/utils';
+import {Content} from '@vue-spectrum/view';
 import {DatePickerField} from './DatePickerField';
 import datepickerStyles from './styles.css';
-import {DateValue, SpectrumDateRangePickerProps} from '-types/datepicker';
-import {Dialog, DialogTrigger} from '-spectrum/dialog';
-import {Field} from '-spectrum/label';
-import {FieldButton} from '-spectrum/button';
-import {Flex} from '-spectrum/layout';
-import {FocusableRef} from '-types/shared';
+import {DateValue, SpectrumDateRangePickerProps} from '@vue-types/datepicker';
+import {Dialog, DialogTrigger} from '@vue-spectrum/dialog';
+import {Field} from '@vue-spectrum/label';
+import {FieldButton} from '@vue-spectrum/button';
+import {Flex} from '@vue-spectrum/layout';
+import {FocusableRef} from '@vue-types/shared';
 import {Input} from './Input';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeProps} from '-aria/utils';
-import {RangeCalendar} from '-spectrum/calendar';
+import {mergeProps} from '@vue-aria/utils';
+import {RangeCalendar} from '@vue-spectrum/calendar';
 import React, {ReactElement, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/inputgroup/vars.css';
 import {TimeField} from './TimeField';
-import {useDateRangePicker} from '-aria/datepicker';
-import {useDateRangePickerState} from '-stately/datepicker';
+import {useDateRangePicker} from '@vue-aria/datepicker';
+import {useDateRangePickerState} from '@vue-stately/datepicker';
 import {useFocusManagerRef, useFormatHelpText, useFormattedDateWidth, useVisibleMonths} from './utils';
-import {useFocusRing} from '-aria/focus';
-import {useFormProps} from '-spectrum/form';
-import {useHover} from '-aria/interactions';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {useFocusRing} from '@vue-aria/focus';
+import {useFormProps} from '@vue-spectrum/form';
+import {useHover} from '@vue-aria/interactions';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * DateRangePickers combine two DateFields and a RangeCalendar popover to allow users
@@ -62,7 +62,7 @@ export const DateRangePicker = React.forwardRef(function DateRangePicker<T exten
   let {isOpen, setOpen} = state;
   let {direction} = useLocale();
   let domRef = useFocusManagerRef(ref);
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/datepicker');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/datepicker');
 
   let {isFocused, isFocusVisible, focusProps} = useFocusRing({
     within: true,

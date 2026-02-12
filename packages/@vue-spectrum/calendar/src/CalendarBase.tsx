@@ -10,23 +10,23 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
-import {AriaButtonProps} from '-types/button';
+import {ActionButton} from '@vue-spectrum/button';
+import {AriaButtonProps} from '@vue-types/button';
 import {CalendarDate} from '@internationalized/date';
 import {CalendarMonth} from './CalendarMonth';
-import {CalendarPropsBase} from '-types/calendar';
-import {CalendarState, RangeCalendarState} from '-stately/calendar';
+import {CalendarPropsBase} from '@vue-types/calendar';
+import {CalendarState, RangeCalendarState} from '@vue-stately/calendar';
 import ChevronLeft from '@spectrum-icons/ui/ChevronLeftLarge';
 import ChevronRight from '@spectrum-icons/ui/ChevronRightLarge';
-import {classNames, useStyleProps} from '-spectrum/utils';
-import {DOMProps, RefObject, StyleProps} from '-types/shared';
-import {HelpText} from '-spectrum/label';
+import {classNames, useStyleProps} from '@vue-spectrum/utils';
+import {DOMProps, RefObject, StyleProps} from '@vue-types/shared';
+import {HelpText} from '@vue-spectrum/label';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React, {HTMLAttributes, JSX} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/calendar/vars.css';
-import {useDateFormatter, useLocale, useLocalizedStringFormatter} from '-aria/i18n';
-import {VisuallyHidden} from '-aria/visually-hidden';
+import {useDateFormatter, useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {VisuallyHidden} from '@vue-aria/visually-hidden';
 
 interface CalendarBaseProps<T extends CalendarState | RangeCalendarState> extends CalendarPropsBase, DOMProps, StyleProps {
   state: T,
@@ -50,7 +50,7 @@ export function CalendarBase<T extends CalendarState | RangeCalendarState>(props
     firstDayOfWeek
   } = props;
   let {styleProps} = useStyleProps(props);
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/calendar');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/calendar');
   let {direction} = useLocale();
   let currentMonth = state.visibleRange.start;
   let monthDateFormatter = useDateFormatter({

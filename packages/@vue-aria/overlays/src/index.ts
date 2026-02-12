@@ -29,5 +29,5 @@ export type {DismissButtonProps} from './DismissButton';
 export type {AriaPopoverProps, PopoverAria} from './usePopover';
 export type {AriaModalOverlayProps, ModalOverlayAria} from './useModalOverlay';
 export type {OverlayProps} from './Overlay';
-export type {Placement, PlacementAxis, PositionProps} from '-types/overlays';
+export type {Placement, PlacementAxis, PositionProps} from '@vue-types/overlays';
 export type {PortalProviderProps, PortalProviderContextValue} from './PortalProvider';

@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaMenuProps} from '-types/menu';
-import {DOMAttributes, KeyboardDelegate, KeyboardEvents, RefObject} from '-types/shared';
-import {filterDOMProps, mergeProps} from '-aria/utils';
+import {AriaMenuProps} from '@vue-types/menu';
+import {DOMAttributes, KeyboardDelegate, KeyboardEvents, RefObject} from '@vue-types/shared';
+import {filterDOMProps, mergeProps} from '@vue-aria/utils';
 import {menuData} from './utils';
-import {TreeState} from '-stately/tree';
-import {useSelectableList} from '-aria/selection';
+import {TreeState} from '@vue-stately/tree';
+import {useSelectableList} from '@vue-aria/selection';
 
 export interface MenuAria {
   /** Props for the menu element. */

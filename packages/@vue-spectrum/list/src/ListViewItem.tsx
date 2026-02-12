@@ -9,27 +9,27 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import {Checkbox} from '-spectrum/checkbox';
+import {Checkbox} from '@vue-spectrum/checkbox';
 import ChevronLeftMedium from '@spectrum-icons/ui/ChevronLeftMedium';
 import ChevronRightMedium from '@spectrum-icons/ui/ChevronRightMedium';
-import {classNames, ClearSlots, SlotProvider, useHasChild} from '-spectrum/utils';
+import {classNames, ClearSlots, SlotProvider, useHasChild} from '@vue-spectrum/utils';
 import {CSSTransition} from 'react-transition-group';
-import type {DraggableItemResult, DropIndicatorAria} from '-aria/dnd';
-import {DropTarget, Node} from '-types/shared';
-import {FocusRing, useFocusRing} from '-aria/focus';
-import {Grid} from '-spectrum/layout';
-import {isFocusVisible as isGlobalFocusVisible, useHover} from '-aria/interactions';
+import type {DraggableItemResult, DropIndicatorAria} from '@vue-aria/dnd';
+import {DropTarget, Node} from '@vue-types/shared';
+import {FocusRing, useFocusRing} from '@vue-aria/focus';
+import {Grid} from '@vue-spectrum/layout';
+import {isFocusVisible as isGlobalFocusVisible, useHover} from '@vue-aria/interactions';
 import ListGripper from '@spectrum-icons/ui/ListGripper';
 import listStyles from './styles.css';
 import {ListViewContext} from './ListView';
-import {mergeProps} from '-aria/utils';
-import {Provider} from '-spectrum/provider';
+import {mergeProps} from '@vue-aria/utils';
+import {Provider} from '@vue-spectrum/provider';
 import React, {JSX, useContext, useRef} from 'react';
-import {Text} from '-spectrum/text';
-import {useButton} from '-aria/button';
-import {useGridListItem, useGridListSelectionCheckbox} from '-aria/gridlist';
-import {useLocale} from '-aria/i18n';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {Text} from '@vue-spectrum/text';
+import {useButton} from '@vue-aria/button';
+import {useGridListItem, useGridListSelectionCheckbox} from '@vue-aria/gridlist';
+import {useLocale} from '@vue-aria/i18n';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 interface ListViewItemProps<T> {
   item: Node<T>,

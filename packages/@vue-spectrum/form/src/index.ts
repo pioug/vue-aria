@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {useFormProps, Form} from './Form';
-export type {SpectrumFormProps} from '-types/form';
+export type {SpectrumFormProps} from '@vue-types/form';

@@ -11,22 +11,22 @@
  */
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import CheckmarkMedium from '@spectrum-icons/ui/CheckmarkMedium';
-import {classNames, useFocusableRef} from '-spectrum/utils';
-import {ClearButton} from '-spectrum/button';
-import {ComboBoxState, useComboBoxState} from '-stately/combobox';
-import {DismissButton, useOverlayTrigger} from '-aria/overlays';
-import {Field} from '-spectrum/label';
-import {FocusableRef, ValidationState} from '-types/shared';
-import {focusSafely, setInteractionModality, useHover} from '-aria/interactions';
-import {FocusScope, useFocusRing} from '-aria/focus';
-import {getActiveElement, mergeProps, useFormReset, useId} from '-aria/utils';
+import {classNames, useFocusableRef} from '@vue-spectrum/utils';
+import {ClearButton} from '@vue-spectrum/button';
+import {ComboBoxState, useComboBoxState} from '@vue-stately/combobox';
+import {DismissButton, useOverlayTrigger} from '@vue-aria/overlays';
+import {Field} from '@vue-spectrum/label';
+import {FocusableRef, ValidationState} from '@vue-types/shared';
+import {focusSafely, setInteractionModality, useHover} from '@vue-aria/interactions';
+import {FocusScope, useFocusRing} from '@vue-aria/focus';
+import {getActiveElement, mergeProps, useFormReset, useId} from '@vue-aria/utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListBoxBase, useListBoxLayout} from '-spectrum/listbox';
+import {ListBoxBase, useListBoxLayout} from '@vue-spectrum/listbox';
 import Magnifier from '@spectrum-icons/ui/Magnifier';
-import {ProgressCircle} from '-spectrum/progress';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {
   HTMLAttributes,
   InputHTMLAttributes,
@@ -39,18 +39,18 @@ import React, {
 } from 'react';
 import searchAutocompleteStyles from './searchautocomplete.css';
 import searchStyles from '@adobe/spectrum-css-temp/components/search/vars.css';
-import {SpectrumSearchAutocompleteProps} from '-types/autocomplete';
+import {SpectrumSearchAutocompleteProps} from '@vue-types/autocomplete';
 import styles from '@adobe/spectrum-css-temp/components/inputgroup/vars.css';
-import {TextFieldBase} from '-spectrum/textfield';
+import {TextFieldBase} from '@vue-spectrum/textfield';
 import textfieldStyles from '@adobe/spectrum-css-temp/components/textfield/vars.css';
-import {Tray} from '-spectrum/overlays';
-import {useButton} from '-aria/button';
-import {useDialog} from '-aria/dialog';
-import {useField} from '-aria/label';
-import {useFilter, useLocalizedStringFormatter} from '-aria/i18n';
-import {useFormValidation} from '-aria/form';
-import {useProviderProps} from '-spectrum/provider';
-import {useSearchAutocomplete} from '-aria/autocomplete';
+import {Tray} from '@vue-spectrum/overlays';
+import {useButton} from '@vue-aria/button';
+import {useDialog} from '@vue-aria/dialog';
+import {useField} from '@vue-aria/label';
+import {useFilter, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useFormValidation} from '@vue-aria/form';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useSearchAutocomplete} from '@vue-aria/autocomplete';
 
 function ForwardMobileSearchAutocomplete<T extends object>(props: SpectrumSearchAutocompleteProps<T>, ref: FocusableRef<HTMLElement>) {
   props = useProviderProps(props);
@@ -204,7 +204,7 @@ const SearchAutocompleteButton = React.forwardRef(function SearchAutocompleteBut
     style,
     className
 } = props;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/autocomplete');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/autocomplete');
   let valueId = useId();
   let invalidId = useId();
   let validationIcon = validationState === 'invalid'
@@ -395,7 +395,7 @@ function SearchAutocompleteTray<T>(props: SearchAutocompleteTrayProps<T>) {
   let listBoxRef = useRef<HTMLDivElement>(null);
   let isLoading = loadingState === 'loading' || loadingState === 'loadingMore';
   let layout = useListBoxLayout();
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/autocomplete');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/autocomplete');
 
   let {inputProps, listBoxProps, labelProps, clearButtonProps} = useSearchAutocomplete<T>(
     {

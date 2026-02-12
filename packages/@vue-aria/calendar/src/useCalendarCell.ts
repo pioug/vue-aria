@@ -11,14 +11,14 @@
  */
 
 import {CalendarDate, isEqualDay, isSameDay, isToday} from '@internationalized/date';
-import {CalendarState, RangeCalendarState} from '-stately/calendar';
-import {DOMAttributes, RefObject} from '-types/shared';
-import {focusWithoutScrolling, getActiveElement, getEventTarget, getScrollParent, mergeProps, scrollIntoViewport, useDeepMemo, useDescription} from '-aria/utils';
+import {CalendarState, RangeCalendarState} from '@vue-stately/calendar';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {focusWithoutScrolling, getActiveElement, getEventTarget, getScrollParent, mergeProps, scrollIntoViewport, useDeepMemo, useDescription} from '@vue-aria/utils';
 import {getEraFormat, hookData} from './utils';
-import {getInteractionModality, usePress} from '-aria/interactions';
+import {getInteractionModality, usePress} from '@vue-aria/interactions';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {useDateFormatter, useLocalizedStringFormatter} from '-aria/i18n';
+import {useDateFormatter, useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useEffect, useMemo, useRef} from 'react';
 
 export interface AriaCalendarCellProps {
@@ -80,7 +80,7 @@ export interface CalendarCellAria {
 export function useCalendarCell(props: AriaCalendarCellProps, state: CalendarState | RangeCalendarState, ref: RefObject<HTMLElement | null>): CalendarCellAria {
   let {date, isDisabled} = props;
   let {errorMessageId, selectedDateDescription} = hookData.get(state)!;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/calendar');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/calendar');
   let dateFormatter = useDateFormatter({
     weekday: 'long',
     day: 'numeric',

@@ -11,16 +11,16 @@
  */
 
 import {CheckboxGroupContext} from './context';
-import {classNames, useDOMRef} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {Field} from '-spectrum/label';
-import {Provider, useProviderProps} from '-spectrum/provider';
+import {classNames, useDOMRef} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {Provider, useProviderProps} from '@vue-spectrum/provider';
 import React from 'react';
-import {SpectrumCheckboxGroupProps} from '-types/checkbox';
+import {SpectrumCheckboxGroupProps} from '@vue-types/checkbox';
 import styles from '@adobe/spectrum-css-temp/components/fieldgroup/vars.css';
-import {useCheckboxGroup} from '-aria/checkbox';
-import {useCheckboxGroupState} from '-stately/checkbox';
-import {useFormProps} from '-spectrum/form';
+import {useCheckboxGroup} from '@vue-aria/checkbox';
+import {useCheckboxGroupState} from '@vue-stately/checkbox';
+import {useFormProps} from '@vue-spectrum/form';
 
 /**
  * A CheckboxGroup allows users to select one or more items from a list of choices.

@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, ClearSlots, SlotProvider, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, ClearSlots, SlotProvider, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React, {forwardRef} from 'react';
-import {SpectrumBadgeProps} from '-types/badge';
+import {SpectrumBadgeProps} from '@vue-types/badge';
 import styles from '@adobe/spectrum-css-temp/components/badge/vars.css';
-import {Text} from '-spectrum/text';
-import {useProviderProps} from '-spectrum/provider';
+import {Text} from '@vue-spectrum/text';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 
 /**

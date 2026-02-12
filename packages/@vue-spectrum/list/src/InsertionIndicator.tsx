@@ -1,9 +1,9 @@
-import {classNames} from '-spectrum/utils';
-import {ItemDropTarget} from '-types/shared';
+import {classNames} from '@vue-spectrum/utils';
+import {ItemDropTarget} from '@vue-types/shared';
 import listStyles from './styles.css';
 import {ListViewContext} from './ListView';
 import React, {JSX, useContext, useRef} from 'react';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 interface InsertionIndicatorProps {
   target: ItemDropTarget,

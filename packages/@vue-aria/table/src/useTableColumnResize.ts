@@ -11,17 +11,17 @@
  */
 
 import {ChangeEvent, useCallback, useEffect, useRef} from 'react';
-import {ColumnSize} from '-types/table';
-import {DOMAttributes, FocusableElement, Key, RefObject} from '-types/shared';
-import {focusSafely, useInteractionModality, useKeyboard, useMove, usePress} from '-aria/interactions';
-import {getActiveElement, getEventTarget, mergeProps, useDescription, useEffectEvent, useId} from '-aria/utils';
+import {ColumnSize} from '@vue-types/table';
+import {DOMAttributes, FocusableElement, Key, RefObject} from '@vue-types/shared';
+import {focusSafely, useInteractionModality, useKeyboard, useMove, usePress} from '@vue-aria/interactions';
+import {getActiveElement, getEventTarget, mergeProps, useDescription, useEffectEvent, useId} from '@vue-aria/utils';
 import {getColumnHeaderId} from './utils';
-import {GridNode} from '-types/grid';
+import {GridNode} from '@vue-types/grid';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {TableColumnResizeState} from '-stately/table';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {TableColumnResizeState} from '@vue-stately/table';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 export interface TableColumnResizeAria {
   /** Props for the visually hidden input element. */
@@ -61,7 +61,7 @@ export interface AriaTableColumnResizeProps<T> {
  */
 export function useTableColumnResize<T>(props: AriaTableColumnResizeProps<T>, state: TableColumnResizeState<T>, ref: RefObject<HTMLInputElement | null>): TableColumnResizeAria {
   let {column: item, triggerRef, isDisabled, onResizeStart, onResize, onResizeEnd, 'aria-label': ariaLabel} = props;
-  const stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/table');
+  const stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/table');
   let id = useId();
   let isResizing = state.resizingColumn === item.key;
   let isResizingRef = useRef(isResizing);

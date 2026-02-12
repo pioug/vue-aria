@@ -14,5 +14,5 @@
 
 export {Radio} from './Radio';
 export {RadioGroup} from './RadioGroup';
-export type {SpectrumRadioProps} from '-types/radio';
-export type {SpectrumRadioGroupProps} from '-types/radio';
+export type {SpectrumRadioProps} from '@vue-types/radio';
+export type {SpectrumRadioGroupProps} from '@vue-types/radio';

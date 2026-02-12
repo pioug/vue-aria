@@ -11,10 +11,10 @@
  */
 
 import {DialogContext} from './context';
-import {Modal} from '-spectrum/overlays';
+import {Modal} from '@vue-spectrum/overlays';
 import React, {JSX, ReactElement, useState} from 'react';
-import {SpectrumDialogContainerProps} from '-types/dialog';
-import {useOverlayTriggerState} from '-stately/overlays';
+import {SpectrumDialogContainerProps} from '@vue-types/dialog';
+import {useOverlayTriggerState} from '@vue-stately/overlays';
 
 /**
  * A DialogContainer accepts a single Dialog as a child, and manages showing and hiding

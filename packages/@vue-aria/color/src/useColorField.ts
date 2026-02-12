@@ -10,9 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaColorFieldProps} from '-types/color';
-import {ColorFieldState} from '-stately/color';
-import {DOMAttributes, ValidationResult} from '-types/shared';
+import {AriaColorFieldProps} from '@vue-types/color';
+import {ColorFieldState} from '@vue-stately/color';
+import {DOMAttributes, ValidationResult} from '@vue-types/shared';
 import {
   InputHTMLAttributes,
   LabelHTMLAttributes,
@@ -20,11 +20,11 @@ import {
   useCallback,
   useState
 } from 'react';
-import {mergeProps, useFormReset, useId} from '-aria/utils';
-import {privateValidationStateProp} from '-stately/form';
-import {useFocusWithin, useScrollWheel} from '-aria/interactions';
-import {useFormattedTextField} from '-aria/textfield';
-import {useSpinButton} from '-aria/spinbutton';
+import {mergeProps, useFormReset, useId} from '@vue-aria/utils';
+import {privateValidationStateProp} from '@vue-stately/form';
+import {useFocusWithin, useScrollWheel} from '@vue-aria/interactions';
+import {useFormattedTextField} from '@vue-aria/textfield';
+import {useSpinButton} from '@vue-aria/spinbutton';
 
 export interface ColorFieldAria extends ValidationResult {
   /** Props for the label element. */

@@ -11,16 +11,16 @@
  */
 
 import Asterisk from '@spectrum-icons/ui/Asterisk';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React from 'react';
-import {SpectrumLabelProps} from '-types/label';
+import {SpectrumLabelProps} from '@vue-types/label';
 import styles from '@adobe/spectrum-css-temp/components/fieldlabel/vars.css';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 export const Label = React.forwardRef(function Label(props: SpectrumLabelProps, ref: DOMRef<HTMLLabelElement>) {
   props = useProviderProps(props);
@@ -41,7 +41,7 @@ export const Label = React.forwardRef(function Label(props: SpectrumLabelProps, 
   let domRef = useDOMRef(ref);
   let {styleProps} = useStyleProps(otherProps);
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/label');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/label');
   let necessityLabel = isRequired ? stringFormatter.format('(required)') : stringFormatter.format('(optional)');
   let icon = (
     <Asterisk

@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaModalOverlayProps, useModalOverlay} from '-aria/overlays';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef, RefObject, StyleProps} from '-types/shared';
+import {AriaModalOverlayProps, useModalOverlay} from '@vue-aria/overlays';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, RefObject, StyleProps} from '@vue-types/shared';
 import modalStyles from '@adobe/spectrum-css-temp/components/modal/vars.css';
 import {Overlay} from './Overlay';
-import {OverlayProps} from '-types/overlays';
-import {OverlayTriggerState} from '-stately/overlays';
+import {OverlayProps} from '@vue-types/overlays';
+import {OverlayTriggerState} from '@vue-stately/overlays';
 import overrideStyles from './overlays.css';
 import React, {ForwardedRef, forwardRef, ReactNode, useRef} from 'react';
 import {Underlay} from './Underlay';
-import {useObjectRef, useViewportSize} from '-aria/utils';
+import {useObjectRef, useViewportSize} from '@vue-aria/utils';
 
 interface ModalProps extends AriaModalOverlayProps, StyleProps, Omit<OverlayProps, 'nodeRef' | 'shouldContainFocus'> {
   children: ReactNode,

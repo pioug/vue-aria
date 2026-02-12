@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
+import {classNames} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React from 'react';
 import {SliderBase, SliderBaseChildArguments, SliderBaseProps} from './SliderBase';
 import {SliderThumb} from './SliderThumb';
-import {SpectrumRangeSliderProps} from '-types/slider';
+import {SpectrumRangeSliderProps} from '@vue-types/slider';
 import styles from '@adobe/spectrum-css-temp/components/slider/vars.css';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 /**
  * RangeSliders allow users to quickly select a subset range. They should be used when the upper and lower bounds to the range are invariable.
@@ -47,7 +47,7 @@ export const RangeSlider = React.forwardRef(function RangeSlider(props: Spectrum
     getValueLabel: getValueLabel ? ([start, end]) => getValueLabel({start, end}) : undefined
   };
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/slider');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/slider');
   let {direction} = useLocale();
 
   return (

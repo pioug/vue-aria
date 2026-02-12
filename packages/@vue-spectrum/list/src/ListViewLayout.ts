@@ -9,9 +9,9 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import {InvalidationContext, LayoutInfo, Rect} from '-stately/virtualizer';
-import {LayoutNode, ListLayout, ListLayoutOptions} from '-stately/layout';
-import {Node} from '-types/shared';
+import {InvalidationContext, LayoutInfo, Rect} from '@vue-stately/virtualizer';
+import {LayoutNode, ListLayout, ListLayoutOptions} from '@vue-stately/layout';
+import {Node} from '@vue-types/shared';
 
 interface ListViewLayoutProps extends ListLayoutOptions {
   isLoading?: boolean

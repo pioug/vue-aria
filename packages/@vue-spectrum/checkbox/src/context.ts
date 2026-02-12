@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {CheckboxGroupState} from '-stately/checkbox';
+import {CheckboxGroupState} from '@vue-stately/checkbox';
 import React from 'react';
 
 export const CheckboxGroupContext = React.createContext<CheckboxGroupState | null>(null);

@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps, DOMRef, StyleProps} from '-types/shared';
-import {classNames, SlotProvider, useDOMRef, useStyleProps} from '-spectrum/utils';
+import {AriaLabelingProps, DOMProps, DOMRef, StyleProps} from '@vue-types/shared';
+import {classNames, SlotProvider, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
 import {DropZoneProps, HeadingContext, Provider, DropZone as RACDropZone} from 'react-aria-components';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeProps, useId} from '-aria/utils';
+import {mergeProps, useId} from '@vue-aria/utils';
 import React, {ReactNode} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/dropzone/vars.css';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface SpectrumDropZoneProps extends Omit<DropZoneProps, 'onHoverStart' | 'onHoverChange' | 'onHoverEnd' | 'isDisabled' | 'className' | 'style' | 'render'>, DOMProps, StyleProps, AriaLabelingProps {
   /** The content to display in the drop zone. */
@@ -45,7 +45,7 @@ export const DropZone = React.forwardRef(function DropZone(props: SpectrumDropZo
   let domRef = useDOMRef(ref);
   let messageId = useId();
   let headingId = useId();
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/dropzone');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/dropzone');
   let ariaLabelledby = isFilled ? `${headingId} ${messageId}` : headingId;
 
   return (

@@ -14,4 +14,4 @@
 
 export {Calendar} from './Calendar';
 export {RangeCalendar} from './RangeCalendar';
-export type {SpectrumCalendarProps, SpectrumRangeCalendarProps} from '-types/calendar';
+export type {SpectrumCalendarProps, SpectrumRangeCalendarProps} from '@vue-types/calendar';

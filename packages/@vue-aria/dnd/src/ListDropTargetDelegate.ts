@@ -1,4 +1,4 @@
-import {Direction, DropTarget, DropTargetDelegate, Node, Orientation, RefObject} from '-types/shared';
+import {Direction, DropTarget, DropTargetDelegate, Node, Orientation, RefObject} from '@vue-types/shared';
 
 interface ListDropTargetDelegateOptions {
   /**

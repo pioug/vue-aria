@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMAttributes, FocusableElement, RefObject} from '-types/shared';
+import {DOMAttributes, FocusableElement, RefObject} from '@vue-types/shared';
 import {getCellId} from './utils';
-import {GridNode} from '-types/grid';
-import {TableState} from '-stately/table';
-import {useGridCell} from '-aria/grid';
+import {GridNode} from '@vue-types/grid';
+import {TableState} from '@vue-stately/table';
+import {useGridCell} from '@vue-aria/grid';
 
 export interface AriaTableCellProps {
   /** An object representing the table cell. Contains all the relevant information that makes up the row header. */

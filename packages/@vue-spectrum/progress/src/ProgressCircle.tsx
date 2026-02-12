@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {clamp} from '-aria/utils';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
+import {clamp} from '@vue-aria/utils';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
 import React, {CSSProperties} from 'react';
-import {SpectrumProgressCircleProps} from '-types/progress';
+import {SpectrumProgressCircleProps} from '@vue-types/progress';
 import styles from '@adobe/spectrum-css-temp/components/circleloader/vars.css';
-import {useProgressBar} from '-aria/progress';
+import {useProgressBar} from '@vue-aria/progress';
 
 
 /**

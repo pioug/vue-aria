@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, getWrappedElement, useSlotProps, useStyleProps} from '-spectrum/utils';
-import {FocusRing} from '-aria/focus';
-import {mergeProps, mergeRefs} from '-aria/utils';
+import {classNames, getWrappedElement, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps, mergeRefs} from '@vue-aria/utils';
 import React, {ForwardedRef, JSX, MutableRefObject, useRef} from 'react';
-import {SpectrumLinkProps} from '-types/link';
+import {SpectrumLinkProps} from '@vue-types/link';
 import styles from '@adobe/spectrum-css-temp/components/link/vars.css';
-import {useHover} from '-aria/interactions';
-import {useLink} from '-aria/link';
-import {useProviderProps} from '-spectrum/provider';
+import {useHover} from '@vue-aria/interactions';
+import {useLink} from '@vue-aria/link';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 let isOldReact = parseInt(React.version, 10) <= 18;
 /**

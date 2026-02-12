@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {chain, getActiveElement, getEventTarget, getScrollParent, isIOS, isScrollable, useLayoutEffect, willOpenKeyboard} from '-aria/utils';
+import {chain, getActiveElement, getEventTarget, getScrollParent, isIOS, isScrollable, useLayoutEffect, willOpenKeyboard} from '@vue-aria/utils';
 
 interface PreventScrollOptions {
   /** Whether the scroll lock is disabled. */

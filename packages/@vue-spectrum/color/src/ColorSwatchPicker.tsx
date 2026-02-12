@@ -11,12 +11,12 @@
  */
 
 import {ColorSwatchPicker as AriaColorSwatchPicker, ColorSwatchPickerItem as AriaColorSwatchPickerItem} from 'react-aria-components';
-import {Color} from '-types/color';
-import {DOMRef, StyleProps, ValueBase} from '-types/shared';
+import {Color} from '@vue-types/color';
+import {DOMRef, StyleProps, ValueBase} from '@vue-types/shared';
 import React, {forwardRef, ReactElement, ReactNode} from 'react';
 import {SpectrumColorSwatchContext, SpectrumColorSwatchProps} from './ColorSwatch';
-import {style} from '-spectrum/style-macro-s1' with {type: 'macro'};
-import {useDOMRef, useStyleProps} from '-spectrum/utils';
+import {style} from '@vue-spectrum/style-macro-s1' with {type: 'macro'};
+import {useDOMRef, useStyleProps} from '@vue-spectrum/utils';
 
 export interface SpectrumColorSwatchPickerProps extends ValueBase<string | Color, Color>, StyleProps {
   /** The ColorSwatches within the ColorSwatchPicker. */

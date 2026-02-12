@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, SlotProvider, useFocusableRef, useStyleProps} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
+import {classNames, SlotProvider, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
 import React from 'react';
-import {SpectrumToggleButtonProps} from '-types/button';
+import {SpectrumToggleButtonProps} from '@vue-types/button';
 import styles from '@adobe/spectrum-css-temp/components/button/vars.css';
-import {Text} from '-spectrum/text';
-import {useHover} from '-aria/interactions';
-import {useProviderProps} from '-spectrum/provider';
-import {useToggleButton} from '-aria/button';
-import {useToggleState} from '-stately/toggle';
+import {Text} from '@vue-spectrum/text';
+import {useHover} from '@vue-aria/interactions';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useToggleButton} from '@vue-aria/button';
+import {useToggleState} from '@vue-stately/toggle';
 
 /**
  * ToggleButtons allow users to toggle a selection on or off, for example

@@ -13,18 +13,18 @@
 import {CheckboxContext, useContextProps} from 'react-aria-components';
 import {CheckboxGroupContext} from './context';
 import CheckmarkSmall from '@spectrum-icons/ui/CheckmarkSmall';
-import {classNames, useFocusableRef, useStyleProps} from '-spectrum/utils';
+import {classNames, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
 import DashSmall from '@spectrum-icons/ui/DashSmall';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
 import React, {forwardRef, useContext, useRef} from 'react';
-import {SpectrumCheckboxProps} from '-types/checkbox';
+import {SpectrumCheckboxProps} from '@vue-types/checkbox';
 import styles from '@adobe/spectrum-css-temp/components/checkbox/vars.css';
-import {useCheckbox, useCheckboxGroupItem} from '-aria/checkbox';
-import {useFormProps} from '-spectrum/form';
-import {useHover} from '-aria/interactions';
-import {useProviderProps} from '-spectrum/provider';
-import {useToggleState} from '-stately/toggle';
+import {useCheckbox, useCheckboxGroupItem} from '@vue-aria/checkbox';
+import {useFormProps} from '@vue-spectrum/form';
+import {useHover} from '@vue-aria/interactions';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useToggleState} from '@vue-stately/toggle';
 
 /**
  * Checkboxes allow users to select multiple items from a list of individual items,

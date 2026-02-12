@@ -12,7 +12,7 @@
  */
 
 import {BaseLayout, BaseLayoutOptions} from './BaseLayout';
-import {LayoutInfo, Rect, Size} from '-stately/virtualizer';
+import {LayoutInfo, Rect, Size} from '@vue-stately/virtualizer';
 
 export interface GalleryLayoutOptions extends BaseLayoutOptions {
   // /**

@@ -12,9 +12,9 @@
  */
 
 import {BaseLayout, BaseLayoutOptions} from './BaseLayout';
-import {getChildNodes, getFirstItem} from '-stately/collections';
-import {Key, Node, Orientation} from '-types/shared';
-import {LayoutInfo, Rect, Size} from '-stately/virtualizer';
+import {getChildNodes, getFirstItem} from '@vue-stately/collections';
+import {Key, Node, Orientation} from '@vue-types/shared';
+import {LayoutInfo, Rect, Size} from '@vue-stately/virtualizer';
 
 export interface GridLayoutOptions extends BaseLayoutOptions {
   // /**

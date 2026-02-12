@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 import ChevronRightMedium from '@spectrum-icons/ui/ChevronRightMedium';
-import {classNames} from '-spectrum/utils';
-import {FocusRing} from '-aria/focus';
+import {classNames} from '@vue-spectrum/utils';
+import {FocusRing} from '@vue-aria/focus';
 import intlMessages from '../intl';
-import {mergeProps, useId} from '-aria/utils';
-import {Node} from '-types/shared';
+import {mergeProps, useId} from '@vue-aria/utils';
+import {Node} from '@vue-types/shared';
 import React, {ReactNode, useContext, useRef} from 'react';
 import {StepListContext} from './StepListContext';
 import styles from '@adobe/spectrum-css-temp/components/steplist/vars.css';
-import {useHover} from '-aria/interactions';
-import {useLocale, useLocalizedStringFormatter, useNumberFormatter} from '-aria/i18n';
-import {useStepListItem} from '-aria/steplist';
-import {VisuallyHidden} from '-aria/visually-hidden';
+import {useHover} from '@vue-aria/interactions';
+import {useLocale, useLocalizedStringFormatter, useNumberFormatter} from '@vue-aria/i18n';
+import {useStepListItem} from '@vue-aria/steplist';
+import {VisuallyHidden} from '@vue-aria/visually-hidden';
 
 interface SpectrumStepListItemProps<T> {
   item: Node<T>,
@@ -49,7 +49,7 @@ export function StepListItem<T>(props: SpectrumStepListItemProps<T>): ReactNode 
 
 
   let stepStateText = '';
-  const stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/steplist');
+  const stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/steplist');
   const numberFormatter = useNumberFormatter();
 
   if (isSelected) {

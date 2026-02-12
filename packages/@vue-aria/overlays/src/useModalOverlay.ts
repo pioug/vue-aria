@@ -12,9 +12,9 @@
 
 import {ariaHideOutside} from './ariaHideOutside';
 import {AriaOverlayProps, useOverlay} from './useOverlay';
-import {DOMAttributes, RefObject} from '-types/shared';
-import {mergeProps} from '-aria/utils';
-import {OverlayTriggerState} from '-stately/overlays';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {mergeProps} from '@vue-aria/utils';
+import {OverlayTriggerState} from '@vue-stately/overlays';
 import {useEffect} from 'react';
 import {useOverlayFocusContain} from './Overlay';
 import {usePreventScroll} from './usePreventScroll';

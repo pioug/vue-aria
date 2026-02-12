@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaColorSliderProps} from '-types/color';
-import {ColorSliderState} from '-stately/color';
-import {DOMAttributes, RefObject} from '-types/shared';
+import {AriaColorSliderProps} from '@vue-types/color';
+import {ColorSliderState} from '@vue-stately/color';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
 import {InputHTMLAttributes} from 'react';
-import {mergeProps} from '-aria/utils';
-import {useLocale} from '-aria/i18n';
-import {useSlider, useSliderThumb} from '-aria/slider';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {mergeProps} from '@vue-aria/utils';
+import {useLocale} from '@vue-aria/i18n';
+import {useSlider, useSliderThumb} from '@vue-aria/slider';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 export interface AriaColorSliderOptions extends AriaColorSliderProps {
   /** A ref for the track element. */

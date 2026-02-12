@@ -17,12 +17,12 @@ import {
   useResizeObserver,
   useSlotProps,
   useStyleProps
-} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps, useLayoutEffect, useValueEffect} from '-aria/utils';
-import {Provider, useProvider, useProviderProps} from '-spectrum/provider';
+} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps, useLayoutEffect, useValueEffect} from '@vue-aria/utils';
+import {Provider, useProvider, useProviderProps} from '@vue-spectrum/provider';
 import React, {useCallback, useRef} from 'react';
-import {SpectrumButtonGroupProps} from '-types/buttongroup';
+import {SpectrumButtonGroupProps} from '@vue-types/buttongroup';
 import styles from '@adobe/spectrum-css-temp/components/buttongroup/vars.css';
 
 /**

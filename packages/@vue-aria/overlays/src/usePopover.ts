@@ -12,10 +12,10 @@
 
 import {ariaHideOutside, keepVisible} from './ariaHideOutside';
 import {AriaPositionProps, useOverlayPosition} from './useOverlayPosition';
-import {DOMAttributes, RefObject} from '-types/shared';
-import {mergeProps} from '-aria/utils';
-import {OverlayTriggerState} from '-stately/overlays';
-import {PlacementAxis} from '-types/overlays';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {mergeProps} from '@vue-aria/utils';
+import {OverlayTriggerState} from '@vue-stately/overlays';
+import {PlacementAxis} from '@vue-types/overlays';
 import {useEffect} from 'react';
 import {useOverlay} from './useOverlay';
 import {usePreventScroll} from './usePreventScroll';

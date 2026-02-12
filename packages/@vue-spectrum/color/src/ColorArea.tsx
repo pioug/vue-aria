@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, dimensionValue, useFocusableRef, useStyleProps} from '-spectrum/utils';
+import {classNames, dimensionValue, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
 import {ColorAreaContext, useContextProps} from 'react-aria-components';
 import {ColorThumb} from './ColorThumb';
-import {FocusableRef} from '-types/shared';
-import {mergeProps} from '-aria/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {mergeProps} from '@vue-aria/utils';
 import React, {ReactElement, useRef} from 'react';
-import {SpectrumColorAreaProps} from '-types/color';
+import {SpectrumColorAreaProps} from '@vue-types/color';
 import styles from '@adobe/spectrum-css-temp/components/colorarea/vars.css';
-import {useColorArea} from '-aria/color';
-import {useColorAreaState} from '-stately/color';
-import {useFocusRing} from '-aria/focus';
-import {useProviderProps} from '-spectrum/provider';
+import {useColorArea} from '@vue-aria/color';
+import {useColorAreaState} from '@vue-stately/color';
+import {useFocusRing} from '@vue-aria/focus';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * ColorArea allows users to adjust two channels of an RGB, HSL or HSB color value against a two-dimensional gradient background.

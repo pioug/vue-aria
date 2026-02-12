@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {clamp} from '-aria/utils';
-import {classNames} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
+import {clamp} from '@vue-aria/utils';
+import {classNames} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
 import React, {ReactNode} from 'react';
 import {SliderBase, SliderBaseChildArguments, SliderBaseProps} from './SliderBase';
 import {SliderThumb} from './SliderThumb';
-import {SpectrumSliderProps} from '-types/slider';
+import {SpectrumSliderProps} from '@vue-types/slider';
 import styles from '@adobe/spectrum-css-temp/components/slider/vars.css';
-import {useLocale} from '-aria/i18n';
+import {useLocale} from '@vue-aria/i18n';
 
 /**
  * Sliders allow users to quickly select a value within a range. They should be used when the upper and lower bounds to the range are invariable.

@@ -10,29 +10,29 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaGridListProps, useGridList} from '-aria/gridlist';
-import {AsyncLoadable, DOMRef, Key, LoadingState, Node, SpectrumSelectionProps, StyleProps} from '-types/shared';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import type {DragAndDropHooks} from '-spectrum/dnd';
-import type {DraggableCollectionState, DroppableCollectionState} from '-stately/dnd';
-import type {DroppableCollectionResult} from '-aria/dnd';
-import {filterDOMProps, mergeProps, useLayoutEffect} from '-aria/utils';
-import {FocusRing, FocusScope} from '-aria/focus';
+import {AriaGridListProps, useGridList} from '@vue-aria/gridlist';
+import {AsyncLoadable, DOMRef, Key, LoadingState, Node, SpectrumSelectionProps, StyleProps} from '@vue-types/shared';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import type {DragAndDropHooks} from '@vue-spectrum/dnd';
+import type {DraggableCollectionState, DroppableCollectionState} from '@vue-stately/dnd';
+import type {DroppableCollectionResult} from '@vue-aria/dnd';
+import {filterDOMProps, mergeProps, useLayoutEffect} from '@vue-aria/utils';
+import {FocusRing, FocusScope} from '@vue-aria/focus';
 import InsertionIndicator from './InsertionIndicator';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListKeyboardDelegate} from '-aria/selection';
-import {ListState, useListState} from '-stately/list';
+import {ListKeyboardDelegate} from '@vue-aria/selection';
+import {ListState, useListState} from '@vue-stately/list';
 import listStyles from './styles.css';
 import {ListViewItem} from './ListViewItem';
 import {ListViewLayout} from './ListViewLayout';
-import {ProgressCircle} from '-spectrum/progress';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {JSX, ReactElement, useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import RootDropIndicator from './RootDropIndicator';
 import {DragPreview as SpectrumDragPreview} from './DragPreview';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProvider} from '-spectrum/provider';
-import {Virtualizer} from '-aria/virtualizer';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProvider} from '@vue-spectrum/provider';
+import {Virtualizer} from '@vue-aria/virtualizer';
 
 export interface SpectrumListViewProps<T> extends Omit<AriaGridListProps<T>, 'keyboardNavigationBehavior'>, StyleProps, SpectrumSelectionProps, Omit<AsyncLoadable, 'isLoading'> {
   /**
@@ -310,7 +310,7 @@ function Item({item}: {item: Node<unknown>}) {
 
 function LoadingView() {
   let {state} = useContext(ListViewContext)!;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/list');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/list');
   return (
     <CenteredWrapper>
       <ProgressCircle

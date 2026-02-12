@@ -11,12 +11,12 @@
  */
 
 import {CalendarDate, getWeeksInMonth, startOfWeek, today} from '@internationalized/date';
-import {CalendarState, RangeCalendarState} from '-stately/calendar';
-import {DOMAttributes} from '-types/shared';
+import {CalendarState, RangeCalendarState} from '@vue-stately/calendar';
+import {DOMAttributes} from '@vue-types/shared';
 import {hookData, useVisibleRangeDescription} from './utils';
 import {KeyboardEvent, useMemo} from 'react';
-import {mergeProps, useLabels} from '-aria/utils';
-import {useDateFormatter, useLocale} from '-aria/i18n';
+import {mergeProps, useLabels} from '@vue-aria/utils';
+import {useDateFormatter, useLocale} from '@vue-aria/i18n';
 
 export interface AriaCalendarGridProps {
   /**

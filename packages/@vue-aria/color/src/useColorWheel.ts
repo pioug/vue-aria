@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaColorWheelProps} from '-types/color';
-import {ColorWheelState} from '-stately/color';
-import {DOMAttributes, RefObject} from '-types/shared';
-import {focusWithoutScrolling, getEventTarget, mergeProps, useFormReset, useGlobalListeners, useLabels} from '-aria/utils';
+import {AriaColorWheelProps} from '@vue-types/color';
+import {ColorWheelState} from '@vue-stately/color';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {focusWithoutScrolling, getEventTarget, mergeProps, useFormReset, useGlobalListeners, useLabels} from '@vue-aria/utils';
 import React, {ChangeEvent, InputHTMLAttributes, useCallback, useRef} from 'react';
-import {useKeyboard, useMove} from '-aria/interactions';
-import {useLocale} from '-aria/i18n';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {useKeyboard, useMove} from '@vue-aria/interactions';
+import {useLocale} from '@vue-aria/i18n';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 export interface AriaColorWheelOptions extends AriaColorWheelProps {
   /** The outer radius of the color wheel. */

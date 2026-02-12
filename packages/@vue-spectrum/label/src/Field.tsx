@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, SlotProvider, useStyleProps} from '-spectrum/utils';
-import {Flex} from '-spectrum/layout';
+import {classNames, SlotProvider, useStyleProps} from '@vue-spectrum/utils';
+import {Flex} from '@vue-spectrum/layout';
 import {HelpText} from './HelpText';
 import {Label} from './Label';
-import {LabelPosition, RefObject} from '-types/shared';
+import {LabelPosition, RefObject} from '@vue-types/shared';
 import labelStyles from '@adobe/spectrum-css-temp/components/fieldlabel/vars.css';
-import {mergeProps, useId} from '-aria/utils';
+import {mergeProps, useId} from '@vue-aria/utils';
 import React, {ReactNode, Ref} from 'react';
-import {SpectrumFieldProps} from '-types/label';
-import {useFormProps} from '-spectrum/form';
+import {SpectrumFieldProps} from '@vue-types/label';
+import {useFormProps} from '@vue-spectrum/form';
 
 export const Field = React.forwardRef(function Field(props: SpectrumFieldProps, ref: Ref<HTMLElement>) {
   let formProps = useFormProps(props);

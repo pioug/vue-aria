@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps} from '-types/shared';
+import {AriaLabelingProps, DOMProps} from '@vue-types/shared';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React, {JSX} from 'react';
-import {useLabels} from '-aria/utils';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {VisuallyHidden} from '-aria/visually-hidden';
+import {useLabels} from '@vue-aria/utils';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {VisuallyHidden} from '@vue-aria/visually-hidden';
 
 export interface DismissButtonProps extends AriaLabelingProps, DOMProps {
   /** Called when the dismiss button is activated. */
@@ -30,7 +30,7 @@ export interface DismissButtonProps extends AriaLabelingProps, DOMProps {
  */
 export function DismissButton(props: DismissButtonProps): JSX.Element {
   let {onDismiss, ...otherProps} = props;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/overlays');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/overlays');
 
   let labels = useLabels(otherProps, stringFormatter.format('dismiss'));
 

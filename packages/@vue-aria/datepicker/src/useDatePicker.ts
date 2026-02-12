@@ -10,22 +10,22 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {AriaDatePickerProps, DateValue} from '-types/datepicker';
-import {AriaDialogProps} from '-types/dialog';
-import {CalendarProps} from '-types/calendar';
-import {createFocusManager} from '-aria/focus';
-import {DatePickerState} from '-stately/datepicker';
-import {DOMAttributes, GroupDOMAttributes, KeyboardEvent, RefObject, ValidationResult} from '-types/shared';
-import {filterDOMProps, mergeProps, nodeContains, useDescription, useId} from '-aria/utils';
+import {AriaButtonProps} from '@vue-types/button';
+import {AriaDatePickerProps, DateValue} from '@vue-types/datepicker';
+import {AriaDialogProps} from '@vue-types/dialog';
+import {CalendarProps} from '@vue-types/calendar';
+import {createFocusManager} from '@vue-aria/focus';
+import {DatePickerState} from '@vue-stately/datepicker';
+import {DOMAttributes, GroupDOMAttributes, KeyboardEvent, RefObject, ValidationResult} from '@vue-types/shared';
+import {filterDOMProps, mergeProps, nodeContains, useDescription, useId} from '@vue-aria/utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {privateValidationStateProp} from '-stately/form';
+import {privateValidationStateProp} from '@vue-stately/form';
 import {roleSymbol} from './useDateField';
 import {useDatePickerGroup} from './useDatePickerGroup';
-import {useField} from '-aria/label';
-import {useFocusWithin} from '-aria/interactions';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {useField} from '@vue-aria/label';
+import {useFocusWithin} from '@vue-aria/interactions';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useMemo, useRef} from 'react';
 
 export interface DatePickerAria extends ValidationResult {
@@ -55,7 +55,7 @@ export function useDatePicker<T extends DateValue>(props: AriaDatePickerProps<T>
   let buttonId = useId();
   let dialogId = useId();
   let fieldId = useId();
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/datepicker');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/datepicker');
 
   let {isInvalid, validationErrors, validationDetails} = state.displayValidation;
   let {labelProps, fieldProps, descriptionProps, errorMessageProps} = useField({

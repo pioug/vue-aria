@@ -11,13 +11,13 @@
  */
 
 import {CalendarDate, CalendarDateTime, getLocalTimeZone, Time, toCalendarDateTime, today, ZonedDateTime} from '@internationalized/date';
-import {classNames, useDOMRef} from '-spectrum/utils';
-import type {DOMProps, DOMRef, RangeValue, SpectrumLabelableProps, StyleProps} from '-types/shared';
-import {Field} from '-spectrum/label';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, useDOMRef} from '@vue-spectrum/utils';
+import type {DOMProps, DOMRef, RangeValue, SpectrumLabelableProps, StyleProps} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {filterDOMProps} from '@vue-aria/utils';
 import labelStyles from '@adobe/spectrum-css-temp/components/fieldlabel/vars.css';
 import React, {ReactElement, ReactNode, useEffect} from 'react';
-import {useDateFormatter, useListFormatter, useNumberFormatter} from '-aria/i18n';
+import {useDateFormatter, useListFormatter, useNumberFormatter} from '@vue-aria/i18n';
 
 // NOTE: the types here need to be synchronized with the ones in docs/types.ts, which are simpler so the documentation generator can handle them.
 

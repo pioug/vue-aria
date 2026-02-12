@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonElementTypeProps, ButtonProps} from '-types/button';
-import {classNames, useFocusableRef, useStyleProps} from '-spectrum/utils';
+import {AriaButtonElementTypeProps, ButtonProps} from '@vue-types/button';
+import {classNames, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
 import CrossSmall from '@spectrum-icons/ui/CrossSmall';
-import {DOMProps, FocusableRef, StyleProps} from '-types/shared';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
+import {DOMProps, FocusableRef, StyleProps} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
 import React, {ElementType} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/button/vars.css';
-import {useButton} from '-aria/button';
-import {useHover} from '-aria/interactions';
+import {useButton} from '@vue-aria/button';
+import {useHover} from '@vue-aria/interactions';
 
 interface ClearButtonProps<T extends ElementType = 'button'> extends ButtonProps, AriaButtonElementTypeProps<T>, DOMProps, StyleProps {
   focusClassName?: string,

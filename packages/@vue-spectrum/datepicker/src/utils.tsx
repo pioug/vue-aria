@@ -9,16 +9,16 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import {createDOMRef} from '-spectrum/utils';
-import {createFocusManager} from '-aria/focus';
-import {DateFormatter, useDateFormatter, useLocale} from '-aria/i18n';
-import {FocusableRef} from '-types/shared';
-import {FormatterOptions} from '-stately/datepicker';
+import {createDOMRef} from '@vue-spectrum/utils';
+import {createFocusManager} from '@vue-aria/focus';
+import {DateFormatter, useDateFormatter, useLocale} from '@vue-aria/i18n';
+import {FocusableRef} from '@vue-types/shared';
+import {FormatterOptions} from '@vue-stately/datepicker';
 import React, {ReactNode, useImperativeHandle, useMemo, useRef, useState} from 'react';
-import {SpectrumDatePickerBase} from '-types/datepicker';
-import {useDisplayNames} from '-aria/datepicker';
-import {useLayoutEffect} from '-aria/utils';
-import {useProvider} from '-spectrum/provider';
+import {SpectrumDatePickerBase} from '@vue-types/datepicker';
+import {useDisplayNames} from '@vue-aria/datepicker';
+import {useLayoutEffect} from '@vue-aria/utils';
+import {useProvider} from '@vue-spectrum/provider';
 
 export function useFormatHelpText(props: Pick<SpectrumDatePickerBase<any>, 'description' | 'showFormatHelpText'>): ReactNode {
   let formatter = useDateFormatter({dateStyle: 'short'});

@@ -16,9 +16,9 @@ export {useDateField, useTimeField} from './useDateField';
 export {useDateRangePicker} from './useDateRangePicker';
 export {useDisplayNames} from './useDisplayNames';
 
-export type {AriaDateFieldProps, AriaDatePickerProps, AriaDateRangePickerProps, DateRange, DateValue, TimeValue} from '-types/datepicker';
+export type {AriaDateFieldProps, AriaDatePickerProps, AriaDateRangePickerProps, DateRange, DateValue, TimeValue} from '@vue-types/datepicker';
 export type {AriaDateFieldOptions, DateFieldAria} from './useDateField';
 export type {DatePickerAria} from './useDatePicker';
 export type {DateRangePickerAria} from './useDateRangePicker';
 export type {DateSegmentAria} from './useDateSegment';
-export type {AriaTimeFieldProps} from '-types/datepicker';
+export type {AriaTimeFieldProps} from '@vue-types/datepicker';

@@ -13,5 +13,5 @@ export {useSearchAutocomplete} from './useSearchAutocomplete';
 export {useAutocomplete} from './useAutocomplete';
 
 export type {AriaSearchAutocompleteOptions, SearchAutocompleteAria} from './useSearchAutocomplete';
-export type {AriaSearchAutocompleteProps} from '-types/autocomplete';
+export type {AriaSearchAutocompleteProps} from '@vue-types/autocomplete';
 export type {AriaAutocompleteProps, AriaAutocompleteOptions, AutocompleteAria, CollectionOptions, InputProps} from './useAutocomplete';

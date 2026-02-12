@@ -10,24 +10,24 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
-import {ActionGroup} from '-spectrum/actiongroup';
-import {announce} from '-aria/live-announcer';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
+import {ActionButton} from '@vue-spectrum/button';
+import {ActionGroup} from '@vue-spectrum/actiongroup';
+import {announce} from '@vue-aria/live-announcer';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
 import CrossLarge from '@spectrum-icons/ui/CrossLarge';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {FocusScope} from '-aria/focus';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {FocusScope} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {OpenTransition} from '-spectrum/overlays';
+import {OpenTransition} from '@vue-spectrum/overlays';
 import React, {ReactElement, Ref, useEffect, useRef, useState} from 'react';
-import {SpectrumActionBarProps} from '-types/actionbar';
+import {SpectrumActionBarProps} from '@vue-types/actionbar';
 import styles from './actionbar.css';
-import {Text} from '-spectrum/text';
-import {useKeyboard} from '-aria/interactions';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {Text} from '@vue-spectrum/text';
+import {useKeyboard} from '@vue-aria/interactions';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * Action bars are used for single and bulk selection patterns when a user needs to perform actions on one or more items at the same time.
@@ -67,7 +67,7 @@ function ActionBarInner<T>(props: ActionBarInnerProps<T>, ref: Ref<HTMLDivElemen
   } = props;
 
   let {styleProps} = useStyleProps(props);
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/actionbar');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/actionbar');
 
   // Store the last count greater than zero in a ref so that we can retain it while rendering the fade-out animation.
   let [lastCount, setLastCount] = useState(selectedItemCount);

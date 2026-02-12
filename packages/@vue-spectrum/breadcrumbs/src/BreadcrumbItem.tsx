@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {BreadcrumbItemProps} from '-types/breadcrumbs';
+import {BreadcrumbItemProps} from '@vue-types/breadcrumbs';
 import ChevronRightSmall from '@spectrum-icons/ui/ChevronRightSmall';
-import {classNames} from '-spectrum/utils';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
+import {classNames} from '@vue-spectrum/utils';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
 import React, {Fragment, JSX, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/breadcrumb/vars.css';
-import {useBreadcrumbItem} from '-aria/breadcrumbs';
-import {useHover} from '-aria/interactions';
-import {useLocale} from '-aria/i18n';
+import {useBreadcrumbItem} from '@vue-aria/breadcrumbs';
+import {useHover} from '@vue-aria/interactions';
+import {useLocale} from '@vue-aria/i18n';
 
 interface SpectrumBreadcrumbItemProps extends BreadcrumbItemProps {
   isMenu?: boolean

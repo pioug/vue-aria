@@ -11,5 +11,5 @@
  */
 
 export {TagGroup} from './TagGroup';
-export {Item} from '-stately/collections';
+export {Item} from '@vue-stately/collections';
 export type {SpectrumTagGroupProps} from './TagGroup';

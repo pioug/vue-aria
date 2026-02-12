@@ -10,9 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-import {DraggableCollectionState} from '-stately/dnd';
+import {DraggableCollectionState} from '@vue-stately/dnd';
 import {globalDndState, setDraggingCollectionRef} from './utils';
-import {RefObject} from '-types/shared';
+import {RefObject} from '@vue-types/shared';
 
 export interface DraggableCollectionOptions {}
 

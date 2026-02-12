@@ -13,21 +13,21 @@
 import CheckmarkMedium from '@spectrum-icons/ui/CheckmarkMedium';
 import ChevronLeft from '@spectrum-icons/workflow/ChevronLeft';
 import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
-import {classNames, ClearSlots, SlotProvider} from '-spectrum/utils';
-import {DOMAttributes, Node} from '-types/shared';
-import {FocusRing} from '-aria/focus';
-import {Grid} from '-spectrum/layout';
+import {classNames, ClearSlots, SlotProvider} from '@vue-spectrum/utils';
+import {DOMAttributes, Node} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
+import {Grid} from '@vue-spectrum/layout';
 import InfoOutline from '@spectrum-icons/workflow/InfoOutline';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeRefs, useObjectRef, useSlotId} from '-aria/utils';
+import {mergeRefs, useObjectRef, useSlotId} from '@vue-aria/utils';
 import React, {JSX, useMemo, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {Text} from '-spectrum/text';
-import {TreeState} from '-stately/tree';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {Text} from '@vue-spectrum/text';
+import {TreeState} from '@vue-stately/tree';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useMenuContext, useSubmenuTriggerContext} from './context';
-import {useMenuItem} from '-aria/menu';
+import {useMenuItem} from '@vue-aria/menu';
 
 interface MenuItemProps<T> {
   item: Node<T>,
@@ -50,7 +50,7 @@ export function MenuItem<T>(props: MenuItemProps<T>): JSX.Element {
     key
   } = item;
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/menu');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/menu');
   let {direction} = useLocale();
 
   let submenuTriggerContext = useSubmenuTriggerContext();

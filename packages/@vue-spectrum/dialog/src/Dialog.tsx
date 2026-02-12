@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
+import {ActionButton} from '@vue-spectrum/button';
 import {
   classNames,
   SlotProvider,
@@ -19,19 +19,19 @@ import {
   useHasChild,
   useSlotProps,
   useStyleProps
-} from '-spectrum/utils';
+} from '@vue-spectrum/utils';
 import CrossLarge from '@spectrum-icons/ui/CrossLarge';
 import {DialogContext, DialogContextValue} from './context';
-import {DOMRef} from '-types/shared';
-import {Grid} from '-spectrum/layout';
+import {DOMRef} from '@vue-types/shared';
+import {Grid} from '@vue-spectrum/layout';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeProps} from '-aria/utils';
+import {mergeProps} from '@vue-aria/utils';
 import React, {useContext, useMemo, useRef} from 'react';
-import {SpectrumDialogProps} from '-types/dialog';
+import {SpectrumDialogProps} from '@vue-types/dialog';
 import styles from '@adobe/spectrum-css-temp/components/dialog/vars.css';
-import {useDialog} from '-aria/dialog';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useDialog} from '@vue-aria/dialog';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 let sizeMap = {
   S: 'small',
@@ -58,7 +58,7 @@ export const Dialog = React.forwardRef(function Dialog(props: SpectrumDialogProp
     size,
     ...otherProps
   } = props;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/dialog');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/dialog');
   let {styleProps} = useStyleProps(otherProps);
 
   size = type === 'popover' ? (size || 'S') : (size || 'L');

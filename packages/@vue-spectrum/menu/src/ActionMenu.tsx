@@ -10,25 +10,25 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
-import {filterDOMProps} from '-aria/utils';
-import {FocusableRef} from '-types/shared';
+import {ActionButton} from '@vue-spectrum/button';
+import {filterDOMProps} from '@vue-aria/utils';
+import {FocusableRef} from '@vue-types/shared';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {Menu} from './Menu';
 import {MenuTrigger} from './MenuTrigger';
 import More from '@spectrum-icons/workflow/More';
 import React, {forwardRef, ReactElement} from 'react';
-import {SpectrumActionMenuProps} from '-types/menu';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useSlotProps} from '-spectrum/utils';
+import {SpectrumActionMenuProps} from '@vue-types/menu';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useSlotProps} from '@vue-spectrum/utils';
 
 /**
  * ActionMenu combines an ActionButton with a Menu for simple "more actions" use cases.
  */
 export const ActionMenu = forwardRef(function ActionMenu<T extends object>(props: SpectrumActionMenuProps<T>, ref: FocusableRef<HTMLButtonElement>) {
   props = useSlotProps(props, 'actionMenu');
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/menu');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/menu');
   let buttonProps = filterDOMProps(props, {labelable: true});
   if (buttonProps['aria-label'] === undefined) {
     buttonProps['aria-label'] = stringFormatter.format('moreActions');

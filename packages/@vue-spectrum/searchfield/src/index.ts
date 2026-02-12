@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {SearchField} from './SearchField';
-export type {SpectrumSearchFieldProps} from '-types/searchfield';
+export type {SpectrumSearchFieldProps} from '@vue-types/searchfield';

@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, BaseEvent, DOMProps, FocusableElement, FocusEvents, KeyboardEvents, Node, RefObject, ValueBase} from '-types/shared';
-import {AriaTextFieldProps} from '-aria/textfield';
-import {AutocompleteProps, AutocompleteState} from '-stately/autocomplete';
-import {CLEAR_FOCUS_EVENT, FOCUS_EVENT, getActiveElement, getEventTarget, getOwnerDocument, isAndroid, isCtrlKeyPressed, isIOS, mergeProps, mergeRefs, useEffectEvent, useEvent, useId, useLabels, useLayoutEffect, useObjectRef} from '-aria/utils';
-import {dispatchVirtualBlur, dispatchVirtualFocus, getVirtuallyFocusedElement, moveVirtualFocus} from '-aria/focus';
-import {getInteractionModality, getPointerType} from '-aria/interactions';
+import {AriaLabelingProps, BaseEvent, DOMProps, FocusableElement, FocusEvents, KeyboardEvents, Node, RefObject, ValueBase} from '@vue-types/shared';
+import {AriaTextFieldProps} from '@vue-aria/textfield';
+import {AutocompleteProps, AutocompleteState} from '@vue-stately/autocomplete';
+import {CLEAR_FOCUS_EVENT, FOCUS_EVENT, getActiveElement, getEventTarget, getOwnerDocument, isAndroid, isCtrlKeyPressed, isIOS, mergeProps, mergeRefs, useEffectEvent, useEvent, useId, useLabels, useLayoutEffect, useObjectRef} from '@vue-aria/utils';
+import {dispatchVirtualBlur, dispatchVirtualFocus, getVirtuallyFocusedElement, moveVirtualFocus} from '@vue-aria/focus';
+import {getInteractionModality, getPointerType} from '@vue-aria/interactions';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {FocusEvent as ReactFocusEvent, KeyboardEvent as ReactKeyboardEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface CollectionOptions extends DOMProps, AriaLabelingProps {
   /** Whether the collection items should use virtual focus instead of being focused directly. */
@@ -352,7 +352,7 @@ export function useAutocomplete<T>(props: AriaAutocompleteOptions<T>, state: Aut
     };
   }, []);
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/autocomplete');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/autocomplete');
   let collectionProps = useLabels({
     id: collectionId,
     'aria-label': stringFormatter.format('collectionLabel')

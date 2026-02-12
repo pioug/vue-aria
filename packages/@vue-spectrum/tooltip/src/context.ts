@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {PlacementAxis} from '-types/overlays';
+import {PlacementAxis} from '@vue-types/overlays';
 import React, {HTMLAttributes} from 'react';
-import {RefObject, StyleProps} from '-types/shared';
-import {TooltipTriggerState} from '-stately/tooltip';
+import {RefObject, StyleProps} from '@vue-types/shared';
+import {TooltipTriggerState} from '@vue-stately/tooltip';
 
 interface TooltipContextProps extends StyleProps {
   state?: TooltipTriggerState,

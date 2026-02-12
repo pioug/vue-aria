@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaColorSwatchProps, useColorSwatch} from '-aria/color';
-import {Color} from '-types/color';
+import {AriaColorSwatchProps, useColorSwatch} from '@vue-aria/color';
+import {Color} from '@vue-types/color';
 import {ColorSwatchContext, useContextProps} from 'react-aria-components';
-import {DOMRef, StyleProps} from '-types/shared';
+import {DOMRef, StyleProps} from '@vue-types/shared';
 import React, {createContext, forwardRef, JSX, ReactElement, useContext} from 'react';
-import {style} from '-spectrum/style-macro-s1' with {type: 'macro'};
-import {useDOMRef, useStyleProps} from '-spectrum/utils';
+import {style} from '@vue-spectrum/style-macro-s1' with {type: 'macro'};
+import {useDOMRef, useStyleProps} from '@vue-spectrum/utils';
 
 export interface SpectrumColorSwatchProps extends AriaColorSwatchProps, StyleProps {
   /**

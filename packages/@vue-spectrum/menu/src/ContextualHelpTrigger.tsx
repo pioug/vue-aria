@@ -10,20 +10,20 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, SlotProvider, unwrapDOMRef, useIsMobileDevice} from '-spectrum/utils';
-import {DOMRefValue, ItemProps, Key} from '-types/shared';
-import {FocusScope} from '-aria/focus';
-import {getInteractionModality} from '-aria/interactions';
+import {classNames, SlotProvider, unwrapDOMRef, useIsMobileDevice} from '@vue-spectrum/utils';
+import {DOMRefValue, ItemProps, Key} from '@vue-types/shared';
+import {FocusScope} from '@vue-aria/focus';
+import {getInteractionModality} from '@vue-aria/interactions';
 import helpStyles from '@adobe/spectrum-css-temp/components/contextualhelp/vars.css';
-import {isFocusWithin, nodeContains} from '-aria/utils';
-import {Popover} from '-spectrum/overlays';
+import {isFocusWithin, nodeContains} from '@vue-aria/utils';
+import {Popover} from '@vue-spectrum/overlays';
 import React, {JSX, KeyboardEventHandler, ReactElement, useEffect, useRef, useState} from 'react';
 import ReactDOM from 'react-dom';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
 import {SubmenuTriggerContext, useMenuStateContext} from './context';
 import {TrayHeaderWrapper} from './Menu';
-import {useSubmenuTrigger} from '-aria/menu';
-import {useSubmenuTriggerState} from '-stately/menu';
+import {useSubmenuTrigger} from '@vue-aria/menu';
+import {useSubmenuTriggerState} from '@vue-stately/menu';
 
 interface MenuDialogTriggerProps {
   /** Whether the menu item is currently unavailable. */

@@ -12,4 +12,4 @@
 /// <reference types="css-module-types" />
 export {Checkbox} from './Checkbox';
 export {CheckboxGroup} from './CheckboxGroup';
-export type {SpectrumCheckboxProps, SpectrumCheckboxGroupProps} from '-types/checkbox';
+export type {SpectrumCheckboxProps, SpectrumCheckboxGroupProps} from '@vue-types/checkbox';

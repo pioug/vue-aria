@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps} from '-types/shared';
-import {Color} from '-types/color';
-import {filterDOMProps, useId} from '-aria/utils';
+import {AriaLabelingProps, DOMProps} from '@vue-types/shared';
+import {Color} from '@vue-types/color';
+import {filterDOMProps, useId} from '@vue-aria/utils';
 import {HTMLAttributes, useMemo} from 'react';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {parseColor} from '-stately/color';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {parseColor} from '@vue-stately/color';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface AriaColorSwatchProps extends AriaLabelingProps, DOMProps {
   /** The color value to display in the swatch. */
@@ -48,7 +48,7 @@ export function useColorSwatch(props: AriaColorSwatchProps): ColorSwatchAria {
   let color = useMemo(() => typeof nonNullValue === 'string' ? parseColor(nonNullValue) : nonNullValue, [nonNullValue]);
   let {locale} = useLocale();
   let DOMProps = filterDOMProps(props, {labelable: true});
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/color');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/color');
   let id = useId(props.id);
 
   if (!colorName) {

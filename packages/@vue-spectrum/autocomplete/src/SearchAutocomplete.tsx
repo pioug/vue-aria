@@ -9,20 +9,20 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import {AriaButtonProps} from '-types/button';
-import {classNames, dimensionValue, useFocusableRef, useIsMobileDevice, useResizeObserver, useUnwrapDOMRef} from '-spectrum/utils';
-import {ClearButton} from '-spectrum/button';
-import {DOMRefValue, FocusableRef} from '-types/shared';
-import {Field} from '-spectrum/label';
-import {filterDOMProps, useLayoutEffect} from '-aria/utils';
-import {FocusRing} from '-aria/focus';
+import {AriaButtonProps} from '@vue-types/button';
+import {classNames, dimensionValue, useFocusableRef, useIsMobileDevice, useResizeObserver, useUnwrapDOMRef} from '@vue-spectrum/utils';
+import {ClearButton} from '@vue-spectrum/button';
+import {DOMRefValue, FocusableRef} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {filterDOMProps, useLayoutEffect} from '@vue-aria/utils';
+import {FocusRing} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListBoxBase, useListBoxLayout} from '-spectrum/listbox';
+import {ListBoxBase, useListBoxLayout} from '@vue-spectrum/listbox';
 import Magnifier from '@spectrum-icons/ui/Magnifier';
 import {MobileSearchAutocomplete} from './MobileSearchAutocomplete';
-import {Popover} from '-spectrum/overlays';
-import {ProgressCircle} from '-spectrum/progress';
+import {Popover} from '@vue-spectrum/overlays';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {
   forwardRef,
   InputHTMLAttributes,
@@ -35,16 +35,16 @@ import React, {
 } from 'react';
 import searchAutocompleteStyles from './searchautocomplete.css';
 import searchStyles from '@adobe/spectrum-css-temp/components/search/vars.css';
-import {SpectrumSearchAutocompleteProps} from '-types/autocomplete';
+import {SpectrumSearchAutocompleteProps} from '@vue-types/autocomplete';
 import styles from '@adobe/spectrum-css-temp/components/inputgroup/vars.css';
-import {TextFieldBase} from '-spectrum/textfield';
+import {TextFieldBase} from '@vue-spectrum/textfield';
 import textfieldStyles from '@adobe/spectrum-css-temp/components/textfield/vars.css';
-import {useComboBoxState} from '-stately/combobox';
-import {useFilter, useLocalizedStringFormatter} from '-aria/i18n';
-import {useFormProps} from '-spectrum/form';
-import {useHover} from '-aria/interactions';
-import {useProvider, useProviderProps} from '-spectrum/provider';
-import {useSearchAutocomplete} from '-aria/autocomplete';
+import {useComboBoxState} from '@vue-stately/combobox';
+import {useFilter, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useFormProps} from '@vue-spectrum/form';
+import {useHover} from '@vue-aria/interactions';
+import {useProvider, useProviderProps} from '@vue-spectrum/provider';
+import {useSearchAutocomplete} from '@vue-aria/autocomplete';
 
 function SearchAutocomplete<T extends object>(props: SpectrumSearchAutocompleteProps<T>, ref: FocusableRef<HTMLElement>) {
   props = useProviderProps(props);
@@ -83,7 +83,7 @@ function ForwardSearchAutocompleteBase<T extends object>(props: SpectrumSearchAu
     validate
   } = props;
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/autocomplete');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/autocomplete');
   let isAsync = loadingState != null;
   let popoverRef = useRef<DOMRefValue<HTMLDivElement>>(null);
   let unwrappedPopoverRef = useUnwrapDOMRef(popoverRef);
@@ -231,7 +231,7 @@ function ForwardSearchAutocompleteInput<T>(props: SearchAutocompleteInputProps<T
     clearButtonProps
   } = props;
   let {hoverProps, isHovered} = useHover({});
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/autocomplete');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/autocomplete');
   let domProps = filterDOMProps(props);
   let timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   let [showLoading, setShowLoading] = useState(false);

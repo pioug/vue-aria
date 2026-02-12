@@ -11,9 +11,9 @@
  */
 
 import {CUSTOM_DRAG_TYPE, DROP_OPERATION, GENERIC_TYPE, NATIVE_DRAG_TYPES} from './constants';
-import {DirectoryDropItem, DragItem, DropItem, FileDropItem, DragTypes as IDragTypes, Key, RefObject, TextDropItem} from '-types/shared';
-import {DroppableCollectionState} from '-stately/dnd';
-import {getInteractionModality, useInteractionModality} from '-aria/interactions';
+import {DirectoryDropItem, DragItem, DropItem, FileDropItem, DragTypes as IDragTypes, Key, RefObject, TextDropItem} from '@vue-types/shared';
+import {DroppableCollectionState} from '@vue-stately/dnd';
+import {getInteractionModality, useInteractionModality} from '@vue-aria/interactions';
 
 interface DroppableCollectionMap {
   id: string,

@@ -11,12 +11,12 @@
  */
 
 import {calculatePosition, getRect, PositionResult} from './calculatePosition';
-import {DOMAttributes, RefObject} from '-types/shared';
-import {getActiveElement, isFocusWithin, useLayoutEffect, useResizeObserver} from '-aria/utils';
-import {Placement, PlacementAxis, PositionProps} from '-types/overlays';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {getActiveElement, isFocusWithin, useLayoutEffect, useResizeObserver} from '@vue-aria/utils';
+import {Placement, PlacementAxis, PositionProps} from '@vue-types/overlays';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useCloseOnScroll} from './useCloseOnScroll';
-import {useLocale} from '-aria/i18n';
+import {useLocale} from '@vue-aria/i18n';
 
 export interface AriaPositionProps extends PositionProps {
   /**

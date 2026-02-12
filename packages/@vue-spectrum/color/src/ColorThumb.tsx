@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {Color} from '-types/color';
-import {DOMProps, RefObject} from '-types/shared';
-import {Overlay} from '-spectrum/overlays';
+import {classNames} from '@vue-spectrum/utils';
+import {Color} from '@vue-types/color';
+import {DOMProps, RefObject} from '@vue-types/shared';
+import {Overlay} from '@vue-spectrum/overlays';
 import React, {CSSProperties, JSX, ReactElement, useRef, useState} from 'react';
 import stylesHandle from '@adobe/spectrum-css-temp/components/colorhandle/vars.css';
 import stylesLoupe from '@adobe/spectrum-css-temp/components/colorloupe/vars.css';
-import {useId, useLayoutEffect} from '-aria/utils';
-import {useProvider} from '-spectrum/provider';
+import {useId, useLayoutEffect} from '@vue-aria/utils';
+import {useProvider} from '@vue-spectrum/provider';
 
 interface ColorThumbProps extends DOMProps {
   value: Color,

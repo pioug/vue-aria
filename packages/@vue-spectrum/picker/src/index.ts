@@ -13,5 +13,5 @@
 /// <reference types="css-module-types" />
 
 export {Picker} from './Picker';
-export {Item, Section} from '-stately/collections';
-export type {SpectrumPickerProps} from '-types/select';
+export {Item, Section} from '@vue-stately/collections';
+export type {SpectrumPickerProps} from '@vue-types/select';

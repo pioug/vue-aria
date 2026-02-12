@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {chain, useLayoutEffect} from '-aria/utils';
+import {chain, useLayoutEffect} from '@vue-aria/utils';
 import React, {Ref, useCallback, useEffect, useRef} from 'react';
-import {SpectrumTextAreaProps, SpectrumTextFieldBaseProps, TextFieldRef} from '-types/textfield';
+import {SpectrumTextAreaProps, SpectrumTextFieldBaseProps, TextFieldRef} from '@vue-types/textfield';
 import {TextFieldBase} from './TextFieldBase';
-import {useControlledState} from '-stately/utils';
-import {useFormProps} from '-spectrum/form';
-import {useProviderProps} from '-spectrum/provider';
-import {useTextField} from '-aria/textfield';
+import {useControlledState} from '@vue-stately/utils';
+import {useFormProps} from '@vue-spectrum/form';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useTextField} from '@vue-aria/textfield';
 
 /**
  * TextAreas are multiline text inputs, useful for cases where users have

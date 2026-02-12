@@ -1,5 +1,5 @@
-import {Collection, DropTarget, Key, KeyboardDelegate, Node} from '-types/shared';
-import {getChildNodes} from '-stately/collections';
+import {Collection, DropTarget, Key, KeyboardDelegate, Node} from '@vue-types/shared';
+import {getChildNodes} from '@vue-stately/collections';
 
 export function navigate(
   keyboardDelegate: KeyboardDelegate,

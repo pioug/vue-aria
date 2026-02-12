@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, RefObject} from '-types/shared';
-import {ColorChannelFieldProps, ColorChannelFieldState} from '-stately/color';
-import {NumberFieldAria, useNumberField} from '-aria/numberfield';
-import {useLocale} from '-aria/i18n';
+import {AriaLabelingProps, RefObject} from '@vue-types/shared';
+import {ColorChannelFieldProps, ColorChannelFieldState} from '@vue-stately/color';
+import {NumberFieldAria, useNumberField} from '@vue-aria/numberfield';
+import {useLocale} from '@vue-aria/i18n';
 
 export interface AriaColorChannelFieldProps extends ColorChannelFieldProps, AriaLabelingProps {}
 export interface ColorChannelFieldAria extends NumberFieldAria {}

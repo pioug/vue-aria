@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {getEventTarget, nodeContains} from '-aria/utils';
-import {RefObject} from '-types/shared';
+import {getEventTarget, nodeContains} from '@vue-aria/utils';
+import {RefObject} from '@vue-types/shared';
 import {useEffect} from 'react';
 
 // This behavior moved from useOverlayTrigger to useOverlayPosition.

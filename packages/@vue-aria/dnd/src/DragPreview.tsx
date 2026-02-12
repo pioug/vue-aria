@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {DragItem, DragPreviewRenderer} from '-types/shared';
+import {DragItem, DragPreviewRenderer} from '@vue-types/shared';
 import {flushSync} from 'react-dom';
 import React, {ForwardedRef, JSX, useEffect, useImperativeHandle, useRef, useState} from 'react';
 

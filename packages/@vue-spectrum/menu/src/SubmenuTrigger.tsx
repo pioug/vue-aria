@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useIsMobileDevice} from '-spectrum/utils';
-import {isFocusWithin, mergeProps} from '-aria/utils';
-import {Key} from '-types/shared';
+import {classNames, useIsMobileDevice} from '@vue-spectrum/utils';
+import {isFocusWithin, mergeProps} from '@vue-aria/utils';
+import {Key} from '@vue-types/shared';
 import {MenuContext, SubmenuTriggerContext, useMenuStateContext} from './context';
-import {Popover} from '-spectrum/overlays';
+import {Popover} from '@vue-spectrum/overlays';
 import React, {type JSX, ReactElement, useRef} from 'react';
 import ReactDOM from 'react-dom';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {useLocale} from '-aria/i18n';
-import {useSubmenuTrigger} from '-aria/menu';
-import {useSubmenuTriggerState} from '-stately/menu';
+import {useLocale} from '@vue-aria/i18n';
+import {useSubmenuTrigger} from '@vue-aria/menu';
+import {useSubmenuTriggerState} from '@vue-stately/menu';
 
 interface SubmenuTriggerProps {
   /**

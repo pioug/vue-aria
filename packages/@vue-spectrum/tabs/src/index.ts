@@ -13,5 +13,5 @@
 /// <reference types="css-module-types" />
 
 export {TabList, TabPanels, Tabs} from './Tabs';
-export {Item} from '-stately/collections';
-export type {SpectrumTabsProps, SpectrumTabListProps, SpectrumTabPanelsProps} from '-types/tabs';
+export {Item} from '@vue-stately/collections';
+export type {SpectrumTabsProps, SpectrumTabListProps, SpectrumTabPanelsProps} from '@vue-types/tabs';

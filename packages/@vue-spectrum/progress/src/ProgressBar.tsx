@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
+import {classNames} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
 import {ProgressBarBase} from './ProgressBarBase';
 import React from 'react';
-import {SpectrumProgressBarProps} from '-types/progress';
+import {SpectrumProgressBarProps} from '@vue-types/progress';
 import styles from '@adobe/spectrum-css-temp/components/barloader/vars.css';
-import {useProgressBar} from '-aria/progress';
+import {useProgressBar} from '@vue-aria/progress';
 
 /**
  * ProgressBars show the progression of a system operation: downloading, uploading, processing, etc., in a visual way.

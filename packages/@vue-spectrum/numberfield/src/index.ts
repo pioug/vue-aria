@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {NumberField} from './NumberField';
-export type {SpectrumNumberFieldProps} from '-types/numberfield';
+export type {SpectrumNumberFieldProps} from '@vue-types/numberfield';

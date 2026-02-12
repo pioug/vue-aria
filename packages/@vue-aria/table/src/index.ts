@@ -19,14 +19,14 @@ export {useTableSelectionCheckbox, useTableSelectAllCheckbox} from './useTableSe
 export {useTableColumnResize} from './useTableColumnResize';
 
 // Workaround for a Parcel bug where re-exports don't work in the CommonJS output format...
-// export {useGridRowGroup as useTableRowGroup} from '-aria/grid';
-import {GridRowGroupAria, useGridRowGroup} from '-aria/grid';
+// export {useGridRowGroup as useTableRowGroup} from '@vue-aria/grid';
+import {GridRowGroupAria, useGridRowGroup} from '@vue-aria/grid';
 export function useTableRowGroup(): GridRowGroupAria {
   return useGridRowGroup();
 }
 
 export type {AriaTableProps} from './useTable';
-export type {GridAria, GridRowAria, GridRowProps} from '-aria/grid';
+export type {GridAria, GridRowAria, GridRowProps} from '@vue-aria/grid';
 export type {AriaTableColumnHeaderProps, TableColumnHeaderAria} from './useTableColumnHeader';
 export type {AriaTableCellProps, TableCellAria} from './useTableCell';
 export type {TableHeaderRowAria} from './useTableHeaderRow';

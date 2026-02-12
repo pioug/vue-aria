@@ -9,18 +9,18 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import {ActionButton} from '-spectrum/button';
+import {ActionButton} from '@vue-spectrum/button';
 import {BreadcrumbItem} from './BreadcrumbItem';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef, Key} from '-types/shared';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, Key} from '@vue-types/shared';
 import FolderBreadcrumb from '@spectrum-icons/ui/FolderBreadcrumb';
-import {Menu, MenuTrigger} from '-spectrum/menu';
+import {Menu, MenuTrigger} from '@vue-spectrum/menu';
 import React, {ReactElement, useCallback, useRef} from 'react';
-import {SpectrumBreadcrumbsProps} from '-types/breadcrumbs';
+import {SpectrumBreadcrumbsProps} from '@vue-types/breadcrumbs';
 import styles from '@adobe/spectrum-css-temp/components/breadcrumb/vars.css';
-import {useBreadcrumbs} from '-aria/breadcrumbs';
-import {useLayoutEffect, useResizeObserver, useValueEffect} from '-aria/utils';
-import {useProviderProps} from '-spectrum/provider';
+import {useBreadcrumbs} from '@vue-aria/breadcrumbs';
+import {useLayoutEffect, useResizeObserver, useValueEffect} from '@vue-aria/utils';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 const MIN_VISIBLE_ITEMS = 1;
 const MAX_VISIBLE_ITEMS = 4;

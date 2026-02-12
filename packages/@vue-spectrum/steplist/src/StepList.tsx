@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaStepListProps, useStepList} from '-aria/steplist';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef, Orientation, StyleProps} from '-types/shared';
+import {AriaStepListProps, useStepList} from '@vue-aria/steplist';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef, Orientation, StyleProps} from '@vue-types/shared';
 import React, {ReactElement} from 'react';
 import {StepListContext} from './StepListContext';
 import {StepListItem} from './StepListItem';
 import styles from '@adobe/spectrum-css-temp/components/steplist/vars.css';
-import {useProviderProps} from '-spectrum/provider';
-import {useStepListState} from '-stately/steplist';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useStepListState} from '@vue-stately/steplist';
 
 export interface SpectrumStepListProps<T> extends AriaStepListProps<T>, StyleProps {
   /**

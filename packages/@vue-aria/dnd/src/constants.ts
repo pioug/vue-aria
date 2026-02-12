@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {DropOperation} from '-types/shared';
+import {DropOperation} from '@vue-types/shared';
 
 export interface IDropOperation {
   readonly none: 0,

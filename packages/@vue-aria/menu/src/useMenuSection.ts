@@ -10,9 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMAttributes} from '-types/shared';
+import {DOMAttributes} from '@vue-types/shared';
 import {ReactNode} from 'react';
-import {useId} from '-aria/utils';
+import {useId} from '@vue-aria/utils';
 
 export interface AriaMenuSectionProps {
   /** The heading for the section. */

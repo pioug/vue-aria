@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaRangeCalendarProps, DateValue} from '-types/calendar';
+import {AriaRangeCalendarProps, DateValue} from '@vue-types/calendar';
 import {CalendarAria, useCalendarBase} from './useCalendarBase';
-import {FocusableElement, RefObject} from '-types/shared';
-import {isFocusWithin, nodeContains, useEvent} from '-aria/utils';
-import {RangeCalendarState} from '-stately/calendar';
+import {FocusableElement, RefObject} from '@vue-types/shared';
+import {isFocusWithin, nodeContains, useEvent} from '@vue-aria/utils';
+import {RangeCalendarState} from '@vue-stately/calendar';
 import {useRef} from 'react';
 
 /**

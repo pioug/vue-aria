@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {getScrollParent, isIOS, isScrollable, isWebKit} from '-aria/utils';
-import {RefObject} from '-types/shared';
+import {getScrollParent, isIOS, isScrollable, isWebKit} from '@vue-aria/utils';
+import {RefObject} from '@vue-types/shared';
 import {useCallback, useEffect, useRef} from 'react';
 
 const AUTOSCROLL_AREA_SIZE = 20;

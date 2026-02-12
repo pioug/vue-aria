@@ -14,4 +14,4 @@
 
 export {Slider} from './Slider';
 export {RangeSlider} from './RangeSlider';
-export type {SpectrumRangeSliderProps, SpectrumSliderProps} from '-types/slider';
+export type {SpectrumRangeSliderProps, SpectrumSliderProps} from '@vue-types/slider';

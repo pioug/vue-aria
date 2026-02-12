@@ -15,4 +15,4 @@
 export {TextArea} from './TextArea';
 export {TextField} from './TextField';
 export {TextFieldBase} from './TextFieldBase';
-export type {SpectrumTextFieldProps, SpectrumTextAreaProps} from '-types/textfield';
+export type {SpectrumTextFieldProps, SpectrumTextAreaProps} from '@vue-types/textfield';

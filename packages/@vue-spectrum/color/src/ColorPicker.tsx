@@ -11,14 +11,14 @@
  */
 
 import {ColorPicker as AriaColorPicker, Button, Color} from 'react-aria-components';
-import {AriaLabelingProps, FocusableRef, ValueBase} from '-types/shared';
+import {AriaLabelingProps, FocusableRef, ValueBase} from '@vue-types/shared';
 import {ColorSwatch} from './ColorSwatch';
-import {Content} from '-spectrum/view';
-import {Dialog, DialogTrigger} from '-spectrum/dialog';
+import {Content} from '@vue-spectrum/view';
+import {Dialog, DialogTrigger} from '@vue-spectrum/dialog';
 import React, {ReactNode, useRef} from 'react';
-import {style} from '-spectrum/style-macro-s1' with {type: 'macro'};
-import {unwrapDOMRef, useFocusableRef} from '-spectrum/utils';
-import {useId} from '-aria/utils';
+import {style} from '@vue-spectrum/style-macro-s1' with {type: 'macro'};
+import {unwrapDOMRef, useFocusableRef} from '@vue-spectrum/utils';
+import {useId} from '@vue-aria/utils';
 
 export interface SpectrumColorPickerProps extends ValueBase<string | Color, Color>, AriaLabelingProps {
   /** A visual label for the color picker. */

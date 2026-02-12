@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, SlotProvider, unwrapDOMRef, useDOMRef, useIsMobileDevice} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
+import {classNames, SlotProvider, unwrapDOMRef, useDOMRef, useIsMobileDevice} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
 import {MenuContext} from './context';
-import {Placement} from '-types/overlays';
-import {Popover, Tray} from '-spectrum/overlays';
-import {PressResponder, useInteractOutside} from '-aria/interactions';
+import {Placement} from '@vue-types/overlays';
+import {Popover, Tray} from '@vue-spectrum/overlays';
+import {PressResponder, useInteractOutside} from '@vue-aria/interactions';
 import React, {forwardRef, Fragment, useRef} from 'react';
-import {SpectrumMenuTriggerProps} from '-types/menu';
+import {SpectrumMenuTriggerProps} from '@vue-types/menu';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {useMenuTrigger} from '-aria/menu';
-import {useMenuTriggerState} from '-stately/menu';
+import {useMenuTrigger} from '@vue-aria/menu';
+import {useMenuTriggerState} from '@vue-stately/menu';
 
 /**
  * The MenuTrigger serves as a wrapper around a Menu and its associated trigger,

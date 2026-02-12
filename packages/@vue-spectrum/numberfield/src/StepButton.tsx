@@ -11,19 +11,19 @@
  */
 
 import Add from '@spectrum-icons/workflow/Add';
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import ChevronDownSmall from '@spectrum-icons/ui/ChevronDownSmall';
 import ChevronUpSmall from '@spectrum-icons/ui/ChevronUpSmall';
-import {classNames, useFocusableRef} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
+import {classNames, useFocusableRef} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
 import React, {ReactElement} from 'react';
 import Remove from '@spectrum-icons/workflow/Remove';
 import stepperStyle from '@adobe/spectrum-css-temp/components/stepper/vars.css';
-import {useButton} from '-aria/button';
-import {useHover} from '-aria/interactions';
-import {useProvider, useProviderProps} from '-spectrum/provider';
+import {useButton} from '@vue-aria/button';
+import {useHover} from '@vue-aria/interactions';
+import {useProvider, useProviderProps} from '@vue-spectrum/provider';
 
 interface StepButtonProps extends AriaButtonProps {
   isQuiet?: boolean,

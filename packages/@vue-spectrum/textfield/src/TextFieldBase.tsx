@@ -12,18 +12,18 @@
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
 import CheckmarkMedium from '@spectrum-icons/ui/CheckmarkMedium';
-import {classNames, createFocusableRef} from '-spectrum/utils';
-import {Field} from '-spectrum/label';
+import {classNames, createFocusableRef} from '@vue-spectrum/utils';
+import {Field} from '@vue-spectrum/label';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeProps, useId} from '-aria/utils';
-import {PressEvents, RefObject, ValidationResult} from '-types/shared';
+import {mergeProps, useId} from '@vue-aria/utils';
+import {PressEvents, RefObject, ValidationResult} from '@vue-types/shared';
 import React, {cloneElement, forwardRef, HTMLAttributes, InputHTMLAttributes, LabelHTMLAttributes, ReactElement, Ref, TextareaHTMLAttributes, useImperativeHandle, useRef} from 'react';
-import {SpectrumTextFieldProps, TextFieldRef} from '-types/textfield';
+import {SpectrumTextFieldProps, TextFieldRef} from '@vue-types/textfield';
 import styles from '@adobe/spectrum-css-temp/components/textfield/vars.css';
-import {useFocusRing} from '-aria/focus';
-import {useHover} from '-aria/interactions';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useFocusRing} from '@vue-aria/focus';
+import {useHover} from '@vue-aria/interactions';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 interface TextFieldBaseProps extends Omit<SpectrumTextFieldProps, 'onChange' | 'validate'>, PressEvents, Partial<ValidationResult> {
   wrapperChildren?: ReactElement | ReactElement[],
@@ -94,7 +94,7 @@ export const TextFieldBase = forwardRef(function TextFieldBase(props: TextFieldB
     } as any);
   }
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/textfield');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/textfield');
   let validId = useId();
   let validationIcon = isInvalid
     ? <AlertMedium />

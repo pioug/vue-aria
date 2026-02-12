@@ -11,19 +11,19 @@
  */
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
-import {classNames, SlotProvider, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMProps, DOMRef, StyleProps} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {FocusRing} from '-aria/focus';
-import {Grid} from '-spectrum/layout';
+import {classNames, SlotProvider, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMProps, DOMRef, StyleProps} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {FocusRing} from '@vue-aria/focus';
+import {Grid} from '@vue-spectrum/layout';
 import InfoMedium from '@spectrum-icons/ui/InfoMedium';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React, {ReactNode, useEffect, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/inlinealert/vars.css';
 import SuccessMedium from '@spectrum-icons/ui/SuccessMedium';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 export interface SpectrumInlineAlertProps extends DOMProps, StyleProps {
   /**
@@ -69,7 +69,7 @@ export const InlineAlert = React.forwardRef(function InlineAlert(props: Spectrum
     content: {UNSAFE_className: styles['spectrum-InLineAlert-content']}
   };
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/inlinealert');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/inlinealert');
   let Icon: typeof React.Component | null = null;
   let iconAlt: string = '';
   if (variant in ICONS) {

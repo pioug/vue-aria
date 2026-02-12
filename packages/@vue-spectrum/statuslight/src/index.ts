@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {StatusLight} from './StatusLight';
-export type {SpectrumStatusLightProps} from '-types/statuslight';
+export type {SpectrumStatusLightProps} from '@vue-types/statuslight';

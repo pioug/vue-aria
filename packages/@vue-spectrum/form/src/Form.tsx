@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {Alignment, DOMRef, LabelPosition, SpectrumLabelableProps} from '-types/shared';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {filterDOMProps} from '-aria/utils';
-import {FormValidationContext} from '-stately/form';
-import {Provider, useProviderProps} from '-spectrum/provider';
+import {Alignment, DOMRef, LabelPosition, SpectrumLabelableProps} from '@vue-types/shared';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {filterDOMProps} from '@vue-aria/utils';
+import {FormValidationContext} from '@vue-stately/form';
+import {Provider, useProviderProps} from '@vue-spectrum/provider';
 import React, {useContext} from 'react';
-import {SpectrumFormProps} from '-types/form';
+import {SpectrumFormProps} from '@vue-types/form';
 import styles from '@adobe/spectrum-css-temp/components/fieldlabel/vars.css';
 
 interface FormContextValue extends SpectrumLabelableProps {

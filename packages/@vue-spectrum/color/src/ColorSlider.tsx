@@ -10,19 +10,19 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, SlotProvider, useFocusableRef, useStyleProps} from '-spectrum/utils';
+import {classNames, SlotProvider, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
 import {ColorSliderContext, useContextProps} from 'react-aria-components';
 import {ColorThumb} from './ColorThumb';
-import {FocusableRef} from '-types/shared';
-import {Label} from '-spectrum/label';
+import {FocusableRef} from '@vue-types/shared';
+import {Label} from '@vue-spectrum/label';
 import React, {useRef, useState} from 'react';
-import {SpectrumColorSliderProps} from '-types/color';
+import {SpectrumColorSliderProps} from '@vue-types/color';
 import styles from '@adobe/spectrum-css-temp/components/colorslider/vars.css';
-import {useColorSlider} from '-aria/color';
-import {useColorSliderState} from '-stately/color';
-import {useFocus, useFocusVisible} from '-aria/interactions';
-import {useLocale} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {useColorSlider} from '@vue-aria/color';
+import {useColorSliderState} from '@vue-stately/color';
+import {useFocus, useFocusVisible} from '@vue-aria/interactions';
+import {useLocale} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * ColorSliders allow users to adjust an individual channel of a color value.

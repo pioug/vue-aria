@@ -10,24 +10,24 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
+import {ActionButton} from '@vue-spectrum/button';
 import ArrowDownSmall from '@spectrum-icons/ui/ArrowDownSmall';
-import {classNames, useDOMRef, useIsMobileDevice, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {FocusScope} from '-aria/focus';
+import {classNames, useDOMRef, useIsMobileDevice, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {FocusScope} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {MenuContext, MenuStateContext, useMenuStateContext} from './context';
 import {MenuItem} from './MenuItem';
 import {MenuSection} from './MenuSection';
-import {mergeProps, useLayoutEffect, useSlotId, useSyncRef} from '-aria/utils';
+import {mergeProps, useLayoutEffect, useSlotId, useSyncRef} from '@vue-aria/utils';
 import React, {KeyboardEventHandler, ReactElement, ReactNode, RefObject, useContext, useEffect, useRef, useState} from 'react';
-import {RootMenuTriggerState} from '-stately/menu';
-import {SpectrumMenuProps} from '-types/menu';
+import {RootMenuTriggerState} from '@vue-stately/menu';
+import {SpectrumMenuProps} from '@vue-types/menu';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {TreeState, useTreeState} from '-stately/tree';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
-import {useMenu} from '-aria/menu';
+import {TreeState, useTreeState} from '@vue-stately/tree';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useMenu} from '@vue-aria/menu';
 
 /**
  * Menus display a list of actions or options that a user can choose.
@@ -136,7 +136,7 @@ export function TrayHeaderWrapper(props: {
   menuRef?: RefObject<HTMLDivElement | null>
 }): ReactNode {
   let {children, isSubmenu, hasOpenSubmenu, parentMenuTreeState, rootMenuTriggerState, onBackButtonPress, wrapperKeyDown, menuRef} = props;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/menu');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/menu');
   let lastKey = rootMenuTriggerState?.expandedKeysStack.slice(-1)[0];
   let backButtonText = '';
   if (lastKey != null) {

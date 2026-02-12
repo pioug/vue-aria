@@ -15,4 +15,4 @@
 export {ProgressBar} from './ProgressBar';
 export {ProgressCircle} from './ProgressCircle';
 export {ProgressBarBase} from './ProgressBarBase';
-export type {SpectrumProgressBarProps, SpectrumProgressCircleProps} from '-types/progress';
+export type {SpectrumProgressBarProps, SpectrumProgressCircleProps} from '@vue-types/progress';

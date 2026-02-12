@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
-import {AriaLabelingProps, DOMProps, DOMRef, Key, Node, StyleProps} from '-types/shared';
+import {ActionButton} from '@vue-spectrum/button';
+import {AriaLabelingProps, DOMProps, DOMRef, Key, Node, StyleProps} from '@vue-types/shared';
 import buttonStyles from '@adobe/spectrum-css-temp/components/button/vars.css';
 import ChevronDownMedium from '@spectrum-icons/ui/ChevronDownMedium';
 import {
@@ -21,23 +21,23 @@ import {
   useDOMRef,
   useSlotProps,
   useStyleProps
-} from '-spectrum/utils';
-import {filterDOMProps, mergeProps, useId, useLayoutEffect, useResizeObserver, useValueEffect} from '-aria/utils';
-import {FocusScope} from '-aria/focus';
+} from '@vue-spectrum/utils';
+import {filterDOMProps, mergeProps, useId, useLayoutEffect, useResizeObserver, useValueEffect} from '@vue-aria/utils';
+import {FocusScope} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {Item, Menu, MenuTrigger} from '-spectrum/menu';
-import {ListState, useListState} from '-stately/list';
+import {Item, Menu, MenuTrigger} from '@vue-spectrum/menu';
+import {ListState, useListState} from '@vue-stately/list';
 import More from '@spectrum-icons/workflow/More';
-import {PressResponder, useHover} from '-aria/interactions';
-import {Provider, useProviderProps} from '-spectrum/provider';
+import {PressResponder, useHover} from '@vue-aria/interactions';
+import {Provider, useProviderProps} from '@vue-spectrum/provider';
 import React, {forwardRef, ReactElement, ReactNode, useCallback, useMemo, useRef, useState} from 'react';
-import {SpectrumActionGroupProps} from '-types/actiongroup';
+import {SpectrumActionGroupProps} from '@vue-types/actiongroup';
 import styles from '@adobe/spectrum-css-temp/components/actiongroup/vars.css';
-import {Text} from '-spectrum/text';
-import {Tooltip, TooltipTrigger} from '-spectrum/tooltip';
-import {useActionGroup, useActionGroupItem} from '-aria/actiongroup';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {Text} from '@vue-spectrum/text';
+import {Tooltip, TooltipTrigger} from '@vue-spectrum/tooltip';
+import {useActionGroup, useActionGroupItem} from '@vue-aria/actiongroup';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 
 /**
@@ -378,7 +378,7 @@ function ActionGroupMenu<T>({state, isDisabled, isEmphasized, staticColor, items
   // The key must actually exist in the collection for focus to work correctly.
   let key = items[0].key;
   let {buttonProps} = useActionGroupItem({key}, state);
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/actiongroup');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/actiongroup');
 
   // The menu button shouldn't act like an actual action group item.
   delete buttonProps.onPress;

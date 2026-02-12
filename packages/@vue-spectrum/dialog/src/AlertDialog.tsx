@@ -11,23 +11,23 @@
  */
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
-import {Button} from '-spectrum/button';
-import {ButtonGroup} from '-spectrum/buttongroup';
-import {chain, filterDOMProps} from '-aria/utils';
-import {classNames, useStyleProps} from '-spectrum/utils';
-import {Content} from '-spectrum/view';
+import {Button} from '@vue-spectrum/button';
+import {ButtonGroup} from '@vue-spectrum/buttongroup';
+import {chain, filterDOMProps} from '@vue-aria/utils';
+import {classNames, useStyleProps} from '@vue-spectrum/utils';
+import {Content} from '@vue-spectrum/view';
 import {Dialog} from './Dialog';
 import {DialogContext, DialogContextValue} from './context';
-import {Divider} from '-spectrum/divider';
-import {DOMRef} from '-types/shared';
-import {Heading} from '-spectrum/text';
+import {Divider} from '@vue-spectrum/divider';
+import {DOMRef} from '@vue-types/shared';
+import {Heading} from '@vue-spectrum/text';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React, {forwardRef, useContext} from 'react';
-import {SpectrumAlertDialogProps} from '-types/dialog';
-import {SpectrumButtonProps} from '-types/button';
+import {SpectrumAlertDialogProps} from '@vue-types/dialog';
+import {SpectrumButtonProps} from '@vue-types/button';
 import styles from '@adobe/spectrum-css-temp/components/dialog/vars.css';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 /**
  * AlertDialogs are a specific type of Dialog. They display important information that users need to acknowledge.
@@ -53,7 +53,7 @@ export const AlertDialog = forwardRef(function AlertDialog(props: SpectrumAlertD
     ...otherProps
   } = props;
   let {styleProps} = useStyleProps(otherProps);
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/dialog');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/dialog');
 
   let confirmVariant: SpectrumButtonProps['variant'] = 'primary';
   if (variant) {

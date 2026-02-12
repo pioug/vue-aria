@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {DOMProps, RefObject} from '-types/shared';
+import {AriaButtonProps} from '@vue-types/button';
+import {DOMProps, RefObject} from '@vue-types/shared';
 import {onCloseMap} from './useCloseOnScroll';
-import {OverlayTriggerState} from '-stately/overlays';
+import {OverlayTriggerState} from '@vue-stately/overlays';
 import {useEffect} from 'react';
-import {useId} from '-aria/utils';
+import {useId} from '@vue-aria/utils';
 
 export interface OverlayTriggerProps {
   /** Type of overlay that is opened by the trigger. */

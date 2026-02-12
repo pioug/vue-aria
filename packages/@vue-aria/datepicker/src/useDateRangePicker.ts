@@ -10,22 +10,22 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {AriaDatePickerProps, AriaDateRangePickerProps, DateValue} from '-types/datepicker';
-import {AriaDialogProps} from '-types/dialog';
-import {createFocusManager} from '-aria/focus';
-import {DateRange, RangeCalendarProps} from '-types/calendar';
-import {DateRangePickerState} from '-stately/datepicker';
-import {DEFAULT_VALIDATION_RESULT, mergeValidation, privateValidationStateProp} from '-stately/form';
-import {DOMAttributes, GroupDOMAttributes, KeyboardEvent, RefObject, ValidationResult} from '-types/shared';
-import {filterDOMProps, mergeProps, nodeContains, useDescription, useId} from '-aria/utils';
+import {AriaButtonProps} from '@vue-types/button';
+import {AriaDatePickerProps, AriaDateRangePickerProps, DateValue} from '@vue-types/datepicker';
+import {AriaDialogProps} from '@vue-types/dialog';
+import {createFocusManager} from '@vue-aria/focus';
+import {DateRange, RangeCalendarProps} from '@vue-types/calendar';
+import {DateRangePickerState} from '@vue-stately/datepicker';
+import {DEFAULT_VALIDATION_RESULT, mergeValidation, privateValidationStateProp} from '@vue-stately/form';
+import {DOMAttributes, GroupDOMAttributes, KeyboardEvent, RefObject, ValidationResult} from '@vue-types/shared';
+import {filterDOMProps, mergeProps, nodeContains, useDescription, useId} from '@vue-aria/utils';
 import {focusManagerSymbol, roleSymbol} from './useDateField';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {useDatePickerGroup} from './useDatePickerGroup';
-import {useField} from '-aria/label';
-import {useFocusWithin} from '-aria/interactions';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {useField} from '@vue-aria/label';
+import {useFocusWithin} from '@vue-aria/interactions';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useMemo, useRef} from 'react';
 
 export interface DateRangePickerAria extends ValidationResult {
@@ -55,7 +55,7 @@ export interface DateRangePickerAria extends ValidationResult {
  * users to enter or select a date and time range.
  */
 export function useDateRangePicker<T extends DateValue>(props: AriaDateRangePickerProps<T>, state: DateRangePickerState, ref: RefObject<Element | null>): DateRangePickerAria {
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/datepicker');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/datepicker');
   let {isInvalid, validationErrors, validationDetails} = state.displayValidation;
   let {labelProps, fieldProps, descriptionProps, errorMessageProps} = useField({
     ...props,

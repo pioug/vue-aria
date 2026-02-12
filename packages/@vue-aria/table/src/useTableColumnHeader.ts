@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMAttributes, FocusableElement, RefObject} from '-types/shared';
+import {DOMAttributes, FocusableElement, RefObject} from '@vue-types/shared';
 import {getColumnHeaderId} from './utils';
-import {GridNode} from '-types/grid';
+import {GridNode} from '@vue-types/grid';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {isAndroid, mergeProps, useDescription} from '-aria/utils';
-import {TableState} from '-stately/table';
+import {isAndroid, mergeProps, useDescription} from '@vue-aria/utils';
+import {TableState} from '@vue-stately/table';
 import {useEffect} from 'react';
-import {useFocusable, usePress} from '-aria/interactions';
-import {useGridCell} from '-aria/grid';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useFocusable, usePress} from '@vue-aria/interactions';
+import {useGridCell} from '@vue-aria/grid';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface AriaTableColumnHeaderProps<T> {
   /** An object representing the [column header](https://www.w3.org/TR/wai-aria-1.1/#columnheader). Contains all the relevant information that makes up the column header. */
@@ -69,7 +69,7 @@ export function useTableColumnHeader<T>(props: AriaTableColumnHeaderProps<T>, st
     ariaSort = isSortedColumn ? sortDirection : 'none';
   }
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/table');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/table');
   let sortDescription;
   if (allowsSorting) {
     sortDescription = `${stringFormatter.format('sortable')}`;

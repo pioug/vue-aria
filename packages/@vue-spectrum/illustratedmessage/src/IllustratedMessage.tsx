@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, ClearSlots, SlotProvider, useSlotProps, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {Flex} from '-spectrum/layout';
+import {classNames, ClearSlots, SlotProvider, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {Flex} from '@vue-spectrum/layout';
 import React, {forwardRef} from 'react';
-import {SpectrumIllustratedMessageProps} from '-types/illustratedmessage';
+import {SpectrumIllustratedMessageProps} from '@vue-types/illustratedmessage';
 import styles from '@adobe/spectrum-css-temp/components/illustratedmessage/vars.css';
 
 /**

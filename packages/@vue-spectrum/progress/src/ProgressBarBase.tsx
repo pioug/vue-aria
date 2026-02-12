@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {clamp} from '-aria/utils';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {ProgressBarProps, SpectrumProgressBarBaseProps} from '-types/progress';
+import {clamp} from '@vue-aria/utils';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {ProgressBarProps, SpectrumProgressBarBaseProps} from '@vue-types/progress';
 import React, {CSSProperties, HTMLAttributes} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/barloader/vars.css';
 

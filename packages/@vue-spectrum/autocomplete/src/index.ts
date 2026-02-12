@@ -11,5 +11,5 @@
  */
 /// <reference types="css-module-types" />
 export {SearchAutocomplete} from './SearchAutocomplete';
-export {Item, Section} from '-stately/collections';
-export type {SpectrumSearchAutocompleteProps} from '-types/autocomplete';
+export {Item, Section} from '@vue-stately/collections';
+export type {SpectrumSearchAutocompleteProps} from '@vue-types/autocomplete';

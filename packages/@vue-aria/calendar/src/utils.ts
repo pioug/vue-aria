@@ -11,11 +11,11 @@
  */
 
 import {CalendarDate, DateFormatter, endOfMonth, isSameDay, startOfMonth} from '@internationalized/date';
-import {CalendarState, RangeCalendarState} from '-stately/calendar';
+import {CalendarState, RangeCalendarState} from '@vue-stately/calendar';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import type {LocalizedStringFormatter} from '@internationalized/string';
-import {useDateFormatter, useLocalizedStringFormatter} from '-aria/i18n';
+import {useDateFormatter, useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useMemo} from 'react';
 
 interface HookData {
@@ -32,7 +32,7 @@ export function getEraFormat(date: CalendarDate | undefined): 'short' | undefine
 }
 
 export function useSelectedDateDescription(state: CalendarState | RangeCalendarState): string {
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/calendar');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/calendar');
 
   let start: CalendarDate | undefined, end: CalendarDate | undefined;
   if ('highlightedRange' in state) {
@@ -70,7 +70,7 @@ export function useSelectedDateDescription(state: CalendarState | RangeCalendarS
 }
 
 export function useVisibleRangeDescription(startDate: CalendarDate, endDate: CalendarDate, timeZone: string, isAria: boolean): string {
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/calendar');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/calendar');
   let era: any = getEraFormat(startDate) || getEraFormat(endDate);
   let monthFormatter = useDateFormatter({
     month: 'long',

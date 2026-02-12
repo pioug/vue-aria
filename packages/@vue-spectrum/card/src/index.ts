@@ -21,4 +21,4 @@ export {GalleryLayout} from './GalleryLayout';
 export {GridLayout} from './GridLayout';
 export {WaterfallLayout} from './WaterfallLayout';
 export {Card} from './Card';
-export type {SpectrumCardViewProps} from '-types/card';
+export type {SpectrumCardViewProps} from '@vue-types/card';

@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {ColorChannel, SpectrumColorFieldProps} from '-types/color';
+import {classNames} from '@vue-spectrum/utils';
+import {ColorChannel, SpectrumColorFieldProps} from '@vue-types/color';
 import {ColorFieldContext, useContextProps} from 'react-aria-components';
 import React, {Ref, useEffect, useRef} from 'react';
 import styles from './colorfield.css';
-import {TextFieldBase} from '-spectrum/textfield';
-import {TextFieldRef} from '-types/textfield';
-import {useColorChannelField, useColorField} from '-aria/color';
-import {useColorChannelFieldState, useColorFieldState} from '-stately/color';
-import {useFormProps} from '-spectrum/form';
-import {useLocale} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {TextFieldBase} from '@vue-spectrum/textfield';
+import {TextFieldRef} from '@vue-types/textfield';
+import {useColorChannelField, useColorField} from '@vue-aria/color';
+import {useColorChannelFieldState, useColorFieldState} from '@vue-stately/color';
+import {useFormProps} from '@vue-spectrum/form';
+import {useLocale} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * A color field allows users to edit a hex color or individual color channel value.

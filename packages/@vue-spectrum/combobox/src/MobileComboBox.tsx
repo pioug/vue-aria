@@ -11,39 +11,39 @@
  */
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import buttonStyles from '@adobe/spectrum-css-temp/components/button/vars.css';
 import CheckmarkMedium from '@spectrum-icons/ui/CheckmarkMedium';
 import ChevronDownMedium from '@spectrum-icons/ui/ChevronDownMedium';
-import {classNames, unwrapDOMRef, useFocusableRef} from '-spectrum/utils';
-import {ClearButton} from '-spectrum/button';
-import {ComboBoxState, useComboBoxState} from '-stately/combobox';
+import {classNames, unwrapDOMRef, useFocusableRef} from '@vue-spectrum/utils';
+import {ClearButton} from '@vue-spectrum/button';
+import {ComboBoxState, useComboBoxState} from '@vue-stately/combobox';
 import comboboxStyles from './combobox.css';
-import {DismissButton, useOverlayTrigger} from '-aria/overlays';
-import {Field} from '-spectrum/label';
-import {FocusableRef, FocusableRefValue, ValidationState} from '-types/shared';
-import {FocusRing, FocusScope} from '-aria/focus';
-import {focusSafely, setInteractionModality, useHover} from '-aria/interactions';
-import {getActiveElement, mergeProps, useFormReset, useId, useObjectRef} from '-aria/utils';
+import {DismissButton, useOverlayTrigger} from '@vue-aria/overlays';
+import {Field} from '@vue-spectrum/label';
+import {FocusableRef, FocusableRefValue, ValidationState} from '@vue-types/shared';
+import {FocusRing, FocusScope} from '@vue-aria/focus';
+import {focusSafely, setInteractionModality, useHover} from '@vue-aria/interactions';
+import {getActiveElement, mergeProps, useFormReset, useId, useObjectRef} from '@vue-aria/utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import labelStyles from '@adobe/spectrum-css-temp/components/fieldlabel/vars.css';
-import {ListBoxBase, useListBoxLayout} from '-spectrum/listbox';
-import {ProgressCircle} from '-spectrum/progress';
+import {ListBoxBase, useListBoxLayout} from '@vue-spectrum/listbox';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {ForwardedRef, HTMLAttributes, InputHTMLAttributes, ReactElement, ReactNode, useCallback, useEffect, useRef, useState} from 'react';
 import searchStyles from '@adobe/spectrum-css-temp/components/search/vars.css';
-import {SpectrumComboBoxProps} from '-types/combobox';
+import {SpectrumComboBoxProps} from '@vue-types/combobox';
 import styles from '@adobe/spectrum-css-temp/components/inputgroup/vars.css';
-import {TextFieldBase} from '-spectrum/textfield';
+import {TextFieldBase} from '@vue-spectrum/textfield';
 import textfieldStyles from '@adobe/spectrum-css-temp/components/textfield/vars.css';
-import {Tray} from '-spectrum/overlays';
-import {useButton} from '-aria/button';
-import {useComboBox} from '-aria/combobox';
-import {useDialog} from '-aria/dialog';
-import {useField} from '-aria/label';
-import {useFilter, useLocalizedStringFormatter} from '-aria/i18n';
-import {useFormValidation} from '-aria/form';
-import {useProviderProps} from '-spectrum/provider';
+import {Tray} from '@vue-spectrum/overlays';
+import {useButton} from '@vue-aria/button';
+import {useComboBox} from '@vue-aria/combobox';
+import {useDialog} from '@vue-aria/dialog';
+import {useField} from '@vue-aria/label';
+import {useFilter, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useFormValidation} from '@vue-aria/form';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 export const MobileComboBox = React.forwardRef(function MobileComboBox(props: SpectrumComboBoxProps<any>, ref: FocusableRef<HTMLElement>) {
   props = useProviderProps(props);
@@ -180,7 +180,7 @@ export const ComboBoxButton = React.forwardRef(function ComboBoxButton(props: Co
     style,
     className
   } = props;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/combobox');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/combobox');
   let valueId = useId();
   let invalidId = useId();
   let validId = useId();
@@ -342,7 +342,7 @@ function ComboBoxTray(props: ComboBoxTrayProps) {
   let listBoxRef = useRef<HTMLDivElement>(null);
   let isLoading = loadingState === 'loading' || loadingState === 'loadingMore';
   let layout = useListBoxLayout();
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/combobox');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/combobox');
 
   let {inputProps, listBoxProps, labelProps} = useComboBox(
     {

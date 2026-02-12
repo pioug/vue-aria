@@ -1,16 +1,16 @@
 import {ColorArea} from './ColorArea';
 import {ColorField} from './ColorField';
 import {ColorSlider} from './ColorSlider';
-import {ColorSpace} from '-types/color';
-import {DOMRef} from '-types/shared';
-import {getColorChannels} from '-stately/color';
+import {ColorSpace} from '@vue-types/color';
+import {DOMRef} from '@vue-types/shared';
+import {getColorChannels} from '@vue-stately/color';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {Item, Picker} from '-spectrum/picker';
+import {Item, Picker} from '@vue-spectrum/picker';
 import React, {CSSProperties, useState} from 'react';
-import {style} from '-spectrum/style-macro-s1' with {type: 'macro'};
-import {useDOMRef} from '-spectrum/utils';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {style} from '@vue-spectrum/style-macro-s1' with {type: 'macro'};
+import {useDOMRef} from '@vue-spectrum/utils';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface SpectrumColorEditorProps {
   /** Whether to hide the alpha channel color slider and color field. */
@@ -23,7 +23,7 @@ export interface SpectrumColorEditorProps {
 export const ColorEditor = React.forwardRef(function ColorEditor(props: SpectrumColorEditorProps, ref: DOMRef<HTMLDivElement>) {
   let [format, setFormat] = useState<ColorSpace | 'hex'>('hex');
   let domRef = useDOMRef(ref);
-  let formatter = useLocalizedStringFormatter(intlMessages, '-spectrum/color');
+  let formatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/color');
 
   return (
     <div className={style({display: 'flex', flexDirection: 'column', gap: 4})()} ref={domRef}>

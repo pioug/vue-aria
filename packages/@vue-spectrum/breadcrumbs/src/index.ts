@@ -11,5 +11,5 @@
  */
 /// <reference types="css-module-types" />
 export {Breadcrumbs} from './Breadcrumbs';
-export {Item} from '-stately/collections';
-export type {SpectrumBreadcrumbsProps} from '-types/breadcrumbs';
+export {Item} from '@vue-stately/collections';
+export type {SpectrumBreadcrumbsProps} from '@vue-types/breadcrumbs';

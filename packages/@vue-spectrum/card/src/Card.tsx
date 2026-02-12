@@ -12,10 +12,10 @@
  */
 
 import {CardBase} from './CardBase';
-import {DOMRef, DOMRefValue, ItemProps} from '-types/shared';
-import {PartialNode} from '-stately/collections';
+import {DOMRef, DOMRefValue, ItemProps} from '@vue-types/shared';
+import {PartialNode} from '@vue-stately/collections';
 import React, {forwardRef, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes} from 'react';
-import {SpectrumCardProps} from '-types/card';
+import {SpectrumCardProps} from '@vue-types/card';
 import {useCardViewContext} from './CardViewContext';
 
 

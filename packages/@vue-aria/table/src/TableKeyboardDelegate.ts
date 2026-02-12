@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {getChildNodes, getFirstItem} from '-stately/collections';
-import {GridKeyboardDelegate} from '-aria/grid';
-import {Key, Node} from '-types/shared';
-import {TableCollection} from '-types/table';
+import {getChildNodes, getFirstItem} from '@vue-stately/collections';
+import {GridKeyboardDelegate} from '@vue-aria/grid';
+import {Key, Node} from '@vue-types/shared';
+import {TableCollection} from '@vue-types/table';
 
 export class TableKeyboardDelegate<T> extends GridKeyboardDelegate<T, TableCollection<T>> {
 

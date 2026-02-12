@@ -10,23 +10,23 @@
  * governing permissions and limitations under the License.
  */
 
-import {ActionButton} from '-spectrum/button';
-import {AriaTagGroupProps, useTagGroup} from '-aria/tag';
-import {classNames, useDOMRef} from '-spectrum/utils';
-import {Collection, DOMRef, Node, SpectrumLabelableProps, StyleProps, Validation} from '-types/shared';
-import {Field} from '-spectrum/label';
-import {FocusRing, FocusScope} from '-aria/focus';
+import {ActionButton} from '@vue-spectrum/button';
+import {AriaTagGroupProps, useTagGroup} from '@vue-aria/tag';
+import {classNames, useDOMRef} from '@vue-spectrum/utils';
+import {Collection, DOMRef, Node, SpectrumLabelableProps, StyleProps, Validation} from '@vue-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {FocusRing, FocusScope} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {ListCollection, useListState} from '-stately/list';
-import {ListKeyboardDelegate} from '-aria/selection';
-import {Provider, useProvider, useProviderProps} from '-spectrum/provider';
+import {ListCollection, useListState} from '@vue-stately/list';
+import {ListKeyboardDelegate} from '@vue-aria/selection';
+import {Provider, useProvider, useProviderProps} from '@vue-spectrum/provider';
 import React, {JSX, ReactNode, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/tags/vars.css';
 import {Tag} from './Tag';
-import {useFormProps} from '-spectrum/form';
-import {useId, useLayoutEffect, useResizeObserver, useValueEffect} from '-aria/utils';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {useFormProps} from '@vue-spectrum/form';
+import {useId, useLayoutEffect, useResizeObserver, useValueEffect} from '@vue-aria/utils';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 const TAG_STYLES = {
   medium: {
@@ -67,7 +67,7 @@ export const TagGroup = React.forwardRef(function TagGroup<T extends object>(pro
   let tagsRef = useRef<HTMLDivElement | null>(null);
   let {direction} = useLocale();
   let {scale} = useProvider();
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/tag');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/tag');
   let [isCollapsed, setIsCollapsed] = useState(maxRows != null);
   let state = useListState(props);
   let [tagState, setTagState] = useValueEffect({visibleTagCount: state.collection.size, showCollapseButton: false});

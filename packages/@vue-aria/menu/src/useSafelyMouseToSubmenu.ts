@@ -1,8 +1,8 @@
 
-import {nodeContains, useEffectEvent, useLayoutEffect, useResizeObserver} from '-aria/utils';
-import {RefObject} from '-types/shared';
+import {nodeContains, useEffectEvent, useLayoutEffect, useResizeObserver} from '@vue-aria/utils';
+import {RefObject} from '@vue-types/shared';
 import {useEffect, useRef, useState} from 'react';
-import {useInteractionModality} from '-aria/interactions';
+import {useInteractionModality} from '@vue-aria/interactions';
 
 interface SafelyMouseToSubmenuOptions {
   /** Ref for the parent menu. */

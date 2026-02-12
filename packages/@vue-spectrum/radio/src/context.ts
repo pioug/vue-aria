@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {RadioGroupState} from '-stately/radio';
+import {RadioGroupState} from '@vue-stately/radio';
 import React, {useContext} from 'react';
 
 interface RadioGroupContext {

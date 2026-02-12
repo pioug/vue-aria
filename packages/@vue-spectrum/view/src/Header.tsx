@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {ClearSlots, useDOMRef, useSlotProps, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {HeaderProps} from '-types/view';
+import {ClearSlots, useDOMRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {HeaderProps} from '@vue-types/view';
 import React, {forwardRef} from 'react';
 
 /**

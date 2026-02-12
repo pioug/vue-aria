@@ -11,22 +11,22 @@
  */
 
 import AlertMedium from '@spectrum-icons/ui/AlertMedium';
-import {Button, ClearButton} from '-spectrum/button';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
+import {Button, ClearButton} from '@vue-spectrum/button';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
 import CrossMedium from '@spectrum-icons/ui/CrossMedium';
-import {DOMProps, DOMRef} from '-types/shared';
-import {filterDOMProps, mergeProps} from '-aria/utils';
+import {DOMProps, DOMRef} from '@vue-types/shared';
+import {filterDOMProps, mergeProps} from '@vue-aria/utils';
 import InfoMedium from '@spectrum-icons/ui/InfoMedium';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {QueuedToast, ToastState} from '-stately/toast';
+import {QueuedToast, ToastState} from '@vue-stately/toast';
 import React from 'react';
 import styles from '@adobe/spectrum-css-temp/components/toast/vars.css';
 import SuccessMedium from '@spectrum-icons/ui/SuccessMedium';
 import toastContainerStyles from './toastContainer.css';
-import {useFocusRing} from '-aria/focus';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useToast} from '-aria/toast';
+import {useFocusRing} from '@vue-aria/focus';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useToast} from '@vue-aria/toast';
 
 export interface SpectrumToastValue extends DOMProps {
   children: string,
@@ -72,7 +72,7 @@ export const Toast = React.forwardRef(function Toast(props: SpectrumToastProps, 
   } = useToast(props, state, domRef);
   let {styleProps} = useStyleProps(otherProps);
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/toast');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/toast');
   let iconLabel = variant && variant !== 'neutral' ? stringFormatter.format(variant) : null;
   let Icon = ICONS[variant];
   let {isFocusVisible, focusProps} = useFocusRing();

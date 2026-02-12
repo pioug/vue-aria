@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {createShadowTreeWalker, getOwnerDocument, getOwnerWindow, nodeContains} from '-aria/utils';
-import {shadowDOM} from '-stately/flags';
+import {createShadowTreeWalker, getOwnerDocument, getOwnerWindow, nodeContains} from '@vue-aria/utils';
+import {shadowDOM} from '@vue-stately/flags';
 
 const supportsInert = typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
 

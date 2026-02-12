@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useFocusableRef, useStyleProps} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
+import {classNames, useFocusableRef, useStyleProps} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
 import React, {forwardRef, useRef} from 'react';
-import {SpectrumRadioProps} from '-types/radio';
+import {SpectrumRadioProps} from '@vue-types/radio';
 import styles from '@adobe/spectrum-css-temp/components/radio/vars.css';
-import {useHover} from '-aria/interactions';
-import {useRadio} from '-aria/radio';
+import {useHover} from '@vue-aria/interactions';
+import {useRadio} from '@vue-aria/radio';
 import {useRadioProvider} from './context';
 
 /**

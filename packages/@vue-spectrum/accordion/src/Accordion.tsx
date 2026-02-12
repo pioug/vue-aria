@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps, DOMRef, forwardRefType, StyleProps} from '-types/shared';
+import {AriaLabelingProps, DOMProps, DOMRef, forwardRefType, StyleProps} from '@vue-types/shared';
 import {Button, DisclosureGroup, DisclosureGroupProps, DisclosurePanelProps, DisclosureProps, Heading, Disclosure as RACDisclosure, DisclosurePanel as RACDisclosurePanel} from 'react-aria-components';
 import ChevronLeftMedium from '@spectrum-icons/ui/ChevronLeftMedium';
 import ChevronRightMedium from '@spectrum-icons/ui/ChevronRightMedium';
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
 import React, {createContext, forwardRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/accordion/vars.css';
-import {useLocale} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {useLocale} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 export interface SpectrumAccordionProps extends Omit<DisclosureGroupProps, 'className' | 'style' | 'render' | 'children'>, StyleProps, DOMProps {
   /** Whether the Accordion should be displayed with a quiet style. */

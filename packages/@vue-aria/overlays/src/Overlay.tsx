@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {ClearPressResponder} from '-aria/interactions';
-import {FocusScope} from '-aria/focus';
+import {ClearPressResponder} from '@vue-aria/interactions';
+import {FocusScope} from '@vue-aria/focus';
 import React, {ReactNode, useContext, useMemo, useState} from 'react';
 import ReactDOM from 'react-dom';
-import {useIsSSR} from '-aria/ssr';
-import {useLayoutEffect} from '-aria/utils';
+import {useIsSSR} from '@vue-aria/ssr';
+import {useLayoutEffect} from '@vue-aria/utils';
 import {useUNSAFE_PortalContext} from './PortalProvider';
 
 export interface OverlayProps {

@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {DragEndEvent, DragItem, DragMoveEvent, DragPreviewRenderer, DragStartEvent, DropOperation, PressEvent, RefObject} from '-types/shared';
+import {AriaButtonProps} from '@vue-types/button';
+import {DragEndEvent, DragItem, DragMoveEvent, DragPreviewRenderer, DragStartEvent, DropOperation, PressEvent, RefObject} from '@vue-types/shared';
 import {DragEvent, HTMLAttributes, version as ReactVersion, useEffect, useRef, useState} from 'react';
 import * as DragManager from './DragManager';
 import {DROP_EFFECT_TO_DROP_OPERATION, DROP_OPERATION, EFFECT_ALLOWED} from './constants';
-import {getEventTarget, isVirtualClick, isVirtualPointerEvent, useDescription, useGlobalListeners} from '-aria/utils';
+import {getEventTarget, isVirtualClick, isVirtualPointerEvent, useDescription, useGlobalListeners} from '@vue-aria/utils';
 import {globalDropEffect, setGlobalAllowedDropOperations, setGlobalDropEffect, useDragModality, writeToDataTransfer} from './utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface DragOptions {
   /** Handler that is called when a drag operation is started. */
@@ -75,7 +75,7 @@ const MESSAGES = {
  */
 export function useDrag(options: DragOptions): DragResult {
   let {hasDragButton, isDisabled} = options;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/dnd');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/dnd');
   let state = useRef({
     options,
     x: 0,

@@ -13,5 +13,5 @@
 /// <reference types="css-module-types" />
 
 export {ComboBox} from './ComboBox';
-export {Item, Section} from '-stately/collections';
-export type {SpectrumComboBoxProps} from '-types/combobox';
+export {Item, Section} from '@vue-stately/collections';
+export type {SpectrumComboBoxProps} from '@vue-types/combobox';

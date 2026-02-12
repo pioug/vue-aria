@@ -11,5 +11,5 @@
  */
 
 export {ListView} from './ListView';
-export {Item} from '-stately/collections';
+export {Item} from '@vue-stately/collections';
 export type {SpectrumListViewProps} from './ListView';

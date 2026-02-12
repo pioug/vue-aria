@@ -10,10 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMAttributes, RefObject} from '-types/shared';
-import {GridRowProps} from '-aria/grid';
-import {tableNestedRows} from '-stately/flags';
-import {TableState} from '-stately/table';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {GridRowProps} from '@vue-aria/grid';
+import {tableNestedRows} from '@vue-stately/flags';
+import {TableState} from '@vue-stately/table';
 
 export interface TableHeaderRowAria {
   /** Props for the grid row element. */

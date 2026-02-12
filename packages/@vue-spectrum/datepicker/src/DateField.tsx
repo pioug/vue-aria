@@ -10,21 +10,21 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
+import {classNames} from '@vue-spectrum/utils';
 import {createCalendar} from '@internationalized/date';
 import {DatePickerSegment} from './DatePickerSegment';
 import datepickerStyles from './styles.css';
-import {DateValue, SpectrumDateFieldProps} from '-types/datepicker';
-import {Field} from '-spectrum/label';
-import {FocusableRef} from '-types/shared';
+import {DateValue, SpectrumDateFieldProps} from '@vue-types/datepicker';
+import {Field} from '@vue-spectrum/label';
+import {FocusableRef} from '@vue-types/shared';
 import {Input} from './Input';
 import React, {ReactElement, useRef} from 'react';
-import {useDateField} from '-aria/datepicker';
-import {useDateFieldState} from '-stately/datepicker';
+import {useDateField} from '@vue-aria/datepicker';
+import {useDateFieldState} from '@vue-stately/datepicker';
 import {useFocusManagerRef, useFormatHelpText, useFormattedDateWidth} from './utils';
-import {useFormProps} from '-spectrum/form';
-import {useLocale} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {useFormProps} from '@vue-spectrum/form';
+import {useLocale} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * DateFields allow users to enter and edit date and time values using a keyboard.

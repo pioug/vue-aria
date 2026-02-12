@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import {HeadingContext, useContextProps} from 'react-aria-components';
-import {HeadingProps} from '-types/text';
+import {HeadingProps} from '@vue-types/text';
 import React, {ElementType, forwardRef} from 'react';
-import {useDOMRef, useSlotProps, useStyleProps} from '-spectrum/utils';
+import {useDOMRef, useSlotProps, useStyleProps} from '@vue-spectrum/utils';
 
 /**
  * Heading is used to create various levels of typographic hierarchies.

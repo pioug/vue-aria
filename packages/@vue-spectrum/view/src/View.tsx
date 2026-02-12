@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {ClearSlots, useDOMRef, useSlotProps, useStyleProps, viewStyleProps} from '-spectrum/utils';
-import {ColorVersion, DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {ClearSlots, useDOMRef, useSlotProps, useStyleProps, viewStyleProps} from '@vue-spectrum/utils';
+import {ColorVersion, DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React, {forwardRef, ReactElement} from 'react';
-import {ViewProps} from '-types/view';
+import {ViewProps} from '@vue-types/view';
 
 /**
  * View is a general purpose container with no specific semantics that can be used for custom styling purposes.

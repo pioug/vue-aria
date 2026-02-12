@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaSliderThumbProps} from '-types/slider';
-import {classNames} from '-spectrum/utils';
-import {FocusRing} from '-aria/focus';
-import {mergeProps} from '-aria/utils';
+import {AriaSliderThumbProps} from '@vue-types/slider';
+import {classNames} from '@vue-spectrum/utils';
+import {FocusRing} from '@vue-aria/focus';
+import {mergeProps} from '@vue-aria/utils';
 import React, {ReactNode, useRef} from 'react';
-import {RefObject} from '-types/shared';
-import {SliderState} from '-stately/slider';
+import {RefObject} from '@vue-types/shared';
+import {SliderState} from '@vue-stately/slider';
 import styles from '@adobe/spectrum-css-temp/components/slider/vars.css';
-import {useHover} from '-aria/interactions';
-import {useSliderThumb} from '-aria/slider';
-import {VisuallyHidden} from '-aria/visually-hidden';
+import {useHover} from '@vue-aria/interactions';
+import {useSliderThumb} from '@vue-aria/slider';
+import {VisuallyHidden} from '@vue-aria/visually-hidden';
 
 interface SliderThumbProps extends AriaSliderThumbProps {
   trackRef: RefObject<HTMLElement | null>,

@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {announce} from '-aria/live-announcer';
-import {AriaButtonProps} from '-types/button';
-import {AriaLabelingProps, DOMAttributes, DOMProps} from '-types/shared';
-import {CalendarPropsBase} from '-types/calendar';
-import {CalendarState, RangeCalendarState} from '-stately/calendar';
-import {filterDOMProps, mergeProps, useLabels, useSlotId, useUpdateEffect} from '-aria/utils';
+import {announce} from '@vue-aria/live-announcer';
+import {AriaButtonProps} from '@vue-types/button';
+import {AriaLabelingProps, DOMAttributes, DOMProps} from '@vue-types/shared';
+import {CalendarPropsBase} from '@vue-types/calendar';
+import {CalendarState, RangeCalendarState} from '@vue-stately/calendar';
+import {filterDOMProps, mergeProps, useLabels, useSlotId, useUpdateEffect} from '@vue-aria/utils';
 import {hookData, useSelectedDateDescription, useVisibleRangeDescription} from './utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useState} from 'react';
 
 export interface CalendarAria {
@@ -36,7 +36,7 @@ export interface CalendarAria {
 }
 
 export function useCalendarBase(props: CalendarPropsBase & DOMProps & AriaLabelingProps, state: CalendarState | RangeCalendarState): CalendarAria {
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/calendar');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/calendar');
   let domProps = filterDOMProps(props);
 
   let title = useVisibleRangeDescription(state.visibleRange.start, state.visibleRange.end, state.timeZone, false);

@@ -11,16 +11,16 @@
  */
 
 import AlertSmall from '@spectrum-icons/ui/AlertSmall';
-import {classNames, createDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
+import {classNames, createDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
 import InfoSmall from '@spectrum-icons/ui/InfoSmall';
-import {mergeProps} from '-aria/utils';
+import {mergeProps} from '@vue-aria/utils';
 import React, {useContext, useImperativeHandle, useRef} from 'react';
-import {SpectrumTooltipProps} from '-types/tooltip';
+import {SpectrumTooltipProps} from '@vue-types/tooltip';
 import styles from '@adobe/spectrum-css-temp/components/tooltip/vars.css';
 import SuccessSmall from '@spectrum-icons/ui/SuccessSmall';
 import {TooltipContext} from './context';
-import {useTooltip} from '-aria/tooltip';
+import {useTooltip} from '@vue-aria/tooltip';
 
 let iconMap = {
   info: InfoSmall,

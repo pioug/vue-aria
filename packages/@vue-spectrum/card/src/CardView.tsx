@@ -13,22 +13,22 @@
 
 import {CardBase} from './CardBase';
 import {CardViewContext, useCardViewContext} from './CardViewContext';
-import {classNames, useDOMRef, useStyleProps, useUnwrapDOMRef} from '-spectrum/utils';
-import {DOMRef, DOMRefValue, Node} from '-types/shared';
-import {GridCollection, useGridState} from '-stately/grid';
+import {classNames, useDOMRef, useStyleProps, useUnwrapDOMRef} from '@vue-spectrum/utils';
+import {DOMRef, DOMRefValue, Node} from '@vue-types/shared';
+import {GridCollection, useGridState} from '@vue-stately/grid';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {mergeProps} from '-aria/utils';
-import {ProgressCircle} from '-spectrum/progress';
+import {mergeProps} from '@vue-aria/utils';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {ReactElement, ReactNode, useCallback, useMemo, useRef} from 'react';
-import {ReusableView} from '-stately/virtualizer';
-import {SpectrumCardViewProps} from '-types/card';
+import {ReusableView} from '@vue-stately/virtualizer';
+import {SpectrumCardViewProps} from '@vue-types/card';
 import styles from '@adobe/spectrum-css-temp/components/card/vars.css';
-import {useCollator, useLocale, useLocalizedStringFormatter} from '-aria/i18n';
-import {useGrid, useGridCell, useGridRow} from '-aria/grid';
-import {useListState} from '-stately/list';
-import {useProvider} from '-spectrum/provider';
-import {Virtualizer, VirtualizerItem} from '-aria/virtualizer';
+import {useCollator, useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useGrid, useGridCell, useGridRow} from '@vue-aria/grid';
+import {useListState} from '@vue-stately/list';
+import {useProvider} from '@vue-spectrum/provider';
+import {Virtualizer, VirtualizerItem} from '@vue-aria/virtualizer';
 
 /**
  * TODO: Add description of component here.
@@ -147,7 +147,7 @@ export const CardView = React.forwardRef(function CardView<T extends object>(pro
 
 function LoadingState() {
   let {state} = useCardViewContext();
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/card');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/card');
   return (
     <CenteredWrapper>
       <ProgressCircle

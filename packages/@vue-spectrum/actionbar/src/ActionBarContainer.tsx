@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React from 'react';
-import {SpectrumActionBarContainerProps} from '-types/actionbar';
+import {SpectrumActionBarContainerProps} from '@vue-types/actionbar';
 import styles from './actionbar.css';
-import {useProviderProps} from '-spectrum/provider';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * ActionBarContainer wraps around an ActionBar and a component that supports selection. It handles

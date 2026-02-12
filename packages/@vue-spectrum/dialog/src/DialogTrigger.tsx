@@ -11,13 +11,13 @@
  */
 
 import {DialogContext} from './context';
-import {Modal, Popover, Tray} from '-spectrum/overlays';
-import {OverlayTriggerState, useOverlayTriggerState} from '-stately/overlays';
-import {PressResponder} from '-aria/interactions';
+import {Modal, Popover, Tray} from '@vue-spectrum/overlays';
+import {OverlayTriggerState, useOverlayTriggerState} from '@vue-stately/overlays';
+import {PressResponder} from '@vue-aria/interactions';
 import React, {Fragment, JSX, ReactElement, useEffect, useRef} from 'react';
-import {SpectrumDialogClose, SpectrumDialogProps, SpectrumDialogTriggerProps} from '-types/dialog';
-import {useIsMobileDevice} from '-spectrum/utils';
-import {useOverlayTrigger} from '-aria/overlays';
+import {SpectrumDialogClose, SpectrumDialogProps, SpectrumDialogTriggerProps} from '@vue-types/dialog';
+import {useIsMobileDevice} from '@vue-spectrum/utils';
+import {useOverlayTrigger} from '@vue-aria/overlays';
 
 function DialogTrigger(props: SpectrumDialogTriggerProps) {
   let {

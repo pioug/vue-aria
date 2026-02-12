@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import {DOMAttributes} from 'react';
 import * as DragManager from './DragManager';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {useDescription} from '-aria/utils';
+import {useDescription} from '@vue-aria/utils';
 import {useDragModality} from './utils';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 interface VirtualDropResult {
   dropProps: AriaButtonProps & DOMAttributes<HTMLDivElement>
@@ -30,7 +30,7 @@ const MESSAGES = {
 };
 
 export function useVirtualDrop(): VirtualDropResult {
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/dnd');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/dnd');
   let modality = useDragModality();
   let dragSession = DragManager.useDragSession();
   let descriptionProps = useDescription(dragSession ? stringFormatter.format(MESSAGES[modality]) : '');

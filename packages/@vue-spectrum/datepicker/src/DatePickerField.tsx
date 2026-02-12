@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
+import {classNames} from '@vue-spectrum/utils';
 import {createCalendar} from '@internationalized/date';
 import {DatePickerSegment} from './DatePickerSegment';
 import datepickerStyles from './styles.css';
-import {DateValue, SpectrumDatePickerProps} from '-types/datepicker';
+import {DateValue, SpectrumDatePickerProps} from '@vue-types/datepicker';
 import React, {JSX, useRef} from 'react';
-import {useDateField} from '-aria/datepicker';
-import {useDateFieldState} from '-stately/datepicker';
-import {useLocale} from '-aria/i18n';
+import {useDateField} from '@vue-aria/datepicker';
+import {useDateFieldState} from '@vue-stately/datepicker';
+import {useLocale} from '@vue-aria/i18n';
 
 interface DatePickerFieldProps<T extends DateValue> extends SpectrumDatePickerProps<T> {
   inputClassName?: string,

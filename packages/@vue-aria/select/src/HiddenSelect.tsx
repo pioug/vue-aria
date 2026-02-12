@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {FocusableElement, Key, RefObject} from '-types/shared';
-import {getEventTarget, useFormReset} from '-aria/utils';
+import {FocusableElement, Key, RefObject} from '@vue-types/shared';
+import {getEventTarget, useFormReset} from '@vue-aria/utils';
 import React, {InputHTMLAttributes, JSX, ReactNode, useCallback, useRef} from 'react';
 import {selectData} from './useSelect';
-import {SelectionMode} from '-types/select';
-import {SelectState} from '-stately/select';
-import {useFormValidation} from '-aria/form';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {SelectionMode} from '@vue-types/select';
+import {SelectState} from '@vue-stately/select';
+import {useFormValidation} from '@vue-aria/form';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 export interface AriaHiddenSelectProps {
   /**

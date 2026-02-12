@@ -12,14 +12,14 @@
 
 import {CalendarBase} from './CalendarBase';
 import {createCalendar} from '@internationalized/date';
-import {createDOMRef} from '-spectrum/utils';
-import {DateValue, SpectrumRangeCalendarProps} from '-types/calendar';
-import {FocusableRef} from '-types/shared';
+import {createDOMRef} from '@vue-spectrum/utils';
+import {DateValue, SpectrumRangeCalendarProps} from '@vue-types/calendar';
+import {FocusableRef} from '@vue-types/shared';
 import React, {ReactElement, useImperativeHandle, useMemo, useRef} from 'react';
-import {useLocale} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
-import {useRangeCalendar} from '-aria/calendar';
-import {useRangeCalendarState} from '-stately/calendar';
+import {useLocale} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useRangeCalendar} from '@vue-aria/calendar';
+import {useRangeCalendarState} from '@vue-stately/calendar';
 
 /**
  * RangeCalendars display a grid of days in one or more months and allow users to select a contiguous range of dates.

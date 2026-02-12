@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMRef} from '-types/shared';
+import {DOMRef} from '@vue-types/shared';
 import {OpenTransition} from './OpenTransition';
-import {OverlayProps} from '-types/overlays';
-import {Provider} from '-spectrum/provider';
+import {OverlayProps} from '@vue-types/overlays';
+import {Provider} from '@vue-spectrum/provider';
 import React, {useCallback, useState} from 'react';
-import {Overlay as ReactAriaOverlay} from '-aria/overlays';
+import {Overlay as ReactAriaOverlay} from '@vue-aria/overlays';
 
 export const Overlay = React.forwardRef(function Overlay(props: OverlayProps, ref: DOMRef<HTMLDivElement>) {
   let {

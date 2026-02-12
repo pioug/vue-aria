@@ -13,5 +13,5 @@
 /// <reference types="css-module-types" />
 
 export {StepList} from './StepList';
-export {Item} from '-stately/collections';
+export {Item} from '@vue-stately/collections';
 export type {SpectrumStepListProps} from './StepList';

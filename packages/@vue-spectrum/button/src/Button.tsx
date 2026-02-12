@@ -17,21 +17,21 @@ import {
   useHasChild,
   useSlotProps,
   useStyleProps
-} from '-spectrum/utils';
-import {FocusableRef} from '-types/shared';
-import {FocusRing} from '-aria/focus';
+} from '@vue-spectrum/utils';
+import {FocusableRef} from '@vue-types/shared';
+import {FocusRing} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {isAppleDevice, isFirefox, mergeProps, useId} from '-aria/utils';
-import {ProgressCircle} from '-spectrum/progress';
+import {isAppleDevice, isFirefox, mergeProps, useId} from '@vue-aria/utils';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {ElementType, ReactElement, useEffect, useState} from 'react';
-import {SpectrumButtonProps} from '-types/button';
+import {SpectrumButtonProps} from '@vue-types/button';
 import styles from '@adobe/spectrum-css-temp/components/button/vars.css';
-import {Text} from '-spectrum/text';
-import {useButton} from '-aria/button';
-import {useFocus, useHover} from '-aria/interactions';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
+import {Text} from '@vue-spectrum/text';
+import {useButton} from '@vue-aria/button';
+import {useFocus, useHover} from '@vue-aria/interactions';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 function disablePendingProps(props) {
   // Don't allow interaction while isPending is true
@@ -74,7 +74,7 @@ export const Button = React.forwardRef(function Button<T extends ElementType = '
   let {hoverProps, isHovered} = useHover({isDisabled});
   let [isFocused, onFocusChange] = useState(false);
   let {focusProps} = useFocus({onFocusChange, isDisabled});
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/button');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/button');
   let {styleProps} = useStyleProps(otherProps);
   let hasLabel = useHasChild(`.${styles['spectrum-Button-label']}`, domRef);
   let hasIcon = useHasChild(`.${styles['spectrum-Icon']}`, domRef);

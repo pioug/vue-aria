@@ -10,14 +10,14 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaCheckboxProps} from '-types/checkbox';
+import {AriaCheckboxProps} from '@vue-types/checkbox';
 import {getRowLabelledBy} from './utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {Key} from '-types/shared';
-import {TableState} from '-stately/table';
-import {useGridSelectionCheckbox} from '-aria/grid';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {Key} from '@vue-types/shared';
+import {TableState} from '@vue-stately/table';
+import {useGridSelectionCheckbox} from '@vue-aria/grid';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface AriaTableSelectionCheckboxProps {
   /** A unique key for the checkbox. */
@@ -58,7 +58,7 @@ export function useTableSelectionCheckbox<T>(props: AriaTableSelectionCheckboxPr
  */
 export function useTableSelectAllCheckbox<T>(state: TableState<T>): TableSelectAllCheckboxAria {
   let {isEmpty, isSelectAll, selectionMode} = state.selectionManager;
-  const stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/table');
+  const stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/table');
 
   return {
     checkboxProps: {

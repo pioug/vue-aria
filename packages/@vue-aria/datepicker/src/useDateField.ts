@@ -10,19 +10,19 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaDateFieldProps as AriaDateFieldPropsBase, AriaTimeFieldProps, DateValue, TimeValue} from '-types/datepicker';
-import {createFocusManager, FocusManager} from '-aria/focus';
-import {DateFieldState, TimeFieldState} from '-stately/datepicker';
-import {DOMAttributes, GroupDOMAttributes, KeyboardEvent, RefObject, ValidationResult} from '-types/shared';
-import {filterDOMProps, mergeProps, useDescription, useFormReset} from '-aria/utils';
+import {AriaDateFieldProps as AriaDateFieldPropsBase, AriaTimeFieldProps, DateValue, TimeValue} from '@vue-types/datepicker';
+import {createFocusManager, FocusManager} from '@vue-aria/focus';
+import {DateFieldState, TimeFieldState} from '@vue-stately/datepicker';
+import {DOMAttributes, GroupDOMAttributes, KeyboardEvent, RefObject, ValidationResult} from '@vue-types/shared';
+import {filterDOMProps, mergeProps, useDescription, useFormReset} from '@vue-aria/utils';
 import {InputHTMLAttributes, useEffect, useMemo, useRef} from 'react';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {useDatePickerGroup} from './useDatePickerGroup';
-import {useField} from '-aria/label';
-import {useFocusWithin} from '-aria/interactions';
-import {useFormValidation} from '-aria/form';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useField} from '@vue-aria/label';
+import {useFocusWithin} from '@vue-aria/interactions';
+import {useFormValidation} from '@vue-aria/form';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 // Allows this hook to also be used with TimeField
 export interface AriaDateFieldOptions<T extends DateValue> extends Omit<AriaDateFieldPropsBase<T>, 'value' | 'defaultValue' | 'onChange' | 'minValue' | 'maxValue' | 'placeholderValue' | 'validate'> {
@@ -89,7 +89,7 @@ export function useDateField<T extends DateValue>(props: AriaDateFieldOptions<T>
     onFocusWithinChange: props.onFocusChange
   });
 
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/datepicker');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/datepicker');
   let message = state.maxGranularity === 'hour' ? 'selectedTimeDescription' : 'selectedDateDescription';
   let field = state.maxGranularity === 'hour' ? 'time' : 'date';
   let description = state.value ? stringFormatter.format(message, {[field]: state.formatValue({month: 'long'})}) : '';

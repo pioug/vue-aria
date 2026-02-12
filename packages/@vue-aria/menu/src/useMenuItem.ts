@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMAttributes, DOMProps, FocusableElement, FocusEvents, HoverEvents, Key, KeyboardEvents, PressEvent, PressEvents, RefObject} from '-types/shared';
-import {filterDOMProps, getEventTarget, handleLinkClick, mergeProps, useLinkProps, useRouter, useSlotId} from '-aria/utils';
-import {getItemCount} from '-stately/collections';
-import {isFocusVisible, useFocusable, useHover, useKeyboard, usePress} from '-aria/interactions';
+import {DOMAttributes, DOMProps, FocusableElement, FocusEvents, HoverEvents, Key, KeyboardEvents, PressEvent, PressEvents, RefObject} from '@vue-types/shared';
+import {filterDOMProps, getEventTarget, handleLinkClick, mergeProps, useLinkProps, useRouter, useSlotId} from '@vue-aria/utils';
+import {getItemCount} from '@vue-stately/collections';
+import {isFocusVisible, useFocusable, useHover, useKeyboard, usePress} from '@vue-aria/interactions';
 import {menuData} from './utils';
 import {MouseEvent, useRef} from 'react';
-import {SelectionManager} from '-stately/selection';
-import {TreeState} from '-stately/tree';
-import {useSelectableItem} from '-aria/selection';
+import {SelectionManager} from '@vue-stately/selection';
+import {TreeState} from '@vue-stately/tree';
+import {useSelectableItem} from '@vue-aria/selection';
 
 export interface MenuItemAria {
   /** Props for the menu item element. */

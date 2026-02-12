@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaColorAreaProps, ColorChannel} from '-types/color';
-import {ColorAreaState} from '-stately/color';
-import {DOMAttributes, RefObject} from '-types/shared';
-import {focusWithoutScrolling, isAndroid, isIOS, mergeProps, useFormReset, useGlobalListeners, useLabels} from '-aria/utils';
+import {AriaColorAreaProps, ColorChannel} from '@vue-types/color';
+import {ColorAreaState} from '@vue-stately/color';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {focusWithoutScrolling, isAndroid, isIOS, mergeProps, useFormReset, useGlobalListeners, useLabels} from '@vue-aria/utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import React, {ChangeEvent, InputHTMLAttributes, useCallback, useRef, useState} from 'react';
 import {useColorAreaGradient} from './useColorAreaGradient';
-import {useFocus, useFocusWithin, useKeyboard, useMove} from '-aria/interactions';
-import {useLocale, useLocalizedStringFormatter} from '-aria/i18n';
-import {useVisuallyHidden} from '-aria/visually-hidden';
+import {useFocus, useFocusWithin, useKeyboard, useMove} from '@vue-aria/interactions';
+import {useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useVisuallyHidden} from '@vue-aria/visually-hidden';
 
 export interface ColorAreaAria {
   /** Props for the color area container element. */
@@ -57,7 +57,7 @@ export function useColorArea(props: AriaColorAreaOptions, state: ColorAreaState)
     yName,
     form
   } = props;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/color');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/color');
 
   let {addGlobalListener, removeGlobalListener} = useGlobalListeners();
 

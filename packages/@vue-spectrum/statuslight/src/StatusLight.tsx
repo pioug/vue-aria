@@ -10,13 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames, useDOMRef, useStyleProps} from '-spectrum/utils';
-import {DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
+import {classNames, useDOMRef, useStyleProps} from '@vue-spectrum/utils';
+import {DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
 import React, {forwardRef} from 'react';
-import {SpectrumStatusLightProps} from '-types/statuslight';
+import {SpectrumStatusLightProps} from '@vue-types/statuslight';
 import styles from '@adobe/spectrum-css-temp/components/statuslight/vars.css';
-import {useProviderProps} from '-spectrum/provider';
+import {useProviderProps} from '@vue-spectrum/provider';
 
 /**
  * Status lights are used to color code categories and labels commonly found in data visualization.

@@ -12,9 +12,9 @@
  */
 
 import {BaseLayout, BaseLayoutOptions} from './BaseLayout';
-import {getChildNodes, getFirstItem} from '-stately/collections';
-import {InvalidationContext, LayoutInfo, Rect, Size} from '-stately/virtualizer';
-import {Key, KeyboardDelegate} from '-types/shared';
+import {getChildNodes, getFirstItem} from '@vue-stately/collections';
+import {InvalidationContext, LayoutInfo, Rect, Size} from '@vue-stately/virtualizer';
+import {Key, KeyboardDelegate} from '@vue-types/shared';
 
 export interface WaterfallLayoutOptions extends BaseLayoutOptions {
   /**

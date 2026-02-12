@@ -10,20 +10,20 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
+import {classNames} from '@vue-spectrum/utils';
 import {DatePickerSegment} from './DatePickerSegment';
 import datepickerStyles from './styles.css';
-import {Field} from '-spectrum/label';
-import {FocusableRef} from '-types/shared';
+import {Field} from '@vue-spectrum/label';
+import {FocusableRef} from '@vue-types/shared';
 import {Input} from './Input';
 import React, {ReactElement, useRef} from 'react';
-import {SpectrumTimeFieldProps, TimeValue} from '-types/datepicker';
+import {SpectrumTimeFieldProps, TimeValue} from '@vue-types/datepicker';
 import {useFocusManagerRef, useFormattedDateWidth} from './utils';
-import {useFormProps} from '-spectrum/form';
-import {useLocale} from '-aria/i18n';
-import {useProviderProps} from '-spectrum/provider';
-import {useTimeField} from '-aria/datepicker';
-import {useTimeFieldState} from '-stately/datepicker';
+import {useFormProps} from '@vue-spectrum/form';
+import {useLocale} from '@vue-aria/i18n';
+import {useProviderProps} from '@vue-spectrum/provider';
+import {useTimeField} from '@vue-aria/datepicker';
+import {useTimeFieldState} from '@vue-stately/datepicker';
 
 /**
  * TimeFields allow users to enter and edit time values using a keyboard.

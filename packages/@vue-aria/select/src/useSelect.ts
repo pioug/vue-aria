@@ -10,19 +10,19 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
-import {AriaListBoxOptions} from '-aria/listbox';
-import {AriaSelectProps, SelectionMode} from '-types/select';
-import {chain, filterDOMProps, mergeProps, nodeContains, useId} from '-aria/utils';
-import {DOMAttributes, KeyboardDelegate, RefObject, ValidationResult} from '-types/shared';
+import {AriaButtonProps} from '@vue-types/button';
+import {AriaListBoxOptions} from '@vue-aria/listbox';
+import {AriaSelectProps, SelectionMode} from '@vue-types/select';
+import {chain, filterDOMProps, mergeProps, nodeContains, useId} from '@vue-aria/utils';
+import {DOMAttributes, KeyboardDelegate, RefObject, ValidationResult} from '@vue-types/shared';
 import {FocusEvent, useMemo} from 'react';
 import {HiddenSelectProps} from './HiddenSelect';
-import {ListKeyboardDelegate, useTypeSelect} from '-aria/selection';
-import {SelectState} from '-stately/select';
-import {setInteractionModality} from '-aria/interactions';
-import {useCollator} from '-aria/i18n';
-import {useField} from '-aria/label';
-import {useMenuTrigger} from '-aria/menu';
+import {ListKeyboardDelegate, useTypeSelect} from '@vue-aria/selection';
+import {SelectState} from '@vue-stately/select';
+import {setInteractionModality} from '@vue-aria/interactions';
+import {useCollator} from '@vue-aria/i18n';
+import {useField} from '@vue-aria/label';
+import {useMenuTrigger} from '@vue-aria/menu';
 
 export interface AriaSelectOptions<T, M extends SelectionMode = 'single'> extends Omit<AriaSelectProps<T, M>, 'children'> {
   /**

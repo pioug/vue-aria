@@ -10,25 +10,25 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps, FocusStrategy, Node, RefObject, StyleProps} from '-types/shared';
-import {AriaListBoxOptions, useListBox} from '-aria/listbox';
-import {classNames, useStyleProps} from '-spectrum/utils';
-import {FocusScope} from '-aria/focus';
+import {AriaLabelingProps, DOMProps, FocusStrategy, Node, RefObject, StyleProps} from '@vue-types/shared';
+import {AriaListBoxOptions, useListBox} from '@vue-aria/listbox';
+import {classNames, useStyleProps} from '@vue-spectrum/utils';
+import {FocusScope} from '@vue-aria/focus';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {ListBoxContext} from './ListBoxContext';
 import {ListBoxLayout} from './ListBoxLayout';
 import {ListBoxOption} from './ListBoxOption';
 import {ListBoxSection} from './ListBoxSection';
-import {ListState} from '-stately/list';
-import {mergeProps, useObjectRef} from '-aria/utils';
-import {ProgressCircle} from '-spectrum/progress';
+import {ListState} from '@vue-stately/list';
+import {mergeProps, useObjectRef} from '@vue-aria/utils';
+import {ProgressCircle} from '@vue-spectrum/progress';
 import React, {ForwardedRef, HTMLAttributes, ReactElement, ReactNode, useCallback, useContext, useMemo} from 'react';
-import {ReusableView} from '-stately/virtualizer';
+import {ReusableView} from '@vue-stately/virtualizer';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {useLocalizedStringFormatter} from '-aria/i18n';
-import {useProvider} from '-spectrum/provider';
-import {Virtualizer, VirtualizerItem} from '-aria/virtualizer';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
+import {useProvider} from '@vue-spectrum/provider';
+import {Virtualizer, VirtualizerItem} from '@vue-aria/virtualizer';
 
 interface ListBoxBaseProps<T> extends AriaListBoxOptions<T>, DOMProps, AriaLabelingProps, StyleProps {
   layout: ListBoxLayout<T>,
@@ -151,7 +151,7 @@ export const ListBoxBase = React.forwardRef(function ListBoxBase<T extends objec
 
 function LoadingState() {
   let {state} = useContext(ListBoxContext)!;
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-spectrum/listbox');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-spectrum/listbox');
   return (
     // aria-selected isn't needed here since this option is not selectable.
     // eslint-disable-next-line jsx-a11y/role-has-required-aria-props

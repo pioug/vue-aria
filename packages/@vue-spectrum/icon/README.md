@@ -25,7 +25,7 @@ These will both display `<_123 />` in the React Inspector
 ## How to include custom icons
 #### Minimal setup
 Because we can't include icons for specific projects or non-open source icons, we also support providing your own icons.
-To do this, `import {Icon} from '-spectrum/icon';` and use it to wrap your own svg components. To take advantage of scale, our wrapper will pass the prop `scale` to your svg component from the React Spectrum Provider.
+To do this, `import {Icon} from '@vue-spectrum/icon';` and use it to wrap your own svg components. To take advantage of scale, our wrapper will pass the prop `scale` to your svg component from the React Spectrum Provider.
 ```jsx
 import CustomSVGComponent from '@a4u/product/custom-icons/CustomSVGComponent';
 

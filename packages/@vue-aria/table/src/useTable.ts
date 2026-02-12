@@ -10,17 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-import {announce} from '-aria/live-announcer';
-import {GridAria, GridProps, useGrid} from '-aria/grid';
+import {announce} from '@vue-aria/live-announcer';
+import {GridAria, GridProps, useGrid} from '@vue-aria/grid';
 import {gridIds} from './utils';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {Key, LayoutDelegate, Rect, RefObject, Size} from '-types/shared';
-import {mergeProps, useDescription, useId, useUpdateEffect} from '-aria/utils';
+import {Key, LayoutDelegate, Rect, RefObject, Size} from '@vue-types/shared';
+import {mergeProps, useDescription, useId, useUpdateEffect} from '@vue-aria/utils';
 import {TableKeyboardDelegate} from './TableKeyboardDelegate';
-import {tableNestedRows} from '-stately/flags';
-import {TableState, TreeGridState} from '-stately/table';
-import {useCollator, useLocale, useLocalizedStringFormatter} from '-aria/i18n';
+import {tableNestedRows} from '@vue-stately/flags';
+import {TableState, TreeGridState} from '@vue-stately/table';
+import {useCollator, useLocale, useLocalizedStringFormatter} from '@vue-aria/i18n';
 import {useMemo} from 'react';
 
 export interface AriaTableProps extends GridProps {
@@ -94,7 +94,7 @@ export function useTable<T>(props: AriaTableProps, state: TableState<T> | TreeGr
   }
 
   let {column, direction: sortDirection} = state.sortDescriptor || {};
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/table');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/table');
   let sortDescription = useMemo(() => {
     let columnName = state.collection.columns.find(c => c.key === column)?.textValue ?? '';
     return sortDirection && column ? stringFormatter.format(`${sortDirection}Sort`, {columnName}) : undefined;

@@ -10,15 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import {classNames} from '-spectrum/utils';
-import {LayoutInfo} from '-stately/virtualizer';
-import {layoutInfoToStyle, useVirtualizerItem, VirtualizerItemOptions} from '-aria/virtualizer';
+import {classNames} from '@vue-spectrum/utils';
+import {LayoutInfo} from '@vue-stately/virtualizer';
+import {layoutInfoToStyle, useVirtualizerItem, VirtualizerItemOptions} from '@vue-aria/virtualizer';
 import {ListBoxContext} from './ListBoxContext';
-import {Node} from '-types/shared';
+import {Node} from '@vue-types/shared';
 import React, {Fragment, JSX, ReactNode, useContext, useRef} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/menu/vars.css';
-import {useListBoxSection} from '-aria/listbox';
-import {useLocale} from '-aria/i18n';
+import {useListBoxSection} from '@vue-aria/listbox';
+import {useLocale} from '@vue-aria/i18n';
 
 interface ListBoxSectionProps<T> extends Omit<VirtualizerItemOptions, 'ref' | 'layoutInfo'> {
   layoutInfo: LayoutInfo,

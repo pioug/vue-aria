@@ -10,11 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import {DOMAttributes, RefObject} from '-types/shared';
-import {getEventTarget} from '-aria/utils';
-import {isElementInChildOfActiveScope} from '-aria/focus';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
+import {getEventTarget} from '@vue-aria/utils';
+import {isElementInChildOfActiveScope} from '@vue-aria/focus';
 import {useEffect, useRef} from 'react';
-import {useFocusWithin, useInteractOutside} from '-aria/interactions';
+import {useFocusWithin, useInteractOutside} from '@vue-aria/interactions';
 
 export interface AriaOverlayProps {
   /** Whether the overlay is currently open. */

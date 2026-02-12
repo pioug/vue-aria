@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
 */
 
-import {Color, ColorChannel} from '-types/color';
-import {ColorAreaState, parseColor} from '-stately/color';
+import {Color, ColorChannel} from '@vue-types/color';
+import {ColorAreaState, parseColor} from '@vue-stately/color';
 import {CSSProperties, useMemo} from 'react';
 
 const hue = (color: Color) => [0, 60, 120, 180, 240, 300, 360].map(hue => color.withChannelValue('hue', hue).toString('css')).join(', ');

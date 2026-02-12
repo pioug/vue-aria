@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {Key} from '-types/shared';
-import {TableState} from '-stately/table';
+import {Key} from '@vue-types/shared';
+import {TableState} from '@vue-stately/table';
 
 export const gridIds: WeakMap<TableState<unknown>, string> = new WeakMap<TableState<unknown>, string>();
 

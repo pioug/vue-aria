@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaButtonProps} from '-types/button';
+import {AriaButtonProps} from '@vue-types/button';
 import {clearGlobalDnDState, isInternalDropOperation, setDraggingKeys, useDragModality} from './utils';
-import {DraggableCollectionState} from '-stately/dnd';
+import {DraggableCollectionState} from '@vue-stately/dnd';
 import {HTMLAttributes} from 'react';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
-import {Key} from '-types/shared';
-import {useDescription} from '-aria/utils';
+import {Key} from '@vue-types/shared';
+import {useDescription} from '@vue-aria/utils';
 import {useDrag} from './useDrag';
-import {useLocalizedStringFormatter} from '-aria/i18n';
+import {useLocalizedStringFormatter} from '@vue-aria/i18n';
 
 export interface DraggableItemProps {
   /** The key of the draggable item within the collection. */
@@ -64,7 +64,7 @@ const MESSAGES = {
  * Handles drag interactions for an item within a draggable collection.
  */
 export function useDraggableItem(props: DraggableItemProps, state: DraggableCollectionState): DraggableItemResult {
-  let stringFormatter = useLocalizedStringFormatter(intlMessages, '-aria/dnd');
+  let stringFormatter = useLocalizedStringFormatter(intlMessages, '@vue-aria/dnd');
   let isDisabled = state.isDisabled || state.selectionManager.isDisabled(props.key);
   let {dragProps, dragButtonProps} = useDrag({
     getItems() {

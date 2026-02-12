@@ -17,10 +17,10 @@ import {
   StyleHandlers,
   useDOMRef,
   useStyleProps
-} from '-spectrum/utils';
-import {DimensionValue, DOMRef} from '-types/shared';
-import {filterDOMProps} from '-aria/utils';
-import {GridProps} from '-types/layout';
+} from '@vue-spectrum/utils';
+import {DimensionValue, DOMRef} from '@vue-types/shared';
+import {filterDOMProps} from '@vue-aria/utils';
+import {GridProps} from '@vue-types/layout';
 import React, {forwardRef} from 'react';
 
 const gridStyleProps: StyleHandlers = {

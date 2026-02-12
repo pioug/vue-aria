@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {Axis, Placement, PlacementAxis, SizeAxis} from '-types/overlays';
-import {clamp, isWebKit, nodeContains} from '-aria/utils';
+import {Axis, Placement, PlacementAxis, SizeAxis} from '@vue-types/overlays';
+import {clamp, isWebKit, nodeContains} from '@vue-aria/utils';
 
 interface Position {
   top?: number,

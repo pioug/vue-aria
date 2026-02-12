@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export {Badge} from './Badge';
-export type {SpectrumBadgeProps} from '-types/badge';
+export type {SpectrumBadgeProps} from '@vue-types/badge';

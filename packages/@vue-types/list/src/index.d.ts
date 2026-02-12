@@ -10,5 +10,5 @@
  * governing permissions and limitations under the License.
  */
 
-export type {AriaGridListProps, GridListProps} from '-aria/gridlist';
-export type {SpectrumListViewProps} from '-spectrum/list';
+export type {AriaGridListProps, GridListProps} from '@vue-aria/gridlist';
+export type {SpectrumListViewProps} from '@vue-spectrum/list';
