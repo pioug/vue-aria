@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:18:19.892Z",
+  "generatedAt": "2026-02-12T17:20:04.075Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 90,
-  "availableLeafCount": 11,
+  "incompletePackageCount": 89,
+  "availableLeafCount": 10,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/breadcrumbs",
@@ -33,11 +33,6 @@
       "packageName": "@vue-aria/slider",
       "upstreamPackageName": "@react-aria/slider",
       "upstreamPath": "packages/@react-aria/slider"
-    },
-    {
-      "packageName": "@vue-aria/switch",
-      "upstreamPackageName": "@react-aria/switch",
-      "upstreamPath": "packages/@react-aria/switch"
     },
     {
       "packageName": "@vue-aria/textfield",
