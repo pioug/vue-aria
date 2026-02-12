@@ -1135,6 +1135,86 @@ describe("SearchAutocomplete", () => {
     }
   });
 
+  it("does not reset loading indicator timer when loading changes to filtering", async () => {
+    vi.useFakeTimers();
+
+    try {
+      let setLoadingState: ((state: "loading" | "filtering") => void) | undefined;
+
+      const App = defineComponent({
+        name: "SearchAutocompleteLoadingIndicatorNoResetApp",
+        setup() {
+          const loadingState = ref<"loading" | "filtering">("loading");
+          setLoadingState = (nextState: "loading" | "filtering") => {
+            loadingState.value = nextState;
+          };
+
+          return () =>
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              loadingState: loadingState.value,
+              menuTrigger: "manual",
+            });
+        },
+      });
+
+      const tree = render(App);
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      setLoadingState?.("filtering");
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      expect(tree.getByRole("progressbar")).toBeTruthy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("hides loading indicator when loading state becomes idle", async () => {
+    vi.useFakeTimers();
+
+    try {
+      let setLoadingState: ((state: "loading" | "idle") => void) | undefined;
+
+      const App = defineComponent({
+        name: "SearchAutocompleteLoadingIndicatorIdleApp",
+        setup() {
+          const loadingState = ref<"loading" | "idle">("loading");
+          setLoadingState = (nextState: "loading" | "idle") => {
+            loadingState.value = nextState;
+          };
+
+          return () =>
+            h(SearchAutocomplete, {
+              label: "Test",
+              defaultItems: items,
+              loadingState: loadingState.value,
+              menuTrigger: "manual",
+            });
+        },
+      });
+
+      const tree = render(App);
+      vi.advanceTimersByTime(500);
+      await Promise.resolve();
+      expect(tree.getByRole("progressbar")).toBeTruthy();
+
+      setLoadingState?.("idle");
+      await Promise.resolve();
+      expect(tree.queryByRole("progressbar")).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("fires onLoadMore when listbox scrolls near the end", () => {
     const onLoadMore = vi.fn();
     const scrollHeightSpy = vi
