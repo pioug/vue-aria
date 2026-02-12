@@ -140,6 +140,7 @@ describe("SearchAutocomplete", () => {
     const listbox = await tree.findByRole("listbox");
     expect(listbox).toBeTruthy();
     expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
   });
 
   it("opens on ArrowDown and commits selection with Enter", async () => {

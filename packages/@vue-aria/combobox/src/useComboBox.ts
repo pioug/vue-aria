@@ -1,4 +1,4 @@
-import { computed, ref, toValue } from "vue";
+import { computed, ref, toValue, watch } from "vue";
 import { useId } from "@vue-aria/ssr";
 import { nodeContains, mergeProps } from "@vue-aria/utils";
 import { useTextField } from "@vue-aria/textfield";
@@ -7,6 +7,7 @@ import type { ListBoxItem } from "@vue-aria/listbox";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
 import type {
   FocusStrategy,
+  MenuTrigger,
   UseComboBoxStateResult,
 } from "@vue-aria/combobox-state";
 
@@ -23,6 +24,7 @@ export interface UseComboBoxOptions {
   isReadOnly?: MaybeReactive<boolean | undefined>;
   isRequired?: MaybeReactive<boolean | undefined>;
   shouldFocusWrap?: MaybeReactive<boolean | undefined>;
+  menuTrigger?: MaybeReactive<MenuTrigger | undefined>;
   inputRef: MaybeReactive<HTMLInputElement | null | undefined>;
   popoverRef: MaybeReactive<Element | null | undefined>;
   listBoxRef: MaybeReactive<HTMLElement | null | undefined>;
@@ -52,6 +54,16 @@ function resolveBoolean(value: MaybeReactive<boolean | undefined> | undefined): 
   return Boolean(toValue(value));
 }
 
+function resolveMenuTrigger(
+  value: MaybeReactive<MenuTrigger | undefined> | undefined
+): MenuTrigger {
+  if (value === undefined) {
+    return "input";
+  }
+
+  return toValue(value) ?? "input";
+}
+
 function normalizeKey(key: string | number): string {
   if (typeof key === "string") {
     return key.replace(/\s*/g, "");
@@ -74,7 +86,21 @@ export function useComboBox<T extends ListBoxItem>(
 
   const isDisabled = computed(() => resolveBoolean(options.isDisabled));
   const isReadOnly = computed(() => resolveBoolean(options.isReadOnly));
+  const menuTrigger = computed(() => resolveMenuTrigger(options.menuTrigger));
   const suppressActiveDescendant = ref(false);
+
+  watch(
+    [() => state.isOpen.value, () => state.focusStrategy.value],
+    ([isOpen, focusStrategy]) => {
+      if (!isOpen) {
+        suppressActiveDescendant.value = false;
+        return;
+      }
+
+      suppressActiveDescendant.value = focusStrategy === null;
+    },
+    { immediate: true }
+  );
 
   const focusBoundaryItem = (strategy: Exclude<FocusStrategy, null>): void => {
     const disabledKeys = state.disabledKeys.value;
@@ -228,6 +254,10 @@ export function useComboBox<T extends ListBoxItem>(
 
       if (event.pointerType !== "touch") {
         focusInput(options.inputRef);
+        if (menuTrigger.value === "focus") {
+          return;
+        }
+
         const focusStrategy: FocusStrategy =
           event.pointerType === "keyboard" || event.pointerType === "virtual"
             ? "first"

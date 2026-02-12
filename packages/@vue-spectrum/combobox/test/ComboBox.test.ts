@@ -186,12 +186,15 @@ describe("ComboBox", () => {
     const user = userEvent.setup();
     const tree = renderComponent();
 
+    const input = tree.getByRole("combobox");
     const button = tree.getByRole("button");
     await user.click(button);
 
     const listbox = tree.getByRole("listbox");
     const options = within(listbox).getAllByRole("option");
     expect(options).toHaveLength(3);
+    expect(document.activeElement).toBe(input);
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
 
     await user.click(button);
     expect(tree.queryByRole("listbox")).toBeNull();
@@ -258,6 +261,26 @@ describe("ComboBox", () => {
 
     const listbox = await tree.findByRole("listbox");
     expect(listbox).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
+  });
+
+  it("opens on trigger click in focus mode and keeps focus in the input", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      menuTrigger: "focus",
+      onOpenChange,
+    });
+    const input = tree.getByRole("combobox");
+    const button = tree.getByRole("button");
+
+    await user.click(button);
+
+    const listbox = await tree.findByRole("listbox");
+    expect(listbox).toBeTruthy();
+    expect(document.activeElement).toBe(input);
+    expect(input.getAttribute("aria-activedescendant")).toBeNull();
     expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
   });
 

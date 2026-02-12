@@ -816,6 +816,7 @@ export const ComboBox = defineComponent({
         isDisabled: props.isDisabled,
         isReadOnly: props.isReadOnly,
         isRequired: props.isRequired,
+        menuTrigger: computed(() => props.menuTrigger),
         inputRef,
         popoverRef,
         listBoxRef,
