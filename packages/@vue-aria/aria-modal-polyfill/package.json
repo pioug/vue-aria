@@ -1,0 +1,36 @@
+{
+  "name": "@vue-aria/aria-modal-polyfill",
+  "version": "3.7.15",
+  "description": "Vue port of @react-aria/aria-modal-polyfill",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "exports": {
+    "source": "./src/index.ts",
+    "types": [
+      "./dist/types.d.ts",
+      "./src/index.ts"
+    ],
+    "import": "./dist/import.mjs",
+    "require": "./dist/main.js"
+  },
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@swc/helpers": "^0.5.0",
+    "aria-hidden": "^1.2.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

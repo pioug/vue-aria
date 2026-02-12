@@ -1,0 +1,3 @@
+[submodule "upstream/react-spectrum"]
+	path = upstream/react-spectrum
+	url = https://github.com/adobe/react-spectrum.git

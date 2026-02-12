@@ -1,0 +1,19 @@
+{
+  "name": "vue-aria",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Vue port of React Aria and React Spectrum",
+  "type": "module",
+  "workspaces": [
+    "packages/*/*"
+  ],
+  "upstreamBaselineSha": "1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1",
+  "scripts": {
+    "generate:status": "node scripts/generate-status-md.mjs",
+    "validate:status": "node scripts/validate-status.mjs",
+    "sync:status": "node scripts/sync-status-from-upstream.mjs",
+    "compute:port-order": "node scripts/compute-port-order.mjs",
+    "start:next-package": "node scripts/start-next-package.mjs",
+    "status:refresh": "npm run sync:status && npm run generate:status && npm run validate:status"
+  }
+}
