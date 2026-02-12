@@ -10,7 +10,7 @@ import {
   type PropType,
   type VNode,
 } from "vue";
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, useStyleProps, type ClassValue } from "@vue-spectrum/utils";
@@ -25,6 +25,15 @@ import type {
 } from "./types";
 
 const SUBMENU_OPEN_EVENT = "v-spectrum-submenu-open";
+
+const SUBMENU_TRIGGER_INTL_MESSAGES = {
+  "en-US": {
+    more: "More",
+  },
+  "fr-FR": {
+    more: "Plus",
+  },
+} as const;
 
 function getComponentName(node: VNode): string | undefined {
   if (typeof node.type === "string") {
@@ -224,6 +233,10 @@ export const SubmenuTrigger = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(
+      SUBMENU_TRIGGER_INTL_MESSAGES,
+      "@vue-spectrum/menu"
+    );
     const rootRef = ref<HTMLLIElement | null>(null);
     const buttonRef = ref<HTMLButtonElement | null>(null);
     const openedByHover = ref(false);
@@ -342,7 +355,7 @@ export const SubmenuTrigger = defineComponent({
         slottedTriggerLabel ||
         (!slottedMenuNode && defaultSlotNodes && defaultSlotNodes.length > 0
           ? defaultSlotNodes
-          : props.label ?? "More");
+          : props.label ?? stringFormatter.value.format("more"));
       const ariaLabel =
         props.ariaLabel ??
         props["aria-label"] ??

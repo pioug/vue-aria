@@ -59,6 +59,7 @@ const component = h(MenuTrigger, {
 - Package also exports upstream-compatible `Item`/`Section` aliases for React Spectrum-style menu composition, including static slot syntax.
 - `MenuTrigger` baseline supports both prop-driven usage and upstream-style static composition (`trigger + Menu` children).
 - `SubmenuTrigger` baseline supports both prop-driven usage and upstream-style static composition (`trigger + Menu` children).
+- `SubmenuTrigger` default trigger label is locale-aware when `label` is omitted.
 - Baseline includes accessibility guardrails from upstream behavior: runtime warning when neither `aria-label` nor `aria-labelledby` is provided to `Menu`, plus section/item `aria-label` semantics for grouped/icon-style menus.
 - Baseline includes trigger-anchored popover positioning support (`placement`) for `MenuTrigger` and `ActionMenu`.
 - Baseline `ActionMenu` parity includes default/custom trigger ARIA labeling (locale-aware `More actions` fallback), `aria-labelledby` precedence wiring, trigger-id-to-menu `aria-labelledby` linkage, controlled/uncontrolled open-state behavior, disabled handling, and `autoFocus`.

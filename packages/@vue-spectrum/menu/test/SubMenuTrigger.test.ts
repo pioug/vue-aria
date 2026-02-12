@@ -67,6 +67,32 @@ function renderComponent(
 }
 
 describe("SubmenuTrigger", () => {
+  it("localizes default label when label prop is omitted", () => {
+    const App = defineComponent({
+      name: "SubmenuTriggerLocalizedDefaultLabelHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(
+            "ul",
+            {
+              role: "menu",
+              "aria-label": "Root",
+            },
+            [
+              h(SubmenuTrigger, {
+                items,
+              }),
+            ]
+          );
+      },
+    });
+
+    const tree = render(App);
+    expect(tree.getByRole("menuitem", { name: "Plus" })).toBeTruthy();
+  });
+
   it("opens on hover and closes when hover moves to a neighboring menu item", async () => {
     const onOpenChange = vi.fn();
 
