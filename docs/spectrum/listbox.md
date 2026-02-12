@@ -90,5 +90,5 @@ const component = h(ListBox, {
 
 - Baseline includes section rendering (`group` + heading semantics), keyboard navigation, wrap-focus support, single/multiple selection behavior, and static slot composition support via `ListBoxOption` and `ListBoxSection`.
 - Package also exports `Collection` plus upstream-compatible `Item`/`Section` aliases for React Spectrum-style composition.
-- Loading and empty-state rendering hooks are included via `isLoading`, `showLoadingSpinner`, `onLoadMore`, and `renderEmptyState`.
+- Loading and empty-state rendering hooks are included via `isLoading`, `showLoadingSpinner`, `onLoadMore`, and `renderEmptyState`, with locale-aware loading progress labels.
 - Advanced virtualizer layout/measurement parity and full visual/theming parity remain in progress.

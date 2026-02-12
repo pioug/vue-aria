@@ -12,6 +12,7 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import {
   useListBox,
   useListBoxState,
@@ -90,6 +91,17 @@ export function useListBoxLayout(): Readonly<{ value: ListBoxLayout }> {
     };
   });
 }
+
+const LISTBOX_INTL_MESSAGES = {
+  "en-US": {
+    loading: "Loading…",
+    loadingMore: "Loading more…",
+  },
+  "fr-FR": {
+    loading: "Chargement...",
+    loadingMore: "Chargement supplémentaire...",
+  },
+} as const;
 
 function normalizeListBoxKey(value: unknown, fallback: ListBoxKey): ListBoxKey {
   if (typeof value === "string" || typeof value === "number") {
@@ -497,6 +509,10 @@ export const ListBoxBase = defineComponent({
     },
   },
   setup(props, { attrs, slots, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      LISTBOX_INTL_MESSAGES,
+      "@vue-spectrum/listbox"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const loadingRequested = ref(false);
     const slotItems = ref<SpectrumListBoxItemData[]>([]);
@@ -764,7 +780,9 @@ export const ListBoxBase = defineComponent({
                 isIndeterminate: true,
                 size: "S",
                 "aria-label":
-                  collection.value.length > 0 ? "Loading more" : "Loading",
+                  collection.value.length > 0
+                    ? stringFormatter.value.format("loadingMore")
+                    : stringFormatter.value.format("loading"),
                 UNSAFE_className: classNames(
                   "spectrum-Dropdown-progressCircle"
                 ),

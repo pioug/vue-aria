@@ -2,6 +2,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import {
   Collection,
   Item,
@@ -363,7 +364,9 @@ describe("ListView", () => {
       },
     });
 
-    expect(loadingTree.getByRole("progressbar")).toBeTruthy();
+    expect(loadingTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Loading…"
+    );
 
     const emptyTree = render(ListView, {
       props: {
@@ -374,6 +377,47 @@ describe("ListView", () => {
     });
 
     expect(emptyTree.getByText("No results")).toBeTruthy();
+  });
+
+  it("localizes loading labels from i18n locale", () => {
+    const LoadingHarness = defineComponent({
+      name: "ListViewLoadingLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(ListView, {
+            "aria-label": "List",
+            loadingState: "loading",
+            items: [],
+          });
+      },
+    });
+
+    const loadingTree = render(LoadingHarness);
+    expect(loadingTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement..."
+    );
+    loadingTree.unmount();
+
+    const LoadingMoreHarness = defineComponent({
+      name: "ListViewLoadingMoreLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(ListView, {
+            "aria-label": "List",
+            loadingState: "loadingMore",
+            items: manyItems,
+          });
+      },
+    });
+
+    const loadingMoreTree = render(LoadingMoreHarness);
+    expect(loadingMoreTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement supplémentaire..."
+    );
   });
 
   it("supports static slot syntax with ListViewItem", async () => {

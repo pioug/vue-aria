@@ -12,6 +12,7 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useGridList } from "@vue-aria/gridlist";
 import { useListBoxState } from "@vue-aria/listbox";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
@@ -259,6 +260,17 @@ function areListItemsEqual(
   return true;
 }
 
+const LISTVIEW_INTL_MESSAGES = {
+  "en-US": {
+    loading: "Loading…",
+    loadingMore: "Loading more…",
+  },
+  "fr-FR": {
+    loading: "Chargement...",
+    loadingMore: "Chargement supplémentaire...",
+  },
+} as const;
+
 export const ListView = defineComponent({
   name: "ListView",
   inheritAttrs: false,
@@ -369,6 +381,10 @@ export const ListView = defineComponent({
     },
   },
   setup(props, { attrs, expose, slots }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      LISTVIEW_INTL_MESSAGES,
+      "@vue-spectrum/list"
+    );
     const rootRef = ref<HTMLElement | null>(null);
     const loadMoreRequested = ref(false);
     const slotItems = ref<SpectrumListViewItemData[]>([]);
@@ -597,8 +613,8 @@ export const ListView = defineComponent({
                     size: "S",
                     "aria-label":
                       props.loadingState === "loadingMore"
-                        ? "Loading more"
-                        : "Loading",
+                        ? stringFormatter.value.format("loadingMore")
+                        : stringFormatter.value.format("loading"),
                   }),
                 ]
               ),

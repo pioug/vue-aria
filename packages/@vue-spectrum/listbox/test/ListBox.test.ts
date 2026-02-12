@@ -2,6 +2,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import {
   Collection,
   Item,
@@ -80,6 +81,72 @@ function findOptionByText(listbox: HTMLElement, text: string): HTMLElement {
 }
 
 describe("ListBox", () => {
+  it("renders loading spinner labels for loading and loadingMore", () => {
+    const loadingTree = render(ListBox, {
+      props: {
+        items: [],
+        isLoading: true,
+        "aria-label": "listbox-loading",
+      },
+    });
+    expect(loadingTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Loading…"
+    );
+    loadingTree.unmount();
+
+    const loadingMoreTree = render(ListBox, {
+      props: {
+        items: sectionedItems,
+        isLoading: true,
+        "aria-label": "listbox-loading-more",
+      },
+    });
+    expect(loadingMoreTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Loading more…"
+    );
+  });
+
+  it("localizes loading spinner labels from i18n locale", () => {
+    const LoadingHarness = defineComponent({
+      name: "ListBoxLoadingLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(ListBox, {
+            items: [],
+            isLoading: true,
+            "aria-label": "listbox-loading",
+          });
+      },
+    });
+
+    const loadingTree = render(LoadingHarness);
+    expect(loadingTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement..."
+    );
+    loadingTree.unmount();
+
+    const LoadingMoreHarness = defineComponent({
+      name: "ListBoxLoadingMoreLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(ListBox, {
+            items: sectionedItems,
+            isLoading: true,
+            "aria-label": "listbox-loading-more",
+          });
+      },
+    });
+
+    const loadingMoreTree = render(LoadingMoreHarness);
+    expect(loadingMoreTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement supplémentaire..."
+    );
+  });
+
   it("renders sections and options", () => {
     const tree = renderComponent();
     const listbox = tree.getByRole("listbox", { name: "listbox-test" });
