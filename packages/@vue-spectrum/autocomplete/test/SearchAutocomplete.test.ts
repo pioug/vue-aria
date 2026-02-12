@@ -1316,6 +1316,44 @@ describe("SearchAutocomplete", () => {
     }
   });
 
+  it("does not fire duplicate onLoadMore calls while remaining at the threshold", () => {
+    const onLoadMore = vi.fn();
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 1200;
+        }
+        return 0;
+      });
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 300;
+        }
+        return 0;
+      });
+
+    try {
+      const tree = renderComponent({
+        defaultOpen: true,
+        loadingState: "idle",
+        onLoadMore,
+      });
+
+      const listbox = tree.getByRole("listbox");
+      (listbox as HTMLElement).scrollTop = 2000;
+      fireEvent.scroll(listbox);
+      fireEvent.scroll(listbox);
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("fires onLoadMore on initial open when listbox is already at the end", async () => {
     const onLoadMore = vi.fn();
     const scrollHeightSpy = vi
