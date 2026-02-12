@@ -23,7 +23,7 @@ function renderComponent(props: Record<string, unknown> = {}) {
 }
 
 describe("StepList", () => {
-  it("renders links with first step selected by default", () => {
+  it("renders", () => {
     const onSelectionChange = vi.fn();
     const tree = renderComponent({
       onSelectionChange,
@@ -35,10 +35,12 @@ describe("StepList", () => {
 
     expect(stepListItems[0].getAttribute("aria-current")).toBe("step");
     expect(stepListItems[0].getAttribute("tabindex")).toBe("0");
+    expect(stepListItems[0].textContent).toContain("Current:");
     expect(onSelectionChange).toHaveBeenCalledWith("step-one");
 
     for (let index = 1; index < stepListItems.length; index += 1) {
       expect(stepListItems[index].getAttribute("aria-disabled")).toBe("true");
+      expect(stepListItems[index].textContent).toContain("Not completed:");
       expect(stepListItems[index].getAttribute("tabindex")).toBeNull();
     }
 
@@ -67,7 +69,7 @@ describe("StepList", () => {
     expect(listRef.value?.UNSAFE_getDOMNode()).toBe(stepList);
   });
 
-  it("allows selecting completed and immediate next steps only", async () => {
+  it("allows user to click completed steps and immediate next step only", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
     const tree = renderComponent({
@@ -82,9 +84,11 @@ describe("StepList", () => {
 
     await user.click(stepListItems[0]);
     expect(stepListItems[0].getAttribute("aria-current")).toBe("step");
+    expect(onSelectionChange).toHaveBeenLastCalledWith("step-one");
 
     await user.click(stepListItems[2]);
     expect(stepListItems[2].getAttribute("aria-current")).toBe("step");
+    expect(onSelectionChange).toHaveBeenLastCalledWith("step-three");
 
     const callsBefore = onSelectionChange.mock.calls.length;
     await user.click(stepListItems[3]);
@@ -92,7 +96,41 @@ describe("StepList", () => {
     expect(onSelectionChange.mock.calls.length).toBe(callsBefore);
   });
 
-  it("does not allow selecting disabled steps", async () => {
+  it("allows user to change selected step via tab key only", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    const tree = renderComponent({
+      defaultLastCompletedStep: "step-two",
+      defaultSelectedKey: "step-three",
+      onSelectionChange,
+    });
+
+    const stepListItems = tree.getAllByRole("link");
+    expect(stepListItems[2].getAttribute("aria-current")).toBe("step");
+
+    await user.tab();
+    expect(document.activeElement).toBe(stepListItems[0]);
+    await user.tab();
+    expect(document.activeElement).toBe(stepListItems[1]);
+    await user.tab();
+    expect(document.activeElement).toBe(stepListItems[2]);
+
+    await user.tab({ shift: true });
+    expect(document.activeElement).toBe(stepListItems[1]);
+
+    const callsBeforeEnter = onSelectionChange.mock.calls.length;
+    await user.keyboard("{Enter}");
+    expect(onSelectionChange.mock.calls.length).toBe(callsBeforeEnter + 1);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("step-two");
+    expect(stepListItems[1].getAttribute("aria-current")).toBe("step");
+
+    const callsBeforeArrow = onSelectionChange.mock.calls.length;
+    await user.keyboard("{ArrowUp}");
+    expect(stepListItems[1].getAttribute("aria-current")).toBe("step");
+    expect(onSelectionChange.mock.calls.length).toBe(callsBeforeArrow);
+  });
+
+  it("should not allow user to click on disabled steps", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
     const tree = renderComponent({
@@ -111,7 +149,7 @@ describe("StepList", () => {
     expect(onSelectionChange.mock.calls.length).toBe(callsBefore);
   });
 
-  it("disables all steps when StepList is disabled", async () => {
+  it("should disable all steps when step list is disabled", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
     const tree = renderComponent({
@@ -124,13 +162,15 @@ describe("StepList", () => {
     for (const item of stepListItems) {
       expect(item.getAttribute("aria-disabled")).toBe("true");
     }
+    expect(stepListItems[2].getAttribute("aria-current")).toBe("step");
 
     const callsBefore = onSelectionChange.mock.calls.length;
     await user.click(stepListItems[1]);
+    expect(stepListItems[1].getAttribute("aria-current")).toBeNull();
     expect(onSelectionChange.mock.calls.length).toBe(callsBefore);
   });
 
-  it("disables all steps when StepList is readOnly", async () => {
+  it("should not allow user to click previous steps when step list is readonly", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
     const tree = renderComponent({
@@ -147,6 +187,7 @@ describe("StepList", () => {
 
     const callsBefore = onSelectionChange.mock.calls.length;
     await user.click(stepListItems[0]);
+    expect(stepListItems[0].getAttribute("aria-current")).toBeNull();
     expect(onSelectionChange.mock.calls.length).toBe(callsBefore);
   });
 
@@ -165,6 +206,100 @@ describe("StepList", () => {
     });
 
     expect(stepListItems[2].getAttribute("aria-current")).toBe("step");
+  });
+
+  it(
+    "updates the last completed step automatically (uncontrollled) when the selected step is updated",
+    async () => {
+      const onLastCompletedStepChange = vi.fn();
+      const onSelectionChange = vi.fn();
+
+      const tree = render(StepList, {
+        props: {
+          id: "steplist-id",
+          items,
+          "aria-label": "steplist-test",
+          defaultLastCompletedStep: "step-one",
+          onLastCompletedStepChange,
+          onSelectionChange,
+          selectedKey: "step-one",
+        },
+      });
+
+      const stepListItems = tree.getAllByRole("link");
+      expect(stepListItems[0].getAttribute("aria-current")).toBe("step");
+      expect(stepListItems[0].textContent).toContain("Current:");
+      expect(onLastCompletedStepChange).not.toHaveBeenCalled();
+
+      await tree.rerender({
+        id: "steplist-id",
+        items,
+        "aria-label": "steplist-test",
+        onLastCompletedStepChange,
+        onSelectionChange,
+        selectedKey: "step-two",
+      });
+
+      expect(onLastCompletedStepChange).not.toHaveBeenCalled();
+      expect(stepListItems[0].textContent).toContain("Completed:");
+
+      await tree.rerender({
+        id: "steplist-id",
+        items,
+        "aria-label": "steplist-test",
+        onLastCompletedStepChange,
+        onSelectionChange,
+        selectedKey: "step-three",
+      });
+
+      expect(onLastCompletedStepChange).toHaveBeenCalledWith("step-two");
+      expect(stepListItems[1].textContent).toContain("Completed:");
+    }
+  );
+
+  it("does not update selected step when last completed step is controlled", async () => {
+    const onLastCompletedStepChange = vi.fn();
+    const onSelectionChange = vi.fn();
+
+    const tree = render(StepList, {
+      props: {
+        id: "steplist-id",
+        items,
+        "aria-label": "steplist-test",
+        lastCompletedStep: "step-one",
+        onSelectionChange,
+        onLastCompletedStepChange,
+      },
+    });
+
+    expect(onLastCompletedStepChange).toHaveBeenCalledTimes(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("step-two");
+
+    const stepListItems = tree.getAllByRole("link");
+
+    await tree.rerender({
+      id: "steplist-id",
+      items,
+      "aria-label": "steplist-test",
+      onLastCompletedStepChange,
+      onSelectionChange,
+      lastCompletedStep: "step-two",
+    });
+
+    await tree.rerender({
+      id: "steplist-id",
+      items,
+      "aria-label": "steplist-test",
+      onLastCompletedStepChange,
+      onSelectionChange,
+      lastCompletedStep: "step-three",
+    });
+
+    expect(onLastCompletedStepChange).toHaveBeenCalledTimes(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(stepListItems[1].getAttribute("aria-current")).toBe("step");
+    expect(stepListItems[2].textContent).toContain("Completed:");
   });
 
   it("applies orientation and size classes", () => {

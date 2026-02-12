@@ -447,6 +447,21 @@ export const StepList = defineComponent({
       updateLastCompletedStep(key);
     };
 
+    watch(
+      () => props.selectedKey,
+      (nextSelected, previousSelected) => {
+        if (nextSelected === undefined || nextSelected === null) {
+          return;
+        }
+
+        if (keyToString(nextSelected) === keyToString(previousSelected)) {
+          return;
+        }
+
+        updateLastCompletedStep(nextSelected);
+      }
+    );
+
     if (selectedKey.value !== null) {
       props.onSelectionChange?.(selectedKey.value);
     }
