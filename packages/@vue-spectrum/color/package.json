@@ -1,0 +1,75 @@
+{
+  "name": "-spectrum/color",
+  "version": "3.1.6",
+  "description": "Spectrum UI components in React",
+  "license": "Apache-2.0",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "exports": {
+    "source": "./src/index.ts",
+    "types": [
+      "./dist/types.d.ts",
+      "./src/index.ts"
+    ],
+    "import": "./dist/import.mjs",
+    "require": "./dist/main.js"
+  },
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "targets": {
+    "main": {
+      "includeNodeModules": [
+        "@adobe/spectrum-css-temp"
+      ]
+    },
+    "module": {
+      "includeNodeModules": [
+        "@adobe/spectrum-css-temp"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "-aria/color": "^3.1.4",
+    "-aria/focus": "^3.21.4",
+    "-aria/i18n": "^3.12.15",
+    "-aria/interactions": "^3.27.0",
+    "-aria/utils": "^3.33.0",
+    "-spectrum/dialog": "^3.9.6",
+    "-spectrum/form": "^3.7.21",
+    "-spectrum/label": "^3.16.21",
+    "-spectrum/overlays": "^5.9.2",
+    "-spectrum/picker": "^3.16.6",
+    "-spectrum/textfield": "^3.14.4",
+    "-spectrum/utils": "^3.12.11",
+    "-spectrum/view": "^3.6.25",
+    "-stately/color": "^3.9.4",
+    "-types/color": "^3.1.3",
+    "-types/shared": "^3.33.0",
+    "-types/textfield": "^3.12.7",
+    "@swc/helpers": "^0.5.0",
+    "react-aria-components": "^1.15.0"
+  },
+  "devDependencies": {
+    "@adobe/spectrum-css-temp": "3.0.0-alpha.1",
+    "-spectrum/style-macro-s1": "3.0.0-alpha.5"
+  },
+  "peerDependencies": {
+    "-spectrum/provider": "^3.0.0",
+    "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1",
+    "react-dom": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
