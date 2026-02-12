@@ -27,7 +27,7 @@
 | @vue-aria/autocomplete | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/autocomplete | packages/@react-aria/autocomplete |
 | @vue-aria/breadcrumbs | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
 | @vue-aria/button | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
-| @vue-aria/calendar | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/calendar | packages/@react-aria/calendar |
+| @vue-aria/calendar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
 | @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
 | @vue-aria/collections | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
 | @vue-aria/color | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/color | packages/@react-aria/color |
