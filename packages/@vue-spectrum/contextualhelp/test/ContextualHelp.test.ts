@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import { Content, Footer, Header } from "@vue-spectrum/view";
 import { Link } from "@vue-spectrum/link";
 import { ContextualHelp } from "../src";
@@ -179,5 +180,102 @@ describe("ContextualHelp", () => {
     expect(popover?.getAttribute("data-placement")).not.toBeNull();
 
     wrapper.unmount();
+  });
+
+  it("renders contextual help popover in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(
+                  ContextualHelp,
+                  null,
+                  {
+                    default: () => h(Header, null, () => "Test title"),
+                  }
+                ),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const popover = document.body.querySelector("[data-testid=\"popover\"]");
+      expect(popover).not.toBeNull();
+      expect(popover?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("supports nested UNSAFE_PortalProvider null override for contextual help", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(
+                  UNSAFE_PortalProvider,
+                  {
+                    getContainer: null,
+                  },
+                  {
+                    default: () =>
+                      h(
+                        ContextualHelp,
+                        null,
+                        {
+                          default: () => h(Header, null, () => "Test title"),
+                        }
+                      ),
+                  }
+                ),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const popover = document.body.querySelector("[data-testid=\"popover\"]");
+      expect(popover).not.toBeNull();
+      expect(popover?.closest("[data-testid=\"custom-container\"]")).not.toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
   });
 });
