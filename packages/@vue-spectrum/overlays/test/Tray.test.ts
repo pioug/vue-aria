@@ -5,7 +5,7 @@ import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provid
 import { Tray } from "../src";
 
 describe("Tray", () => {
-  it("renders nothing if isOpen is not set", () => {
+  it("should render nothing if isOpen is not set", () => {
     const tree = render(Tray, {
       slots: {
         default: () => h("div", { role: "dialog" }, "contents"),
@@ -16,7 +16,7 @@ describe("Tray", () => {
     expect(document.documentElement.style.overflow).not.toBe("hidden");
   });
 
-  it("renders when isOpen is true", async () => {
+  it("should render when isOpen is true", async () => {
     const tree = render(Tray, {
       props: {
         isOpen: true,
@@ -31,7 +31,7 @@ describe("Tray", () => {
     expect(document.documentElement.style.overflow).toBe("hidden");
   });
 
-  it("hides when pressing Escape", async () => {
+  it("hides the tray when pressing the escape key", async () => {
     const onOpenChange = vi.fn();
     const tree = render(Tray, {
       props: {
@@ -48,7 +48,7 @@ describe("Tray", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("hides when clicking outside", async () => {
+  it("hides the tray when clicking outside", async () => {
     const onOpenChange = vi.fn();
     render(Tray, {
       props: {
@@ -66,7 +66,7 @@ describe("Tray", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("includes hidden dismiss buttons and closes on dismiss button press", async () => {
+  it("should have hidden dismiss buttons for screen readers", async () => {
     const onOpenChange = vi.fn();
     const tree = render(Tray, {
       props: {
@@ -124,7 +124,7 @@ describe("Tray", () => {
     expect(tray.getAttribute("class") ?? "").toContain("spectrum-Tray--fixedHeight");
   });
 
-  it("hides on blur when shouldCloseOnBlur is true", async () => {
+  it("hides the tray on blur when shouldCloseOnBlur is true", async () => {
     const onOpenChange = vi.fn();
     const tree = render(Tray, {
       props: {

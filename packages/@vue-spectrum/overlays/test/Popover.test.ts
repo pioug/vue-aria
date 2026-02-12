@@ -37,7 +37,7 @@ describe("Popover", () => {
     }
   });
 
-  it("calls onOpenChange(false) on Escape", async () => {
+  it("hides the popover when pressing the escape key", async () => {
     const trigger = createTrigger();
     const onOpenChange = vi.fn();
 
@@ -60,7 +60,7 @@ describe("Popover", () => {
     }
   });
 
-  it("calls onOpenChange(false) when clicking the underlay", async () => {
+  it("hides the popover when clicking outside", async () => {
     const trigger = createTrigger();
     const onOpenChange = vi.fn();
 
@@ -83,7 +83,7 @@ describe("Popover", () => {
     }
   });
 
-  it("calls onOpenChange(false) when focus leaves the popover", async () => {
+  it("hides the popover on blur when shouldCloseOnBlur is true", async () => {
     const trigger = createTrigger();
     const outside = document.createElement("button");
     outside.textContent = "Outside";
@@ -155,7 +155,7 @@ describe("Popover", () => {
     }
   });
 
-  it("includes hidden dismiss buttons and closes on dismiss press", async () => {
+  it("should have hidden dismiss buttons for screen readers", async () => {
     const trigger = createTrigger();
     const onOpenChange = vi.fn();
 

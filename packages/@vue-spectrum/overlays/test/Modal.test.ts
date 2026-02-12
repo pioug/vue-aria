@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Modal } from "../src";
 
 describe("Modal", () => {
-  it("renders nothing if isOpen is not set", () => {
+  it("should render nothing if isOpen is not set", () => {
     const tree = render(Modal, {
       slots: {
         default: () => h("div", { role: "dialog" }, "contents"),
@@ -15,7 +15,7 @@ describe("Modal", () => {
     expect(document.documentElement.style.overflow).not.toBe("hidden");
   });
 
-  it("renders when isOpen is true", async () => {
+  it("should render when isOpen is true", async () => {
     const tree = render(Modal, {
       props: {
         isOpen: true,
@@ -31,7 +31,7 @@ describe("Modal", () => {
     expect(document.documentElement.style.overflow).toBe("hidden");
   });
 
-  it("hides when pressing Escape", async () => {
+  it("hides the modal when pressing the escape key", async () => {
     const onOpenChange = vi.fn();
     const tree = render(Modal, {
       props: {
@@ -48,7 +48,7 @@ describe("Modal", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("does not hide when clicking outside by default", async () => {
+  it('doesn\'t hide the modal when clicking outside by default', async () => {
     const onOpenChange = vi.fn();
     render(Modal, {
       props: {
@@ -66,7 +66,7 @@ describe("Modal", () => {
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
-  it("hides when clicking outside if dismissable", async () => {
+  it("hides the modal when clicking outside if isDismissible is true", async () => {
     const onOpenChange = vi.fn();
     render(Modal, {
       props: {

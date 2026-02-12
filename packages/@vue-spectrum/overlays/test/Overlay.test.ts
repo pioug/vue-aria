@@ -11,7 +11,7 @@ const ExampleOverlay = defineComponent({
 });
 
 describe("Overlay", () => {
-  it("renders nothing if isOpen is not set", () => {
+  it("should render nothing if isOpen is not set", () => {
     const overlayRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(
       null
     );
@@ -41,7 +41,7 @@ describe("Overlay", () => {
     wrapper.unmount();
   });
 
-  it("renders into a portal in document.body", async () => {
+  it("should render into a portal in the body", async () => {
     const providerRef = ref<HTMLElement | null>(null);
     const overlayRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(
       null
