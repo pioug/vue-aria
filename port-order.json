@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:20:20.640Z",
+  "generatedAt": "2026-02-12T16:22:59.011Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 126,
-  "availableLeafCount": 12,
+  "incompletePackageCount": 125,
+  "availableLeafCount": 11,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -48,11 +48,6 @@
       "packageName": "@vue-stately/numberfield",
       "upstreamPackageName": "@react-stately/numberfield",
       "upstreamPath": "packages/@react-stately/numberfield"
-    },
-    {
-      "packageName": "@vue-stately/radio",
-      "upstreamPackageName": "@react-stately/radio",
-      "upstreamPath": "packages/@react-stately/radio"
     },
     {
       "packageName": "@vue-stately/slider",

@@ -313,3 +313,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve dependency order and upstream validation behavior before full composable conversion.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential lifecycle timing differences until full migration.
 - Removal plan: Replace React context/hooks with Vue provide/inject plus refs/computed/watch equivalents, then port upstream form state tests for behavioral parity.
+
+- Package: `@vue-stately/radio`
+- Upstream reference: `packages/@react-stately/radio` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime hooks (`useMemo`, `useState`) for radio group state management.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependency requirements and potential state-timing differences until full composable conversion.
+- Removal plan: Replace React hooks with Vue refs/computed patterns in `useRadioGroupState` and add parity tests against upstream behavior.
