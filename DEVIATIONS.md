@@ -15,7 +15,7 @@ Track every divergence from upstream in this file.
 
 - Package: `@vue-aria/utils`
 - Upstream reference: `packages/@react-aria/utils` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
-- Difference: Package is partially ported; exported surface currently includes core DOM/refs/viewport/scroll/focus helpers plus initial event/form/resize composables and all upstream test-file parity, but not the full upstream API set yet. Some newly added composables are Vue lifecycle adaptations and do not yet mirror every React re-render timing edge case.
+- Difference: Package is partially ported; exported surface currently includes core DOM/refs/viewport/scroll/focus helpers plus event/form/resize/labeling/effect composables and all upstream test-file parity, but not the full upstream API set yet. Some composables are Vue lifecycle adaptations and do not yet mirror every React re-render timing edge case.
 - Reason: Work is being done incrementally while keeping tests green and preserving dependency order.
 - User impact: Some upstream utility exports are not yet available in Vue package consumers, and a subset of hook timing semantics may differ in edge cases until full parity work is finished.
 - Removal plan: Port remaining source modules and align `src/index.ts` to full upstream export parity, then clear this deviation.

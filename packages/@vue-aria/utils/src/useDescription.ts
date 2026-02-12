@@ -1,0 +1,47 @@
+/*
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+import {getCurrentScope, onScopeDispose} from 'vue';
+
+let descriptionId = 0;
+const descriptionNodes = new Map<string, {refCount: number; element: Element}>();
+
+export function useDescription(description?: string): {'aria-describedby': string | undefined} {
+  if (!description || typeof document === 'undefined') {
+    return {'aria-describedby': undefined};
+  }
+
+  let desc = descriptionNodes.get(description);
+  if (!desc) {
+    let id = `react-aria-description-${descriptionId++}`;
+
+    let node = document.createElement('div');
+    node.id = id;
+    node.style.display = 'none';
+    node.textContent = description;
+    document.body.appendChild(node);
+    desc = {refCount: 0, element: node};
+    descriptionNodes.set(description, desc);
+  }
+
+  desc.refCount++;
+  if (getCurrentScope()) {
+    onScopeDispose(() => {
+      if (desc && --desc.refCount === 0) {
+        desc.element.remove();
+        descriptionNodes.delete(description);
+      }
+    });
+  }
+
+  return {'aria-describedby': desc.element.id};
+}
