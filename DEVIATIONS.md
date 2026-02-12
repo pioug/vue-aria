@@ -285,3 +285,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally while preserving API shape and dependency order.
 - User impact: Consumers may still need React types for full type resolution, and subtle state timing semantics may differ from upstream in edge cases.
 - Removal plan: Replace remaining React-centric type references with Vue-native equivalents and add parity tests to verify Vue state timing behavior.
+
+- Package: `@vue-stately/tooltip`
+- Upstream reference: `packages/@react-stately/tooltip` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Structural port is complete, but tooltip warmup/cooldown lifecycle and timer handling were adapted from React hook semantics to Vue scope-disposal semantics.
+- Reason: The package was ported incrementally while preserving API shape and global tooltip coordination behavior.
+- User impact: Runtime behavior should be close, but edge cases around mount/unmount timing and delayed close sequencing may differ until dedicated parity tests are added.
+- Removal plan: Port and run upstream tooltip state tests 1:1 against this implementation and refine timing/lifecycle behavior until parity is confirmed.
