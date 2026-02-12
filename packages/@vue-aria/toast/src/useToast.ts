@@ -1,4 +1,4 @@
-import { computed, ref, toValue, watchEffect } from "vue";
+import { computed, ref, toValue, watch } from "vue";
 import { filterDOMProps } from "@vue-aria/utils";
 import { useId } from "@vue-aria/ssr";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
@@ -35,19 +35,22 @@ export function useToast<T>(
 ): UseToastResult {
   const toast = computed(() => toValue(options.toast));
 
-  watchEffect((onCleanup) => {
-    const timer = toast.value.timer;
-    const timeout = toast.value.timeout;
+  watch(
+    () => [toast.value.timer, toast.value.timeout] as const,
+    ([timer, timeout], _, onCleanup) => {
+      if (timer === undefined || typeof timeout !== "number") {
+        return;
+      }
 
-    if (timer === undefined || typeof timeout !== "number") {
-      return;
+      timer.reset(timeout);
+      onCleanup(() => {
+        timer.pause();
+      });
+    },
+    {
+      immediate: true,
     }
-
-    timer.reset(timeout);
-    onCleanup(() => {
-      timer.pause();
-    });
-  });
+  );
 
   const titleId = useId(undefined, "v-aria-toast-title");
   const descriptionId = useId(undefined, "v-aria-toast-description");

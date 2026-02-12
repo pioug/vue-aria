@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import {
   ToastContainer,
   ToastQueue,
@@ -131,6 +132,68 @@ describe("ToastContainer", () => {
     expect(document.body.querySelector("[role=\"alertdialog\"]")).not.toBeNull();
 
     vi.advanceTimersByTime(3500);
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("pauses timers when hovering over the toast region", async () => {
+    const wrapper = mountToastContainer();
+
+    queueToast("neutral", { timeout: 5000 });
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).not.toBeNull();
+
+    vi.advanceTimersByTime(1000);
+    await flushToasts();
+
+    const region = document.body.querySelector("[role=\"region\"]") as HTMLElement | null;
+    expect(region).not.toBeNull();
+    if (!region) {
+      throw new Error("Missing toast region");
+    }
+
+    region.dispatchEvent(new Event("pointerenter"));
+    vi.advanceTimersByTime(7000);
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).not.toBeNull();
+
+    region.dispatchEvent(new Event("pointerleave"));
+    vi.advanceTimersByTime(4000);
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("pauses timers when focusing within the toast region", async () => {
+    const wrapper = mountToastContainer();
+
+    queueToast("neutral", { timeout: 5000 });
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).not.toBeNull();
+
+    vi.advanceTimersByTime(1000);
+    await flushToasts();
+
+    const closeButton = document.body.querySelector(
+      "[data-testid=\"rsp-Toast-closeButton\"]"
+    ) as HTMLButtonElement | null;
+    expect(closeButton).not.toBeNull();
+    if (!closeButton) {
+      throw new Error("Missing close button");
+    }
+
+    closeButton.focus();
+    await flushToasts();
+
+    vi.advanceTimersByTime(7000);
+    await flushToasts();
+    expect(document.body.querySelector("[role=\"alertdialog\"]")).not.toBeNull();
+
+    closeButton.blur();
+    vi.advanceTimersByTime(4000);
     await flushToasts();
     expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
 
@@ -268,6 +331,89 @@ describe("ToastContainer", () => {
     expect(regions[0]?.getAttribute("aria-label")).toBe("Toasts");
 
     wrapper.unmount();
+  });
+
+  it("renders toasts in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () => h(ToastContainer),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      queueToast();
+      await flushToasts();
+
+      const region = document.body.querySelector("[role=\"region\"]");
+      expect(region).not.toBeNull();
+      expect(region?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("supports nested UNSAFE_PortalProvider null override for toasts", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(
+                  UNSAFE_PortalProvider,
+                  {
+                    getContainer: null,
+                  },
+                  {
+                    default: () => h(ToastContainer),
+                  }
+                ),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      queueToast();
+      await flushToasts();
+
+      const region = document.body.querySelector("[role=\"region\"]");
+      expect(region).not.toBeNull();
+      expect(region?.closest("[data-testid=\"custom-container\"]")).not.toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
   });
 
   it("supports programmatically closing toasts", async () => {

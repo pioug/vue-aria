@@ -6,6 +6,7 @@ import {
   Teleport,
   type PropType,
 } from "vue";
+import { useUNSAFE_PortalContext } from "@vue-aria/overlays";
 import { useToastRegion } from "@vue-aria/toast";
 import { mergeProps } from "@vue-aria/utils";
 import type { UseToastStateResult } from "@vue-aria/toast-state";
@@ -43,6 +44,7 @@ export const Toaster = defineComponent({
   },
   setup(props, { attrs, slots }) {
     const regionRef = ref<HTMLElement | null>(null);
+    const portalContext = useUNSAFE_PortalContext();
     const { regionProps } = useToastRegion(
       {
         "aria-label":
@@ -64,12 +66,14 @@ export const Toaster = defineComponent({
     });
 
     return () => {
+      const portalContainer = portalContext.getContainer?.() ?? undefined;
+
       if (typeof document === "undefined") {
         return null;
       }
 
       const attrsRecord = attrs as Record<string, unknown>;
-      return h(Teleport, { to: "body" }, [
+      return h(Teleport, { to: portalContainer ?? "body" }, [
         h(
           "div",
           mergeProps(regionProps.value as Record<string, unknown>, attrsRecord, {
