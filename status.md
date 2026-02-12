@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 20 |
-| Passing tests | 20 |
+| Ported tests | 21 |
+| Passing tests | 21 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -29,7 +29,7 @@
 | @vue-aria/button | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
 | @vue-aria/calendar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
 | @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
-| @vue-aria/collections | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
+| @vue-aria/collections | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
 | @vue-aria/color | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/color | packages/@react-aria/color |
 | @vue-aria/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/combobox | packages/@react-aria/combobox |
 | @vue-aria/datepicker | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/datepicker | packages/@react-aria/datepicker |
