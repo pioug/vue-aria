@@ -76,4 +76,4 @@ const area = h(TextArea, {
 - Native server validation errors persist across repeated submits until the field value changes.
 - `TextArea` baseline includes multiline rendering, row configuration, and auto-resize behavior driven by textarea `scrollHeight` updates (including quiet variant growth and explicit-height opt-out behavior).
 - Placeholder deprecation warning parity from upstream `TextField` and `TextArea` is included.
-- Baseline icon, loading-indicator, validation-icon, and `excludeFromTabOrder` behavior parity is now included for both `TextField` and `TextArea`.
+- Baseline icon, loading-indicator, validation-icon (including locale-aware valid-icon labels), and `excludeFromTabOrder` behavior parity is now included for both `TextField` and `TextArea`.

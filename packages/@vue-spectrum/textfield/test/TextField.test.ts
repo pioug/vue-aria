@@ -2,6 +2,7 @@ import { fireEvent, render } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { Form } from "@vue-spectrum/form";
 import {
   DEFAULT_SPECTRUM_THEME_CLASS_MAP,
@@ -349,6 +350,7 @@ describe("TextField", () => {
     const validIconId = validIcon.getAttribute("id");
 
     expect(validIconId).toBeTruthy();
+    expect(validIcon.getAttribute("aria-label")).toBe("Valid");
     expect(validInput.getAttribute("aria-describedby")).toContain(validIconId ?? "");
     validTree.unmount();
 
@@ -359,7 +361,30 @@ describe("TextField", () => {
       },
     });
 
-    expect(invalidTree.getByTestId("textfield-invalid-icon")).toBeTruthy();
+    const invalidIcon = invalidTree.getByTestId("textfield-invalid-icon");
+    expect(invalidIcon).toBeTruthy();
+    expect(invalidIcon.getAttribute("aria-hidden")).toBe("true");
+    expect(invalidIcon.getAttribute("aria-label")).toBeNull();
+  });
+
+  it("localizes valid icon aria label from i18n locale", () => {
+    const App = defineComponent({
+      name: "TextFieldValidLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(TextField, {
+            label: "Name",
+            validationState: "valid",
+          });
+      },
+    });
+
+    const tree = render(App);
+    expect(tree.getByTestId("textfield-valid-icon").getAttribute("aria-label")).toBe(
+      "Valide"
+    );
   });
 
   it("supports loading indicator and suppresses validation icon while loading", () => {

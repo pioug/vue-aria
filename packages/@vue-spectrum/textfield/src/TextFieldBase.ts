@@ -11,12 +11,22 @@ import {
   type Ref,
   type VNode,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/ssr";
 import { useFocusRing } from "@vue-aria/focus";
 import { useHover } from "@vue-aria/interactions";
 import { mergeProps } from "@vue-aria/utils";
 import { Field } from "@vue-spectrum/label";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
+
+const TEXTFIELD_INTL_MESSAGES = {
+  "en-US": {
+    valid: "Valid",
+  },
+  "fr-FR": {
+    valid: "Valide",
+  },
+} as const;
 
 export interface SpectrumTextFieldBaseRenderProps {
   isQuiet?: boolean | undefined;
@@ -166,6 +176,10 @@ export const TextFieldBase = defineComponent({
   setup(props, { expose }) {
     const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
     const validIconId = useId(undefined, "v-spectrum-textfield-valid");
+    const stringFormatter = useLocalizedStringFormatter(
+      TEXTFIELD_INTL_MESSAGES,
+      "@vue-spectrum/textfield"
+    );
 
     const setInputRef = (value: HTMLInputElement | HTMLTextAreaElement | null) => {
       inputRef.value = value;
@@ -266,13 +280,14 @@ export const TextFieldBase = defineComponent({
                 ? {
                     id: validIconId.value,
                     role: "img",
-                    "aria-label": "Valid",
+                    "aria-label": stringFormatter.value.format("valid"),
+                    "aria-hidden": "true",
                     class: "spectrum-Textfield-validationIcon",
                     "data-testid": "textfield-valid-icon",
                   }
                 : {
                     role: "img",
-                    "aria-label": "Invalid",
+                    "aria-hidden": "true",
                     class: "spectrum-Textfield-validationIcon",
                     "data-testid": "textfield-invalid-icon",
                   },
