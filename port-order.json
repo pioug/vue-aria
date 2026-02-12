@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T18:06:59.153Z",
+  "generatedAt": "2026-02-12T18:07:19.746Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 49,
-  "availableLeafCount": 15,
+  "incompletePackageCount": 48,
+  "availableLeafCount": 14,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/accordion",
@@ -33,11 +33,6 @@
       "packageName": "@vue-spectrum/layout",
       "upstreamPackageName": "@react-spectrum/layout",
       "upstreamPath": "packages/@react-spectrum/layout"
-    },
-    {
-      "packageName": "@vue-spectrum/link",
-      "upstreamPackageName": "@react-spectrum/link",
-      "upstreamPath": "packages/@react-spectrum/link"
     },
     {
       "packageName": "@vue-spectrum/overlays",
