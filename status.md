@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 132 |
-| Passing tests | 132 |
+| Ported tests | 134 |
+| Passing tests | 134 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -97,7 +97,7 @@
 | @vue-spectrum/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dnd | packages/@react-spectrum/dnd |
 | @vue-spectrum/dropzone | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dropzone | packages/@react-spectrum/dropzone |
 | @vue-spectrum/filetrigger | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/filetrigger | packages/@react-spectrum/filetrigger |
-| @vue-spectrum/form | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/form | packages/@react-spectrum/form |
+| @vue-spectrum/form | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/form | packages/@react-spectrum/form |
 | @vue-spectrum/icon | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/icon | packages/@react-spectrum/icon |
 | @vue-spectrum/illustratedmessage | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/illustratedmessage | packages/@react-spectrum/illustratedmessage |
 | @vue-spectrum/image | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/image | packages/@react-spectrum/image |
