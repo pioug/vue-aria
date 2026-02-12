@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T17:53:53.520Z",
+  "generatedAt": "2026-02-12T17:54:39.267Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 65,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 64,
+  "availableLeafCount": 4,
   "availableLeaves": [
-    {
-      "packageName": "@vue-aria/color",
-      "upstreamPackageName": "@react-aria/color",
-      "upstreamPath": "packages/@react-aria/color"
-    },
     {
       "packageName": "@vue-aria/datepicker",
       "upstreamPackageName": "@react-aria/datepicker",
