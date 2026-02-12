@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:00:29.496Z",
+  "generatedAt": "2026-02-12T17:01:33.229Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 102,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 101,
+  "availableLeafCount": 4,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -23,11 +23,6 @@
       "packageName": "@vue-stately/table",
       "upstreamPackageName": "@react-stately/table",
       "upstreamPath": "packages/@react-stately/table"
-    },
-    {
-      "packageName": "@vue-types/sidenav",
-      "upstreamPackageName": "@react-types/sidenav",
-      "upstreamPath": "packages/@react-types/sidenav"
     }
   ],
   "hasCycles": false,

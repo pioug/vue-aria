@@ -1,0 +1,22 @@
+{
+  "name": "@vue-types/sidenav",
+  "version": "3.0.0-alpha.1",
+  "description": "Vue port of @react-types/sidenav",
+  "license": "Apache-2.0",
+  "private": true,
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-stately/virtualizer": "^4.0.0",
+    "@vue-types/shared": "^3.1.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

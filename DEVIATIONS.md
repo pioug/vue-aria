@@ -467,3 +467,10 @@ Track every divergence from upstream in this file.
 - Reason: This package depends on transitional shared/provider typing layers and upstream React-specific card type contracts.
 - User impact: Consumers may still need React type packages for full type resolution in card view typing surfaces.
 - Removal plan: Replace React-centric declaration types with Vue-native node/component typing aliases after shared/provider type remapping is complete.
+
+- Package: `@vue-types/sidenav`
+- Upstream reference: `packages/@react-types/sidenav` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Structural port is complete, but declarations remain React-centric (`ReactNode` and `HTMLAttributes` imported from `react`).
+- Reason: This package depends on transitional shared typing layers and upstream React-specific side navigation type contracts.
+- User impact: Consumers may still need React type packages for full type resolution in side navigation typing surfaces.
+- Removal plan: Replace React-centric declaration types with Vue-native node/attribute typing aliases after shared type remapping is complete.
