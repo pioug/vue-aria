@@ -119,7 +119,7 @@
 | @vue-spectrum/s2 | not_started | 19 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/s2 | packages/@react-spectrum/s2 |
 | @vue-spectrum/searchfield | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/searchfield | packages/@react-spectrum/searchfield |
 | @vue-spectrum/slider | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/slider | packages/@react-spectrum/slider |
-| @vue-spectrum/statuslight | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
+| @vue-spectrum/statuslight | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
 | @vue-spectrum/steplist | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/steplist | packages/@react-spectrum/steplist |
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
