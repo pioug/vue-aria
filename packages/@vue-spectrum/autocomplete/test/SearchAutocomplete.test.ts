@@ -219,6 +219,89 @@ describe("SearchAutocomplete", () => {
     ]);
   });
 
+  it("updates mapped slot items and selected input text when list items change", async () => {
+    const user = userEvent.setup();
+    const initialItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "Aardvark" },
+      { key: "2", label: "Kangaroo" },
+      { key: "3", label: "Snake" },
+    ];
+    const nextItems: SpectrumSearchAutocompleteItemData[] = [
+      { key: "1", label: "New Text" },
+      { key: "2", label: "Item 2" },
+      { key: "3", label: "Item 3" },
+    ];
+    let setItems:
+      | ((nextItems: SpectrumSearchAutocompleteItemData[]) => void)
+      | undefined;
+
+    const App = defineComponent({
+      name: "SearchAutocompleteMappedItemsUpdateApp",
+      setup() {
+        const list = ref<SpectrumSearchAutocompleteItemData[]>(initialItems);
+        setItems = (updatedItems: SpectrumSearchAutocompleteItemData[]) => {
+          list.value = updatedItems;
+        };
+
+        return () =>
+          h(
+            SearchAutocomplete,
+            {
+              label: "SearchAutocomplete",
+              menuTrigger: "focus",
+            },
+            {
+              default: () =>
+                list.value.map((item) =>
+                  h(
+                    SearchAutocompleteItem,
+                    {
+                      key: item.key,
+                    },
+                    () => item.label
+                  )
+                ),
+            }
+          );
+      },
+    });
+
+    const tree = render(App);
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    input.focus();
+    await user.keyboard("a");
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options.map((option) => option.textContent)).toEqual([
+      "Aardvark",
+      "Kangaroo",
+      "Snake",
+    ]);
+
+    await user.click(options[0]!);
+    expect(input.value).toBe("Aardvark");
+
+    input.blur();
+    await Promise.resolve();
+
+    setItems?.(nextItems);
+    await Promise.resolve();
+
+    expect(input.value).toBe("New Text");
+
+    input.focus();
+    await user.clear(input);
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options.map((option) => option.textContent)).toEqual([
+      "New Text",
+      "Item 2",
+      "Item 3",
+    ]);
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({

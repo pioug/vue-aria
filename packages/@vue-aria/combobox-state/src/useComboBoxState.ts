@@ -454,6 +454,17 @@ export function useComboBoxState<T extends ListBoxItem>(
   });
 
   watch(
+    () => originalCollection.value,
+    () => {
+      if (isInputControlled.value || isFocused.value || selectedKey.value === null) {
+        return;
+      }
+
+      setInputValueInternal(getItemText(originalCollection.value, selectedKey.value), true);
+    }
+  );
+
+  watch(
     () => listState.focusedKey.value,
     (nextFocusedKey) => {
       if (
