@@ -557,6 +557,27 @@ describe("TooltipTrigger", () => {
     wrapper.unmount();
   });
 
+  it("is closed if the trigger is activated with keyboard", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTooltipTrigger({
+      onOpenChange,
+    });
+
+    const button = wrapper.get("button");
+    (button.element as HTMLButtonElement).focus();
+    await flushOverlay();
+    expect(document.body.querySelector("[role=\"tooltip\"]")).not.toBeNull();
+
+    await button.trigger("keydown", { key: "Enter" });
+    await button.trigger("keyup", { key: "Enter" });
+    await flushOverlay();
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
   it("applies overlay positioning styles and requested placement", async () => {
     const wrapper = mountTooltipTrigger({}, { placement: "bottom" });
     const button = wrapper.get("button");
@@ -739,6 +760,35 @@ describe("TooltipTrigger", () => {
     try {
       const button = wrapper.get("button");
       (button.element as HTMLButtonElement).focus();
+      await button.trigger("pointerenter", { pointerType: "mouse" });
+      await flushOverlay();
+
+      expect(onOpenChange).not.toHaveBeenCalledWith(true);
+      expect(document.body.querySelector("[role=\"tooltip\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it("does not open when the trigger element is disabled", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(TooltipTrigger, {
+      attachTo: document.body,
+      props: {
+        delay: 0,
+        closeDelay: 0,
+        onOpenChange,
+      },
+      slots: {
+        default: () => [
+          h("button", { "aria-label": "trigger", disabled: true }, "Trigger"),
+          h(Tooltip, () => "Helpful information."),
+        ],
+      },
+    });
+
+    try {
+      const button = wrapper.get("button");
       await button.trigger("pointerenter", { pointerType: "mouse" });
       await flushOverlay();
 

@@ -31,7 +31,12 @@ function resolveBoolean(value: MaybeReactive<boolean | undefined> | undefined, f
     return fallback;
   }
 
-  return Boolean(toValue(value));
+  const resolvedValue = toValue(value);
+  if (resolvedValue === undefined) {
+    return fallback;
+  }
+
+  return Boolean(resolvedValue);
 }
 
 function resolveTrigger(
@@ -274,6 +279,14 @@ export function useTooltipTrigger(
     handleHide(true);
   };
 
+  const onTriggerKeydown = (event: KeyboardEvent): void => {
+    if (event.key !== "Enter" && event.key !== " " && event.key !== "Spacebar") {
+      return;
+    }
+
+    onPressStart();
+  };
+
   if (getCurrentScope()) {
     onScopeDispose(() => {
       clearShowTimeout();
@@ -287,7 +300,7 @@ export function useTooltipTrigger(
       "aria-describedby": state.isOpen.value ? tooltipId.value : undefined,
       ...mergeProps(focusProps, hoverProps, {
         onPointerdown: onPressStart,
-        onKeydown: onPressStart,
+        onKeydown: onTriggerKeydown,
       }),
       tabIndex: undefined,
     })),

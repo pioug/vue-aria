@@ -88,6 +88,29 @@ function isTooltipPlacement(value: unknown): value is TooltipPlacement {
   );
 }
 
+function isDisabledTriggerValue(value: unknown): boolean {
+  if (value === true) {
+    return true;
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+    return normalized === "" || normalized === "true" || normalized === "disabled";
+  }
+
+  return false;
+}
+
+function isTriggerNodeDisabled(node: VNode): boolean {
+  const props = (node.props ?? {}) as Record<string, unknown>;
+  return (
+    isDisabledTriggerValue(props.disabled) ||
+    isDisabledTriggerValue(props.isDisabled) ||
+    isDisabledTriggerValue(props["aria-disabled"]) ||
+    isDisabledTriggerValue(props.ariaDisabled)
+  );
+}
+
 export const TooltipTrigger = defineComponent({
   name: "TooltipTrigger",
   inheritAttrs: false,
@@ -135,6 +158,7 @@ export const TooltipTrigger = defineComponent({
   },
   setup(props, { slots, expose }) {
     const triggerElementRef = ref<HTMLElement | null>(null);
+    const triggerNodeDisabled = ref(false);
     const tooltipElementRef = ref<HTMLElement | null>(null);
     const requestedPlacement = ref<TooltipPlacement>("top");
     const uncontrolledOpen = ref(Boolean(props.defaultOpen));
@@ -170,7 +194,7 @@ export const TooltipTrigger = defineComponent({
 
     const { triggerProps, tooltipProps } = useTooltipTrigger(
       {
-        isDisabled: computed(() => props.isDisabled),
+        isDisabled: computed(() => Boolean(props.isDisabled || triggerNodeDisabled.value)),
         trigger: computed(() => props.trigger),
         shouldCloseOnPress: computed(() => props.shouldCloseOnPress),
         delay: computed(() => props.delay),
@@ -199,10 +223,12 @@ export const TooltipTrigger = defineComponent({
     return () => {
       const children = normalizeChildren(slots.default?.());
       if (children.length === 0) {
+        triggerNodeDisabled.value = false;
         return null;
       }
 
       const triggerNode = children[0];
+      triggerNodeDisabled.value = isTriggerNodeDisabled(triggerNode);
       const tooltipNode = children[1];
       if (tooltipNode && isVNode(tooltipNode)) {
         const tooltipNodeProps = (tooltipNode.props ?? {}) as Record<string, unknown>;
