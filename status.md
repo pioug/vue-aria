@@ -37,7 +37,7 @@
 | @vue-aria/disclosure | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/disclosure | packages/@react-aria/disclosure |
 | @vue-aria/dnd | not_started | 8 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/dnd | packages/@react-aria/dnd |
 | @vue-aria/example-theme | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/example-theme | packages/@react-aria/example-theme |
-| @vue-aria/focus | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/focus | packages/@react-aria/focus |
+| @vue-aria/focus | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/focus | packages/@react-aria/focus |
 | @vue-aria/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/form | packages/@react-aria/form |
 | @vue-aria/grid | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/grid | packages/@react-aria/grid |
 | @vue-aria/gridlist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/gridlist | packages/@react-aria/gridlist |

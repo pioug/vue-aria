@@ -1,9 +1,14 @@
 {
-  "generatedAt": "2026-02-12T17:28:58.590Z",
+  "generatedAt": "2026-02-12T17:30:11.996Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 85,
-  "availableLeafCount": 6,
+  "incompletePackageCount": 84,
+  "availableLeafCount": 11,
   "availableLeaves": [
+    {
+      "packageName": "@vue-aria/actiongroup",
+      "upstreamPackageName": "@react-aria/actiongroup",
+      "upstreamPath": "packages/@react-aria/actiongroup"
+    },
     {
       "packageName": "@vue-aria/calendar",
       "upstreamPackageName": "@react-aria/calendar",
@@ -15,9 +20,24 @@
       "upstreamPath": "packages/@react-aria/collections"
     },
     {
-      "packageName": "@vue-aria/focus",
-      "upstreamPackageName": "@react-aria/focus",
-      "upstreamPath": "packages/@react-aria/focus"
+      "packageName": "@vue-aria/datepicker",
+      "upstreamPackageName": "@react-aria/datepicker",
+      "upstreamPath": "packages/@react-aria/datepicker"
+    },
+    {
+      "packageName": "@vue-aria/overlays",
+      "upstreamPackageName": "@react-aria/overlays",
+      "upstreamPath": "packages/@react-aria/overlays"
+    },
+    {
+      "packageName": "@vue-aria/radio",
+      "upstreamPackageName": "@react-aria/radio",
+      "upstreamPath": "packages/@react-aria/radio"
+    },
+    {
+      "packageName": "@vue-aria/selection",
+      "upstreamPackageName": "@react-aria/selection",
+      "upstreamPath": "packages/@react-aria/selection"
     },
     {
       "packageName": "@vue-aria/slider",
@@ -33,6 +53,11 @@
       "packageName": "@vue-aria/toast",
       "upstreamPackageName": "@react-aria/toast",
       "upstreamPath": "packages/@react-aria/toast"
+    },
+    {
+      "packageName": "@vue-aria/toolbar",
+      "upstreamPackageName": "@react-aria/toolbar",
+      "upstreamPath": "packages/@react-aria/toolbar"
     }
   ],
   "hasCycles": false,
