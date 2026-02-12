@@ -36,10 +36,14 @@ This page is the consolidated entry point for migration status and execution mod
 ## Definition Of Done (Per Package)
 
 1. Runtime behavior in `packages/@vue-spectrum/<pkg>/src` is parity-aligned.
-2. Test coverage in `packages/@vue-spectrum/<pkg>/test` includes upstream scenarios adapted to Vue.
-3. Docs page exists at `docs/spectrum/<pkg>.md` with preview + parity notes.
-4. Package is exported by `@vue-spectrum/vue-spectrum`.
-5. Validation passes:
+2. API surface is parity-aligned (exported package surface + core component semantics).
+3. Upstream test parity is complete:
+missing upstream named cases = `0`
+missing upstream test files = `none`
+4. Docs page exists at `docs/spectrum/<pkg>.md` with preview + parity notes.
+5. Base component styling is usable and aligned with the shared Spectrum docs style lane.
+6. Package is exported by `@vue-spectrum/vue-spectrum`.
+7. Validation passes:
 
 ```bash
 npm run check

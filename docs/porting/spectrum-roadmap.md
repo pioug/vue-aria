@@ -58,11 +58,15 @@ For live package-by-package completion, use the canonical tracker:
 
 A package is considered complete only when all conditions are met:
 
-1. Runtime parity implementation exists.
-2. Upstream-style tests are ported and passing.
-3. Docs page and preview are available.
-4. Umbrella exports are wired.
-5. Quality gates pass (`check`, tests, parity scripts, docs build).
+1. Behavior parity is implemented and verified against upstream scenarios.
+2. API parity is implemented (public exports + component surface semantics aligned to upstream intent).
+3. Upstream test parity is complete for the package:
+missing upstream named cases = `0`
+missing upstream test files = `none`
+4. Docs page and preview are available and reflect the upstream-like API/composition model.
+5. Base component visual parity lane is covered:
+shared docs base styles and aliases are sufficient for usable Spectrum-like appearance.
+6. Quality gates pass (`check`, tests, parity scripts, docs build).
 
 ## Guardrails
 

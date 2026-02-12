@@ -10,8 +10,8 @@ Companion docs:
 
 ## Progress Snapshot
 
-- Completed packages: `24 / 64`
-- Remaining packages: `40`
+- Completed packages: `21 / 64`
+- Remaining packages: `43`
 - Upstream named-case parity source of truth: `SPECTRUM_TESTCASE_TRACKER.md` (auto-generated via `npm run update:spectrum-case-tracker`)
 - Primary progress metric: upstream named-case parity (`matched / upstream named`), with missing upstream named cases as the actionable gap.
 - Secondary metric: raw call ratio (informational only).
@@ -28,12 +28,17 @@ Companion docs:
 
 ## Completion Rules (Per Package)
 
-1. Port runtime behavior in `packages/@vue-spectrum/<pkg>/src` with APIs and semantics aligned to upstream intent.
-2. Port test scenarios from upstream into `packages/@vue-spectrum/<pkg>/test` and adapt for Vue.
-3. Add docs page in `docs/spectrum/<pkg>.md` with usage, accessibility notes, and parity caveats.
-4. Add/verify exports in umbrella entry (`@vue-spectrum/vue-spectrum`).
-5. Mark package complete only after `npm run check`, `npm run test`, `npm run test:cross-browser`, and docs build pass.
-6. Track and refresh upstream named-case parity with `npm run update:spectrum-case-tracker` (use diagnostics mode only for local-only debugging).
+1. Port runtime behavior in `packages/@vue-spectrum/<pkg>/src` with behavior semantics aligned to upstream intent.
+2. Port API surface semantics aligned to upstream (public exports + component usage model).
+3. Port test scenarios from upstream into `packages/@vue-spectrum/<pkg>/test` and adapt for Vue.
+4. Enforce upstream test parity before checking package complete:
+missing upstream named cases = `0`
+missing upstream test files = `none`
+5. Add docs page in `docs/spectrum/<pkg>.md` with usage, accessibility notes, and parity caveats.
+6. Ensure base component appearance is covered by shared Spectrum docs style baseline for usable parity.
+7. Add/verify exports in umbrella entry (`@vue-spectrum/vue-spectrum`).
+8. Mark package complete only after `npm run check`, `npm run test`, `npm run test:cross-browser`, and docs build pass.
+9. Track and refresh upstream named-case parity with `npm run update:spectrum-case-tracker` (use diagnostics mode only for local-only debugging).
 
 ## Execution Protocol
 
@@ -56,6 +61,7 @@ Companion docs:
 ## Foundation, Theme, and Infrastructure
 
 - Scope note: this section tracks package completion checkboxes only. Detailed runtime/test notes should live in per-package docs and commits to avoid stale tracker prose.
+- Checkbox rule: `[x]` means package completion rules above are fully satisfied (including upstream test parity = 100% for named cases).
 - Priority note: `@react-spectrum/s2` is paused for new scope until v1 completion gates in `docs/porting/spectrum-roadmap.md` are met.
 - [ ] `@react-spectrum/provider` -> `@vue-spectrum/provider`
 - [ ] `@react-spectrum/utils` -> `@vue-spectrum/utils`
@@ -181,7 +187,7 @@ Companion docs:
 - [ ] `@react-spectrum/actiongroup` -> `@vue-spectrum/actiongroup`
 - [x] `@react-spectrum/buttongroup` -> `@vue-spectrum/buttongroup`
 - [x] `@react-spectrum/link` -> `@vue-spectrum/link`
-- [x] `@react-spectrum/breadcrumbs` -> `@vue-spectrum/breadcrumbs` (includes `Item` compatibility alias and dedicated `BreadcrumbItem` parity test coverage, including aria-label and forwarded ref `UNSAFE_getDOMNode` coverage)
+- [ ] `@react-spectrum/breadcrumbs` -> `@vue-spectrum/breadcrumbs` (includes `Item` compatibility alias and dedicated `BreadcrumbItem` parity test coverage, including aria-label and forwarded ref `UNSAFE_getDOMNode` coverage)
 - [ ] `@react-spectrum/tabs` -> `@vue-spectrum/tabs`
 - [x] `@react-spectrum/accordion` -> `@vue-spectrum/accordion`
 - [ ] `@react-spectrum/steplist` -> `@vue-spectrum/steplist`
@@ -200,8 +206,8 @@ Companion docs:
 - In progress baseline: `@react-spectrum/color` now has Vue `ColorArea`, `ColorWheel`, `ColorSlider`, `ColorField`, `ColorSwatch`, `ColorPicker`, `ColorEditor`, `ColorSwatchPicker`, and `ColorThumb` primitives with baseline hex-color parsing/editing flows, picker popover behavior, locale-aware default labels for `ColorField`/`ColorPicker` swatches, `ColorSwatchPicker` listbox naming, `ColorSlider` fallback channel labels, `ColorArea`/`ColorWheel` controls, and `ColorEditor` controls (`Color area`, `Hue`, `Alpha`, `Hex`), dedicated upstream-style per-component test-file coverage (`ColorArea`/`ColorEditor`/`ColorField`/`ColorPicker`/`ColorSlider`/`ColorSwatchPicker`/`ColorWheel`), and starter/SSR tests plus docs/umbrella wiring; advanced color-space interactions and full visual/theming parity remain.
 - In progress baseline: `@react-spectrum/datepicker` now has Vue `DateField`, `TimeField`, `DatePicker`, and `DateRangePicker` primitives with baseline native date/time field behavior, popover calendar selection for single and range values, dedicated upstream-style split test-file coverage (`DateField`/`TimeField`/`DatePickerBase`/`DateRangePicker`) including expanded `DateField`/`TimeField` parity tests for ARIA labeling/description/error wiring, invalid-state attributes, read-only/disabled change suppression, granularity-derived `step` behavior, and ref helper exposure, plus additional `DatePicker`/`DateRangePicker` parity tests for controlled open-state callbacks, `shouldCloseOnSelect={false}` behavior, root data-attribute passthrough, and ref helper exposure, with starter/SSR tests and docs/umbrella wiring; segmented-field parity, full range-time behavior, and deeper visual/theming parity remain.
 - Parity-complete baseline: `@react-spectrum/filetrigger` now has Vue `FileTrigger` primitive with parity-style tests/docs and umbrella wiring (pressable-child trigger behavior, hidden file-input wiring, accepted-file/multiple/capture/directory options, ref exposure utilities, and SSR coverage).
-- [x] `@react-spectrum/checkbox` -> `@vue-spectrum/checkbox`
-- [x] `@react-spectrum/radio` -> `@vue-spectrum/radio`
+- [ ] `@react-spectrum/checkbox` -> `@vue-spectrum/checkbox`
+- [ ] `@react-spectrum/radio` -> `@vue-spectrum/radio`
 - [x] `@react-spectrum/switch` -> `@vue-spectrum/switch`
 - [ ] `@react-spectrum/slider` -> `@vue-spectrum/slider`
 - [ ] `@react-spectrum/textfield` -> `@vue-spectrum/textfield`

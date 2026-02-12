@@ -11,6 +11,7 @@ const spectrumReferencePath = path.join(
   "packages",
   "@react-spectrum"
 );
+const caseTrackerPath = path.join(root, "SPECTRUM_TESTCASE_TRACKER.md");
 const umbrellaEntryPath = path.join(
   root,
   "packages",
@@ -61,6 +62,78 @@ function collectTests(testDirectory) {
     .filter((name) => name.endsWith(".test.ts") || name.endsWith(".test.tsx"));
 }
 
+function parseMarkdownTableCells(line) {
+  return line
+    .split("|")
+    .slice(1, -1)
+    .map((cell) => cell.trim());
+}
+
+function parseCaseTracker(content) {
+  const lines = content.split(/\r?\n/);
+  const rows = new Map();
+  let headerIndex = null;
+  let inMatrix = false;
+
+  for (const line of lines) {
+    if (!inMatrix && line.startsWith("| package | status |")) {
+      const header = parseMarkdownTableCells(line);
+      headerIndex = new Map(header.map((name, index) => [name, index]));
+      inMatrix = true;
+      continue;
+    }
+
+    if (!inMatrix) {
+      continue;
+    }
+
+    if (!line.startsWith("|")) {
+      if (rows.size > 0) {
+        break;
+      }
+      continue;
+    }
+
+    if (line.startsWith("| ---")) {
+      continue;
+    }
+
+    if (!headerIndex) {
+      continue;
+    }
+
+    const cells = parseMarkdownTableCells(line);
+    const packageIndex = headerIndex.get("package");
+    const statusIndex = headerIndex.get("status");
+    const missingNamedIndex = headerIndex.get("missing named");
+    const missingFilesIndex = headerIndex.get("missing upstream test files");
+
+    if (
+      packageIndex === undefined ||
+      statusIndex === undefined ||
+      missingNamedIndex === undefined ||
+      missingFilesIndex === undefined
+    ) {
+      continue;
+    }
+
+    const packageCell = cells[packageIndex] ?? "";
+    if (!packageCell.startsWith("`") || !packageCell.endsWith("`")) {
+      continue;
+    }
+
+    const packageName = packageCell.slice(1, -1);
+    const missingNamed = Number.parseInt(cells[missingNamedIndex] ?? "0", 10);
+    rows.set(packageName, {
+      status: cells[statusIndex] ?? "pending",
+      missingNamed: Number.isFinite(missingNamed) ? missingNamed : 0,
+      missingFiles: cells[missingFilesIndex] ?? "none",
+    });
+  }
+
+  return rows;
+}
+
 const errors = [];
 
 if (!fs.existsSync(trackerPath)) {
@@ -92,6 +165,16 @@ if (!fs.existsSync(trackerPath)) {
   }
 
   const trackedRows = rows.filter((row) => row.checked);
+  const caseTrackerRows = fs.existsSync(caseTrackerPath)
+    ? parseCaseTracker(readFile(caseTrackerPath))
+    : null;
+
+  if (!caseTrackerRows) {
+    errors.push(
+      `Missing testcase tracker file: ${path.relative(root, caseTrackerPath)}`
+    );
+  }
+
   const umbrellaExports = fs.existsSync(umbrellaEntryPath)
     ? readFile(umbrellaEntryPath)
     : "";
@@ -121,6 +204,33 @@ if (!fs.existsSync(trackerPath)) {
 
     if (!umbrellaExports.includes(`@vue-spectrum/${row.local}`)) {
       errors.push(`Completed package not exported by umbrella: @vue-spectrum/${row.local}`);
+    }
+
+    if (caseTrackerRows) {
+      const caseParity = caseTrackerRows.get(row.upstream);
+      if (!caseParity) {
+        errors.push(
+          `Completed package missing testcase parity row: @react-spectrum/${row.upstream}`
+        );
+      } else {
+        if (caseParity.status !== "checked") {
+          errors.push(
+            `Completed package status mismatch in testcase tracker: @react-spectrum/${row.upstream} (expected checked, found ${caseParity.status})`
+          );
+        }
+
+        if (caseParity.missingNamed > 0) {
+          errors.push(
+            `Completed package has missing upstream named tests: @react-spectrum/${row.upstream} (${caseParity.missingNamed} remaining)`
+          );
+        }
+
+        if (caseParity.missingFiles !== "none") {
+          errors.push(
+            `Completed package has missing upstream test files: @react-spectrum/${row.upstream} (${caseParity.missingFiles})`
+          );
+        }
+      }
     }
   }
 }

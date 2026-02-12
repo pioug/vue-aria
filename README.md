@@ -7,6 +7,17 @@ Vue 3 monorepo port of:
 
 The priority is behavior and accessibility parity with upstream, while keeping Vue-native usage and package boundaries close to the original repo.
 
+## Parity contract
+
+For `@vue-spectrum/*`, completion means:
+
+1. 100% upstream parity for behavior + API semantics.
+2. Proven by upstream test parity for the package:
+missing upstream named cases = `0`
+missing upstream test files = `none`
+3. Similar repository/package architecture and documentation model to upstream.
+4. Similar base component appearance via the shared Spectrum docs style baseline.
+
 ## Current migration mode
 
 - `@vue-aria/*`: parity-complete baseline, now in maintenance/hardening mode.
