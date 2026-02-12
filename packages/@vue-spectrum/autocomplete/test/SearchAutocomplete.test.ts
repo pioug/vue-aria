@@ -351,6 +351,74 @@ describe("SearchAutocomplete", () => {
     expect(input.value).toBe("Aa");
   });
 
+  it("updates input value and selection freely in uncontrolled mode", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+    const tree = renderComponent({
+      onInputChange,
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("");
+
+    input.focus();
+    await user.keyboard("T");
+
+    let listbox = tree.getByRole("listbox");
+    let options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(2);
+
+    await user.keyboard("wo");
+    expect(input.value).toBe("Two");
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+
+    await user.clear(input);
+    expect(input.value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    expect(options.find((option) => option.textContent === "Two")).toBeTruthy();
+    expect(
+      options.find((option) => option.textContent === "Two")?.getAttribute("aria-selected")
+    ).not.toBe("true");
+
+    await user.click(options[0]!);
+    expect(input.value).toBe("One");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(onInputChange).toHaveBeenLastCalledWith("One");
+
+    fireEvent.update(input, "o");
+    await Promise.resolve();
+
+    listbox = tree.getByRole("listbox");
+    options = within(listbox).getAllByRole("option");
+    const oneOption = options.find((option) => option.textContent === "One");
+    expect(oneOption).toBeTruthy();
+    expect(oneOption?.getAttribute("aria-selected")).toBe("true");
+
+    await user.clear(input);
+    expect(input.value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+  });
+
+  it("does not set selected item from defaultInputValue", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultInputValue: "Tw",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+    expect(input.value).toBe("Tw");
+
+    input.focus();
+    await user.keyboard("o");
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]?.textContent).toContain("Two");
+    expect(options[0]?.getAttribute("aria-selected")).toBe("false");
+  });
+
   it("opens on focus when menuTrigger is focus", async () => {
     const onOpenChange = vi.fn();
     const tree = renderComponent({
