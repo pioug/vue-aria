@@ -1,14 +1,9 @@
 {
-  "generatedAt": "2026-02-12T18:30:24.388Z",
+  "generatedAt": "2026-02-12T18:30:53.952Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 4,
-  "availableLeafCount": 4,
+  "incompletePackageCount": 3,
+  "availableLeafCount": 3,
   "availableLeaves": [
-    {
-      "packageName": "@vue-spectrum/actionbar",
-      "upstreamPackageName": "@react-spectrum/actionbar",
-      "upstreamPath": "packages/@react-spectrum/actionbar"
-    },
     {
       "packageName": "@vue-spectrum/color",
       "upstreamPackageName": "@react-spectrum/color",
