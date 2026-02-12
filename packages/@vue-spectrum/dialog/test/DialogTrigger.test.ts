@@ -124,6 +124,83 @@ describe("DialogTrigger", () => {
     wrapper.unmount();
   });
 
+  it("supports external targetRef for popover scroll-close behavior", async () => {
+    const scrollContainer = document.createElement("div");
+    const target = document.createElement("div");
+    scrollContainer.appendChild(target);
+    document.body.appendChild(scrollContainer);
+
+    const wrapper = mountDialogTrigger({
+      type: "popover",
+      defaultOpen: true,
+      targetRef: target,
+    });
+
+    try {
+      await flushOverlay();
+      expect(document.body.querySelector("[data-testid=\"popover\"]")).not.toBeNull();
+
+      scrollContainer.dispatchEvent(new Event("scroll"));
+      await flushOverlay();
+
+      expect(document.body.querySelector("[role=\"dialog\"]")).toBeNull();
+    } finally {
+      wrapper.unmount();
+      scrollContainer.remove();
+    }
+  });
+
+  it("forwards hideArrow to popover-like content components", async () => {
+    const PopoverLike = defineComponent({
+      name: "PopoverLike",
+      props: {
+        hideArrow: {
+          type: Boolean as PropType<boolean | undefined>,
+          default: undefined,
+        },
+      },
+      setup(props) {
+        return () =>
+          h(
+            "div",
+            {
+              role: "dialog",
+              "data-testid": "popover-like",
+              "data-hide-arrow": props.hideArrow === true ? "true" : "false",
+            },
+            "contents"
+          );
+      },
+    });
+
+    const wrapper = mount(DialogTrigger, {
+      attachTo: document.body,
+      props: {
+        type: "popover",
+        hideArrow: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { type: "button" }, "Trigger"),
+          h(PopoverLike),
+        ],
+      },
+    });
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const popoverLike = document.body.querySelector(
+        "[data-testid=\"popover-like\"]"
+      ) as HTMLElement | null;
+      expect(popoverLike).not.toBeNull();
+      expect(popoverLike?.getAttribute("data-hide-arrow")).toBe("true");
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
   it("hides the dialog when pressing escape", async () => {
     const wrapper = mountDialogTrigger();
 

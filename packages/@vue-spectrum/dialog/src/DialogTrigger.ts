@@ -28,8 +28,10 @@ export interface SpectrumDialogTriggerProps {
   type?: DialogType | undefined;
   mobileType?: DialogType | undefined;
   placement?: Placement | undefined;
+  targetRef?: HTMLElement | undefined;
   isDismissable?: boolean | undefined;
   isKeyboardDismissDisabled?: boolean | undefined;
+  hideArrow?: boolean | undefined;
   isOpen?: boolean | undefined;
   defaultOpen?: boolean | undefined;
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
@@ -160,11 +162,19 @@ export const DialogTrigger = defineComponent({
       type: String as PropType<Placement | undefined>,
       default: undefined,
     },
+    targetRef: {
+      type: null as unknown as PropType<HTMLElement | undefined>,
+      default: undefined,
+    },
     isDismissable: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
     isKeyboardDismissDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    hideArrow: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
@@ -277,7 +287,7 @@ export const DialogTrigger = defineComponent({
     );
 
     const overlayPosition = useOverlayPosition({
-      targetRef: computed(() => triggerRef.value),
+      targetRef: computed(() => props.targetRef ?? triggerRef.value),
       overlayRef: computed(() =>
         shouldUsePopoverPositioning.value ? overlayRootRef.value : null
       ),
@@ -287,6 +297,9 @@ export const DialogTrigger = defineComponent({
       shouldUpdatePosition: computed(
         () => isOpen.value && shouldUsePopoverPositioning.value
       ),
+      onClose: () => {
+        setOpen(false);
+      },
     });
 
     const focusOverlay = () => {
@@ -570,6 +583,9 @@ export const DialogTrigger = defineComponent({
         componentEmitsEvent(contentNode, "close")
       ) {
         contentCloseProps.onClose = close;
+      }
+      if (componentAcceptsProp(contentNode, "hideArrow") && props.hideArrow !== undefined) {
+        contentCloseProps.hideArrow = props.hideArrow;
       }
 
       const renderedContent = cloneVNode(contentNode, contentCloseProps, true);

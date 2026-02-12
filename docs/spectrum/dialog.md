@@ -72,5 +72,6 @@ const component = h(DialogTrigger, null, {
 - Baseline `DialogContainer` dismissal semantics now cover `Escape` handling, keyboard-dismiss disabling, and outside-click dismissal rules (`isDismissable` gated).
 - Baseline `DialogTrigger` now matches upstream unmount safety behavior by warning in development when a non-popover dialog trigger unmounts while still open.
 - Baseline `DialogTrigger` and `DialogContainer` now support custom portal container targeting via `container` across modal, tray, and popover overlays.
+- Baseline `DialogTrigger` now supports custom popover anchor targeting via `targetRef`, popover scroll-dismiss behavior for anchored targets, and forwards `hideArrow` to compatible popover-like content wrappers.
 - Baseline `Dialog` label semantics now match explicit-prop precedence (`aria-labelledby` / `aria-label`) and automatically link `aria-labelledby` to the first heading when no explicit label props are supplied.
 - Advanced overlay positioning and complete React Spectrum parity for dialog internals remain in progress.
