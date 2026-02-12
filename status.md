@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 47 |
-| Passing tests | 47 |
+| Ported tests | 48 |
+| Passing tests | 48 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -159,7 +159,7 @@
 | @vue-stately/numberfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/numberfield | packages/@react-stately/numberfield |
 | @vue-stately/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/overlays | packages/@react-stately/overlays |
 | @vue-stately/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/radio | packages/@react-stately/radio |
-| @vue-stately/searchfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
+| @vue-stately/searchfield | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/searchfield | packages/@react-stately/searchfield |
 | @vue-stately/select | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/select | packages/@react-stately/select |
 | @vue-stately/selection | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/selection | packages/@react-stately/selection |
 | @vue-stately/slider | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/slider | packages/@react-stately/slider |
