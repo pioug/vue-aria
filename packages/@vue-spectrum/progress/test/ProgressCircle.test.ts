@@ -89,6 +89,20 @@ describe("ProgressCircle", () => {
     expect(wrapper.get("[data-testid=\"fillSubMask2\"]").attributes("style")).toBeUndefined();
   });
 
+  it("handles submask defaults", () => {
+    const wrapper = mount(ProgressCircle, {
+      props: {
+        ariaLabel: "Progress",
+        value: 0,
+      } as Record<string, unknown>,
+    });
+    const progressCircle = wrapper.get("[role=\"progressbar\"]");
+    expect(progressCircle.attributes("aria-valuenow")).toBe("0");
+    expect(progressCircle.attributes("aria-valuetext")).toBe("0%");
+    expect(wrapper.get("[data-testid=\"fillSubMask1\"]").attributes("style")).toBeUndefined();
+    expect(wrapper.get("[data-testid=\"fillSubMask2\"]").attributes("style")).toBeUndefined();
+  });
+
   it("shows quarter of the circle for 25%", () => {
     const wrapper = mount(ProgressCircle, {
       props: {
