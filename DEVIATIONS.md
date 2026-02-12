@@ -761,3 +761,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential menu/submenu focus and hover-intent timing differences until full composable conversion.
 - Removal plan: Replace React hook/event assumptions and inherited interaction flows with Vue-native composables/event typing and port upstream menu behavior tests for parity.
+
+- Package: `@vue-aria/select`
+- Upstream reference: `packages/@react-aria/select` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime/event semantics (`useMemo`, `useRef`, `useCallback`, React focus/change typing) together with inherited React-based menu/selection/form integration behavior.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime/type dependencies and potential select focus/menu trigger/form-sync timing differences until full composable conversion.
+- Removal plan: Replace React hook/event assumptions and inherited interaction/form flows with Vue-native composables/event typing and port upstream select behavior tests for parity.

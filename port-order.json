@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:58:40.055Z",
+  "generatedAt": "2026-02-12T17:59:34.736Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 59,
-  "availableLeafCount": 5,
+  "incompletePackageCount": 58,
+  "availableLeafCount": 4,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/combobox",
@@ -13,11 +13,6 @@
       "packageName": "@vue-aria/dnd",
       "upstreamPackageName": "@react-aria/dnd",
       "upstreamPath": "packages/@react-aria/dnd"
-    },
-    {
-      "packageName": "@vue-aria/select",
-      "upstreamPackageName": "@react-aria/select",
-      "upstreamPath": "packages/@react-aria/select"
     },
     {
       "packageName": "@vue-spectrum/provider",
