@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import {
   ToastContainer,
   ToastQueue,
@@ -121,6 +122,34 @@ describe("ToastContainer", () => {
     const toast = document.body.querySelector("[role=\"alertdialog\"]");
     const title = document.body.querySelector(".spectrum-Toast-content");
     expect(toast?.getAttribute("aria-labelledby")).toBe(title?.id);
+
+    wrapper.unmount();
+  });
+
+  it("localizes status icon and close labels from provider locale", async () => {
+    const wrapper = mount(Provider, {
+      attachTo: document.body,
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () => h(ToastContainer),
+      },
+    });
+
+    queueToast("positive");
+    await flushToasts();
+
+    const icon = document.body.querySelector("[role=\"img\"]");
+    expect(icon).not.toBeNull();
+    expect(icon?.getAttribute("aria-label")).toBe("Succès");
+
+    const closeButton = document.body.querySelector(
+      "[data-testid=\"rsp-Toast-closeButton\"]"
+    );
+    expect(closeButton).not.toBeNull();
+    expect(closeButton?.getAttribute("aria-label")).toBe("Fermer");
 
     wrapper.unmount();
   });

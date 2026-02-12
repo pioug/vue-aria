@@ -1,5 +1,6 @@
 import { computed, defineComponent, h, ref, type PropType } from "vue";
 import { useFocusRing } from "@vue-aria/focus";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useToast } from "@vue-aria/toast";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import type { QueuedToast, UseToastStateResult } from "@vue-aria/toast-state";
@@ -20,14 +21,24 @@ export interface SpectrumToastProps {
   state: UseToastStateResult<SpectrumToastValue>;
 }
 
-const ICON_LABELS: Record<
-  Exclude<SpectrumToastValue["variant"], "neutral">,
-  string
-> = {
-  info: "Info",
-  negative: "Error",
-  positive: "Success",
-};
+const TOAST_INTL_MESSAGES = {
+  "en-US": {
+    info: "Info",
+    negative: "Error",
+    positive: "Success",
+  },
+  "fr-FR": {
+    info: "Infos",
+    negative: "Erreur",
+    positive: "Succès",
+  },
+} as const;
+
+const ICON_LABEL_KEYS = {
+  info: "info",
+  negative: "negative",
+  positive: "positive",
+} as const satisfies Record<Exclude<SpectrumToastValue["variant"], "neutral">, keyof typeof TOAST_INTL_MESSAGES["en-US"]>;
 
 const ICON_SYMBOLS: Record<
   Exclude<SpectrumToastValue["variant"], "neutral">,
@@ -60,6 +71,7 @@ export const Toast = defineComponent({
       toastRef
     );
     const { focusProps, isFocusVisible } = useFocusRing();
+    const stringFormatter = useLocalizedStringFormatter(TOAST_INTL_MESSAGES);
 
     const onAction = (): void => {
       const { key, content } = props.toast;
@@ -72,7 +84,10 @@ export const Toast = defineComponent({
     return () => {
       const toast = props.toast;
       const variant = toast.content.variant;
-      const iconLabel = variant === "neutral" ? undefined : ICON_LABELS[variant];
+      const iconLabel =
+        variant === "neutral"
+          ? undefined
+          : stringFormatter.value.format(ICON_LABEL_KEYS[variant]);
       const iconSymbol = variant === "neutral" ? undefined : ICON_SYMBOLS[variant];
       const domProps = filterDOMProps(toast.content as Record<string, unknown>);
 

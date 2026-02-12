@@ -1,4 +1,5 @@
 import { computed, ref, toValue, watch } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps } from "@vue-aria/utils";
 import { useId } from "@vue-aria/ssr";
 import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
@@ -20,6 +21,15 @@ export interface UseToastResult {
   closeButtonProps: ReadonlyRef<Record<string, unknown>>;
 }
 
+const ARIA_TOAST_INTL_MESSAGES = {
+  "en-US": {
+    close: "Close",
+  },
+  "fr-FR": {
+    close: "Fermer",
+  },
+} as const;
+
 function resolveString(value: MaybeReactive<string | undefined> | undefined): string | undefined {
   if (value === undefined) {
     return undefined;
@@ -34,6 +44,7 @@ export function useToast<T>(
   _toastRef: MaybeReactive<HTMLElement | null | undefined>
 ): UseToastResult {
   const toast = computed(() => toValue(options.toast));
+  const stringFormatter = useLocalizedStringFormatter(ARIA_TOAST_INTL_MESSAGES);
 
   watch(
     () => [toast.value.timer, toast.value.timeout] as const,
@@ -81,7 +92,7 @@ export function useToast<T>(
   }));
 
   const closeButtonProps = computed<Record<string, unknown>>(() => ({
-    "aria-label": "Close",
+    "aria-label": stringFormatter.value.format("close"),
     onPress: () => {
       state.close(toast.value.key);
     },
