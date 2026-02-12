@@ -11,7 +11,7 @@
  */
 
 import {TooltipTriggerProps} from '@vue-types/tooltip';
-import {onScopeDispose, ref} from 'vue';
+import {useEffect, useRef} from 'react';
 import {useOverlayTriggerState} from '@vue-stately/overlays';
 
 const TOOLTIP_DELAY = 1500; // this seems to be a 1.5 second delay, check with design
@@ -43,9 +43,9 @@ let globalCooldownTimeout: ReturnType<typeof setTimeout> | null = null;
  */
 export function useTooltipTriggerState(props: TooltipTriggerProps = {}): TooltipTriggerState {
   let {delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_COOLDOWN} = props;
-  let {isOpen, open, close} = useOverlayTriggerState(props);
+  let overlayState = useOverlayTriggerState(props);
   let id = `${++tooltipId}`;
-  let closeTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+  let closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   let ensureTooltipEntry = () => {
     tooltips[id] = hideTooltip;
@@ -61,14 +61,14 @@ export function useTooltipTriggerState(props: TooltipTriggerProps = {}): Tooltip
   };
 
   let showTooltip = () => {
-    if (closeTimeout.value) {
-      clearTimeout(closeTimeout.value);
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
     }
-    closeTimeout.value = null;
+    closeTimeout.current = null;
     closeOpenTooltips();
     ensureTooltipEntry();
     globalWarmedUp = true;
-    open();
+    overlayState.open();
     if (globalWarmUpTimeout) {
       clearTimeout(globalWarmUpTimeout);
       globalWarmUpTimeout = null;
@@ -81,15 +81,15 @@ export function useTooltipTriggerState(props: TooltipTriggerProps = {}): Tooltip
 
   let hideTooltip = (immediate?: boolean) => {
     if (immediate || closeDelay <= 0) {
-      if (closeTimeout.value) {
-        clearTimeout(closeTimeout.value);
+      if (closeTimeout.current) {
+        clearTimeout(closeTimeout.current);
       }
-      closeTimeout.value = null;
-      close();
-    } else if (!closeTimeout.value) {
-      closeTimeout.value = setTimeout(() => {
-        closeTimeout.value = null;
-        close();
+      closeTimeout.current = null;
+      overlayState.close();
+    } else if (!closeTimeout.current) {
+      closeTimeout.current = setTimeout(() => {
+        closeTimeout.current = null;
+        overlayState.close();
       }, closeDelay);
     }
 
@@ -112,32 +112,34 @@ export function useTooltipTriggerState(props: TooltipTriggerProps = {}): Tooltip
   let warmupTooltip = () => {
     closeOpenTooltips();
     ensureTooltipEntry();
-    if (!isOpen && !globalWarmUpTimeout && !globalWarmedUp) {
+    if (!overlayState.isOpen && !globalWarmUpTimeout && !globalWarmedUp) {
       globalWarmUpTimeout = setTimeout(() => {
         globalWarmUpTimeout = null;
         globalWarmedUp = true;
         showTooltip();
       }, delay);
-    } else if (!isOpen) {
+    } else if (!overlayState.isOpen) {
       showTooltip();
     }
   };
 
-  onScopeDispose(() => {
-    if (closeTimeout.value) {
-      clearTimeout(closeTimeout.value);
-    }
-    if (tooltips[id]) {
-      delete tooltips[id];
-    }
-  });
+  useEffect(() => {
+    return () => {
+      if (closeTimeout.current) {
+        clearTimeout(closeTimeout.current);
+      }
+      if (tooltips[id]) {
+        delete tooltips[id];
+      }
+    };
+  }, [id]);
 
   return {
     get isOpen() {
-      return isOpen;
+      return overlayState.isOpen;
     },
     open: (immediate) => {
-      if (!immediate && delay > 0 && !closeTimeout.value) {
+      if (!immediate && delay > 0 && !closeTimeout.current) {
         warmupTooltip();
       } else {
         showTooltip();
