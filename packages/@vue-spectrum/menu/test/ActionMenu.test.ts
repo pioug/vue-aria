@@ -1,7 +1,8 @@
 import { render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import { nextTick } from "vue";
+import { h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "@vue-spectrum/provider";
 import { ActionMenu, type SpectrumMenuItemData } from "../src";
 
 const items: SpectrumMenuItemData[] = [
@@ -44,6 +45,24 @@ describe("ActionMenu", () => {
 
     const trigger = tree.getByRole("button", { name: "Custom Aria Label" });
     expect(trigger.getAttribute("aria-label")).toBe("Custom Aria Label");
+  });
+
+  it("localizes default aria label from provider locale", () => {
+    const tree = render(Provider, {
+      props: {
+        theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+        locale: "fr-FR",
+      },
+      slots: {
+        default: () =>
+          h(ActionMenu, {
+            items,
+          }),
+      },
+    });
+
+    const trigger = tree.getByRole("button", { name: "Autres actions" });
+    expect(trigger.getAttribute("aria-label")).toBe("Autres actions");
   });
 
   it("prioritizes aria-labelledby over default aria-label", () => {

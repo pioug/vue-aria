@@ -1,4 +1,5 @@
 import { defineComponent, h, type PropType } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type { Placement } from "@vue-aria/overlays";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { MenuTrigger, type SpectrumMenuTriggerProps } from "./MenuTrigger";
@@ -6,6 +7,15 @@ import { MenuTrigger, type SpectrumMenuTriggerProps } from "./MenuTrigger";
 export interface SpectrumActionMenuProps extends SpectrumMenuTriggerProps {
   align?: "start" | "end" | undefined;
 }
+
+const ACTION_MENU_INTL_MESSAGES = {
+  "en-US": {
+    moreActions: "More actions",
+  },
+  "fr-FR": {
+    moreActions: "Autres actions",
+  },
+} as const;
 
 export const ActionMenu = defineComponent({
   name: "ActionMenu",
@@ -129,6 +139,8 @@ export const ActionMenu = defineComponent({
     },
   },
   setup(props, { attrs, slots }) {
+    const stringFormatter = useLocalizedStringFormatter(ACTION_MENU_INTL_MESSAGES);
+
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
       const triggerAriaLabelledby =
@@ -143,7 +155,7 @@ export const ActionMenu = defineComponent({
           : props.ariaLabel ??
             props["aria-label"] ??
             (attrsRecord["aria-label"] as string | undefined) ??
-            "More actions");
+            stringFormatter.value.format("moreActions"));
       const placement =
         props.placement ?? (props.align === "end" ? "bottom end" : "bottom start");
 
