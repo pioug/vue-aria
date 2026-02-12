@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-02-12T18:05:55.492Z",
+  "generatedAt": "2026-02-12T18:06:13.454Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 51,
-  "availableLeafCount": 17,
+  "incompletePackageCount": 50,
+  "availableLeafCount": 16,
   "availableLeaves": [
     {
       "packageName": "@vue-spectrum/accordion",
       "upstreamPackageName": "@react-spectrum/accordion",
       "upstreamPath": "packages/@react-spectrum/accordion"
-    },
-    {
-      "packageName": "@vue-spectrum/buttongroup",
-      "upstreamPackageName": "@react-spectrum/buttongroup",
-      "upstreamPath": "packages/@react-spectrum/buttongroup"
     },
     {
       "packageName": "@vue-spectrum/dropzone",

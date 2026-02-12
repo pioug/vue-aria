@@ -84,7 +84,7 @@
 | @vue-spectrum/badge | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/badge | packages/@react-spectrum/badge |
 | @vue-spectrum/breadcrumbs | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/breadcrumbs | packages/@react-spectrum/breadcrumbs |
 | @vue-spectrum/button | not_started | 5 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/button | packages/@react-spectrum/button |
-| @vue-spectrum/buttongroup | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/buttongroup | packages/@react-spectrum/buttongroup |
+| @vue-spectrum/buttongroup | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/buttongroup | packages/@react-spectrum/buttongroup |
 | @vue-spectrum/calendar | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/calendar | packages/@react-spectrum/calendar |
 | @vue-spectrum/card | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/card | packages/@react-spectrum/card |
 | @vue-spectrum/checkbox | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/checkbox | packages/@react-spectrum/checkbox |
