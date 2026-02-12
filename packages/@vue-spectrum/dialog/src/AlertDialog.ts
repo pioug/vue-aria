@@ -1,4 +1,4 @@
-import { defineComponent, h, type PropType } from "vue";
+import { defineComponent, h, nextTick, onMounted, ref, type PropType } from "vue";
 import { filterDOMProps } from "@vue-aria/utils";
 import { classNames, type ClassValue } from "@vue-spectrum/utils";
 import { Button } from "@vue-spectrum/button";
@@ -104,6 +104,7 @@ export const AlertDialog = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const context = useDialogContext();
+    const dialogRef = ref<{ UNSAFE_getDOMNode?: () => HTMLElement | null } | null>(null);
 
     const close = (): void => {
       context?.onClose?.();
@@ -113,6 +114,25 @@ export const AlertDialog = defineComponent({
       close();
       action?.();
     };
+
+    onMounted(() => {
+      void nextTick(() => {
+        const autoFocusSelector =
+          props.autoFocusButton === "primary"
+            ? "[data-testid=\"rsp-AlertDialog-confirmButton\"]"
+            : props.autoFocusButton === "secondary"
+              ? "[data-testid=\"rsp-AlertDialog-secondaryButton\"]"
+              : props.autoFocusButton === "cancel"
+                ? "[data-testid=\"rsp-AlertDialog-cancelButton\"]"
+                : null;
+        const dialogElement = dialogRef.value?.UNSAFE_getDOMNode?.() ?? null;
+        const autoFocusTarget =
+          autoFocusSelector && dialogElement
+            ? (dialogElement.querySelector(autoFocusSelector) as HTMLElement | null)
+            : null;
+        autoFocusTarget?.focus();
+      });
+    });
 
     expose({
       UNSAFE_getDOMNode: () => null,
@@ -126,6 +146,9 @@ export const AlertDialog = defineComponent({
         Dialog,
         {
           ...domProps,
+          ref: (value: unknown) => {
+            dialogRef.value = value as { UNSAFE_getDOMNode?: () => HTMLElement | null } | null;
+          },
           role: "alertdialog",
           size: "M",
           UNSAFE_className: classNames(
@@ -163,7 +186,7 @@ export const AlertDialog = defineComponent({
                         Button,
                         {
                           variant: "secondary",
-                          autoFocus: props.autoFocusButton === "cancel",
+                          autoFocus: props.autoFocusButton === "cancel" ? true : undefined,
                           onPress: () => runAction(props.onCancel),
                           "data-testid": "rsp-AlertDialog-cancelButton",
                         },
@@ -178,7 +201,8 @@ export const AlertDialog = defineComponent({
                         {
                           variant: "secondary",
                           isDisabled: props.isSecondaryActionDisabled,
-                          autoFocus: props.autoFocusButton === "secondary",
+                          autoFocus:
+                            props.autoFocusButton === "secondary" ? true : undefined,
                           onPress: () => runAction(props.onSecondaryAction),
                           "data-testid": "rsp-AlertDialog-secondaryButton",
                         },
@@ -192,7 +216,7 @@ export const AlertDialog = defineComponent({
                     {
                       variant: confirmVariant,
                       isDisabled: props.isPrimaryActionDisabled,
-                      autoFocus: props.autoFocusButton === "primary",
+                      autoFocus: props.autoFocusButton === "primary" ? true : undefined,
                       onPress: () => runAction(props.onPrimaryAction),
                       "data-testid": "rsp-AlertDialog-confirmButton",
                     },

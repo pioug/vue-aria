@@ -43,6 +43,12 @@ export function useDialog(
     }
 
     if (!nodeContains(dialog, document.activeElement)) {
+      const autoFocusTarget = dialog.querySelector<HTMLElement>("[autofocus]");
+      if (autoFocusTarget) {
+        focusSafely(autoFocusTarget);
+        return;
+      }
+
       focusSafely(dialog);
 
       const timeout = window.setTimeout(() => {

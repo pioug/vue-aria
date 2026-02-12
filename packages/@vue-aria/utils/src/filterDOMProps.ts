@@ -29,6 +29,8 @@ const DOM_PROP_NAMES = new Set([
   "placeholder",
   "autoComplete",
   "autocomplete",
+  "autoFocus",
+  "autofocus",
   "autoCorrect",
   "autocorrect",
   "spellCheck",
