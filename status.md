@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 142 |
-| Passing tests | 142 |
+| Ported tests | 145 |
+| Passing tests | 145 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -114,7 +114,7 @@
 | @vue-spectrum/overlays | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/overlays | packages/@react-spectrum/overlays |
 | @vue-spectrum/picker | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/picker | packages/@react-spectrum/picker |
 | @vue-spectrum/progress | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/progress | packages/@react-spectrum/progress |
-| @vue-spectrum/provider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/provider | packages/@react-spectrum/provider |
+| @vue-spectrum/provider | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/provider | packages/@react-spectrum/provider |
 | @vue-spectrum/radio | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/radio | packages/@react-spectrum/radio |
 | @vue-spectrum/s2 | complete | 19 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/s2 | packages/@react-spectrum/s2 |
 | @vue-spectrum/searchfield | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/searchfield | packages/@react-spectrum/searchfield |
