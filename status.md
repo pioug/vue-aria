@@ -151,7 +151,7 @@
 | @vue-stately/disclosure | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |
 | @vue-stately/dnd | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/dnd | packages/@react-stately/dnd |
 | @vue-stately/flags | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/flags | packages/@react-stately/flags |
-| @vue-stately/form | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/form | packages/@react-stately/form |
+| @vue-stately/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/form | packages/@react-stately/form |
 | @vue-stately/grid | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/grid | packages/@react-stately/grid |
 | @vue-stately/layout | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/layout | packages/@react-stately/layout |
 | @vue-stately/list | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/list | packages/@react-stately/list |

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:17:17.559Z",
+  "generatedAt": "2026-02-12T16:20:20.640Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 127,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 126,
+  "availableLeafCount": 12,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -25,6 +25,11 @@
       "upstreamPath": "packages/@react-stately/calendar"
     },
     {
+      "packageName": "@vue-stately/checkbox",
+      "upstreamPackageName": "@react-stately/checkbox",
+      "upstreamPath": "packages/@react-stately/checkbox"
+    },
+    {
       "packageName": "@vue-stately/collections",
       "upstreamPackageName": "@react-stately/collections",
       "upstreamPath": "packages/@react-stately/collections"
@@ -35,9 +40,19 @@
       "upstreamPath": "packages/@react-stately/data"
     },
     {
-      "packageName": "@vue-stately/form",
-      "upstreamPackageName": "@react-stately/form",
-      "upstreamPath": "packages/@react-stately/form"
+      "packageName": "@vue-stately/datepicker",
+      "upstreamPackageName": "@react-stately/datepicker",
+      "upstreamPath": "packages/@react-stately/datepicker"
+    },
+    {
+      "packageName": "@vue-stately/numberfield",
+      "upstreamPackageName": "@react-stately/numberfield",
+      "upstreamPath": "packages/@react-stately/numberfield"
+    },
+    {
+      "packageName": "@vue-stately/radio",
+      "upstreamPackageName": "@react-stately/radio",
+      "upstreamPath": "packages/@react-stately/radio"
     },
     {
       "packageName": "@vue-stately/slider",
