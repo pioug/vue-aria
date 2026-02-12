@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-12T16:40:14.844Z",
+  "generatedAt": "2026-02-12T16:41:44.600Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 114,
+  "incompletePackageCount": 113,
   "availableLeafCount": 10,
   "availableLeaves": [
     {
@@ -40,14 +40,14 @@
       "upstreamPath": "packages/@react-stately/dnd"
     },
     {
-      "packageName": "@vue-stately/grid",
-      "upstreamPackageName": "@react-stately/grid",
-      "upstreamPath": "packages/@react-stately/grid"
-    },
-    {
       "packageName": "@vue-stately/list",
       "upstreamPackageName": "@react-stately/list",
       "upstreamPath": "packages/@react-stately/list"
+    },
+    {
+      "packageName": "@vue-stately/table",
+      "upstreamPackageName": "@react-stately/table",
+      "upstreamPath": "packages/@react-stately/table"
     },
     {
       "packageName": "@vue-stately/virtualizer",
