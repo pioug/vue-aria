@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:22:38.362Z",
+  "generatedAt": "2026-02-12T17:24:30.358Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 88,
-  "availableLeafCount": 9,
+  "incompletePackageCount": 87,
+  "availableLeafCount": 8,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/breadcrumbs",
@@ -43,11 +43,6 @@
       "packageName": "@vue-aria/toast",
       "upstreamPackageName": "@react-aria/toast",
       "upstreamPath": "packages/@react-aria/toast"
-    },
-    {
-      "packageName": "@vue-aria/virtualizer",
-      "upstreamPackageName": "@react-aria/virtualizer",
-      "upstreamPath": "packages/@react-aria/virtualizer"
     }
   ],
   "hasCycles": false,

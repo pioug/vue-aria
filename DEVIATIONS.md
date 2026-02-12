@@ -558,3 +558,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential tooltip open/close timing differences until full composable conversion.
 - Removal plan: Replace React hook-based trigger wiring with Vue lifecycle/ref patterns and port upstream tooltip behavior tests for parity.
+
+- Package: `@vue-aria/virtualizer`
+- Upstream reference: `packages/@react-aria/virtualizer` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React runtime rendering/hook semantics (`forwardRef`, `useCallback`, `useEffect`, `useRef`, `useState`, `flushSync`, JSX) across scroll view and virtualizer item wrappers.
+- Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
+- User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential scroll/measurement timing differences until full component conversion.
+- Removal plan: Replace React rendering/hook flows with Vue component/composable equivalents and port upstream virtualizer behavior tests for parity.
