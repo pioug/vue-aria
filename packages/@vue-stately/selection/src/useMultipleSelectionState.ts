@@ -30,6 +30,14 @@ function equalSets(setA, setB) {
   return true;
 }
 
+function equalSelections(selectionA, selectionB) {
+  if (selectionA === 'all' || selectionB === 'all') {
+    return selectionA === selectionB;
+  }
+
+  return equalSets(selectionA, selectionB);
+}
+
 export interface MultipleSelectionStateProps extends MultipleSelection {
   /** How multiple selection should behave in the collection. */
   selectionBehavior?: SelectionBehavior,
@@ -52,19 +60,19 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
   } = props;
 
   // We want synchronous updates to `isFocused` and `focusedKey` after their setters are called.
-  // But we also need to trigger a react re-render. So, we have both a ref (sync) and state (async).
+  // Keep refs as the source of truth to avoid extra rerenders resetting non-React controlled state.
   let isFocusedRef = useRef(false);
-  let [, setFocused] = useState(false);
   let focusedKeyRef = useRef<Key | null>(null);
   let childFocusStrategyRef = useRef<FocusStrategy | null>(null);
-  let [, setFocusedKey] = useState<Key | null>(null);
   let selectedKeysProp = useMemo(() => convertSelection(props.selectedKeys), [props.selectedKeys]);
   let defaultSelectedKeys = useMemo(() => convertSelection(props.defaultSelectedKeys, new Selection()), [props.defaultSelectedKeys]);
-  let [selectedKeys, setSelectedKeys] = useControlledState(
+  let [selectedKeys, setSelectedKeysState] = useControlledState(
     selectedKeysProp,
     defaultSelectedKeys!,
     props.onSelectionChange
   );
+  let selectedKeysRef = useRef(selectedKeys.value);
+  selectedKeysRef.current = selectedKeys.value;
   let disabledKeysProp = useMemo(() =>
     props.disabledKeys ? new Set(props.disabledKeys) : new Set<Key>()
   , [props.disabledKeys]);
@@ -72,7 +80,7 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
 
   // If the selectionBehavior prop is set to replace, but the current state is toggle (e.g. due to long press
   // to enter selection mode on touch), and the selection becomes empty, reset the selection behavior.
-  if (selectionBehaviorProp === 'replace' && selectionBehavior === 'toggle' && typeof selectedKeys === 'object' && selectedKeys.size === 0) {
+  if (selectionBehaviorProp === 'replace' && selectionBehavior === 'toggle' && selectedKeysRef.current !== 'all' && selectedKeysRef.current.size === 0) {
     setSelectionBehavior('replace');
   }
 
@@ -95,7 +103,6 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
     },
     setFocused(f) {
       isFocusedRef.current = f;
-      setFocused(f);
     },
     get focusedKey() {
       return focusedKeyRef.current;
@@ -106,12 +113,15 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
     setFocusedKey(k, childFocusStrategy = 'first') {
       focusedKeyRef.current = k;
       childFocusStrategyRef.current = childFocusStrategy;
-      setFocusedKey(k);
     },
-    selectedKeys,
+    get selectedKeys() {
+      return selectedKeysRef.current;
+    },
     setSelectedKeys(keys) {
-      if (allowDuplicateSelectionEvents || !equalSets(keys, selectedKeys)) {
-        setSelectedKeys(keys);
+      let currentSelection = selectedKeysRef.current;
+      if (allowDuplicateSelectionEvents || !equalSelections(keys, currentSelection)) {
+        selectedKeysRef.current = keys;
+        setSelectedKeysState(keys);
       }
     },
     disabledKeys: disabledKeysProp,

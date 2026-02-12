@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 70 |
-| Passing tests | 70 |
+| Ported tests | 71 |
+| Passing tests | 71 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -145,7 +145,7 @@
 | @vue-stately/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/checkbox | packages/@react-stately/checkbox |
 | @vue-stately/collections | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/collections | packages/@react-stately/collections |
 | @vue-stately/color | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/color | packages/@react-stately/color |
-| @vue-stately/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/combobox | packages/@react-stately/combobox |
+| @vue-stately/combobox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/combobox | packages/@react-stately/combobox |
 | @vue-stately/data | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/data | packages/@react-stately/data |
 | @vue-stately/datepicker | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/datepicker | packages/@react-stately/datepicker |
 | @vue-stately/disclosure | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-stately/disclosure | packages/@react-stately/disclosure |

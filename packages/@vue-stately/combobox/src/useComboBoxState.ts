@@ -101,7 +101,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
 
   let [showAllItems, setShowAllItems] = useState(false);
   let [isFocused, setFocusedState] = useState(false);
-  let [focusStrategy, setFocusStrategy] = useState<FocusStrategy | null>(null);
+  let focusStrategyRef = useRef<FocusStrategy | null>(null);
 
   let defaultValue = useMemo(() => {
     return props.defaultValue !== undefined ? props.defaultValue : (selectionMode === 'single' ? props.defaultSelectedKey ?? null : []) as ValueType<M>;
@@ -110,8 +110,9 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     return props.value !== undefined ? props.value : (selectionMode === 'single' ? props.selectedKey : undefined) as ValueType<M>;
   }, [props.value, props.selectedKey, selectionMode]);
   let [controlledValue, setControlledValue] = useControlledState<Key | readonly Key[] | null>(value, defaultValue, props.onChange as any);
+  let controlledValueState = controlledValue.value;
   // Only display the first selected item if in single selection mode but the value is an array.
-  let displayValue: ValueType<M> = selectionMode === 'single' && Array.isArray(controlledValue) ? controlledValue[0] : controlledValue;
+  let displayValue: ValueType<M> = selectionMode === 'single' && Array.isArray(controlledValueState) ? controlledValueState[0] : controlledValueState;
 
   let setValue = (value: Key | Key[] | null) => {
     if (selectionMode === 'single') {
@@ -177,7 +178,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     props.onInputChange
   );
   let [initialValue] = useState(displayValue);
-  let [initialInputValue] = useState(inputValue);
+  let [initialInputValue] = useState(inputValue.value);
 
   // Preserve original collection so we can show all items on demand
   let originalCollection = collection;
@@ -185,8 +186,8 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     // No default filter if items are controlled.
     props.items != null || !defaultFilter
       ? collection
-      : filterCollection(collection, inputValue, defaultFilter)
-  ), [collection, inputValue, defaultFilter, props.items]);
+      : filterCollection(collection, inputValue.value, defaultFilter)
+  ), [collection, inputValue.value, defaultFilter, props.items]);
   let [lastCollection, setLastCollection] = useState(filteredCollection);
 
   // Track what action is attempting to open the menu
@@ -215,7 +216,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
       }
 
       menuOpenTrigger.current = trigger;
-      setFocusStrategy(focusStrategy);
+      focusStrategyRef.current = focusStrategy;
       triggerState.open();
     }
   };
@@ -251,7 +252,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
       updateLastCollection();
     }
 
-    setFocusStrategy(focusStrategy);
+    focusStrategyRef.current = focusStrategy;
     triggerState.toggle();
   }, [triggerState, updateLastCollection]);
 
@@ -262,7 +263,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     }
   }, [triggerState, updateLastCollection]);
 
-  let [lastValue, setLastValue] = useState(inputValue);
+  let [lastValue, setLastValue] = useState(inputValue.value);
   let resetInputValue = () => {
     let itemText = selectedKey != null ? collection.getItem(selectedKey)?.textValue ?? '' : '';
     setLastValue(itemText);
@@ -282,7 +283,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
       isFocused &&
       (filteredCollection.size > 0 || allowsEmptyCollection) &&
       !triggerState.isOpen &&
-      inputValue !== lastValue &&
+      inputValue.value !== lastValue &&
       menuTrigger !== 'manual'
     ) {
       open(null, 'input');
@@ -309,13 +310,13 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     }
 
     // Clear focused key when input value changes and display filtered collection again.
-    if (inputValue !== lastValue) {
+    if (inputValue.value !== lastValue) {
       selectionManager.setFocusedKey(null);
       setShowAllItems(false);
 
       // Set value to null when the user clears the input.
       // If controlled, this is the application developer's responsibility.
-      if (selectionMode === 'single' && inputValue === '' && (props.inputValue === undefined || value === undefined)) {
+      if (selectionMode === 'single' && inputValue.value === '' && (props.inputValue === undefined || value === undefined)) {
         setValue(null);
       }
     }
@@ -328,8 +329,8 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
       (props.inputValue === undefined || value === undefined)
     ) {
       resetInputValue();
-    } else if (lastValue !== inputValue) {
-      setLastValue(inputValue);
+    } else if (lastValue !== inputValue.value) {
+      setLastValue(inputValue.value);
     }
 
     // Update the inputValue if the selected item's text changes from its last tracked value.
@@ -350,7 +351,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
 
   let validation = useFormValidationState({
     ...props,
-    value: useMemo(() => Array.isArray(displayValue) && displayValue.length === 0 ? null : ({inputValue, value: displayValue as any, selectedKey}), [inputValue, selectedKey, displayValue])
+    value: useMemo(() => Array.isArray(displayValue) && displayValue.length === 0 ? null : ({inputValue: inputValue.value, value: displayValue as any, selectedKey}), [inputValue.value, selectedKey, displayValue])
   });
 
   // Revert input value and close menu
@@ -389,7 +390,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
   const commitValue = () => {
     if (allowsCustomValue) {
       const itemText = selectedKey != null ? collection.getItem(selectedKey)?.textValue ?? '' : '';
-      (inputValue === itemText) ? commitSelection() : commitCustomValue();
+      (inputValue.value === itemText) ? commitSelection() : commitCustomValue();
     } else {
       // Reset inputValue and close menu
       commitSelection();
@@ -410,10 +411,10 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     }
   };
 
-  let valueOnFocus = useRef(inputValue);
+  let valueOnFocus = useRef(inputValue.value);
   let setFocused = (isFocused: boolean) => {
     if (isFocused) {
-      valueOnFocus.current = inputValue;
+      valueOnFocus.current = inputValue.value;
       if (menuTrigger === 'focus' && !props.isReadOnly) {
         open(null, 'focus');
       }
@@ -422,7 +423,7 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
         commitValue();
       }
 
-      if (inputValue !== valueOnFocus.current) {
+      if (inputValue.value !== valueOnFocus.current) {
         validation.commitValidation();
       }
     }
@@ -447,7 +448,12 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
   return {
     ...validation,
     ...triggerState,
-    focusStrategy,
+    get isOpen() {
+      return triggerState.isOpen;
+    },
+    get focusStrategy() {
+      return focusStrategyRef.current;
+    },
     toggle,
     open,
     close: commitValue,
@@ -464,7 +470,9 @@ export function useComboBoxState<T extends object, M extends SelectionMode = 'si
     setFocused,
     selectedItem: selectedItems[0] ?? null,
     collection: displayedCollection,
-    inputValue,
+    get inputValue() {
+      return inputValue.value;
+    },
     defaultInputValue: getDefaultInputValue(props.defaultInputValue, defaultSelectedKey, collection) ?? initialInputValue,
     setInputValue,
     commit,
