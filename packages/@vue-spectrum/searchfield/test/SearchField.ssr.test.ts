@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { SearchField } from "../src";
 
 describe("SearchField SSR", () => {
-  it("renders search field on the server", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "SearchFieldSSRApp",
       setup() {
