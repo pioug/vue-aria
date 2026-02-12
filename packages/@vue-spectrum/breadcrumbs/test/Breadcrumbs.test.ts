@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { render, within } from "@testing-library/vue";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { h, nextTick, defineComponent } from "vue";
+import { h, nextTick, defineComponent, ref } from "vue";
 import { BreadcrumbItem, Breadcrumbs, Item } from "../src";
 
 interface BreadcrumbFixtureItem {
@@ -402,6 +402,44 @@ describe("Breadcrumbs", () => {
     const { getByRole } = render(App);
     const breadcrumbs = getByRole("navigation");
     expect(breadcrumbs.getAttribute("aria-describedby")).toBe("test-description");
+  });
+
+  it("supports aria-label", () => {
+    const { getByRole } = renderBreadcrumbs({
+      "aria-label": "breadcrumbs-test",
+    });
+
+    const breadcrumbs = getByRole("navigation");
+    expect(breadcrumbs.getAttribute("aria-label")).toBe("breadcrumbs-test");
+  });
+
+  it("supports forwarded ref UNSAFE_getDOMNode", async () => {
+    const breadcrumbsRef = ref<{
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    } | null>(null);
+
+    const App = defineComponent({
+      name: "BreadcrumbRefApp",
+      setup() {
+        return () =>
+          h(
+            Breadcrumbs,
+            {
+              ref: breadcrumbsRef,
+              "aria-label": "breadcrumbs-test",
+            },
+            {
+              default: () => [h(BreadcrumbItem, null, () => "Folder 1")],
+            }
+          );
+      },
+    });
+
+    const { getByRole } = render(App);
+    await settle();
+    const breadcrumbs = getByRole("navigation");
+    expect(typeof breadcrumbsRef.value?.UNSAFE_getDOMNode).toBe("function");
+    expect(breadcrumbsRef.value?.UNSAFE_getDOMNode()).toBe(breadcrumbs);
   });
 
   it("supports custom props", () => {
