@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T16:58:45.776Z",
+  "generatedAt": "2026-02-12T17:00:29.496Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 103,
-  "availableLeafCount": 6,
+  "incompletePackageCount": 102,
+  "availableLeafCount": 5,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -23,11 +23,6 @@
       "packageName": "@vue-stately/table",
       "upstreamPackageName": "@react-stately/table",
       "upstreamPath": "packages/@react-stately/table"
-    },
-    {
-      "packageName": "@vue-types/card",
-      "upstreamPackageName": "@react-types/card",
-      "upstreamPath": "packages/@react-types/card"
     },
     {
       "packageName": "@vue-types/sidenav",

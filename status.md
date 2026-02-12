@@ -181,7 +181,7 @@
 | @vue-types/button | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/button | packages/@react-types/button |
 | @vue-types/buttongroup | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/buttongroup | packages/@react-types/buttongroup |
 | @vue-types/calendar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/calendar | packages/@react-types/calendar |
-| @vue-types/card | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/card | packages/@react-types/card |
+| @vue-types/card | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/card | packages/@react-types/card |
 | @vue-types/checkbox | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/checkbox | packages/@react-types/checkbox |
 | @vue-types/color | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/color | packages/@react-types/color |
 | @vue-types/combobox | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/combobox | packages/@react-types/combobox |

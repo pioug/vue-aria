@@ -460,3 +460,10 @@ Track every divergence from upstream in this file.
 - Reason: The package was ported incrementally to preserve API/dependency parity with upstream while unblocking dependent packages.
 - User impact: This package is transitional and not yet Vue-native; consumers should expect React runtime dependencies and potential visible-view update timing differences until full composable conversion.
 - Removal plan: Replace React hook-based virtualizer state composition with Vue refs/computed/watch/lifecycle equivalents and port upstream virtualizer tests for parity.
+
+- Package: `@vue-types/card`
+- Upstream reference: `packages/@react-types/card` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Structural port is complete, but declarations remain React-centric (`ReactNode` and layout typing tied to React virtualizer contracts).
+- Reason: This package depends on transitional shared/provider typing layers and upstream React-specific card type contracts.
+- User impact: Consumers may still need React type packages for full type resolution in card view typing surfaces.
+- Removal plan: Replace React-centric declaration types with Vue-native node/component typing aliases after shared/provider type remapping is complete.
