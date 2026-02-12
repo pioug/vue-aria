@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 72 |
-| Passing tests | 72 |
+| Ported tests | 73 |
+| Passing tests | 73 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -142,7 +142,7 @@
 | @vue-spectrum/well | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/well | packages/@react-spectrum/well |
 | @vue-stately/autocomplete | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/autocomplete | packages/@react-stately/autocomplete |
 | @vue-stately/calendar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/calendar | packages/@react-stately/calendar |
-| @vue-stately/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/checkbox | packages/@react-stately/checkbox |
+| @vue-stately/checkbox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/checkbox | packages/@react-stately/checkbox |
 | @vue-stately/collections | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/collections | packages/@react-stately/collections |
 | @vue-stately/color | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/color | packages/@react-stately/color |
 | @vue-stately/combobox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/combobox | packages/@react-stately/combobox |
