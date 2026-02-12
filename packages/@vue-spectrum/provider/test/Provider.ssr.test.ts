@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_SPECTRUM_THEME_CLASS_MAP, Provider } from "../src";
 
 describe("Provider SSR", () => {
-  it("renders without errors on the server", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "ProviderSSRApp",
       setup() {

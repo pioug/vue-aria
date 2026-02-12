@@ -1,11 +1,12 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, nextTick } from "vue";
+import { computed, defineComponent, h, nextTick, watch } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   Provider,
   useProvider,
 } from "../src";
 import type { SpectrumTheme } from "../src";
+import { useMatchedBreakpoints } from "@vue-spectrum/utils";
 
 const theme: SpectrumTheme = {
   global: { spectrum: "spectrum" },
@@ -33,6 +34,87 @@ function installMatchMediaStub(activeQueries: string[] = []): void {
   );
 }
 
+function installMutableMatchMediaStub(initial: Record<string, boolean>) {
+  const state = new Map<string, boolean>(Object.entries(initial));
+  const listeners = new Map<string, Set<(event: MediaQueryListEvent) => void>>();
+
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn((query: string) => {
+      if (!listeners.has(query)) {
+        listeners.set(query, new Set());
+      }
+
+      const queryListeners = listeners.get(query)!;
+      return {
+        get matches() {
+          return Boolean(state.get(query));
+        },
+        media: query,
+        onchange: null,
+        addListener: (listener: (event: MediaQueryListEvent) => void) => {
+          queryListeners.add(listener);
+        },
+        removeListener: (listener: (event: MediaQueryListEvent) => void) => {
+          queryListeners.delete(listener);
+        },
+        addEventListener: (_type: "change", listener: (event: MediaQueryListEvent) => void) => {
+          queryListeners.add(listener);
+        },
+        removeEventListener: (
+          _type: "change",
+          listener: (event: MediaQueryListEvent) => void
+        ) => {
+          queryListeners.delete(listener);
+        },
+        dispatchEvent: vi.fn(),
+      };
+    })
+  );
+
+  return {
+    setQueryMatch(query: string, matches: boolean): void {
+      state.set(query, matches);
+      const event = {
+        matches,
+        media: query,
+      } as MediaQueryListEvent;
+      for (const listener of listeners.get(query) ?? []) {
+        listener(event);
+      }
+    },
+  };
+}
+
+function installViewportMatchMedia(initialWidth = 800) {
+  let width = initialWidth;
+
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn((query: string) => {
+      const match = /\(min-width:\s*(\d+)px\)/.exec(query);
+      const minWidth = match ? Number(match[1]) : Number.POSITIVE_INFINITY;
+
+      return {
+        matches: width >= minWidth,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      };
+    })
+  );
+
+  return {
+    setWidth(nextWidth: number): void {
+      width = nextWidth;
+    },
+  };
+}
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });
@@ -54,7 +136,7 @@ describe("Provider", () => {
     consoleWarn.mockRestore();
   });
 
-  it("uses OS dark mode by default", () => {
+  it("Uses OS theme by default - dark", () => {
     installMatchMediaStub(["(prefers-color-scheme: dark)"]);
 
     const wrapper = mount(Provider, {
@@ -69,7 +151,7 @@ describe("Provider", () => {
     expect(wrapper.get("div").classes()).toContain("spectrum--dark");
   });
 
-  it("uses OS light mode by default", () => {
+  it("Uses OS theme by default - light", () => {
     installMatchMediaStub(["(prefers-color-scheme: light)"]);
 
     const wrapper = mount(Provider, {
@@ -84,20 +166,20 @@ describe("Provider", () => {
     expect(wrapper.get("div").classes()).toContain("spectrum--light");
   });
 
-  it("supports explicit color scheme overrides", () => {
-    installMatchMediaStub(["(prefers-color-scheme: dark)"]);
+  it("Can be set to dark regardless of OS setting", () => {
+    installMatchMediaStub(["(prefers-color-scheme: light)"]);
 
     const wrapper = mount(Provider, {
       props: {
         theme,
-        colorScheme: "light",
+        colorScheme: "dark",
       },
       slots: {
         default: () => h("div", "hello"),
       },
     });
 
-    expect(wrapper.get("div").classes()).toContain("spectrum--light");
+    expect(wrapper.get("div").classes()).toContain("spectrum--dark");
   });
 
   it("returns provider DOM attributes, classes, locale and direction", () => {
@@ -127,7 +209,7 @@ describe("Provider", () => {
     expect(provider.attributes("style")).toContain("padding: 8px");
   });
 
-  it("inherits nearest ancestor values without adding an extra DOM wrapper", () => {
+  it("Nested providers follow their ancestors by default, not the OS", () => {
     let innerColorScheme = "";
 
     const Reader = defineComponent({
@@ -157,7 +239,7 @@ describe("Provider", () => {
     expect(wrapper.findAll(".spectrum")).toHaveLength(1);
   });
 
-  it("renders a nested wrapper when nested provider changes visual context", () => {
+  it("Nested providers can be explicitly set to something else", () => {
     const App = defineComponent({
       name: "OverrideProviderApp",
       setup() {
@@ -197,7 +279,7 @@ describe("Provider", () => {
     expect(wrapper.get("div").classes()).toContain("spectrum--dark");
   });
 
-  it("updates nested providers when ancestor color scheme changes", async () => {
+  it("Nested providers can update to follow their ancestors", async () => {
     const Nested = defineComponent({
       name: "NestedProvider",
       props: {
@@ -258,5 +340,84 @@ describe("Provider", () => {
     );
 
     warnSpy.mockRestore();
+  });
+
+  it("Provider will rerender if the OS preferred changes and it is on auto", async () => {
+    const media = installMutableMatchMediaStub({
+      "(prefers-color-scheme: dark)": false,
+      "(prefers-color-scheme: light)": true,
+    });
+
+    const wrapper = mount(Provider, {
+      props: {
+        theme,
+      },
+      slots: {
+        default: () => h("div", "hello"),
+      },
+    });
+
+    expect(wrapper.get("div").classes()).toContain("spectrum--light");
+
+    media.setQueryMatch("(prefers-color-scheme: light)", false);
+    media.setQueryMatch("(prefers-color-scheme: dark)", true);
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.get("div").classes()).toContain("spectrum--dark");
+  });
+
+  it("only renders once for multiple resizes in the same range", async () => {
+    const viewport = installViewportMatchMedia(768);
+    const onBreakpointChange = vi.fn();
+
+    const App = defineComponent({
+      name: "ProviderBreakpointHarness",
+      setup() {
+        const matchedBreakpoints = useMatchedBreakpoints({
+          S: 640,
+          M: 768,
+          L: 1024,
+        });
+        const breakpoint = computed(() => matchedBreakpoints.value[0] ?? "base");
+
+        watch(
+          breakpoint,
+          (nextBreakpoint, previousBreakpoint) => {
+            if (nextBreakpoint !== previousBreakpoint) {
+              onBreakpointChange(nextBreakpoint);
+            }
+          },
+          { immediate: true }
+        );
+
+        return () =>
+          h(
+            Provider,
+            {
+              theme,
+            },
+            {
+              default: () => h("button", "push me"),
+            }
+          );
+      },
+    });
+
+    mount(App);
+    expect(onBreakpointChange).toHaveBeenCalledTimes(1);
+    expect(onBreakpointChange).toHaveBeenNthCalledWith(1, "M");
+
+    viewport.setWidth(1024);
+    window.dispatchEvent(new Event("resize"));
+    await nextTick();
+
+    expect(onBreakpointChange).toHaveBeenCalledTimes(2);
+    expect(onBreakpointChange).toHaveBeenNthCalledWith(2, "L");
+
+    window.dispatchEvent(new Event("resize"));
+    await nextTick();
+
+    expect(onBreakpointChange).toHaveBeenCalledTimes(2);
   });
 });

@@ -50,22 +50,22 @@ afterEach(() => {
 });
 
 describe("useColorScheme", () => {
-  it("uses OS dark mode when available", () => {
+  it("uses OS as default - dark", () => {
     installMatchMediaStub(["(prefers-color-scheme: dark)"]);
     expect(readColorScheme("light")).toBe("dark");
   });
 
-  it("uses OS light mode when available", () => {
+  it("uses OS as default - light", () => {
     installMatchMediaStub(["(prefers-color-scheme: light)"]);
     expect(readColorScheme("dark")).toBe("light");
   });
 
-  it("uses default light when OS preference is unavailable", () => {
+  it("uses default light if OS is not useable", () => {
     installMatchMediaStub();
     expect(readColorScheme("light")).toBe("light");
   });
 
-  it("uses default dark when OS preference is unavailable", () => {
+  it("uses default dark if OS is not useable", () => {
     installMatchMediaStub();
     expect(readColorScheme("dark")).toBe("dark");
   });

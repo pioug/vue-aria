@@ -76,7 +76,9 @@ describe("provideSpectrumProvider", () => {
     expect(innerScheme).toBe("dark");
   });
 
-  it("falls back to available color scheme when nested theme lacks parent scheme", () => {
+  it(
+    "will render an available color scheme automatically if the previous does not exist on the new theme",
+    () => {
     let innerScheme = "";
 
     const Reader = defineComponent({
@@ -103,9 +105,10 @@ describe("provideSpectrumProvider", () => {
     mount(App);
 
     expect(innerScheme).toBe("light");
-  });
+    }
+  );
 
-  it("merges provider-level props for children", () => {
+  it("Provider passes props to children", () => {
     let mergedProps: Record<string, unknown> = {};
 
     const Reader = defineComponent({
@@ -119,6 +122,40 @@ describe("provideSpectrumProvider", () => {
       setup() {
         provideSpectrumProvider({ theme, isReadOnly: true, isDisabled: true, isQuiet: true });
         return () => h(Reader);
+      },
+    });
+
+    mount(App);
+
+    expect(mergedProps).toMatchObject({
+      id: "child",
+      isDisabled: false,
+      isReadOnly: true,
+      isQuiet: true,
+    });
+  });
+
+  it("Nested providers pass props to children", () => {
+    let mergedProps: Record<string, unknown> = {};
+
+    const Reader = defineComponent({
+      setup() {
+        mergedProps = useSpectrumProviderProps({ id: "child", isDisabled: false });
+        return () => h("div");
+      },
+    });
+
+    const Inner = defineComponent({
+      setup() {
+        provideSpectrumProvider({ isQuiet: true });
+        return () => h(Reader);
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        provideSpectrumProvider({ theme, isReadOnly: true, isDisabled: true });
+        return () => h(Inner);
       },
     });
 
