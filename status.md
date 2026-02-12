@@ -144,7 +144,7 @@
 | @vue-stately/calendar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/calendar | packages/@react-stately/calendar |
 | @vue-stately/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/checkbox | packages/@react-stately/checkbox |
 | @vue-stately/collections | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/collections | packages/@react-stately/collections |
-| @vue-stately/color | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/color | packages/@react-stately/color |
+| @vue-stately/color | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/color | packages/@react-stately/color |
 | @vue-stately/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/combobox | packages/@react-stately/combobox |
 | @vue-stately/data | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/data | packages/@react-stately/data |
 | @vue-stately/datepicker | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/datepicker | packages/@react-stately/datepicker |
