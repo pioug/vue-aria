@@ -153,7 +153,7 @@
 | @vue-stately/flags | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/flags | packages/@react-stately/flags |
 | @vue-stately/form | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/form | packages/@react-stately/form |
 | @vue-stately/grid | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/grid | packages/@react-stately/grid |
-| @vue-stately/layout | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/layout | packages/@react-stately/layout |
+| @vue-stately/layout | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/layout | packages/@react-stately/layout |
 | @vue-stately/list | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/list | packages/@react-stately/list |
 | @vue-stately/menu | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/menu | packages/@react-stately/menu |
 | @vue-stately/numberfield | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/numberfield | packages/@react-stately/numberfield |

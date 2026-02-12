@@ -1,0 +1,43 @@
+{
+  "name": "@vue-stately/layout",
+  "version": "4.5.3",
+  "description": "Vue port of @react-stately/layout",
+  "license": "Apache-2.0",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "exports": {
+    "source": "./src/index.ts",
+    "types": [
+      "./dist/types.d.ts",
+      "./src/index.ts"
+    ],
+    "import": "./dist/import.mjs",
+    "require": "./dist/main.js"
+  },
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/react-spectrum"
+  },
+  "dependencies": {
+    "@vue-stately/collections": "^3.12.9",
+    "@vue-stately/table": "^3.15.3",
+    "@vue-stately/virtualizer": "^4.4.5",
+    "@vue-types/grid": "^3.3.7",
+    "@vue-types/shared": "^3.33.0",
+    "@vue-types/table": "^3.13.5",
+    "@swc/helpers": "^0.5.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

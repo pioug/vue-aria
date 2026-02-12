@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:07:17.565Z",
+  "generatedAt": "2026-02-12T17:08:54.369Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 97,
-  "availableLeafCount": 3,
+  "incompletePackageCount": 96,
+  "availableLeafCount": 2,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/interactions",
@@ -13,11 +13,6 @@
       "packageName": "@vue-stately/datepicker",
       "upstreamPackageName": "@react-stately/datepicker",
       "upstreamPath": "packages/@react-stately/datepicker"
-    },
-    {
-      "packageName": "@vue-stately/layout",
-      "upstreamPackageName": "@react-stately/layout",
-      "upstreamPath": "packages/@react-stately/layout"
     }
   ],
   "hasCycles": false,
