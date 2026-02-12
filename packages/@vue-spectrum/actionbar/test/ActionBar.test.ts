@@ -70,6 +70,84 @@ function renderFocusRestoreHarness() {
   return { tree, onClearSelection };
 }
 
+function renderRowRestoreHarness(
+  actionItems: { key: string; label: string }[] = [{ key: "delete", label: "Delete" }]
+) {
+  const Harness = defineComponent({
+    name: "ActionBarRowRestoreHarness",
+    setup() {
+      const rows = ref(["Foo 1", "Foo 2", "Foo 3"]);
+      const selectedRow = ref<string | null>(null);
+
+      const removeSelectedRow = () => {
+        if (!selectedRow.value) {
+          return;
+        }
+
+        const currentSelection = selectedRow.value;
+        rows.value = rows.value.filter((row) => row !== currentSelection);
+        selectedRow.value = null;
+      };
+
+      return () =>
+        h("div", [
+          h(
+            "div",
+            {
+              role: "grid",
+              "aria-label": "rows grid",
+            },
+            rows.value.map((row) =>
+              h(
+                "div",
+                {
+                  key: row,
+                  role: "row",
+                  tabindex: 0,
+                  onClick: () => {
+                    selectedRow.value = row;
+                  },
+                  onKeydown: (event: KeyboardEvent) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      selectedRow.value = row;
+                    }
+                  },
+                },
+                [
+                  h(
+                    "span",
+                    {
+                      role: "rowheader",
+                    },
+                    row
+                  ),
+                ]
+              )
+            )
+          ),
+          h(ActionBar, {
+            selectedItemCount: selectedRow.value ? 1 : 0,
+            items: actionItems,
+            onClearSelection: () => {
+              selectedRow.value = null;
+            },
+            onAction: (key: string | number) => {
+              if (key === "delete") {
+                removeSelectedRow();
+                return;
+              }
+
+              selectedRow.value = null;
+            },
+          }),
+        ]);
+    },
+  });
+
+  return renderWithProvider(h(Harness));
+}
+
 describe("ActionBar", () => {
   it("is closed when there are no selected items", () => {
     const tree = renderWithProvider(
@@ -319,6 +397,107 @@ describe("ActionBar", () => {
     expect(tree.queryByRole("toolbar")).toBeNull();
     expect(document.activeElement).toBe(rowCheckbox);
   });
+
+  it(
+    "should restore focus where it came from after being closed via escape if no elements are removed",
+    async () => {
+      const user = userEvent.setup();
+      const tree = renderRowRestoreHarness();
+      const rows = tree.getAllByRole("row");
+      const firstRow = rows[0] as HTMLElement;
+
+      firstRow.focus();
+      expect(document.activeElement).toBe(firstRow);
+
+      await user.keyboard("{Enter}");
+
+      const toolbar = tree.getByRole("toolbar", { name: "Actions" });
+      expect(toolbar).toBeTruthy();
+      expect(document.activeElement).toBe(firstRow);
+
+      const actionButtons = within(toolbar).getAllByRole("button");
+      (actionButtons[0] as HTMLElement).focus();
+
+      await user.keyboard("{Escape}");
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(tree.queryByRole("toolbar")).toBeNull();
+      expect(document.activeElement).toBe(firstRow);
+    }
+  );
+
+  it(
+    "should restore focus to the the new first row if the row we wanted to restore to was removed",
+    async () => {
+      const user = userEvent.setup();
+      const tree = renderRowRestoreHarness();
+      const rows = tree.getAllByRole("row");
+      const firstRow = rows[0] as HTMLElement;
+
+      firstRow.focus();
+      await user.keyboard("{Enter}");
+
+      const toolbar = tree.getByRole("toolbar", { name: "Actions" });
+      const actionButtons = within(toolbar).getAllByRole("button");
+      await user.click(actionButtons[0] as HTMLElement);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      const remainingRows = tree.getAllByRole("row");
+      expect(remainingRows[0]?.textContent).toContain("Foo 2");
+      expect(document.activeElement).toBe(remainingRows[0]);
+    }
+  );
+
+  it(
+    "should restore focus to the new first row if the row we wanted to restore to was removed via actiongroup menu",
+    async () => {
+      const user = userEvent.setup();
+      const clientWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "clientWidth", "get")
+        .mockImplementation(function (this: HTMLElement) {
+          if (this.classList.contains("spectrum-ActionGroup")) {
+            return 220;
+          }
+
+          return 0;
+        });
+      const offsetWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+        .mockImplementation(function (this: HTMLElement) {
+          if (this.classList.contains("spectrum-ActionButton")) {
+            return 100;
+          }
+
+          return 0;
+        });
+
+      try {
+        const tree = renderRowRestoreHarness(items);
+        const rows = tree.getAllByRole("row");
+        const firstRow = rows[0] as HTMLElement;
+
+        firstRow.focus();
+        await user.keyboard("{Enter}");
+        await Promise.resolve();
+        await Promise.resolve();
+
+        const moreButton = tree.getByRole("button", { name: "More items" });
+        await user.click(moreButton);
+        await user.click(tree.getByRole("menuitem", { name: "Delete" }));
+        await Promise.resolve();
+        await Promise.resolve();
+
+        const remainingRows = tree.getAllByRole("row");
+        expect(remainingRows[0]?.textContent).toContain("Foo 2");
+        expect(document.activeElement).toBe(remainingRows[0]);
+      } finally {
+        clientWidthSpy.mockRestore();
+        offsetWidthSpy.mockRestore();
+      }
+    }
+  );
 
   it("keeps the action bar mounted for the close transition tick", async () => {
     const Harness = defineComponent({

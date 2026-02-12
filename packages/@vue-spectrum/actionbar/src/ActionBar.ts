@@ -80,6 +80,59 @@ const ACTIONBAR_INTL_MESSAGES = {
   },
 } as const;
 
+const RESTORE_SCOPE_SELECTOR = [
+  "[role=\"grid\"]",
+  "[role=\"treegrid\"]",
+  "[role=\"table\"]",
+  "[role=\"listbox\"]",
+  "[role=\"tree\"]",
+  "[role=\"menu\"]",
+  "table",
+  "ul",
+  "ol",
+].join(", ");
+
+const GENERIC_FOCUSABLE_SELECTOR = [
+  "button:not([disabled])",
+  "[href]",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex=\"-1\"])",
+].join(", ");
+
+function findRestoreScope(element: HTMLElement): HTMLElement | null {
+  return element.closest(RESTORE_SCOPE_SELECTOR);
+}
+
+function findFallbackFocusTarget(
+  scope: HTMLElement | null,
+  restoreTarget: HTMLElement | null
+): HTMLElement | null {
+  if (!scope) {
+    return null;
+  }
+
+  const targetRole = restoreTarget?.getAttribute("role");
+  if (targetRole === "row") {
+    return scope.querySelector<HTMLElement>("[role=\"row\"]");
+  }
+
+  if (targetRole === "option") {
+    return scope.querySelector<HTMLElement>("[role=\"option\"]");
+  }
+
+  if (targetRole === "treeitem") {
+    return scope.querySelector<HTMLElement>("[role=\"treeitem\"]");
+  }
+
+  if (targetRole === "menuitem") {
+    return scope.querySelector<HTMLElement>("[role=\"menuitem\"]");
+  }
+
+  return scope.querySelector<HTMLElement>(GENERIC_FOCUSABLE_SELECTOR);
+}
+
 function normalizeActionBarKey(value: unknown, fallback: ActionGroupKey): ActionGroupKey {
   if (typeof value === "string" || typeof value === "number") {
     return value;
@@ -324,6 +377,7 @@ export const ActionBar = defineComponent({
     );
     const rootRef = ref<HTMLDivElement | null>(null);
     const restoreFocusRef = ref<HTMLElement | null>(null);
+    const restoreScopeRef = ref<HTMLElement | null>(null);
     const slotItems = ref<SpectrumActionGroupItemData[]>([]);
 
     const count = computed<number | "all">(() => {
@@ -389,23 +443,35 @@ export const ActionBar = defineComponent({
           !rootRef.value?.contains(activeElement)
         ) {
           restoreFocusRef.value = activeElement;
+          restoreScopeRef.value = findRestoreScope(activeElement);
         }
         return;
       }
 
       if (!nextOpen && previousOpen) {
         const restoreTarget = restoreFocusRef.value;
-        if (!restoreTarget || typeof document === "undefined") {
+        const restoreScope = restoreScopeRef.value;
+        if (typeof document === "undefined") {
           return;
         }
 
-        if (!document.contains(restoreTarget)) {
+        const fallbackTarget = findFallbackFocusTarget(restoreScope, restoreTarget);
+        const targetToFocus = restoreTarget && document.contains(restoreTarget)
+          ? restoreTarget
+          : fallbackTarget && document.contains(fallbackTarget)
+            ? fallbackTarget
+            : null;
+
+        if (!targetToFocus) {
           restoreFocusRef.value = null;
+          restoreScopeRef.value = null;
           return;
         }
 
         void nextTick(() => {
-          restoreTarget.focus();
+          targetToFocus.focus();
+          restoreFocusRef.value = null;
+          restoreScopeRef.value = null;
         });
       }
     });
