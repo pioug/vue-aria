@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 128 |
-| Passing tests | 128 |
+| Ported tests | 130 |
+| Passing tests | 130 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -123,7 +123,7 @@
 | @vue-spectrum/steplist | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/steplist | packages/@react-spectrum/steplist |
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
-| @vue-spectrum/switch | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
+| @vue-spectrum/switch | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
 | @vue-spectrum/table | complete | 8 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/table | packages/@react-spectrum/table |
 | @vue-spectrum/tabs | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tabs | packages/@react-spectrum/tabs |
 | @vue-spectrum/tag | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
