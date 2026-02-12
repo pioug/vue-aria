@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import { Tooltip, TooltipTrigger } from "../src";
 
 async function flushOverlay(): Promise<void> {
@@ -767,5 +768,116 @@ describe("TooltipTrigger", () => {
     expect(tooltips[0]?.textContent).toContain("Second tooltip");
 
     wrapper.unmount();
+  });
+
+  it("renders tooltip content in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(
+                  TooltipTrigger,
+                  {
+                    delay: 0,
+                    closeDelay: 0,
+                  },
+                  {
+                    default: () => [
+                      h("button", { "aria-label": "trigger" }, "Trigger"),
+                      h(Tooltip, () => h("div", { "data-testid": "content" }, "hello")),
+                    ],
+                  }
+                ),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      const button = wrapper.get("button");
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      const content = document.body.querySelector("[data-testid=\"content\"]");
+      expect(content).not.toBeNull();
+      expect(content?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("allows nested UNSAFE_PortalProvider with null to clear parent portal container", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(
+                  UNSAFE_PortalProvider,
+                  {
+                    getContainer: null,
+                  },
+                  {
+                    default: () =>
+                      h(
+                        TooltipTrigger,
+                        {
+                          delay: 0,
+                          closeDelay: 0,
+                        },
+                        {
+                          default: () => [
+                            h("button", { "aria-label": "trigger" }, "Trigger"),
+                            h(Tooltip, () => h("div", { "data-testid": "content" }, "hello")),
+                          ],
+                        }
+                      ),
+                  }
+                ),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      const button = wrapper.get("button");
+      (button.element as HTMLButtonElement).focus();
+      await flushOverlay();
+
+      const content = document.body.querySelector("[data-testid=\"content\"]");
+      expect(content).not.toBeNull();
+      expect(content?.closest("[data-testid=\"custom-container\"]")).not.toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
   });
 });

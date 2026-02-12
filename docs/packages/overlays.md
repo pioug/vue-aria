@@ -16,6 +16,17 @@ optional blur-dismiss semantics.
 Positions overlays relative to a trigger, supports flip/cross-offset behavior,
 and exposes arrow positioning metadata.
 
+## `UNSAFE_PortalProvider`
+
+Provides a portal-container context for nested overlays. Pass `getContainer`
+to route overlay portals to a custom element, or pass `null` to clear a parent
+portal context.
+
+## `useUNSAFE_PortalContext`
+
+Returns the current portal-container context (`getContainer`) used by overlay
+components.
+
 ## `useModal`
 
 Provides modal semantics (`data-ismodal`) and parent-provider `aria-hidden`
@@ -52,7 +63,11 @@ Composes overlay dismissal and positioning for trigger-anchored popovers, with
 modal or non-modal behavior.
 
 ```ts
-import { useOverlayPosition, useOverlayTrigger } from "@vue-aria/overlays";
+import {
+  UNSAFE_PortalProvider,
+  useOverlayPosition,
+  useOverlayTrigger,
+} from "@vue-aria/overlays";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 
 const state = useOverlayTriggerState();
@@ -65,4 +80,6 @@ const { overlayProps: positionProps } = useOverlayPosition({
   targetRef: triggerElement,
   overlayRef: overlayElement,
 });
+
+const containerProvider = UNSAFE_PortalProvider;
 ```

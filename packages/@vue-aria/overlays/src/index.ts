@@ -2,6 +2,7 @@ export { useOverlayTrigger } from "./useOverlayTrigger";
 export { useOverlay } from "./useOverlay";
 export { useOverlayPosition } from "./useOverlayPosition";
 export { calculatePosition } from "./calculatePosition";
+export { UNSAFE_PortalProvider, providePortalProvider, useUNSAFE_PortalContext } from "./PortalProvider";
 export { provideModalProvider, provideOverlayProvider, useModalProvider, useModal } from "./useModal";
 export { useModalOverlay } from "./useModalOverlay";
 export { useOverlayFocusContain } from "./useOverlayFocusContain";
@@ -21,6 +22,10 @@ export type {
   UseOverlayPositionOptions,
   UseOverlayPositionResult,
 } from "./useOverlayPosition";
+export type {
+  PortalProviderProps,
+  PortalProviderContextValue,
+} from "./PortalProvider";
 export type {
   UseModalOptions,
   UseModalProviderResult,

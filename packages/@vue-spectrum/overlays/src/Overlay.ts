@@ -5,6 +5,7 @@ import {
   ref,
   type PropType,
 } from "vue";
+import { useUNSAFE_PortalContext } from "@vue-aria/overlays";
 import { OpenTransition } from "./OpenTransition";
 
 export interface SpectrumOverlayProps {
@@ -67,6 +68,7 @@ export const Overlay = defineComponent({
   setup(props, { slots, expose }) {
     const overlayRef = ref<HTMLElement | null>(null);
     const exited = ref(!props.isOpen);
+    const portalContext = useUNSAFE_PortalContext();
 
     const handleEntered = () => {
       exited.value = false;
@@ -120,13 +122,15 @@ export const Overlay = defineComponent({
         [transition]
       );
 
-      if (typeof document === "undefined" && !props.container) {
+      const portalContainer = props.container ?? portalContext.getContainer?.() ?? undefined;
+
+      if (typeof document === "undefined" && !portalContainer) {
         return overlayNode;
       }
 
       return h(
         Teleport,
-        { to: props.container ?? "body" },
+        { to: portalContainer ?? "body" },
         overlayNode
       );
     };

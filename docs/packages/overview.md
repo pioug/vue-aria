@@ -176,6 +176,8 @@ This port follows React Aria's package-first structure.
 - `useOverlayTrigger`
 - `useOverlay`
 - `useOverlayPosition`
+- `UNSAFE_PortalProvider`
+- `useUNSAFE_PortalContext`
 - `useModal`
 - `useModalOverlay`
 - `useOverlayFocusContain`
