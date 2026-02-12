@@ -44,6 +44,11 @@ function clickElement(selector: string): void {
   element.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 }
 
+function mouseClickElement(element: HTMLElement): void {
+  element.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+  element.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+}
+
 describe("ToastContainer", () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -597,7 +602,7 @@ describe("ToastContainer", () => {
     wrapper.unmount();
   });
 
-  it("restores trigger focus after dismissing all toasts from a stacked set", async () => {
+  it("restores trigger focus when dismissing stacked toasts with pointer interaction", async () => {
     const component = defineComponent({
       name: "ToastStackedDismissHarness",
       setup() {
@@ -644,12 +649,12 @@ describe("ToastContainer", () => {
     closeButton.focus();
     await flushToasts();
 
-    closeButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    mouseClickElement(closeButton);
     await flushToasts();
 
     toasts = Array.from(document.body.querySelectorAll<HTMLElement>("[role=\"alertdialog\"]"));
     expect(toasts).toHaveLength(1);
-    expect(document.activeElement).toBe(toasts[0]);
+    expect(document.activeElement).toBe(trigger);
 
     closeButton = toasts[0]?.querySelector(
       "[data-testid=\"rsp-Toast-closeButton\"]"
@@ -658,7 +663,7 @@ describe("ToastContainer", () => {
     if (!closeButton) {
       throw new Error("Missing close button on final toast");
     }
-    closeButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    mouseClickElement(closeButton);
     await flushToasts();
 
     expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();

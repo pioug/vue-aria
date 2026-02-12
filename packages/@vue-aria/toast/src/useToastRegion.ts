@@ -13,6 +13,8 @@ export interface UseToastRegionResult {
   regionProps: ReadonlyRef<Record<string, unknown>>;
 }
 
+type InteractionModality = "keyboard" | "pointer";
+
 function getToastNodes(region: HTMLElement | null): HTMLElement[] {
   if (!region) {
     return [];
@@ -62,6 +64,7 @@ export function useToastRegion<T>(
   const isFocusedWithin = ref(false);
   const focusedToastIndex = ref<number>(-1);
   const lastFocusedElement = ref<HTMLElement | null>(null);
+  const interactionModality = ref<InteractionModality>("keyboard");
 
   const syncTimers = (): void => {
     if (isHovered.value || isFocusedWithin.value) {
@@ -106,7 +109,15 @@ export function useToastRegion<T>(
       return;
     }
 
+    const onPointerInteraction = (): void => {
+      interactionModality.value = "pointer";
+    };
+
     const onKeydown = (event: KeyboardEvent): void => {
+      if (!event.metaKey && !event.ctrlKey && !event.altKey) {
+        interactionModality.value = "keyboard";
+      }
+
       if (event.key !== "F6") {
         return;
       }
@@ -125,16 +136,21 @@ export function useToastRegion<T>(
       focusWithoutScrolling(region);
     };
 
-    document.addEventListener("keydown", onKeydown);
+    document.addEventListener("keydown", onKeydown, true);
+    document.addEventListener("pointerdown", onPointerInteraction, true);
+    document.addEventListener("mousedown", onPointerInteraction, true);
+    document.addEventListener("touchstart", onPointerInteraction, true);
     onCleanup(() => {
-      document.removeEventListener("keydown", onKeydown);
+      document.removeEventListener("keydown", onKeydown, true);
+      document.removeEventListener("pointerdown", onPointerInteraction, true);
+      document.removeEventListener("mousedown", onPointerInteraction, true);
+      document.removeEventListener("touchstart", onPointerInteraction, true);
     });
   });
 
   watch(
     () => state.visibleToasts.value.map((toast) => toast.key),
     (keys, previousKeys) => {
-      const currentRegion = toValue(regionRef) ?? null;
       const previousKeyList = previousKeys ?? [];
 
       if (keys.length === 0) {
@@ -151,6 +167,14 @@ export function useToastRegion<T>(
         if (previousFocusedKey && !keys.includes(previousFocusedKey)) {
           const fallbackIndex = Math.min(focusedToastIndex.value, keys.length - 1);
           nextTick(() => {
+            if (
+              interactionModality.value === "pointer" &&
+              lastFocusedElement.value?.isConnected
+            ) {
+              focusWithoutScrolling(lastFocusedElement.value);
+              return;
+            }
+
             const nodes = getToastNodes(toValue(regionRef) ?? null);
             focusWithoutScrolling(nodes[fallbackIndex] ?? nodes[nodes.length - 1] ?? null);
           });
