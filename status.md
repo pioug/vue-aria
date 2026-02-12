@@ -192,7 +192,7 @@
 | @vue-types/form | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/form | packages/@react-types/form |
 | @vue-types/grid | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/grid | packages/@react-types/grid |
 | @vue-types/illustratedmessage | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/illustratedmessage | packages/@react-types/illustratedmessage |
-| @vue-types/image | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/image | packages/@react-types/image |
+| @vue-types/image | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/image | packages/@react-types/image |
 | @vue-types/label | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/label | packages/@react-types/label |
 | @vue-types/layout | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/layout | packages/@react-types/layout |
 | @vue-types/link | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/link | packages/@react-types/link |
