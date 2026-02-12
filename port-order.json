@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:50:08.688Z",
+  "generatedAt": "2026-02-12T15:51:38.462Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 142,
-  "availableLeafCount": 20,
+  "incompletePackageCount": 141,
+  "availableLeafCount": 19,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -33,11 +33,6 @@
       "packageName": "@vue-spectrum/test-utils",
       "upstreamPackageName": "@react-spectrum/test-utils",
       "upstreamPath": "packages/@react-spectrum/test-utils"
-    },
-    {
-      "packageName": "@vue-spectrum/theme-dark",
-      "upstreamPackageName": "@react-spectrum/theme-dark",
-      "upstreamPath": "packages/@react-spectrum/theme-dark"
     },
     {
       "packageName": "@vue-spectrum/theme-default",
