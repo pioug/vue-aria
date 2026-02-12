@@ -1662,7 +1662,7 @@
     },
     {
       "packageName": "@vue-spectrum/theme-express",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 0,
       "portedTests": 0,
       "passingTests": 0,
