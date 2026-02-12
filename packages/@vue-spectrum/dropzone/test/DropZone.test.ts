@@ -57,7 +57,7 @@ describe("DropZone", () => {
     wrapper.unmount();
   });
 
-  it("attaches dom ref on outermost div", async () => {
+  it("should attach a ref on the outer most div", async () => {
     const dropZoneRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(
       null
     );
@@ -92,7 +92,7 @@ describe("DropZone", () => {
     wrapper.unmount();
   });
 
-  it("supports drag/drop lifecycle and filled banner behavior", async () => {
+  it("should show banner when filled", async () => {
     const onDragStart = vi.fn();
     const onDragMove = vi.fn();
     const onDragEnd = vi.fn();
