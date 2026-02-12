@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-02-12T17:59:34.736Z",
+  "generatedAt": "2026-02-12T18:00:23.391Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 58,
+  "incompletePackageCount": 57,
   "availableLeafCount": 4,
   "availableLeaves": [
     {
-      "packageName": "@vue-aria/combobox",
-      "upstreamPackageName": "@react-aria/combobox",
-      "upstreamPath": "packages/@react-aria/combobox"
+      "packageName": "@vue-aria/autocomplete",
+      "upstreamPackageName": "@react-aria/autocomplete",
+      "upstreamPath": "packages/@react-aria/autocomplete"
     },
     {
       "packageName": "@vue-aria/dnd",
