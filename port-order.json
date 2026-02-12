@@ -1,18 +1,58 @@
 {
-  "generatedAt": "2026-02-12T18:22:31.154Z",
+  "generatedAt": "2026-02-12T18:22:58.751Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 19,
-  "availableLeafCount": 2,
+  "incompletePackageCount": 18,
+  "availableLeafCount": 10,
   "availableLeaves": [
     {
-      "packageName": "@vue-spectrum/button",
-      "upstreamPackageName": "@react-spectrum/button",
-      "upstreamPath": "packages/@react-spectrum/button"
+      "packageName": "@vue-spectrum/autocomplete",
+      "upstreamPackageName": "@react-spectrum/autocomplete",
+      "upstreamPath": "packages/@react-spectrum/autocomplete"
+    },
+    {
+      "packageName": "@vue-spectrum/calendar",
+      "upstreamPackageName": "@react-spectrum/calendar",
+      "upstreamPath": "packages/@react-spectrum/calendar"
+    },
+    {
+      "packageName": "@vue-spectrum/combobox",
+      "upstreamPackageName": "@react-spectrum/combobox",
+      "upstreamPath": "packages/@react-spectrum/combobox"
+    },
+    {
+      "packageName": "@vue-spectrum/dialog",
+      "upstreamPackageName": "@react-spectrum/dialog",
+      "upstreamPath": "packages/@react-spectrum/dialog"
+    },
+    {
+      "packageName": "@vue-spectrum/menu",
+      "upstreamPackageName": "@react-spectrum/menu",
+      "upstreamPath": "packages/@react-spectrum/menu"
+    },
+    {
+      "packageName": "@vue-spectrum/picker",
+      "upstreamPackageName": "@react-spectrum/picker",
+      "upstreamPath": "packages/@react-spectrum/picker"
     },
     {
       "packageName": "@vue-spectrum/s2",
       "upstreamPackageName": "@react-spectrum/s2",
       "upstreamPath": "packages/@react-spectrum/s2"
+    },
+    {
+      "packageName": "@vue-spectrum/searchfield",
+      "upstreamPackageName": "@react-spectrum/searchfield",
+      "upstreamPath": "packages/@react-spectrum/searchfield"
+    },
+    {
+      "packageName": "@vue-spectrum/tag",
+      "upstreamPackageName": "@react-spectrum/tag",
+      "upstreamPath": "packages/@react-spectrum/tag"
+    },
+    {
+      "packageName": "@vue-spectrum/toast",
+      "upstreamPackageName": "@react-spectrum/toast",
+      "upstreamPath": "packages/@react-spectrum/toast"
     }
   ],
   "hasCycles": false,
