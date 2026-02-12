@@ -11,7 +11,10 @@ const items = [
   { key: "delete", label: "Delete" },
 ];
 
-function renderWithProvider(component: ReturnType<typeof h>) {
+function renderWithProvider(
+  component: ReturnType<typeof h>,
+  options: { locale?: string } = {}
+) {
   const App = defineComponent({
     name: "ActionBarTestApp",
     setup() {
@@ -20,6 +23,7 @@ function renderWithProvider(component: ReturnType<typeof h>) {
           Provider,
           {
             theme: DEFAULT_SPECTRUM_THEME_CLASS_MAP,
+            locale: options.locale,
           },
           {
             default: () => component,
@@ -95,6 +99,21 @@ describe("ActionBar", () => {
     expect(tree.getAllByText("1 selected").length).toBeGreaterThan(0);
     expect(tree.getByRole("status").textContent).toBe("1 selected");
     expect(tree.getByLabelText("Clear selection").tagName).toBe("BUTTON");
+  });
+
+  it("localizes built-in labels with provider locale", () => {
+    const tree = renderWithProvider(
+      h(ActionBar, {
+        selectedItemCount: 2,
+        items,
+      }),
+      { locale: "fr-FR" }
+    );
+
+    expect(tree.getByRole("toolbar", { name: "Actions" })).toBeTruthy();
+    expect(tree.getByLabelText("Supprimer la selection").tagName).toBe("BUTTON");
+    expect(tree.getByText("Effacer")).toBeTruthy();
+    expect(tree.getByRole("status").textContent).toMatch(/2.*selectionnes/);
   });
 
   it("shows all-selected copy", () => {

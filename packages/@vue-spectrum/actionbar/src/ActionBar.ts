@@ -11,6 +11,7 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
 import {
@@ -57,6 +58,27 @@ const SCREEN_READER_ONLY_STYLE: Record<string, string> = {
   whiteSpace: "nowrap",
   border: "0",
 };
+
+const ACTIONBAR_INTL_MESSAGES = {
+  "en-US": {
+    actions: "Actions",
+    clearSelection: "Clear selection",
+    clear: "Clear",
+    selectedAll: "All selected",
+    selectedNone: "None selected",
+    selectedSingular: "selected",
+    selectedPlural: "selected",
+  },
+  "fr-FR": {
+    actions: "Actions",
+    clearSelection: "Supprimer la selection",
+    clear: "Effacer",
+    selectedAll: "Toute la selection",
+    selectedNone: "Aucun element selectionne",
+    selectedSingular: "selectionne",
+    selectedPlural: "selectionnes",
+  },
+} as const;
 
 function normalizeActionBarKey(value: unknown, fallback: ActionGroupKey): ActionGroupKey {
   if (typeof value === "string" || typeof value === "number") {
@@ -293,6 +315,10 @@ export const ActionBar = defineComponent({
     },
   },
   setup(props, { attrs, slots }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      ACTIONBAR_INTL_MESSAGES,
+      "@vue-spectrum/actionbar"
+    );
     const resolvedProviderProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
@@ -332,10 +358,21 @@ export const ActionBar = defineComponent({
 
     const selectedLabel = computed(() => {
       if (displayCount.value === "all") {
-        return props.selectedAllLabel ?? "All selected";
+        return props.selectedAllLabel ?? stringFormatter.value.format("selectedAll");
       }
 
-      return props.selectedCountLabel?.(displayCount.value) ?? `${displayCount.value} selected`;
+      if (props.selectedCountLabel) {
+        return props.selectedCountLabel(displayCount.value);
+      }
+
+      if (displayCount.value <= 0) {
+        return stringFormatter.value.format("selectedNone");
+      }
+
+      const suffix = stringFormatter.value.format(
+        displayCount.value === 1 ? "selectedSingular" : "selectedPlural"
+      );
+      return `${displayCount.value} ${suffix}`;
     });
 
     watch(isOpen, (nextOpen, previousOpen) => {
@@ -408,7 +445,7 @@ export const ActionBar = defineComponent({
         staticColor: isEmphasized ? "white" : undefined,
         overflowMode: "collapse",
         buttonLabelBehavior: props.buttonLabelBehavior,
-        ariaLabel: props.actionsLabel ?? "Actions",
+        ariaLabel: props.actionsLabel ?? stringFormatter.value.format("actions"),
         UNSAFE_className: classNames("react-spectrum-ActionBar-actionGroup"),
       });
 
@@ -461,7 +498,9 @@ export const ActionBar = defineComponent({
                   h(
                     ActionButton,
                     {
-                      "aria-label": props.clearSelectionLabel ?? "Clear selection",
+                      "aria-label":
+                        props.clearSelectionLabel ??
+                        stringFormatter.value.format("clearSelection"),
                       isQuiet: true,
                       staticColor: isEmphasized ? "white" : undefined,
                       onPress: () => {
@@ -469,7 +508,9 @@ export const ActionBar = defineComponent({
                       },
                     },
                     {
-                      default: () => slots.clearButton?.() ?? "Clear",
+                      default: () =>
+                        slots.clearButton?.() ??
+                        stringFormatter.value.format("clear"),
                     }
                   ),
                   h(
