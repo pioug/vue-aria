@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 21 |
-| Passing tests | 21 |
+| Ported tests | 23 |
+| Passing tests | 23 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -25,7 +25,7 @@
 | @vue-aria/actiongroup | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/actiongroup | packages/@react-aria/actiongroup |
 | @vue-aria/aria-modal-polyfill | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-aria/aria-modal-polyfill | packages/@react-aria/aria-modal-polyfill |
 | @vue-aria/autocomplete | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/autocomplete | packages/@react-aria/autocomplete |
-| @vue-aria/breadcrumbs | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
+| @vue-aria/breadcrumbs | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-aria/breadcrumbs | packages/@react-aria/breadcrumbs |
 | @vue-aria/button | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/button | packages/@react-aria/button |
 | @vue-aria/calendar | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
 | @vue-aria/checkbox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
