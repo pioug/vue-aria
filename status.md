@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 68 |
-| Passing tests | 68 |
+| Ported tests | 69 |
+| Passing tests | 69 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -30,7 +30,7 @@
 | @vue-aria/calendar | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/calendar | packages/@react-aria/calendar |
 | @vue-aria/checkbox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/checkbox | packages/@react-aria/checkbox |
 | @vue-aria/collections | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/collections | packages/@react-aria/collections |
-| @vue-aria/color | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/color | packages/@react-aria/color |
+| @vue-aria/color | complete | 2 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/color | packages/@react-aria/color |
 | @vue-aria/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/combobox | packages/@react-aria/combobox |
 | @vue-aria/datepicker | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/datepicker | packages/@react-aria/datepicker |
 | @vue-aria/dialog | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-aria/dialog | packages/@react-aria/dialog |
@@ -171,7 +171,7 @@
 | @vue-stately/tooltip | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tooltip | packages/@react-stately/tooltip |
 | @vue-stately/tree | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tree | packages/@react-stately/tree |
 | @vue-stately/utils | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-stately/utils | packages/@react-stately/utils |
-| @vue-stately/virtualizer | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/virtualizer | packages/@react-stately/virtualizer |
+| @vue-stately/virtualizer | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/virtualizer | packages/@react-stately/virtualizer |
 | @vue-types/actionbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/actionbar | packages/@react-types/actionbar |
 | @vue-types/actiongroup | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/actiongroup | packages/@react-types/actiongroup |
 | @vue-types/autocomplete | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/autocomplete | packages/@react-types/autocomplete |
