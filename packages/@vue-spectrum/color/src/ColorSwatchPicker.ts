@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import {
   classNames,
@@ -8,6 +9,15 @@ import {
 import { ColorSwatch } from "./ColorSwatch";
 import { colorSwatchPickerPropOptions } from "./types";
 import { parseColor, tryParseColor, toColorLabel } from "./utils";
+
+const COLORSWATCHPICKER_INTL_MESSAGES = {
+  "en-US": {
+    colorSwatchPicker: "Color swatches",
+  },
+  "fr-FR": {
+    colorSwatchPicker: "Échantillons de couleurs",
+  },
+} as const;
 
 function getIndexFromKey(keys: string[], key: string | null | undefined): number {
   if (!key) {
@@ -25,6 +35,10 @@ export const ColorSwatchPicker = defineComponent({
     ...colorSwatchPickerPropOptions,
   },
   setup(props, { attrs, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      COLORSWATCHPICKER_INTL_MESSAGES,
+      "@vue-spectrum/color"
+    );
     const rootRef = ref<HTMLElement | null>(null);
 
     const items = computed(() =>
@@ -153,7 +167,11 @@ export const ColorSwatchPicker = defineComponent({
             rootRef.value = value as HTMLElement | null;
           },
           role: "listbox",
-          "aria-label": props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Color swatches",
+          "aria-label":
+            props["aria-label"] ??
+            props.ariaLabel ??
+            props.label ??
+            stringFormatter.value.format("colorSwatchPicker"),
           "aria-labelledby": props["aria-labelledby"] ?? props.ariaLabelledby,
           "aria-describedby": props["aria-describedby"] ?? props.ariaDescribedby,
           class: classNames(
