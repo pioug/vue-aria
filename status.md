@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 73 |
-| Passing tests | 73 |
+| Ported tests | 74 |
+| Passing tests | 74 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -169,7 +169,7 @@
 | @vue-stately/toast | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | false | @react-stately/toast | packages/@react-stately/toast |
 | @vue-stately/toggle | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-stately/toggle | packages/@react-stately/toggle |
 | @vue-stately/tooltip | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/tooltip | packages/@react-stately/tooltip |
-| @vue-stately/tree | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-stately/tree | packages/@react-stately/tree |
+| @vue-stately/tree | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/tree | packages/@react-stately/tree |
 | @vue-stately/utils | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | false | @react-stately/utils | packages/@react-stately/utils |
 | @vue-stately/virtualizer | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-stately/virtualizer | packages/@react-stately/virtualizer |
 | @vue-types/actionbar | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/actionbar | packages/@react-types/actionbar |

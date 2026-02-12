@@ -13,7 +13,7 @@
 import {Collection, CollectionStateBase, DisabledBehavior, Expandable, Key, MultipleSelection, Node} from '@vue-types/shared';
 import {SelectionManager, useMultipleSelectionState} from '@vue-stately/selection';
 import {TreeCollection} from './TreeCollection';
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useCollection} from '@vue-stately/collections';
 import {useControlledState} from '@vue-stately/utils';
 
@@ -50,18 +50,40 @@ export function useTreeState<T extends object>(props: TreeProps<T>): TreeState<T
     onExpandedChange
   } = props;
 
-  let [expandedKeys, setExpandedKeys] = useControlledState(
+  let [expandedKeysState, setExpandedKeysState] = useControlledState(
     props.expandedKeys ? new Set(props.expandedKeys) : undefined,
     props.defaultExpandedKeys ? new Set(props.defaultExpandedKeys) : new Set(),
     onExpandedChange
   );
+  let expandedKeysRef = useRef(expandedKeysState.value);
+  let [expandedKeysForRender, setExpandedKeysForRender] = useState(expandedKeysRef.current);
+  let expandedKeysProp = useMemo(() =>
+    props.expandedKeys ? new Set(props.expandedKeys) : null
+  , [props.expandedKeys]);
+
+  useEffect(() => {
+    if (expandedKeysProp) {
+      expandedKeysRef.current = expandedKeysProp;
+      setExpandedKeysForRender(expandedKeysProp);
+    }
+  }, [expandedKeysProp]);
+
+  let setExpandedKeys = (keys: Set<Key>) => {
+    expandedKeysRef.current = keys;
+    setExpandedKeysState(keys);
+    setExpandedKeysForRender(keys);
+  };
 
   let selectionState = useMultipleSelectionState(props);
   let disabledKeys = useMemo(() =>
     props.disabledKeys ? new Set(props.disabledKeys) : new Set<Key>()
   , [props.disabledKeys]);
 
-  let tree = useCollection(props, useCallback(nodes => new TreeCollection(nodes, {expandedKeys}), [expandedKeys]), null);
+  let tree = useCollection(
+    props,
+    useCallback(nodes => new TreeCollection(nodes, {expandedKeys: expandedKeysForRender}), [expandedKeysForRender]),
+    null
+  );
 
   // Reset focused key if that item is deleted from the collection.
   useEffect(() => {
@@ -72,12 +94,14 @@ export function useTreeState<T extends object>(props: TreeProps<T>): TreeState<T
   }, [tree, selectionState.focusedKey]);
 
   let onToggle = (key: Key) => {
-    setExpandedKeys(toggleKey(expandedKeys, key));
+    setExpandedKeys(toggleKey(expandedKeysRef.current, key));
   };
 
   return {
     collection: tree,
-    expandedKeys,
+    get expandedKeys() {
+      return expandedKeysRef.current;
+    },
     disabledKeys,
     toggleKey: onToggle,
     setExpandedKeys,

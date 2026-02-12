@@ -60,10 +60,11 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
   } = props;
 
   // We want synchronous updates to `isFocused` and `focusedKey` after their setters are called.
-  // Keep refs as the source of truth to avoid extra rerenders resetting non-React controlled state.
+  // We keep refs as source of truth and only rerender for focusedKey updates.
   let isFocusedRef = useRef(false);
   let focusedKeyRef = useRef<Key | null>(null);
   let childFocusStrategyRef = useRef<FocusStrategy | null>(null);
+  let [, setFocusedKey] = useState<Key | null>(null);
   let selectedKeysProp = useMemo(() => convertSelection(props.selectedKeys), [props.selectedKeys]);
   let defaultSelectedKeys = useMemo(() => convertSelection(props.defaultSelectedKeys, new Selection()), [props.defaultSelectedKeys]);
   let [selectedKeys, setSelectedKeysState] = useControlledState(
@@ -113,6 +114,7 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
     setFocusedKey(k, childFocusStrategy = 'first') {
       focusedKeyRef.current = k;
       childFocusStrategyRef.current = childFocusStrategy;
+      setFocusedKey(k);
     },
     get selectedKeys() {
       return selectedKeysRef.current;
