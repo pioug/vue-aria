@@ -162,6 +162,20 @@ describe("SearchAutocomplete", () => {
     expect(tree.queryByRole("listbox")).toBeNull();
   });
 
+  it("reports manual trigger on keyboard open", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      onOpenChange,
+    });
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(onOpenChange).toHaveBeenCalledWith(true, "manual");
+  });
+
   it("submits free text on Enter when no item is focused", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
@@ -312,6 +326,22 @@ describe("SearchAutocomplete", () => {
     expect(options).toHaveLength(1);
     expect(options[0]?.textContent).toContain("Two");
     expect(input.getAttribute("aria-activedescendant")).toBeNull();
+  });
+
+  it("closes menu when pressing Enter on an already selected item", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultSelectedKey: "1",
+    });
+    const input = tree.getByRole("combobox") as HTMLInputElement;
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    await user.keyboard("{Enter}");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect(input.value).toBe("One");
   });
 
   it("keeps menu open when clearing input with menuTrigger focus", async () => {

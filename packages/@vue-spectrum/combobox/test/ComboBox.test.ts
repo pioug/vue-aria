@@ -218,6 +218,20 @@ describe("ComboBox", () => {
     expect(options[0]?.id).toContain("option");
   });
 
+  it("reports manual trigger on keyboard open", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const tree = renderComponent({
+      onOpenChange,
+    });
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(onOpenChange).toHaveBeenCalledWith(true, "manual");
+  });
+
   it("opens with ArrowUp and focuses the last item", async () => {
     const user = userEvent.setup();
     const tree = renderComponent();
@@ -314,6 +328,22 @@ describe("ComboBox", () => {
     expect(options).toHaveLength(1);
     expect(options[0]?.textContent).toContain("Two");
     expect(input.getAttribute("aria-activedescendant")).toBeNull();
+  });
+
+  it("closes menu when pressing Enter on an already selected item", async () => {
+    const user = userEvent.setup();
+    const tree = renderComponent({
+      defaultSelectedKey: "1",
+    });
+    const input = tree.getByRole("combobox");
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(tree.getByRole("listbox")).toBeTruthy();
+
+    await user.keyboard("{Enter}");
+    expect(tree.queryByRole("listbox")).toBeNull();
+    expect((input as HTMLInputElement).value).toBe("One");
   });
 
   it("supports controlled selectedKey", () => {
