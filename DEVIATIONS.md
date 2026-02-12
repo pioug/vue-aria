@@ -264,3 +264,10 @@ Track every divergence from upstream in this file.
 - Reason: This package depends on the current transitional `@vue-types/shared` typing layer, the transitional `@vue-types/slider` typing layer, and upstream React-specific color typing contracts.
 - User impact: Consumers may need React type packages for full type resolution until shared/slider/color declarations are remapped to Vue-native node and event types.
 - Removal plan: Complete Vue-native type remapping in `@vue-types/shared` and `@vue-types/slider`, then update this package’s declarations to remove React-specific imports.
+
+- Package: `@vue-spectrum/test-utils`
+- Upstream reference: `packages/@react-spectrum/test-utils` at baseline `1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1`
+- Difference: Package is currently a structural mirror and still depends on React testing utilities (`@testing-library/react`, `react`, `react-dom`) through peer dependencies and re-exported test helpers.
+- Reason: This package was ported incrementally to preserve dependency order and keep testing utility surfaces aligned with upstream naming.
+- User impact: This package is not yet Vue-native; consumers should treat it as transitional and expect React-centric testing dependencies.
+- Removal plan: Replace React testing dependencies and re-exports with Vue Test Utils/Vue Testing Library equivalents, then clear this deviation.

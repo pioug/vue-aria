@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T15:53:41.303Z",
+  "generatedAt": "2026-02-12T15:55:11.054Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 139,
-  "availableLeafCount": 18,
+  "incompletePackageCount": 138,
+  "availableLeafCount": 17,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/i18n",
@@ -28,11 +28,6 @@
       "packageName": "@vue-spectrum/story-utils",
       "upstreamPackageName": "@react-spectrum/story-utils",
       "upstreamPath": "packages/@react-spectrum/story-utils"
-    },
-    {
-      "packageName": "@vue-spectrum/test-utils",
-      "upstreamPackageName": "@react-spectrum/test-utils",
-      "upstreamPath": "packages/@react-spectrum/test-utils"
     },
     {
       "packageName": "@vue-spectrum/theme-express",
