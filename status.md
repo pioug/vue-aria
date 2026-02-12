@@ -107,7 +107,7 @@
 | @vue-spectrum/layout | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/layout | packages/@react-spectrum/layout |
 | @vue-spectrum/link | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/link | packages/@react-spectrum/link |
 | @vue-spectrum/list | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/list | packages/@react-spectrum/list |
-| @vue-spectrum/listbox | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/listbox | packages/@react-spectrum/listbox |
+| @vue-spectrum/listbox | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/listbox | packages/@react-spectrum/listbox |
 | @vue-spectrum/menu | not_started | 6 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/menu | packages/@react-spectrum/menu |
 | @vue-spectrum/meter | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/meter | packages/@react-spectrum/meter |
 | @vue-spectrum/numberfield | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/numberfield | packages/@react-spectrum/numberfield |
