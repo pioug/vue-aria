@@ -274,4 +274,55 @@ describe("useMove", () => {
     handlers.onKeydown?.(new KeyboardEvent("keydown", { key: "PageUp", bubbles: true }));
     expect(onMove).not.toHaveBeenCalled();
   });
+
+  it("does not bubble to parent useMove handlers", () => {
+    const parentOnMove = vi.fn();
+    const childOnMove = vi.fn();
+    const { moveProps: parentMoveProps } = useMove({ onMove: parentOnMove });
+    const { moveProps: childMoveProps } = useMove({ onMove: childOnMove });
+
+    const parent = document.createElement("div");
+    const child = document.createElement("div");
+    parent.appendChild(child);
+    document.body.appendChild(parent);
+
+    parent.addEventListener(
+      "pointerdown",
+      parentMoveProps.onPointerdown as EventListener
+    );
+    child.addEventListener(
+      "pointerdown",
+      childMoveProps.onPointerdown as EventListener
+    );
+
+    child.dispatchEvent(
+      createPointerEvent("pointerdown", {
+        pointerType: "mouse",
+        pointerId: 11,
+        button: 0,
+        pageX: 10,
+        pageY: 10,
+      })
+    );
+
+    window.dispatchEvent(
+      createPointerEvent("pointermove", {
+        pointerType: "mouse",
+        pointerId: 11,
+        pageX: 20,
+        pageY: 16,
+      })
+    );
+    window.dispatchEvent(
+      createPointerEvent("pointerup", {
+        pointerType: "mouse",
+        pointerId: 11,
+        pageX: 20,
+        pageY: 16,
+      })
+    );
+
+    expect(childOnMove).toHaveBeenCalledTimes(1);
+    expect(parentOnMove).not.toHaveBeenCalled();
+  });
 });
