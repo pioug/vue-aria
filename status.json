@@ -1647,7 +1647,7 @@
     },
     {
       "packageName": "@vue-spectrum/theme-default",
-      "status": "not_started",
+      "status": "complete",
       "upstreamTests": 0,
       "portedTests": 0,
       "passingTests": 0,
