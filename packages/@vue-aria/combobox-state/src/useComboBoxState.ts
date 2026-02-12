@@ -270,6 +270,10 @@ export function useComboBoxState<T extends ListBoxItem>(
   });
 
   const setSelectedKey = (key: Key | null): void => {
+    if (key === selectedKey.value) {
+      return;
+    }
+
     if (!isSelectedControlled.value) {
       uncontrolledSelectedKey.value = key;
     }

@@ -44,6 +44,7 @@ export function useOption<T extends ListBoxItem>(
   const labelId = useId(undefined, "v-aria-option-label");
   const descriptionId = useId(undefined, "v-aria-option-description");
   const isPressed = ref(false);
+  const ignoreClickAfterPressUp = ref(false);
 
   const data = computed(() => listData.get(state as object));
   const isDisabled = computed(() => {
@@ -142,6 +143,7 @@ export function useOption<T extends ListBoxItem>(
           return;
         }
 
+        ignoreClickAfterPressUp.value = false;
         isPressed.value = true;
         if (!shouldSelectOnPressUp.value) {
           performSelectionAndAction();
@@ -155,6 +157,7 @@ export function useOption<T extends ListBoxItem>(
 
         if (shouldSelectOnPressUp.value) {
           performSelectionAndAction();
+          ignoreClickAfterPressUp.value = true;
         }
         isPressed.value = false;
       },
@@ -163,6 +166,11 @@ export function useOption<T extends ListBoxItem>(
       },
       onClick: () => {
         if (!shouldSelectOnPressUp.value) {
+          return;
+        }
+
+        if (ignoreClickAfterPressUp.value) {
+          ignoreClickAfterPressUp.value = false;
           return;
         }
 

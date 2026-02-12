@@ -90,6 +90,19 @@ describe("useComboBoxState", () => {
     expect(state.inputValue.value).toBe("Two");
   });
 
+  it("does not emit selection change when selected key is unchanged", () => {
+    const onSelectionChange = vi.fn();
+    const state = useComboBoxState({
+      collection: items,
+      defaultSelectedKey: "one",
+      onSelectionChange,
+    });
+
+    state.setSelectedKey("one");
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("opens with all items on manual trigger even when filtered list is empty", () => {
     const state = useComboBoxState({
       collection: items,
