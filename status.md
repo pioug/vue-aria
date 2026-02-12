@@ -104,7 +104,7 @@
 | @vue-spectrum/inlinealert | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/inlinealert | packages/@react-spectrum/inlinealert |
 | @vue-spectrum/label | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/label | packages/@react-spectrum/label |
 | @vue-spectrum/labeledvalue | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/labeledvalue | packages/@react-spectrum/labeledvalue |
-| @vue-spectrum/layout | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/layout | packages/@react-spectrum/layout |
+| @vue-spectrum/layout | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/layout | packages/@react-spectrum/layout |
 | @vue-spectrum/link | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/link | packages/@react-spectrum/link |
 | @vue-spectrum/list | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/list | packages/@react-spectrum/list |
 | @vue-spectrum/listbox | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/listbox | packages/@react-spectrum/listbox |
