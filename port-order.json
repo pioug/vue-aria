@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-02-12T17:49:48.376Z",
+  "generatedAt": "2026-02-12T17:51:51.012Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 67,
-  "availableLeafCount": 6,
+  "incompletePackageCount": 66,
+  "availableLeafCount": 5,
   "availableLeaves": [
     {
       "packageName": "@vue-aria/calendar",
@@ -28,11 +28,6 @@
       "packageName": "@vue-aria/table",
       "upstreamPackageName": "@react-aria/table",
       "upstreamPath": "packages/@react-aria/table"
-    },
-    {
-      "packageName": "@vue-aria/tag",
-      "upstreamPackageName": "@react-aria/tag",
-      "upstreamPath": "packages/@react-aria/tag"
     }
   ],
   "hasCycles": false,
