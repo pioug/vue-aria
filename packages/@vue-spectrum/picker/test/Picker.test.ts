@@ -2,6 +2,7 @@ import { fireEvent, render, within } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { Form } from "@vue-spectrum/form";
 import {
   DEFAULT_SPECTRUM_THEME_CLASS_MAP,
@@ -182,6 +183,49 @@ describe("Picker", () => {
     expect(progressbar.getAttribute("aria-label")).toBe("Loading…");
     const trigger = tree.getByRole("button", { name: "picker-test" });
     expect(trigger.getAttribute("aria-describedby")).toBe(progressbar.getAttribute("id"));
+  });
+
+  it("localizes loading labels from i18n locale", async () => {
+    const LoadingHarness = defineComponent({
+      name: "PickerLoadingLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(Picker, {
+            "aria-label": "picker-test",
+            items: [],
+            isLoading: true,
+          });
+      },
+    });
+
+    const loadingTree = render(LoadingHarness);
+    expect(loadingTree.getByRole("progressbar").getAttribute("aria-label")).toBe(
+      "Chargement..."
+    );
+    loadingTree.unmount();
+
+    const user = userEvent.setup();
+    const LoadingMoreHarness = defineComponent({
+      name: "PickerLoadingMoreLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(Picker, {
+            "aria-label": "picker-test",
+            items,
+            isLoading: true,
+          });
+      },
+    });
+
+    const loadingMoreTree = render(LoadingMoreHarness);
+    await user.click(loadingMoreTree.getByRole("button", { name: "picker-test" }));
+    const progressbars = loadingMoreTree.getAllByRole("progressbar");
+    expect(progressbars.length).toBeGreaterThan(0);
+    expect(progressbars[0]?.getAttribute("aria-label")).toBe("Chargement supplémentaire...");
   });
 
   it("merges existing aria-describedby with loading progress indicator", () => {

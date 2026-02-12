@@ -57,7 +57,7 @@ const component = h(Picker, {
 - Mobile tray rendering is included when running on mobile screen widths.
 - Baseline test coverage includes an upstream-style `TempUtilTest` lane for real/fake timer open-select flows and mobile tray rendering checks.
 - Baseline test fixtures include upstream-style `test/data` coverage for picker datasets used by parity suites.
-- Async loading baseline is included via `isLoading` spinner handling, `onLoadMore` scroll-threshold callbacks, loading-progress `aria-describedby` wiring on the trigger, and explicit loading labels (`Loading…`, `Loading more…`).
+- Async loading baseline is included via `isLoading` spinner handling, `onLoadMore` scroll-threshold callbacks, loading-progress `aria-describedby` wiring on the trigger, and locale-aware loading labels.
 - Basic form wiring is included via hidden-input submission/reset support (`name`, `form`, `defaultSelectedKey` reset behavior).
 - Baseline now includes validation behavior parity across `aria` and `native` modes: `validate(value)` support, function-style `errorMessage` customizers with validation context, and `Form.validationErrors` integration by field `name` with clear-on-selection behavior.
 - Native-mode baseline includes required/custom-validity wiring on the hidden form input, `checkValidity` invalid-message display/focus behavior, and reset clearing behavior.

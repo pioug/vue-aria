@@ -13,6 +13,7 @@ import {
   type VNodeChild,
   type PropType,
 } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useOverlayPosition, type Placement } from "@vue-aria/overlays";
 import { useId } from "@vue-aria/ssr";
 import { filterDOMProps } from "@vue-aria/utils";
@@ -87,6 +88,17 @@ export interface SpectrumPickerSectionProps {
   title?: string | undefined;
   "aria-label"?: string | undefined;
 }
+
+const PICKER_INTL_MESSAGES = {
+  "en-US": {
+    loading: "Loading…",
+    loadingMore: "Loading more…",
+  },
+  "fr-FR": {
+    loading: "Chargement...",
+    loadingMore: "Chargement supplémentaire...",
+  },
+} as const;
 
 function keyToString(key: PickerKey | undefined): string | null {
   if (key === undefined || key === null) {
@@ -436,6 +448,10 @@ export const Picker = defineComponent({
     },
   },
   setup(props, { attrs, expose, slots }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      PICKER_INTL_MESSAGES,
+      "@vue-spectrum/picker"
+    );
     const resolvedProviderProps = computed(() =>
       useProviderProps(props as unknown as Record<string, unknown>)
     );
@@ -1120,7 +1136,7 @@ export const Picker = defineComponent({
                     id: loadingIndicatorId.value,
                     isIndeterminate: true,
                     size: "S",
-                    "aria-label": "Loading…",
+                    "aria-label": stringFormatter.value.format("loading"),
                     UNSAFE_className: classNames("spectrum-Dropdown-progressCircle"),
                   })
                 : null,
@@ -1289,7 +1305,7 @@ export const Picker = defineComponent({
                                       h(ProgressCircle, {
                                         isIndeterminate: true,
                                         size: "S",
-                                        "aria-label": "Loading more…",
+                                        "aria-label": stringFormatter.value.format("loadingMore"),
                                         UNSAFE_className: classNames(
                                           "spectrum-Dropdown-progressCircle"
                                         ),
