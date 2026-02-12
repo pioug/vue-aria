@@ -92,6 +92,60 @@ describe("InlineAlert", () => {
     }
   );
 
+  it("does not render an icon for neutral variant", () => {
+    const wrapper = mount(InlineAlert, {
+      props: {
+        variant: "neutral",
+      },
+      slots: {
+        default: [
+          "<Header>Title</Header>",
+          "<Content>Content</Content>",
+        ],
+      },
+      global: {
+        components: {
+          Header,
+          Content,
+        },
+      },
+    });
+
+    expect(wrapper.find(".spectrum-InLineAlert-icon").exists()).toBe(false);
+  });
+
+  it.each([
+    ["info", "Information"],
+    ["positive", "Success"],
+    ["notice", "Warning"],
+    ["negative", "Error"],
+  ] as const)(
+    "renders variant icon with %s label",
+    (variant, label) => {
+      const wrapper = mount(InlineAlert, {
+        props: {
+          variant,
+        },
+        slots: {
+          default: [
+            "<Header>Title</Header>",
+            "<Content>Content</Content>",
+          ],
+        },
+        global: {
+          components: {
+            Header,
+            Content,
+          },
+        },
+      });
+
+      const icon = wrapper.get(".spectrum-InLineAlert-icon");
+      expect(icon.attributes("role")).toBe("img");
+      expect(icon.attributes("aria-label")).toBe(label);
+    }
+  );
+
   it("supports autoFocus", async () => {
     const wrapper = mount(InlineAlert, {
       attachTo: document.body,

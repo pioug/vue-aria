@@ -22,6 +22,26 @@ export type InlineAlertVariant =
   | "notice"
   | "negative";
 
+const INLINE_ALERT_ICON_SYMBOL: Record<
+  Exclude<InlineAlertVariant, "neutral">,
+  string
+> = {
+  info: "i",
+  positive: "✓",
+  notice: "!",
+  negative: "!",
+};
+
+const INLINE_ALERT_ICON_LABEL: Record<
+  Exclude<InlineAlertVariant, "neutral">,
+  string
+> = {
+  info: "Information",
+  positive: "Success",
+  notice: "Warning",
+  negative: "Error",
+};
+
 export interface SpectrumInlineAlertProps {
   variant?: InlineAlertVariant | undefined;
   autoFocus?: boolean | undefined;
@@ -96,6 +116,12 @@ export const InlineAlert = defineComponent({
       const domProps = filterDOMProps(slotProps as Record<string, unknown>);
       const variant = (slotProps.variant as InlineAlertVariant | undefined) ?? "neutral";
       const showVariantIcon = variant !== "neutral";
+      const iconSymbol = showVariantIcon
+        ? INLINE_ALERT_ICON_SYMBOL[variant as Exclude<InlineAlertVariant, "neutral">]
+        : undefined;
+      const iconLabel = showVariantIcon
+        ? INLINE_ALERT_ICON_LABEL[variant as Exclude<InlineAlertVariant, "neutral">]
+        : undefined;
 
       const rootProps = mergeProps(domProps, styleProps, {
         ref: (value: unknown) => {
@@ -124,9 +150,10 @@ export const InlineAlert = defineComponent({
                   "span",
                   {
                     class: classNames("spectrum-InLineAlert-icon"),
-                    "aria-hidden": "true",
+                    role: "img",
+                    "aria-label": iconLabel,
                   },
-                  "!"
+                  iconSymbol
                 )
               : null,
             h(
