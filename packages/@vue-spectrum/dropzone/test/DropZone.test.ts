@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { provideI18n } from "@vue-aria/i18n";
 import { mergeProps } from "@vue-aria/utils";
 import { useDrag } from "@vue-aria/dnd";
 import { DataTransferMock, DragEventMock } from "../../../@vue-aria/dnd/test/mocks";
@@ -27,6 +28,35 @@ function setRect(element: HTMLElement): void {
 }
 
 describe("DropZone", () => {
+  it("localizes default replace banner message from i18n locale", () => {
+    const Harness = defineComponent({
+      name: "DropZoneLocalizedHarness",
+      setup() {
+        provideI18n({ locale: "fr-FR" });
+
+        return () =>
+          h(
+            DropZone,
+            {
+              "data-testid": "dropzone",
+              isFilled: true,
+            },
+            {
+              default: () =>
+                h(IllustratedMessage, null, {
+                  default: () => h(Header, null, () => "Aucun fichier"),
+                }),
+            }
+          );
+      },
+    });
+
+    const wrapper = mount(Harness);
+    const dropzone = wrapper.get("[data-testid=\"dropzone\"]");
+    expect(dropzone.text()).toContain("Déposer le fichier à remplacer");
+    wrapper.unmount();
+  });
+
   it("attaches dom ref on outermost div", async () => {
     const dropZoneRef = ref<{ UNSAFE_getDOMNode: () => HTMLElement | null } | null>(
       null

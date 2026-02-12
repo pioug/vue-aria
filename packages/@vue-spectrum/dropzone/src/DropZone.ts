@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, type PropType } from "vue";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import {
   useDrop,
   type IDragTypes,
@@ -40,7 +41,14 @@ export interface SpectrumDropZoneProps {
   UNSAFE_style?: Record<string, string | number> | undefined;
 }
 
-const DEFAULT_REPLACE_MESSAGE = "Drop file to replace";
+const DROPZONE_INTL_MESSAGES = {
+  "en-US": {
+    replaceMessage: "Drop file to replace",
+  },
+  "fr-FR": {
+    replaceMessage: "Déposer le fichier à remplacer",
+  },
+} as const;
 
 export const DropZone = defineComponent({
   name: "DropZone",
@@ -115,6 +123,10 @@ export const DropZone = defineComponent({
     },
   },
   setup(props, { attrs, slots, expose }) {
+    const stringFormatter = useLocalizedStringFormatter(
+      DROPZONE_INTL_MESSAGES,
+      "@vue-spectrum/dropzone"
+    );
     const domRef = ref<HTMLElement | null>(null);
     const messageId = useId(undefined, "v-spectrum-dropzone-message");
 
@@ -204,7 +216,7 @@ export const DropZone = defineComponent({
               id: messageId.value,
               class: classNames("spectrum-Dropzone-banner"),
             },
-            props.replaceMessage ?? DEFAULT_REPLACE_MESSAGE
+            props.replaceMessage ?? stringFormatter.value.format("replaceMessage")
           ),
         ]
       );

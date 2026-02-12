@@ -57,6 +57,6 @@ const component = h(
 
 ## Notes
 
-- Baseline includes drop-target lifecycle via `@vue-aria/dnd/useDrop`, filled banner behavior, and starter drag/drop tests.
+- Baseline includes drop-target lifecycle via `@vue-aria/dnd/useDrop`, filled banner behavior (with locale-aware default replace banner copy), and starter drag/drop tests.
 - Ref forwarding (`UNSAFE_getDOMNode`) and SSR coverage are included.
 - Advanced upstream heading-context wiring and full visual/theming parity remain in progress.
