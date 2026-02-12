@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import { Dialog, DialogContainer } from "../src";
 
 async function flushOverlay(): Promise<void> {
@@ -189,6 +190,44 @@ describe("DialogContainer", () => {
       const dialog = document.body.querySelector("[role=\"dialog\"]");
       expect(dialog).not.toBeNull();
       expect(dialog?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("renders overlays in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-provider-container");
+    document.body.append(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(DialogContainer, null, {
+                  default: () => h(Dialog, null, () => "contents"),
+                }),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await flushOverlay();
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-provider-container\"]")).toBe(customContainer);
     } finally {
       wrapper.unmount();
       customContainer.remove();

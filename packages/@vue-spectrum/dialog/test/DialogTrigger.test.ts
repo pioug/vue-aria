@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import userEvent from "@testing-library/user-event";
 import { defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import { Dialog, DialogTrigger } from "../src";
 
 async function flushOverlay(): Promise<void> {
@@ -742,6 +743,103 @@ describe("DialogTrigger", () => {
       const dialog = document.body.querySelector("[role=\"dialog\"]");
       expect(dialog).not.toBeNull();
       expect(dialog?.closest("[data-testid=\"custom-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("renders overlays in portal container from UNSAFE_PortalProvider", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-provider-container");
+    document.body.append(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(DialogTrigger, { type: "popover" }, {
+                  default: () => [
+                    h("button", { type: "button" }, "Trigger"),
+                    h(Dialog, null, () => "contents"),
+                  ],
+                }),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-provider-container\"]")).toBe(customContainer);
+    } finally {
+      wrapper.unmount();
+      customContainer.remove();
+    }
+  });
+
+  it("supports nested UNSAFE_PortalProvider null override for dialog overlays", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.setAttribute("data-testid", "custom-provider-container");
+    document.body.append(customContainer);
+
+    const wrapper = mount(
+      {
+        render() {
+          return h(
+            UNSAFE_PortalProvider,
+            {
+              getContainer: () => customContainer,
+            },
+            {
+              default: () =>
+                h(
+                  UNSAFE_PortalProvider,
+                  {
+                    getContainer: null,
+                  },
+                  {
+                    default: () =>
+                      h(DialogTrigger, { type: "popover" }, {
+                        default: () => [
+                          h("button", { type: "button" }, "Trigger"),
+                          h(Dialog, null, () => "contents"),
+                        ],
+                      }),
+                  }
+                ),
+            }
+          );
+        },
+      },
+      {
+        attachTo: document.body,
+      }
+    );
+
+    try {
+      await wrapper.get("button").trigger("click");
+      await flushOverlay();
+
+      const dialog = document.body.querySelector("[role=\"dialog\"]");
+      expect(dialog).not.toBeNull();
+      expect(dialog?.closest("[data-testid=\"custom-provider-container\"]")).not.toBe(
+        customContainer
+      );
     } finally {
       wrapper.unmount();
       customContainer.remove();
