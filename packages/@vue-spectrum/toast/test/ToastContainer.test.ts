@@ -306,9 +306,70 @@ describe("ToastContainer", () => {
 
     expect(document.body.querySelector("[role=\"alertdialog\"]")).toBeNull();
     expect(onToast).toHaveBeenCalledTimes(1);
+    const event = onToast.mock.calls[0]?.[0] as CustomEvent | undefined;
+    expect(event?.detail).toEqual({
+      children: "Toast is default",
+      variant: "neutral",
+      options: {},
+    });
 
     window.removeEventListener("react-spectrum-toast", onToast as EventListener);
     wrapper.unmount();
+  });
+
+  it("keeps only one active ToastContainer across rerenders", async () => {
+    const Root = defineComponent({
+      name: "ToastContainerRerenderHarness",
+      props: {
+        mode: {
+          type: String as () => "both" | "second-only" | "first-only",
+          required: true,
+        },
+      },
+      setup(props) {
+        return () =>
+          h("div", null, [
+            props.mode !== "second-only"
+              ? h(ToastContainer, { key: "first" })
+              : null,
+            props.mode !== "first-only"
+              ? h(ToastContainer, { key: "second" })
+              : null,
+            h("button", { id: "toast-rerender-trigger", type: "button" }, "Trigger"),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Root, {
+      attachTo: document.body,
+      props: {
+        mode: "both",
+      },
+    });
+
+    try {
+      queueToast();
+      await flushToasts();
+      expect(document.body.querySelectorAll("[role=\"region\"]")).toHaveLength(1);
+      expect(document.body.querySelectorAll("[role=\"alert\"]")).toHaveLength(1);
+
+      await wrapper.setProps({ mode: "second-only" });
+      await flushToasts();
+      expect(document.body.querySelectorAll("[role=\"region\"]")).toHaveLength(1);
+      expect(document.body.querySelectorAll("[role=\"alert\"]")).toHaveLength(1);
+
+      await wrapper.setProps({ mode: "first-only" });
+      await flushToasts();
+      expect(document.body.querySelectorAll("[role=\"region\"]")).toHaveLength(1);
+      expect(document.body.querySelectorAll("[role=\"alert\"]")).toHaveLength(1);
+
+      await wrapper.setProps({ mode: "both" });
+      await flushToasts();
+      expect(document.body.querySelectorAll("[role=\"region\"]")).toHaveLength(1);
+      expect(document.body.querySelectorAll("[role=\"alert\"]")).toHaveLength(1);
+    } finally {
+      wrapper.unmount();
+    }
   });
 
   it("supports custom aria-labels and a single active container", async () => {
