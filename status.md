@@ -204,14 +204,14 @@
 | @vue-types/overlays | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/overlays | packages/@react-types/overlays |
 | @vue-types/progress | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/progress | packages/@react-types/progress |
 | @vue-types/provider | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/provider | packages/@react-types/provider |
-| @vue-types/radio | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/radio | packages/@react-types/radio |
+| @vue-types/radio | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/radio | packages/@react-types/radio |
 | @vue-types/searchfield | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/searchfield | packages/@react-types/searchfield |
 | @vue-types/select | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/select | packages/@react-types/select |
 | @vue-types/shared | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/shared | packages/@react-types/shared |
 | @vue-types/sidenav | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/sidenav | packages/@react-types/sidenav |
 | @vue-types/slider | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/slider | packages/@react-types/slider |
 | @vue-types/statuslight | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/statuslight | packages/@react-types/statuslight |
-| @vue-types/switch | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/switch | packages/@react-types/switch |
+| @vue-types/switch | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/switch | packages/@react-types/switch |
 | @vue-types/table | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/table | packages/@react-types/table |
 | @vue-types/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-types/tabs | packages/@react-types/tabs |
 | @vue-types/text | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-types/text | packages/@react-types/text |
