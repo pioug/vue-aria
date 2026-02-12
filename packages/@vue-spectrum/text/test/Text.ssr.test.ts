@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Text } from "../src";
 
 describe("Text SSR", () => {
-  it("renders without errors", async () => {
+  it("should render without errors", async () => {
     const App = defineComponent({
       name: "TextSSRApp",
       setup() {
