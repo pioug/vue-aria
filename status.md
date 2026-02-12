@@ -64,7 +64,7 @@
 | @vue-aria/steplist | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/steplist | packages/@react-aria/steplist |
 | @vue-aria/switch | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/switch | packages/@react-aria/switch |
 | @vue-aria/table | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/table | packages/@react-aria/table |
-| @vue-aria/tabs | not_started | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tabs | packages/@react-aria/tabs |
+| @vue-aria/tabs | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/tabs | packages/@react-aria/tabs |
 | @vue-aria/tag | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-aria/tag | packages/@react-aria/tag |
 | @vue-aria/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/test-utils | packages/@react-aria/test-utils |
 | @vue-aria/textfield | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-aria/textfield | packages/@react-aria/textfield |
