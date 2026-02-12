@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
 import { useNumberField } from "../src/useNumberField";
 
 interface NumberFieldHandlers {
@@ -263,5 +264,58 @@ describe("useNumberField", () => {
     handlers.onWheel?.({ deltaX: 0, deltaY: 10, ctrlKey: false } as WheelEvent);
 
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("resets controlled value to the initial value on form reset", () => {
+    const form = document.createElement("form");
+    const inputElement = document.createElement("input");
+    form.appendChild(inputElement);
+    document.body.appendChild(form);
+
+    const value = ref(10);
+    const onChange = vi.fn((next: number | undefined) => {
+      value.value = next ?? 0;
+    });
+
+    const { inputProps } = useNumberField({
+      "aria-label": "mandatory label",
+      value,
+      onChange,
+      inputRef: inputElement,
+    });
+    const handlers = inputProps.value as NumberFieldHandlers;
+
+    handlers.onChange?.({ target: { value: "100" } } as unknown as Event);
+    handlers.onBlur?.({} as FocusEvent);
+
+    expect(value.value).toBe(100);
+
+    form.dispatchEvent(new Event("reset"));
+
+    expect(onChange).toHaveBeenLastCalledWith(10);
+    expect(value.value).toBe(10);
+    document.body.removeChild(form);
+  });
+
+  it("resets uncontrolled value to defaultValue on form reset", () => {
+    const form = document.createElement("form");
+    const inputElement = document.createElement("input");
+    form.appendChild(inputElement);
+    document.body.appendChild(form);
+
+    const { inputProps } = useNumberField({
+      "aria-label": "mandatory label",
+      defaultValue: 10,
+      inputRef: inputElement,
+    });
+    const handlers = inputProps.value as NumberFieldHandlers;
+
+    handlers.onChange?.({ target: { value: "100" } } as unknown as Event);
+    handlers.onBlur?.({} as FocusEvent);
+    expect(inputProps.value.value).toBe("100");
+
+    form.dispatchEvent(new Event("reset"));
+    expect(inputProps.value.value).toBe("10");
+    document.body.removeChild(form);
   });
 });
