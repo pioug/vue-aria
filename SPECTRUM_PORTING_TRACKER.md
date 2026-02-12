@@ -10,8 +10,8 @@ Companion docs:
 
 ## Progress Snapshot
 
-- Completed packages: `22 / 64`
-- Remaining packages: `42`
+- Completed packages: `23 / 64`
+- Remaining packages: `41`
 - Current stage: phase-1 foundation migration
 - Priority mode: complete React Spectrum v1 package parity first; S2 feature work is paused until v1 reaches completion gates.
 - Active focus lane: v1 package parity/hardening with shared docs base-style porting (runtime + tests + docs usability/styling + CI stability), including broad docs runtime class alias coverage for both `spectrum-*` and `react-spectrum-*` selectors in `docs/.vitepress/theme/spectrum-base.css`.
@@ -200,7 +200,7 @@ Companion docs:
 - [ ] `@react-spectrum/color` -> `@vue-spectrum/color`
 - [ ] `@react-spectrum/datepicker` -> `@vue-spectrum/datepicker`
 - [ ] `@react-spectrum/calendar` -> `@vue-spectrum/calendar`
-- [ ] `@react-spectrum/filetrigger` -> `@vue-spectrum/filetrigger`
+- [x] `@react-spectrum/filetrigger` -> `@vue-spectrum/filetrigger`
 
 ## Lists, Tables, and Trees
 
