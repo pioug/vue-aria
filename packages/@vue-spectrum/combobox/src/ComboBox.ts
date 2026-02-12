@@ -779,6 +779,7 @@ export const ComboBox = defineComponent({
 
       return slotModel.value.items;
     });
+    const isAsync = computed(() => props.loadingState !== undefined);
 
     const controlledSelectedKey =
       props.selectedKey === undefined
@@ -806,7 +807,9 @@ export const ComboBox = defineComponent({
       defaultFilter: props.defaultFilter ?? DEFAULT_FILTER,
       completionMode: computed(() => props.completionMode),
       menuTrigger: computed(() => props.menuTrigger),
-      allowsEmptyCollection: computed(() => props.allowsEmptyCollection),
+      allowsEmptyCollection: computed(
+        () => props.allowsEmptyCollection ?? isAsync.value
+      ),
       allowsCustomValue: computed(() => props.allowsCustomValue),
       shouldCloseOnBlur: computed(() => props.shouldCloseOnBlur),
       isReadOnly: computed(() => props.isReadOnly),
@@ -1250,6 +1253,9 @@ export const ComboBox = defineComponent({
       }
 
       if (isLoadingList.value) {
+        const isEmptyLoadingState =
+          props.loadingState === "loading" && state.collection.value.length === 0;
+
         renderedList.push(
           h(
             "div",
@@ -1266,6 +1272,15 @@ export const ComboBox = defineComponent({
                     ? "Loading more"
                     : "Loading",
               }),
+              isEmptyLoadingState
+                ? h(
+                    "span",
+                    {
+                      class: classNames("react-spectrum-ComboBox-loadingLabel"),
+                    },
+                    "Loading..."
+                  )
+                : null,
             ]
           )
         );

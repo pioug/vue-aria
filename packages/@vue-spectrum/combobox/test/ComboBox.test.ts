@@ -1561,6 +1561,26 @@ describe("ComboBox", () => {
     }
   });
 
+  it("renders a Loading... placeholder option when loading with no items", async () => {
+    const user = userEvent.setup();
+    const tree = render(ComboBox, {
+      props: {
+        label: "Combobox",
+        items: [],
+        inputValue: "blah",
+        loadingState: "loading",
+      },
+    });
+
+    const button = tree.getByRole("button");
+    await user.click(button);
+
+    const listbox = tree.getByRole("listbox");
+    const options = within(listbox).getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]?.textContent).toContain("Loading...");
+  });
+
   it("supports static slot syntax with ComboBoxItem and ComboBoxSection", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
