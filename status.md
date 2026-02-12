@@ -128,7 +128,7 @@
 | @vue-spectrum/tabs | not_started | 1 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tabs | packages/@react-spectrum/tabs |
 | @vue-spectrum/tag | not_started | 2 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/tag | packages/@react-spectrum/tag |
 | @vue-spectrum/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/test-utils | packages/@react-spectrum/test-utils |
-| @vue-spectrum/text | not_started | 3 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/text | packages/@react-spectrum/text |
+| @vue-spectrum/text | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/text | packages/@react-spectrum/text |
 | @vue-spectrum/textfield | not_started | 4 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/textfield | packages/@react-spectrum/textfield |
 | @vue-spectrum/theme-dark | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/theme-dark | packages/@react-spectrum/theme-dark |
 | @vue-spectrum/theme-default | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/theme-default | packages/@react-spectrum/theme-default |

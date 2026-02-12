@@ -1,9 +1,14 @@
 {
-  "generatedAt": "2026-02-12T18:09:24.765Z",
+  "generatedAt": "2026-02-12T18:09:47.868Z",
   "trackedPackageCount": 197,
-  "incompletePackageCount": 43,
+  "incompletePackageCount": 42,
   "availableLeafCount": 9,
   "availableLeaves": [
+    {
+      "packageName": "@vue-spectrum/badge",
+      "upstreamPackageName": "@react-spectrum/badge",
+      "upstreamPath": "packages/@react-spectrum/badge"
+    },
     {
       "packageName": "@vue-spectrum/dropzone",
       "upstreamPackageName": "@react-spectrum/dropzone",
@@ -38,11 +43,6 @@
       "packageName": "@vue-spectrum/steplist",
       "upstreamPackageName": "@react-spectrum/steplist",
       "upstreamPath": "packages/@react-spectrum/steplist"
-    },
-    {
-      "packageName": "@vue-spectrum/text",
-      "upstreamPackageName": "@react-spectrum/text",
-      "upstreamPath": "packages/@react-spectrum/text"
     },
     {
       "packageName": "@vue-spectrum/view",
