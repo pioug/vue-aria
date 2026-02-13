@@ -3011,3 +3011,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` shadow mixed-control containment parity with adapted upstream coverage for:
   - cycling contained Tab traversal across mixed focusable controls (`input`, `input`, `button`) inside a shadow-root scope
 - Validation: `npm run check` passed, `npm test` passed (125 files, 522 tests).
+- Expanded `@vue-aria/focus/FocusScope` cleanup parity with adapted timer/raf leak guard coverage for:
+  - no pending timer work after contained focus/blur lifecycle and unmount
+- Validation: `npm run check` passed, `npm test` passed (125 files, 523 tests).

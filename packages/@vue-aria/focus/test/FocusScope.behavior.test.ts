@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { disableShadowDOM, enableShadowDOM } from "@vue-aria/flags";
 import { Teleport, defineComponent, h, nextTick, onMounted, ref } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { FocusScope, useFocusManager, type FocusManager } from "../src";
 
 describe("FocusScope behavior", () => {
@@ -1508,6 +1508,35 @@ describe("FocusScope behavior", () => {
       wrapper.unmount();
       host.remove();
       disableShadowDOM();
+    }
+  });
+
+  it("does not leave pending timer work after a contained focus/blur cycle", () => {
+    vi.useFakeTimers();
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { restoreFocus: true, contain: true },
+      slots: {
+        default: () => [
+          h("button", { id: "first" }, "First"),
+          h("button", { id: "second" }, "Second"),
+        ],
+      },
+    });
+
+    try {
+      const first = wrapper.get("#first").element as HTMLButtonElement;
+      const second = wrapper.get("#second").element as HTMLButtonElement;
+
+      first.focus();
+      second.focus();
+      second.blur();
+
+      wrapper.unmount();
+      vi.runAllTimers();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
     }
   });
 
