@@ -13,6 +13,7 @@ export default defineConfig({
       { text: "Visually Hidden", link: "/packages/visually-hidden" },
       { text: "Label", link: "/packages/label" },
       { text: "Button", link: "/packages/button" },
+      { text: "Link", link: "/packages/link" },
     ],
     sidebar: [
       {
@@ -25,6 +26,7 @@ export default defineConfig({
           { text: "@vue-aria/visually-hidden", link: "/packages/visually-hidden" },
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/button", link: "/packages/button" },
+          { text: "@vue-aria/link", link: "/packages/link" },
         ],
       },
     ],

@@ -22,7 +22,8 @@
       "@vue-aria/live-announcer": ["packages/@vue-aria/live-announcer/src/index.ts"],
       "@vue-aria/visually-hidden": ["packages/@vue-aria/visually-hidden/src/index.ts"],
       "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
-      "@vue-aria/button": ["packages/@vue-aria/button/src/index.ts"]
+      "@vue-aria/button": ["packages/@vue-aria/button/src/index.ts"],
+      "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

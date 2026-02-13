@@ -46,7 +46,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/searchfield`: Not started
 - `@vue-aria/numberfield`: Not started
 - `@vue-aria/slider`: Not started
-- `@vue-aria/link`: Not started
+- `@vue-aria/link`: In progress
 - `@vue-aria/menu`: Not started
 - `@vue-aria/listbox`: Not started
 - `@vue-aria/select`: Not started
@@ -664,7 +664,57 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 2. Wire and validate consumers (`@vue-spectrum/button` and related controls).
 3. Expand docs with full Vue component examples once consumers exist.
 
-## 13) Session Log
+## 13) Package Record: @vue-aria/link
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/link/src`
+  - `references/react-spectrum/packages/@react-aria/link/test`
+- Local package path: `packages/@vue-aria/link`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete (full package/deep integration pending)
+
+### Implementation
+- [x] Ported initial upstream API:
+  - `useLink`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useLink.ts`
+  - `tsconfig.json` path alias
+- Remaining:
+  - Validate/expand router integration semantics against upstream edge cases.
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted `useLink` tests for defaults, custom element type behavior, and disabled behavior.
+- [x] All currently present upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/link.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate link semantics and keyboard behavior in downstream component integrations
+
+### Visual Parity
+- Not applicable for this utility package beyond interaction semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Harden router/client-navigation edge-case parity.
+2. Integrate and validate within downstream link/menu/breadcrumb components.
+
+## 14) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -874,3 +924,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted `useButton` upstream test coverage and resolved scope warnings by running hooks in Vue effect scopes.
 - Added VitePress docs page for `@vue-aria/button` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (60 files, 175 tests).
+- Started `@vue-aria/link` package:
+  - `useLink`
+  - package scaffolding and tsconfig alias wiring
+- Added adapted `@react-aria/link` test coverage for default/custom/disabled link behavior.
+- Added VitePress docs page for `@vue-aria/link` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (61 files, 178 tests).
