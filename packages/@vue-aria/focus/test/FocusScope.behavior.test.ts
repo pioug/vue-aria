@@ -503,6 +503,54 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("handles forms with a single radio in containment traversal without crashing", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("button", { id: "button1" }, "First button"),
+          h("form", [
+            h("input", { id: "only", type: "radio", name: "option" }),
+            h("label", { for: "only" }, "Only option"),
+          ]),
+          h("button", { id: "button2" }, "Second button"),
+        ],
+      },
+    });
+
+    const button1 = wrapper.get("#button1").element as HTMLButtonElement;
+    const radio = wrapper.get("#only").element as HTMLInputElement;
+    const button2 = wrapper.get("#button2").element as HTMLButtonElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    button1.focus();
+    expect(document.activeElement).toBe(button1);
+
+    expect(() => tabFromActive(false)).not.toThrow();
+    expect(document.activeElement).toBe(radio);
+
+    expect(() => tabFromActive(false)).not.toThrow();
+    expect(document.activeElement).toBe(button2);
+
+    wrapper.unmount();
+  });
+
   it("keeps focus in the active scope when another contain scope receives focus", () => {
     const wrapper = mount(defineComponent({
       components: { FocusScope },

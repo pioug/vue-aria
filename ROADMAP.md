@@ -2953,3 +2953,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useFocusManager.focusNext` forward traversal and wrap traversal inside iframe-owned scopes
 - Updated focus docs parity note to mark owner-document/iframe focus behavior as implemented.
 - Validation: `npm run check` passed, `npm test` passed (125 files, 505 tests).
+- Expanded `@vue-aria/focus/FocusScope` containment regression parity with adapted upstream coverage for:
+  - single-radio form traversal path (`form.elements.namedItem()` returning an element instead of `RadioNodeList`)
+  - non-crashing tab progression from button -> single radio -> following button within a containing focus scope
+- Validation: `npm run check` passed, `npm test` passed (125 files, 506 tests).
