@@ -2531,6 +2531,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useSlider` coverage for `aria-label` group labeling, vertical track interaction behavior, and stacked-thumb nearest-selection resolution.
   - Added adapted `useSliderThumb` coverage for range input prop wiring, change-event value parsing, and `PageUp` keyboard behavior.
   - Added adapted `useSliderThumb` coverage for merged slider/thumb `aria-describedby` metadata.
+  - Added adapted `useSliderThumb` coverage for upstream label wiring variants:
+    - slider-level visible label
+    - thumb-level visible label with slider `aria-label`
+    - per-thumb `aria-label` behavior in multi-thumb state with dynamic min/max boundaries
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3876,3 +3880,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider` track interaction parity:
   - added adapted tests for `aria-label` labeling path, vertical track dragging behavior, and stacked-thumb nearest-selection behavior (before/after click paths).
 - Validation: `npm run check` passed, `npm test` passed (140 files, 727 tests).
+- Expanded `@vue-aria/slider` thumb-label parity:
+  - added adapted tests for slider label wiring, thumb visible-label wiring, and multi-thumb per-label ARIA behavior with dynamic thumb bounds.
+- Validation: `npm run check` passed, `npm test` passed (140 files, 730 tests).
