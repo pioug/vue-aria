@@ -1069,6 +1069,125 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("restores to the correct nested scope when contained child scopes unmount", async () => {
+    const Host = defineComponent({
+      props: {
+        show1: Boolean,
+        show2: Boolean,
+        show3: Boolean,
+      },
+      setup(props) {
+        return () =>
+          h("div", [
+            h("input", { id: "outside" }),
+            h(
+              FocusScope,
+              { autoFocus: true, restoreFocus: true, contain: true },
+              {
+                default: () => [
+                  h("input", { id: "parent" }),
+                  props.show1
+                    ? h(
+                      FocusScope,
+                      { contain: true },
+                      {
+                        default: () => [
+                          h("input", { id: "child1" }),
+                          props.show2
+                            ? h(
+                              FocusScope,
+                              { contain: true },
+                              {
+                                default: () => [
+                                  h("input", { id: "child2" }),
+                                  props.show3
+                                    ? h(
+                                      FocusScope,
+                                      { contain: true },
+                                      {
+                                        default: () => [h("input", { id: "child3" })],
+                                      }
+                                    )
+                                    : null,
+                                ],
+                              }
+                            )
+                            : null,
+                        ],
+                      }
+                    )
+                    : null,
+                ],
+              }
+            ),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Host, {
+      attachTo: document.body,
+      props: {
+        show1: false,
+        show2: false,
+        show3: false,
+      },
+    });
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    const byId = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+    expect(document.activeElement).toBe(byId("parent"));
+
+    await wrapper.setProps({ show1: true });
+    expect(document.activeElement).toBe(byId("parent"));
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(byId("child1"));
+
+    byId("parent").focus();
+    expect(document.activeElement).toBe(byId("child1"));
+
+    await wrapper.setProps({ show1: true, show2: true });
+    expect(document.activeElement).toBe(byId("child1"));
+    tabFromActive(false);
+    expect(document.activeElement).toBe(byId("child2"));
+
+    byId("child1").focus();
+    expect(document.activeElement).toBe(byId("child2"));
+
+    byId("parent").focus();
+    expect(document.activeElement).toBe(byId("child2"));
+
+    await wrapper.setProps({ show1: true, show2: true, show3: true });
+    tabFromActive(false);
+    expect(document.activeElement).toBe(byId("child3"));
+
+    await wrapper.setProps({ show1: true, show2: false, show3: false });
+
+    byId("child1").focus();
+    expect(document.activeElement).toBe(byId("child1"));
+
+    byId("parent").focus();
+    expect(document.activeElement).toBe(byId("child1"));
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

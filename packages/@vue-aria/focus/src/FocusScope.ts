@@ -311,16 +311,17 @@ export const FocusScope = defineComponent({
           }
 
           const currentActiveScope = activeScopeRef.value;
-          if (
-            currentActiveScope
-            && currentActiveScope !== scopeRootRef.value
-            && nodeContains(scopeRootRef.value, currentActiveScope)
-            && nodeContains(currentActiveScope, target)
-          ) {
+          const scopeRoot = scopeRootRef.value;
+          const canActivateScope = !currentActiveScope
+            || currentActiveScope === scopeRoot
+            || isDescendantScope(scopeRoot, currentActiveScope)
+            || nodeContains(currentActiveScope, scopeRoot);
+
+          if (!canActivateScope) {
             return;
           }
 
-          activeScopeRef.value = scopeRootRef.value;
+          activeScopeRef.value = scopeRoot;
           lastFocusedInScope.value = target;
         };
 

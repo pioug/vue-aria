@@ -2988,3 +2988,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - preserving parent-scope tab traversal through nested child scopes that do not use `contain`
   - preserving parent-scope tab traversal through nested child scopes that use `restoreFocus` without `contain`
 - Validation: `npm run check` passed, `npm test` passed (125 files, 516 tests).
+- Expanded `@vue-aria/focus/FocusScope` nested contained-unmount parity with adapted upstream coverage for:
+  - restoring active containment to the correct remaining nested scope as deeper contained children unmount
+- Improved active-scope transition logic:
+  - ancestor scopes can no longer reclaim active-scope state while a descendant contained scope is active
+  - descendant scopes (including teleported descendants) retain focus ownership until focus moves within allowed hierarchy
+- Validation: `npm run check` passed, `npm test` passed (125 files, 517 tests).
