@@ -10,6 +10,13 @@ export { usePress } from "./usePress";
 export { useLongPress } from "./useLongPress";
 export { PressResponder, ClearPressResponder } from "./PressResponder";
 export { PressResponderContext } from "./context";
+export { Pressable } from "./Pressable";
+export {
+  useFocusable,
+  FocusableProvider,
+  Focusable,
+  FocusableContext,
+} from "./useFocusable";
 export {
   isFocusVisible,
   getInteractionModality,
@@ -57,3 +64,9 @@ export type {
   LongPressProps,
   LongPressResult,
 } from "./useLongPress";
+export type {
+  FocusableOptions,
+  FocusableProviderProps,
+  FocusableAria,
+  FocusableContextValue,
+} from "./useFocusable";

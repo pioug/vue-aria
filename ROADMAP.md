@@ -322,6 +322,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useLongPress`
   - `PressResponder` / `ClearPressResponder` context provider APIs
   - `PressResponderContext` + `usePress` context consumption/registration
+  - `useFocusable`
+  - `FocusableProvider` / `Focusable` / `FocusableContext`
+  - `Pressable` component API
   - `textSelection` helpers (`disableTextSelection`, `restoreTextSelection`)
 - [x] Package scaffolding created and wired:
   - `package.json`
@@ -334,8 +337,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 12
-- Passing test files: 12
+- Ported test files: 14
+- Passing test files: 14
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
@@ -349,6 +352,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `usePress` pointer/mouse fallback flow, keyboard flow, disabled behavior, pointer-exit cancellation, and propagation semantics.
   - Added adapted tests for `useLongPress` timer threshold behavior, cancellation semantics, `usePress` composition, keyboard non-trigger behavior, and accessibility description handling.
   - Added adapted tests for `PressResponder` registration warning semantics and pressable-child registration path.
+  - Added adapted tests for `useFocusable` tab order/default keyboard-focus wiring and `Pressable` focusability behavior.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -612,3 +616,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported `@vue-aria/interactions` press responder context layer (`PressResponder`, `ClearPressResponder`, `PressResponderContext`) and wired `usePress` context merge behavior.
 - Added adapted `PressResponder` tests for registration warning and pressable-child detection behavior.
 - Validation: `npm run check` passed, `npm test` passed (50 files, 144 tests).
+- Ported `@vue-aria/interactions` focusable/pressable surface (`useFocusable`, `FocusableProvider`, `Focusable`, `FocusableContext`, `Pressable`) with Vue slot/cloneVNode adaptation.
+- Added adapted tests for `useFocusable` and `Pressable` baseline parity paths.
+- Validation: `npm run check` passed, `npm test` passed (52 files, 148 tests).
