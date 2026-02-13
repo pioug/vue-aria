@@ -150,6 +150,50 @@ describe("useSelect", () => {
     ref.current?.remove();
   });
 
+  it("uses first key and prevents default on arrow keys when there is no selection", () => {
+    const state = createState();
+    state.selectedKey = null;
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const leftPreventDefault = vi.fn();
+    const rightPreventDefault = vi.fn();
+    const onKeyDown = result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
+    onKeyDown?.({
+      key: "ArrowLeft",
+      preventDefault: leftPreventDefault,
+    } as unknown as KeyboardEvent);
+    onKeyDown?.({
+      key: "ArrowRight",
+      preventDefault: rightPreventDefault,
+    } as unknown as KeyboardEvent);
+
+    expect(leftPreventDefault).toHaveBeenCalledTimes(1);
+    expect(rightPreventDefault).toHaveBeenCalledTimes(1);
+    expect(state.setSelectedKey).toHaveBeenNthCalledWith(1, "a");
+    expect(state.setSelectedKey).toHaveBeenNthCalledWith(2, "a");
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
   it("wires focus and blur lifecycle callbacks", () => {
     const state = createState();
     const onFocusChange = vi.fn();
