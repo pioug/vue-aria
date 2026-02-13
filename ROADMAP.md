@@ -1413,8 +1413,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 11
-- Ported test files: 10
-- Passing test files: 10 (validated 2026-02-13)
+- Ported test files: 11
+- Passing test files: 11 (validated 2026-02-13)
 - Test parity notes:
   - Current adapted coverage includes outside-dismiss behavior, scroll-lock behavior, `ariaHideOutside` hide/restore behavior, overlay-trigger semantics/compatibility behavior, `DismissButton`/`useModal`/`useModalOverlay`/`usePopover` behavior, core `calculatePosition` math/flip/arrow boundary behavior, and `useOverlayPosition` baseline positioning and close-on-scroll behavior.
 - [ ] All relevant upstream tests migrated
@@ -1769,3 +1769,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useOverlay` top-most-overlay dismissal behavior
   - `useModal` error behavior outside provider
 - Validation: `npm run check` passed, `npm test` passed (92 files, 280 tests).
+- Added `useModal.ssr` adapted test coverage for `OverlayContainer`/`OverlayProvider` server rendering path.
+- Validation: `npm run check` passed, `npm test` passed (93 files, 281 tests).
