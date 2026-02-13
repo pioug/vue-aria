@@ -272,6 +272,106 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("does not navigate to landmarks removed from the DOM", async () => {
+    const showRegion = ref(true);
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const Region = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "region", "aria-label": "Region" }, refAdapter);
+        return () => h("article", { ...landmarkProps, ref: elementRef }, "Region");
+      },
+    });
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), showRegion.value ? h(Region) : null, h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav").element as HTMLElement;
+    const main = wrapper.get("main").element as HTMLElement;
+    const region = wrapper.get("article").element as HTMLElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav);
+
+    nav.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region);
+
+    region.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    showRegion.value = false;
+    await nextTick();
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", shiftKey: true, bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav);
+    wrapper.unmount();
+  });
+
+  it("navigates to landmarks added to the DOM", async () => {
+    const showRegion = ref(false);
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const Main = createLandmark("main", "main", "Main");
+    const Region = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "region", "aria-label": "Region" }, refAdapter);
+        return () => h("article", { ...landmarkProps, ref: elementRef }, "Region");
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main), showRegion.value ? h(Region) : null]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav").element as HTMLElement;
+    const main = wrapper.get("main").element as HTMLElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav);
+
+    nav.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    showRegion.value = true;
+    await nextTick();
+    const region = wrapper.get("article").element as HTMLElement;
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region);
+    wrapper.unmount();
+  });
+
   it("skips aria-hidden landmarks when navigating", async () => {
     const Navigation = createLandmark("nav", "navigation", "Navigation");
     const HiddenRegion = defineComponent({

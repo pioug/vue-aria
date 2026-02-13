@@ -2382,6 +2382,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
   - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
   - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
+  - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2400,8 +2401,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port additional upstream `useLandmark.test.tsx` interaction coverage for dynamic DOM mutation and focus restoration corner-cases.
-2. Port remaining nested-first/nested-last focused landmark assertions from upstream parity suite.
+1. Port remaining upstream focus-restoration edge coverage (tab/window toggle and blur/re-focus behavior).
+2. Port nested-first/nested-last explicit assertion variants from upstream parity suite.
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3724,3 +3725,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` nested traversal parity:
   - added adapted DOM-order navigation coverage for nested landmarks (`main` -> `region 1` -> `region 2`) including backward wrap from `main`.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 686 tests).
+- Expanded `@vue-aria/landmark` dynamic mutation parity:
+  - added adapted tests covering landmark removal from the active traversal path and post-mount landmark insertion into F6 navigation order.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 688 tests).
