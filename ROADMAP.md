@@ -2160,6 +2160,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for aria realtime update behavior, native commit-queue behavior, controlled invalid-state precedence, and `mergeValidation` result semantics.
+  - Added adapted component-context coverage for `FormValidationContext` server-error injection:
+    - server-error display when provider payload includes matching field names
+    - server-error clearing after `commitValidation`
+    - redisplay when provider payload changes to a new server error object
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2177,7 +2181,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Validate server error context parity in consumer integration scenarios.
+1. Validate server error context parity in additional consumer integration scenarios.
 2. Reuse this state package in additional control-state ports (`checkbox-state`, `radio-state`, and future form controls).
 
 ## 37) Session Log
@@ -3261,3 +3265,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - aligned non-Enter key handling to call `continuePropagation` from the chained keydown handler
   - added adapted test coverage asserting non-Enter keydown paths propagate while Enter paths retain commit/validation behavior
 - Validation: `npm run check` passed, `npm test` passed (126 files, 593 tests).
+- Expanded `@vue-aria/form-state` server-error context parity coverage:
+  - added adapted provider-based `FormValidationContext` tests for initial server-error display, clear-on-commit behavior, and redisplay when server payload changes
+- Validation: `npm run check` passed, `npm test` passed (126 files, 594 tests).

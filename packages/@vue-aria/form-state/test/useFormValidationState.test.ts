@@ -1,9 +1,12 @@
-import { effectScope, nextTick, ref } from "vue";
+import { defineComponent, effectScope, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
+import { mount } from "@vue/test-utils";
 import {
   DEFAULT_VALIDATION_RESULT,
+  FormValidationContext,
   mergeValidation,
   useFormValidationState,
+  type FormValidationState,
   type ValidationResult,
 } from "../src";
 
@@ -94,5 +97,45 @@ describe("useFormValidationState", () => {
     expect(merged.validationDetails!.valueMissing).toBe(true);
     expect(merged.validationDetails!.rangeOverflow).toBe(true);
     expect(merged.validationDetails!.valid).toBe(false);
+  });
+
+  it("surfaces injected server errors and refreshes when server payload changes", async () => {
+    const value = ref("abc");
+    const serverErrors = ref<Record<string, string | string[]>>({ field: "Server invalid" });
+    const state = ref<FormValidationState | null>(null);
+
+    const TestHarness = defineComponent({
+      setup() {
+        state.value = useFormValidationState<string>({
+          name: "field",
+          value,
+          validationBehavior: "aria",
+        });
+        return () => null;
+      },
+    });
+
+    const wrapper = mount(TestHarness, {
+      global: {
+        provide: {
+          [FormValidationContext as symbol]: serverErrors,
+        },
+      },
+    });
+    await nextTick();
+
+    expect(state.value?.displayValidation.isInvalid).toBe(true);
+    expect(state.value?.displayValidation.validationErrors).toEqual(["Server invalid"]);
+
+    state.value?.commitValidation();
+    await nextTick();
+    expect(state.value?.displayValidation.isInvalid).toBe(false);
+
+    serverErrors.value = { field: ["Server invalid", "Server still invalid"] };
+    await nextTick();
+    expect(state.value?.displayValidation.isInvalid).toBe(true);
+    expect(state.value?.displayValidation.validationErrors).toEqual(["Server invalid", "Server still invalid"]);
+
+    wrapper.unmount();
   });
 });
