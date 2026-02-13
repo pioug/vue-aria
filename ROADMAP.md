@@ -2603,6 +2603,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Open adaptation note:
   - Current state logic is source-aligned and exercised in slider hook integration tests; controlled-value reactivity now mirrors upstream expectations via `useControlledState` getters.
+  - Dynamic thumb-count bookkeeping now re-sizes drag/editable state and focused-thumb index when controlled value length changes.
 
 ### Tests
 - Total upstream test files: 1 (`useSliderState.test.js`)
@@ -2614,6 +2615,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for single-value callback conversion (`number` instead of `number[]`) and disabled/non-editable thumb update guards.
   - Added adapted controlled-value coverage for reactive external updates in both array and single-value (`number`) modes.
   - Added adapted coverage for controlled/uncontrolled transitions (`controlled -> uncontrolled` and `uncontrolled -> controlled`) including warning behavior and callback semantics.
+  - Added adapted coverage for dynamic controlled thumb-count changes and associated drag/editable/focus bookkeeping stability.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2635,7 +2637,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Validate callback and drag-lifecycle behavior in additional multi-thumb integration scenarios.
 2. Expand docs examples with range-slider and callback lifecycle walkthroughs.
-3. Harden parity for dynamic-thumb-count controlled updates and ensure drag/editable bookkeeping remains stable when value array length changes.
+3. Audit controlled callback-shape behavior under runtime type switches (`number` <-> `number[]`) and document expected constraints.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4021,3 +4023,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted test coverage for `controlled -> uncontrolled` transitions, including warning behavior and post-transition internal state updates.
   - added adapted test coverage for `uncontrolled -> controlled` transitions, including warning behavior and controlled-value update semantics.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 761 tests).
+- Expanded `@vue-aria/slider-state` dynamic-thumb-count parity hardening:
+  - updated `useSliderState` bookkeeping to re-size drag/editable arrays and clear out-of-range focused indices when controlled value-array length changes.
+  - added adapted tests for dynamic thumb-count growth/shrink scenarios, preserving expected drag/editable behavior and focus safety.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 762 tests).

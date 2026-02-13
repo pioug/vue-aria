@@ -353,4 +353,41 @@ describe("useSliderState", () => {
     warnSpy.mockRestore();
     stop();
   });
+
+  it("keeps dragging/editable/focus bookkeeping aligned with dynamic thumb count", async () => {
+    const props = reactive({
+      value: [10, 40],
+      numberFormatter,
+    });
+
+    const { state, stop } = setupSliderState(props as any);
+    expect(state.values).toEqual([10, 40]);
+
+    state.setThumbEditable(1, false);
+    expect(state.isThumbEditable(1)).toBe(false);
+    state.setThumbDragging(0, true);
+    expect(state.isThumbDragging(0)).toBe(true);
+
+    props.value = [10, 40, 70];
+    await nextTick();
+    expect(state.values).toEqual([10, 40, 70]);
+    expect(state.isThumbDragging(0)).toBe(true);
+    expect(state.isThumbDragging(2)).toBe(false);
+    expect(state.isThumbEditable(1)).toBe(false);
+    expect(state.isThumbEditable(2)).toBe(true);
+
+    state.setFocusedThumb(2);
+    expect(state.focusedThumb).toBe(2);
+    state.setThumbDragging(0, false);
+    expect(state.isThumbDragging(0)).toBe(false);
+
+    props.value = [10];
+    await nextTick();
+    expect(state.values).toEqual([10]);
+    expect(state.isThumbDragging(0)).toBe(false);
+    expect(state.isThumbEditable(0)).toBe(true);
+    expect(state.focusedThumb).toBeUndefined();
+
+    stop();
+  });
 });

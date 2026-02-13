@@ -148,6 +148,27 @@ export function useSliderState<T extends number | number[]>(
     }
   );
 
+  watch(
+    () => valuesState.value.length,
+    (length) => {
+      if (isDraggingsRef.value.length !== length) {
+        const nextDraggings = Array.from({ length }, (_, index) => Boolean(isDraggingsRef.value[index]));
+        setDraggings(nextDraggings);
+      }
+
+      if (isEditablesRef.value.length !== length) {
+        isEditablesRef.value = Array.from(
+          { length },
+          (_, index) => isEditablesRef.value[index] ?? true
+        );
+      }
+
+      if (focusedIndexRef.value != null && focusedIndexRef.value >= length) {
+        focusedIndexRef.value = undefined;
+      }
+    }
+  );
+
   const getValuePercent = (value: number) => (value - minValue) / (maxValue - minValue);
 
   const getThumbMinValue = (index: number) =>
