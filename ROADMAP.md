@@ -1468,10 +1468,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 0 dedicated unit tests in package
-- Ported test files: 3 (adapted)
-- Passing test files: 3 (validated 2026-02-13)
+- Ported test files: 5 (adapted)
+- Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for listbox role/multiselect props, option aria metadata/id wiring (including virtualized metadata), and section group/heading semantics.
+  - Added adapted coverage for listbox role/multiselect props, option aria metadata/id wiring (including virtualized metadata), section group/heading semantics, item id utility derivation, Safari VoiceOver aria mapping behavior, and hover-focus interaction gating.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1525,7 +1525,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 3 (adapted)
 - Passing test files: 3 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for key traversal/indexing in `ListCollection`, baseline `useListState` selection manager wiring, and `useSingleSelectListState` selected-key/item behavior.
+  - Added adapted coverage for key traversal/indexing in `ListCollection` (including `at(index)`), baseline `useListState` selection manager wiring, and `useSingleSelectListState` selected-key/item behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1908,3 +1908,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (100 files, 293 tests).
 - Added adapted Safari/macOS VoiceOver branch coverage for `@vue-aria/listbox/useOption` ensuring aria label slot mappings are omitted under WebKit/macOS conditions.
 - Validation: `npm run check` passed, `npm test` passed (101 files, 294 tests).
+- Added `@vue-aria/list-state/ListCollection.at(index)` API parity and adapted test coverage.
+- Added adapted `@vue-aria/listbox/useOption` hover-focus parity coverage:
+  - focuses option on hover when `shouldFocusOnHover` is enabled and modality is pointer
+  - does not force focus on hover when focus is keyboard-visible
+  - keeps hover-focus behavior disabled when `shouldFocusOnHover` is false
+- Validation: `npm run check` passed, `npm test` passed (101 files, 297 tests).

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { listData } from "../src/utils";
 import { useOption } from "../src/useOption";
 import type { ListState } from "../src/types";
+import { setInteractionModality } from "@vue-aria/interactions";
 
 function createCollection() {
   const keys = ["a", "b"];
@@ -31,7 +32,7 @@ function createCollection() {
   };
 }
 
-function createManager() {
+function createManager(overrides: Partial<Record<string, unknown>> = {}) {
   const collection = createCollection();
   return {
     selectionMode: "multiple",
@@ -63,7 +64,19 @@ function createManager() {
     getItemProps: () => ({}),
     setFocused: () => {},
     setFocusedKey: () => {},
+    ...overrides,
   } as any;
+}
+
+function getPointerEnterHandler(optionProps: Record<string, unknown>) {
+  return (
+    optionProps.onPointerenter ??
+    optionProps.onPointerEnter ??
+    optionProps.onMouseenter ??
+    optionProps.onMouseEnter
+  ) as
+    | ((event: PointerEvent) => void)
+    | undefined;
 }
 
 describe("useOption", () => {
@@ -98,6 +111,150 @@ describe("useOption", () => {
     expect(optionProps["aria-posinset"]).toBe(1);
     expect(optionProps["aria-setsize"]).toBe(2);
     expect(optionProps.id).toBe("list-id-option-a");
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("focuses hovered option when pointer modality is active and hover focus is enabled", () => {
+    const focusCalls: boolean[] = [];
+    const focusedKeyCalls: string[] = [];
+    const manager = createManager({
+      setFocused: (value: boolean) => {
+        focusCalls.push(value);
+      },
+      setFocusedKey: (value: string) => {
+        focusedKeyCalls.push(value);
+      },
+    });
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    listData.set(state as ListState<unknown>, {
+      id: "list-id",
+      shouldFocusOnHover: true,
+      linkBehavior: "override",
+    });
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let optionProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ optionProps } = useOption({ key: "a" }, state, ref));
+    });
+
+    setInteractionModality("pointer");
+    const pointerEnter = getPointerEnterHandler(optionProps);
+    expect(pointerEnter).toBeTypeOf("function");
+    pointerEnter?.({
+      currentTarget: ref.current,
+      target: ref.current,
+      pointerType: "mouse",
+    } as unknown as PointerEvent);
+    setInteractionModality("keyboard");
+
+    expect(focusCalls).toEqual([true]);
+    expect(focusedKeyCalls).toEqual(["a"]);
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("does not focus hovered option when focus is already keyboard-visible", () => {
+    const focusCalls: boolean[] = [];
+    const focusedKeyCalls: string[] = [];
+    const manager = createManager({
+      setFocused: (value: boolean) => {
+        focusCalls.push(value);
+      },
+      setFocusedKey: (value: string) => {
+        focusedKeyCalls.push(value);
+      },
+    });
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    listData.set(state as ListState<unknown>, {
+      id: "list-id",
+      shouldFocusOnHover: true,
+      linkBehavior: "override",
+    });
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let optionProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ optionProps } = useOption({ key: "a" }, state, ref));
+    });
+
+    setInteractionModality("keyboard");
+    const pointerEnter = getPointerEnterHandler(optionProps);
+    pointerEnter?.({
+      currentTarget: ref.current,
+      target: ref.current,
+      pointerType: "mouse",
+    } as unknown as PointerEvent);
+
+    expect(focusCalls).toEqual([]);
+    expect(focusedKeyCalls).toEqual([]);
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("keeps hover handlers disabled when shouldFocusOnHover is false", () => {
+    const focusCalls: boolean[] = [];
+    const focusedKeyCalls: string[] = [];
+    const manager = createManager({
+      setFocused: (value: boolean) => {
+        focusCalls.push(value);
+      },
+      setFocusedKey: (value: string) => {
+        focusedKeyCalls.push(value);
+      },
+    });
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    listData.set(state as ListState<unknown>, {
+      id: "list-id",
+      shouldFocusOnHover: false,
+      linkBehavior: "override",
+    });
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let optionProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ optionProps } = useOption({ key: "a" }, state, ref));
+    });
+
+    setInteractionModality("pointer");
+    const pointerEnter = getPointerEnterHandler(optionProps);
+    pointerEnter?.({
+      currentTarget: ref.current,
+      target: ref.current,
+      pointerType: "mouse",
+    } as unknown as PointerEvent);
+    setInteractionModality("keyboard");
+
+    expect(focusCalls).toEqual([]);
+    expect(focusedKeyCalls).toEqual([]);
 
     scope.stop();
     ref.current?.remove();

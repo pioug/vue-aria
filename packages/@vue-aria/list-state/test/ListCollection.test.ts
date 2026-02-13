@@ -32,5 +32,7 @@ describe("ListCollection", () => {
     expect(collection.getKeyAfter("a")).toBe("b");
     expect(collection.getKeyBefore("c")).toBe("b");
     expect(collection.getItem("b")?.key).toBe("b");
+    expect(collection.at(1)?.key).toBe("b");
+    expect(collection.at(99)).toBeNull();
   });
 });

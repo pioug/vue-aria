@@ -87,6 +87,11 @@ export class ListCollection<T> implements Collection<Node<T>> {
     return this.keyMap.get(key) ?? null;
   }
 
+  at(index: number): Node<T> | null {
+    const keys = [...this.getKeys()];
+    return this.getItem(keys[index] as Key);
+  }
+
   getChildren(key: Key): Iterable<Node<T>> {
     const node = this.keyMap.get(key);
     return (node?.childNodes as Iterable<Node<T>>) || [];
