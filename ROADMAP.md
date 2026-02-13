@@ -430,7 +430,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 7
+- Ported test files: 8
 - Passing test files: 4
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
@@ -1755,3 +1755,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useModal` provider aria-hidden behavior while modal is open
   - `usePopover` scroll behavior (does not close on scroll)
 - Validation: `npm run check` passed, `npm test` passed (89 files, 267 tests).
+- Added adapted `useModalOverlay` outside-interaction tests for `shouldCloseOnInteractOutside` true/false behavior.
+- Validation: `npm run check` passed, `npm test` passed (90 files, 269 tests).

@@ -90,6 +90,10 @@ export const Overlay = defineComponent({
 });
 
 export function useOverlayFocusContain(): void {
+  if (!getCurrentInstance()) {
+    return;
+  }
+
   const ctx = inject<OverlayContextValue | null>(OverlayContext, null);
   if (!ctx) {
     return;
