@@ -16,6 +16,8 @@ function createState(selectionMode: "single" | "multiple" = "single") {
     value: selectionMode === "multiple" ? ["a"] : "a",
     defaultValue: selectionMode === "multiple" ? ["a"] : "a",
     setValue: vi.fn(),
+    commitValidation: vi.fn(),
+    displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
   } as any;
 }
 
@@ -112,6 +114,57 @@ describe("useHiddenSelect", () => {
 
     expect(result.selectProps.required).toBe(true);
     expect(selectElement.validationMessage).toBe("Selection required");
+
+    scope.stop();
+  });
+
+  it("focuses trigger on native invalid events via form validation integration", async () => {
+    const state = createState("single");
+    const selectElement = document.createElement("select");
+    selectElement.required = true;
+    const form = document.createElement("form");
+    form.appendChild(selectElement);
+    document.body.appendChild(form);
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(selectElement);
+    const trigger = document.createElement("button");
+    const triggerRef = { current: trigger as Element | null };
+    const focusSpy = vi.spyOn(trigger, "focus");
+    selectData.set(state as object, {
+      validationBehavior: "native",
+      isRequired: true,
+    });
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+    await nextTick();
+
+    selectElement.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalledTimes(1);
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    expect(result.selectProps.required).toBe(true);
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("forwards hidden select focus to trigger element", () => {
+    const state = createState("single");
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(null);
+    const trigger = document.createElement("button");
+    const triggerRef = { current: trigger as Element | null };
+    const focusSpy = vi.spyOn(trigger, "focus");
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+
+    (result.selectProps.onFocus as () => void)();
+    expect(focusSpy).toHaveBeenCalledTimes(1);
 
     scope.stop();
   });

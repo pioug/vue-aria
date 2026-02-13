@@ -1702,6 +1702,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for native custom validity wiring, invalid-event commit behavior, form reset listener behavior, and programmatic reset ignore path.
   - Added adapted coverage for change-event commit behavior, invalid-event short-circuit when display state is already invalid, and native validity snapshot propagation when realtime validation is valid.
   - Added adapted focus-order behavior coverage for first-invalid-only focus and custom `focus` callback invocation.
+  - Added adapted integration coverage through `@vue-aria/select/useHiddenSelect` for native invalid-event trigger focus and hidden-select focus forwarding.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1719,8 +1720,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand integration tests through `@vue-aria/select` hidden select/native validation paths.
-2. Validate keyboard modality side effects around invalid focus paths.
+1. Validate keyboard modality side effects around invalid focus paths.
+2. Continue expanding native invalid integration coverage across additional form consumers.
 
 ## 33) Package Record: @vue-aria/spinbutton
 - Upstream source path(s):
@@ -2504,3 +2505,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - first-invalid-only focus behavior in multi-input forms
   - custom `focus` callback invocation on invalid
 - Validation: `npm run check` passed, `npm test` passed (117 files, 383 tests).
+- Expanded `@vue-aria/select/useHiddenSelect` integration parity with adapted tests for:
+  - trigger focus on native invalid events via `useFormValidation`
+  - hidden-select `onFocus` forwarding to trigger element
+- Validation: `npm run check` passed, `npm test` passed (117 files, 385 tests).
