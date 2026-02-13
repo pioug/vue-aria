@@ -1627,7 +1627,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 11 (validated 2026-02-13)
 - Test parity notes:
   - Current adapted coverage includes outside-dismiss behavior, scroll-lock behavior, `ariaHideOutside` hide/restore behavior, overlay-trigger semantics/compatibility behavior, `DismissButton`/`useModal`/`useModalOverlay`/`usePopover` behavior, core `calculatePosition` math/flip/arrow boundary behavior, and `useOverlayPosition` baseline positioning and close-on-scroll behavior.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/overlays.md`)
@@ -1644,8 +1644,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Port remaining upstream overlay tests (`useModal`, `useModalOverlay`, `useOverlayPosition`, `usePopover`, `DismissButton`, SSR).
-2. Remove temporary `@ts-nocheck` by tightening copied internal typings.
+1. Validate overlays behavior in downstream Spectrum consumers (dialog/popover/menu/select stacks).
+2. Reconcile any integration deltas in cross-browser viewport/scroll positioning paths.
 
 ## 28) Package Record: @vue-aria/listbox
 - Upstream source path(s):
