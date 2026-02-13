@@ -3129,6 +3129,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added modality-aware `select` behavior checks (`touch`/`virtual` toggle vs mouse replace in replace-mode)
   - added link/disabled metadata branch coverage for `isLink`, `getItemProps`, `isDisabled`, and `canSelectItem`
   - added derived-manager state/options continuity coverage for `withCollection`
+  - added selection-behavior setter coverage, toggle-select-all coverage, selection-equality checks, and single-mode select toggle coverage
 - Expanded `@vue-aria/selection/useSelectableItem` virtual-focus behavior parity:
   - wired focused virtual-item path to `moveVirtualFocus`
   - added virtual-focus click path updates for collection focus + focused key tracking
@@ -3164,4 +3165,4 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded docs package coverage:
   - added VitePress page for `@vue-aria/selection-state` with state and manager usage examples
   - wired `@vue-aria/selection-state` into docs index and VitePress nav/sidebar
-- Validation: `npm run check` passed, `npm test` passed (126 files, 567 tests).
+- Validation: `npm run check` passed, `npm test` passed (126 files, 571 tests).

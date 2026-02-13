@@ -122,4 +122,51 @@ describe("SelectionManager", () => {
     expect(derived.selectedKeys.has("b")).toBe(true);
     expect(layoutDelegate.getKeyRange).toHaveBeenCalled();
   });
+
+  it("updates selection behavior through manager setter", () => {
+    const state = useMultipleSelectionState({
+      selectionMode: "multiple",
+      selectionBehavior: "replace",
+    });
+    const manager = new SelectionManager(makeCollection() as any, state);
+
+    expect(manager.selectionBehavior).toBe("replace");
+    manager.setSelectionBehavior("toggle");
+    expect(manager.selectionBehavior).toBe("toggle");
+  });
+
+  it("toggles select all state", () => {
+    const state = useMultipleSelectionState({ selectionMode: "multiple" });
+    const manager = new SelectionManager(makeCollection() as any, state);
+
+    manager.toggleSelectAll();
+    expect(manager.isSelectAll).toBe(true);
+
+    manager.toggleSelectAll();
+    expect(manager.isEmpty).toBe(true);
+  });
+
+  it("compares selection equality against manager selection", () => {
+    const state = useMultipleSelectionState({ selectionMode: "multiple" });
+    const manager = new SelectionManager(makeCollection() as any, state);
+
+    manager.setSelectedKeys(["a", "b"]);
+    expect(manager.isSelectionEqual(new Set(["a", "b"]))).toBe(true);
+    expect(manager.isSelectionEqual(new Set(["a"]))).toBe(false);
+    expect(manager.isSelectionEqual(new Set(["a", "c"]))).toBe(false);
+  });
+
+  it("supports single-mode select toggling when empty selection is allowed", () => {
+    const state = useMultipleSelectionState({
+      selectionMode: "single",
+      disallowEmptySelection: false,
+    });
+    const manager = new SelectionManager(makeCollection() as any, state);
+
+    manager.select("a", { pointerType: "mouse" });
+    expect(manager.selectedKeys.has("a")).toBe(true);
+
+    manager.select("a", { pointerType: "mouse" });
+    expect(manager.selectedKeys.size).toBe(0);
+  });
 });
