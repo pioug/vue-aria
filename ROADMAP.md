@@ -3105,3 +3105,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - marked `@vue-aria/disclosure` test migration check complete after validating adapted hook/state coverage
 - Updated `@vue-aria/link` scope tracker:
   - marked public API checklist complete for currently exported upstream module surface
+- Expanded `@vue-aria/selection` upstream-intent interaction parity:
+  - added multi-item touch/virtual pointer toggle semantics for replace-mode selection (`useSelectableItem`)
+  - added focus-entry assertions confirming first/last selected targeting does not mutate selection state (`useSelectableCollection`)
+- Expanded `@vue-aria/selection` focus lifecycle parity:
+  - added focused-item DOM focus + `scrollIntoView` behavior checks for keyboard modality
+  - added non-keyboard modality guard coverage for focus scroll behavior
+  - added virtual-focus coverage ensuring active element is preserved during collection focus handling
+- Expanded `@vue-aria/selection-state` manager coverage:
+  - added modality-aware `select` behavior checks (`touch`/`virtual` toggle vs mouse replace in replace-mode)
+  - added link/disabled metadata branch coverage for `isLink`, `getItemProps`, `isDisabled`, and `canSelectItem`
+  - added derived-manager state/options continuity coverage for `withCollection`
+- Validation: `npm run check` passed, `npm test` passed (126 files, 545 tests).
