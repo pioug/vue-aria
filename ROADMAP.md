@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/combobox`
+- Current focus package: `@vue-aria/tabs-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -57,7 +57,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/listbox`: Complete
 - `@vue-aria/select`: Complete
 - `@vue-aria/combobox`: In progress
-- `@vue-aria/tabs`: Not started
+- `@vue-aria/tabs`: In progress
 - `@vue-aria/grid`: Not started
 - `@vue-aria/table`: Not started
 - `@vue-aria/tree`: Not started
@@ -86,6 +86,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tooltip-state`: Complete
 - `@vue-aria/disclosure-state`: Complete
 - `@vue-aria/list-state`: Complete
+- `@vue-aria/tabs-state`: In progress
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
 - `@vue-aria/calendar-state`: Not started
@@ -2219,6 +2220,54 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Expand combobox interaction coverage for link-action and announcement edge paths from upstream behavior.
+
+## 31c) Package Record: @vue-aria/tabs-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/tabs/src`
+- Local package path:
+  - `packages/@vue-aria/tabs-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useTabListState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useTabListState.ts`
+- Open adaptation note:
+  - Current port covers default-selection fallback and focus synchronization semantics for plain-item collections; additional parity remains for deeper dynamic collection mutation scenarios.
+
+### Tests
+- Total upstream test files: none in package-local upstream path
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for default first-tab selection, disabled-key fallback selection, non-null selection-change forwarding, and disabled-state propagation.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/tabs-state.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- Not directly applicable for state package; validated via downstream tabs hook/component consumers.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Integrate with `@vue-aria/tabs` hooks and expand mutation-focused state regressions as tabs porting continues.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4519,3 +4568,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/combobox` locale parity:
   - replaced the initial `en-US` combobox intl stub with the full upstream `@react-aria/combobox/intl` locale bundle.
 - Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/i18n/test` passed (4 files, 11 tests).
+- Started `@vue-aria/tabs-state` port:
+  - added `@vue-aria/tabs-state` package scaffold and source-aligned `useTabListState` adaptation.
+  - added adapted tabs-state behavior coverage for default selection/focus sync and disabled fallback handling.
+  - added VitePress docs page for `@vue-aria/tabs-state` and linked it in docs nav/sidebar/index.
+  - added a dedicated `@vue-aria/tabs-state` package record in ROADMAP and marked `@vue-aria/tabs` / `@vue-aria/tabs-state` execution queue items as `In progress`.
+- Validation: `npm test -- packages/@vue-aria/tabs-state/test` passed (1 file, 4 tests).
