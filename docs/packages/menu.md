@@ -48,5 +48,5 @@ const { submenuTriggerProps, submenuProps, popoverProps } = useSubmenuTrigger({
 ## Notes
 
 - Current slice includes `useMenu`, `useMenuItem`, `useMenuSection`, `useMenuTrigger`, and `useSubmenuTrigger`.
-- Full safe-triangle pointer movement logic (`useSafelyMouseToSubmenu`) is still a parity gap.
+- `useSafelyMouseToSubmenu` is implemented, with further parity hardening still needed for full edge-case equivalence.
 - `Spectrum S2` is ignored for this port.

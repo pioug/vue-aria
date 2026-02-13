@@ -1574,14 +1574,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - `useSafelyMouseToSubmenu` is currently a placeholder and needs full upstream safe-triangle pointer behavior parity.
+  - `useSafelyMouseToSubmenu` is now implemented with core movement/pointer-event logic, but still needs edge-case hardening to fully match upstream behavior.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
 - Ported test files: 5 (adapted)
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, and submenu trigger open/close interactions.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, and safe-mouse hook lifecycle/reset behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1600,7 +1600,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port full `useSafelyMouseToSubmenu` behavior (safe triangle, pointer-event suppression, movement heuristics).
+1. Harden `useSafelyMouseToSubmenu` edge-case parity (hit-testing behavior, movement heuristics calibration, and submenu auto-close fallbacks).
 2. Deepen `useMenuItem` / `useMenuTrigger` / `useSubmenuTrigger` parity tests for keyboard-triggered click paths, long-press behavior, and virtualized aria metadata.
 
 ## 31) Session Log
@@ -2001,6 +2001,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (105 files, 308 tests).
 - Expanded `@vue-aria/menu` with `useSubmenuTrigger`:
   - implemented submenu trigger keyboard/press/hover open-close behavior and submenu/popover prop wiring
-  - added initial `useSafelyMouseToSubmenu` placeholder hook for API surface alignment
+  - added initial `useSafelyMouseToSubmenu` hook for API surface alignment
 - Added adapted `useSubmenuTrigger` tests for ArrowRight opening, delayed hover opening, outside interaction close gating, and Escape close behavior.
 - Validation: `npm run check` passed, `npm test` passed (106 files, 311 tests).
+- Expanded `@vue-aria/menu/useSafelyMouseToSubmenu` with core pointer-movement logic:
+  - submenu-trajectory angle heuristics
+  - pointer-event suppression/reset flow
+  - resize-driven submenu bounds updates and cleanup lifecycle behavior
+- Added adapted safe-mouse hook tests for pointer lifecycle/reset behavior.
+- Validation: `npm run check` passed, `npm test` passed (107 files, 313 tests).
