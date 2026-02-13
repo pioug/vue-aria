@@ -27,6 +27,7 @@ export default defineConfig({
       { text: "Separator", link: "/packages/separator" },
       { text: "Tooltip", link: "/packages/tooltip" },
       { text: "Disclosure", link: "/packages/disclosure" },
+      { text: "Overlays", link: "/packages/overlays" },
     ],
     sidebar: [
       {
@@ -53,6 +54,7 @@ export default defineConfig({
           { text: "@vue-aria/separator", link: "/packages/separator" },
           { text: "@vue-aria/tooltip", link: "/packages/tooltip" },
           { text: "@vue-aria/disclosure", link: "/packages/disclosure" },
+          { text: "@vue-aria/overlays", link: "/packages/overlays" },
         ],
       },
     ],

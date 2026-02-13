@@ -115,6 +115,9 @@ export default defineConfig({
       ),
       "@vue-aria/disclosure": fileURLToPath(
         new URL("./packages/@vue-aria/disclosure/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/overlays": fileURLToPath(
+        new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
       )
     }
   }

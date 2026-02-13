@@ -43,7 +43,8 @@
       "@vue-aria/tooltip-state": ["packages/@vue-aria/tooltip-state/src/index.ts"],
       "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
       "@vue-aria/disclosure-state": ["packages/@vue-aria/disclosure-state/src/index.ts"],
-      "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"]
+      "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
+      "@vue-aria/overlays": ["packages/@vue-aria/overlays/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
