@@ -1637,7 +1637,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 3 (adapted)
 - Passing test files: 3 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for trigger/menu/hidden-select prop wiring, hidden-select single and multiple change handling, select arrow-key key selection behavior, and hidden-input fallback behavior for large collections/native validation.
+  - Added adapted coverage for trigger/menu/hidden-select prop wiring, hidden-select single and multiple change handling, select arrow-key key selection behavior, focus/blur lifecycle callback behavior, and hidden-input fallback behavior for large collections/native validation.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2143,3 +2143,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted form tests for native custom-validity updates and invalid-event commit behavior.
 - Added VitePress docs page for `@vue-aria/form` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (111 files, 325 tests).
+- Expanded `@vue-aria/select` behavior tests for trigger focus/blur lifecycle callback semantics.
+- Validation: `npm run check` passed, `npm test` passed (111 files, 326 tests).

@@ -137,4 +137,49 @@ describe("useSelect", () => {
     scope.stop();
     ref.current?.remove();
   });
+
+  it("wires focus and blur lifecycle callbacks", () => {
+    const state = createState();
+    const onFocusChange = vi.fn();
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          onFocus,
+          onBlur,
+          onFocusChange,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onFocusHandler = result.triggerProps.onFocus as ((event: FocusEvent) => void) | undefined;
+    onFocusHandler?.({} as FocusEvent);
+    expect(onFocus).toHaveBeenCalled();
+    expect(onFocusChange).toHaveBeenCalledWith(true);
+    expect(state.setFocused).toHaveBeenCalledWith(true);
+
+    state.isOpen = false;
+    const onBlurHandler = result.triggerProps.onBlur as ((event: FocusEvent) => void) | undefined;
+    onBlurHandler?.({} as FocusEvent);
+    expect(onBlur).toHaveBeenCalled();
+    expect(onFocusChange).toHaveBeenCalledWith(false);
+    expect(state.setFocused).toHaveBeenCalledWith(false);
+
+    scope.stop();
+    ref.current?.remove();
+  });
 });
