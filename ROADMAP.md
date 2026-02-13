@@ -3008,3 +3008,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` shadow restore-focus parity with adapted upstream coverage for:
   - preserving focus on an external element when a shadow-root restore-focus scope unmounts while an outer restore-focus scope is present
 - Validation: `npm run check` passed, `npm test` passed (125 files, 521 tests).
+- Expanded `@vue-aria/focus/FocusScope` shadow mixed-control containment parity with adapted upstream coverage for:
+  - cycling contained Tab traversal across mixed focusable controls (`input`, `input`, `button`) inside a shadow-root scope
+- Validation: `npm run check` passed, `npm test` passed (125 files, 522 tests).

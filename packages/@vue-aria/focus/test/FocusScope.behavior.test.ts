@@ -1446,6 +1446,71 @@ describe("FocusScope behavior", () => {
     }
   });
 
+  it("cycles contained tab navigation across mixed controls inside shadow DOM", () => {
+    enableShadowDOM();
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const shadowRoot = host.attachShadow({ mode: "open" });
+
+    const wrapper = mount(defineComponent({
+      render() {
+        return h(
+          Teleport,
+          { to: shadowRoot },
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+                h("button", { id: "button" }, "Button"),
+              ],
+            }
+          )
+        );
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    try {
+      const input1 = shadowRoot.querySelector("#input1") as HTMLInputElement;
+      const input2 = shadowRoot.querySelector("#input2") as HTMLInputElement;
+      const button = shadowRoot.querySelector("#button") as HTMLButtonElement;
+
+      const tabFromShadowActive = (shiftKey = false) => {
+        const active = shadowRoot.activeElement as HTMLElement | null;
+        if (!active) {
+          return;
+        }
+        active.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Tab",
+            shiftKey,
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+      };
+
+      input1.focus();
+      expect(shadowRoot.activeElement).toBe(input1);
+
+      tabFromShadowActive(false);
+      expect(shadowRoot.activeElement).toBe(input2);
+      tabFromShadowActive(false);
+      expect(shadowRoot.activeElement).toBe(button);
+      tabFromShadowActive(false);
+      expect(shadowRoot.activeElement).toBe(input1);
+    } finally {
+      wrapper.unmount();
+      host.remove();
+      disableShadowDOM();
+    }
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {
