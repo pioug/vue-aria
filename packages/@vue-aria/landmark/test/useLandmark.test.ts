@@ -430,6 +430,56 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("restores landmark focus after blur when navigating with F6 again", async () => {
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav");
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
+
+    (document.activeElement as HTMLElement).blur();
+    await nextTick();
+    expect(nav.attributes("tabindex")).toBeUndefined();
+    expect(document.activeElement).toBe(document.body);
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
+    wrapper.unmount();
+  });
+
+  it("does not focus landmarks via mouse interaction", async () => {
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav").element as HTMLElement;
+
+    nav.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, cancelable: true }));
+    nav.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, cancelable: true }));
+    await nextTick();
+
+    expect(document.activeElement).toBe(document.body);
+    wrapper.unmount();
+  });
+
   it("supports controller navigation", async () => {
     const Navigation = createLandmark("nav", "navigation", "Navigation");
     const Main = createLandmark("main", "main", "Main");

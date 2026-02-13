@@ -2383,6 +2383,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
   - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
   - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
+  - Added adapted focus-state coverage for blur/re-focus F6 restoration and preventing mouse-based landmark focus.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2401,7 +2402,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream focus-restoration edge coverage (tab/window toggle and blur/re-focus behavior).
+1. Port remaining upstream tab/window visibility toggle focus-restoration coverage.
 2. Port nested-first/nested-last explicit assertion variants from upstream parity suite.
 
 ## 40) Package Record: @vue-aria/toast
@@ -3728,3 +3729,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` dynamic mutation parity:
   - added adapted tests covering landmark removal from the active traversal path and post-mount landmark insertion into F6 navigation order.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 688 tests).
+- Expanded `@vue-aria/landmark` focus-state parity:
+  - added adapted tests for blur/re-focus landmark restoration via F6 and mouse interaction non-focus behavior.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 690 tests).
