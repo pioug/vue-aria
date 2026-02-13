@@ -100,6 +100,15 @@ export default defineConfig({
       ),
       "@vue-aria/separator": fileURLToPath(
         new URL("./packages/@vue-aria/separator/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/overlays-state": fileURLToPath(
+        new URL("./packages/@vue-aria/overlays-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/tooltip-state": fileURLToPath(
+        new URL("./packages/@vue-aria/tooltip-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/tooltip": fileURLToPath(
+        new URL("./packages/@vue-aria/tooltip/src/index.ts", import.meta.url)
       )
     }
   }

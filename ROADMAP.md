@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/separator`
+- Current focus package: `@vue-aria/tooltip`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -60,7 +60,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/breadcrumbs`: In progress
 - `@vue-aria/dialog`: In progress
 - `@vue-aria/separator`: In progress
-- `@vue-aria/tooltip`: Not started
+- `@vue-aria/tooltip`: In progress
 - `@vue-aria/progress`: In progress
 - `@vue-aria/meter`: In progress
 - `@vue-aria/collections`: In progress
@@ -72,6 +72,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/checkbox-state`: In progress
 - `@vue-aria/radio-state`: In progress
 - `@vue-aria/searchfield-state`: In progress
+- `@vue-aria/overlays-state`: In progress
+- `@vue-aria/tooltip-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
@@ -1264,7 +1266,62 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum separator components.
 2. Continue queue progression to tooltip/overlay stack.
 
-## 25) Session Log
+## 25) Package Record: @vue-aria/tooltip (+ @vue-aria/tooltip-state + @vue-aria/overlays-state)
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/tooltip/src`
+  - `references/react-spectrum/packages/@react-aria/tooltip/test/useTooltip.test.js`
+  - `references/react-spectrum/packages/@react-stately/tooltip/src`
+  - `references/react-spectrum/packages/@react-stately/overlays/src/useOverlayTriggerState.ts`
+- Local package path:
+  - `packages/@vue-aria/tooltip`
+  - `packages/@vue-aria/tooltip-state`
+  - `packages/@vue-aria/overlays-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useTooltip`
+  - `useTooltipTrigger`
+  - `useTooltipTriggerState`
+  - `useOverlayTriggerState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path aliases
+
+### Tests
+- Total upstream test files: 1 in `@react-aria/tooltip` + no dedicated stately files in this reference path
+- Ported test files: 3
+- Passing test files: 3
+- Test parity notes:
+  - Added adapted tests for tooltip role/hover behavior, trigger described-by wiring, tooltip-state open/close delay handling, and overlays-state open/close/toggle behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/tooltip.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate tooltip trigger interactions in downstream Spectrum tooltip/popover integrations
+
+### Visual Parity
+- Not applicable for hook/state package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum tooltip components.
+2. Validate warmup/cooldown semantics against integration scenarios.
+
+## 26) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1554,3 +1611,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted separator tests for orientation and role behavior.
 - Added VitePress docs page for `@vue-aria/separator` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (77 files, 241 tests).
+- Started tooltip state/trigger stack:
+  - `@vue-aria/overlays-state/useOverlayTriggerState`
+  - `@vue-aria/tooltip-state/useTooltipTriggerState`
+  - `@vue-aria/tooltip/useTooltip`
+  - `@vue-aria/tooltip/useTooltipTrigger`
+- Added adapted tests for tooltip role/trigger semantics and stately delay behavior.
+- Added VitePress docs page for `@vue-aria/tooltip` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (80 files, 248 tests).

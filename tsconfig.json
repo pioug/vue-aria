@@ -38,7 +38,10 @@
       "@vue-aria/meter": ["packages/@vue-aria/meter/src/index.ts"],
       "@vue-aria/dialog": ["packages/@vue-aria/dialog/src/index.ts"],
       "@vue-aria/breadcrumbs": ["packages/@vue-aria/breadcrumbs/src/index.ts"],
-      "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"]
+      "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"],
+      "@vue-aria/overlays-state": ["packages/@vue-aria/overlays-state/src/index.ts"],
+      "@vue-aria/tooltip-state": ["packages/@vue-aria/tooltip-state/src/index.ts"],
+      "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

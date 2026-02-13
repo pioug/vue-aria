@@ -25,6 +25,7 @@ export default defineConfig({
       { text: "Dialog", link: "/packages/dialog" },
       { text: "Breadcrumbs", link: "/packages/breadcrumbs" },
       { text: "Separator", link: "/packages/separator" },
+      { text: "Tooltip", link: "/packages/tooltip" },
     ],
     sidebar: [
       {
@@ -49,6 +50,7 @@ export default defineConfig({
           { text: "@vue-aria/dialog", link: "/packages/dialog" },
           { text: "@vue-aria/breadcrumbs", link: "/packages/breadcrumbs" },
           { text: "@vue-aria/separator", link: "/packages/separator" },
+          { text: "@vue-aria/tooltip", link: "/packages/tooltip" },
         ],
       },
     ],
