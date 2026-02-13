@@ -1797,6 +1797,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for default input props, placeholder forwarding, merged input event handlers, stepper mouse press-start focus transfer, and wheel increment/decrement behavior when focus is within the field group.
   - Added integration coverage validating `@vue-aria/numberfield-state` interoperability with stepper press handlers.
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
+  - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2450,3 +2451,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Hardened `@vue-aria/form-state` injection fallback:
   - switched non-setup detection from `hasInjectionContext()` to `getCurrentInstance()` for consistent runtime behavior in composable + component contexts.
 - Validation: `npm run check` passed, `npm test` passed (116 files, 366 tests).
+- Expanded `@vue-aria/numberfield` parity with adapted iOS branch coverage:
+  - `aria-roledescription` is omitted when `isIOS()` is true.
+- Validation: `npm run check` passed, `npm test` passed (117 files, 367 tests).
