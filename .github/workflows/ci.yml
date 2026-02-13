@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test-and-status:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check parity regression
+        run: npm run check:parity
+
+      - name: Sync and validate status
+        run: |
+          npm run sync:status
+          npm run generate:status
+          npm run validate:status
+          git diff --exit-code status.json status.md
+
+      - name: Compute port order
+        run: npm run compute:port-order
+
+      - name: Run tests
+        run: npm test

@@ -11,6 +11,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "check:parity": "node scripts/check-parity-regression.mjs",
     "generate:status": "node scripts/generate-status-md.mjs",
     "validate:status": "node scripts/validate-status.mjs",
     "sync:status": "node scripts/sync-status-from-upstream.mjs",

@@ -83,7 +83,6 @@ const cyclePackages = visited === incomplete.length
   : [...indegree.entries()].filter(([, count]) => count > 0).map(([name]) => name).sort();
 
 const output = {
-  generatedAt: new Date().toISOString(),
   trackedPackageCount: packages.length,
   incompletePackageCount: incomplete.length,
   availableLeafCount: availableLeaves.length,
