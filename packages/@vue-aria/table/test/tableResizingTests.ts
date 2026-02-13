@@ -51,5 +51,20 @@ export function resizingTests(
 
       harness.cleanup();
     });
+
+    it("calls onResize with updated width values during keyboard resize", () => {
+      const onResize = vi.fn();
+      const harness = createHarness({ onResize });
+
+      keydown(harness.resizerProps.onKeydown, "Enter");
+      keydown(harness.resizerProps.onKeydown, "ArrowRight");
+
+      expect(onResize.mock.calls.length).toBeGreaterThanOrEqual(1);
+      const widthMap = onResize.mock.calls.at(-1)?.[0] as Map<Key, ColumnSize>;
+      expect(widthMap).toBeInstanceOf(Map);
+      expect(typeof widthMap.get("name")).toBe("number");
+
+      harness.cleanup();
+    });
   });
 }

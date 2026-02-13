@@ -2594,6 +2594,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
   - Added upstream-aligned `ariaTableResizing.test.ts` Vue adaptation covering resize-start and resize-end callback map semantics.
   - Added shared `tableResizingTests.ts` helper to mirror upstream resize-test suite structure.
+  - Expanded `tableResizingTests.ts` with adapted keyboard-delta `onResize` callback-map assertions.
   - Added integration-style table action coverage (`useTableActions.test.ts`) for replace-selection double-click row action and legacy row `onAction` behavior.
   - Updated table hook tests to run in Vue `effectScope` for lifecycle-aligned composable execution and clean test output.
 - [ ] All relevant upstream tests migrated
@@ -5072,3 +5073,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - wrapped table hook tests in Vue `effectScope` to match composable lifecycle expectations and remove scope-dispose warnings.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (8 files, 24 tests).
+- Expanded `@vue-aria/table` resize callback coverage in shared suite:
+  - added adapted keyboard-delta `onResize` callback-map assertions in `tableResizingTests.ts`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (8 files, 25 tests).
