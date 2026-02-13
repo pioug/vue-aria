@@ -2381,6 +2381,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, controller-based forward/backward/main navigation, backward wrapping, wrap custom events, aria-hidden landmark skipping, focused `tabIndex` behavior, and duplicate-role labeling warning behaviors.
   - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
   - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
+  - Added adapted controller return-value coverage for `navigate`/`focusNext`/`focusPrevious`/`focusMain` when no landmarks are registered.
   - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
   - Added adapted nested-first/nested-last variants to verify F6 traversal when nested region placement changes within `main`.
   - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
@@ -2406,7 +2407,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port multi-component focus-management parity case from upstream (`ActionGroup` + `TableView` managed focus handoff).
-2. Expand controller tests for explicit `navigate("forward" | "backward")` return-value parity when no landmarks are registered.
+2. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components.
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3748,3 +3749,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` warning assertion parity:
   - added adapted tests asserting exact `console.warn` message + landmark-array arguments for unlabeled and duplicate-label navigation landmark cases.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 697 tests).
+- Expanded `@vue-aria/landmark` controller return parity:
+  - added adapted tests asserting controller method return values when no landmarks are registered.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 698 tests).

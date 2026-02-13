@@ -724,6 +724,18 @@ describe("useLandmark", () => {
     window.removeEventListener("react-aria-landmark-navigation", onLandmarkNavigation as EventListener);
   });
 
+  it("returns false for controller navigation methods when no landmarks exist", () => {
+    const controller = UNSTABLE_createLandmarkController();
+    const from = document.body as unknown as Element;
+
+    expect(controller.navigate("forward", { from })).toBe(false);
+    expect(controller.navigate("backward", { from })).toBe(false);
+    expect(controller.focusNext({ from })).toBe(false);
+    expect(controller.focusPrevious({ from })).toBe(false);
+    expect(controller.focusMain()).toBe(false);
+    controller.dispose();
+  });
+
   it("allows duplicate role landmarks when labels are unique", async () => {
     const RegionA = defineComponent({
       setup() {
