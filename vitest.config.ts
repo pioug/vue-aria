@@ -19,6 +19,9 @@ export default defineConfig({
       ),
       "@vue-aria/flags": fileURLToPath(
         new URL("./packages/@vue-aria/flags/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/i18n": fileURLToPath(
+        new URL("./packages/@vue-aria/i18n/src/index.ts", import.meta.url)
       )
     }
   }

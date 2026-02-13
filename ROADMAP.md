@@ -29,7 +29,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### React Aria packages
 - `@vue-aria/utils`: In progress
-- `@vue-aria/i18n`: Not started
+- `@vue-aria/i18n`: In progress
 - `@vue-aria/ssr`: In progress
 - `@vue-aria/interactions`: Not started
 - `@vue-aria/focus`: Not started
@@ -240,3 +240,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useId`
 - Added SSR provider tests and validated nested-provider id uniqueness.
 - Validation: `npm run check` passed, `npm test` passed (21 files, 53 tests).
+- Started `@vue-aria/i18n` package slice with:
+  - locale context/provider
+  - default locale + languagechange handling
+  - formatter/filter hooks
+  - RTL utility and server localization script serialization
+- Added adapted i18n tests (`languagechange`, `server`) and integrated dependencies.
+- Validation: `npm run check` passed, `npm test` passed (23 files, 56 tests).
