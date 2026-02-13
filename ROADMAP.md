@@ -483,7 +483,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
     - tabbable-only traversal behavior
-    - `from` container traversal semantics
+    - `from` container traversal semantics (forward and backward)
     - accept-filter traversal skipping behavior
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
@@ -2749,3 +2749,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` behavior tests for:
   - nested-scope containment lock (child scope tab cycling remains isolated)
 - Validation: `npm run check` passed, `npm test` passed (123 files, 484 tests).
+- Expanded `@vue-aria/focus` focus-manager parity tests for:
+  - backward `from` traversal semantics, including no-wrap no-op branch
+- Validation: `npm run check` passed, `npm test` passed (123 files, 485 tests).

@@ -218,4 +218,31 @@ describe("FocusScope focus manager parity", () => {
     expect(document.activeElement).toBe(item1);
     wrapper.unmount();
   });
+
+  it("respects the from option for backward tabbable traversal", () => {
+    const { wrapper, getManager } = mountScope(() => [
+      h("div", { id: "group1", role: "group" }, [
+        h("div", { id: "item1", tabIndex: 0 }),
+        h("div", { id: "item2", tabIndex: -1 }),
+        h("div", { style: { display: "none" } }),
+      ]),
+      h("div", { id: "group2", role: "group" }, [
+        h("div", { style: { visibility: "hidden" } }),
+        h("div", { style: { visibility: "collapse" } }),
+        h("div", { id: "item3", tabIndex: 0 }),
+      ]),
+    ]);
+    const manager = getManager();
+
+    const group1 = wrapper.get("#group1").element as HTMLDivElement;
+    const group2 = wrapper.get("#group2").element as HTMLDivElement;
+    const item1 = wrapper.get("#item1").element as HTMLDivElement;
+
+    manager?.focusPrevious({ from: group2, tabbable: true });
+    expect(document.activeElement).toBe(item1);
+
+    manager?.focusPrevious({ from: group1, tabbable: true });
+    expect(document.activeElement).toBe(item1);
+    wrapper.unmount();
+  });
 });
