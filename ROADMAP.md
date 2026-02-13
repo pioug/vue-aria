@@ -418,6 +418,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - autoFocus selected-key prioritization (`canSelectItem` filtering)
     - blur no-op when related target remains within collection
     - focus-entry direction behavior without mutating selection state
+    - focused-item DOM focus + `scrollIntoView` behavior gated by interaction modality
+    - virtual-focus mode preserving active element during collection focus handling
   - Added adapted `useSelectableItem` interaction coverage for:
     - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
     - keyboard Enter/Space selection behavior and secondary action routing

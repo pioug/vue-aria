@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { effectScope, ref } from "vue";
 import { useSelectableCollection } from "../src/useSelectableCollection";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
@@ -8,11 +8,12 @@ vi.mock("@vue-aria/i18n", () => ({
   useLocale: () => ref({ locale: "en-US", direction: "ltr" }),
 }));
 
-const { focusSafely } = vi.hoisted(() => ({
+const { focusSafely, getInteractionModality } = vi.hoisted(() => ({
   focusSafely: vi.fn(),
+  getInteractionModality: vi.fn(() => "keyboard"),
 }));
 vi.mock("@vue-aria/interactions", () => ({
-  getInteractionModality: () => "keyboard",
+  getInteractionModality,
   focusSafely,
 }));
 
@@ -82,6 +83,10 @@ const delegate: KeyboardDelegate = {
 };
 
 describe("useSelectableCollection", () => {
+  beforeEach(() => {
+    getInteractionModality.mockReturnValue("keyboard");
+  });
+
   it("handles arrow navigation and focus selection", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
@@ -663,6 +668,120 @@ describe("useSelectableCollection", () => {
       scope.stop();
       ref.current.remove();
       preceding.remove();
+    }
+  });
+
+  it("focuses and scrolls the focused item on keyboard focus entry", () => {
+    const manager = createManager({
+      focusedKey: "a",
+    });
+    const ref = { current: document.createElement("div") };
+    const option = document.createElement("div");
+    option.setAttribute("data-key", "a");
+    option.tabIndex = -1;
+    option.scrollIntoView = vi.fn();
+    ref.current.appendChild(option);
+    document.body.append(ref.current);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus", { relatedTarget: null });
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(document.activeElement).toBe(option);
+      expect(option.scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+    } finally {
+      scope.stop();
+      ref.current.remove();
+    }
+  });
+
+  it("does not scroll focused item for non-keyboard modality", () => {
+    getInteractionModality.mockReturnValue("pointer");
+    const manager = createManager({
+      focusedKey: "a",
+    });
+    const ref = { current: document.createElement("div") };
+    const option = document.createElement("div");
+    option.setAttribute("data-key", "a");
+    option.tabIndex = -1;
+    option.scrollIntoView = vi.fn();
+    ref.current.appendChild(option);
+    document.body.append(ref.current);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus", { relatedTarget: null });
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(option.scrollIntoView).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+      ref.current.remove();
+    }
+  });
+
+  it("does not move DOM focus to item when virtual focus is enabled", () => {
+    const manager = createManager({
+      focusedKey: "a",
+    });
+    const ref = { current: document.createElement("div") };
+    const option = document.createElement("div");
+    option.setAttribute("data-key", "a");
+    option.tabIndex = -1;
+    option.scrollIntoView = vi.fn();
+    ref.current.appendChild(option);
+    const outside = document.createElement("button");
+    document.body.append(ref.current, outside);
+    outside.focus();
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        shouldUseVirtualFocus: true,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus", { relatedTarget: outside });
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(document.activeElement).toBe(outside);
+    } finally {
+      scope.stop();
+      ref.current.remove();
+      outside.remove();
     }
   });
 
