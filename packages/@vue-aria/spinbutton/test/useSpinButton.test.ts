@@ -100,4 +100,44 @@ describe("useSpinButton", () => {
     expect(result.spinButtonProps["aria-valuetext"]).toBe("−2 items");
     scope.stop();
   });
+
+  it("does not increment on touch press end without press up", () => {
+    const onIncrement = vi.fn();
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton({ value: 1, onIncrement }))!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+    (result.incrementButtonProps.onPressEnd as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+
+    expect(onIncrement).not.toHaveBeenCalled();
+    scope.stop();
+  });
+
+  it("increments on touch press up + press end", () => {
+    const onIncrement = vi.fn();
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton({ value: 1, onIncrement }))!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+    (result.incrementButtonProps.onPressUp as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+    (result.incrementButtonProps.onPressEnd as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+    scope.stop();
+  });
 });

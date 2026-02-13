@@ -1742,6 +1742,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for spinbutton aria attributes, keyboard increment/decrement/page/home/end handlers, page-key fallback behavior, and minus-sign text normalization.
+  - Added adapted touch press flow coverage for no-op press-end without press-up and increment-on-touch press-up + press-end sequence.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2343,3 +2344,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (114 files, 346 tests).
 - Added `@vue-aria/numberfield` integration test coverage using `@vue-aria/numberfield-state`.
 - Validation: `npm run check` passed, `npm test` passed (115 files, 347 tests).
+- Expanded `@vue-aria/spinbutton` touch parity coverage with adapted tests for touch press-up/press-end sequencing behavior.
+- Validation: `npm run check` passed, `npm test` passed (115 files, 349 tests).
