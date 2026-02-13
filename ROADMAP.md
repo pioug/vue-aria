@@ -1638,6 +1638,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 3 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for trigger/menu/hidden-select prop wiring, hidden-select single and multiple change handling, select arrow-key key selection behavior, focus/blur lifecycle callback behavior, and hidden-input fallback behavior for large collections/native validation.
+  - Added parity coverage for hidden-select native-required behavior across multi-value hidden input fallback (only first native text input marked required).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1686,7 +1687,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 1 (adapted)
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for native custom validity wiring and invalid-event commit behavior.
+  - Added adapted coverage for native custom validity wiring, invalid-event commit behavior, form reset listener behavior, and programmatic reset ignore path.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2145,3 +2146,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (111 files, 325 tests).
 - Expanded `@vue-aria/select` behavior tests for trigger focus/blur lifecycle callback semantics.
 - Validation: `npm run check` passed, `npm test` passed (111 files, 326 tests).
+- Hardened `@vue-aria/select` parity:
+  - normalized trigger keyboard handler prop casing to upstream (`onKeyDown`/`onKeyUp`)
+  - fixed hidden-select change handling to read `event.currentTarget` fallback
+  - fixed hidden-input fallback native-required behavior so only first input is required in multi-value mode
+- Expanded select/form test parity:
+  - `HiddenSelect` now has adapted coverage for first-input-required semantics in multi-value native validation fallback
+  - `useFormValidation` now has adapted coverage for form `reset` listener behavior and ignored programmatic resets
+- Validation: `npm run check` passed, `npm test` passed (111 files, 331 tests).

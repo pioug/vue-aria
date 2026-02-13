@@ -46,4 +46,52 @@ describe("useFormValidation", () => {
     scope.stop();
     form.remove();
   });
+
+  it("resets validation on form reset event", () => {
+    const input = document.createElement("input");
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      resetValidation: vi.fn(),
+      commitValidation: vi.fn(),
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    form.dispatchEvent(new Event("reset"));
+    expect(state.resetValidation).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("ignores programmatic form reset", () => {
+    const input = document.createElement("input");
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      resetValidation: vi.fn(),
+      commitValidation: vi.fn(),
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    form.reset();
+    expect(state.resetValidation).not.toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
 });

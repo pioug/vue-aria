@@ -135,8 +135,8 @@ export function useSelect(
 
   const id = useId();
   let typeaheadProps = { ...typeSelectProps } as Record<string, unknown>;
-  typeaheadProps.onKeydown = typeaheadProps.onKeydownCapture;
-  delete typeaheadProps.onKeydownCapture;
+  typeaheadProps.onKeyDown = typeaheadProps.onKeyDownCapture;
+  delete typeaheadProps.onKeyDownCapture;
   if (state.selectionManager.selectionMode === "multiple") {
     typeaheadProps = {};
   }
@@ -165,12 +165,12 @@ export function useSelect(
     triggerProps: mergeProps(domProps, {
       ...triggerPropsBase,
       isDisabled,
-      onKeydown: chain(
-        triggerPropsBase.onKeydown as ((...args: any[]) => void) | undefined,
+      onKeyDown: chain(
+        triggerPropsBase.onKeyDown as ((...args: any[]) => void) | undefined,
         onArrowKeyDown,
         props.onKeyDown
       ),
-      onKeyup: props.onKeyUp,
+      onKeyUp: props.onKeyUp,
       "aria-labelledby": [
         id,
         triggerPropsBase["aria-labelledby"],

@@ -64,6 +64,7 @@ export function useFormValidation(
   ref?: { value: ValidatableElement | null } | null
 ): void {
   const { validationBehavior, focus } = props;
+  let isIgnoredReset = false;
 
   useLayoutEffect(() => {
     const input = ref?.value;
@@ -117,14 +118,36 @@ export function useFormValidation(
       }
 
       const form = input.form;
+      const reset = form?.reset;
+
+      if (form) {
+        form.reset = () => {
+          const activeEvent = window.event;
+          isIgnoredReset =
+            !activeEvent ||
+            (activeEvent.type === "message" && activeEvent.target instanceof MessagePort);
+          reset?.call(form);
+          isIgnoredReset = false;
+        };
+      }
+
+      const onResetHandler = () => {
+        if (!isIgnoredReset) {
+          onReset();
+        }
+      };
+
       input.addEventListener("invalid", onInvalid);
       input.addEventListener("change", onChange);
-      form?.addEventListener("reset", onReset);
+      form?.addEventListener("reset", onResetHandler);
 
       onCleanup(() => {
         input.removeEventListener("invalid", onInvalid);
         input.removeEventListener("change", onChange);
-        form?.removeEventListener("reset", onReset);
+        form?.removeEventListener("reset", onResetHandler);
+        if (form) {
+          form.reset = reset!;
+        }
       });
     },
     { immediate: true }

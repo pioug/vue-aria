@@ -121,12 +121,12 @@ describe("useSelect", () => {
       );
     });
 
-    const onKeydown = result.triggerProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
-    onKeydown?.({
+    const onKeyDown = result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
+    onKeyDown?.({
       key: "ArrowLeft",
       preventDefault: vi.fn(),
     } as unknown as KeyboardEvent);
-    onKeydown?.({
+    onKeyDown?.({
       key: "ArrowRight",
       preventDefault: vi.fn(),
     } as unknown as KeyboardEvent);
@@ -181,5 +181,51 @@ describe("useSelect", () => {
 
     scope.stop();
     ref.current?.remove();
+  });
+
+  it("does not propagate menu blur when focus stays within menu", () => {
+    const state = createState();
+    const onBlur = vi.fn();
+    const onFocusChange = vi.fn();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    const menu = document.createElement("div");
+    const inner = document.createElement("div");
+    menu.appendChild(inner);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          onBlur,
+          onFocusChange,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onMenuBlur = result.menuProps.onBlur as ((event: FocusEvent) => void) | undefined;
+    onMenuBlur?.({
+      currentTarget: menu,
+      relatedTarget: inner,
+    } as unknown as FocusEvent);
+    expect(onBlur).not.toHaveBeenCalled();
+    expect(onFocusChange).not.toHaveBeenCalledWith(false);
+
+    onMenuBlur?.({
+      currentTarget: menu,
+      relatedTarget: document.createElement("div"),
+    } as unknown as FocusEvent);
+    expect(onBlur).toHaveBeenCalled();
+    expect(onFocusChange).toHaveBeenCalledWith(false);
+
+    scope.stop();
   });
 });

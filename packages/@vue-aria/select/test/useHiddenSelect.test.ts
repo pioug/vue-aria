@@ -1,6 +1,7 @@
-import { effectScope, ref } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useHiddenSelect } from "../src/HiddenSelect";
+import { selectData } from "../src/useSelect";
 
 function createState(selectionMode: "single" | "multiple" = "single") {
   return {
@@ -60,6 +61,34 @@ describe("useHiddenSelect", () => {
 
     expect(result.selectProps.multiple).toBe(true);
     expect(state.setValue).toHaveBeenCalledWith(["a", "b"]);
+
+    scope.stop();
+  });
+
+  it("applies native validation requirements and custom validity", async () => {
+    const state = createState("single");
+    state.realtimeValidation = {
+      isInvalid: true,
+      validationErrors: ["Selection required"],
+      validationDetails: null,
+    };
+    const selectElement = document.createElement("select");
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(selectElement);
+    selectData.set(state as object, {
+      validationBehavior: "native",
+      isRequired: true,
+    });
+    const triggerRef = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+    await nextTick();
+
+    expect(result.selectProps.required).toBe(true);
+    expect(selectElement.validationMessage).toBe("Selection required");
 
     scope.stop();
   });

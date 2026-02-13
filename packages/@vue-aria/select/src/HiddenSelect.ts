@@ -63,7 +63,7 @@ export function useHiddenSelect(
   );
 
   const onChange = (event: Event) => {
-    const target = event.target as HTMLSelectElement;
+    const target = (event.target ?? event.currentTarget) as HTMLSelectElement;
     if (target.multiple) {
       state.setValue?.(Array.from(target.selectedOptions, (option) => option.value));
     } else {
@@ -156,7 +156,7 @@ export const HiddenSelect = defineComponent({
         const stateObject = (toRaw(props.state as object) as object) ?? (props.state as object);
         const data = selectData.get(stateObject) || selectData.get(props.state as object) || {};
         const validationBehavior = data.validationBehavior;
-        for (const value of list) {
+        for (const [index, value] of list.entries()) {
           nodes.push(
             h("input", {
               type: validationBehavior === "native" ? "text" : "hidden",
@@ -166,9 +166,9 @@ export const HiddenSelect = defineComponent({
               form: props.form,
               disabled: props.isDisabled,
               value: value ?? "",
-              required: validationBehavior === "native",
+              required: validationBehavior === "native" ? index === 0 && Boolean(selectProps.required) : undefined,
               onChange: () => {},
-              ref: selectRef,
+              ref: index === 0 ? selectRef : undefined,
             })
           );
         }
