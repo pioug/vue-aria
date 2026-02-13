@@ -165,6 +165,83 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("navigates nested landmarks in DOM order", async () => {
+    const App = defineComponent({
+      setup() {
+        const mainRef = ref<HTMLElement | null>(null);
+        const region1Ref = ref<HTMLElement | null>(null);
+        const region2Ref = ref<HTMLElement | null>(null);
+
+        const mainAdapter = {
+          get current() {
+            return mainRef.value;
+          },
+          set current(value: Element | null) {
+            mainRef.value = value as HTMLElement | null;
+          },
+        };
+        const region1Adapter = {
+          get current() {
+            return region1Ref.value;
+          },
+          set current(value: Element | null) {
+            region1Ref.value = value as HTMLElement | null;
+          },
+        };
+        const region2Adapter = {
+          get current() {
+            return region2Ref.value;
+          },
+          set current(value: Element | null) {
+            region2Ref.value = value as HTMLElement | null;
+          },
+        };
+
+        const { landmarkProps: mainProps } = useLandmark({ role: "main" }, mainAdapter);
+        const { landmarkProps: region1Props } = useLandmark({ role: "region", "aria-label": "Region 1" }, region1Adapter);
+        const { landmarkProps: region2Props } = useLandmark({ role: "region", "aria-label": "Region 2" }, region2Adapter);
+
+        return () =>
+          h("div", [
+            h("main", { ...mainProps, ref: mainRef }, [
+              h("article", { ...region1Props, ref: region1Ref }, "Region 1"),
+              h("p", "Between"),
+              h("article", { ...region2Props, ref: region2Ref }, "Region 2"),
+            ]),
+          ]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const main = wrapper.get("main").element as HTMLElement;
+    const regions = wrapper.findAll("article").map((node) => node.element as HTMLElement);
+    const region1 = regions[0];
+    const region2 = regions[1];
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region1);
+
+    region1.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region2);
+
+    region2.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", shiftKey: true, bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region2);
+
+    wrapper.unmount();
+  });
+
   it("fires a custom navigation event when wrapping forward", async () => {
     const Navigation = createLandmark("nav", "navigation", "Navigation");
     const Main = createLandmark("main", "main", "Main");

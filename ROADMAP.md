@@ -2381,6 +2381,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, controller-based forward/backward/main navigation, backward wrapping, wrap custom events, aria-hidden landmark skipping, focused `tabIndex` behavior, and duplicate-role labeling warning behaviors.
   - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
   - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
+  - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2400,7 +2401,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port additional upstream `useLandmark.test.tsx` interaction coverage for dynamic DOM mutation and focus restoration corner-cases.
-2. Port remaining nested landmark traversal parity cases (nested-first/nested-last ordering and DOM-order assertions).
+2. Port remaining nested-first/nested-last focused landmark assertions from upstream parity suite.
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3720,3 +3721,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/toast` story-driven lifecycle parity:
   - added adapted integration coverage for single-visible-toast queue behavior (`toast 2` -> close -> `toast 1`) with focus handoff and final restore to launcher.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 685 tests).
+- Expanded `@vue-aria/landmark` nested traversal parity:
+  - added adapted DOM-order navigation coverage for nested landmarks (`main` -> `region 1` -> `region 2`) including backward wrap from `main`.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 686 tests).
