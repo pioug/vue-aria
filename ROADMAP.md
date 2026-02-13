@@ -2397,8 +2397,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - landmark `tabIndex=-1` reset when focus moves from the landmark container to a child control.
     - duplicate-label warning updates after dynamic landmark label changes.
   - Added adapted last-focused-child restoration parity for link/input traversal across F6 and Shift+F6 between navigation/main landmarks.
+  - Added adapted tab traversal parity for landmark child controls (`tab` into first navigation link and `shift+tab` reverse traversal from main input back to navigation links).
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/landmark.md`)
@@ -2415,8 +2416,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components (explicit tab/shift+tab traversal paths).
-2. Revisit upstream component-level parity once Vue Spectrum table/actiongroup components land (currently hook-level equivalent coverage).
+1. Revisit upstream component-level parity once Vue Spectrum table/actiongroup components land (current coverage is hook-level equivalent for managed-focus loops).
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3774,3 +3774,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted test coverage for preserving/restoring focused link/input descendants across forward and backward landmark navigation (`F6`/`Shift+F6`).
 - Expanded `@vue-aria/toast` tab-order keyboard sequencing parity:
   - added adapted story-equivalent `F6 -> tab -> tab -> close button` traversal assertions before queued-toast dismissal.
+- Expanded `@vue-aria/landmark` tab traversal parity:
+  - added adapted tests for forward tab entry into navigation landmark descendants and reverse shift+tab traversal from main landmark descendants.

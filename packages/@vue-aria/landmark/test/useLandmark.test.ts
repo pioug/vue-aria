@@ -56,6 +56,39 @@ function toggleBrowserTabs(activeElement: HTMLElement) {
   activeElement.dispatchEvent(new Event("focus"));
 }
 
+function moveTabFocus(options: { shift?: boolean } = {}) {
+  const tabbables = Array.from(document.querySelectorAll<HTMLElement>("button,[href],input,select,textarea,[tabindex]"))
+    .filter((element) => {
+      if (element.getAttribute("tabindex") === "-1") {
+        return false;
+      }
+      if ("disabled" in element && (element as HTMLButtonElement).disabled) {
+        return false;
+      }
+      return element.tabIndex >= 0;
+    });
+
+  if (tabbables.length === 0) {
+    return;
+  }
+
+  const current = document.activeElement as HTMLElement | null;
+  const index = current ? tabbables.indexOf(current) : -1;
+  if (index >= 0) {
+    const nextIndex = options.shift
+      ? (index - 1 + tabbables.length) % tabbables.length
+      : (index + 1) % tabbables.length;
+    tabbables[nextIndex]?.focus();
+    return;
+  }
+
+  if (options.shift) {
+    tabbables[tabbables.length - 1]?.focus();
+  } else {
+    tabbables[0]?.focus();
+  }
+}
+
 describe("useLandmark", () => {
   afterEach(() => {
     document.body.innerHTML = "";
@@ -114,6 +147,111 @@ describe("useLandmark", () => {
     await nextTick();
     expect(document.activeElement).toBe(nav);
 
+    wrapper.unmount();
+  });
+
+  it("tabs into the first focusable child within landmark regions", async () => {
+    const Navigation = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation" }, refAdapter);
+        return () =>
+          h("nav", { ...landmarkProps, ref: elementRef }, [
+            h("a", { href: "#", "data-testid": "link-home" }, "Home"),
+            h("a", { href: "#", "data-testid": "link-about" }, "About"),
+          ]);
+      },
+    });
+    const Main = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "main" }, refAdapter);
+        return () => h("main", { ...landmarkProps, ref: elementRef }, [h("input", { type: "text", "data-testid": "textbox" })]);
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const firstLink = wrapper.get('[data-testid="link-home"]').element as HTMLAnchorElement;
+
+    moveTabFocus();
+    expect(document.activeElement).toBe(firstLink);
+    wrapper.unmount();
+  });
+
+  it("shift+tabs through landmark children in reverse order", async () => {
+    const Navigation = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation" }, refAdapter);
+        return () =>
+          h("nav", { ...landmarkProps, ref: elementRef }, [
+            h("a", { href: "#", "data-testid": "link-home" }, "Home"),
+            h("a", { href: "#", "data-testid": "link-about" }, "About"),
+            h("a", { href: "#", "data-testid": "link-contact" }, "Contact"),
+          ]);
+      },
+    });
+    const Main = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "main" }, refAdapter);
+        return () => h("main", { ...landmarkProps, ref: elementRef }, [h("input", { type: "text", "data-testid": "textbox" })]);
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const textField = wrapper.get('[data-testid="textbox"]').element as HTMLInputElement;
+    const lastLink = wrapper.get('[data-testid="link-contact"]').element as HTMLAnchorElement;
+
+    moveTabFocus({ shift: true });
+    expect(document.activeElement).toBe(textField);
+
+    moveTabFocus({ shift: true });
+    expect(document.activeElement).toBe(lastLink);
     wrapper.unmount();
   });
 
