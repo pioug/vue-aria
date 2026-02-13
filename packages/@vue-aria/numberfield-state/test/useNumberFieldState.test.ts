@@ -225,4 +225,36 @@ describe("useNumberFieldState", () => {
     expect(state.inputValue).toBe("$2.00");
     scope.stop();
   });
+
+  it("parses swiss currency grouping separators", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "de-CH",
+        defaultValue: 0,
+        formatOptions: {
+          style: "currency",
+          currency: "CHF",
+        },
+      })
+    )!;
+
+    state.commit("CHF 1'000.00");
+    expect(state.numberValue).toBe(1000);
+    scope.stop();
+  });
+
+  it("parses arabic-indic digits for locales with non-latin numbering systems", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "ar-EG",
+        defaultValue: 0,
+      })
+    )!;
+
+    state.commit("١٢٣٤");
+    expect(state.numberValue).toBe(1234);
+    scope.stop();
+  });
 });

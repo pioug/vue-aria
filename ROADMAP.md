@@ -1854,6 +1854,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for locale-aware separator parsing (`fr-FR`), partial sign validation under bounds, and default percent step behavior (`0.01`).
   - Added adapted native validation commit-queue coverage (`validationBehavior='native'` updates display state on `commitValidation`).
   - Added adapted parser edge-case coverage for decimal shorthand (`.5`/`-.5`), accounting-currency negatives (`($1.50)`), and unknown-currency rejection fallback behavior.
+  - Added adapted locale-numbering-system/parser coverage for Swiss currency grouping separators (`de-CH`) and Arabic-Indic digit parsing (`ar-EG`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2474,3 +2475,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - already-focused-input no-op focus transfer behavior
   - Enter key commit/validation behavior with IME composing guard
 - Validation: `npm run check` passed, `npm test` passed (117 files, 374 tests).
+- Expanded `@vue-aria/numberfield-state` parser parity coverage with adapted locale-numbering-system cases:
+  - Swiss grouping apostrophe parsing in CHF currency format
+  - Arabic-Indic digit parsing in `ar-EG`
+- Validation: `npm run check` passed, `npm test` passed (117 files, 376 tests).
