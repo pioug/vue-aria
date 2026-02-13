@@ -117,4 +117,5 @@ onBeforeUnmount(() => {
   - owner-document/iframe containment, autofocus, restore-focus, and focus-manager traversal behavior
   - teleported child-scope containment behavior for both `contain` and non-`contain` child scopes
   - shadow-root containment tab traversal behavior
+  - restore-focus skip behavior when scope unmounts while focus is already outside the scope
 - Remaining work focuses on broader full upstream FocusScope test-file migration.

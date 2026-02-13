@@ -1540,6 +1540,52 @@ describe("FocusScope behavior", () => {
     }
   });
 
+  it("does not restore focus when scope unmounts and active element is outside the scope", async () => {
+    const Host = defineComponent({
+      setup() {
+        const display = ref(false);
+        const toggle = () => {
+          display.value = !display.value;
+        };
+        return { display, toggle };
+      },
+      render() {
+        return h("div", [
+          h("button", { id: "button1", type: "button", onClick: this.toggle }, this.display ? "Close dialog" : "Open dialog"),
+          h("button", { id: "button2", type: "button", onClick: this.toggle }, this.display ? "Close dialog" : "Open dialog"),
+          this.display
+            ? h(
+              FocusScope,
+              { restoreFocus: true },
+              {
+                default: () => [h("input", { id: "input1" })],
+              }
+            )
+            : null,
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, { attachTo: document.body });
+
+    const button1 = wrapper.get("#button1").element as HTMLButtonElement;
+    const button2 = wrapper.get("#button2").element as HTMLButtonElement;
+
+    button1.focus();
+    await wrapper.get("#button1").trigger("click");
+    await nextTick();
+    expect(document.activeElement).toBe(button1);
+    expect(wrapper.find("#input1").exists()).toBe(true);
+
+    button2.focus();
+    await wrapper.get("#button2").trigger("click");
+    await nextTick();
+    expect(document.activeElement).toBe(button2);
+    expect(wrapper.find("#input1").exists()).toBe(false);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

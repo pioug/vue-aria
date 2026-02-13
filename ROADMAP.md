@@ -3014,3 +3014,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` cleanup parity with adapted timer/raf leak guard coverage for:
   - no pending timer work after contained focus/blur lifecycle and unmount
 - Validation: `npm run check` passed, `npm test` passed (125 files, 523 tests).
+- Expanded `@vue-aria/focus/FocusScope` restore-focus parity for outside-active unmount paths with adapted upstream coverage for:
+  - skipping restoration when scope unmounts while focus is already outside the scope
+- Improved restore-focus unmount behavior:
+  - restore now short-circuits when current active element is outside the scope (except `document.body` fallback cases)
+- Validation: `npm run check` passed, `npm test` passed (125 files, 524 tests).

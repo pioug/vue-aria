@@ -442,7 +442,20 @@ export const FocusScope = defineComponent({
         scopeParentMap.delete(scopeRootRef.value);
       }
 
-      if (props.restoreFocus && isHTMLElement(previousFocused.value)) {
+      let canRestoreFocus = true;
+      if (scopeRootRef.value) {
+        const ownerDocument = getOwnerDocument(scopeRootRef.value);
+        const activeElement = getActiveElement(ownerDocument);
+        if (
+          activeElement
+          && activeElement !== ownerDocument.body
+          && !nodeContains(scopeRootRef.value, activeElement)
+        ) {
+          canRestoreFocus = false;
+        }
+      }
+
+      if (canRestoreFocus && props.restoreFocus && isHTMLElement(previousFocused.value)) {
         let shouldRestore = true;
         if (scopeRootRef.value) {
           const ownerWindow = getOwnerWindow(scopeRootRef.value);
