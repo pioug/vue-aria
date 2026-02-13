@@ -1564,6 +1564,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useMenu`
   - `useMenuItem`
   - `useMenuSection`
+  - `useMenuTrigger`
   - `menuData`
 - [x] Package scaffolding created and wired:
   - `package.json`
@@ -1572,14 +1573,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - `useMenuTrigger`, `useSubmenuTrigger`, and submenu movement safety hooks are still pending.
+  - `useSubmenuTrigger` and submenu movement safety hooks are still pending.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 3 (adapted)
-- Passing test files: 3 (validated 2026-02-13)
+- Ported test files: 4 (adapted)
+- Passing test files: 4 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, and close/action behavior.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, and menu trigger keyboard/menu-prop wiring semantics.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1589,7 +1590,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [ ] Validate full keyboard/press/hover parity details for `useMenuItem` against upstream edge cases
-- [ ] Validate submenu keyboard and hover behavior once trigger/submenu hooks are ported
+- [ ] Validate submenu keyboard and hover behavior once submenu hooks are ported
 
 ### Visual Parity
 - Not applicable for hook package beyond downstream consumer validation.
@@ -1598,8 +1599,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `useMenuTrigger` and `useSubmenuTrigger` stacks, including submenu movement safety behavior.
-2. Deepen `useMenuItem` parity tests for keyboard-triggered click paths, trigger-item behavior, and virtualized aria metadata.
+1. Port `useSubmenuTrigger` stack, including submenu movement safety behavior.
+2. Deepen `useMenuItem` and `useMenuTrigger` parity tests for keyboard-triggered click paths, long-press behavior, trigger-item behavior, and virtualized aria metadata.
 
 ## 31) Session Log
 ### 2026-02-13
@@ -1991,3 +1992,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - wired press/hover/keyboard/focus props via existing interaction hooks
 - Added adapted `useMenuItem` tests for role derivation and action/close semantics.
 - Validation: `npm run check` passed, `npm test` passed (104 files, 305 tests).
+- Expanded `@vue-aria/menu` with `useMenuTrigger`:
+  - implemented trigger keyboard handling for ArrowUp/ArrowDown and guarded Enter/Space semantics
+  - implemented press vs long-press trigger path wiring with overlay trigger semantics
+  - wired menu trigger ids and overlay close/autofocus propagation
+- Added adapted `useMenuTrigger` tests for keyboard gating, focus-strategy toggle behavior, and trigger/menu prop wiring.
+- Validation: `npm run check` passed, `npm test` passed (105 files, 308 tests).

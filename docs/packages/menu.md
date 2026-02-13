@@ -7,16 +7,20 @@
 - `useMenu`
 - `useMenuItem`
 - `useMenuSection`
+- `useMenuTrigger`
 - `menuData`
 
 ## Upstream-aligned example
 
 ```vue
 <script setup lang="ts">
-import { useMenu, useMenuItem, useMenuSection } from "@vue-aria/menu";
+import { useMenu, useMenuItem, useMenuSection, useMenuTrigger } from "@vue-aria/menu";
 import { useListState } from "@vue-aria/list-state";
+import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 
+const triggerRef = { current: null as HTMLElement | null };
 const menuRef = { current: null as HTMLElement | null };
+const triggerState = useOverlayTriggerState({});
 const state = useListState({
   selectionMode: "none",
   items: [
@@ -27,7 +31,8 @@ const state = useListState({
   getTextValue: (item) => item.label
 });
 
-const { menuProps } = useMenu({ "aria-label": "File actions" }, state as any, menuRef);
+const { menuTriggerProps, menuProps: triggerMenuProps } = useMenuTrigger({}, triggerState as any, triggerRef);
+const { menuProps } = useMenu({ ...triggerMenuProps, "aria-label": "File actions" }, state as any, menuRef);
 const itemRef = { current: null as HTMLElement | null };
 const { menuItemProps } = useMenuItem({ key: "new" }, state as any, itemRef);
 const { itemProps, headingProps, groupProps } = useMenuSection({ heading: "File" });
@@ -36,5 +41,5 @@ const { itemProps, headingProps, groupProps } = useMenuSection({ heading: "File"
 
 ## Notes
 
-- Current slice includes `useMenu`, `useMenuItem`, and `useMenuSection`; trigger/submenu hooks are pending.
+- Current slice includes `useMenu`, `useMenuItem`, `useMenuSection`, and `useMenuTrigger`; submenu hooks are pending.
 - `Spectrum S2` is ignored for this port.
