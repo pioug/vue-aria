@@ -233,3 +233,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (18 files, 49 tests).
 - Added final missing upstream index exports (`useDrag1D`, `useEnterAnimation`, `useExitAnimation`, `useViewportSize`) with Vue adaptations.
 - Validation: `npm run check` passed, `npm test` passed (20 files, 51 tests).
+- Ported `@vue-aria/ssr` provider/composables slice:
+  - `SSRProvider`
+  - `useSSRSafeId`
+  - `useIsSSR`
+  - `useId`
+- Added SSR provider tests and validated nested-provider id uniqueness.
+- Validation: `npm run check` passed, `npm test` passed (21 files, 53 tests).
