@@ -321,6 +321,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useFilter`
   - `isRTL`
   - `getPackageLocalizationScript`
+- [x] Aligned provider structure with upstream split behavior:
+  - `I18nProviderWithLocale`
+  - `I18nProviderWithDefaultLocale`
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -335,6 +338,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 3
 - Test parity notes:
   - Ported/adapted upstream language-change listener coverage.
+  - Added adapted language direction transition coverage (LTR <-> RTL updates).
   - Ported/adapted upstream server rendering utility coverage.
   - Added adapted formatter reactivity coverage for locale/provider updates.
 - [x] All relevant upstream tests migrated
@@ -419,7 +423,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [x] VitePress package page scaffolded (`docs/packages/interactions.md`)
+- [x] VitePress package page scaffolded (`docs/packages/selection.md`)
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2923,3 +2927,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - new `docs/packages/i18n.md` page
   - docs nav/sidebar/index wiring for `@vue-aria/i18n`
 - Validation: `npm run check` passed, `npm test` passed (124 files, 494 tests).
+- Improved `@vue-aria/i18n` parity:
+  - aligned `I18nProvider` structure to upstream split-provider behavior
+  - expanded languagechange coverage for RTL/LTR direction transitions
+- Validation: `npm run check` passed, `npm test` passed (124 files, 495 tests).

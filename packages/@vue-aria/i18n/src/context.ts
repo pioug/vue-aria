@@ -9,6 +9,34 @@ export interface I18nProviderProps {
   locale?: string;
 }
 
+const I18nProviderWithLocale = defineComponent({
+  name: "I18nProviderWithLocale",
+  props: {
+    locale: {
+      type: String as PropType<string>,
+      required: true,
+    },
+  },
+  setup(props, { slots }) {
+    const value = computed<Locale>(() => ({
+      locale: props.locale,
+      direction: isRTL(props.locale) ? "rtl" : "ltr",
+    }));
+
+    provide(I18nContext, value);
+    return () => slots.default?.() ?? h("span");
+  },
+});
+
+const I18nProviderWithDefaultLocale = defineComponent({
+  name: "I18nProviderWithDefaultLocale",
+  setup(_props, { slots }) {
+    const defaultLocale = useDefaultLocale();
+    provide(I18nContext, defaultLocale);
+    return () => slots.default?.() ?? h("span");
+  },
+});
+
 export const I18nProvider = defineComponent({
   name: "I18nProvider",
   props: {
@@ -18,21 +46,13 @@ export const I18nProvider = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const defaultLocale = useDefaultLocale();
-    const value = computed<Locale>(() => {
+    return () => {
       if (props.locale) {
-        return {
-          locale: props.locale,
-          direction: isRTL(props.locale) ? "rtl" : "ltr",
-        };
+        return h(I18nProviderWithLocale, { locale: props.locale }, slots);
       }
 
-      return defaultLocale.value;
-    });
-
-    provide(I18nContext, value);
-
-    return () => slots.default?.() ?? h("span");
+      return h(I18nProviderWithDefaultLocale, null, slots);
+    };
   },
 });
 
