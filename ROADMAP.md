@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/tabs-state`
+- Current focus package: `@vue-aria/tabs`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -57,7 +57,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/listbox`: Complete
 - `@vue-aria/select`: Complete
 - `@vue-aria/combobox`: In progress
-- `@vue-aria/tabs`: In progress
+- `@vue-aria/tabs`: Complete
 - `@vue-aria/grid`: Not started
 - `@vue-aria/table`: Not started
 - `@vue-aria/tree`: Not started
@@ -86,7 +86,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tooltip-state`: Complete
 - `@vue-aria/disclosure-state`: Complete
 - `@vue-aria/list-state`: Complete
-- `@vue-aria/tabs-state`: In progress
+- `@vue-aria/tabs-state`: Complete
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
 - `@vue-aria/calendar-state`: Not started
@@ -2226,7 +2226,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-stately/tabs/src`
 - Local package path:
   - `packages/@vue-aria/tabs-state`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -2240,8 +2240,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `package.json`
   - `src/index.ts`
   - `src/useTabListState.ts`
-- Open adaptation note:
-  - Current port covers default-selection fallback and focus synchronization semantics for plain-item collections; additional parity remains for deeper dynamic collection mutation scenarios.
+- Adaptation note:
+  - Default-selection fallback and focus synchronization semantics are validated both in package-local tests and downstream `@vue-aria/tabs` integration.
 
 ### Tests
 - Total upstream test files: none in package-local upstream path
@@ -2249,7 +2249,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for default first-tab selection, disabled-key fallback selection, non-null selection-change forwarding, and disabled-state propagation.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/tabs-state.md`)
@@ -2267,7 +2267,69 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Integrate with `@vue-aria/tabs` hooks and expand mutation-focused state regressions as tabs porting continues.
+1. Monitor upstream `@react-stately/tabs` for drift and add targeted regression coverage as needed.
+
+## 31d) Package Record: @vue-aria/tabs
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/tabs/src`
+  - `references/react-spectrum/packages/@react-spectrum/tabs/test/Tabs.test.js` (behavior source for adapted parity assertions)
+- Local package path:
+  - `packages/@vue-aria/tabs`
+- Status: Complete
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useTabList`
+  - `useTab`
+  - `useTabPanel`
+  - `TabsKeyboardDelegate`
+  - `tabsIds` / `generateId` shared utilities
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useTabList.ts`
+  - `src/useTab.ts`
+  - `src/useTabPanel.ts`
+  - `src/TabsKeyboardDelegate.ts`
+  - `src/utils.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Adaptation note:
+  - Hook-level tests mirror upstream behavior intent for keyboard orientation/RTL navigation, disabled tab skipping, tab-to-panel ARIA linking, and tab panel tabbability semantics.
+
+### Tests
+- Total upstream test files: no dedicated package-local `@react-aria/tabs` test folder
+- Ported test files: 4 (adapted)
+- Passing test files: 4 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted `TabsKeyboardDelegate` coverage for horizontal/vertical navigation, RTL flip behavior, wrapping, and disabled-key skipping.
+  - Added adapted `useTabList` coverage for role/orientation output and `keyboardActivation` select-on-focus behavior.
+  - Added adapted `useTab` coverage for selected/disabled tab aria wiring, tabpanel linking, and focus-ref bridging.
+  - Added adapted `useTabPanel` coverage for selected-tab label linking and tabbable-child `tabIndex` behavior.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/tabs.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Added upstream-aligned baseline tab CSS snippet for role-based tablist/tab/tabpanel styling.
+
+### Accessibility
+- [x] Keyboard and ARIA role/id-link semantics validated in adapted hook-level tests.
+
+### Visual Parity
+- Hook package is non-visual; downstream component integrations consume these role/aria primitives for UI parity.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Monitor upstream `@react-aria/tabs` for drift and add targeted regression coverage as needed.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4574,3 +4636,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page for `@vue-aria/tabs-state` and linked it in docs nav/sidebar/index.
   - added a dedicated `@vue-aria/tabs-state` package record in ROADMAP and marked `@vue-aria/tabs` / `@vue-aria/tabs-state` execution queue items as `In progress`.
 - Validation: `npm test -- packages/@vue-aria/tabs-state/test` passed (1 file, 4 tests).
+- Completed `@vue-aria/tabs` parity slice:
+  - finished upstream-aligned `useTabList`, `useTab`, `useTabPanel`, `TabsKeyboardDelegate`, and shared tab id utility wiring.
+  - added `@vue-aria/tabs` tsconfig/vitest aliases.
+  - added adapted tabs test suite (`TabsKeyboardDelegate`, `useTabList`, `useTab`, `useTabPanel`) covering keyboard orientation/RTL behavior, disabled-key skipping, and tab-panel ARIA linking semantics.
+  - added VitePress package page for `@vue-aria/tabs` and linked it in docs nav/sidebar/index.
+  - added dedicated package record `31d` and marked `@vue-aria/tabs` + `@vue-aria/tabs-state` execution queue items `Complete`.
+- Validation: `npm test -- packages/@vue-aria/tabs/test packages/@vue-aria/tabs-state/test` passed (5 files, 14 tests).

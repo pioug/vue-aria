@@ -155,6 +155,9 @@ export default defineConfig({
       "@vue-aria/tabs-state": fileURLToPath(
         new URL("./packages/@vue-aria/tabs-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/tabs": fileURLToPath(
+        new URL("./packages/@vue-aria/tabs/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/toast": fileURLToPath(
         new URL("./packages/@vue-aria/toast/src/index.ts", import.meta.url)
       ),

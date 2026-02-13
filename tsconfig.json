@@ -57,6 +57,7 @@
       "@vue-aria/combobox-state": ["packages/@vue-aria/combobox-state/src/index.ts"],
       "@vue-aria/combobox": ["packages/@vue-aria/combobox/src/index.ts"],
       "@vue-aria/tabs-state": ["packages/@vue-aria/tabs-state/src/index.ts"],
+      "@vue-aria/tabs": ["packages/@vue-aria/tabs/src/index.ts"],
       "@vue-aria/toast": ["packages/@vue-aria/toast/src/index.ts"],
       "@vue-aria/tooltip-state": ["packages/@vue-aria/tooltip-state/src/index.ts"],
       "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
