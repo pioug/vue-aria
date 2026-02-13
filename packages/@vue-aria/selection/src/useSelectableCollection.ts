@@ -2,7 +2,7 @@ import { getFocusableTreeWalker } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
 import { focusSafely } from "@vue-aria/interactions";
 import type { FocusStrategy, Key, MultipleSelectionManager } from "@vue-aria/selection-state";
-import { onScopeDispose } from "vue";
+import { onScopeDispose, watch } from "vue";
 import {
   CLEAR_FOCUS_EVENT,
   FOCUS_EVENT,
@@ -63,6 +63,7 @@ export function useSelectableCollection(
   const router = useRouter();
   const locale = useLocale();
   let scrollPosition = { top: 0, left: 0 };
+  let lastFocusedKey = manager.focusedKey;
 
   const onScroll = () => {
     scrollPosition = {
@@ -75,6 +76,37 @@ export function useSelectableCollection(
   onScopeDispose(() => {
     scrollRef.current?.removeEventListener("scroll", onScroll);
   });
+
+  watch(
+    [() => manager.focusedKey, () => manager.isFocused],
+    () => {
+      if (
+        manager.isFocused &&
+        manager.focusedKey != null &&
+        manager.focusedKey !== lastFocusedKey &&
+        scrollRef.current &&
+        ref.current
+      ) {
+        const element = getItemElement(ref, manager.focusedKey);
+        if (element instanceof HTMLElement && getInteractionModality() === "keyboard") {
+          element.scrollIntoView({ block: "nearest" });
+        }
+      }
+
+      if (
+        !shouldUseVirtualFocus &&
+        manager.isFocused &&
+        manager.focusedKey == null &&
+        lastFocusedKey != null &&
+        ref.current
+      ) {
+        focusSafely(ref.current);
+      }
+
+      lastFocusedKey = manager.focusedKey;
+    },
+    { flush: "post" }
+  );
 
   const navigateToKey = (
     key: Key | null | undefined,

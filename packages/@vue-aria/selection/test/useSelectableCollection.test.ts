@@ -71,6 +71,34 @@ function createManager(overrides: Partial<MultipleSelectionManager> = {}): Multi
   return manager;
 }
 
+function createReactiveManager(overrides: Partial<MultipleSelectionManager> = {}) {
+  const focusedKey = ref<Key | null>(null);
+  const isFocused = ref(false);
+  const manager = createManager(overrides);
+
+  Object.defineProperty(manager, "focusedKey", {
+    get() {
+      return focusedKey.value;
+    },
+  });
+
+  Object.defineProperty(manager, "isFocused", {
+    get() {
+      return isFocused.value;
+    },
+  });
+
+  manager.setFocused = vi.fn((nextFocused: boolean) => {
+    isFocused.value = nextFocused;
+  });
+
+  manager.setFocusedKey = vi.fn((key: Key | null) => {
+    focusedKey.value = key;
+  });
+
+  return { manager, focusedKey, isFocused };
+}
+
 const delegate: KeyboardDelegate = {
   getKeyBelow: () => "b",
   getKeyAbove: () => "a",
@@ -705,6 +733,70 @@ describe("useSelectableCollection", () => {
 
       expect(document.activeElement).toBe(option);
       expect(option.scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+    } finally {
+      scope.stop();
+      ref.current.remove();
+    }
+  });
+
+  it("scrolls the focused item into view when focusedKey changes while focused", async () => {
+    const { manager, focusedKey, isFocused } = createReactiveManager();
+    const ref = { current: document.createElement("div") };
+    const first = document.createElement("div");
+    first.setAttribute("data-key", "a");
+    first.scrollIntoView = vi.fn();
+    const second = document.createElement("div");
+    second.setAttribute("data-key", "b");
+    second.scrollIntoView = vi.fn();
+    ref.current.append(first, second);
+    document.body.append(ref.current);
+
+    focusedKey.value = "a";
+    isFocused.value = true;
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    );
+
+    try {
+      focusedKey.value = "b";
+      await Promise.resolve();
+
+      expect((second.scrollIntoView as any).mock.calls.length).toBe(1);
+      expect((second.scrollIntoView as any).mock.calls[0]?.[0]).toEqual({ block: "nearest" });
+    } finally {
+      scope.stop();
+      ref.current.remove();
+    }
+  });
+
+  it("focuses the collection root when focusedKey becomes null while focused", async () => {
+    const { manager, focusedKey, isFocused } = createReactiveManager();
+    const ref = { current: document.createElement("div") };
+    document.body.append(ref.current);
+
+    focusedKey.value = "a";
+    isFocused.value = true;
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    );
+
+    try {
+      focusedKey.value = null;
+      await Promise.resolve();
+
+      expect(focusSafely).toHaveBeenCalledWith(ref.current);
     } finally {
       scope.stop();
       ref.current.remove();

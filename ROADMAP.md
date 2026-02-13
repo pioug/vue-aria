@@ -3188,3 +3188,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added pointer-event test harness helpers for touch/virtual interaction branches in jsdom
   - adapted `@vue-aria/listbox/useOption` hover-pointer tests to provide full event contracts expected by press handlers
 - Validation: `npm run check` passed, `npm test` passed (126 files, 577 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` focus lifecycle parity:
+  - added focused-key change lifecycle handling to scroll newly focused items into view when modality is keyboard
+  - added fallback collection-root refocus when focusedKey transitions from a concrete key to `null` while collection focus state remains active
+- Expanded `@vue-aria/selection/useSelectableCollection` reactive lifecycle coverage:
+  - added adapted tests for focused-key-change scroll behavior
+  - added adapted tests for focused-key-null collection-root focus fallback behavior
+- Validation: `npm run check` passed, `npm test` passed (126 files, 579 tests).
