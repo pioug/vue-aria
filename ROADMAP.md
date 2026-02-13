@@ -36,6 +36,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/live-announcer`: In progress
 - `@vue-aria/aria-modal-polyfill`: In progress
 - `@vue-aria/landmark`: In progress
+- `@vue-aria/toast`: In progress
 - `@vue-aria/overlays`: In progress
 - `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: In progress
@@ -2397,7 +2398,60 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port additional upstream `useLandmark.test.tsx` interaction coverage (hidden landmarks, custom-event wrapping, nested focus restoration).
 2. Integrate `@vue-aria/landmark` into downstream `@vue-aria/toast` porting work.
 
-## 40) Session Log
+## 40) Package Record: @vue-aria/toast
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/toast/src`
+  - `references/react-spectrum/packages/@react-aria/toast/test`
+- Local package path:
+  - `packages/@vue-aria/toast`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useToast`
+  - `useToastRegion`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useToast.ts`
+  - `src/useToastRegion.ts`
+  - `src/intlMessages.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted upstream `useToast` coverage for default props, close-button invocation, and data-attribute passthrough.
+  - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/toast.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Port full upstream toast-region interaction behavior (focus restoration and multi-toast transitions) from story-backed tests.
+
+### Visual Parity
+- Not applicable for utility hooks beyond interaction semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port additional upstream `useToast` story-driven interaction coverage (`single toast at a time` focus transfer flows).
+2. Tighten `useToastRegion` parity for focused-toast removal and pointer-modality focus restoration.
+
+## 41) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -3631,3 +3685,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page (`docs/packages/landmark.md`) and wired docs index/nav/sidebar links.
   - added package-level roadmap record and execution queue tracking entry.
 - Validation: `npm run check` passed, `npm test` passed (136 files, 663 tests).
+- Started `@vue-aria/toast` package parity slice:
+  - ported `useToast` and `useToastRegion` hooks with localized messages and landmark/interactions integration.
+  - added adapted upstream `useToast` tests for defaults, close-button behavior, and data attribute passthrough.
+  - added adapted baseline `useToastRegion` test for region role/label/top-layer props.
+  - added VitePress docs page (`docs/packages/toast.md`) and wired docs index/nav/sidebar links.
+  - added package-level roadmap record and execution queue tracking entry.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 667 tests).
