@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "types": ["node", "vitest/globals"],
+    "baseUrl": ".",
+    "paths": {
+      "@vue-aria/utils": ["packages/@vue-aria/utils/src/index.ts"],
+      "@vue-aria/types": ["packages/@vue-aria/types/src/index.ts"],
+      "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"]
+    },
+    "strict": true,
+    "declaration": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["packages/**/*.ts", "vitest.config.ts"]
+}

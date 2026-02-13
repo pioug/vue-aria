@@ -4,13 +4,12 @@ Last updated: 2026-02-13
 Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 
 ## 1) Program Status
-- Overall status: Not started
-- Current phase: Bootstrap from scratch
-- Current focus package: TBD
+- Overall status: In progress
+- Current phase: Foundation bootstrap + first package
+- Current focus package: `@vue-aria/utils`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
-  - Upstream source code import pending into `/Users/piou/Dev/vue-aria/upstream`
-  - Initial monorepo scaffolding pending
+  - Docs stack (VitePress/Storybook parity pages) not scaffolded yet
 
 ## 2) Global Acceptance Gates
 A package can be marked `Complete` only if all are true:
@@ -29,9 +28,9 @@ Program completion gate:
 Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### React Aria packages
-- `@vue-aria/utils`: Not started
+- `@vue-aria/utils`: In progress
 - `@vue-aria/i18n`: Not started
-- `@vue-aria/ssr`: Not started
+- `@vue-aria/ssr`: In progress
 - `@vue-aria/interactions`: Not started
 - `@vue-aria/focus`: Not started
 - `@vue-aria/live-announcer`: Not started
@@ -112,32 +111,34 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 5. Date/time stack: `calendar`, `calendar-state`, `datepicker`, `datepicker-state`.
 6. Spectrum visual layer and docs parity.
 
-## 5) Package Record Template
-Copy this section for each package and keep it up to date.
-
-## Package: <package-name>
+## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
-- Local package path:
-- Status: Not started
+  - `references/react-spectrum/packages/@react-aria/utils/src`
+  - `references/react-spectrum/packages/@react-aria/utils/test`
+- Local package path: `packages/@vue-aria/utils`
+- Status: In progress
 - Owner: Codex
 
 ### Scope
-- [ ] Upstream modules enumerated
+- [x] Upstream modules enumerated
 - [ ] Public API checklist complete
 
 ### Implementation
-- [ ] Core composables/components/helpers ported
-- [ ] Folder structure mirrors upstream
-- [ ] Vue idioms applied (`v-model`, slots, emits, provide/inject, refs)
+- [x] Initial utility/composable slice ported
+- [x] Folder structure mirrors package boundary
+- [x] Vue idioms applied where hooks were adapted
+- Remaining:
+  - Port full upstream `@react-aria/utils` export surface
+  - Reconcile naming/semantics gaps to upstream API
 
 ### Tests
-- Total upstream test files: 0
-- Ported test files: 0
-- Passing test files: 0
+- Total upstream test files: 7
+- Ported test files: 10
+- Passing test files: 10
 - Test parity notes:
-  - None
-- [ ] All relevant tests migrated
-- [ ] All migrated tests passing
+  - Current test set includes Vue-adapted behavior tests, not yet a 1:1 mapped set for all upstream files.
+- [ ] All relevant upstream tests migrated
+- [x] Current migrated tests passing
 
 ### Docs
 - [ ] VitePress/Storybook pages ported
@@ -158,21 +159,26 @@ Copy this section for each package and keep it up to date.
 ### React Dependency Check
 - [ ] No remaining React runtime dependency
 - Remaining dependencies:
-  - None
+  - None in runtime deps for this slice; parity verification pending for full package
 
 ### Open Gaps
-- None
+- Upstream reference now added as submodule, but many `@react-aria/utils` exports remain unported.
+- SSR/documentation scaffolding is baseline only and needs parity-level implementation.
 
 ### Next Actions
-1. Enumerate upstream API and tests.
-2. Port implementation.
-3. Port tests and make them pass.
-4. Port docs/examples/styles.
-5. Mark completion only after all gates pass.
+1. Build explicit upstream export-to-local mapping for `@react-aria/utils`.
+2. Port missing upstream utilities (`mergeRefs`, `useId` semantics, shadow DOM helpers, etc.).
+3. Convert upstream tests file-by-file with assertion parity notes.
+4. Scaffold docs pages for `@vue-aria/utils` usage and parity notes.
+5. Mark completion only after all package gates pass.
 
 ## 6) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
 - Added reusable package parity template.
-- Next step: import upstream source tree and scaffold initial monorepo packages.
+- Added upstream reference submodule: `references/react-spectrum` pinned to `c8d64314e5b9039fc6cb985f0dd666e1c6187b37`.
+- Bootstrapped monorepo toolchain (`package.json`, `tsconfig.json`, `vitest.config.ts`).
+- Started first package implementation: `@vue-aria/utils`.
+- Added foundational packages needed by current utils slice: `@vue-aria/types`, `@vue-aria/ssr`.
+- Validation: `npm run check` passed, `npm test` passed (10 files, 33 tests).
