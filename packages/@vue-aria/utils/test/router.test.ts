@@ -2,10 +2,13 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import {
+  getSyntheticLinkProps,
   handleLinkClick,
+  openLink,
   provideRouter,
   shouldClientNavigate,
   useLinkProps,
+  useSyntheticLinkProps,
 } from "../src";
 
 describe("router utilities", () => {
@@ -101,5 +104,81 @@ describe("router utilities", () => {
 
     mount(App);
     expect(resolvedHref).toBe("/app/reports");
+  });
+
+  it("resolves synthetic link href through router useHref", () => {
+    let dataHref: unknown;
+
+    const Child = defineComponent({
+      setup() {
+        const props = useSyntheticLinkProps({ href: "/reports" });
+        dataHref = props["data-href"];
+        return () => h("div");
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        provideRouter({
+          navigate: vi.fn(),
+          useHref: (href) => `/app${href}`,
+        });
+
+        return () => h(Child);
+      },
+    });
+
+    mount(App);
+    expect(dataHref).toBe("/app/reports");
+  });
+
+  it("keeps deprecated getSyntheticLinkProps href unmapped", () => {
+    const props = getSyntheticLinkProps({
+      href: "/reports",
+      target: "_blank",
+      rel: "noopener",
+      download: true,
+      ping: "/ping",
+      referrerPolicy: "origin",
+    });
+
+    expect(props["data-href"]).toBe("/reports");
+    expect(props["data-target"]).toBe("_blank");
+    expect(props["data-rel"]).toBe("noopener");
+    expect(props["data-download"]).toBe(true);
+    expect(props["data-ping"]).toBe("/ping");
+    expect(props["data-referrer-policy"]).toBe("origin");
+  });
+
+  it("tracks openLink.isOpening during dispatch", () => {
+    const anchor = document.createElement("a");
+    anchor.href = "/reports";
+
+    const openingStates: boolean[] = [];
+    anchor.addEventListener("click", (event) => {
+      event.preventDefault();
+      openingStates.push(openLink.isOpening);
+      expect(event.metaKey).toBe(true);
+    });
+
+    expect(openLink.isOpening).toBe(false);
+    openLink(anchor, { metaKey: true });
+    expect(openingStates).toEqual([true]);
+    expect(openLink.isOpening).toBe(false);
+  });
+
+  it("supports openLink calls that do not mark opening state", () => {
+    const anchor = document.createElement("a");
+    anchor.href = "/reports";
+
+    const openingStates: boolean[] = [];
+    anchor.addEventListener("click", (event) => {
+      event.preventDefault();
+      openingStates.push(openLink.isOpening);
+    });
+
+    openLink(anchor, {}, false);
+    expect(openingStates).toEqual([false]);
+    expect(openLink.isOpening).toBe(false);
   });
 });

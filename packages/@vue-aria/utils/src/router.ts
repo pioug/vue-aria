@@ -1,4 +1,5 @@
 import { getCurrentInstance, inject, provide } from "vue";
+import { focusWithoutScrolling } from "./focusWithoutScrolling";
 
 export type Href = string;
 
@@ -57,29 +58,24 @@ function getSyntheticLink(
   const link = document.createElement("a");
   link.href = href;
 
-  const targetAttr = target.getAttribute("data-target");
-  if (targetAttr) {
-    link.target = targetAttr;
+  if (target.hasAttribute("data-target")) {
+    link.target = target.getAttribute("data-target") ?? "";
   }
 
-  const rel = target.getAttribute("data-rel");
-  if (rel) {
-    link.rel = rel;
+  if (target.hasAttribute("data-rel")) {
+    link.rel = target.getAttribute("data-rel") ?? "";
   }
 
-  const download = target.getAttribute("data-download");
-  if (download) {
-    link.download = download;
+  if (target.hasAttribute("data-download")) {
+    link.download = target.getAttribute("data-download") ?? "";
   }
 
-  const ping = target.getAttribute("data-ping");
-  if (ping) {
-    link.ping = ping;
+  if (target.hasAttribute("data-ping")) {
+    link.ping = target.getAttribute("data-ping") ?? "";
   }
 
-  const referrerPolicy = target.getAttribute("data-referrer-policy");
-  if (referrerPolicy) {
-    link.referrerPolicy = referrerPolicy;
+  if (target.hasAttribute("data-referrer-policy")) {
+    link.referrerPolicy = target.getAttribute("data-referrer-policy") ?? "";
   }
 
   target.appendChild(link);
@@ -107,7 +103,20 @@ export function shouldClientNavigate(
   );
 }
 
-export function openLink(target: HTMLAnchorElement, modifiers: Modifiers): void {
+export interface OpenLinkFn {
+  (
+    target: HTMLAnchorElement,
+    modifiers: Modifiers,
+    setOpening?: boolean
+  ): void;
+  isOpening: boolean;
+}
+
+export const openLink: OpenLinkFn = ((
+  target: HTMLAnchorElement,
+  modifiers: Modifiers,
+  setOpening = true
+) => {
   const { metaKey, ctrlKey, altKey, shiftKey } = modifiers;
   const event = new MouseEvent("click", {
     metaKey,
@@ -119,8 +128,16 @@ export function openLink(target: HTMLAnchorElement, modifiers: Modifiers): void 
     cancelable: true,
   });
 
-  target.dispatchEvent(event);
-}
+  openLink.isOpening = setOpening;
+  try {
+    focusWithoutScrolling(target);
+    target.dispatchEvent(event);
+  } finally {
+    openLink.isOpening = false;
+  }
+}) as OpenLinkFn;
+
+openLink.isOpening = false;
 
 function openSyntheticLink(target: Element, modifiers: Modifiers): void {
   getSyntheticLink(target, (link) => openLink(link, modifiers));
@@ -187,14 +204,22 @@ export function useSyntheticLinkProps(props?: LinkDOMProps): Record<string, unkn
     "data-href": resolvedHref,
     "data-target": props?.target,
     "data-rel": props?.rel,
-    "data-download":
-      props?.download === undefined ? undefined : String(props.download),
+    "data-download": props?.download,
     "data-ping": props?.ping,
     "data-referrer-policy": props?.referrerPolicy,
   };
 }
 
-export const getSyntheticLinkProps = useSyntheticLinkProps;
+export function getSyntheticLinkProps(props?: LinkDOMProps): Record<string, unknown> {
+  return {
+    "data-href": props?.href,
+    "data-target": props?.target,
+    "data-rel": props?.rel,
+    "data-download": props?.download,
+    "data-ping": props?.ping,
+    "data-referrer-policy": props?.referrerPolicy,
+  };
+}
 export const RouterProvider = provideRouter;
 
 export function handleLinkClick(

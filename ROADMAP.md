@@ -190,7 +190,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted upstream coverage for `shadowTreeWalker` traversal parity (non-shadow and root-shadow scenarios).
   - Added adapted upstream coverage for `useViewportSize` SSR behavior (`0x0` pre-hydration contract and SSR render safety).
   - Added adapted upstream coverage for `shadowTreeWalker` multi-shadow traversal (peer and nested shadow hosts).
-  - Remaining parity gaps include `useEnterAnimation`/`useExitAnimation` and `openLink` API alignment.
+  - Added adapted router/openLink parity coverage (`openLink.isOpening`, synthetic href mapping, and deprecated `getSyntheticLinkProps` behavior).
+  - Remaining parity gaps include `useEnterAnimation`/`useExitAnimation` and advanced `openLink` browser-specific event synthesis branches.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2617,3 +2618,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - traversal across peer shadow hosts
   - traversal across nested shadow hosts
 - Validation: `npm run check` passed, `npm test` passed (120 files, 431 tests).
+- Improved `@vue-aria/utils/router` open-link parity:
+  - added `openLink.isOpening` + optional `setOpening` behavior
+  - aligned synthetic-link attribute extraction for empty-string data attributes
+  - separated deprecated `getSyntheticLinkProps` from router-aware `useSyntheticLinkProps`
+- Expanded router parity tests for:
+  - mapped synthetic href behavior via `useSyntheticLinkProps`
+  - deprecated unmapped href behavior via `getSyntheticLinkProps`
+  - `openLink.isOpening` semantics during and after dispatch
+- Validation: `npm run check` passed, `npm test` passed (120 files, 435 tests).
