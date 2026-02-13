@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, nextTick, onMounted, ref } from "vue";
+import { Teleport, defineComponent, h, nextTick, onMounted, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { FocusScope, useFocusManager, type FocusManager } from "../src";
 
@@ -1057,5 +1057,93 @@ describe("FocusScope behavior", () => {
 
     wrapper.unmount();
     outside.remove();
+  });
+
+  it("does not lock focus in parent scope when child scope is teleported without contain", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { autoFocus: true, restoreFocus: true, contain: true },
+            {
+              default: () => [
+                h("input", { id: "parent" }),
+                h("div", [
+                  h(
+                    Teleport,
+                    { to: "body" },
+                    h(
+                      FocusScope,
+                      {},
+                      {
+                        default: () => [h("input", { id: "child" })],
+                      }
+                    )
+                  ),
+                ]),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const parent = document.getElementById("parent") as HTMLInputElement;
+    const child = document.getElementById("child") as HTMLInputElement;
+
+    expect(document.activeElement).toBe(parent);
+    child.focus();
+    expect(document.activeElement).toBe(child);
+    parent.focus();
+    expect(document.activeElement).toBe(parent);
+
+    wrapper.unmount();
+  });
+
+  it("locks focus in teleported child scope when child scope has contain", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { autoFocus: true, restoreFocus: true, contain: true },
+            {
+              default: () => [
+                h("input", { id: "parent" }),
+                h("div", [
+                  h(
+                    Teleport,
+                    { to: "body" },
+                    h(
+                      FocusScope,
+                      { contain: true },
+                      {
+                        default: () => [h("input", { id: "child" })],
+                      }
+                    )
+                  ),
+                ]),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const parent = document.getElementById("parent") as HTMLInputElement;
+    const child = document.getElementById("child") as HTMLInputElement;
+
+    expect(document.activeElement).toBe(parent);
+    child.focus();
+    expect(document.activeElement).toBe(child);
+    parent.focus();
+    expect(document.activeElement).toBe(child);
+
+    wrapper.unmount();
   });
 });

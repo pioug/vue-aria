@@ -2976,3 +2976,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` containment fallback parity with adapted coverage for:
   - focusing the first tabbable element when focus leaves an active contained scope before any explicit in-scope focus tracking is recorded
 - Validation: `npm run check` passed, `npm test` passed (125 files, 512 tests).
+- Expanded `@vue-aria/focus/FocusScope` portal containment parity with adapted upstream coverage for:
+  - allowing focus transfer from a containing parent scope into a teleported child scope without `contain`
+  - locking focus inside a teleported child scope when the child scope uses `contain`
+- Improved `@vue-aria/focus/FocusScope` logical-scope containment behavior:
+  - tracks logical scope parent relationships across Teleport boundaries
+  - permits descendant teleported scope focus targets during parent-scope containment enforcement
+  - avoids nested-scope eager activation during mount-time initialization
+- Validation: `npm run check` passed, `npm test` passed (125 files, 514 tests).

@@ -115,4 +115,5 @@ onBeforeUnmount(() => {
   - restore event cancellation and nested propagation isolation
   - radio-group tabbable traversal rules for containment
   - owner-document/iframe containment, autofocus, restore-focus, and focus-manager traversal behavior
-- Remaining work focuses on deeper portal behavior and full upstream test migration.
+  - teleported child-scope containment behavior for both `contain` and non-`contain` child scopes
+- Remaining work focuses on broader full upstream FocusScope test-file migration.

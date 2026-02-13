@@ -228,6 +228,24 @@ export function createFocusManager(
 
 const activeScopeRef = shallowRef<Element | null>(null);
 const FocusManagerContext: InjectionKey<FocusManager> = Symbol("FocusManagerContext");
+const ScopeParentContext: InjectionKey<{ current: Element | null }> = Symbol("FocusScopeParentContext");
+const scopeParentMap = new WeakMap<Element, Element | null>();
+
+function isDescendantScope(scope: Element | null, ancestor: Element | null): boolean {
+  if (!scope || !ancestor) {
+    return false;
+  }
+
+  let parent = scopeParentMap.get(scope) ?? null;
+  while (parent) {
+    if (parent === ancestor) {
+      return true;
+    }
+    parent = scopeParentMap.get(parent) ?? null;
+  }
+
+  return false;
+}
 
 export const FocusScope = defineComponent({
   name: "FocusScope",
@@ -238,6 +256,7 @@ export const FocusScope = defineComponent({
   },
   setup(props, { slots }) {
     const scopeRootRef = shallowRef<Element | null>(null);
+    const parentScopeRef = inject(ScopeParentContext, null);
     const previousFocused = shallowRef<Element | null>(null);
     const lastFocusedInScope = shallowRef<Element | null>(null);
     let keydownListener: ((event: KeyboardEvent) => void) | null = null;
@@ -256,6 +275,11 @@ export const FocusScope = defineComponent({
     });
 
     provide(FocusManagerContext, focusManager);
+    provide(ScopeParentContext, {
+      get current() {
+        return scopeRootRef.value;
+      },
+    });
 
     onBeforeMount(() => {
       if (typeof document !== "undefined") {
@@ -272,14 +296,14 @@ export const FocusScope = defineComponent({
         initialized = true;
 
         const root = scopeRootRef.value;
+        scopeParentMap.set(root, parentScopeRef?.current ?? null);
         const ownerDocument = getOwnerDocument(root);
         if (!previousFocused.value) {
           previousFocused.value = getActiveElement(ownerDocument);
         }
-        if (!activeScopeRef.value) {
+        if (!activeScopeRef.value && !parentScopeRef) {
           activeScopeRef.value = root;
         }
-
         scopeFocusInListener = (event: FocusEvent) => {
           const target = event.target as Element | null;
           if (!scopeRootRef.value || !nodeContains(scopeRootRef.value, target)) {
@@ -362,6 +386,11 @@ export const FocusScope = defineComponent({
               return;
             }
 
+            const targetScope = target.closest("[data-focus-scope]");
+            if (targetScope && targetScope !== scopeRoot && isDescendantScope(targetScope, scopeRoot)) {
+              return;
+            }
+
             restoringFocus = true;
             try {
               const fallback = lastFocusedInScope.value && nodeContains(scopeRoot, lastFocusedInScope.value)
@@ -406,6 +435,10 @@ export const FocusScope = defineComponent({
 
       if (activeScopeRef.value === scopeRootRef.value) {
         activeScopeRef.value = null;
+      }
+
+      if (scopeRootRef.value) {
+        scopeParentMap.delete(scopeRootRef.value);
       }
 
       if (props.restoreFocus && isHTMLElement(previousFocused.value)) {
