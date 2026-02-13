@@ -2967,3 +2967,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - forward traversal through checked same-name groups while skipping non-selected radios (`button1 -> huey -> button2 -> larry -> button3 -> button4`)
   - backward traversal through checked same-name groups while skipping non-selected radios (`button4 -> button3 -> larry -> button2 -> huey -> button1`)
 - Validation: `npm run check` passed, `npm test` passed (125 files, 509 tests).
+- Expanded `@vue-aria/focus` focus-manager parity coverage for forward filtered traversal:
+  - added `focusNext({wrap: true, accept})` branch coverage to mirror backward filtered-wrap behavior
+- Validation: `npm run check` passed, `npm test` passed (125 files, 510 tests).

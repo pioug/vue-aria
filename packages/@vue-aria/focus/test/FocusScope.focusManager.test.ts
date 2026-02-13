@@ -193,6 +193,32 @@ describe("FocusScope focus manager parity", () => {
     wrapper.unmount();
   });
 
+  it("skips filtered nodes while moving forward with wrap", () => {
+    const { wrapper, getManager } = mountScope(() => [
+      h("div", { id: "item1", tabIndex: -1 }),
+      h("div", { id: "item2", tabIndex: -1, "data-skip": "" }),
+      h("div", { id: "item3", tabIndex: -1 }),
+    ]);
+    const manager = getManager();
+
+    const item1 = wrapper.get("#item1").element as HTMLDivElement;
+    const item3 = wrapper.get("#item3").element as HTMLDivElement;
+
+    item1.focus();
+    manager?.focusNext({
+      wrap: true,
+      accept: (element) => !element.hasAttribute("data-skip"),
+    });
+    expect(document.activeElement).toBe(item3);
+
+    manager?.focusNext({
+      wrap: true,
+      accept: (element) => !element.hasAttribute("data-skip"),
+    });
+    expect(document.activeElement).toBe(item1);
+    wrapper.unmount();
+  });
+
   it("skips filtered nodes while moving backward with wrap", () => {
     const { wrapper, getManager } = mountScope(() => [
       h("div", { id: "item1", tabIndex: -1 }),
