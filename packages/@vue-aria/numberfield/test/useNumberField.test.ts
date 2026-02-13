@@ -428,6 +428,39 @@ describe("useNumberField hook", () => {
     form.remove();
   });
 
+  it("re-evaluates first-invalid ordering after earlier field validity changes", () => {
+    const state = createState();
+    const precedingInput = document.createElement("input");
+    precedingInput.required = true;
+    const input = document.createElement("input");
+    input.required = true;
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(precedingInput);
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+    const focusSpy = vi.spyOn(input, "focus");
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    precedingInput.required = false;
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    form.remove();
+  });
+
   it("does not focus numberfield on invalid when event is already default prevented", () => {
     const state = createState();
     const input = document.createElement("input");

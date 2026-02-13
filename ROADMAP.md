@@ -2079,6 +2079,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - default-prevented invalid-event guard that skips native focus transfer
     - focus transfer behavior when earlier siblings are disabled or non-validatable
     - mixed custom-validity + first-invalid ordering scenarios (custom-invalid numberfield with and without earlier invalid siblings)
+    - dynamic first-invalid re-evaluation after earlier field validity changes
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted blur merge-path coverage ensuring user-provided `onBlur` callbacks are preserved while commit/announce logic still runs.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
@@ -3392,3 +3393,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` mixed custom-validity first-invalid parity:
   - added adapted coverage for custom-invalid numberfield focus behavior with and without earlier invalid siblings in native validation mode
 - Validation: `npm run check` passed, `npm test` passed (130 files, 631 tests).
+- Expanded `@vue-aria/numberfield` dynamic first-invalid mutation parity:
+  - added adapted coverage for re-evaluating first-invalid ordering after earlier field validity changes within the same form
+- Validation: `npm run check` passed, `npm test` passed (130 files, 632 tests).
