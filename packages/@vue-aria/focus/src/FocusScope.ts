@@ -6,7 +6,7 @@ import {
   isTabbable,
   nodeContains,
 } from "@vue-aria/utils";
-import { defineComponent, h, inject, onBeforeUnmount, onMounted, provide, shallowRef, type InjectionKey } from "vue";
+import { defineComponent, h, inject, onBeforeMount, onBeforeUnmount, onMounted, provide, shallowRef, type InjectionKey } from "vue";
 
 export interface FocusManagerOptions {
   from?: Element | null;
@@ -199,6 +199,12 @@ export const FocusScope = defineComponent({
 
     provide(FocusManagerContext, focusManager);
 
+    onBeforeMount(() => {
+      if (typeof document !== "undefined") {
+        previousFocused.value = getActiveElement(document);
+      }
+    });
+
     onMounted(() => {
       if (!(scopeRootRef.value instanceof HTMLElement)) {
         return;
@@ -206,7 +212,9 @@ export const FocusScope = defineComponent({
 
       const root = scopeRootRef.value;
       const ownerDocument = getOwnerDocument(root);
-      previousFocused.value = getActiveElement(ownerDocument);
+      if (!previousFocused.value) {
+        previousFocused.value = getActiveElement(ownerDocument);
+      }
       if (!activeScopeRef.value) {
         activeScopeRef.value = root;
       }
@@ -228,7 +236,7 @@ export const FocusScope = defineComponent({
         activeScopeRef.value = root;
         lastFocusedInScope.value = activeElement;
       } else if (props.autoFocus) {
-        focusManager.focusFirst();
+        focusManager.focusFirst({ tabbable: true });
       }
 
       if (props.contain) {

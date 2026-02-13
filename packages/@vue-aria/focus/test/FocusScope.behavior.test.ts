@@ -21,6 +21,23 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("auto focuses the first tabbable element when autoFocus is enabled", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { autoFocus: true },
+      slots: {
+        default: () => [
+          h("div", { id: "focusable-only", tabIndex: -1 }),
+          h("input", { id: "first-tabbable" }),
+          h("input", { id: "second-tabbable" }),
+        ],
+      },
+    });
+
+    expect(document.activeElement).toBe(wrapper.get("#first-tabbable").element);
+    wrapper.unmount();
+  });
+
   it("restores focus to the previously focused element when unmounted with restoreFocus", () => {
     const outside = document.createElement("button");
     outside.id = "outside-focus";
@@ -36,6 +53,44 @@ describe("FocusScope behavior", () => {
     });
 
     expect(document.activeElement).toBe(wrapper.get("#inside-focus").element);
+    wrapper.unmount();
+    expect(document.activeElement).toBe(outside);
+    outside.remove();
+  });
+
+  it("restores focus when unmounted after a child receives autofocus", () => {
+    const outside = document.createElement("button");
+    outside.id = "outside-focus";
+    document.body.appendChild(outside);
+    outside.focus();
+
+    const FocusInside = defineComponent({
+      setup() {
+        onMounted(() => {
+          const autofocusTarget = document.getElementById("autofocused");
+          if (autofocusTarget instanceof HTMLElement) {
+            autofocusTarget.focus();
+          }
+        });
+        return () => null;
+      },
+    });
+
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { restoreFocus: true },
+      slots: {
+        default: () => [
+          h("input", { id: "first" }),
+          h("input", { id: "autofocused" }),
+          h("input", { id: "third" }),
+          h(FocusInside),
+        ],
+      },
+    });
+
+    expect(document.activeElement).toBe(wrapper.get("#autofocused").element);
+
     wrapper.unmount();
     expect(document.activeElement).toBe(outside);
     outside.remove();
@@ -294,6 +349,63 @@ describe("FocusScope behavior", () => {
     expect(document.activeElement).toBe(input3);
     tabFromActive(true);
     expect(document.activeElement).toBe(input2);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input1);
+
+    wrapper.unmount();
+  });
+
+  it("only includes contenteditable elements that are tabbable while containing focus", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("span", { id: "editable", contenteditable: "true" }),
+          h("span", { contenteditable: "false" }),
+          h("span", { contenteditable: false }),
+          h("span", { id: "plaintext", contenteditable: "plaintext-only" }),
+          h("input", { id: "input4" }),
+        ],
+      },
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const editable = wrapper.get("#editable").element as HTMLElement;
+    const plaintext = wrapper.get("#plaintext").element as HTMLElement;
+    const input4 = wrapper.get("#input4").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(editable);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(plaintext);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input4);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(plaintext);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(editable);
     tabFromActive(true);
     expect(document.activeElement).toBe(input1);
 

@@ -466,13 +466,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `FocusScope` API exports (`useFocusManager`, `isElementInChildOfActiveScope`).
   - Added adapted behavior tests for `FocusScope`:
     - `autoFocus` first-focusable behavior
+    - `autoFocus` first-tabbable behavior (non-tabbable focusable nodes skipped)
     - `autoFocus` no-op when focus is already inside the scope
     - `restoreFocus` restoration to previously focused node on unmount
+    - `restoreFocus` behavior when child focus changes during mount
     - `useFocusManager` next/previous traversal with wrap
     - `useFocusManager` `focusLast` traversal behavior
     - `useFocusManager` accept-filter traversal behavior
     - baseline containment wrap behavior on Tab/Shift+Tab when `contain` is enabled
     - containment traversal through nested descendants
+    - containment traversal through tabbable `contenteditable` descendants
     - containment skipping hidden/non-tabbable descendants
     - active-scope enforcement across multiple contained scopes
     - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
@@ -2720,3 +2723,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - active-scope enforcement when another contained scope receives focus
   - `autoFocus` no-op when focus is already inside the scope
 - Validation: `npm run check` passed, `npm test` passed (122 files, 472 tests).
+- Improved `@vue-aria/focus/FocusScope` autofocus and restoration parity:
+  - `autoFocus` now targets the first tabbable element in scope
+  - previous focused element capture now occurs before child mount-time focus changes
+- Expanded `@vue-aria/focus/FocusScope` behavior tests for:
+  - first-tabbable autofocus behavior
+  - restore-focus behavior when a child is focused during scope mount
+  - containment traversal through tabbable `contenteditable` nodes
+- Validation: `npm run check` passed, `npm test` passed (122 files, 475 tests).
