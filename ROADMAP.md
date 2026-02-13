@@ -2589,6 +2589,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for `useTable` role/aria-rowcount/treegrid wiring.
   - Added adapted coverage for `useTableRow`, `useTableCell`, `useTableHeaderRow`, `useTableColumnHeader`, and selection checkbox hooks.
   - Added adapted hook-level `useTableColumnResize` coverage for keyboard-start/resize/end flow and slider input step behavior.
+  - Expanded `useTableColumnResize` coverage for pointer press-start/blur-end lifecycle and trigger-focus restoration behavior.
   - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
 - [ ] All relevant upstream tests migrated
 
@@ -5033,3 +5034,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted `useTableBackwardCompat.test.ts` coverage for legacy row `onAction` forwarding behavior.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 17 tests).
+- Expanded `@vue-aria/table` resize interaction parity:
+  - added adapted pointer press-start/blur-end lifecycle coverage in `useTableColumnResize.test.ts`.
+  - added adapted trigger focus-restoration coverage when column resizing exits.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 19 tests).

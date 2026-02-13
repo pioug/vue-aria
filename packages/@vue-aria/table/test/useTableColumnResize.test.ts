@@ -8,6 +8,7 @@ import { createTableState } from "./helpers";
 
 interface ResizeHarness {
   cleanup: () => void;
+  input: HTMLInputElement;
   state: ReturnType<typeof createTableState>;
   resizeState: TableColumnResizeState<object>;
   aria: ReturnType<typeof useTableColumnResize<object>>;
@@ -40,6 +41,7 @@ function createResizeHarness(
   });
 
   return {
+    input,
     state,
     resizeState,
     aria,
@@ -55,6 +57,25 @@ function callKeydown(handler: unknown, key: string) {
   expect(typeof onKeydown).toBe("function");
   const event = new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true });
   onKeydown?.(event);
+}
+
+function createPointerLikeEvent(
+  type: string,
+  target: Element,
+  options: { pointerId?: number; pointerType?: string; button?: number } = {}
+): PointerEvent {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    button: options.button ?? 0,
+  });
+
+  Object.defineProperty(event, "pointerId", { value: options.pointerId ?? 1 });
+  Object.defineProperty(event, "pointerType", { value: options.pointerType ?? "mouse" });
+  Object.defineProperty(event, "target", { value: target });
+  Object.defineProperty(event, "currentTarget", { value: target });
+
+  return event as PointerEvent;
 }
 
 describe("useTableColumnResize", () => {
@@ -143,5 +164,73 @@ describe("useTableColumnResize", () => {
     expect(harness.resizeState.resizingColumn).toBeNull();
 
     harness.cleanup();
+  });
+
+  it("handles mouse press start/end resize lifecycle", () => {
+    const onResizeStart = vi.fn();
+    const onResizeEnd = vi.fn();
+    const harness = createResizeHarness({ onResizeStart, onResizeEnd });
+    const target = document.createElement("div");
+    const onPointerdown = harness.aria.resizerProps.onPointerdown as
+      | ((event: PointerEvent) => void)
+      | undefined;
+    const onMousedown = harness.aria.resizerProps.onMousedown as
+      | ((event: MouseEvent) => void)
+      | undefined;
+
+    if (onPointerdown) {
+      onPointerdown(createPointerLikeEvent("pointerdown", target, { pointerId: 77 }));
+      document.dispatchEvent(
+        createPointerLikeEvent("pointerup", target, { pointerId: 77 })
+      );
+    } else {
+      const mouseDown = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true,
+        button: 0,
+        detail: 1,
+      });
+      Object.defineProperty(mouseDown, "target", { value: target });
+      Object.defineProperty(mouseDown, "currentTarget", { value: target });
+      onMousedown?.(mouseDown);
+
+      const mouseUp = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
+      Object.defineProperty(mouseUp, "target", { value: target });
+      Object.defineProperty(mouseUp, "currentTarget", { value: target });
+      document.dispatchEvent(mouseUp);
+    }
+
+    expect(onResizeStart.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(harness.state.isKeyboardNavigationDisabled).toBe(true);
+    expect(harness.resizeState.resizingColumn).toBe("name");
+
+    (harness.aria.inputProps.onBlur as () => void)();
+    expect(onResizeEnd.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(harness.state.isKeyboardNavigationDisabled).toBe(false);
+    expect(harness.resizeState.resizingColumn).toBeNull();
+
+    harness.cleanup();
+  });
+
+  it("returns focus to trigger ref when resize ends", () => {
+    const trigger = document.createElement("button");
+    const outside = document.createElement("button");
+    document.body.appendChild(trigger);
+    document.body.appendChild(outside);
+    const harness = createResizeHarness({
+      triggerRef: { current: trigger },
+    });
+
+    trigger.focus();
+    callKeydown(harness.aria.resizerProps.onKeydown, "Enter");
+    outside.focus();
+    expect(document.activeElement).toBe(outside);
+
+    (harness.aria.inputProps.onBlur as () => void)();
+    expect(document.activeElement).toBe(trigger);
+
+    harness.cleanup();
+    trigger.remove();
+    outside.remove();
   });
 });
