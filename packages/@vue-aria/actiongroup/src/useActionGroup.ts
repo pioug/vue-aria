@@ -1,9 +1,8 @@
 import { createFocusManager } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
-import { filterDOMProps, nodeContains, useLayoutEffect } from "@vue-aria/utils";
+import { filterDOMProps, nodeContains } from "@vue-aria/utils";
 import type { ListState } from "@vue-aria/list-state";
 import type { Key } from "@vue-aria/collections";
-import { ref } from "vue";
 
 type Orientation = "horizontal" | "vertical";
 type SelectionMode = "none" | "single" | "multiple";
@@ -31,11 +30,6 @@ export function useActionGroup<T>(
   refValue: { current: Element | null }
 ): ActionGroupAria {
   let { isDisabled, orientation = "horizontal" as Orientation } = props;
-
-  const isInToolbar = ref(false);
-  useLayoutEffect(() => {
-    isInToolbar.value = !!(refValue.current && refValue.current.parentElement?.closest('[role="toolbar"]'));
-  }, [() => refValue.current]);
 
   const collection = state.collection as { getKeys?: () => Iterable<unknown> };
   const allKeys = [...(collection.getKeys?.() ?? [])] as Key[];
@@ -76,20 +70,35 @@ export function useActionGroup<T>(
     }
   };
 
-  let role: "toolbar" | "radiogroup" | "group" | undefined =
-    BUTTON_GROUP_ROLES[state.selectionManager.selectionMode as SelectionMode];
-  if (isInToolbar.value && role === "toolbar") {
-    role = "group";
-  }
+  const getRole = (): "toolbar" | "radiogroup" | "group" | undefined => {
+    let role: "toolbar" | "radiogroup" | "group" | undefined =
+      BUTTON_GROUP_ROLES[state.selectionManager.selectionMode as SelectionMode];
+    const isInToolbar = !!(refValue.current && refValue.current.parentElement?.closest('[role="toolbar"]'));
+    if (isInToolbar && role === "toolbar") {
+      role = "group";
+    }
+
+    return role;
+  };
+
+  const actionGroupProps: Record<string, unknown> = {
+    ...filterDOMProps(props, { labelable: true }),
+    "aria-disabled": isDisabled,
+    onKeydown: onKeyDown,
+    onKeyDown,
+  };
+  Object.defineProperty(actionGroupProps, "role", {
+    enumerable: true,
+    configurable: true,
+    get: getRole,
+  });
+  Object.defineProperty(actionGroupProps, "aria-orientation", {
+    enumerable: true,
+    configurable: true,
+    get: () => (getRole() === "toolbar" ? orientation : undefined),
+  });
 
   return {
-    actionGroupProps: {
-      ...filterDOMProps(props, { labelable: true }),
-      role,
-      "aria-orientation": role === "toolbar" ? orientation : undefined,
-      "aria-disabled": isDisabled,
-      onKeydown: onKeyDown,
-      onKeyDown,
-    },
+    actionGroupProps,
   };
 }

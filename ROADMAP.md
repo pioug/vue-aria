@@ -2320,6 +2320,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 2
 - Test parity notes:
   - Added adapted upstream `useActionGroup` role/orientation/disabled behavior coverage.
+  - Added adapted `useActionGroup` integration coverage for:
+    - LTR arrow-key roving focus (`ArrowRight` moves to next item)
+    - RTL arrow-key direction flipping (`ArrowRight` moves to previous item)
+    - nested toolbar role downgrade (`toolbar` -> `group`)
   - Added adapted `useActionGroupItem` coverage for role/selection/focus wiring in single and none selection modes.
 - [x] All currently present upstream tests migrated
 
@@ -2338,8 +2342,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Add integration coverage for keyboard navigation + RTL direction handling with concrete button elements.
-2. Validate toolbar nesting role downgrade behavior (`toolbar` -> `group`) in component-level harnesses.
+1. Validate behavior in downstream component implementations once `@vue-spectrum/actiongroup` lands.
+2. Expand docs examples to include fully interactive Vue component snippets matching upstream stories.
 
 ## 39) Session Log
 ### 2026-02-13
@@ -3563,3 +3567,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page (`docs/packages/actiongroup.md`) and wired docs index/nav/sidebar links.
   - added package-level roadmap record and execution queue tracking entry.
 - Validation: `npm run check` passed, `npm test` passed (134 files, 655 tests).
+- Hardened `@vue-aria/actiongroup` keyboard and nesting parity:
+  - added adapted integration coverage for LTR/RTL arrow-key roving focus behavior with concrete button elements.
+  - added adapted integration coverage for nested-toolbar role downgrade behavior (`toolbar` -> `group`).
+  - updated `useActionGroup` role/orientation wiring to compute from current DOM nesting at runtime.
+- Validation: `npm run check` passed, `npm test` passed (134 files, 658 tests).
