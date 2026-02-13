@@ -884,7 +884,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete (full package/deep integration pending)
+- [x] Public API checklist complete (all current upstream module exports mapped)
 
 ### Implementation
 - [x] Ported initial upstream API:
@@ -3099,3 +3099,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Refreshed tracker parity status for packages with no dedicated upstream test directories:
   - marked `@vue-aria/live-announcer`, `@vue-aria/toggle`, and `@vue-aria/listbox` test migration checks complete based on adapted coverage
   - marked `@vue-aria/disclosure` test migration check complete after validating adapted hook/state coverage
+- Updated `@vue-aria/link` scope tracker:
+  - marked public API checklist complete for currently exported upstream module surface
