@@ -112,6 +112,7 @@ rangeLifecycleState.setThumbDragging(1, false); // onChangeEnd now fires
 - Handles step snapping, min/max clamping, drag lifecycle flags, and `onChange`/`onChangeEnd` conversion for single-value sliders.
 - Controlled values can be driven from reactive external state while preserving upstream callback semantics.
 - Keep `value`/`defaultValue` callback shape stable at runtime (`number` or `number[]`) to avoid callback payload type churn.
+- In SSR flows, initialize slider state from deterministic server values (`defaultValue` or controlled `value`) to avoid hydration mismatches.
 - Exposes thumb-level helpers used directly by `@vue-aria/slider`:
   - `getThumbMinValue` / `getThumbMaxValue`
   - `setThumbPercent` / `getPercentValue`

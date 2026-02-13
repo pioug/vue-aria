@@ -2625,6 +2625,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Expanded parity examples for single-value vs range callback behavior and lifecycle usage notes.
 - [x] Added controlled/reactive usage example aligning with upstream controlled callback semantics.
 - [x] Added multi-thumb drag lifecycle walkthrough and callback-shape stability note.
+- [x] Added SSR initialization guidance for deterministic slider-state hydration behavior.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2639,8 +2640,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Consider porting upstream story-equivalent slider-state walkthrough examples into VitePress playground snippets.
-2. Expand slider-state docs with SSR-focused usage note where state is initialized from server-rendered values.
-3. Revisit whether runtime `number` <-> `number[]` switching should be explicitly guarded at runtime versus documented as unsupported.
+2. Revisit whether runtime `number` <-> `number[]` switching should be explicitly guarded at runtime versus documented as unsupported.
+3. Cross-check slider-state docs snippets against Vue SFC usage patterns (template + `setup`) for stronger copy/paste fidelity.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4040,4 +4041,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (142 files, 763 tests).
 - Expanded `@vue-aria/slider` track-contained-thumb integration parity:
   - added adapted integration coverage ensuring thumb drags bubbling within the track do not trigger duplicate track handling or duplicate `onChangeEnd` emissions.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).
+- Expanded `@vue-aria/slider-state` SSR docs parity:
+  - added SSR initialization guidance to `docs/packages/slider-state.md` for deterministic server/client hydration behavior.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).
