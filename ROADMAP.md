@@ -1593,7 +1593,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 5 (adapted)
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, and non-touch onPressStart open behavior with disabled short-circuit.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, non-touch onPressStart open behavior with disabled short-circuit, and virtualized menu item `aria-posinset`/`aria-setsize` metadata across full item sets.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2536,3 +2536,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - open/closed trigger aria-controls and aria-expanded semantics
   - non-touch `onPressStart` open behavior and disabled short-circuit
 - Validation: `npm run check` passed, `npm test` passed (118 files, 397 tests).
+- Expanded `@vue-aria/menu/useMenuItem` virtualized parity with adapted tests for:
+  - 1-based `aria-posinset` values across all menu items
+  - stable full-set `aria-setsize` values across all menu items
+- Validation: `npm run check` passed, `npm test` passed (118 files, 398 tests).

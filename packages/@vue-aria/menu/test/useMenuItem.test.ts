@@ -47,6 +47,49 @@ function createCollection() {
   };
 }
 
+function createCollectionWithKeys(keys: string[]) {
+  return {
+    getKeys() {
+      return keys.values();
+    },
+    getItem(key: string) {
+      return {
+        key,
+        type: "item",
+        value: null,
+        level: 0,
+        hasChildNodes: false,
+        rendered: key,
+        textValue: key,
+        index: keys.indexOf(key),
+        parentKey: null,
+        prevKey: null,
+        nextKey: null,
+        firstChildKey: null,
+        lastChildKey: null,
+        props: {},
+        colSpan: null,
+        colIndex: null,
+        childNodes: [],
+      } as any;
+    },
+    getFirstKey() {
+      return keys[0];
+    },
+    getLastKey() {
+      return keys[keys.length - 1];
+    },
+    getKeyBefore(key: string) {
+      const index = keys.indexOf(key);
+      return index > 0 ? keys[index - 1] : null;
+    },
+    getKeyAfter(key: string) {
+      const index = keys.indexOf(key);
+      return index >= 0 && index < keys.length - 1 ? keys[index + 1] : null;
+    },
+  };
+}
+
 function createManager(selectionMode: "none" | "single" | "multiple" = "none") {
   const collection = createCollection();
   return {
@@ -183,5 +226,49 @@ describe("useMenuItem", () => {
 
     scope.stop();
     ref.current?.remove();
+  });
+
+  it("emits 1-based aria-posinset and full aria-setsize for virtualized items", () => {
+    const collection = createCollectionWithKeys(["a", "b", "c"]);
+    const manager = {
+      ...createManager("single"),
+      collection,
+    } as any;
+    const state = {
+      collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    const refs = [
+      { current: document.createElement("li") as HTMLElement | null },
+      { current: document.createElement("li") as HTMLElement | null },
+      { current: document.createElement("li") as HTMLElement | null },
+    ];
+    document.body.appendChild(refs[0].current as HTMLElement);
+    document.body.appendChild(refs[1].current as HTMLElement);
+    document.body.appendChild(refs[2].current as HTMLElement);
+
+    const scope = effectScope();
+    let firstProps: Record<string, unknown> = {};
+    let secondProps: Record<string, unknown> = {};
+    let thirdProps: Record<string, unknown> = {};
+    scope.run(() => {
+      firstProps = useMenuItem({ key: "a", isVirtualized: true }, state as any, refs[0]).menuItemProps;
+      secondProps = useMenuItem({ key: "b", isVirtualized: true }, state as any, refs[1]).menuItemProps;
+      thirdProps = useMenuItem({ key: "c", isVirtualized: true }, state as any, refs[2]).menuItemProps;
+    });
+
+    expect(firstProps["aria-posinset"]).toBe(1);
+    expect(secondProps["aria-posinset"]).toBe(2);
+    expect(thirdProps["aria-posinset"]).toBe(3);
+    expect(firstProps["aria-setsize"]).toBe(3);
+    expect(secondProps["aria-setsize"]).toBe(3);
+    expect(thirdProps["aria-setsize"]).toBe(3);
+
+    scope.stop();
+    refs[0].current?.remove();
+    refs[1].current?.remove();
+    refs[2].current?.remove();
   });
 });
