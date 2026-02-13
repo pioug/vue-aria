@@ -6,6 +6,7 @@ import {
   isTabbable,
   nodeContains,
 } from "@vue-aria/utils";
+import { defineComponent, h, inject, onBeforeUnmount, onMounted, provide, shallowRef, type InjectionKey } from "vue";
 
 export interface FocusManagerOptions {
   from?: Element | null;
@@ -19,6 +20,13 @@ export interface FocusManager {
   focusPrevious(opts?: FocusManagerOptions): Element | null;
   focusFirst(opts?: FocusManagerOptions): Element | null;
   focusLast(opts?: FocusManagerOptions): Element | null;
+}
+
+export interface FocusScopeProps {
+  children?: unknown;
+  contain?: boolean;
+  restoreFocus?: boolean;
+  autoFocus?: boolean;
 }
 
 export function getFocusableTreeWalker(
@@ -159,4 +167,70 @@ export function createFocusManager(
       return focusElement(current);
     },
   };
+}
+
+const activeScopeRef = shallowRef<Element | null>(null);
+const FocusManagerContext: InjectionKey<FocusManager> = Symbol("FocusManagerContext");
+
+export const FocusScope = defineComponent({
+  name: "FocusScope",
+  props: {
+    contain: Boolean,
+    restoreFocus: Boolean,
+    autoFocus: Boolean,
+  },
+  setup(props, { slots }) {
+    const scopeRootRef = shallowRef<Element | null>(null);
+    const previousFocused = shallowRef<Element | null>(null);
+
+    const focusManager = createFocusManager({
+      get current() {
+        return scopeRootRef.value;
+      },
+      set current(value: Element | null) {
+        scopeRootRef.value = value;
+      },
+    });
+
+    provide(FocusManagerContext, focusManager);
+
+    onMounted(() => {
+      previousFocused.value = getActiveElement(getOwnerDocument(scopeRootRef.value));
+      activeScopeRef.value = scopeRootRef.value;
+
+      if (props.autoFocus) {
+        focusManager.focusFirst();
+      }
+    });
+
+    onBeforeUnmount(() => {
+      if (activeScopeRef.value === scopeRootRef.value) {
+        activeScopeRef.value = null;
+      }
+
+      if (props.restoreFocus && previousFocused.value instanceof HTMLElement) {
+        previousFocused.value.focus();
+      }
+    });
+
+    return () =>
+      h(
+        "div",
+        {
+          "data-focus-scope": "",
+          ref: ((el: Element | null) => {
+            scopeRootRef.value = el;
+          }) as any,
+        },
+        slots.default?.() ?? []
+      );
+  },
+});
+
+export function useFocusManager(): FocusManager | undefined {
+  return inject(FocusManagerContext, undefined);
+}
+
+export function isElementInChildOfActiveScope(element: Element | null): boolean {
+  return nodeContains(activeScopeRef.value, element);
 }
