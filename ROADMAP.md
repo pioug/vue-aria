@@ -2056,6 +2056,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted platform input-mode parity coverage for iPhone and Android branches, including negative-number and decimal/fraction-digit combinations.
   - Added adapted default-platform input-mode parity coverage (non-iPhone/non-Android paths) for negative, decimal-capable, and integer-only branches.
   - Added adapted native form reset parity coverage to ensure parent `form.reset()` restores `defaultNumberValue` via `setNumberValue`.
+  - Expanded adapted native validation integration coverage for invalid/change/reset event handling:
+    - commit-validation on native `invalid` and `change` events
+    - validation reset on parent `form.reset()`
+    - first-invalid native focus branch assertion via required input invalidation
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
   - Added adapted keydown propagation parity coverage for non-Enter keys (`continuePropagation` passthrough path).
@@ -2077,7 +2081,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
-2. Expand parity coverage for native invalid flows in integration-style harnesses.
+2. Expand native-invalid integration parity for first-invalid ordering across multi-field forms.
 
 ## 35) Package Record: @vue-aria/numberfield-state
 - Upstream source path(s):
@@ -3310,3 +3314,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` input-mode matrix parity:
   - added adapted default-platform (`!isIPhone && !isAndroid`) branch tests to cover numeric mode behavior across negative, decimal-capable, and integer-only paths
 - Validation: `npm run check` passed, `npm test` passed (130 files, 614 tests).
+- Expanded `@vue-aria/numberfield` native validation integration parity:
+  - added adapted tests for native `invalid` focus/commit-validation behavior on required fields
+  - added adapted tests for native `change` commit-validation behavior
+  - added adapted tests for native reset-validation behavior on parent `form.reset()`
+- Validation: `npm run check` passed, `npm test` passed (130 files, 616 tests).

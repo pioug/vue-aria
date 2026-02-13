@@ -25,6 +25,13 @@ function createState() {
       validationErrors: [],
       validationDetails: null,
     },
+    realtimeValidation: {
+      isInvalid: false,
+      validationErrors: [],
+      validationDetails: null,
+    },
+    updateValidation: vi.fn(),
+    resetValidation: vi.fn(),
   };
 }
 
@@ -263,6 +270,33 @@ describe("useNumberField hook", () => {
   it("commits validation on native invalid events", () => {
     const state = createState();
     const input = document.createElement("input");
+    input.required = true;
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+    const focusSpy = vi.spyOn(input, "focus");
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalled();
+    expect(focusSpy).toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("commits validation on native change events", () => {
+    const state = createState();
+    const input = document.createElement("input");
     const ref = { current: input as HTMLInputElement | null };
     const form = document.createElement("form");
     form.appendChild(input);
@@ -277,7 +311,7 @@ describe("useNumberField hook", () => {
       )
     )!;
 
-    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
     expect(state.commitValidation).toHaveBeenCalled();
 
     scope.stop();
@@ -305,6 +339,31 @@ describe("useNumberField hook", () => {
     await nextTick();
     form.dispatchEvent(new Event("reset"));
     expect(state.setNumberValue).toHaveBeenCalledWith(7);
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("resets validation state on parent form reset", async () => {
+    const state = createState();
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+
+    await nextTick();
+    form.dispatchEvent(new Event("reset"));
+    expect(state.resetValidation).toHaveBeenCalledTimes(1);
 
     scope.stop();
     form.remove();
