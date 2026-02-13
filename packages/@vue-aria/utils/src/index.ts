@@ -53,7 +53,10 @@ export { useViewportSize } from "./useViewportSize";
 export { useDrag1D } from "./useDrag1D";
 export { useEnterAnimation, useExitAnimation } from "./animation";
 export { useLoadMore } from "./useLoadMore";
-export { useLoadMoreSentinel } from "./useLoadMoreSentinel";
+export {
+  useLoadMoreSentinel,
+  useLoadMoreSentinel as UNSTABLE_useLoadMoreSentinel,
+} from "./useLoadMoreSentinel";
 export { useDescription } from "./useDescription";
 export { useErrorMessage } from "./useErrorMessage";
 export { useResizeObserver } from "./useResizeObserver";
@@ -71,7 +74,10 @@ export {
 } from "./router";
 export type { FilterDOMPropsOptions } from "./filterDOMProps";
 export type { UseLoadMoreOptions } from "./useLoadMore";
-export type { UseLoadMoreSentinelOptions } from "./useLoadMoreSentinel";
+export type {
+  UseLoadMoreSentinelOptions,
+  LoadMoreSentinelProps,
+} from "./useLoadMoreSentinel";
 export type { UseDescriptionResult } from "./useDescription";
 export type { UseErrorMessageResult } from "./useErrorMessage";
 export type { UseResizeObserverOptions } from "./useResizeObserver";

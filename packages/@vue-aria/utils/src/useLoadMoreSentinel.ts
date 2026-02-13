@@ -8,6 +8,9 @@ export interface UseLoadMoreSentinelOptions<C = unknown> {
   scrollOffset?: MaybeReactive<number | undefined>;
 }
 
+export type LoadMoreSentinelProps<C = unknown> =
+  UseLoadMoreSentinelOptions<C>;
+
 function resolveScrollOffset(
   value: MaybeReactive<number | undefined> | undefined
 ): number {

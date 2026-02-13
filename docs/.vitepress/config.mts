@@ -6,6 +6,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "Guide", link: "/" },
+      { text: "Utils", link: "/packages/utils" },
       { text: "Selection", link: "/packages/selection" },
       { text: "Selection State", link: "/packages/selection-state" },
       { text: "I18n", link: "/packages/i18n" },
@@ -52,6 +53,7 @@ export default defineConfig({
       {
         text: "Packages",
         items: [
+          { text: "@vue-aria/utils", link: "/packages/utils" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/selection-state", link: "/packages/selection-state" },
           { text: "@vue-aria/i18n", link: "/packages/i18n" },
