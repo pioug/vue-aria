@@ -78,10 +78,6 @@ function getLandmarkManager(): LandmarkManagerApi | null {
   return doc[landmarkSymbol] ?? null;
 }
 
-function useLandmarkManager(): LandmarkManagerApi | null {
-  return getLandmarkManager();
-}
-
 class LandmarkManager implements LandmarkManagerApi {
   private landmarks: Array<Landmark> = [];
   private isListening = false;
@@ -417,7 +413,6 @@ export function UNSTABLE_createLandmarkController(): LandmarkController {
 
 export function useLandmark(props: AriaLandmarkProps, refValue: { current: Element | null }): LandmarkAria {
   const { role, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, focus } = props;
-  const manager = useLandmarkManager();
   const label = ariaLabel || ariaLabelledby;
   const isLandmarkFocused = ref(false);
 
@@ -430,10 +425,23 @@ export function useLandmark(props: AriaLandmarkProps, refValue: { current: Eleme
   };
 
   useLayoutEffect(() => {
-    if (manager) {
-      return manager.registerLandmark({ ref: refValue, label, role, focus: focus || defaultFocus, blur });
-    }
-  });
+    let unregister = () => {};
+    const register = () => {
+      unregister();
+      const manager = getLandmarkManager();
+      if (manager && refValue.current) {
+        unregister = manager.registerLandmark({ ref: refValue, label, role, focus: focus || defaultFocus, blur });
+      }
+    };
+
+    register();
+    const unsubscribe = subscribe(register);
+
+    return () => {
+      unsubscribe();
+      unregister();
+    };
+  }, [() => refValue.current]);
 
   useLayoutEffect(() => {
     if (isLandmarkFocused.value) {

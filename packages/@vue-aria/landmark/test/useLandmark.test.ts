@@ -394,4 +394,68 @@ describe("useLandmark", () => {
     expect(joinedMessages).toContain("must have unique labels");
     wrapper.unmount();
   });
+
+  it("stores the landmark manager singleton on document", () => {
+    const controller = UNSTABLE_createLandmarkController();
+    const manager = (document as Document & Record<symbol, unknown>)[landmarkSymbol] as Record<string, unknown> | undefined;
+    expect(manager).toBeDefined();
+    expect(typeof manager?.version).toBe("number");
+    expect(typeof manager?.createLandmarkController).toBe("function");
+    expect(typeof manager?.registerLandmark).toBe("function");
+    controller.dispose();
+  });
+
+  it("replaces the singleton manager with a newer version", async () => {
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+
+    const controller = UNSTABLE_createLandmarkController();
+    const newController = {
+      navigate: vi.fn(),
+      focusNext: vi.fn(),
+      focusPrevious: vi.fn(),
+      focusMain: vi.fn(),
+      dispose: vi.fn(),
+    };
+
+    const manager = (document as Document & Record<symbol, { version: number } | undefined>)[landmarkSymbol];
+    const unregister = vi.fn();
+    const testLandmarkManager = {
+      version: (manager?.version ?? 0) + 1,
+      createLandmarkController: vi.fn(() => newController),
+      registerLandmark: vi.fn(() => unregister),
+    };
+
+    (document as Document & Record<symbol, unknown>)[landmarkSymbol] = testLandmarkManager;
+    document.dispatchEvent(new CustomEvent("react-aria-landmark-manager-change"));
+    await nextTick();
+
+    expect(testLandmarkManager.registerLandmark).toHaveBeenCalledTimes(1);
+    expect(testLandmarkManager.createLandmarkController).toHaveBeenCalledTimes(1);
+
+    controller.navigate("forward");
+    expect(newController.navigate).toHaveBeenCalledWith("forward", undefined);
+
+    controller.focusNext();
+    expect(newController.focusNext).toHaveBeenCalledTimes(1);
+
+    controller.focusPrevious();
+    expect(newController.focusPrevious).toHaveBeenCalledTimes(1);
+
+    controller.focusMain();
+    expect(newController.focusMain).toHaveBeenCalledTimes(1);
+
+    controller.dispose();
+    expect(newController.dispose).toHaveBeenCalledTimes(1);
+
+    wrapper.unmount();
+    expect(unregister).toHaveBeenCalledTimes(1);
+  });
 });

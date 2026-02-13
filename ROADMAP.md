@@ -2364,6 +2364,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Ported upstream APIs:
   - `useLandmark`
   - `UNSTABLE_createLandmarkController`
+- [x] Added singleton manager replacement parity:
+  - `useLandmark` now re-registers landmarks when `react-aria-landmark-manager-change` is dispatched.
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -2377,6 +2379,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 2
 - Test parity notes:
   - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, controller-based forward/backward/main navigation, backward wrapping, wrap custom events, aria-hidden landmark skipping, focused `tabIndex` behavior, and duplicate-role labeling warning behaviors.
+  - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2396,7 +2399,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port additional upstream `useLandmark.test.tsx` interaction coverage for dynamic DOM mutation and focus restoration corner-cases.
-2. Expand controller singleton/version replacement coverage from upstream’s dedicated controller tests.
+2. Port remaining upstream `LandmarkController` keyboard-listener lifecycle coverage (`ensure keyboard listeners are active`).
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3696,3 +3699,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted coverage for Alt+F6 no-main no-op behavior, Shift+F6 backward wrap navigation, wrapping custom-event dispatch, aria-hidden landmark skipping, and focused landmark `tabIndex` behavior.
   - added adapted coverage for duplicate-role warning semantics (unlabeled duplicates and duplicate labels) and no-warning behavior for uniquely labeled duplicates.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 678 tests).
+- Expanded `@vue-aria/landmark` singleton replacement parity:
+  - updated `useLandmark` registration flow to re-register on `react-aria-landmark-manager-change` events so components follow manager version replacements.
+  - added adapted singleton tests for manager storage on `document` and controller/component behavior after singleton version replacement.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 680 tests).
