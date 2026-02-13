@@ -316,6 +316,32 @@ describe("useSelectableItem", () => {
     expect(manager.extendSelection).not.toHaveBeenCalled();
   });
 
+  it("prevents native click navigation for actionable link items", () => {
+    const manager = createManager({
+      isLink: vi.fn(() => true),
+      getItemProps: vi.fn(() => ({ href: "/docs" })),
+    });
+    const ref = { current: document.createElement("a") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    const event = {
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      preventDefault: vi.fn(),
+    } as unknown as MouseEvent;
+    onClick(event);
+
+    expect((event.preventDefault as any).mock.calls.length).toBe(1);
+  });
+
   it("does nothing for link selection when link behavior is none", () => {
     const manager = createManager({
       isLink: vi.fn(() => true),
@@ -393,6 +419,33 @@ describe("useSelectableItem", () => {
 
     expect(onAction).toHaveBeenCalledTimes(2);
     expect(manager.replaceSelection).not.toHaveBeenCalled();
+  });
+
+  it("forces action behavior when UNSTABLE_itemBehavior is action", () => {
+    const onAction = vi.fn();
+    const manager = createManager({
+      selectionBehavior: "replace",
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps, allowsSelection, hasAction } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      onAction,
+      UNSTABLE_itemBehavior: "action",
+    });
+
+    expect(allowsSelection).toBe(false);
+    expect(hasAction).toBe(true);
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+    expect(manager.toggleSelection).not.toHaveBeenCalled();
+    expect(manager.extendSelection).not.toHaveBeenCalled();
   });
 
   it("prevents mousedown and clears focused key for disabled focused item", () => {

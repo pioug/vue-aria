@@ -59,6 +59,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   const hasSecondaryAction =
     allowsActions && allowsSelection && manager.selectionBehavior === "replace";
   const hasAction = hasPrimaryAction || hasSecondaryAction;
+  const shouldPreventNativeLinkClick = linkBehavior !== "none" && manager.isLink(key);
   const shouldSelectOnMouseDown = !shouldUseVirtualFocus && !options.shouldSelectOnPressUp;
   const shouldSelectOnMouseUp =
     !shouldUseVirtualFocus && Boolean(options.shouldSelectOnPressUp && options.allowsDifferentPressOrigin);
@@ -162,6 +163,10 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   }
 
   itemProps.onClick = (event: MouseEvent) => {
+    if (shouldPreventNativeLinkClick) {
+      event.preventDefault();
+    }
+
     if (selectedOnMouseDown || selectedOnMouseUp) {
       selectedOnMouseDown = false;
       selectedOnMouseUp = false;
