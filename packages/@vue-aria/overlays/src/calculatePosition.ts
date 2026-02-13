@@ -1,4 +1,3 @@
-// @ts-nocheck
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -15,6 +14,7 @@ import {Axis, Placement, PlacementAxis, SizeAxis} from './types';
 import {clamp, isWebKit, nodeContains} from '@vue-aria/utils';
 
 interface Position {
+  [key: string]: any,
   top?: number,
   left?: number,
   bottom?: number,
@@ -22,6 +22,7 @@ interface Position {
 }
 
 interface Dimensions {
+  [key: string]: any,
   width: number,
   height: number,
   totalWidth: number,
@@ -32,6 +33,7 @@ interface Dimensions {
 }
 
 interface ParsedPlacement {
+  [key: string]: PlacementAxis | Axis | SizeAxis,
   placement: PlacementAxis,
   crossPlacement: PlacementAxis,
   axis: Axis,
@@ -41,6 +43,7 @@ interface ParsedPlacement {
 }
 
 interface Offset {
+  [key: string]: number,
   top: number,
   left: number,
   width: number,
@@ -73,36 +76,36 @@ export interface PositionResult {
   placement: PlacementAxis
 }
 
-const AXIS = {
+const AXIS: Record<string, Axis> = {
   top: 'top',
   bottom: 'top',
   left: 'left',
   right: 'left'
 };
 
-const FLIPPED_DIRECTION = {
+const FLIPPED_DIRECTION: Record<string, Axis> = {
   top: 'bottom',
   bottom: 'top',
   left: 'right',
   right: 'left'
 };
 
-const CROSS_AXIS = {
+const CROSS_AXIS: Record<string, Axis> = {
   top: 'left',
   left: 'top'
 };
 
-const AXIS_SIZE = {
+const AXIS_SIZE: Record<string, SizeAxis> = {
   top: 'height',
   left: 'width'
 };
 
-const TOTAL_SIZE = {
+const TOTAL_SIZE: Record<string, keyof Dimensions> = {
   width: 'totalWidth',
   height: 'totalHeight'
 };
 
-const PARSED_PLACEMENT_CACHE = {};
+const PARSED_PLACEMENT_CACHE: Record<string, ParsedPlacement> = {};
 
 let getVisualViewport = () => typeof document !== 'undefined' ? window.visualViewport : null;
 
@@ -180,17 +183,21 @@ function getDelta(
   containerOffsetWithBoundary: Offset
 ) {
   let containerScroll = containerDimensions.scroll[axis] ?? 0;
+  const axisDirection = AXIS[axis] ?? axis;
+  const boundaryScroll = boundaryDimensions.scroll[axisDirection] ?? 0;
+  const boundaryOffset = containerOffsetWithBoundary[axis] ?? 0;
+  const boundaryAxisOffset = boundaryDimensions[axisDirection] ?? 0;
   // The height/width of the boundary. Matches the axis along which we are adjusting the overlay position
   let boundarySize = boundaryDimensions[AXIS_SIZE[axis]];
   // Calculate the edges of the boundary (accomodating for the boundary padding) and the edges of the overlay.
   // Note that these values are with respect to the visual viewport (aka 0,0 is the top left of the viewport)
 
-  let boundaryStartEdge =  containerOffsetWithBoundary[axis] + boundaryDimensions.scroll[AXIS[axis]] +  padding;
-  let boundaryEndEdge =  containerOffsetWithBoundary[axis] + boundaryDimensions.scroll[AXIS[axis]] + boundarySize - padding;
+  let boundaryStartEdge = boundaryOffset + boundaryScroll + padding;
+  let boundaryEndEdge = boundaryOffset + boundaryScroll + boundarySize - padding;
   // transformed value of the left edge of the overlay
-  let startEdgeOffset = offset - containerScroll + boundaryDimensions.scroll[AXIS[axis]] + containerOffsetWithBoundary[axis] - boundaryDimensions[AXIS[axis]];
+  let startEdgeOffset = offset - containerScroll + boundaryScroll + boundaryOffset - boundaryAxisOffset;
   // transformed value of the right edge of the overlay
-  let endEdgeOffset = offset - containerScroll + size + boundaryDimensions.scroll[AXIS[axis]]  + containerOffsetWithBoundary[axis] - boundaryDimensions[AXIS[axis]];
+  let endEdgeOffset = offset - containerScroll + size + boundaryScroll + boundaryOffset - boundaryAxisOffset;
 
   // If any of the overlay edges falls outside of the boundary, shift the overlay the required amount to align one of the overlay's
   // edges with the closest boundary edge.
@@ -228,7 +235,14 @@ function parsePlacement(input: Placement): ParsedPlacement {
 
   let size = AXIS_SIZE[axis];
   let crossSize = AXIS_SIZE[crossAxis];
-  PARSED_PLACEMENT_CACHE[input] = {placement, crossPlacement, axis, crossAxis, size, crossSize};
+  PARSED_PLACEMENT_CACHE[input] = {
+    placement: placement as PlacementAxis,
+    crossPlacement: crossPlacement as PlacementAxis,
+    axis,
+    crossAxis,
+    size,
+    crossSize
+  };
   return PARSED_PLACEMENT_CACHE[input];
 }
 
@@ -338,13 +352,14 @@ function getAvailableSpace(
   isContainerDescendentOfBoundary: boolean
 ) {
   let {placement, axis, size} = placementInfo;
+  const flippedAxis = FLIPPED_DIRECTION[axis] ?? axis;
   if (placement === axis) {
     return  Math.max(0,
       childOffset[axis] // trigger start
       - (containerDimensions.scroll[axis] ?? 0) // transform trigger position to be with respect to viewport 0,0
       - (boundaryDimensions[axis] + (isContainerDescendentOfBoundary ? containerOffsetWithBoundary[axis] : 0)) // boundary start
       - (margins[axis] ?? 0) // margins usually for arrows or other decorations
-      - margins[FLIPPED_DIRECTION[axis]]
+      - (margins[flippedAxis] ?? 0)
       - padding); // padding between overlay and boundary
   }
 
@@ -356,7 +371,7 @@ function getAvailableSpace(
      - childOffset[size]
      + (containerDimensions.scroll[axis] ?? 0)
      - (margins[axis] ?? 0)
-     - margins[FLIPPED_DIRECTION[axis]]
+     - (margins[flippedAxis] ?? 0)
      - padding);
 }
 
@@ -469,7 +484,8 @@ export function calculatePositionInternal(
   // childOffset[crossAxis] + .5 * childOffset[crossSize] = absolute position with respect to the trigger's coordinate system that would place the arrow in the center of the trigger
   // position[crossAxis] - margins[AXIS[crossAxis]] = value use to transform the position to a value with respect to the overlay's coordinate system. A child element's (aka arrow) position absolute's "0"
   // is positioned after the margin of its parent (aka overlay) so we need to subtract it to get the proper coordinate transform
-  let origin = childOffset[crossAxis] - position[crossAxis]! - margins[AXIS[crossAxis]];
+  const crossAxisDirection = AXIS[crossAxis] ?? crossAxis;
+  let origin = childOffset[crossAxis] - position[crossAxis]! - (margins[crossAxisDirection] ?? 0);
   let preferredArrowPosition = origin + .5 * childOffset[crossSize];
 
   // Min/Max position limits for the arrow with respect to the overlay
@@ -480,8 +496,8 @@ export function calculatePositionInternal(
 
   // Min/Max position limits for the arrow with respect to the trigger/overlay anchor element
   // Same margin accomodation done here as well as for the preferredArrowPosition
-  const arrowOverlappingChildMinEdge = childOffset[crossAxis] + (arrowSize / 2) - (position[crossAxis] + margins[AXIS[crossAxis]]);
-  const arrowOverlappingChildMaxEdge = childOffset[crossAxis] + childOffset[crossSize] - (arrowSize / 2) - (position[crossAxis] + margins[AXIS[crossAxis]]);
+  const arrowOverlappingChildMinEdge = childOffset[crossAxis] + (arrowSize / 2) - (position[crossAxis]! + (margins[crossAxisDirection] ?? 0));
+  const arrowOverlappingChildMaxEdge = childOffset[crossAxis] + childOffset[crossSize] - (arrowSize / 2) - (position[crossAxis]! + (margins[crossAxisDirection] ?? 0));
 
   // Clamp the arrow positioning so that it always is within the bounds of the anchor and the overlay
   const arrowPositionOverlappingChild = clamp(preferredArrowPosition, arrowOverlappingChildMinEdge, arrowOverlappingChildMaxEdge);
