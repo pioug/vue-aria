@@ -2963,3 +2963,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` radio containment parity with adapted backward traversal coverage for unchecked groups:
   - validates Shift+Tab order through radios and intervening controls in an unchecked same-name radio group (`button3 -> curly -> button2 -> moe -> larry -> button1`)
 - Validation: `npm run check` passed, `npm test` passed (125 files, 507 tests).
+- Expanded `@vue-aria/focus/FocusScope` outside-form radio-group parity with adapted containment tests for:
+  - forward traversal through checked same-name groups while skipping non-selected radios (`button1 -> huey -> button2 -> larry -> button3 -> button4`)
+  - backward traversal through checked same-name groups while skipping non-selected radios (`button4 -> button3 -> larry -> button2 -> huey -> button1`)
+- Validation: `npm run check` passed, `npm test` passed (125 files, 509 tests).

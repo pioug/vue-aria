@@ -619,6 +619,174 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("skips non-selected radios outside forms during forward containment traversal", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("button", { id: "button1" }, "button"),
+          h("fieldset", [
+            h("legend", "Select a drone"),
+            h("div", [
+              h("input", { id: "huey", type: "radio", name: "drone", checked: true }),
+              h("label", { for: "huey" }, "Huey"),
+            ]),
+            h("div", [
+              h("input", { id: "dewey", type: "radio", name: "drone" }),
+              h("label", { for: "dewey" }, "Dewey"),
+            ]),
+            h("button", { id: "button2" }, "button"),
+            h("div", [
+              h("input", { id: "louie", type: "radio", name: "drone" }),
+              h("label", { for: "louie" }, "Louie"),
+            ]),
+          ]),
+          h("fieldset", [
+            h("legend", "Select a ship"),
+            h("div", [
+              h("input", { id: "larry", type: "radio", name: "ship", checked: true }),
+              h("label", { for: "larry" }, "Larry"),
+            ]),
+            h("div", [
+              h("input", { id: "moe", type: "radio", name: "ship" }),
+              h("label", { for: "moe" }, "Moe"),
+            ]),
+            h("button", { id: "button3" }, "button"),
+            h("div", [
+              h("input", { id: "curly", type: "radio", name: "ship" }),
+              h("label", { for: "curly" }, "Curly"),
+            ]),
+          ]),
+          h("button", { id: "button4" }, "button"),
+        ],
+      },
+    });
+
+    const button1 = wrapper.get("#button1").element as HTMLButtonElement;
+    const button2 = wrapper.get("#button2").element as HTMLButtonElement;
+    const button3 = wrapper.get("#button3").element as HTMLButtonElement;
+    const button4 = wrapper.get("#button4").element as HTMLButtonElement;
+    const huey = wrapper.get("#huey").element as HTMLInputElement;
+    const larry = wrapper.get("#larry").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    button1.focus();
+    expect(document.activeElement).toBe(button1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(huey);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(button2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(larry);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(button3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(button4);
+
+    wrapper.unmount();
+  });
+
+  it("skips non-selected radios outside forms during backward containment traversal", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("button", { id: "button1" }, "button"),
+          h("fieldset", [
+            h("legend", "Select a drone"),
+            h("div", [
+              h("input", { id: "huey", type: "radio", name: "drone", checked: true }),
+              h("label", { for: "huey" }, "Huey"),
+            ]),
+            h("div", [
+              h("input", { id: "dewey", type: "radio", name: "drone" }),
+              h("label", { for: "dewey" }, "Dewey"),
+            ]),
+            h("button", { id: "button2" }, "button"),
+            h("div", [
+              h("input", { id: "louie", type: "radio", name: "drone" }),
+              h("label", { for: "louie" }, "Louie"),
+            ]),
+          ]),
+          h("fieldset", [
+            h("legend", "Select a ship"),
+            h("div", [
+              h("input", { id: "larry", type: "radio", name: "ship", checked: true }),
+              h("label", { for: "larry" }, "Larry"),
+            ]),
+            h("div", [
+              h("input", { id: "moe", type: "radio", name: "ship" }),
+              h("label", { for: "moe" }, "Moe"),
+            ]),
+            h("button", { id: "button3" }, "button"),
+            h("div", [
+              h("input", { id: "curly", type: "radio", name: "ship" }),
+              h("label", { for: "curly" }, "Curly"),
+            ]),
+          ]),
+          h("button", { id: "button4" }, "button"),
+        ],
+      },
+    });
+
+    const button1 = wrapper.get("#button1").element as HTMLButtonElement;
+    const button2 = wrapper.get("#button2").element as HTMLButtonElement;
+    const button3 = wrapper.get("#button3").element as HTMLButtonElement;
+    const button4 = wrapper.get("#button4").element as HTMLButtonElement;
+    const huey = wrapper.get("#huey").element as HTMLInputElement;
+    const larry = wrapper.get("#larry").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    button4.focus();
+    expect(document.activeElement).toBe(button4);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(button3);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(larry);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(button2);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(huey);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(button1);
+
+    wrapper.unmount();
+  });
+
   it("keeps focus in the active scope when another contain scope receives focus", () => {
     const wrapper = mount(defineComponent({
       components: { FocusScope },
