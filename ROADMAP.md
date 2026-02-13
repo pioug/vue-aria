@@ -1899,6 +1899,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `HiddenSelect` selectData-fallback parity coverage for `name` propagation in large-collection hidden-input rendering and empty-collection initial form submission behavior.
   - Added adapted `HiddenSelect` selectData-fallback coverage for `isDisabled` propagation when component `isDisabled` prop is omitted.
   - Added adapted `useHiddenSelect` form-reset integration coverage ensuring parent `form.reset()` restores `state.defaultValue`.
+  - Added adapted `useHiddenSelect` native invalid guard coverage:
+    - no focus transfer when an earlier form field is first-invalid
+    - no focus transfer when invalid event is already default-prevented
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1916,7 +1919,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining hidden select parity behaviors around browser form validation integration (`@react-aria/form` path), including dynamic first-invalid ordering scenarios.
+1. Port remaining hidden select parity behaviors around browser form validation integration (`@react-aria/form` path), including dynamic form mutation ordering scenarios.
 2. Deepen `useSelect` behavior parity (focus/blur lifecycle edge cases and expanded keyboard/typeahead interactions).
 
 ## 32) Package Record: @vue-aria/form
@@ -3400,3 +3403,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/select/useHiddenSelect` form-reset integration parity:
   - added adapted coverage ensuring hidden-select wiring restores `defaultValue` on parent `form.reset()` events
 - Validation: `npm run check` passed, `npm test` passed (130 files, 633 tests).
+- Expanded `@vue-aria/select/useHiddenSelect` native invalid guard parity:
+  - added adapted first-invalid ordering and default-prevented invalid-event guard coverage for trigger-focus behavior
+- Validation: `npm run check` passed, `npm test` passed (130 files, 635 tests).
