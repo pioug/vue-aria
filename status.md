@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 148 |
-| Passing tests | 148 |
+| Ported tests | 149 |
+| Passing tests | 149 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -125,7 +125,7 @@
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
 | @vue-spectrum/switch | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
 | @vue-spectrum/table | complete | 8 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/table | packages/@react-spectrum/table |
-| @vue-spectrum/tabs | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tabs | packages/@react-spectrum/tabs |
+| @vue-spectrum/tabs | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/tabs | packages/@react-spectrum/tabs |
 | @vue-spectrum/tag | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
 | @vue-spectrum/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/test-utils | packages/@react-spectrum/test-utils |
 | @vue-spectrum/text | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/text | packages/@react-spectrum/text |

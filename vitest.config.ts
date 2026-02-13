@@ -16,6 +16,7 @@ export default defineConfig({
       {find: '@internationalized/number', replacement: path.resolve(rootDir, 'test-shims/internationalizedNumber.ts')},
       {find: '@internationalized/date', replacement: path.resolve(rootDir, 'test-shims/internationalizedDate.ts')},
       {find: 'react-aria-components', replacement: path.resolve(rootDir, 'test-shims/reactAriaComponents.tsx')},
+      {find: 'react-transition-group', replacement: path.resolve(rootDir, 'test-shims/reactTransitionGroup.tsx')},
       {find: 'use-sync-external-store/shim/index.js', replacement: path.resolve(rootDir, 'test-shims/useSyncExternalStore.ts')},
       {find: /^@vue-aria\/([^/]+)$/, replacement: path.resolve(rootDir, 'packages/@vue-aria/$1/index.ts')},
       {find: /^@vue-stately\/([^/]+)$/, replacement: path.resolve(rootDir, 'packages/@vue-stately/$1/index.ts')},
