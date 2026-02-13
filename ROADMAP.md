@@ -261,7 +261,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [ ] VitePress/Storybook pages ported
+- [x] VitePress package page scaffolded (`docs/packages/interactions.md`)
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -619,3 +619,4 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported `@vue-aria/interactions` focusable/pressable surface (`useFocusable`, `FocusableProvider`, `Focusable`, `FocusableContext`, `Pressable`) with Vue slot/cloneVNode adaptation.
 - Added adapted tests for `useFocusable` and `Pressable` baseline parity paths.
 - Validation: `npm run check` passed, `npm test` passed (52 files, 148 tests).
+- Added VitePress docs page for `@vue-aria/interactions` and wired docs nav/sidebar entry.

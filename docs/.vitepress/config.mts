@@ -7,11 +7,15 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/" },
       { text: "Selection", link: "/packages/selection" },
+      { text: "Interactions", link: "/packages/interactions" },
     ],
     sidebar: [
       {
         text: "Packages",
-        items: [{ text: "@vue-aria/selection", link: "/packages/selection" }],
+        items: [
+          { text: "@vue-aria/selection", link: "/packages/selection" },
+          { text: "@vue-aria/interactions", link: "/packages/interactions" },
+        ],
       },
     ],
   },
