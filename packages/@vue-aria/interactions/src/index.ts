@@ -3,6 +3,7 @@ export { useKeyboard } from "./useKeyboard";
 export { useFocus } from "./useFocus";
 export { useFocusWithin } from "./useFocusWithin";
 export { useInteractOutside } from "./useInteractOutside";
+export { useHover } from "./useHover";
 export {
   isFocusVisible,
   getInteractionModality,
@@ -28,3 +29,4 @@ export type { KeyboardProps, KeyboardResult } from "./useKeyboard";
 export type { FocusProps, FocusResult } from "./useFocus";
 export type { FocusWithinProps, FocusWithinResult } from "./useFocusWithin";
 export type { InteractOutsideProps } from "./useInteractOutside";
+export type { HoverEvent, HoverProps, HoverResult } from "./useHover";
