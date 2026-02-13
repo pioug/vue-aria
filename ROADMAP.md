@@ -2386,6 +2386,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
   - Added adapted focus-state coverage for blur/re-focus F6 restoration and preventing mouse-based landmark focus.
   - Added adapted visibility/window focus regression coverage for keeping focused landmarks active across tab/window blur-focus transitions.
+  - Added adapted warning-assertion exactness coverage for duplicate navigation landmarks (message text + queried landmark element arrays).
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2405,7 +2406,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port multi-component focus-management parity case from upstream (`ActionGroup` + `TableView` managed focus handoff).
-2. Port remaining upstream warning assertion exactness (`console.warn` argument list alignment with queried landmark arrays).
+2. Expand controller tests for explicit `navigate("forward" | "backward")` return-value parity when no landmarks are registered.
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3744,3 +3745,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` nested placement parity:
   - added adapted nested-first and nested-last traversal tests to ensure stable F6 ordering regardless of nested region placement inside `main`.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 695 tests).
+- Expanded `@vue-aria/landmark` warning assertion parity:
+  - added adapted tests asserting exact `console.warn` message + landmark-array arguments for unlabeled and duplicate-label navigation landmark cases.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 697 tests).

@@ -785,6 +785,26 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("warns with exact arguments for unlabeled duplicate navigation landmarks", async () => {
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const Main = createLandmark("main", "main", "Main");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const navs = wrapper.findAll("nav").map((node) => node.element);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Page contains more than one landmark with the 'navigation' role. If two or more landmarks on a page share the same role, all must be labeled with an aria-label or aria-labelledby attribute: ",
+      navs
+    );
+    wrapper.unmount();
+  });
+
   it("warns when duplicate role landmarks share the same label", async () => {
     const RegionA = defineComponent({
       setup() {
@@ -828,6 +848,55 @@ describe("useLandmark", () => {
     expect(warnSpy).toHaveBeenCalled();
     const joinedMessages = warnSpy.mock.calls.map((call) => String(call[0])).join("\n");
     expect(joinedMessages).toContain("must have unique labels");
+    wrapper.unmount();
+  });
+
+  it("warns with exact arguments for duplicate role landmarks sharing a label", async () => {
+    const NavigationA = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation", "aria-label": "First nav" }, refAdapter);
+        return () => h("nav", { ...landmarkProps, ref: elementRef }, "A");
+      },
+    });
+    const NavigationB = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation", "aria-label": "First nav" }, refAdapter);
+        return () => h("nav", { ...landmarkProps, ref: elementRef }, "B");
+      },
+    });
+    const Main = createLandmark("main", "main", "Main");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(NavigationA), h(NavigationB), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const navs = wrapper.findAll("nav").map((node) => node.element);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Page contains more than one landmark with the 'navigation' role and 'First nav' label. If two or more landmarks on a page share the same role, they must have unique labels: ",
+      navs
+    );
     wrapper.unmount();
   });
 
