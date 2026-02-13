@@ -166,4 +166,61 @@ describe("useSlider integration with useSliderState", () => {
 
     scope.stop();
   });
+
+  it("clamps upper thumb drag at lower thumb value", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const minInputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const maxInputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const scope = effectScope();
+    const { state, maxThumbProps } = scope.run(() => {
+      const state = useSliderState({
+        defaultValue: [40, 80],
+        numberFormatter,
+      });
+      useSlider({ "aria-label": "Slider" }, state as any, { current: track });
+      useSliderThumb(
+        {
+          index: 0,
+          "aria-label": "Min",
+          trackRef: { current: track },
+          inputRef: minInputRef,
+        },
+        state as any
+      );
+      const { thumbProps } = useSliderThumb(
+        {
+          index: 1,
+          "aria-label": "Max",
+          trackRef: { current: track },
+          inputRef: maxInputRef,
+        },
+        state as any
+      );
+      return { state, maxThumbProps: thumbProps };
+    })!;
+
+    const kind = dispatchThumbDown(maxThumbProps, 80);
+    dispatchThumbMove(kind, 60);
+    expect(state.values).toEqual([40, 60]);
+
+    dispatchThumbMove(kind, 30);
+    expect(state.values).toEqual([40, 40]);
+
+    dispatchThumbUp(kind, 30);
+    expect(state.isThumbDragging(1)).toBe(false);
+
+    scope.stop();
+  });
 });
