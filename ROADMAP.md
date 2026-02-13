@@ -2626,6 +2626,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Added controlled/reactive usage example aligning with upstream controlled callback semantics.
 - [x] Added multi-thumb drag lifecycle walkthrough and callback-shape stability note.
 - [x] Added SSR initialization guidance for deterministic slider-state hydration behavior.
+- [x] Added Vue SFC (`<script setup>`) usage snippet for copy/paste fidelity.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2641,7 +2642,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Consider porting upstream story-equivalent slider-state walkthrough examples into VitePress playground snippets.
 2. Revisit whether runtime `number` <-> `number[]` switching should be explicitly guarded at runtime versus documented as unsupported.
-3. Cross-check slider-state docs snippets against Vue SFC usage patterns (template + `setup`) for stronger copy/paste fidelity.
+3. Add minimal style/base-markup examples demonstrating how slider-state wiring feeds rendered thumb/track output in Vue templates.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4044,4 +4045,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).
 - Expanded `@vue-aria/slider-state` SSR docs parity:
   - added SSR initialization guidance to `docs/packages/slider-state.md` for deterministic server/client hydration behavior.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).
+- Expanded `@vue-aria/slider-state` Vue SFC docs parity:
+  - added `<script setup>` + template usage snippet for controlled slider-state wiring to improve copy/paste fidelity in Vue apps.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).

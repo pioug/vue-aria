@@ -106,6 +106,28 @@ rangeLifecycleState.setThumbDragging(0, false); // no onChangeEnd yet
 rangeLifecycleState.setThumbDragging(1, false); // onChangeEnd now fires
 ```
 
+```vue
+<script setup lang="ts">
+import { reactive } from "vue";
+import { useSliderState } from "@vue-aria/slider-state";
+
+const model = reactive({ value: [20, 80] });
+const numberFormatter = new Intl.NumberFormat("en-US", {});
+
+const state = useSliderState({
+  value: model.value,
+  numberFormatter,
+  onChange(next) {
+    model.value = next;
+  },
+});
+</script>
+
+<template>
+  <pre>{{ state.values }}</pre>
+</template>
+```
+
 ## Notes
 
 - Supports single and multi-thumb value arrays.
