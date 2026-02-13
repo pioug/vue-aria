@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 194 |
-| Passing tests | 194 |
+| Ported tests | 198 |
+| Passing tests | 198 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -85,7 +85,7 @@
 | @vue-spectrum/breadcrumbs | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/breadcrumbs | packages/@react-spectrum/breadcrumbs |
 | @vue-spectrum/button | complete | 5 | 5 | 5 | 0 | 0 | 0 | 0 | true | @react-spectrum/button | packages/@react-spectrum/button |
 | @vue-spectrum/buttongroup | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/buttongroup | packages/@react-spectrum/buttongroup |
-| @vue-spectrum/calendar | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/calendar | packages/@react-spectrum/calendar |
+| @vue-spectrum/calendar | complete | 4 | 4 | 4 | 0 | 0 | 0 | 0 | true | @react-spectrum/calendar | packages/@react-spectrum/calendar |
 | @vue-spectrum/card | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/card | packages/@react-spectrum/card |
 | @vue-spectrum/checkbox | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/checkbox | packages/@react-spectrum/checkbox |
 | @vue-spectrum/color | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/color | packages/@react-spectrum/color |
