@@ -247,8 +247,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 1
-- Ported test files: 2
-- Passing test files: 2
+- Ported test files: 3
+- Passing test files: 3
 - Test parity notes:
   - Added adapted tests for keyboard delegate navigation/search behavior.
   - Added adapted tests for typeahead buffer, focus movement, and debounce reset.
@@ -497,3 +497,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `createFocusManager`
 - Added adapted tests for virtual focus behavior and focusable tree walker traversal.
 - Validation: `npm run check` passed, `npm test` passed (35 files, 85 tests).
+- Expanded `@vue-aria/selection` shared utils parity slice:
+  - `isNonContiguousSelectionModifier`
+  - `useCollectionId`
+  - `getCollectionId`
+  - Hardened `getItemElement` selector escaping fallback for non-browser test runtimes
+- Added adapted utility tests for collection scoping, collection id mapping, and modifier semantics.
+- Validation: `npm run check` passed, `npm test` passed (36 files, 89 tests).
