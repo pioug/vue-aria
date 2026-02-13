@@ -2064,6 +2064,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - no-op increment path for touch `onPressStart` + `onPressEnd` without `onPressUp`
     - single increment path for touch `onPressStart` + `onPressUp` + `onPressEnd`
     - pointer-cancel path coverage ensuring touch repeat timers are canceled without increment side effects
+    - mouse press-up repeat-stop behavior through integrated stepper handlers
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
   - Added adapted platform input-mode parity coverage for iPhone and Android branches, including negative-number and decimal/fraction-digit combinations.
@@ -2096,7 +2097,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining numberfield interaction parity (touch repeat cadence and commit/announce timing edge cases).
+1. Port remaining numberfield interaction parity (touch repeat cadence thresholds and commit/announce timing edge cases).
 2. Expand native-invalid integration parity for mixed custom-validity and multi-field first-invalid scenarios.
 
 ## 35) Package Record: @vue-aria/numberfield-state
@@ -3376,3 +3377,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` native-invalid sibling-order parity:
   - added adapted coverage ensuring required numberfield focus behavior remains correct when earlier form siblings are disabled or non-validatable
 - Validation: `npm run check` passed, `npm test` passed (130 files, 625 tests).
+- Expanded `@vue-aria/numberfield` repeat-stop integration parity:
+  - added adapted coverage ensuring mouse `onPressUp` halts additional increment repeats in integrated stepper flows
+- Validation: `npm run check` passed, `npm test` passed (130 files, 626 tests).

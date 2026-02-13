@@ -135,4 +135,40 @@ describe("useNumberField integration with useNumberFieldState", () => {
     input.remove();
     button.remove();
   });
+
+  it("stops mouse repeat increments after press up", () => {
+    vi.useFakeTimers();
+    const onChange = vi.fn();
+    const input = document.createElement("input");
+    const button = document.createElement("button");
+    document.body.appendChild(input);
+    document.body.appendChild(button);
+
+    const scope = effectScope();
+    const result = scope.run(() => {
+      const state = useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 2,
+        onChange,
+      });
+      return useNumberField({ "aria-label": "Quantity" }, state as any, { current: input });
+    })!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "mouse",
+      target: button,
+    });
+    vi.advanceTimersByTime(450);
+    const callsBeforeRelease = onChange.mock.calls.length;
+    (result.incrementButtonProps.onPressUp as (event: any) => void)({
+      pointerType: "mouse",
+      target: button,
+    });
+    vi.advanceTimersByTime(300);
+
+    expect(onChange.mock.calls.length).toBe(callsBeforeRelease);
+    scope.stop();
+    input.remove();
+    button.remove();
+  });
 });
