@@ -192,8 +192,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted upstream coverage for `shadowTreeWalker` multi-shadow traversal (peer and nested shadow hosts).
   - Added adapted router/openLink parity coverage (`openLink.isOpening`, synthetic href mapping, and deprecated `getSyntheticLinkProps` behavior).
   - Added adapted animation parity coverage for `useEnterAnimation`/`useExitAnimation` (completion and interrupted-exit flows).
-  - Added adapted `openLink` browser-branch coverage for Firefox keyboard-triggered `_blank` handling (ctrl/meta modifier synthesis).
-  - Remaining parity gap: WebKit-specific keyboard event synthesis path (`keyIdentifier` branch) is implemented but still unverified in the test environment.
+  - Added adapted `openLink` browser-branch coverage for:
+    - Firefox keyboard-triggered `_blank` handling (ctrl/meta modifier synthesis)
+    - WebKit keyboard event synthesis path (`keyIdentifier`) under non-test runtime mode
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2682,3 +2683,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - keyboard Enter/Space and double-click action-selection semantics
   - disabled focused-item cleanup and mousedown-prevention branches
 - Validation: `npm run check` passed, `npm test` passed (121 files, 460 tests).
+- Expanded `@vue-aria/utils/router` parity with adapted WebKit branch coverage for:
+  - keyboard event synthesis path (`keyIdentifier`) outside test mode
+- Validation: `npm run check` passed, `npm test` passed (121 files, 461 tests).

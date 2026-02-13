@@ -279,4 +279,43 @@ describe("router utilities", () => {
       }
     }
   });
+
+  it("uses WebKit keyboard event path outside test environment", () => {
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const originalNodeEnv = process.env.NODE_ENV;
+
+    try {
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "Mozilla/5.0 AppleWebKit/605.1.15 Safari/605.1.15",
+      });
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "MacIntel",
+      });
+      process.env.NODE_ENV = "production";
+
+      const anchor = document.createElement("a");
+      anchor.href = "/reports";
+
+      let keyboardEvent: KeyboardEvent | undefined;
+      anchor.addEventListener("keydown", (event) => {
+        keyboardEvent = event as KeyboardEvent;
+      });
+
+      openLink(anchor, { metaKey: true });
+
+      expect(keyboardEvent).toBeDefined();
+      expect(keyboardEvent!.metaKey).toBe(true);
+    } finally {
+      process.env.NODE_ENV = originalNodeEnv;
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+    }
+  });
 });
