@@ -80,7 +80,22 @@ export const SliderBase = defineComponent({
   },
   setup(props, { slots }) {
     const attrs = useAttrs();
-    const numberFormatter = useNumberFormatter(props.formatOptions ?? {});
+    let formatOptions = props.formatOptions;
+    const alwaysDisplaySign = Math.abs(Math.sign(props.minValue) - Math.sign(props.maxValue)) === 2;
+    if (alwaysDisplaySign) {
+      if (formatOptions != null) {
+        if (!("signDisplay" in formatOptions)) {
+          formatOptions = {
+            ...formatOptions,
+            signDisplay: "exceptZero",
+          };
+        }
+      } else {
+        formatOptions = { signDisplay: "exceptZero" };
+      }
+    }
+
+    const numberFormatter = useNumberFormatter(formatOptions ?? {});
     const trackRef = { current: null as Element | null };
     const inputRef = ref<HTMLInputElement | null>(null);
 
@@ -161,6 +176,41 @@ export const SliderBase = defineComponent({
       return state.values.map((value) => numberFormatter.format(value)).join(", ");
     });
 
+    const maxLabelLength = computed(() => {
+      if (typeof props.getValueLabel === "function") {
+        switch (state.values.length) {
+          case 1:
+            return Math.max(
+              props.getValueLabel([props.minValue]).length,
+              props.getValueLabel([props.maxValue]).length
+            );
+          case 2:
+            return Math.max(
+              props.getValueLabel([props.minValue, props.minValue]).length,
+              props.getValueLabel([props.minValue, props.maxValue]).length,
+              props.getValueLabel([props.maxValue, props.minValue]).length,
+              props.getValueLabel([props.maxValue, props.maxValue]).length
+            );
+          default:
+            throw new Error("Only sliders with 1 or 2 handles are supported!");
+        }
+      }
+
+      const formattedMin = [...numberFormatter.format(props.minValue)].length;
+      const formattedMax = [...numberFormatter.format(props.maxValue)].length;
+      let computedLength = Math.max(formattedMin, formattedMax);
+
+      switch (state.values.length) {
+        case 1:
+          return computedLength;
+        case 2:
+          computedLength = 3 + 2 * Math.max(computedLength, formattedMin, formattedMax);
+          return computedLength;
+        default:
+          throw new Error("Only sliders with 1 or 2 handles are supported!");
+      }
+    });
+
     return () => {
       const labelNode =
         props.label != null
@@ -170,7 +220,17 @@ export const SliderBase = defineComponent({
       const valueNode = showValueLabel.value
         ? h(
             "output",
-            { ...slider.outputProps, class: "spectrum-Slider-value" },
+            {
+              ...slider.outputProps,
+              class: "spectrum-Slider-value",
+              style:
+                maxLabelLength.value != null
+                  ? {
+                      width: `${maxLabelLength.value}ch`,
+                      minWidth: `${maxLabelLength.value}ch`,
+                    }
+                  : undefined,
+            },
             displayValue.value
           )
         : null;
@@ -192,6 +252,9 @@ export const SliderBase = defineComponent({
           props.label
             ? h("div", { class: "spectrum-Slider-labelContainer", role: "presentation" }, [
                 labelNode,
+                slots.contextualHelp
+                  ? h("div", { class: "spectrum-Slider-contextualHelp" }, slots.contextualHelp())
+                  : null,
                 props.labelPosition === "top" ? valueNode : null,
               ])
             : null,

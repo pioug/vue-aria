@@ -89,6 +89,9 @@ export const Slider = defineComponent({
               class: "spectrum-Slider-track",
               style: {
                 width: `${state.getThumbPercent(0) * 100}%`,
+                "--spectrum-track-background-size": `${(1 / state.getThumbPercent(0)) * 100}%`,
+                "--spectrum-track-background-position":
+                  locale.value.direction === "ltr" ? "0" : "100%",
               },
             });
 
@@ -96,6 +99,11 @@ export const Slider = defineComponent({
               class: "spectrum-Slider-track",
               style: {
                 width: `${(1 - state.getThumbPercent(0)) * 100}%`,
+                "--spectrum-track-background-size": `${
+                  (1 / (1 - state.getThumbPercent(0))) * 100
+                }%`,
+                "--spectrum-track-background-position":
+                  locale.value.direction === "ltr" ? "100%" : "0",
               },
             });
 

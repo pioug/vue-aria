@@ -26,6 +26,53 @@ import { Slider } from "@vue-spectrum/slider";
 <Slider label="Volume" :defaultValue="20" />
 ```
 
+## Controlled Slider (`v-model`)
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { Slider } from "@vue-spectrum/slider";
+
+const value = ref(35);
+const handleChange = (next: number) => {
+  value.value = next;
+};
+</script>
+
+<template>
+  <Slider
+    label="Volume"
+    :value="value"
+    :onChange="handleChange"
+  />
+</template>
+```
+
+## Value formatting (`formatOptions`)
+
+```vue
+<Slider
+  label="Opacity"
+  :minValue="0"
+  :maxValue="1"
+  :step="0.01"
+  :defaultValue="0.2"
+  :formatOptions="{ style: 'percent' }"
+/>
+```
+
+## Filled and gradient track styles
+
+```vue
+<Slider
+  label="Temperature"
+  :defaultValue="30"
+  isFilled
+  :fillOffset="20"
+  :trackGradient="['#0ea5e9 0%', '#22c55e 50%', '#f59e0b 100%']"
+/>
+```
+
 ## Basic RangeSlider example
 
 ```ts
@@ -41,7 +88,31 @@ import { RangeSlider } from "@vue-spectrum/slider";
 />
 ```
 
+## Controlled RangeSlider (`v-model` pattern)
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { RangeSlider } from "@vue-spectrum/slider";
+
+const value = ref({ start: 10, end: 60 });
+const handleChange = (next: { start: number; end: number }) => {
+  value.value = next;
+};
+</script>
+
+<template>
+  <RangeSlider
+    label="Price range"
+    :value="value"
+    :onChange="handleChange"
+    startName="minPrice"
+    endName="maxPrice"
+  />
+</template>
+```
+
 ## Notes
 
-- Initial parity slice focuses on upstream behavior for labeling, controlled/default values, thumb form wiring, and value-output formatting.
+- Current parity slice covers labeling, controlled/default values, form wiring/reset behavior, keyboard behavior, track-click interactions, locale-aware thumb labels, and value-output formatting.
 - `Spectrum S2` is out of scope for this port.

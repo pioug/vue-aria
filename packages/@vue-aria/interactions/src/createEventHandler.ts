@@ -18,28 +18,36 @@ export function createEventHandler<T extends Event>(
 
   let shouldStopPropagation = true;
   return (e: T) => {
-    const event = Object.create(e) as BaseEvent<T> & T;
-    Object.defineProperties(event, {
-      type: { value: e.type, enumerable: true },
-      target: { value: e.target, enumerable: true },
-      currentTarget: { value: e.currentTarget, enumerable: true },
-    });
-    Object.defineProperties(event, {
-      preventDefault: { value() {
-        e.preventDefault();
-      } },
-      isDefaultPrevented: { value() {
-        return e.defaultPrevented;
-      } },
-      stopPropagation: { value() {
-        shouldStopPropagation = true;
-      } },
-      continuePropagation: { value() {
-        shouldStopPropagation = false;
-      } },
-      isPropagationStopped: { value() {
-        return shouldStopPropagation;
-      } },
+    const event = new Proxy(e as BaseEvent<T> & T, {
+      get(target, property) {
+        if (property === "preventDefault") {
+          return () => {
+            e.preventDefault();
+          };
+        }
+
+        if (property === "isDefaultPrevented") {
+          return () => e.defaultPrevented;
+        }
+
+        if (property === "stopPropagation") {
+          return () => {
+            shouldStopPropagation = true;
+          };
+        }
+
+        if (property === "continuePropagation") {
+          return () => {
+            shouldStopPropagation = false;
+          };
+        }
+
+        if (property === "isPropagationStopped") {
+          return () => shouldStopPropagation;
+        }
+
+        return Reflect.get(target, property, target);
+      },
     });
 
     handler(event);

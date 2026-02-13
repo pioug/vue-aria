@@ -1,8 +1,26 @@
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
-import { defineComponent, h, ref } from "vue";
+import { describe, expect, it, vi } from "vitest";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { I18nProvider } from "@vue-aria/i18n";
 import { RangeSlider } from "../src";
+
+function pressKey(input: HTMLInputElement, key: string) {
+  input.focus();
+  input.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      key,
+      bubbles: true,
+      cancelable: true,
+    })
+  );
+  input.dispatchEvent(
+    new KeyboardEvent("keyup", {
+      key,
+      bubbles: true,
+      cancelable: true,
+    })
+  );
+}
 
 describe("Spectrum RangeSlider", () => {
   it("supports aria-label", () => {
@@ -166,6 +184,25 @@ describe("Spectrum RangeSlider", () => {
     wrapper.unmount();
   });
 
+  it("can focus each thumb", () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 20, end: 50 },
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    (sliders[0].element as HTMLInputElement).focus();
+    expect(document.activeElement).toBe(sliders[0].element);
+
+    (sliders[1].element as HTMLInputElement).focus();
+    expect(document.activeElement).toBe(sliders[1].element);
+
+    wrapper.unmount();
+  });
+
   it("supports form reset with controlled values", async () => {
     const Test = defineComponent({
       setup() {
@@ -195,8 +232,63 @@ describe("Spectrum RangeSlider", () => {
     expect((sliders[1].element as HTMLInputElement).value).toBe("60");
 
     await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
     expect((sliders[0].element as HTMLInputElement).value).toBe("10");
     expect((sliders[1].element as HTMLInputElement).value).toBe("40");
+
+    wrapper.unmount();
+  });
+
+  it("prefixes values with plus signs when range spans negative to positive", async () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        minValue: -50,
+        maxValue: 50,
+        defaultValue: { start: 10, end: 20 },
+      },
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    expect(wrapper.find("output").text()).toBe("+10 – +20");
+    expect(sliders[0].attributes("aria-valuetext")).toBe("+10");
+    expect(sliders[1].attributes("aria-valuetext")).toBe("+20");
+
+    await sliders[0].setValue("-35");
+    expect(wrapper.find("output").text()).toBe("-35 – +20");
+    expect(sliders[0].attributes("aria-valuetext")).toBe("-35");
+
+    await sliders[1].setValue("0");
+    expect(wrapper.find("output").text()).toBe("-35 – 0");
+    expect(sliders[1].attributes("aria-valuetext")).toBe("0");
+
+    wrapper.unmount();
+  });
+
+  it("supports custom formatOptions", async () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        minValue: 0,
+        maxValue: 1,
+        step: 0.01,
+        defaultValue: { start: 0.2, end: 0.6 },
+        formatOptions: { style: "percent" },
+      },
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    expect(wrapper.find("output").text()).toBe("20% – 60%");
+    expect(sliders[0].attributes("aria-valuetext")).toBe("20%");
+    expect(sliders[1].attributes("aria-valuetext")).toBe("60%");
+
+    await sliders[0].setValue("0.3");
+    expect(wrapper.find("output").text()).toBe("30% – 60%");
+    expect(sliders[0].attributes("aria-valuetext")).toBe("30%");
+
+    await sliders[1].setValue("0.7");
+    expect(wrapper.find("output").text()).toBe("30% – 70%");
+    expect(sliders[1].attributes("aria-valuetext")).toBe("70%");
 
     wrapper.unmount();
   });
@@ -217,6 +309,266 @@ describe("Spectrum RangeSlider", () => {
     expect(sliders[0].attributes("form")).toBe("test");
     expect(sliders[1].attributes("name")).toBe("maxCookies");
     expect(sliders[1].attributes("form")).toBe("test");
+
+    wrapper.unmount();
+  });
+
+  it("clicking the label focuses the first thumb input", async () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 40, end: 70 },
+      },
+      attachTo: document.body,
+    });
+
+    const label = wrapper.find("label.spectrum-Slider-label");
+    const sliders = wrapper.findAll('input[type="range"]');
+    await label.trigger("click");
+
+    expect(document.activeElement).toBe(sliders[0].element);
+    wrapper.unmount();
+  });
+
+  it("can click on track to move the nearest handle", async () => {
+    const onChange = vi.fn();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(() => ({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }));
+
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 40, end: 70 },
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    const controls = wrapper.find(".spectrum-Slider-controls");
+
+    const leftClick = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+      clientX: 20,
+      clientY: 20,
+    });
+    Object.defineProperty(leftClick, "pageX", { value: 20 });
+    Object.defineProperty(leftClick, "pageY", { value: 20 });
+    controls.element.dispatchEvent(leftClick);
+    await nextTick();
+    expect(document.activeElement).toBe(sliders[0].element);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 70 });
+
+    const upLeft = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
+    Object.defineProperty(upLeft, "pageX", { value: 20 });
+    Object.defineProperty(upLeft, "pageY", { value: 20 });
+    window.dispatchEvent(upLeft);
+
+    onChange.mockClear();
+    const middleRightClick = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+      clientX: 60,
+      clientY: 60,
+    });
+    Object.defineProperty(middleRightClick, "pageX", { value: 60 });
+    Object.defineProperty(middleRightClick, "pageY", { value: 60 });
+    controls.element.dispatchEvent(middleRightClick);
+    await nextTick();
+    expect(document.activeElement).toBe(sliders[1].element);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 60 });
+
+    const upMiddle = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
+    Object.defineProperty(upMiddle, "pageX", { value: 60 });
+    Object.defineProperty(upMiddle, "pageY", { value: 60 });
+    window.dispatchEvent(upMiddle);
+
+    onChange.mockClear();
+    const rightClick = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+      clientX: 90,
+      clientY: 90,
+    });
+    Object.defineProperty(rightClick, "pageX", { value: 90 });
+    Object.defineProperty(rightClick, "pageY", { value: 90 });
+    controls.element.dispatchEvent(rightClick);
+    await nextTick();
+    expect(document.activeElement).toBe(sliders[1].element);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 90 });
+
+    const upRight = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
+    Object.defineProperty(upRight, "pageX", { value: 90 });
+    Object.defineProperty(upRight, "pageY", { value: 90 });
+    window.dispatchEvent(upRight);
+
+    wrapper.unmount();
+    rectSpy.mockRestore();
+  });
+
+  it("cannot click on track to move handles when disabled", () => {
+    const onChange = vi.fn();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(() => ({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }));
+
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 40, end: 70 },
+        onChange,
+        isDisabled: true,
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    const controls = wrapper.find(".spectrum-Slider-controls");
+    const click = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+      clientX: 20,
+      clientY: 20,
+    });
+    Object.defineProperty(click, "pageX", { value: 20 });
+    Object.defineProperty(click, "pageY", { value: 20 });
+    controls.element.dispatchEvent(click);
+
+    expect(document.activeElement).not.toBe(sliders[0].element);
+    expect(document.activeElement).not.toBe(sliders[1].element);
+    expect(onChange).not.toHaveBeenCalled();
+
+    const up = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
+    Object.defineProperty(up, "pageX", { value: 20 });
+    Object.defineProperty(up, "pageY", { value: 20 });
+    window.dispatchEvent(up);
+
+    wrapper.unmount();
+    rectSpy.mockRestore();
+  });
+
+  it("supports keyboard interactions in LTR", async () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 20, end: 50 },
+        minValue: 0,
+        maxValue: 100,
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    const left = sliders[0].element as HTMLInputElement;
+    const right = sliders[1].element as HTMLInputElement;
+
+    pressKey(left, "ArrowRight");
+    await nextTick();
+    expect(left.value).toBe("21");
+
+    pressKey(left, "ArrowLeft");
+    await nextTick();
+    expect(left.value).toBe("20");
+
+    pressKey(right, "ArrowRight");
+    await nextTick();
+    expect(right.value).toBe("51");
+
+    pressKey(right, "ArrowLeft");
+    await nextTick();
+    expect(right.value).toBe("50");
+
+    pressKey(left, "Home");
+    await nextTick();
+    expect(left.value).toBe("0");
+
+    pressKey(right, "End");
+    await nextTick();
+    expect(right.value).toBe("100");
+
+    wrapper.unmount();
+  });
+
+  it("supports keyboard directionality in RTL", async () => {
+    const App = defineComponent({
+      setup() {
+        return () =>
+          h(I18nProvider, { locale: "ar-AE" }, {
+            default: () => [
+              h(RangeSlider as any, {
+                label: "The Label",
+                defaultValue: { start: 20, end: 50 },
+              }),
+            ],
+          });
+      },
+    });
+
+    const wrapper = mount(App as any, { attachTo: document.body });
+    const sliders = wrapper.findAll('input[type="range"]');
+    const left = sliders[0].element as HTMLInputElement;
+    const right = sliders[1].element as HTMLInputElement;
+
+    pressKey(left, "ArrowRight");
+    await nextTick();
+    expect(left.value).toBe("19");
+
+    pressKey(right, "ArrowLeft");
+    await nextTick();
+    expect(right.value).toBe("51");
+
+    wrapper.unmount();
+  });
+
+  it("ignores keyboard interactions when disabled", async () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 20, end: 50 },
+        isDisabled: true,
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    const left = sliders[0].element as HTMLInputElement;
+    const right = sliders[1].element as HTMLInputElement;
+
+    pressKey(left, "ArrowRight");
+    pressKey(right, "ArrowLeft");
+    await nextTick();
+
+    expect(left.value).toBe("20");
+    expect(right.value).toBe("50");
 
     wrapper.unmount();
   });

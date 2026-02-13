@@ -61,7 +61,16 @@ export const SliderThumb = defineComponent({
     const { hoverProps, isHovered } = useHover({});
     const mergedThumbProps = mergeProps(thumb.thumbProps, hoverProps);
 
-    return () =>
+    return () => {
+      const liveInputProps = {
+        ...thumb.inputProps,
+        min: resolvedState.getThumbMinValue(props.index),
+        max: resolvedState.getThumbMaxValue(props.index),
+        value: resolvedState.values[props.index],
+        "aria-valuetext": resolvedState.getThumbValueLabel(props.index),
+      };
+
+      return (
       h(
         "div",
         {
@@ -79,7 +88,7 @@ export const SliderThumb = defineComponent({
           h(VisuallyHidden, null, {
             default: () => [
               h("input", {
-                ...thumb.inputProps,
+                ...liveInputProps,
                 class: "spectrum-Slider-input",
                 ref: ((el: any) => {
                   resolvedInputRef.value = el as HTMLInputElement | null;
@@ -88,6 +97,7 @@ export const SliderThumb = defineComponent({
             ],
           }),
         ]
-      );
+      ));
+    };
   },
 });

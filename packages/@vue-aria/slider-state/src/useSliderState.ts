@@ -172,10 +172,10 @@ export function useSliderState<T extends number | number[]>(
   const getValuePercent = (value: number) => (value - minValue) / (maxValue - minValue);
 
   const getThumbMinValue = (index: number) =>
-    index === 0 ? minValue : valuesState.value[index - 1];
+    index === 0 ? minValue : valuesRef.value[index - 1];
 
   const getThumbMaxValue = (index: number) =>
-    index === valuesState.value.length - 1 ? maxValue : valuesState.value[index + 1];
+    index === valuesRef.value.length - 1 ? maxValue : valuesRef.value[index + 1];
 
   const isThumbEditable = (index: number) => isEditablesRef.value[index];
 
@@ -188,10 +188,11 @@ export function useSliderState<T extends number | number[]>(
       return;
     }
 
-    const thisMin = getThumbMinValue(index);
-    const thisMax = getThumbMaxValue(index);
+    const currentValues = valuesRef.value;
+    const thisMin = index === 0 ? minValue : currentValues[index - 1];
+    const thisMax = index === currentValues.length - 1 ? maxValue : currentValues[index + 1];
     const snapped = snapValueToStep(value, thisMin, thisMax, step);
-    const newValues = replaceIndex(valuesState.value, index, snapped);
+    const newValues = replaceIndex(currentValues, index, snapped);
     setValues(newValues);
   };
 
@@ -229,12 +230,12 @@ export function useSliderState<T extends number | number[]>(
 
   const incrementThumb = (index: number, stepSize = 1) => {
     const size = Math.max(stepSize, step);
-    updateValue(index, snapValueToStep(valuesState.value[index] + size, minValue, maxValue, step));
+    updateValue(index, snapValueToStep(valuesRef.value[index] + size, minValue, maxValue, step));
   };
 
   const decrementThumb = (index: number, stepSize = 1) => {
     const size = Math.max(stepSize, step);
-    updateValue(index, snapValueToStep(valuesState.value[index] - size, minValue, maxValue, step));
+    updateValue(index, snapValueToStep(valuesRef.value[index] - size, minValue, maxValue, step));
   };
 
   return {

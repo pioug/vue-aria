@@ -2677,6 +2677,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Open adaptation notes:
   - Range-thumb label localization is now wired through copied upstream `intl/*.json` dictionaries via `useLocalizedStringFormatter`.
+  - `SliderBase` now mirrors upstream sign-display behavior when ranges cross zero and computes fixed value-label width (`ch`) from min/max formatting bounds.
+  - `Slider` track segments now include upstream background-size/position CSS custom properties for gradient composition parity.
+  - `SliderThumb` now binds live `min`/`max`/`value`/`aria-valuetext` attributes so output/input accessibility text stays in sync after interaction updates.
+  - Shared event wrapper (`createEventHandler`) now proxies native events safely, preventing JSDOM keyboard getter failures during bubbled keyboard interactions.
+  - `useSliderState` now applies updates from `valuesRef` for sequential controlled multi-thumb writes (fixes controlled range form-reset races).
   - Styling currently uses Spectrum class names without imported Spectrum CSS variable files; docs/style parity will continue incrementally.
 
 ### Tests
@@ -2686,11 +2691,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted `Slider` coverage for aria-label and visible-label output semantics.
   - Added adapted `Slider` coverage for default, controlled, and disabled behavior.
-  - Added adapted `Slider` coverage for clamping semantics (value/defaultValue with min/max/step constraints), custom `getValueLabel`, and slider form-name wiring.
+  - Added adapted `Slider` coverage for clamping semantics (value/defaultValue with min/max/step constraints), custom `getValueLabel`, slider form-name wiring, and focus behavior.
   - Added adapted `Slider` coverage for controlled form-reset lifecycle behavior.
+  - Added adapted `Slider` coverage for format semantics (automatic plus-sign display and percent formatting via `formatOptions`).
+  - Added adapted `Slider` mouse track-click behavior coverage (enabled + disabled).
+  - Added adapted `Slider` keyboard coverage (LTR/RTL directionality, page/home/end behavior, disabled keyboard no-op).
   - Added adapted `RangeSlider` coverage for label wiring, min/max thumb labeling, default/controlled behavior, and start/end form names.
   - Added adapted `RangeSlider` coverage for custom `getValueLabel` output semantics and disabled-state behavior across both thumbs.
   - Added adapted `RangeSlider` coverage for controlled form-reset lifecycle behavior across both thumbs.
+  - Added adapted `RangeSlider` coverage for format semantics (automatic plus-sign display and percent formatting via `formatOptions`).
+  - Added adapted `RangeSlider` mouse track-click behavior coverage (nearest-thumb selection + disabled no-op).
+  - Added adapted `RangeSlider` keyboard coverage (LTR/RTL directionality, home/end behavior, disabled keyboard no-op).
   - Added adapted locale coverage validating localized range-thumb `aria-label` output (`ar-AE` minimum/maximum strings).
 - [ ] All relevant upstream tests migrated
 
@@ -2700,7 +2711,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Validate full keyboard/pointer/touch and tab-order behavior against upstream Spectrum suites.
+- [x] Validate keyboard directionality and page/home/end behavior for slider and range variants.
+- [x] Validate pointer track-click focus/selection behavior (including disabled no-op behavior) for slider and range variants.
+- [ ] Validate remaining drag/touch and tab-order traversal behavior against upstream Spectrum suites.
 
 ### Visual Parity
 - [ ] Validate style and composition parity against upstream Spectrum stories/docs.
@@ -2709,11 +2722,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream Slider/RangeSlider tests (keyboard, pointer, tab-order focus, and form action-state reset paths).
+1. Port remaining upstream Slider/RangeSlider drag/touch and tab-order traversal tests.
 2. Align style classes/tokens with upstream docs stories and validate with wrapper harness.
 
 ## 44) Session Log
 ### 2026-02-13
+- Expanded `@vue-spectrum/slider` parity slice:
+  - Added upstream-equivalent `formatOptions` and sign-display behavior in `SliderBase`.
+  - Added upstream track custom-property styling in `Slider`.
+  - Added live thumb input value/aria bindings in `SliderThumb`.
+  - Added broad Spectrum wrapper parity tests for keyboard directionality/page/home/end, track click interactions (enabled/disabled), format semantics, focus/label interactions, and expanded clamping matrix.
+- Fixed cross-package keyboard event wrapping bug in `@vue-aria/interactions/createEventHandler` by replacing `Object.create` wrapping with a safe native-event proxy.
+- Fixed controlled multi-thumb sequential update race in `@vue-aria/slider-state` so range form-reset callbacks compose correctly.
+- Validation: `npm run check` passed, `npm test` passed (145 files, 815 tests).
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
 - Added reusable package parity template.
