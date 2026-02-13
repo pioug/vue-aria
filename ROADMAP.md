@@ -89,7 +89,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tabs-state`: Complete
 - `@vue-aria/grid-state`: Complete
 - `@vue-aria/tree-state`: Not started
-- `@vue-aria/table-state`: In progress
+- `@vue-aria/table-state`: Complete
 - `@vue-aria/calendar-state`: Not started
 - `@vue-aria/datepicker-state`: Not started
 - `@vue-aria/combobox-state`: Complete
@@ -2465,12 +2465,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-stately/table/test/TableUtils.test.js`
 - Local package path:
   - `packages/@vue-aria/table-state`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2480,6 +2480,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useTableColumnResizeState`
   - `UNSTABLE_useFilteredTableState`
   - `UNSTABLE_useTreeGridState`
+  - collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`)
   - `TableColumnLayout`
   - `TableUtils` sizing helpers (`calculateColumnSizes`, static/fraction/width parsers)
 - [x] Package scaffolding created and wired:
@@ -2492,28 +2493,35 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/useTableColumnResizeState.ts`
   - `src/useTreeGridState.ts`
   - `src/useTableState.ts`
+  - `src/TableHeader.ts`
+  - `src/TableBody.ts`
+  - `src/Column.ts`
+  - `src/Row.ts`
+  - `src/Cell.ts`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining modules (collection element builders) are pending.
+  - No remaining module gaps in `@vue-aria/table-state` source surface.
 
 ### Tests
 - Total upstream test files: 1 (`TableUtils.test.js`)
-- Ported test files: 5 (adapted)
-- Passing test files: 5 (validated 2026-02-13)
+- Ported test files: 6 (adapted)
+- Passing test files: 6 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted column-building and column-resize baseline assertions from upstream `TableUtils.test.js`.
   - Added adapted coverage for `TableCollection` row-header text extraction, injected selection/drag columns, and collection filtering behavior.
   - Added adapted coverage for `useTableState` sort direction toggling, keyboard-navigation-disable state, disabled row keys, and `UNSTABLE_useFilteredTableState`.
   - Added adapted coverage for `useTableColumnResizeState` width/min/max map calculation, resize lifecycle callbacks, controlled-column behavior, and uncontrolled-width reset when columns change.
   - Added adapted coverage for `UNSTABLE_useTreeGridState` feature-flag gating, expanded-row flattening/toggling, and controlled expanded-key updates.
-  - Additional upstream resize edge-case scenarios remain to be ported in follow-up slices.
-- [ ] All relevant upstream tests migrated
+  - Completed remaining upstream `TableUtils.test.js` resize edge-case scenarios (`resize > table width`, and later-column shrink behavior).
+  - Added builder parity coverage for `TableHeader`, `TableBody`, `Column`, `Row`, and `Cell` collection-node generation semantics.
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/table-state.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State/layout package; no additional base style assets required.
 
 ### Accessibility
 - Not applicable for state/layout utility package.
@@ -2525,8 +2533,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`) with Vue-adapted equivalents.
-2. Complete remaining upstream `TableUtils.test.js` resize edge-case scenarios.
+1. Monitor upstream `@react-stately/table` for API/test/docs drift and port deltas as needed.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4927,3 +4934,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted coverage for flag gating, expanded-row toggling, and controlled expanded-key updates.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/table-state/test` passed (5 files, 21 tests).
+- Completed `@vue-aria/table-state` collection-builder + parity closeout slice:
+  - ported builder modules `TableHeader`, `TableBody`, `Column`, `Row`, and `Cell` with Vue-adapted `getCollectionNode` behavior.
+  - completed remaining upstream `TableUtils.test.js` resizing edge-case scenarios.
+  - added builder parity tests and updated docs to reflect complete package scope.
+- Completed `@vue-aria/table-state` package record:
+  - marked execution queue status `Complete` and closed package-level scope/test/docs gates.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/table-state/test` passed (6 files, 30 tests).

@@ -6,6 +6,11 @@
 
 - `TableCollection`
 - `buildHeaderRows`
+- `TableHeader`
+- `TableBody`
+- `Column`
+- `Row`
+- `Cell`
 - `useTableState`
 - `useTableColumnResizeState`
 - `UNSTABLE_useFilteredTableState`
@@ -18,10 +23,6 @@
   - `parseStaticWidth`
   - `getMinWidth`
   - `getMaxWidth`
-
-## In progress
-
-- Table collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`)
 
 ## Upstream-aligned example (implemented slice)
 
@@ -59,6 +60,6 @@ const widths = layout.buildColumnWidths(
 
 ## Notes
 
-- Current package status is partial; collection/state hooks are still being ported.
+- Current package status: complete for upstream `@react-stately/table` state/layout module scope.
 - `UNSTABLE_useTreeGridState` requires enabling `tableNestedRows` via `enableTableNestedRows()` from `@vue-aria/flags`.
 - `Spectrum S2` is out of scope unless explicitly requested.

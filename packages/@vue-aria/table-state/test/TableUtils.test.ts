@@ -253,5 +253,175 @@ describe("TableUtils", () => {
         ])
       );
     });
+
+    it("can resize to bigger than the table", () => {
+      const layout = new TableColumnLayout({
+        getDefaultWidth: () => 150,
+        getDefaultMinWidth: () => 50,
+      });
+      let collection = {
+        columns: [
+          { key: "name", props: { width: "1fr" } },
+          { key: "type", props: { width: "1fr" } },
+          { key: "height", props: {} },
+          { key: "weight", props: {} },
+          { key: "level", props: { width: "5fr" } },
+        ],
+      } as any;
+      let columns = layout.buildColumnWidths(
+        1000,
+        collection,
+        new Map<string, string | number>([
+          ["name", "1fr"],
+          ["type", "1fr"],
+          ["height", 150],
+          ["weight", 150],
+          ["level", "5fr"],
+        ])
+      );
+      expect(columns).toStrictEqual(
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 150],
+          ["weight", 150],
+          ["level", 500],
+        ])
+      );
+
+      let resizedColumns = layout.resizeColumnWidth(
+        collection,
+        new Map<string, string | number>([
+          ["height", 150],
+          ["weight", 150],
+        ]),
+        "height",
+        1000
+      );
+      expect(resizedColumns).toStrictEqual(
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 1000],
+          ["weight", 150],
+          ["level", "5fr"],
+        ])
+      );
+
+      collection = {
+        columns: [
+          { key: "name", props: { width: 100 } },
+          { key: "type", props: { width: 100 } },
+          { key: "height", props: {} },
+          { key: "weight", props: {} },
+          { key: "level", props: { width: "5fr" } },
+        ],
+      } as any;
+      columns = layout.buildColumnWidths(
+        1000,
+        collection,
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 1000],
+          ["weight", 150],
+          ["level", "5fr"],
+        ])
+      );
+      expect(columns).toStrictEqual(
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 1000],
+          ["weight", 150],
+          ["level", 50],
+        ])
+      );
+    });
+
+    it("can resize a later column smaller", () => {
+      const layout = new TableColumnLayout({
+        getDefaultWidth: () => 150,
+        getDefaultMinWidth: () => 50,
+      });
+      let collection = {
+        columns: [
+          { key: "name", props: { width: "1fr" } },
+          { key: "type", props: { width: "1fr" } },
+          { key: "height", props: {} },
+          { key: "weight", props: {} },
+          { key: "level", props: { width: "5fr" } },
+        ],
+      } as any;
+      let columns = layout.buildColumnWidths(
+        1000,
+        collection,
+        new Map<string, string | number>([
+          ["name", "1fr"],
+          ["type", "1fr"],
+          ["height", 150],
+          ["weight", 150],
+          ["level", "5fr"],
+        ])
+      );
+      expect(columns).toStrictEqual(
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 150],
+          ["weight", 150],
+          ["level", 500],
+        ])
+      );
+
+      let resizedColumns = layout.resizeColumnWidth(
+        collection,
+        new Map<string, string | number>([
+          ["height", 150],
+          ["weight", 150],
+        ]),
+        "level",
+        400
+      );
+      expect(resizedColumns).toStrictEqual(
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 150],
+          ["weight", 150],
+          ["level", 400],
+        ])
+      );
+
+      collection = {
+        columns: [
+          { key: "name", props: { width: 100 } },
+          { key: "type", props: { width: 100 } },
+          { key: "height", props: {} },
+          { key: "weight", props: {} },
+          { key: "level", props: { width: 400 } },
+        ],
+      } as any;
+      columns = layout.buildColumnWidths(
+        1000,
+        collection,
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 150],
+          ["weight", 150],
+          ["level", 400],
+        ])
+      );
+      expect(columns).toStrictEqual(
+        new Map<string, string | number>([
+          ["name", 100],
+          ["type", 100],
+          ["height", 150],
+          ["weight", 150],
+          ["level", 400],
+        ])
+      );
+    });
   });
 });
