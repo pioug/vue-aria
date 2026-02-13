@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 163 |
-| Passing tests | 163 |
+| Ported tests | 166 |
+| Passing tests | 166 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -128,7 +128,7 @@
 | @vue-spectrum/tabs | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/tabs | packages/@react-spectrum/tabs |
 | @vue-spectrum/tag | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
 | @vue-spectrum/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/test-utils | packages/@react-spectrum/test-utils |
-| @vue-spectrum/text | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/text | packages/@react-spectrum/text |
+| @vue-spectrum/text | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/text | packages/@react-spectrum/text |
 | @vue-spectrum/textfield | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/textfield | packages/@react-spectrum/textfield |
 | @vue-spectrum/theme-dark | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/theme-dark | packages/@react-spectrum/theme-dark |
 | @vue-spectrum/theme-default | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/theme-default | packages/@react-spectrum/theme-default |
