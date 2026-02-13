@@ -2384,6 +2384,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
   - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
   - Added adapted focus-state coverage for blur/re-focus F6 restoration and preventing mouse-based landmark focus.
+  - Added adapted visibility/window focus regression coverage for keeping focused landmarks active across tab/window blur-focus transitions.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2402,8 +2403,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream tab/window visibility toggle focus-restoration coverage.
-2. Port nested-first/nested-last explicit assertion variants from upstream parity suite.
+1. Port nested-first/nested-last explicit assertion variants from upstream parity suite.
+2. Port multi-component focus-management parity case from upstream (`ActionGroup` + `TableView` managed focus handoff).
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3732,3 +3733,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` focus-state parity:
   - added adapted tests for blur/re-focus landmark restoration via F6 and mouse interaction non-focus behavior.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 690 tests).
+- Expanded `@vue-aria/landmark` visibility/window focus parity:
+  - added adapted tests for landmark focus persistence across browser-window focus toggles and visibility/tab toggles.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 692 tests).

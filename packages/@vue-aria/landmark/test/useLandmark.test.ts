@@ -24,6 +24,38 @@ function createLandmark(tag: "main" | "nav" | "article", role: "main" | "navigat
   });
 }
 
+function toggleBrowserWindow() {
+  window.dispatchEvent(new Event("blur"));
+  window.dispatchEvent(new Event("focus"));
+}
+
+function toggleBrowserTabs(activeElement: HTMLElement) {
+  activeElement.dispatchEvent(new Event("blur"));
+  window.dispatchEvent(new Event("blur"));
+
+  Object.defineProperty(document, "visibilityState", {
+    value: "hidden",
+    writable: true,
+  });
+  Object.defineProperty(document, "hidden", {
+    value: true,
+    writable: true,
+  });
+  document.dispatchEvent(new Event("visibilitychange"));
+
+  Object.defineProperty(document, "visibilityState", {
+    value: "visible",
+    writable: true,
+  });
+  Object.defineProperty(document, "hidden", {
+    value: false,
+    writable: true,
+  });
+  document.dispatchEvent(new Event("visibilitychange"));
+  window.dispatchEvent(new Event("focus"));
+  activeElement.dispatchEvent(new Event("focus"));
+}
+
 describe("useLandmark", () => {
   afterEach(() => {
     document.body.innerHTML = "";
@@ -477,6 +509,54 @@ describe("useLandmark", () => {
     await nextTick();
 
     expect(document.activeElement).toBe(document.body);
+    wrapper.unmount();
+  });
+
+  it("keeps landmark focus after toggling browser window focus", async () => {
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav");
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
+
+    toggleBrowserWindow();
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
+    wrapper.unmount();
+  });
+
+  it("keeps landmark focus after tab visibility toggles", async () => {
+    const Navigation = createLandmark("nav", "navigation", "Navigation");
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav");
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
+
+    toggleBrowserTabs(nav.element as HTMLElement);
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
     wrapper.unmount();
   });
 
