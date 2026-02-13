@@ -87,6 +87,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/disclosure-state`: Complete
 - `@vue-aria/list-state`: Complete
 - `@vue-aria/tabs-state`: Complete
+- `@vue-aria/grid-state`: Complete
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
 - `@vue-aria/calendar-state`: Not started
@@ -2331,6 +2332,59 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Monitor upstream `@react-aria/tabs` for drift and add targeted regression coverage as needed.
+
+## 31e) Package Record: @vue-aria/grid-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/grid/src`
+- Local package path:
+  - `packages/@vue-aria/grid-state`
+- Status: Complete
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useGridState`
+  - `GridCollection`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useGridState.ts`
+  - `src/GridCollection.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Adaptation note:
+  - Focus-mode mapping (`row`/`cell`) and focus fallback behavior on collection mutation are preserved while using Vue reactivity/watcher semantics.
+
+### Tests
+- Total upstream test files: no package-local `@react-stately/grid` test folder
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added `GridCollection` construction coverage for row/cell linking and `colSpan`/`colIndex` handling.
+  - Added `useGridState` coverage for cell focus-mode mapping, disabled key exposure, and focused-row fallback when rows are removed.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/grid-state.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [x] Focus fallback and cell-focus behavior validated in adapted state tests.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Integrate `@vue-aria/grid-state` with upcoming `@vue-aria/grid` hook port and expand regression coverage with rowheader/column node variants.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4657,3 +4711,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - marked package records `31a` (`@vue-aria/combobox-state`) and `31b` (`@vue-aria/combobox`) as `Complete`, including accessibility checklist gates.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test` passed (3 files, 21 tests).
+- Started and completed `@vue-aria/grid-state` foundational port:
+  - added `@vue-aria/grid-state` package scaffold with upstream-aligned `GridCollection` and `useGridState`.
+  - added tsconfig/vitest alias wiring and VitePress package page (`docs/packages/grid-state.md`) with docs nav/sidebar/index links.
+  - added adapted tests for grid collection linking/colspan handling and grid-state focus-mode/focus-fallback behavior.
+  - added package record `31e` and marked `@vue-aria/grid-state` execution-queue status `Complete`.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/grid-state/test` passed (2 files, 5 tests).

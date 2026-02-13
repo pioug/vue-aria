@@ -152,6 +152,9 @@ export default defineConfig({
       "@vue-aria/combobox": fileURLToPath(
         new URL("./packages/@vue-aria/combobox/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/grid-state": fileURLToPath(
+        new URL("./packages/@vue-aria/grid-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/tabs-state": fileURLToPath(
         new URL("./packages/@vue-aria/tabs-state/src/index.ts", import.meta.url)
       ),

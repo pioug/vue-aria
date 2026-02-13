@@ -20,6 +20,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/utils-state](/packages/utils-state)
 - [@vue-aria/toggle-state](/packages/toggle-state)
 - [@vue-aria/tabs-state](/packages/tabs-state)
+- [@vue-aria/grid-state](/packages/grid-state)
 - [@vue-aria/tabs](/packages/tabs)
 - [@vue-aria/selection](/packages/selection)
 - [@vue-aria/selection-state](/packages/selection-state)
