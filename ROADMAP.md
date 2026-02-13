@@ -121,7 +121,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete
+- [x] Public API checklist complete (index export-name parity reached)
 
 ### Implementation
 - [x] Initial utility/composable slice ported
@@ -148,18 +148,32 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `scrollIntoView` / `scrollIntoViewport`
   - `clamp` / `snapValueToStep`
   - router aliases: `RouterProvider`, `getSyntheticLinkProps`
+- [x] Added hook/composable utility slice (Vue-adapted parity surface):
+  - `useId` / `mergeIds` / `useSlotId`
+  - `useLayoutEffect`
+  - `useEffectEvent`
+  - `useEvent`
+  - `useUpdateEffect`
+  - `useUpdateLayoutEffect`
+  - `useDeepMemo`
+  - `useFormReset`
+  - `useGlobalListeners`
+  - `useSyncRef`
+  - `useObjectRef`
+  - `useLabels`
 - Remaining:
   - Port full upstream `@react-aria/utils` export surface
   - Reconcile naming/semantics gaps to upstream API
 
 ### Tests
 - Total upstream test files: 7
-- Ported test files: 16
-- Passing test files: 16
+- Ported test files: 18
+- Passing test files: 18
 - Test parity notes:
   - Added adapted upstream coverage for `domHelpers` and `mergeRefs`.
   - Added adapted upstream coverage for `runAfterTransition`.
-  - Remaining upstream files (`useObjectRef`, full `shadowTreeWalker`, hook-level utilities) are still pending parity port/adaptation.
+  - Added adapted coverage for `useObjectRef`.
+  - Remaining upstream files (`useViewportSize`, `useDrag1D`, `useEnterAnimation`/`useExitAnimation`, `openLink` API alignment, full `shadowTreeWalker` parity test migration) are still pending parity port/adaptation.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -185,11 +199,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in runtime deps for this slice; parity verification pending for full package
 
 ### Open Gaps
-- Upstream reference now added as submodule, but many `@react-aria/utils` exports remain unported.
+- Upstream reference now added as submodule, and index export-name parity is now reached for `@vue-aria/utils`.
 - SSR/documentation scaffolding is baseline only and needs parity-level implementation.
 - `mergeProps` still lacks upstream `id` dedupe integration (`mergeIds/useId` parity path pending).
 - `inertValue` is Vue-native simplified and needs explicit parity decision per API surface.
-- Hook-level exports from upstream index are still pending in this package (`useEvent`, `useGlobalListeners`, `useLayoutEffect`, `useUpdateEffect`, `useUpdateLayoutEffect`, `useSyncRef`, `useViewportSize`, `useDrag1D`, `useEnterAnimation`, `useExitAnimation`, etc.).
+- `useId`/`mergeIds` behavior is currently simplified vs upstream reactive id reconciliation semantics and needs deeper parity hardening.
+- `useSlotId` is currently a simplified Vue adaptation and needs parity hardening around deferred DOM-resolution timing.
+- API name parity is complete, but behavior parity still needs deepening for complex hooks (`animation`, `drag`, viewport lifecycle timing, and id merging semantics).
 
 ### Next Actions
 1. Build explicit upstream export-to-local mapping for `@react-aria/utils`.
@@ -213,3 +229,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (14 files, 41 tests).
 - Ported another utility tranche (offset/visibility/focusability/virtual-event/keyboard/transition/scroll/math helpers) and router parity aliases.
 - Validation: `npm run check` passed, `npm test` passed (16 files, 45 tests).
+- Ported hook/composable utility tranche with upstream API names adapted to Vue lifecycle semantics.
+- Validation: `npm run check` passed, `npm test` passed (18 files, 49 tests).
+- Added final missing upstream index exports (`useDrag1D`, `useEnterAnimation`, `useExitAnimation`, `useViewportSize`) with Vue adaptations.
+- Validation: `npm run check` passed, `npm test` passed (20 files, 51 tests).
