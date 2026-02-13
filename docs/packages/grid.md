@@ -6,12 +6,12 @@
 
 - `useGridRowGroup`
 - `useGridRow`
+- `GridKeyboardDelegate`
 
 ## In progress
 
 - `useGrid`
 - `useGridCell`
-- `GridKeyboardDelegate`
 - Selection-announcement and selection-checkbox helpers
 
 ## Upstream-aligned example (implemented slice)

@@ -2403,25 +2403,28 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Ported upstream API slice:
   - `useGridRowGroup`
   - `useGridRow`
+  - `GridKeyboardDelegate`
   - `gridMap` shared utility
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
   - `src/useGridRowGroup.ts`
   - `src/useGridRow.ts`
+  - `src/GridKeyboardDelegate.ts`
   - `src/utils.ts`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining hook/delegate surface (`useGrid`, `useGridCell`, `GridKeyboardDelegate`, and selection-announcement helpers) is pending.
+  - Remaining hook surface (`useGrid`, `useGridCell`, and selection-announcement helpers) is pending.
 
 ### Tests
 - Total upstream test files: 1 (`useGrid.test.js`) plus indirect behavior coverage through hook-level modules
-- Ported test files: 2 (adapted for current slice)
-- Passing test files: 2 (validated 2026-02-13)
+- Ported test files: 3 (adapted for current slice)
+- Passing test files: 3 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for `useGridRowGroup` role props.
   - Added adapted coverage for `useGridRow` aria row semantics, virtualized row index, row action chaining, and selection-mode/disabled behavior.
+  - Added adapted coverage for `GridKeyboardDelegate` row/cell traversal, RTL direction behavior, disabled-row skipping, paging, and search.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2439,8 +2442,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `GridKeyboardDelegate`.
-2. Port `useGrid` and `useGridCell` with state integration against `@vue-aria/grid-state`.
+1. Port `useGrid` and `useGridCell` with state integration against `@vue-aria/grid-state`.
+2. Port selection-announcement and selection-checkbox helper hooks.
 3. Adapt remaining upstream `useGrid.test.js` interaction cases.
 
 ## 32) Package Record: @vue-aria/form
@@ -4780,3 +4783,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added alias wiring plus in-progress VitePress page (`docs/packages/grid.md`) with docs nav/sidebar/index links.
   - added adapted tests for row-group role semantics and row action/selection wiring behavior.
   - added package record `31f` and marked `@vue-aria/grid` execution queue status `In progress`.
+- Expanded `@vue-aria/grid` delegate parity:
+  - ported upstream-aligned `GridKeyboardDelegate` including row/cell traversal, RTL handling, paging, and typeahead search behavior.
+  - added adapted delegate tests covering row/cell movement, disabled-row skipping, page navigation, and collator-based search.
+  - updated `@vue-aria/grid` docs/package record to mark delegate slice complete within the in-progress package.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-aria/grid-state/test` passed (5 files, 11 tests).
