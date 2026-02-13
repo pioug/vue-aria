@@ -304,22 +304,28 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `focusSafely`
   - `getInteractionModality`
   - `setInteractionModality`
+  - `isFocusVisible`
+  - `getPointerType`
+  - `addWindowFocusTracking`
+  - `useInteractionModality`
+  - `useFocusVisible`
+  - `useFocusVisibleListener`
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port full `useFocusVisible` global modality tracking behavior.
   - Port `usePress`, `useLongPress`, `useMove`, `useHover`, `useFocus`, `useFocusWithin`, `useKeyboard`, `useInteractOutside`, and related helpers/context.
   - Migrate upstream interaction tests module-by-module.
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 1
-- Passing test files: 1
+- Ported test files: 2
+- Passing test files: 2
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
+  - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -344,8 +350,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Port `useFocusVisible` with global event listeners and change handlers.
-2. Port `usePress` and `useLongPress` with Vue event adaptation.
+1. Port `usePress` and `useLongPress` with Vue event adaptation.
+2. Port `useMove`, `useHover`, `useFocus`, `useFocusWithin`, `useKeyboard`, and `useInteractOutside`.
 3. Port/migrate upstream interaction tests incrementally after each module.
 4. Wire downstream consumers (`@vue-aria/selection`) once required interaction primitives are available.
 
@@ -538,3 +544,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/styles/selection.css`
 - Ported initial `@react-aria/selection` story-aligned docs content and base list style references.
 - Validation: `npm run check` passed, `npm test` passed, `npm run docs:build` passed.
+- Expanded `@vue-aria/interactions` focus-visible infrastructure:
+  - global focus/modality listener setup and teardown
+  - window tracking via `addWindowFocusTracking`
+  - `isFocusVisible`, `getPointerType`, `useInteractionModality`, `useFocusVisible`, `useFocusVisibleListener`
+- Added adapted tests for modality/pointer state, listener lifecycle, and window tracking behavior.
+- Validation: `npm run check` passed, `npm test` passed (40 files, 106 tests).
