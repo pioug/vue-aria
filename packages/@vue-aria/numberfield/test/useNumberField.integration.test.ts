@@ -31,4 +31,73 @@ describe("useNumberField integration with useNumberFieldState", () => {
     input.remove();
     button.remove();
   });
+
+  it("does not increment on touch press end without press up", () => {
+    const onChange = vi.fn();
+    const input = document.createElement("input");
+    const button = document.createElement("button");
+    document.body.appendChild(input);
+    document.body.appendChild(button);
+
+    const scope = effectScope();
+    const result = scope.run(() => {
+      const state = useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 2,
+        onChange,
+      });
+      return useNumberField({ "aria-label": "Quantity" }, state as any, { current: input });
+    })!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: button,
+    });
+    (result.incrementButtonProps.onPressEnd as (event: any) => void)({
+      pointerType: "touch",
+      target: button,
+    });
+
+    expect(onChange).not.toHaveBeenCalled();
+    scope.stop();
+    input.remove();
+    button.remove();
+  });
+
+  it("increments once on touch press up followed by press end", () => {
+    const onChange = vi.fn();
+    const input = document.createElement("input");
+    const button = document.createElement("button");
+    document.body.appendChild(input);
+    document.body.appendChild(button);
+
+    const scope = effectScope();
+    const result = scope.run(() => {
+      const state = useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 2,
+        onChange,
+      });
+      return useNumberField({ "aria-label": "Quantity" }, state as any, { current: input });
+    })!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: button,
+    });
+    (result.incrementButtonProps.onPressUp as (event: any) => void)({
+      pointerType: "touch",
+      target: button,
+    });
+    (result.incrementButtonProps.onPressEnd as (event: any) => void)({
+      pointerType: "touch",
+      target: button,
+    });
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(3);
+    scope.stop();
+    input.remove();
+    button.remove();
+  });
 });

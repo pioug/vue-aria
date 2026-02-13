@@ -2051,6 +2051,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for default input props, placeholder forwarding, merged input event handlers, stepper mouse press-start focus transfer, and wheel increment/decrement behavior when focus is within the field group.
   - Added integration coverage validating `@vue-aria/numberfield-state` interoperability with stepper press handlers.
+  - Expanded integration coverage for touch stepper interactions:
+    - no-op increment path for touch `onPressStart` + `onPressEnd` without `onPressUp`
+    - single increment path for touch `onPressStart` + `onPressUp` + `onPressEnd`
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
   - Added adapted platform input-mode parity coverage for iPhone and Android branches, including negative-number and decimal/fraction-digit combinations.
@@ -2080,7 +2083,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
+1. Port remaining numberfield interaction parity (touch cancel/repeat cadence and commit/announce timing edge cases).
 2. Expand native-invalid integration parity for first-invalid ordering across multi-field forms.
 
 ## 35) Package Record: @vue-aria/numberfield-state
@@ -3319,3 +3322,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for native `change` commit-validation behavior
   - added adapted tests for native reset-validation behavior on parent `form.reset()`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 616 tests).
+- Expanded `@vue-aria/numberfield` touch-stepper integration parity:
+  - added adapted integration tests for touch press sequencing through `useNumberField` + `useNumberFieldState`
+  - covered no-op touch end without `onPressUp` and single-increment path with `onPressUp` before `onPressEnd`
+- Validation: `npm run check` passed, `npm test` passed (130 files, 618 tests).
