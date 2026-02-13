@@ -4,7 +4,9 @@ const supportsCheckVisibility = typeof Element !== "undefined" && "checkVisibili
 
 function isStyleVisible(element: Element): boolean {
   const windowObject = getOwnerWindow(element);
-  if (!(element instanceof windowObject.HTMLElement) && !(element instanceof windowObject.SVGElement)) {
+  const isHtmlElement = element instanceof HTMLElement || element instanceof windowObject.HTMLElement;
+  const isSvgElement = element instanceof SVGElement || element instanceof windowObject.SVGElement;
+  if (!isHtmlElement && !isSvgElement) {
     return false;
   }
 
@@ -42,10 +44,25 @@ function isAttributeVisible(element: Element, childElement?: Element): boolean {
 
 export function isElementVisible(element: Element, childElement?: Element): boolean {
   if (supportsCheckVisibility) {
-    return (
+    const isVisibleViaCheckVisibility = (
       (element as any).checkVisibility({ visibilityProperty: true })
       && !element.closest("[data-react-aria-prevent-focus]")
     );
+    if (isVisibleViaCheckVisibility) {
+      return true;
+    }
+
+    // jsdom can report iframe-owned elements as not visible via checkVisibility.
+    if (typeof navigator !== "undefined" && /jsdom/i.test(navigator.userAgent)) {
+      return (
+        element.nodeName !== "#comment"
+        && isStyleVisible(element)
+        && isAttributeVisible(element, childElement)
+        && (!element.parentElement || isElementVisible(element.parentElement, element))
+      );
+    }
+
+    return false;
   }
 
   return (

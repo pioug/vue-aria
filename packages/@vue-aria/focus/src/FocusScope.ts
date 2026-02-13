@@ -2,6 +2,7 @@ import {
   createShadowTreeWalker,
   getActiveElement,
   getOwnerDocument,
+  getOwnerWindow,
   isFocusable,
   isTabbable,
   nodeContains,
@@ -31,8 +32,18 @@ export interface FocusScopeProps {
 
 const RESTORE_FOCUS_EVENT = "react-aria-focus-scope-restore";
 
+function isHTMLElement(element: Element | null | undefined): element is HTMLElement {
+  return !!element
+    && (element instanceof HTMLElement || element instanceof getOwnerWindow(element).HTMLElement);
+}
+
+function isHTMLInputElement(element: Element | null | undefined): element is HTMLInputElement {
+  return !!element
+    && (element instanceof HTMLInputElement || element instanceof getOwnerWindow(element).HTMLInputElement);
+}
+
 function isRadioInput(element: Element): element is HTMLInputElement {
-  return element instanceof HTMLInputElement && element.type === "radio";
+  return isHTMLInputElement(element) && element.type === "radio";
 }
 
 function getRadioGroup(node: HTMLInputElement): HTMLInputElement[] {
@@ -42,20 +53,21 @@ function getRadioGroup(node: HTMLInputElement): HTMLInputElement[] {
 
   if (node.form) {
     const namedItem = node.form.elements.namedItem(node.name);
-    if (namedItem instanceof RadioNodeList) {
+    const ownerWindow = getOwnerWindow(node);
+    if (namedItem instanceof ownerWindow.RadioNodeList) {
       return Array.from(namedItem).filter(
-        (element): element is HTMLInputElement => element instanceof HTMLInputElement
+        (element): element is HTMLInputElement => isHTMLInputElement(element)
       );
     }
 
-    if (namedItem instanceof HTMLInputElement) {
+    if (namedItem instanceof ownerWindow.HTMLInputElement) {
       return [namedItem];
     }
   }
 
   return Array.from(node.ownerDocument.querySelectorAll("input[type=\"radio\"]")).filter(
     (element): element is HTMLInputElement =>
-      element instanceof HTMLInputElement && element.name === node.name && !element.form
+      isHTMLInputElement(element) && element.name === node.name && !element.form
   );
 }
 
@@ -105,7 +117,7 @@ export function getFocusableTreeWalker(
 }
 
 function focusElement(element: Element | null): Element | null {
-  if (element instanceof HTMLElement) {
+  if (isHTMLElement(element)) {
     element.focus();
     return element;
   }
@@ -252,145 +264,155 @@ export const FocusScope = defineComponent({
     });
 
     onMounted(() => {
-      if (!(scopeRootRef.value instanceof HTMLElement)) {
-        return;
-      }
-
-      const root = scopeRootRef.value;
-      const ownerDocument = getOwnerDocument(root);
-      if (!previousFocused.value) {
-        previousFocused.value = getActiveElement(ownerDocument);
-      }
-      if (!activeScopeRef.value) {
-        activeScopeRef.value = root;
-      }
-
-      scopeFocusInListener = (event: FocusEvent) => {
-        const target = event.target as Element | null;
-        if (!(scopeRootRef.value instanceof HTMLElement) || !nodeContains(scopeRootRef.value, target)) {
+      let initialized = false;
+      const initializeScope = () => {
+        if (initialized || !scopeRootRef.value) {
           return;
         }
+        initialized = true;
 
-        const currentActiveScope = activeScopeRef.value;
-        if (
-          currentActiveScope
-          && currentActiveScope !== scopeRootRef.value
-          && nodeContains(scopeRootRef.value, currentActiveScope)
-          && nodeContains(currentActiveScope, target)
-        ) {
-          return;
+        const root = scopeRootRef.value;
+        const ownerDocument = getOwnerDocument(root);
+        if (!previousFocused.value) {
+          previousFocused.value = getActiveElement(ownerDocument);
+        }
+        if (!activeScopeRef.value) {
+          activeScopeRef.value = root;
         }
 
-        activeScopeRef.value = scopeRootRef.value;
-        lastFocusedInScope.value = target;
-      };
-
-      root.addEventListener("focusin", scopeFocusInListener);
-      restoreEventListener = (event: Event) => {
-        const target = event.target as Element | null;
-        if (target && target !== root && nodeContains(root, target)) {
-          event.stopPropagation();
-        }
-      };
-      root.addEventListener(RESTORE_FOCUS_EVENT, restoreEventListener);
-
-      const activeElement = getActiveElement(ownerDocument);
-      if (nodeContains(root, activeElement)) {
-        activeScopeRef.value = root;
-        lastFocusedInScope.value = activeElement;
-      } else if (props.autoFocus) {
-        focusManager.focusFirst({ tabbable: true });
-      }
-
-      if (props.contain) {
-        keydownListener = (event: KeyboardEvent) => {
-          const scopeRoot = scopeRootRef.value;
-          if (
-            event.key !== "Tab"
-            || event.altKey
-            || event.ctrlKey
-            || event.metaKey
-            || !(scopeRoot instanceof HTMLElement)
-            || activeScopeRef.value !== scopeRoot
-            || !nodeContains(scopeRoot, getOwnerDocument(scopeRoot).activeElement)
-          ) {
-            return;
-          }
-
-          if (event.shiftKey) {
-            const previous = focusManager.focusPrevious({ tabbable: true });
-            if (!previous) {
-              event.preventDefault();
-              focusManager.focusLast({ tabbable: true });
-            }
-          } else {
-            const next = focusManager.focusNext({ tabbable: true });
-            if (!next) {
-              event.preventDefault();
-              focusManager.focusFirst({ tabbable: true });
-            }
-          }
-        };
-
-        root.addEventListener("keydown", keydownListener);
-
-        documentFocusInListener = (event: FocusEvent) => {
-          const scopeRoot = scopeRootRef.value;
+        scopeFocusInListener = (event: FocusEvent) => {
           const target = event.target as Element | null;
+          if (!scopeRootRef.value || !nodeContains(scopeRootRef.value, target)) {
+            return;
+          }
+
+          const currentActiveScope = activeScopeRef.value;
           if (
-            restoringFocus
-            || !(scopeRoot instanceof HTMLElement)
-            || activeScopeRef.value !== scopeRoot
-            || !target
-            || nodeContains(scopeRoot, target)
+            currentActiveScope
+            && currentActiveScope !== scopeRootRef.value
+            && nodeContains(scopeRootRef.value, currentActiveScope)
+            && nodeContains(currentActiveScope, target)
           ) {
             return;
           }
 
-          restoringFocus = true;
-          try {
-            const fallback = lastFocusedInScope.value && nodeContains(scopeRoot, lastFocusedInScope.value)
-              ? lastFocusedInScope.value
-              : null;
-            if (fallback instanceof HTMLElement) {
-              fallback.focus();
-            } else {
-              focusManager.focusFirst({ tabbable: true });
-            }
-          } finally {
-            restoringFocus = false;
-          }
+          activeScopeRef.value = scopeRootRef.value;
+          lastFocusedInScope.value = target;
         };
 
-        ownerDocument.addEventListener("focusin", documentFocusInListener, true);
+        root.addEventListener("focusin", scopeFocusInListener as EventListener);
+        restoreEventListener = (event: Event) => {
+          const target = event.target as Element | null;
+          if (target && target !== root && nodeContains(root, target)) {
+            event.stopPropagation();
+          }
+        };
+        root.addEventListener(RESTORE_FOCUS_EVENT, restoreEventListener);
+
+        const activeElement = getActiveElement(ownerDocument);
+        if (nodeContains(root, activeElement)) {
+          activeScopeRef.value = root;
+          lastFocusedInScope.value = activeElement;
+        } else if (props.autoFocus) {
+          focusManager.focusFirst({ tabbable: true });
+        }
+
+        if (props.contain) {
+          keydownListener = (event: KeyboardEvent) => {
+            const scopeRoot = scopeRootRef.value;
+            if (
+              event.key !== "Tab"
+              || event.altKey
+              || event.ctrlKey
+              || event.metaKey
+              || !scopeRoot
+              || activeScopeRef.value !== scopeRoot
+              || !nodeContains(scopeRoot, getOwnerDocument(scopeRoot).activeElement)
+            ) {
+              return;
+            }
+
+            if (event.shiftKey) {
+              const previous = focusManager.focusPrevious({ tabbable: true });
+              if (!previous) {
+                event.preventDefault();
+                focusManager.focusLast({ tabbable: true });
+              }
+            } else {
+              const next = focusManager.focusNext({ tabbable: true });
+              if (!next) {
+                event.preventDefault();
+                focusManager.focusFirst({ tabbable: true });
+              }
+            }
+          };
+
+          root.addEventListener("keydown", keydownListener as EventListener);
+
+          documentFocusInListener = (event: FocusEvent) => {
+            const scopeRoot = scopeRootRef.value;
+            const target = event.target as Element | null;
+            if (
+              restoringFocus
+              || !scopeRoot
+              || activeScopeRef.value !== scopeRoot
+              || !target
+              || nodeContains(scopeRoot, target)
+            ) {
+              return;
+            }
+
+            restoringFocus = true;
+            try {
+              const fallback = lastFocusedInScope.value && nodeContains(scopeRoot, lastFocusedInScope.value)
+                ? lastFocusedInScope.value
+                : null;
+              if (isHTMLElement(fallback)) {
+                fallback.focus();
+              } else {
+                focusManager.focusFirst({ tabbable: true });
+              }
+            } finally {
+              restoringFocus = false;
+            }
+          };
+
+          ownerDocument.addEventListener("focusin", documentFocusInListener as EventListener, true);
+        }
+      };
+
+      initializeScope();
+      if (!initialized) {
+        queueMicrotask(initializeScope);
       }
     });
 
     onBeforeUnmount(() => {
-      if (scopeFocusInListener && scopeRootRef.value instanceof HTMLElement) {
-        scopeRootRef.value.removeEventListener("focusin", scopeFocusInListener);
+      if (scopeFocusInListener && scopeRootRef.value) {
+        scopeRootRef.value.removeEventListener("focusin", scopeFocusInListener as EventListener);
       }
 
-      if (restoreEventListener && scopeRootRef.value instanceof HTMLElement) {
+      if (restoreEventListener && scopeRootRef.value) {
         scopeRootRef.value.removeEventListener(RESTORE_FOCUS_EVENT, restoreEventListener);
       }
 
-      if (keydownListener && scopeRootRef.value instanceof HTMLElement) {
-        scopeRootRef.value.removeEventListener("keydown", keydownListener);
+      if (keydownListener && scopeRootRef.value) {
+        scopeRootRef.value.removeEventListener("keydown", keydownListener as EventListener);
       }
 
-      if (documentFocusInListener && scopeRootRef.value instanceof HTMLElement) {
-        getOwnerDocument(scopeRootRef.value).removeEventListener("focusin", documentFocusInListener, true);
+      if (documentFocusInListener && scopeRootRef.value) {
+        getOwnerDocument(scopeRootRef.value).removeEventListener("focusin", documentFocusInListener as EventListener, true);
       }
 
       if (activeScopeRef.value === scopeRootRef.value) {
         activeScopeRef.value = null;
       }
 
-      if (props.restoreFocus && previousFocused.value instanceof HTMLElement) {
+      if (props.restoreFocus && isHTMLElement(previousFocused.value)) {
         let shouldRestore = true;
-        if (scopeRootRef.value instanceof HTMLElement) {
-          const restoreEvent = new CustomEvent(RESTORE_FOCUS_EVENT, {
+        if (scopeRootRef.value) {
+          const ownerWindow = getOwnerWindow(scopeRootRef.value);
+          const restoreEvent = new ownerWindow.CustomEvent(RESTORE_FOCUS_EVENT, {
             bubbles: true,
             cancelable: true,
             detail: { nodeToRestore: previousFocused.value },

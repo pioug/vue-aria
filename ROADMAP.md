@@ -2939,3 +2939,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - autoFocus selected-key prioritization with `canSelectItem` filtering
   - blur no-op path when focus remains within the collection
 - Validation: `npm run check` passed, `npm test` passed (124 files, 498 tests).
+- Expanded `@vue-aria/focus/FocusScope` owner-document parity with adapted upstream `FocusScopeOwnerDocument` tests for:
+  - focus containment traversal inside iframe-owned documents
+  - restore-focus behavior back to previously focused elements outside iframe scopes
+- Improved owner-document compatibility for focusability/focus movement guards:
+  - cross-window element/input checks now support both global and owner-window constructors
+  - `isElementVisible` now falls back to style/attribute traversal in jsdom when `checkVisibility` misreports iframe-owned elements
+- Validation: `npm run check` passed, `npm test` passed (125 files, 500 tests).
