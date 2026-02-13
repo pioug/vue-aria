@@ -10,6 +10,7 @@ export { TableColumnLayout } from "./TableColumnLayout";
 export { TableCollection, buildHeaderRows } from "./TableCollection";
 export { useTableState, UNSTABLE_useFilteredTableState } from "./useTableState";
 export { useTableColumnResizeState } from "./useTableColumnResizeState";
+export { UNSTABLE_useTreeGridState } from "./useTreeGridState";
 
 export type {
   ColumnSize,
@@ -25,6 +26,10 @@ export type {
   TableColumnResizeState,
   TableColumnResizeStateProps,
 } from "./useTableColumnResizeState";
+export type {
+  TreeGridState,
+  TreeGridStateProps,
+} from "./useTreeGridState";
 export type {
   CollectionBuilderContext,
   TableState,

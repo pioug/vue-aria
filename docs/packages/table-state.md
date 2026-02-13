@@ -9,6 +9,7 @@
 - `useTableState`
 - `useTableColumnResizeState`
 - `UNSTABLE_useFilteredTableState`
+- `UNSTABLE_useTreeGridState`
 - `TableColumnLayout`
 - Table sizing utilities from `TableUtils`:
   - `calculateColumnSizes`
@@ -21,7 +22,6 @@
 ## In progress
 
 - Table collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`)
-- Treegrid hook (`UNSTABLE_useTreeGridState`)
 
 ## Upstream-aligned example (implemented slice)
 
@@ -31,6 +31,7 @@ import {
   TableColumnLayout,
   useTableState,
   useTableColumnResizeState,
+  UNSTABLE_useTreeGridState,
 } from "@vue-aria/table-state";
 
 const layout = new TableColumnLayout({
@@ -44,6 +45,10 @@ const state = useTableState({
   selectionMode: "single",
 });
 const resizeState = useTableColumnResizeState({ tableWidth: 960 }, state);
+const treeState = UNSTABLE_useTreeGridState({
+  children: [] as any,
+  selectionMode: "single",
+});
 
 const widths = layout.buildColumnWidths(
   960,
@@ -55,4 +60,5 @@ const widths = layout.buildColumnWidths(
 ## Notes
 
 - Current package status is partial; collection/state hooks are still being ported.
+- `UNSTABLE_useTreeGridState` requires enabling `tableNestedRows` via `enableTableNestedRows()` from `@vue-aria/flags`.
 - `Spectrum S2` is out of scope unless explicitly requested.
