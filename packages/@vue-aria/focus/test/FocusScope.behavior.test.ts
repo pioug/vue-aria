@@ -1035,4 +1035,27 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
     outside.remove();
   });
+
+  it("focuses first tabbable element when contained scope loses focus before any in-scope focus tracking", () => {
+    const outside = document.createElement("button");
+    outside.id = "outside";
+    document.body.appendChild(outside);
+
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "first" }),
+          h("input", { id: "second" }),
+        ],
+      },
+    });
+
+    outside.focus();
+    expect(document.activeElement).toBe(wrapper.get("#first").element);
+
+    wrapper.unmount();
+    outside.remove();
+  });
 });

@@ -2973,3 +2973,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` containment restore behavior with adapted coverage for:
   - restoring focus back to the last focused in-scope element when focus attempts to move outside the active contained scope
 - Validation: `npm run check` passed, `npm test` passed (125 files, 511 tests).
+- Expanded `@vue-aria/focus/FocusScope` containment fallback parity with adapted coverage for:
+  - focusing the first tabbable element when focus leaves an active contained scope before any explicit in-scope focus tracking is recorded
+- Validation: `npm run check` passed, `npm test` passed (125 files, 512 tests).
