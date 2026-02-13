@@ -28,6 +28,9 @@ export default defineConfig({
       ),
       "@vue-aria/toggle-state": fileURLToPath(
         new URL("./packages/@vue-aria/toggle-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/utils-state": fileURLToPath(
+        new URL("./packages/@vue-aria/utils-state/src/index.ts", import.meta.url)
       )
     }
   }

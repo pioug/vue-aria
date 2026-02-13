@@ -65,7 +65,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/collections`: In progress
 
 ### React Stately packages
-- `@vue-aria/utils-state`: Not started
+- `@vue-aria/utils-state`: In progress
 - `@vue-aria/toggle-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
@@ -264,3 +264,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Vue-controlled-state helper aligned to controlled/uncontrolled behavior
 - Added toggle-state tests for single/multiple selection and read-only handling.
 - Validation: `npm run check` passed, `npm test` passed (27 files, 63 tests).
+- Started `@vue-aria/utils-state` slice from upstream `@react-stately/utils`:
+  - `useControlledState`
+  - `clamp`, `snapValueToStep`, `toFixedNumber`, `roundToStepPrecision`
+- Rewired `@vue-aria/toggle-state` to use `@vue-aria/utils-state` for package boundary parity.
+- Added utils-state tests for controlled/uncontrolled behavior and number helpers.
+- Validation: `npm run check` passed, `npm test` passed (29 files, 68 tests).

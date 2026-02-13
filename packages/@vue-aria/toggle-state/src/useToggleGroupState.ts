@@ -1,5 +1,5 @@
 import { computed } from "vue";
-import { useControlledState } from "./useControlledState";
+import { useControlledState } from "@vue-aria/utils-state";
 
 export type Key = string | number;
 
