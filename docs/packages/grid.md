@@ -4,24 +4,28 @@
 
 ## Implemented modules
 
+- `useGrid`
 - `useGridRowGroup`
 - `useGridRow`
 - `GridKeyboardDelegate`
+- `useHighlightSelectionDescription`
+- `useGridSelectionAnnouncement`
+- `useGridSelectionCheckbox`
 
 ## In progress
 
-- `useGrid`
 - `useGridCell`
-- Selection-announcement and selection-checkbox helpers
 
 ## Upstream-aligned example (implemented slice)
 
 ```ts
-import { useGridRow, useGridRowGroup } from "@vue-aria/grid";
+import { useGrid, useGridRow, useGridRowGroup } from "@vue-aria/grid";
 
 const state = {} as any;
+const gridRef = { current: document.createElement("div") as HTMLElement | null };
 const rowRef = { current: document.createElement("div") as HTMLElement | null };
 
+const { gridProps } = useGrid({ "aria-label": "Example grid" }, state, gridRef);
 const { rowGroupProps } = useGridRowGroup();
 const { rowProps } = useGridRow(
   {
