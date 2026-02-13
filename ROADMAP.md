@@ -1692,7 +1692,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current hook now covers native validity wiring plus invalid/change/reset scheduling branches; remaining parity is focused on first-invalid focus ordering and deeper select integration flows.
+  - Current hook now covers native validity wiring plus invalid/change/reset scheduling branches, first-invalid focus ordering, and keyboard-modality side effects; remaining parity is focused on deeper select integration flows.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -1720,8 +1720,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Validate keyboard modality side effects around invalid focus paths.
-2. Continue expanding native invalid integration coverage across additional form consumers.
+1. Continue expanding native invalid integration coverage across additional form consumers.
+2. Add broader consumer-path integration tests where hidden/native controls mediate invalid focus.
 
 ## 33) Package Record: @vue-aria/spinbutton
 - Upstream source path(s):
@@ -2509,3 +2509,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - trigger focus on native invalid events via `useFormValidation`
   - hidden-select `onFocus` forwarding to trigger element
 - Validation: `npm run check` passed, `npm test` passed (117 files, 385 tests).
+- Expanded `@vue-aria/form` modality parity with adapted tests for:
+  - setting interaction modality to keyboard when first invalid input receives focus
+  - avoiding modality mutation for non-first invalid inputs
+- Validation: `npm run check` passed, `npm test` passed (118 files, 387 tests).
