@@ -45,6 +45,31 @@ const { submenuTriggerProps, submenuProps, popoverProps } = useSubmenuTrigger({
 </script>
 ```
 
+## Trigger behavior notes
+
+- `useMenuTrigger` opens with `focusStrategy: "first"` for virtual press starts.
+- Long-press accessibility text is sourced from the upstream menu locale dictionaries.
+
+## Localized long-press description
+
+```vue
+<script setup lang="ts">
+import { I18nProvider } from "@vue-aria/i18n";
+import { useMenuTrigger } from "@vue-aria/menu";
+import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+
+const triggerRef = { current: null as HTMLElement | null };
+const triggerState = useOverlayTriggerState({});
+const { menuTriggerProps } = useMenuTrigger({ trigger: "longPress" }, triggerState as any, triggerRef);
+</script>
+
+<template>
+  <I18nProvider locale="fr-FR">
+    <button v-bind="menuTriggerProps">Menu</button>
+  </I18nProvider>
+</template>
+```
+
 ## Notes
 
 - Current slice includes `useMenu`, `useMenuItem`, `useMenuSection`, `useMenuTrigger`, and `useSubmenuTrigger`.

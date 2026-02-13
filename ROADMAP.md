@@ -3438,3 +3438,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/select/useHiddenSelect` dynamic reorder parity:
   - added adapted coverage for first-invalid ordering re-evaluation after reordering controls within the same form.
 - Validation: `npm run check` passed, `npm test` passed (130 files, 642 tests).
+- Expanded `@vue-aria/menu` docs parity for trigger modality/localization notes:
+  - documented virtual press-start focus-strategy behavior and localized long-press description usage in `docs/packages/menu.md`
+- Validation: `npm run check` passed, `npm test` passed (130 files, 642 tests).
