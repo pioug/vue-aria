@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:parity": "node scripts/check-parity-regression.mjs",
+    "check:ci": "npm run check:parity && npm run sync:status && npm run generate:status && npm run validate:status && npm run compute:port-order && git diff --exit-code status.json status.md port-order.json && npm test",
     "generate:status": "node scripts/generate-status-md.mjs",
     "validate:status": "node scripts/validate-status.mjs",
     "sync:status": "node scripts/sync-status-from-upstream.mjs",
