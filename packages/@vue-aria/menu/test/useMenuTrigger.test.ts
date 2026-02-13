@@ -85,4 +85,34 @@ describe("useMenuTrigger", () => {
     expect(menuProps.autoFocus).toBe(true);
     scope.stop();
   });
+
+  it("does not toggle on Enter when disabled or already defaultPrevented", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ menuTriggerProps } = useMenuTrigger({ isDisabled: true }, state, ref));
+    });
+    const onKeyDown = (menuTriggerProps.onKeyDown ?? menuTriggerProps.onKeydown) as
+      | ((event: KeyboardEvent) => void)
+      | undefined;
+    onKeyDown?.(createKeyEvent("Enter"));
+    scope.stop();
+    expect(state.toggle).not.toHaveBeenCalled();
+
+    const state2 = createState();
+    const scope2 = effectScope();
+    let menuTriggerProps2: Record<string, unknown> = {};
+    scope2.run(() => {
+      ({ menuTriggerProps: menuTriggerProps2 } = useMenuTrigger({}, state2, ref));
+    });
+    const onKeyDown2 = (menuTriggerProps2.onKeyDown ?? menuTriggerProps2.onKeydown) as
+      | ((event: KeyboardEvent) => void)
+      | undefined;
+    onKeyDown2?.(createKeyEvent("Enter", { defaultPrevented: true }));
+    scope2.stop();
+    expect(state2.toggle).not.toHaveBeenCalled();
+  });
 });

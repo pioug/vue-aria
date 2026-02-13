@@ -150,4 +150,38 @@ describe("useMenuItem", () => {
     scope.stop();
     ref.current?.remove();
   });
+
+  it("respects shouldCloseOnSelect override and emits virtualized aria metadata", () => {
+    const onClose = vi.fn();
+    const manager = createManager("single");
+    const state = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+    menuData.set(state as object, { onClose });
+
+    const ref = { current: document.createElement("li") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    let menuItemProps: Record<string, unknown> = {};
+    const scope = effectScope();
+    scope.run(() => {
+      ({ menuItemProps } = useMenuItem(
+        { key: "a", shouldCloseOnSelect: false, isVirtualized: true },
+        state as any,
+        ref
+      ));
+    });
+
+    const onClick = menuItemProps.onClick as ((event: MouseEvent) => void) | undefined;
+    onClick?.({ currentTarget: ref.current, target: ref.current } as MouseEvent);
+
+    expect(menuItemProps["aria-posinset"]).toBe(1);
+    expect(menuItemProps["aria-setsize"]).toBe(2);
+    expect(onClose).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
 });

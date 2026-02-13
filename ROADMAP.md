@@ -1581,7 +1581,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 5 (adapted)
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, and safe-mouse hook lifecycle/reset behavior.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, and additional close/disabled/default-prevented keyboard-path semantics.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2010,3 +2010,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - resize-driven submenu bounds updates and cleanup lifecycle behavior
 - Added adapted safe-mouse hook tests for pointer lifecycle/reset behavior.
 - Validation: `npm run check` passed, `npm test` passed (107 files, 313 tests).
+- Expanded menu interaction test parity with additional adapted cases:
+  - `useMenuItem` close override + virtualized `aria-posinset`/`aria-setsize` metadata behavior
+  - `useMenuTrigger` disabled/default-prevented key-path behavior
+- Validation: `npm run check` passed, `npm test` passed (107 files, 315 tests).
