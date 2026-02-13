@@ -182,7 +182,11 @@ export const FocusScope = defineComponent({
   setup(props, { slots }) {
     const scopeRootRef = shallowRef<Element | null>(null);
     const previousFocused = shallowRef<Element | null>(null);
+    const lastFocusedInScope = shallowRef<Element | null>(null);
     let keydownListener: ((event: KeyboardEvent) => void) | null = null;
+    let scopeFocusInListener: ((event: FocusEvent) => void) | null = null;
+    let documentFocusInListener: ((event: FocusEvent) => void) | null = null;
+    let restoringFocus = false;
 
     const focusManager = createFocusManager({
       get current() {
@@ -196,22 +200,47 @@ export const FocusScope = defineComponent({
     provide(FocusManagerContext, focusManager);
 
     onMounted(() => {
-      previousFocused.value = getActiveElement(getOwnerDocument(scopeRootRef.value));
-      activeScopeRef.value = scopeRootRef.value;
+      if (!(scopeRootRef.value instanceof HTMLElement)) {
+        return;
+      }
 
-      if (props.autoFocus) {
+      const root = scopeRootRef.value;
+      const ownerDocument = getOwnerDocument(root);
+      previousFocused.value = getActiveElement(ownerDocument);
+      if (!activeScopeRef.value) {
+        activeScopeRef.value = root;
+      }
+
+      scopeFocusInListener = (event: FocusEvent) => {
+        const target = event.target as Element | null;
+        if (!(scopeRootRef.value instanceof HTMLElement) || !nodeContains(scopeRootRef.value, target)) {
+          return;
+        }
+
+        activeScopeRef.value = scopeRootRef.value;
+        lastFocusedInScope.value = target;
+      };
+
+      root.addEventListener("focusin", scopeFocusInListener);
+
+      const activeElement = getActiveElement(ownerDocument);
+      if (nodeContains(root, activeElement)) {
+        activeScopeRef.value = root;
+        lastFocusedInScope.value = activeElement;
+      } else if (props.autoFocus) {
         focusManager.focusFirst();
       }
 
-      if (props.contain && scopeRootRef.value instanceof HTMLElement) {
+      if (props.contain) {
         keydownListener = (event: KeyboardEvent) => {
+          const scopeRoot = scopeRootRef.value;
           if (
             event.key !== "Tab"
             || event.altKey
             || event.ctrlKey
             || event.metaKey
-            || !(scopeRootRef.value instanceof HTMLElement)
-            || !nodeContains(scopeRootRef.value, document.activeElement)
+            || !(scopeRoot instanceof HTMLElement)
+            || !nodeContains(scopeRoot, getOwnerDocument(scopeRoot).activeElement)
           ) {
             return;
           }
@@ -231,13 +260,51 @@ export const FocusScope = defineComponent({
           }
         };
 
-        scopeRootRef.value.addEventListener("keydown", keydownListener);
+        root.addEventListener("keydown", keydownListener);
+
+        documentFocusInListener = (event: FocusEvent) => {
+          const scopeRoot = scopeRootRef.value;
+          const target = event.target as Element | null;
+          if (
+            restoringFocus
+            || !(scopeRoot instanceof HTMLElement)
+            || activeScopeRef.value !== scopeRoot
+            || !target
+            || nodeContains(scopeRoot, target)
+          ) {
+            return;
+          }
+
+          restoringFocus = true;
+          try {
+            const fallback = lastFocusedInScope.value && nodeContains(scopeRoot, lastFocusedInScope.value)
+              ? lastFocusedInScope.value
+              : null;
+            if (fallback instanceof HTMLElement) {
+              fallback.focus();
+            } else {
+              focusManager.focusFirst({ tabbable: true });
+            }
+          } finally {
+            restoringFocus = false;
+          }
+        };
+
+        ownerDocument.addEventListener("focusin", documentFocusInListener, true);
       }
     });
 
     onBeforeUnmount(() => {
+      if (scopeFocusInListener && scopeRootRef.value instanceof HTMLElement) {
+        scopeRootRef.value.removeEventListener("focusin", scopeFocusInListener);
+      }
+
       if (keydownListener && scopeRootRef.value instanceof HTMLElement) {
         scopeRootRef.value.removeEventListener("keydown", keydownListener);
+      }
+
+      if (documentFocusInListener && scopeRootRef.value instanceof HTMLElement) {
+        getOwnerDocument(scopeRootRef.value).removeEventListener("focusin", documentFocusInListener, true);
       }
 
       if (activeScopeRef.value === scopeRootRef.value) {

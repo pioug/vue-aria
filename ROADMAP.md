@@ -466,10 +466,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `FocusScope` API exports (`useFocusManager`, `isElementInChildOfActiveScope`).
   - Added adapted behavior tests for `FocusScope`:
     - `autoFocus` first-focusable behavior
+    - `autoFocus` no-op when focus is already inside the scope
     - `restoreFocus` restoration to previously focused node on unmount
     - `useFocusManager` next/previous traversal with wrap
+    - `useFocusManager` `focusLast` traversal behavior
     - `useFocusManager` accept-filter traversal behavior
     - baseline containment wrap behavior on Tab/Shift+Tab when `contain` is enabled
+    - containment traversal through nested descendants
+    - containment skipping hidden/non-tabbable descendants
+    - active-scope enforcement across multiple contained scopes
     - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
@@ -2703,3 +2708,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` behavior tests for:
   - containment no-op when modifier keys are pressed (`Alt+Tab` path)
 - Validation: `npm run check` passed, `npm test` passed (122 files, 467 tests).
+- Improved `@vue-aria/focus/FocusScope` containment behavior:
+  - track active scope on `focusin` and preserve single-scope active semantics for API parity
+  - enforce contained focus against outside `focusin` targets in the active scope's owner document
+  - align keyboard containment active-element checks to owner-document context
+  - keep `autoFocus` from stealing focus when an element is already focused within scope
+- Expanded `@vue-aria/focus/FocusScope` behavior tests for:
+  - `useFocusManager.focusLast` traversal
+  - nested-descendant containment traversal
+  - non-tabbable descendant skipping in containment traversal
+  - active-scope enforcement when another contained scope receives focus
+  - `autoFocus` no-op when focus is already inside the scope
+- Validation: `npm run check` passed, `npm test` passed (122 files, 472 tests).

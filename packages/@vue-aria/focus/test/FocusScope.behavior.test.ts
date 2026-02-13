@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, onMounted } from "vue";
+import { defineComponent, h, nextTick, onMounted } from "vue";
 import { describe, expect, it } from "vitest";
 import { FocusScope, useFocusManager, type FocusManager } from "../src";
 
@@ -81,6 +81,34 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("supports focus manager focusLast traversal", () => {
+    let manager: FocusManager | undefined;
+
+    const Probe = defineComponent({
+      setup() {
+        onMounted(() => {
+          manager = useFocusManager();
+        });
+        return () => null;
+      },
+    });
+
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h("button", { id: "first" }, "First"),
+          h("button", { id: "second" }, "Second"),
+          h(Probe),
+        ],
+      },
+    });
+
+    manager?.focusLast();
+    expect(document.activeElement).toBe(wrapper.get("#second").element);
+    wrapper.unmount();
+  });
+
   it("respects accept filter in focus manager traversal", () => {
     let manager: FocusManager | undefined;
 
@@ -158,6 +186,191 @@ describe("FocusScope behavior", () => {
     tabFromActive(true);
     expect(document.activeElement).toBe(input2);
 
+    wrapper.unmount();
+  });
+
+  it("contains tab focus for nested descendants when contain is enabled", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("div", [h("input", { id: "input2" }), h("div", [h("input", { id: "input3" })])]),
+        ],
+      },
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const input2 = wrapper.get("#input2").element as HTMLInputElement;
+    const input3 = wrapper.get("#input3").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input1);
+
+    wrapper.unmount();
+  });
+
+  it("skips non-tabbable content while containing focus", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("div"),
+          h("input", { id: "input2" }),
+          h("input", { hidden: true }),
+          h("input", { style: { display: "none" } }),
+          h("input", { style: { visibility: "hidden" } }),
+          h("div", { tabIndex: -1 }),
+          h("input", { disabled: true, tabIndex: 0 }),
+          h("input", { id: "input3" }),
+        ],
+      },
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const input2 = wrapper.get("#input2").element as HTMLInputElement;
+    const input3 = wrapper.get("#input3").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input1);
+
+    wrapper.unmount();
+  });
+
+  it("keeps focus in the active scope when another contain scope receives focus", () => {
+    const wrapper = mount(defineComponent({
+      components: { FocusScope },
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+                h("input", { id: "input3" }),
+              ],
+            }
+          ),
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input4" }),
+                h("input", { id: "input5" }),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const input4 = wrapper.get("#input4").element as HTMLInputElement;
+
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    input4.focus();
+    expect(document.activeElement).toBe(input1);
+
+    wrapper.unmount();
+  });
+
+  it("does not autoFocus when an element inside the scope is already focused", async () => {
+    const FocusInside = defineComponent({
+      setup() {
+        onMounted(() => {
+          const existing = document.getElementById("second");
+          if (existing instanceof HTMLElement) {
+            existing.focus();
+          }
+        });
+        return () => null;
+      },
+    });
+
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { autoFocus: true },
+      slots: {
+        default: () => [
+          h("input", { id: "first" }),
+          h("input", { id: "second" }),
+          h(FocusInside),
+        ],
+      },
+    });
+
+    await nextTick();
+    expect(document.activeElement).toBe(wrapper.get("#second").element);
     wrapper.unmount();
   });
 
