@@ -2403,6 +2403,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/landmark.md`)
+- [x] Expanded parity examples for registration, managed-focus restoration, and controller navigation.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2461,6 +2462,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/toast.md`)
+- [x] Expanded parity examples for provider/region/item composition, auto-dismiss, programmatic dismissal, and base style snippet.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -3776,3 +3778,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted story-equivalent `F6 -> tab -> tab -> close button` traversal assertions before queued-toast dismissal.
 - Expanded `@vue-aria/landmark` tab traversal parity:
   - added adapted tests for forward tab entry into navigation landmark descendants and reverse shift+tab traversal from main landmark descendants.
+- Expanded `@vue-aria/landmark` and `@vue-aria/toast` docs parity:
+  - updated package docs with upstream-aligned composition/usage examples and base-style guidance snippets for story-equivalent flows.
