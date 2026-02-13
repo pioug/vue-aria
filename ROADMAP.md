@@ -181,8 +181,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 7
-- Ported test files: 20
-- Passing test files: 20
+- Ported test files: 21
+- Passing test files: 21
 - Test parity notes:
   - Added adapted upstream coverage for `domHelpers` and `mergeRefs`.
   - Added adapted upstream coverage for `runAfterTransition`.
@@ -191,7 +191,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted upstream coverage for `useViewportSize` SSR behavior (`0x0` pre-hydration contract and SSR render safety).
   - Added adapted upstream coverage for `shadowTreeWalker` multi-shadow traversal (peer and nested shadow hosts).
   - Added adapted router/openLink parity coverage (`openLink.isOpening`, synthetic href mapping, and deprecated `getSyntheticLinkProps` behavior).
-  - Remaining parity gaps include `useEnterAnimation`/`useExitAnimation` and advanced `openLink` browser-specific event synthesis branches.
+  - Added adapted animation parity coverage for `useEnterAnimation`/`useExitAnimation` (completion and interrupted-exit flows).
+  - Remaining parity gaps include advanced `openLink` browser-specific event synthesis branches.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2627,3 +2628,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - deprecated unmapped href behavior via `getSyntheticLinkProps`
   - `openLink.isOpening` semantics during and after dispatch
 - Validation: `npm run check` passed, `npm test` passed (120 files, 435 tests).
+- Expanded `@vue-aria/utils/animation` parity with adapted tests for:
+  - `useEnterAnimation` staying active until animation promises resolve
+  - `useExitAnimation` exit lifecycle completion and interrupted-close recovery
+- Validation: `npm run check` passed, `npm test` passed (121 files, 438 tests).
