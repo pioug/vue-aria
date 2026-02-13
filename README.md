@@ -19,6 +19,7 @@ Vue port of React Aria and React Spectrum.
   - parity regression check
   - upstream/status test parity check
   - deviations/status consistency check
+  - docs frontmatter package metadata check
   - status page generation + validation
   - port order computation
   - full test suite
