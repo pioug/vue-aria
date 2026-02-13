@@ -59,6 +59,16 @@ if (status.global && typeof status.global === 'object' && !Array.isArray(status.
 
 assert(Array.isArray(status.packages), 'Root field packages must be an array', errors);
 if (Array.isArray(status.packages)) {
+  const packageSums = {
+    upstreamTests: 0,
+    portedTests: 0,
+    passingTests: 0,
+    snapshotTotal: 0,
+    snapshotPassing: 0,
+    docsTotal: 0,
+    docsComplete: 0
+  };
+
   for (const [index, entry] of status.packages.entries()) {
     assert(entry && typeof entry === 'object' && !Array.isArray(entry), `packages[${index}] must be an object`, errors);
     if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
@@ -76,11 +86,43 @@ if (Array.isArray(status.packages)) {
     for (const numericKey of ['upstreamTests', 'portedTests', 'passingTests', 'snapshotTotal', 'snapshotPassing', 'docsTotal', 'docsComplete']) {
       if (Object.prototype.hasOwnProperty.call(entry, numericKey)) {
         assert(isNonNegativeInteger(entry[numericKey]), `packages[${index}].${numericKey} must be a non-negative integer`, errors);
+        if (isNonNegativeInteger(entry[numericKey])) {
+          packageSums[numericKey] += entry[numericKey];
+        }
+      }
+    }
+
+    if (isNonNegativeInteger(entry.portedTests) && isNonNegativeInteger(entry.upstreamTests)) {
+      assert(entry.portedTests <= entry.upstreamTests, `packages[${index}].portedTests must be <= upstreamTests`, errors);
+    }
+
+    if (isNonNegativeInteger(entry.passingTests) && isNonNegativeInteger(entry.portedTests)) {
+      assert(entry.passingTests <= entry.portedTests, `packages[${index}].passingTests must be <= portedTests`, errors);
+    }
+
+    if (entry.status === 'complete') {
+      if (isNonNegativeInteger(entry.portedTests) && isNonNegativeInteger(entry.upstreamTests)) {
+        assert(entry.portedTests === entry.upstreamTests, `packages[${index}] marked complete but portedTests != upstreamTests`, errors);
+      }
+      if (isNonNegativeInteger(entry.passingTests) && isNonNegativeInteger(entry.portedTests)) {
+        assert(entry.passingTests === entry.portedTests, `packages[${index}] marked complete but passingTests != portedTests`, errors);
       }
     }
 
     if (Object.prototype.hasOwnProperty.call(entry, 'hasDeviations')) {
       assert(typeof entry.hasDeviations === 'boolean', `packages[${index}].hasDeviations must be boolean`, errors);
+    }
+  }
+
+  if (status.global && typeof status.global === 'object' && !Array.isArray(status.global)) {
+    for (const key of REQUIRED_GLOBAL_KEYS) {
+      if (isNonNegativeInteger(status.global[key])) {
+        assert(
+          status.global[key] === packageSums[key],
+          `global.${key} must equal sum of package ${key}`,
+          errors
+        );
+      }
     }
   }
 }
