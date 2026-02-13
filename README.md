@@ -22,6 +22,7 @@ Vue port of React Aria and React Spectrum.
   - docs frontmatter package metadata check
   - status page generation + validation
   - port order computation
+  - dedicated SSR test suite
   - full test suite
 
 ## Status Artifacts
