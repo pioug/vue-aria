@@ -31,5 +31,6 @@ Vue port of React Aria and React Spectrum.
 - `status.md`: generated summary (`npm run generate:status`).
 - `docs/port-status.md`: generated static docs status page (`npm run generate:docs-status`).
 - `port-order.json`: generated dependency-leaf ordering (`npm run compute:port-order`).
+- `packages/*/*/docs/*.mdx`: generated static per-package status header blocks (`npm run generate:docs-headers`).
 
 Generated files should not be edited by hand.
