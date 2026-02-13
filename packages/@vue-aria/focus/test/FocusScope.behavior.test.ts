@@ -832,6 +832,88 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("cycles focus within the active scope when multiple contained scopes are mounted", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+                h("input", { style: { display: "none" } }),
+                h("input", { style: { visibility: "hidden" } }),
+                h("input", { style: { visibility: "collapse" } }),
+                h("input", { id: "input3" }),
+              ],
+            }
+          ),
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input4" }),
+                h("input", { id: "input5" }),
+                h("input", { style: { display: "none" } }),
+                h("input", { style: { visibility: "hidden" } }),
+                h("input", { style: { visibility: "collapse" } }),
+                h("input", { id: "input6" }),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const input2 = wrapper.get("#input2").element as HTMLInputElement;
+    const input3 = wrapper.get("#input3").element as HTMLInputElement;
+    const input4 = wrapper.get("#input4").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input1);
+
+    input4.focus();
+    expect(document.activeElement).toBe(input1);
+
+    wrapper.unmount();
+  });
+
   it("locks tab containment to the active child scope when nested scopes are present", () => {
     const wrapper = mount(defineComponent({
       render() {
@@ -2226,6 +2308,126 @@ describe("FocusScope behavior", () => {
 
     wrapper.unmount();
     outside.remove();
+  });
+
+  it("restores focus to the last focused in-scope element after blur and outside focus transitions", () => {
+    vi.useFakeTimers();
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h("input", { id: "outside" }),
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+                h("input", { id: "input3" }),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    try {
+      const outside = wrapper.get("#outside").element as HTMLInputElement;
+      const input1 = wrapper.get("#input1").element as HTMLInputElement;
+      const input2 = wrapper.get("#input2").element as HTMLInputElement;
+
+      const tabFromActive = (shiftKey = false) => {
+        const active = document.activeElement as HTMLElement | null;
+        if (!active) {
+          return;
+        }
+
+        active.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Tab",
+            shiftKey,
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+      };
+
+      input1.focus();
+      input1.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      expect(document.activeElement).toBe(input1);
+
+      tabFromActive(false);
+      input2.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      vi.runAllTimers();
+      expect(document.activeElement).toBe(input2);
+
+      input2.blur();
+      vi.runAllTimers();
+      expect(document.activeElement).toBe(input2);
+
+      outside.focus();
+      outside.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      expect(document.activeElement).toBe(input2);
+    } finally {
+      wrapper.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it("keeps the last focused in-scope element on explicit focusout transitions", () => {
+    vi.useFakeTimers();
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("input", { id: "input2" }),
+        ],
+      },
+    });
+
+    try {
+      const input1 = wrapper.get("#input1").element as HTMLInputElement;
+      const input2 = wrapper.get("#input2").element as HTMLInputElement;
+
+      const tabFromActive = (shiftKey = false) => {
+        const active = document.activeElement as HTMLElement | null;
+        if (!active) {
+          return;
+        }
+
+        active.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Tab",
+            shiftKey,
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+      };
+
+      input1.focus();
+      input1.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      expect(document.activeElement).toBe(input1);
+
+      tabFromActive(false);
+      input2.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      vi.runAllTimers();
+      expect(document.activeElement).toBe(input2);
+
+      input2.blur();
+      vi.runAllTimers();
+      expect(document.activeElement).toBe(input2);
+
+      input2.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+      expect(document.activeElement).toBe(input2);
+    } finally {
+      wrapper.unmount();
+      vi.useRealTimers();
+    }
   });
 
   it("focuses first tabbable element when contained scope loses focus before any in-scope focus tracking", () => {

@@ -627,6 +627,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - dynamic-children restore-focus stability behavior
     - iframe-like null-`relatedTarget` blur transition behavior
     - node-to-restore tracking when an intermediate restore target is removed in another subtree
+    - sibling contained-scope traversal isolation and active-scope lock behavior
+    - contained-scope restoration to last focused element across blur/focusout/outside-focus transitions
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
     - tabbable-only traversal behavior
@@ -3066,3 +3068,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - body-active mount snapshots now fall back to the last active scope's focused node to preserve restore-target chains
   - disconnected restore-target resolution now reuses prior scope restore mappings
 - Validation: `npm run check` passed, `npm test` passed (125 files, 533 tests).
+- Expanded `@vue-aria/focus/FocusScope` multi-scope and blur/focusout parity with adapted upstream coverage for:
+  - sibling contained-scope traversal isolation with active-scope lock maintained during forward/reverse tab cycling
+  - restoration to last focused in-scope element across blur-driven browser re-entry and explicit focusout transitions
+- Validation: `npm run check` passed, `npm test` passed (125 files, 536 tests).

@@ -122,4 +122,6 @@ onBeforeUnmount(() => {
   - restore-focus boundary tab handoff relative to the previously focused node (forward and reverse)
   - restore-focus stability across dynamic child updates before unmount
   - node-to-restore tracking when intermediate restore targets are removed across scope handoff
+  - sibling contained-scope traversal isolation and active-scope lock behavior
+  - contained restore-focus behavior across blur/focusout browser-transition-like flows
 - Remaining work focuses on broader full upstream FocusScope test-file migration.
