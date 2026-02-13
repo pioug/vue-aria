@@ -2063,6 +2063,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - commit-validation on native `invalid` and `change` events
     - validation reset on parent `form.reset()`
     - first-invalid native focus branch assertion via required input invalidation
+    - first-invalid ordering guard when an earlier form field is invalid
+    - default-prevented invalid-event guard that skips native focus transfer
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
   - Added adapted keydown propagation parity coverage for non-Enter keys (`continuePropagation` passthrough path).
@@ -2084,7 +2086,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining numberfield interaction parity (touch cancel/repeat cadence and commit/announce timing edge cases).
-2. Expand native-invalid integration parity for first-invalid ordering across multi-field forms.
+2. Expand native-invalid integration parity for first-invalid ordering edge cases with disabled/non-validatable siblings.
 
 ## 35) Package Record: @vue-aria/numberfield-state
 - Upstream source path(s):
@@ -3326,3 +3328,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted integration tests for touch press sequencing through `useNumberField` + `useNumberFieldState`
   - covered no-op touch end without `onPressUp` and single-increment path with `onPressUp` before `onPressEnd`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 618 tests).
+- Expanded `@vue-aria/numberfield` first-invalid native focus parity:
+  - added adapted multi-field form coverage for first-invalid ordering guard behavior
+  - added adapted default-prevented invalid-event guard coverage to ensure focus is not forcibly moved
+- Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
