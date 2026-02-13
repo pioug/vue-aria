@@ -689,7 +689,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1
 - Test parity notes:
   - Added adapted tests covering assertive/polite announcements, `aria-labelledby` payloads, clear behavior, and destroy behavior.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 - Current note:
   - Upstream package has no dedicated tests in the reference tree; Vue port relies on adapted behavioral tests.
 - [x] Current migrated tests passing
@@ -950,7 +950,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1
 - Test parity notes:
   - Added adapted tests for base return props, accessibility warning behavior, and change-driven selection updates.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 - Current note:
   - Upstream package has no dedicated test directory in the reference tree.
 - [x] Current migrated tests passing
@@ -1566,7 +1566,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 2 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted tests for expanded/collapsed aria mapping, press semantics, disabled behavior, id wiring, and `beforematch` handling.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/disclosure.md`)
@@ -1682,7 +1682,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for listbox role/multiselect props, option aria metadata/id wiring (including virtualized metadata), section group/heading semantics, item id utility derivation, Safari VoiceOver aria mapping behavior, and hover-focus interaction gating.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/listbox.md`)
@@ -3096,3 +3096,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - removed temporary `@ts-nocheck` from `calculatePosition.ts`
   - added typed cache/map/index access patterns for placement/axis math without changing positioning behavior
 - Validation: `npm run check` passed, `npm test` passed (126 files, 540 tests).
+- Refreshed tracker parity status for packages with no dedicated upstream test directories:
+  - marked `@vue-aria/live-announcer`, `@vue-aria/toggle`, and `@vue-aria/listbox` test migration checks complete based on adapted coverage
+  - marked `@vue-aria/disclosure` test migration check complete after validating adapted hook/state coverage
