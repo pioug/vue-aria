@@ -412,8 +412,6 @@ export function UNSTABLE_createLandmarkController(): LandmarkController {
 }
 
 export function useLandmark(props: AriaLandmarkProps, refValue: { current: Element | null }): LandmarkAria {
-  const { role, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, focus } = props;
-  const label = ariaLabel || ariaLabelledby;
   const isLandmarkFocused = ref(false);
 
   const defaultFocus = () => {
@@ -430,7 +428,13 @@ export function useLandmark(props: AriaLandmarkProps, refValue: { current: Eleme
       unregister();
       const manager = getLandmarkManager();
       if (manager && refValue.current) {
-        unregister = manager.registerLandmark({ ref: refValue, label, role, focus: focus || defaultFocus, blur });
+        unregister = manager.registerLandmark({
+          ref: refValue,
+          label: props["aria-label"] || props["aria-labelledby"],
+          role: props.role,
+          focus: props.focus || defaultFocus,
+          blur,
+        });
       }
     };
 
@@ -441,7 +445,13 @@ export function useLandmark(props: AriaLandmarkProps, refValue: { current: Eleme
       unsubscribe();
       unregister();
     };
-  }, [() => refValue.current]);
+  }, [
+    () => refValue.current,
+    () => props.role,
+    () => props["aria-label"],
+    () => props["aria-labelledby"],
+    () => props.focus,
+  ]);
 
   useLayoutEffect(() => {
     if (isLandmarkFocused.value) {
@@ -449,11 +459,24 @@ export function useLandmark(props: AriaLandmarkProps, refValue: { current: Eleme
     }
   }, [isLandmarkFocused]);
 
-  const landmarkProps: Record<string, unknown> = {
-    role,
-    "aria-label": ariaLabel,
-    "aria-labelledby": ariaLabelledby,
-  };
+  const landmarkProps: Record<string, unknown> = {};
+  Object.defineProperties(landmarkProps, {
+    role: {
+      enumerable: true,
+      configurable: true,
+      get: () => props.role,
+    },
+    "aria-label": {
+      enumerable: true,
+      configurable: true,
+      get: () => props["aria-label"],
+    },
+    "aria-labelledby": {
+      enumerable: true,
+      configurable: true,
+      get: () => props["aria-labelledby"],
+    },
+  });
 
   Object.defineProperty(landmarkProps, "tabIndex", {
     enumerable: true,

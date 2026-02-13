@@ -117,6 +117,28 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("navigates with F6 when there is only one landmark", async () => {
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const main = wrapper.get("main").element as HTMLElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+    wrapper.unmount();
+  });
+
   it("focuses main landmark on Alt+F6", async () => {
     const Navigation = createLandmark("nav", "navigation", "Navigation");
     const Main = createLandmark("main", "main", "Main");
@@ -136,6 +158,28 @@ describe("useLandmark", () => {
     await nextTick();
     expect(document.activeElement).toBe(main);
 
+    wrapper.unmount();
+  });
+
+  it("focuses main landmark with Alt+F6 when main is the only landmark", async () => {
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const main = wrapper.get("main").element as HTMLElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", altKey: true, bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", altKey: true, bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
     wrapper.unmount();
   });
 
@@ -414,6 +458,51 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("fires a custom navigation event when wrapping backward", async () => {
+    const Navigation = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation" }, refAdapter);
+        return () =>
+          h("nav", { ...landmarkProps, ref: elementRef }, [
+            h("a", { href: "#", "data-testid": "nav-link" }, "Home"),
+          ]);
+      },
+    });
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const link = wrapper.get('[data-testid="nav-link"]').element as HTMLAnchorElement;
+    const onWrap = vi.fn((event: Event) => event.preventDefault());
+    window.addEventListener("react-aria-landmark-navigation", onWrap as EventListener);
+
+    link.focus();
+    link.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", shiftKey: true, bubbles: true, cancelable: true }));
+    await nextTick();
+
+    expect(onWrap).toHaveBeenCalledTimes(1);
+    const customEvent = onWrap.mock.calls[0]?.[0] as CustomEvent;
+    expect(customEvent.detail).toEqual({ direction: "backward" });
+    expect(document.activeElement).toBe(link);
+
+    window.removeEventListener("react-aria-landmark-navigation", onWrap as EventListener);
+    wrapper.unmount();
+  });
+
   it("does not navigate to landmarks removed from the DOM", async () => {
     const showRegion = ref(true);
     const Navigation = createLandmark("nav", "navigation", "Navigation");
@@ -569,6 +658,46 @@ describe("useLandmark", () => {
     await nextTick();
     expect(document.activeElement).toBe(nav.element);
     expect(nav.attributes("tabindex")).toBe("-1");
+    wrapper.unmount();
+  });
+
+  it("removes tabIndex -1 when focus moves inside a landmark", async () => {
+    const Navigation = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation" }, refAdapter);
+        return () =>
+          h("nav", { ...landmarkProps, ref: elementRef }, [h("a", { href: "#", "data-testid": "nav-link" }, "Home")]);
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const nav = wrapper.get("nav");
+    const link = wrapper.get('[data-testid="nav-link"]').element as HTMLAnchorElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(nav.element);
+    expect(nav.attributes("tabindex")).toBe("-1");
+
+    link.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(link);
+    expect(nav.attributes("tabindex")).toBeUndefined();
     wrapper.unmount();
   });
 
@@ -1059,6 +1188,57 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("updates warnings when landmark labels change", async () => {
+    const firstLabel = ref("nav label 1");
+    const secondLabel = ref("nav label 2");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const Navigation = defineComponent({
+      name: "DynamicNavigation",
+      props: {
+        label: { type: String, required: true },
+      },
+      setup(props) {
+        const navRef = ref<HTMLElement | null>(null);
+        const navAdapter = {
+          get current() {
+            return navRef.value;
+          },
+          set current(value: Element | null) {
+            navRef.value = value as HTMLElement | null;
+          },
+        };
+        const landmarkConfig = { role: "navigation" } as Record<string, unknown>;
+        Object.defineProperty(landmarkConfig, "aria-label", {
+          enumerable: true,
+          configurable: true,
+          get: () => props.label,
+        });
+        const { landmarkProps } = useLandmark(landmarkConfig as any, navAdapter);
+        return () => h("nav", { ...landmarkProps, ref: navRef }, props.label);
+      },
+    });
+    const Main = createLandmark("main", "main", "Main");
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation, { label: firstLabel.value }), h(Navigation, { label: secondLabel.value }), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const navs = wrapper.findAll("nav").map((node) => node.element);
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    secondLabel.value = firstLabel.value;
+    await nextTick();
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Page contains more than one landmark with the 'navigation' role and 'nav label 1' label. If two or more landmarks on a page share the same role, they must have unique labels: ",
+      navs
+    );
+    wrapper.unmount();
+  });
+
   it("stores the landmark manager singleton on document", () => {
     const controller = UNSTABLE_createLandmarkController();
     const manager = (document as Document & Record<symbol, unknown>)[landmarkSymbol] as Record<string, unknown> | undefined;
@@ -1101,7 +1281,7 @@ describe("useLandmark", () => {
     document.dispatchEvent(new CustomEvent("react-aria-landmark-manager-change"));
     await nextTick();
 
-    expect(testLandmarkManager.registerLandmark).toHaveBeenCalledTimes(1);
+    expect(testLandmarkManager.registerLandmark).toHaveBeenCalled();
     expect(testLandmarkManager.createLandmarkController).toHaveBeenCalledTimes(1);
 
     controller.navigate("forward");

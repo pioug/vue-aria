@@ -2366,6 +2366,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `UNSTABLE_createLandmarkController`
 - [x] Added singleton manager replacement parity:
   - `useLandmark` now re-registers landmarks when `react-aria-landmark-manager-change` is dispatched.
+- [x] Added reactive landmark-prop parity:
+  - `useLandmark` now re-registers when role/label/focus props change and exposes dynamic role/label landmark attributes via getters.
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -2389,6 +2391,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted focus-state coverage for blur/re-focus F6 restoration and preventing mouse-based landmark focus.
   - Added adapted visibility/window focus regression coverage for keeping focused landmarks active across tab/window blur-focus transitions.
   - Added adapted warning-assertion exactness coverage for duplicate navigation landmarks (message text + queried landmark element arrays).
+  - Added adapted single-landmark and backward-wrap parity coverage for:
+    - F6/Alt+F6 cycles when `main` is the only landmark.
+    - backward wrap custom-event cancellation semantics (`react-aria-landmark-navigation` with `direction: "backward"`).
+    - landmark `tabIndex=-1` reset when focus moves from the landmark container to a child control.
+    - duplicate-label warning updates after dynamic landmark label changes.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2407,7 +2414,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components.
+1. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components (shift+tab/last-focused link traversal paths).
 2. Revisit upstream component-level parity once Vue Spectrum table/actiongroup components land (currently hook-level equivalent coverage).
 
 ## 40) Package Record: @vue-aria/toast
@@ -3756,3 +3763,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` managed-focus handoff parity:
   - added adapted test covering actiongroup/table-like focus-managed child restoration across repeated F6 navigation between landmarks, plus controller-driven `focusNext`/`navigate("backward")` assertions.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 699 tests).
+- Expanded `@vue-aria/landmark` keyboard/wrap/label-update parity:
+  - added adapted tests for single-landmark F6/Alt+F6 focus loops, backward-wrap custom-event cancellation, `tabIndex` reset when focus enters child controls, and warning refresh after dynamic label changes.
+  - updated `useLandmark` to re-register landmarks on role/label/focus prop updates and expose dynamic role/label landmark attributes with getters.
