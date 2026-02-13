@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 146 |
-| Passing tests | 146 |
+| Ported tests | 147 |
+| Passing tests | 147 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -120,7 +120,7 @@
 | @vue-spectrum/searchfield | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/searchfield | packages/@react-spectrum/searchfield |
 | @vue-spectrum/slider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/slider | packages/@react-spectrum/slider |
 | @vue-spectrum/statuslight | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
-| @vue-spectrum/steplist | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/steplist | packages/@react-spectrum/steplist |
+| @vue-spectrum/steplist | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/steplist | packages/@react-spectrum/steplist |
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
 | @vue-spectrum/style-macro-s1 | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | false | @react-spectrum/style-macro-s1 | packages/@react-spectrum/style-macro-s1 |
 | @vue-spectrum/switch | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
