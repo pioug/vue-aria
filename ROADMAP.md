@@ -2447,3 +2447,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - accounting currency negative parsing (`($1.50)`)
   - unknown currency rejection fallback (restore formatted controlled value)
 - Validation: `npm run check` passed, `npm test` passed (116 files, 366 tests).
+- Hardened `@vue-aria/form-state` injection fallback:
+  - switched non-setup detection from `hasInjectionContext()` to `getCurrentInstance()` for consistent runtime behavior in composable + component contexts.
+- Validation: `npm run check` passed, `npm test` passed (116 files, 366 tests).

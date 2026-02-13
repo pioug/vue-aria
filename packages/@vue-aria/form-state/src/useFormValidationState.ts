@@ -1,6 +1,6 @@
 import {
   computed,
-  hasInjectionContext,
+  getCurrentInstance,
   inject,
   ref,
   toValue,
@@ -106,7 +106,7 @@ export function useFormValidationState<T>(props: FormValidationProps<T>): FormVa
     return getValidationResult(runValidate(validator, value));
   });
 
-  const injectedServerErrors = hasInjectionContext()
+  const injectedServerErrors = getCurrentInstance()
     ? inject(FormValidationContext, ref<ValidationErrors>({}))
     : ref<ValidationErrors>({});
   const serverErrors = computed(() => toValue(injectedServerErrors) ?? {});
