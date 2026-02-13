@@ -109,6 +109,21 @@ if (Array.isArray(status.packages)) {
       }
     }
 
+    if (entry.status === 'not_started') {
+      if (isNonNegativeInteger(entry.portedTests)) {
+        assert(entry.portedTests === 0, `packages[${index}] marked not_started but portedTests != 0`, errors);
+      }
+      if (isNonNegativeInteger(entry.passingTests)) {
+        assert(entry.passingTests === 0, `packages[${index}] marked not_started but passingTests != 0`, errors);
+      }
+      if (isNonNegativeInteger(entry.snapshotPassing)) {
+        assert(entry.snapshotPassing === 0, `packages[${index}] marked not_started but snapshotPassing != 0`, errors);
+      }
+      if (isNonNegativeInteger(entry.docsComplete)) {
+        assert(entry.docsComplete === 0, `packages[${index}] marked not_started but docsComplete != 0`, errors);
+      }
+    }
+
     if (Object.prototype.hasOwnProperty.call(entry, 'hasDeviations')) {
       assert(typeof entry.hasDeviations === 'boolean', `packages[${index}].hasDeviations must be boolean`, errors);
     }
