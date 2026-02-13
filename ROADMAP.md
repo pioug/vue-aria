@@ -358,7 +358,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [ ] VitePress/Storybook pages ported
+- [x] VitePress package page scaffolded (`docs/packages/focus.md`)
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -637,3 +637,4 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added `FocusScope` component API exports (`FocusScope`, `useFocusManager`, `isElementInChildOfActiveScope`) with a Vue container-based adaptation on top of current focus-manager utilities.
 - Added adapted `FocusScope` API tests and revalidated focus package slice.
 - Validation: `npm run check` passed, `npm test` passed (55 files, 154 tests).
+- Added VitePress docs page for `@vue-aria/focus` and wired docs navigation entries.

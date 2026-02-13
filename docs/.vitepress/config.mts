@@ -8,6 +8,7 @@ export default defineConfig({
       { text: "Guide", link: "/" },
       { text: "Selection", link: "/packages/selection" },
       { text: "Interactions", link: "/packages/interactions" },
+      { text: "Focus", link: "/packages/focus" },
     ],
     sidebar: [
       {
@@ -15,6 +16,7 @@ export default defineConfig({
         items: [
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
+          { text: "@vue-aria/focus", link: "/packages/focus" },
         ],
       },
     ],
