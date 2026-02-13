@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 210 |
-| Passing tests | 210 |
+| Ported tests | 216 |
+| Passing tests | 216 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -91,7 +91,7 @@
 | @vue-spectrum/color | complete | 6 | 6 | 6 | 0 | 0 | 0 | 0 | true | @react-spectrum/color | packages/@react-spectrum/color |
 | @vue-spectrum/combobox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/combobox | packages/@react-spectrum/combobox |
 | @vue-spectrum/contextualhelp | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/contextualhelp | packages/@react-spectrum/contextualhelp |
-| @vue-spectrum/datepicker | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/datepicker | packages/@react-spectrum/datepicker |
+| @vue-spectrum/datepicker | complete | 6 | 6 | 6 | 0 | 0 | 0 | 0 | true | @react-spectrum/datepicker | packages/@react-spectrum/datepicker |
 | @vue-spectrum/dialog | complete | 5 | 5 | 5 | 0 | 0 | 0 | 0 | true | @react-spectrum/dialog | packages/@react-spectrum/dialog |
 | @vue-spectrum/divider | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/divider | packages/@react-spectrum/divider |
 | @vue-spectrum/dnd | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dnd | packages/@react-spectrum/dnd |
