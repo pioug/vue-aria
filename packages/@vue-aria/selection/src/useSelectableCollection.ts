@@ -62,6 +62,19 @@ export function useSelectableCollection(
 
   const router = useRouter();
   const locale = useLocale();
+  let scrollPosition = { top: 0, left: 0 };
+
+  const onScroll = () => {
+    scrollPosition = {
+      top: scrollRef.current?.scrollTop ?? 0,
+      left: scrollRef.current?.scrollLeft ?? 0,
+    };
+  };
+
+  scrollRef.current?.addEventListener("scroll", onScroll);
+  onScopeDispose(() => {
+    scrollRef.current?.removeEventListener("scroll", onScroll);
+  });
 
   const navigateToKey = (
     key: Key | null | undefined,
@@ -172,6 +185,10 @@ export function useSelectableCollection(
         break;
       }
       case "Home": {
+        if (manager.focusedKey === null && event.shiftKey) {
+          return;
+        }
+
         const firstKey = delegate.getFirstKey();
         if (firstKey != null) {
           event.preventDefault();
@@ -185,6 +202,10 @@ export function useSelectableCollection(
         break;
       }
       case "End": {
+        if (manager.focusedKey === null && event.shiftKey) {
+          return;
+        }
+
         const lastKey = delegate.getLastKey();
         if (lastKey != null) {
           event.preventDefault();
@@ -237,7 +258,12 @@ export function useSelectableCollection(
         break;
       }
       case "Tab": {
-        if (!allowsTabNavigation && !event.shiftKey && ref.current) {
+        if (!allowsTabNavigation && ref.current) {
+          if (event.shiftKey) {
+            ref.current.focus();
+            break;
+          }
+
           const walker = getFocusableTreeWalker(ref.current, { tabbable: true });
           let next: HTMLElement | null = null;
           let last: HTMLElement | null = null;
@@ -276,16 +302,27 @@ export function useSelectableCollection(
 
     manager.setFocused(true);
     if (manager.focusedKey == null) {
+      let nextFocusedKey: Key | null | undefined;
       const relatedTarget = event.relatedTarget as Element | null;
       if (
         relatedTarget &&
         ((event.currentTarget as Node).compareDocumentPosition(relatedTarget) &
           Node.DOCUMENT_POSITION_FOLLOWING)
       ) {
-        manager.setFocusedKey(manager.lastSelectedKey ?? delegate.getLastKey());
+        nextFocusedKey = manager.lastSelectedKey ?? delegate.getLastKey();
       } else {
-        manager.setFocusedKey(manager.firstSelectedKey ?? delegate.getFirstKey());
+        nextFocusedKey = manager.firstSelectedKey ?? delegate.getFirstKey();
       }
+
+      if (nextFocusedKey != null) {
+        manager.setFocusedKey(nextFocusedKey);
+        if (selectOnFocus && !manager.isSelected(nextFocusedKey)) {
+          manager.replaceSelection(nextFocusedKey);
+        }
+      }
+    } else if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollPosition.top;
+      scrollRef.current.scrollLeft = scrollPosition.left;
     }
 
     if (manager.focusedKey != null && scrollRef.current) {
@@ -376,6 +413,18 @@ export function useSelectableCollection(
     onScopeDispose(() => {
       ref.current?.removeEventListener(FOCUS_EVENT, onVirtualFocus);
       ref.current?.removeEventListener(CLEAR_FOCUS_EVENT, onVirtualClearFocus);
+    });
+  }
+
+  if (ref.current) {
+    const onFocusScopeRestore = ((event: Event) => {
+      event.preventDefault();
+      manager.setFocused(true);
+    }) as EventListener;
+
+    ref.current.addEventListener("react-aria-focus-scope-restore", onFocusScopeRestore);
+    onScopeDispose(() => {
+      ref.current?.removeEventListener("react-aria-focus-scope-restore", onFocusScopeRestore);
     });
   }
 

@@ -3166,3 +3166,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress page for `@vue-aria/selection-state` with state and manager usage examples
   - wired `@vue-aria/selection-state` into docs index and VitePress nav/sidebar
 - Validation: `npm run check` passed, `npm test` passed (126 files, 571 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` focus/scroll lifecycle parity:
+  - added select-on-focus behavior for focus-entry key targeting when entering the collection with no focused key
+  - preserved no-op selection mutation behavior when focus-entry lands on an already-selected key
+  - added scroll position snapshot/restore behavior when re-entering with an existing focused key
+  - added Shift+Tab root-focus handoff behavior when tab navigation is disabled
+  - added Home/End shift-key guard behavior when no key is currently focused
+  - added focus-scope restore interception behavior to keep manager focus state aligned
+- Expanded `@vue-aria/selection/useSelectableCollection` coverage:
+  - added adapted tests for focus-entry selection/non-mutation branches
+  - added adapted tests for scroll restore on focused-key re-entry
+  - added adapted tests for Shift+Tab, Home/End shift guards, and focus-scope restore handling
+- Validation: `npm run check` passed, `npm test` passed (126 files, 577 tests).

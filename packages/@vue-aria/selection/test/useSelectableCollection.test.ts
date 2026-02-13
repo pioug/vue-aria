@@ -600,6 +600,7 @@ describe("useSelectableCollection", () => {
     const manager = createManager({
       firstSelectedKey: "a",
       lastSelectedKey: "z",
+      isSelected: vi.fn((key: Key) => key === "z"),
     });
     const ref = { current: document.createElement("div") };
     const following = document.createElement("button");
@@ -638,6 +639,7 @@ describe("useSelectableCollection", () => {
     const manager = createManager({
       firstSelectedKey: "a",
       lastSelectedKey: "z",
+      isSelected: vi.fn((key: Key) => key === "a"),
     });
     const ref = { current: document.createElement("div") };
     const preceding = document.createElement("button");
@@ -967,6 +969,229 @@ describe("useSelectableCollection", () => {
     } finally {
       scope.stop();
       ref.current.remove();
+    }
+  });
+
+  it("selects the focus-entry key when selectOnFocus is enabled and key is not selected", () => {
+    const manager = createManager({
+      isSelected: vi.fn(() => false),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        selectOnFocus: true,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus");
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+      expect(manager.replaceSelection).toHaveBeenCalledWith("a");
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("does not mutate selection on focus-entry when the focused key is already selected", () => {
+    const manager = createManager({
+      isSelected: vi.fn((key: Key) => key === "a"),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        selectOnFocus: true,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus");
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("restores scroll position when focusing with an existing focused key", () => {
+    const manager = createManager();
+    manager.setFocusedKey("a");
+    vi.clearAllMocks();
+
+    const ref = { current: document.createElement("div") };
+    const option = document.createElement("div");
+    option.dataset.key = "a";
+    option.scrollIntoView = vi.fn();
+    ref.current.append(option);
+
+    const scrollEl = document.createElement("div");
+    scrollEl.scrollTop = 12;
+    scrollEl.scrollLeft = 34;
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        scrollRef: { current: scrollEl },
+      })
+    )!;
+
+    try {
+      scrollEl.scrollTop = 50;
+      scrollEl.scrollLeft = 60;
+      scrollEl.dispatchEvent(new Event("scroll"));
+
+      scrollEl.scrollTop = 0;
+      scrollEl.scrollLeft = 0;
+
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus");
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(scrollEl.scrollTop).toBe(50);
+      expect(scrollEl.scrollLeft).toBe(60);
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("focuses the collection root on Shift+Tab when tab navigation is disabled", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+    const outside = document.createElement("button");
+    document.body.append(ref.current, outside);
+    outside.focus();
+
+    const focusSpy = vi.spyOn(ref.current, "focus");
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        allowsTabNavigation: false,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      scope.stop();
+      focusSpy.mockRestore();
+      ref.current.remove();
+      outside.remove();
+    }
+  });
+
+  it("ignores Home and End with Shift when no item is focused", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const homeEvent = {
+        key: "Home",
+        shiftKey: true,
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+        target: ref.current,
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+      } as unknown as KeyboardEvent;
+      const endEvent = {
+        key: "End",
+        shiftKey: true,
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+        target: ref.current,
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+      } as unknown as KeyboardEvent;
+
+      onKeydown(homeEvent);
+      onKeydown(endEvent);
+
+      expect(manager.setFocusedKey).not.toHaveBeenCalled();
+      expect((homeEvent.preventDefault as any).mock.calls.length).toBe(0);
+      expect((endEvent.preventDefault as any).mock.calls.length).toBe(0);
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("intercepts focus-scope restore events to keep manager focused", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    );
+
+    try {
+      const event = new Event("react-aria-focus-scope-restore", {
+        bubbles: true,
+        cancelable: true,
+      });
+      ref.current.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+    } finally {
+      scope.stop();
     }
   });
 
