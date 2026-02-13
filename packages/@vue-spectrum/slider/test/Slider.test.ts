@@ -35,6 +35,44 @@ function dispatchMouse(target: EventTarget, type: "mousedown" | "mousemove" | "m
   target.dispatchEvent(event);
 }
 
+function dispatchTouch(
+  target: EventTarget,
+  type: "touchstart" | "touchmove" | "touchend",
+  identifier: number,
+  value: number
+) {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [
+      {
+        identifier,
+        clientX: value,
+        clientY: value,
+        pageX: value,
+        pageY: value,
+      },
+    ],
+  });
+  target.dispatchEvent(event);
+}
+
+function getTabbableElements(root: ParentNode = document.body): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href], [tabindex]"))
+    .filter((element) => !element.hasAttribute("disabled") && element.tabIndex >= 0);
+}
+
+function focusByTab(current: HTMLElement, shift = false) {
+  const tabbables = getTabbableElements(document.body);
+  const index = tabbables.indexOf(current);
+  if (index < 0) {
+    return;
+  }
+
+  const nextIndex = shift ? index - 1 : index + 1;
+  const next = tabbables[nextIndex];
+  next?.focus();
+}
+
 describe("Spectrum Slider", () => {
   it("supports aria-label", () => {
     const wrapper = mount(Slider as any, {
@@ -312,6 +350,67 @@ describe("Spectrum Slider", () => {
     wrapper.unmount();
   });
 
+  it("participates in tab order when enabled", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", {}, [
+              h("button", { type: "button", "data-testid": "before" }, "A"),
+              h(Slider as any, { label: "The Label", defaultValue: 20 }),
+              h("button", { type: "button", "data-testid": "after" }, "B"),
+            ]);
+        },
+      }) as any,
+      { attachTo: document.body }
+    );
+
+    const before = wrapper.get('[data-testid="before"]').element as HTMLButtonElement;
+    const after = wrapper.get('[data-testid="after"]').element as HTMLButtonElement;
+    const slider = wrapper.find('input[type="range"]').element as HTMLInputElement;
+
+    before.focus();
+    expect(document.activeElement).toBe(before);
+
+    focusByTab(before);
+    expect(document.activeElement).toBe(slider);
+
+    focusByTab(slider);
+    expect(document.activeElement).toBe(after);
+
+    focusByTab(after, true);
+    expect(document.activeElement).toBe(slider);
+
+    wrapper.unmount();
+  });
+
+  it("is skipped in tab order when disabled", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", {}, [
+              h("button", { type: "button", "data-testid": "before" }, "A"),
+              h(Slider as any, { label: "The Label", defaultValue: 20, isDisabled: true }),
+              h("button", { type: "button", "data-testid": "after" }, "B"),
+            ]);
+        },
+      }) as any,
+      { attachTo: document.body }
+    );
+
+    const before = wrapper.get('[data-testid="before"]').element as HTMLButtonElement;
+    const after = wrapper.get('[data-testid="after"]').element as HTMLButtonElement;
+
+    before.focus();
+    expect(document.activeElement).toBe(before);
+
+    focusByTab(before);
+    expect(document.activeElement).toBe(after);
+
+    wrapper.unmount();
+  });
+
   it("prefixes value with plus sign when range spans negative to positive", async () => {
     const wrapper = mount(Slider as any, {
       props: {
@@ -550,6 +649,112 @@ describe("Spectrum Slider", () => {
 
     wrapper.unmount();
     rectSpy.mockRestore();
+  });
+
+  it("does not jump to a second touch while dragging", () => {
+    const onChange = vi.fn();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(() => ({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }));
+
+    const wrapper = mount(Slider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: 50,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const thumb = wrapper.find(".spectrum-Slider-handle");
+    const tracks = wrapper.findAll(".spectrum-Slider-track");
+    const rightTrack = tracks[1];
+
+    dispatchTouch(thumb.element, "touchstart", 1, 50);
+    expect(onChange).toHaveBeenCalledTimes(0);
+
+    dispatchTouch(rightTrack.element, "touchstart", 2, 60);
+    dispatchTouch(window, "touchmove", 2, 70);
+    dispatchTouch(window, "touchend", 2, 70);
+    expect(onChange).toHaveBeenCalledTimes(0);
+
+    dispatchTouch(window, "touchmove", 1, 30);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(30);
+
+    dispatchTouch(window, "touchend", 1, 30);
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    wrapper.unmount();
+    rectSpy.mockRestore();
+  });
+
+  it("applies side label position classes and containers", () => {
+    const wrapper = mount(Slider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: 20,
+        labelPosition: "side",
+      },
+    });
+
+    const root = wrapper.find(".spectrum-Slider");
+    expect(root.classes()).toContain("spectrum-Slider--positionSide");
+    expect(wrapper.find(".spectrum-Slider-valueLabelContainer").exists()).toBe(true);
+
+    wrapper.unmount();
+  });
+
+  it("applies filled and gradient classes/styles", () => {
+    const wrapper = mount(Slider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: 30,
+        isFilled: true,
+        trackGradient: ["red 0%", "blue 100%"],
+      },
+    });
+
+    const root = wrapper.find(".spectrum-Slider");
+    expect(root.classes()).toContain("spectrum-Slider--filled");
+    const style = root.attributes("style");
+    expect(style).toContain("--spectrum-slider-track-gradient");
+    expect(style).toContain("linear-gradient(to right");
+
+    wrapper.unmount();
+  });
+
+  it("uses RTL gradient direction when locale is RTL", () => {
+    const App = defineComponent({
+      setup() {
+        return () =>
+          h(I18nProvider, { locale: "ar-AE" }, {
+            default: () => [
+              h(Slider as any, {
+                label: "The Label",
+                defaultValue: 30,
+                trackGradient: ["red 0%", "blue 100%"],
+              }),
+            ],
+          });
+      },
+    });
+
+    const wrapper = mount(App as any);
+    const root = wrapper.find(".spectrum-Slider");
+    expect(root.attributes("style")).toContain("linear-gradient(to left");
+
+    wrapper.unmount();
   });
 
   it("supports keyboard interactions in LTR", async () => {

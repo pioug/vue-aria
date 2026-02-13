@@ -35,6 +35,23 @@ function dispatchMouse(target: EventTarget, type: "mousedown" | "mousemove" | "m
   target.dispatchEvent(event);
 }
 
+function getTabbableElements(root: ParentNode = document.body): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href], [tabindex]"))
+    .filter((element) => !element.hasAttribute("disabled") && element.tabIndex >= 0);
+}
+
+function focusByTab(current: HTMLElement, shift = false) {
+  const tabbables = getTabbableElements(document.body);
+  const index = tabbables.indexOf(current);
+  if (index < 0) {
+    return;
+  }
+
+  const nextIndex = shift ? index - 1 : index + 1;
+  const next = tabbables[nextIndex];
+  next?.focus();
+}
+
 describe("Spectrum RangeSlider", () => {
   it("supports aria-label", () => {
     const wrapper = mount(RangeSlider as any, {
@@ -87,6 +104,23 @@ describe("Spectrum RangeSlider", () => {
 
     expect(wrapper.text()).toContain("The Label");
     expect(wrapper.find("output").exists()).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it("applies range and side label position classes", () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 20, end: 50 },
+        labelPosition: "side",
+      },
+    });
+
+    const root = wrapper.find(".spectrum-Slider");
+    expect(root.classes()).toContain("spectrum-Slider--range");
+    expect(root.classes()).toContain("spectrum-Slider--positionSide");
+    expect(wrapper.find(".spectrum-Slider-valueLabelContainer").exists()).toBe(true);
 
     wrapper.unmount();
   });
@@ -212,6 +246,79 @@ describe("Spectrum RangeSlider", () => {
 
     (sliders[1].element as HTMLInputElement).focus();
     expect(document.activeElement).toBe(sliders[1].element);
+
+    wrapper.unmount();
+  });
+
+  it("both thumbs participate in tab order when enabled", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", {}, [
+              h("button", { type: "button", "data-testid": "before" }, "A"),
+              h(RangeSlider as any, {
+                label: "The Label",
+                defaultValue: { start: 20, end: 50 },
+              }),
+              h("button", { type: "button", "data-testid": "after" }, "B"),
+            ]);
+        },
+      }) as any,
+      { attachTo: document.body }
+    );
+
+    const before = wrapper.get('[data-testid="before"]').element as HTMLButtonElement;
+    const after = wrapper.get('[data-testid="after"]').element as HTMLButtonElement;
+    const sliders = wrapper.findAll('input[type="range"]');
+    const left = sliders[0].element as HTMLInputElement;
+    const right = sliders[1].element as HTMLInputElement;
+
+    before.focus();
+    expect(document.activeElement).toBe(before);
+
+    focusByTab(before);
+    expect(document.activeElement).toBe(left);
+
+    focusByTab(left);
+    expect(document.activeElement).toBe(right);
+
+    focusByTab(right);
+    expect(document.activeElement).toBe(after);
+
+    focusByTab(after, true);
+    expect(document.activeElement).toBe(right);
+
+    wrapper.unmount();
+  });
+
+  it("is skipped in tab order when disabled", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", {}, [
+              h("button", { type: "button", "data-testid": "before" }, "A"),
+              h(RangeSlider as any, {
+                label: "The Label",
+                defaultValue: { start: 20, end: 50 },
+                isDisabled: true,
+              }),
+              h("button", { type: "button", "data-testid": "after" }, "B"),
+            ]);
+        },
+      }) as any,
+      { attachTo: document.body }
+    );
+
+    const before = wrapper.get('[data-testid="before"]').element as HTMLButtonElement;
+    const after = wrapper.get('[data-testid="after"]').element as HTMLButtonElement;
+
+    before.focus();
+    expect(document.activeElement).toBe(before);
+
+    focusByTab(before);
+    expect(document.activeElement).toBe(after);
 
     wrapper.unmount();
   });

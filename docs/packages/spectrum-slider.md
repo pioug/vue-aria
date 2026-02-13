@@ -115,4 +115,5 @@ const handleChange = (next: { start: number; end: number }) => {
 ## Notes
 
 - Current parity slice covers labeling, controlled/default values, form wiring/reset behavior, keyboard behavior, track-click interactions, locale-aware thumb labels, and value-output formatting.
+- Spectrum class/token composition parity is preserved; load your Spectrum theme CSS/tokens in the host app for full visual fidelity.
 - `Spectrum S2` is out of scope for this port.
