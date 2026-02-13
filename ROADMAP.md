@@ -5,7 +5,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 
 ## 1) Program Status
 - Overall status: In progress
-- Current phase: Foundation bootstrap + first package
+- Current phase: React Spectrum component bootstrap
 - Current focus package: `@vue-spectrum/slider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
@@ -104,7 +104,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/textfield`: Not started
 - `@vue-spectrum/searchfield`: Not started
 - `@vue-spectrum/numberfield`: Not started
-- `@vue-spectrum/slider`: Not started
+- `@vue-spectrum/slider`: In progress
 - `@vue-spectrum/link`: Not started
 - `@vue-spectrum/menu`: Not started
 - `@vue-spectrum/listbox`: Not started
@@ -2645,7 +2645,70 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Monitor upstream slider-state changes for drift and add regression coverage as needed.
 
-## 43) Session Log
+## 43) Package Record: @vue-spectrum/slider
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/slider/src`
+  - `references/react-spectrum/packages/@react-spectrum/slider/test`
+- Local package path:
+  - `packages/@vue-spectrum/slider`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `SliderBase`
+  - `SliderThumb`
+  - `Slider`
+  - `RangeSlider`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/types.ts`
+  - `src/sliderContext.ts`
+  - `src/SliderBase.ts`
+  - `src/SliderThumb.ts`
+  - `src/Slider.ts`
+  - `src/RangeSlider.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Initial range-thumb labels are currently English (`Minimum`/`Maximum`); upstream localized dictionary parity remains open.
+  - Styling currently uses Spectrum class names without imported Spectrum CSS variable files; docs/style parity will continue incrementally.
+
+### Tests
+- Total upstream test files: 2 (`Slider.test.tsx`, `RangeSlider.test.tsx`)
+- Ported test files: 2 (adapted initial slice)
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted `Slider` coverage for aria-label and visible-label output semantics.
+  - Added adapted `Slider` coverage for default, controlled, and disabled behavior.
+  - Added adapted `RangeSlider` coverage for label wiring, min/max thumb labeling, default/controlled behavior, and start/end form names.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/spectrum-slider.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full keyboard/pointer/touch and tab-order behavior against upstream Spectrum suites.
+
+### Visual Parity
+- [ ] Validate style and composition parity against upstream Spectrum stories/docs.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port remaining upstream Slider/RangeSlider tests (keyboard, pointer, form lifecycle, locale/format options).
+2. Add localized range-thumb label dictionary parity (`intl/*.json` + formatter wiring).
+3. Align style classes/tokens with upstream docs stories and validate with wrapper harness.
+
+## 44) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -4077,3 +4140,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - accessibility interaction matrix validated through adapted suites
   - downstream visual story composition validated via wrapper harness
 - Validation: `npm run check` passed, `npm test` passed (143 files, 770 tests).
+- Started `@vue-spectrum/slider` package parity slice:
+  - scaffolded `SliderBase`, `SliderThumb`, `Slider`, `RangeSlider`, and package/type exports under `packages/@vue-spectrum/slider`.
+  - wired tsconfig/vitest aliases for `@vue-spectrum/slider`.
+  - added initial VitePress package page (`docs/packages/spectrum-slider.md`) and linked it in nav/sidebar/index docs lists.
+  - added adapted initial test slice (`Slider.test.ts`, `RangeSlider.test.ts`) for labeling, default/controlled behavior, and form-name wiring.
+- Validation: `npm run check` passed, `npm test` passed (145 files, 782 tests).

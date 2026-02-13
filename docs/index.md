@@ -41,6 +41,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/spinbutton](/packages/spinbutton)
 - [@vue-aria/numberfield](/packages/numberfield)
 - [@vue-aria/slider](/packages/slider)
+- [@vue-spectrum/slider](/packages/spectrum-slider)
 - [@vue-aria/slider-state](/packages/slider-state)
 - [@vue-aria/numberfield-state](/packages/numberfield-state)
 - [@vue-aria/progress](/packages/progress)
