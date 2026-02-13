@@ -107,6 +107,12 @@ if (Array.isArray(status.packages)) {
       if (isNonNegativeInteger(entry.passingTests) && isNonNegativeInteger(entry.portedTests)) {
         assert(entry.passingTests === entry.portedTests, `packages[${index}] marked complete but passingTests != portedTests`, errors);
       }
+      if (isNonNegativeInteger(entry.snapshotPassing) && isNonNegativeInteger(entry.snapshotTotal)) {
+        assert(entry.snapshotPassing === entry.snapshotTotal, `packages[${index}] marked complete but snapshotPassing != snapshotTotal`, errors);
+      }
+      if (isNonNegativeInteger(entry.docsComplete) && isNonNegativeInteger(entry.docsTotal)) {
+        assert(entry.docsComplete === entry.docsTotal, `packages[${index}] marked complete but docsComplete != docsTotal`, errors);
+      }
     }
 
     if (entry.status === 'not_started') {
