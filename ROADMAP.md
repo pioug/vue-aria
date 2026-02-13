@@ -74,7 +74,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/datepicker-state`: Not started
 - `@vue-aria/overlays-state`: Not started
 - `@vue-aria/combobox-state`: Not started
-- `@vue-aria/selection-state`: Not started
+- `@vue-aria/selection-state`: In progress
 
 ### React Spectrum component packages
 - `@vue-spectrum/provider`: Not started
@@ -270,3 +270,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Rewired `@vue-aria/toggle-state` to use `@vue-aria/utils-state` for package boundary parity.
 - Added utils-state tests for controlled/uncontrolled behavior and number helpers.
 - Validation: `npm run check` passed, `npm test` passed (29 files, 68 tests).
+- Started `@vue-aria/selection-state` slice from upstream `@react-stately/selection`:
+  - `Selection`
+  - `useMultipleSelectionState`
+  - `SelectionManager`
+  - local collection traversal/order helpers for standalone behavior parity
+- Added selection-state tests for focus/selection state semantics and manager operations.
+- Validation: `npm run check` passed, `npm test` passed (31 files, 72 tests).
