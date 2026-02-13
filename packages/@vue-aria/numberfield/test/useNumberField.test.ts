@@ -284,6 +284,32 @@ describe("useNumberField hook", () => {
     form.remove();
   });
 
+  it("resets state number value on parent form reset", async () => {
+    const state = createState();
+    state.defaultNumberValue = 7;
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+
+    await nextTick();
+    form.dispatchEvent(new Event("reset"));
+    expect(state.setNumberValue).toHaveBeenCalledWith(7);
+
+    scope.stop();
+    form.remove();
+  });
+
   it("commits and validates on Enter keydown when not composing", () => {
     const state = createState();
     const ref = { current: document.createElement("input") as HTMLInputElement | null };

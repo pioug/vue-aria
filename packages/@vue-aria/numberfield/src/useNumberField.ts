@@ -271,8 +271,17 @@ export function useNumberField(
     inputRef
   );
 
+  const inputElementRef = {
+    get value() {
+      return inputRef.current;
+    },
+    set value(value: HTMLInputElement | null) {
+      inputRef.current = value;
+    },
+  };
+
   useFormReset(
-    { current: inputRef.current } as any,
+    inputElementRef as any,
     state.defaultNumberValue as any,
     (value: number) => state.setNumberValue?.(value)
   );
@@ -282,14 +291,7 @@ export function useNumberField(
       focus: () => inputRef.current?.focus(),
     },
     state as any,
-    {
-      get value() {
-        return inputRef.current;
-      },
-      set value(value: HTMLInputElement | null) {
-        inputRef.current = value;
-      },
-    }
+    inputElementRef
   );
 
   const inputProps = mergeProps(spinButtonProps, focusProps, textFieldProps, {
