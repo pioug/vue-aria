@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/list-state`
+- Current focus package: `@vue-aria/menu`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -47,7 +47,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/numberfield`: Not started
 - `@vue-aria/slider`: Not started
 - `@vue-aria/link`: In progress
-- `@vue-aria/menu`: Not started
+- `@vue-aria/menu`: In progress
 - `@vue-aria/listbox`: In progress
 - `@vue-aria/select`: Not started
 - `@vue-aria/combobox`: Not started
@@ -1546,7 +1546,61 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Add full collection-builder parity to support upstream children-driven collection construction (beyond current plain-item extractor support).
 2. Expand list-state docs parity with sectioned collections and filtering walkthroughs.
 
-## 30) Session Log
+## 30) Package Record: @vue-aria/menu
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/menu/src`
+  - `references/react-spectrum/packages/@react-aria/menu/docs`
+- Local package path:
+  - `packages/@vue-aria/menu`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useMenu`
+  - `useMenuSection`
+  - `menuData`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - `useMenuItem`, `useMenuTrigger`, `useSubmenuTrigger`, and submenu movement safety hooks are still pending.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, and section heading/group semantics.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/menu.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate menuitem/menuitemradio/menuitemcheckbox semantics once `useMenuItem` is ported
+- [ ] Validate submenu keyboard and hover behavior once trigger/submenu hooks are ported
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `useMenuItem` and migrate adapted interaction parity tests (action, selection mode roles, press/keyboard behavior).
+2. Port `useMenuTrigger` and `useSubmenuTrigger` stacks, including submenu movement safety behavior.
+
+## 31) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1922,3 +1976,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (101 files, 299 tests).
 - Updated docs examples so `@vue-aria/listbox` and `@vue-aria/list-state` are demonstrated together using state constructors and plain-item extractor support.
 - Validation: `npm run check` passed, `npm test` passed (101 files, 299 tests).
+- Started `@vue-aria/menu` package:
+  - `useMenu`
+  - `useMenuSection`
+  - `menuData`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted menu tests for role/escape-key semantics, accessibility warning behavior, and section heading/group semantics.
+- Added VitePress docs page for `@vue-aria/menu` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (103 files, 303 tests).

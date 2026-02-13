@@ -110,6 +110,9 @@ export default defineConfig({
       "@vue-aria/list-state": fileURLToPath(
         new URL("./packages/@vue-aria/list-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/menu": fileURLToPath(
+        new URL("./packages/@vue-aria/menu/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/tooltip-state": fileURLToPath(
         new URL("./packages/@vue-aria/tooltip-state/src/index.ts", import.meta.url)
       ),
