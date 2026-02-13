@@ -2053,6 +2053,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added integration coverage validating `@vue-aria/numberfield-state` interoperability with stepper press handlers.
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
+  - Added adapted platform input-mode parity coverage for iPhone and Android branches, including negative-number and decimal/fraction-digit combinations.
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
   - Added adapted keydown propagation parity coverage for non-Enter keys (`continuePropagation` passthrough path).
@@ -2064,7 +2065,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Validate full stepper-button press/touch focus heuristics and iOS/Android input-mode branching parity
+- [ ] Validate full stepper-button press/touch focus heuristics and remaining input-mode parity branches (iPad/macOS WebKit matrix paths)
 
 ### Visual Parity
 - Not applicable for hook package beyond downstream consumer validation.
@@ -2074,7 +2075,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
-2. Expand parity coverage for iOS roledescription behavior and native invalid/reset flows.
+2. Expand parity coverage for native invalid/reset flows and remaining non-iPhone input-mode matrix branches.
 
 ## 35) Package Record: @vue-aria/numberfield-state
 - Upstream source path(s):
@@ -2115,6 +2116,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - Unicode minus parsing/partial validation in locales that use U+2212 (`fi-FI`)
     - `signDisplay: "always"` plus-sign partial validation behavior
     - non-default numbering-system parsing in `en-US` using Arabic numerals/decimal separator
+  - Added adapted parser parity coverage for unit-style and percent-style formatted parsing (`style: "unit"` with `unit: "inch"` and percent decimal precision).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2133,7 +2135,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Validate remaining server-error form-context parity paths through consuming packages.
-2. Expand parser edge-case coverage against additional upstream NumberParser fixtures (units/percent + special numbering systems).
+2. Expand parser edge-case coverage against additional upstream NumberParser fixtures (scientific notation, compact notation, and additional numbering-system variations).
 ## 36) Package Record: @vue-aria/form-state
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-stately/form/src`
@@ -3291,3 +3293,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield-state` parser parity coverage:
   - added adapted tests for Unicode-minus parsing (`fi-FI`), `signDisplay: "always"` plus-partial validation, and Arabic numbering-system parsing in `en-US`
 - Validation: `npm run check` passed, `npm test` passed (127 files, 602 tests).
+- Expanded `@vue-aria/numberfield` input-mode parity coverage:
+  - added adapted platform-mocked tests for iPhone and Android inputMode branching
+  - covered negative-value, decimal-capable, and `maximumFractionDigits: 0` matrix paths
+- Expanded `@vue-aria/numberfield-state` parser parity coverage:
+  - added adapted tests for unit-style parsing (`23.5 in`) and percent-style parsing with decimal precision (`10.5%`)
+- Validation: `npm run check` passed, `npm test` passed (129 files, 610 tests).

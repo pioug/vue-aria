@@ -304,4 +304,41 @@ describe("useNumberFieldState", () => {
     expect(state.numberValue).toBe(12.5);
     scope.stop();
   });
+
+  it("parses unit-formatted values for supported unit styles", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        formatOptions: {
+          style: "unit",
+          unit: "inch",
+        },
+      })
+    )!;
+
+    state.commit("23.5 in");
+    expect(state.numberValue).toBe(23.5);
+    scope.stop();
+  });
+
+  it("parses percent-formatted values with decimal precision", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        step: 0.001,
+        formatOptions: {
+          style: "percent",
+          minimumFractionDigits: 2,
+        },
+      })
+    )!;
+
+    state.commit("10.5%");
+    expect(state.numberValue).toBe(0.105);
+    scope.stop();
+  });
 });
