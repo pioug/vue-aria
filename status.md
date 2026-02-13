@@ -112,7 +112,7 @@
 | @vue-spectrum/meter | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/meter | packages/@react-spectrum/meter |
 | @vue-spectrum/numberfield | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/numberfield | packages/@react-spectrum/numberfield |
 | @vue-spectrum/overlays | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/overlays | packages/@react-spectrum/overlays |
-| @vue-spectrum/picker | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/picker | packages/@react-spectrum/picker |
+| @vue-spectrum/picker | complete | 4 | 4 | 4 | 0 | 0 | 0 | 0 | true | @react-spectrum/picker | packages/@react-spectrum/picker |
 | @vue-spectrum/progress | complete | 4 | 4 | 4 | 0 | 0 | 0 | 0 | true | @react-spectrum/progress | packages/@react-spectrum/progress |
 | @vue-spectrum/provider | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/provider | packages/@react-spectrum/provider |
 | @vue-spectrum/radio | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/radio | packages/@react-spectrum/radio |
