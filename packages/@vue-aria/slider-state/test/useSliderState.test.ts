@@ -390,4 +390,30 @@ describe("useSliderState", () => {
 
     stop();
   });
+
+  it("only calls onChangeEnd when all dragging thumbs stop", () => {
+    const onChange = vi.fn();
+    const onChangeEnd = vi.fn();
+    const { state, stop } = setupSliderState({
+      defaultValue: [10, 80],
+      onChange,
+      onChangeEnd,
+      numberFormatter,
+    });
+
+    state.setThumbDragging(0, true);
+    state.setThumbDragging(1, true);
+    state.setThumbValue(0, 20);
+    state.setThumbValue(1, 90);
+    expect(onChange).toHaveBeenLastCalledWith([20, 90]);
+
+    state.setThumbDragging(0, false);
+    expect(onChangeEnd).not.toHaveBeenCalled();
+
+    state.setThumbDragging(1, false);
+    expect(onChangeEnd).toHaveBeenCalledTimes(1);
+    expect(onChangeEnd).toHaveBeenLastCalledWith([20, 90]);
+
+    stop();
+  });
 });

@@ -2616,6 +2616,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted controlled-value coverage for reactive external updates in both array and single-value (`number`) modes.
   - Added adapted coverage for controlled/uncontrolled transitions (`controlled -> uncontrolled` and `uncontrolled -> controlled`) including warning behavior and callback semantics.
   - Added adapted coverage for dynamic controlled thumb-count changes and associated drag/editable/focus bookkeeping stability.
+  - Added adapted multi-thumb drag lifecycle coverage ensuring `onChangeEnd` fires only after the final active thumb drag ends.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2635,9 +2636,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Validate callback and drag-lifecycle behavior in additional multi-thumb integration scenarios.
-2. Expand docs examples with range-slider and callback lifecycle walkthroughs.
-3. Audit controlled callback-shape behavior under runtime type switches (`number` <-> `number[]`) and document expected constraints.
+1. Expand docs examples with range-slider and callback lifecycle walkthroughs.
+2. Audit controlled callback-shape behavior under runtime type switches (`number` <-> `number[]`) and document expected constraints.
+3. Consider porting upstream story-equivalent slider-state walkthrough examples into VitePress playground snippets.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4027,3 +4028,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `useSliderState` bookkeeping to re-size drag/editable arrays and clear out-of-range focused indices when controlled value-array length changes.
   - added adapted tests for dynamic thumb-count growth/shrink scenarios, preserving expected drag/editable behavior and focus safety.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 762 tests).
+- Expanded `@vue-aria/slider-state` multi-thumb drag lifecycle parity:
+  - added adapted test coverage ensuring `onChangeEnd` is emitted only after all active thumb drags have completed.
+  - validated multi-thumb callback behavior when thumbs end dragging at different times.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 763 tests).
