@@ -22,6 +22,19 @@ function pressKey(input: HTMLInputElement, key: string) {
   );
 }
 
+function dispatchMouse(target: EventTarget, type: "mousedown" | "mousemove" | "mouseup", value: number) {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+    clientX: value,
+    clientY: value,
+  });
+  Object.defineProperty(event, "pageX", { value });
+  Object.defineProperty(event, "pageY", { value });
+  target.dispatchEvent(event);
+}
+
 describe("Spectrum RangeSlider", () => {
   it("supports aria-label", () => {
     const wrapper = mount(RangeSlider as any, {
@@ -358,67 +371,31 @@ describe("Spectrum RangeSlider", () => {
     const sliders = wrapper.findAll('input[type="range"]');
     const controls = wrapper.find(".spectrum-Slider-controls");
 
-    const leftClick = new MouseEvent("mousedown", {
-      bubbles: true,
-      cancelable: true,
-      button: 0,
-      clientX: 20,
-      clientY: 20,
-    });
-    Object.defineProperty(leftClick, "pageX", { value: 20 });
-    Object.defineProperty(leftClick, "pageY", { value: 20 });
-    controls.element.dispatchEvent(leftClick);
+    dispatchMouse(controls.element, "mousedown", 20);
     await nextTick();
     expect(document.activeElement).toBe(sliders[0].element);
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 70 });
 
-    const upLeft = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
-    Object.defineProperty(upLeft, "pageX", { value: 20 });
-    Object.defineProperty(upLeft, "pageY", { value: 20 });
-    window.dispatchEvent(upLeft);
+    dispatchMouse(window, "mouseup", 20);
 
     onChange.mockClear();
-    const middleRightClick = new MouseEvent("mousedown", {
-      bubbles: true,
-      cancelable: true,
-      button: 0,
-      clientX: 60,
-      clientY: 60,
-    });
-    Object.defineProperty(middleRightClick, "pageX", { value: 60 });
-    Object.defineProperty(middleRightClick, "pageY", { value: 60 });
-    controls.element.dispatchEvent(middleRightClick);
+    dispatchMouse(controls.element, "mousedown", 60);
     await nextTick();
     expect(document.activeElement).toBe(sliders[1].element);
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 60 });
 
-    const upMiddle = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
-    Object.defineProperty(upMiddle, "pageX", { value: 60 });
-    Object.defineProperty(upMiddle, "pageY", { value: 60 });
-    window.dispatchEvent(upMiddle);
+    dispatchMouse(window, "mouseup", 60);
 
     onChange.mockClear();
-    const rightClick = new MouseEvent("mousedown", {
-      bubbles: true,
-      cancelable: true,
-      button: 0,
-      clientX: 90,
-      clientY: 90,
-    });
-    Object.defineProperty(rightClick, "pageX", { value: 90 });
-    Object.defineProperty(rightClick, "pageY", { value: 90 });
-    controls.element.dispatchEvent(rightClick);
+    dispatchMouse(controls.element, "mousedown", 90);
     await nextTick();
     expect(document.activeElement).toBe(sliders[1].element);
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenLastCalledWith({ start: 20, end: 90 });
 
-    const upRight = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
-    Object.defineProperty(upRight, "pageX", { value: 90 });
-    Object.defineProperty(upRight, "pageY", { value: 90 });
-    window.dispatchEvent(upRight);
+    dispatchMouse(window, "mouseup", 90);
 
     wrapper.unmount();
     rectSpy.mockRestore();
@@ -452,25 +429,133 @@ describe("Spectrum RangeSlider", () => {
 
     const sliders = wrapper.findAll('input[type="range"]');
     const controls = wrapper.find(".spectrum-Slider-controls");
-    const click = new MouseEvent("mousedown", {
-      bubbles: true,
-      cancelable: true,
-      button: 0,
-      clientX: 20,
-      clientY: 20,
-    });
-    Object.defineProperty(click, "pageX", { value: 20 });
-    Object.defineProperty(click, "pageY", { value: 20 });
-    controls.element.dispatchEvent(click);
+    dispatchMouse(controls.element, "mousedown", 20);
 
     expect(document.activeElement).not.toBe(sliders[0].element);
     expect(document.activeElement).not.toBe(sliders[1].element);
     expect(onChange).not.toHaveBeenCalled();
 
-    const up = new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 });
-    Object.defineProperty(up, "pageX", { value: 20 });
-    Object.defineProperty(up, "pageY", { value: 20 });
-    window.dispatchEvent(up);
+    dispatchMouse(window, "mouseup", 20);
+
+    wrapper.unmount();
+    rectSpy.mockRestore();
+  });
+
+  it("can click and drag each handle", () => {
+    const onChange = vi.fn();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(() => ({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }));
+
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 20, end: 50 },
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    const thumbs = wrapper.findAll(".spectrum-Slider-handle");
+
+    dispatchMouse(thumbs[0].element, "mousedown", 20);
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(sliders[0].element);
+
+    dispatchMouse(window, "mousemove", 10);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 10, end: 50 });
+
+    dispatchMouse(window, "mousemove", -10);
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 0, end: 50 });
+
+    dispatchMouse(window, "mousemove", 120);
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 50, end: 50 });
+
+    dispatchMouse(window, "mouseup", 120);
+    expect(onChange).toHaveBeenCalledTimes(3);
+
+    onChange.mockClear();
+    dispatchMouse(thumbs[1].element, "mousedown", 50);
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(sliders[1].element);
+
+    dispatchMouse(window, "mousemove", 60);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 50, end: 60 });
+
+    dispatchMouse(window, "mousemove", -10);
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 50, end: 50 });
+
+    dispatchMouse(window, "mousemove", 120);
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenLastCalledWith({ start: 50, end: 100 });
+
+    dispatchMouse(window, "mouseup", 120);
+    expect(onChange).toHaveBeenCalledTimes(3);
+
+    wrapper.unmount();
+    rectSpy.mockRestore();
+  });
+
+  it("cannot click and drag handles when disabled", () => {
+    const onChange = vi.fn();
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(() => ({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }));
+
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        defaultValue: { start: 20, end: 50 },
+        onChange,
+        isDisabled: true,
+      },
+      attachTo: document.body,
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    const thumbs = wrapper.findAll(".spectrum-Slider-handle");
+
+    dispatchMouse(thumbs[0].element, "mousedown", 20);
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(sliders[0].element);
+
+    dispatchMouse(window, "mousemove", 10);
+    dispatchMouse(window, "mouseup", 10);
+    expect(onChange).not.toHaveBeenCalled();
+
+    dispatchMouse(thumbs[1].element, "mousedown", 50);
+    expect(onChange).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(sliders[1].element);
+
+    dispatchMouse(window, "mousemove", 60);
+    dispatchMouse(window, "mouseup", 60);
+    expect(onChange).not.toHaveBeenCalled();
 
     wrapper.unmount();
     rectSpy.mockRestore();

@@ -2695,12 +2695,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `Slider` coverage for controlled form-reset lifecycle behavior.
   - Added adapted `Slider` coverage for format semantics (automatic plus-sign display and percent formatting via `formatOptions`).
   - Added adapted `Slider` mouse track-click behavior coverage (enabled + disabled).
+  - Added adapted `Slider` mouse drag behavior coverage (enabled + disabled) with min/max clamping assertions.
   - Added adapted `Slider` keyboard coverage (LTR/RTL directionality, page/home/end behavior, disabled keyboard no-op).
   - Added adapted `RangeSlider` coverage for label wiring, min/max thumb labeling, default/controlled behavior, and start/end form names.
   - Added adapted `RangeSlider` coverage for custom `getValueLabel` output semantics and disabled-state behavior across both thumbs.
   - Added adapted `RangeSlider` coverage for controlled form-reset lifecycle behavior across both thumbs.
   - Added adapted `RangeSlider` coverage for format semantics (automatic plus-sign display and percent formatting via `formatOptions`).
   - Added adapted `RangeSlider` mouse track-click behavior coverage (nearest-thumb selection + disabled no-op).
+  - Added adapted `RangeSlider` mouse drag behavior coverage for both thumbs (enabled + disabled) with nearest-bound clamping assertions.
   - Added adapted `RangeSlider` keyboard coverage (LTR/RTL directionality, home/end behavior, disabled keyboard no-op).
   - Added adapted locale coverage validating localized range-thumb `aria-label` output (`ar-AE` minimum/maximum strings).
 - [ ] All relevant upstream tests migrated
@@ -2713,7 +2715,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Accessibility
 - [x] Validate keyboard directionality and page/home/end behavior for slider and range variants.
 - [x] Validate pointer track-click focus/selection behavior (including disabled no-op behavior) for slider and range variants.
-- [ ] Validate remaining drag/touch and tab-order traversal behavior against upstream Spectrum suites.
+- [x] Validate mouse drag behavior for slider and range variants (including disabled no-op behavior).
+- [ ] Validate remaining touch and tab-order traversal behavior against upstream Spectrum suites.
 
 ### Visual Parity
 - [ ] Validate style and composition parity against upstream Spectrum stories/docs.
@@ -2722,7 +2725,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream Slider/RangeSlider drag/touch and tab-order traversal tests.
+1. Port remaining upstream Slider/RangeSlider touch and tab-order traversal tests.
 2. Align style classes/tokens with upstream docs stories and validate with wrapper harness.
 
 ## 44) Session Log
@@ -2735,6 +2738,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Fixed cross-package keyboard event wrapping bug in `@vue-aria/interactions/createEventHandler` by replacing `Object.create` wrapping with a safe native-event proxy.
 - Fixed controlled multi-thumb sequential update race in `@vue-aria/slider-state` so range form-reset callbacks compose correctly.
 - Validation: `npm run check` passed, `npm test` passed (145 files, 815 tests).
+- Added upstream-aligned mouse drag parity tests for `@vue-spectrum/slider`:
+  - Slider handle drag path (enabled + disabled).
+  - RangeSlider per-thumb drag path (enabled + disabled).
+- Validation: `npm run check` passed, `npm test` passed (145 files, 819 tests).
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
 - Added reusable package parity template.
