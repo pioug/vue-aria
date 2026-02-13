@@ -1968,6 +1968,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted focus-order behavior coverage for first-invalid-only focus and custom `focus` callback invocation.
   - Added adapted integration coverage through `@vue-aria/select/useHiddenSelect` for native invalid-event trigger focus and hidden-select focus forwarding.
   - Added adapted branch coverage for fallback native custom-validity messaging (`"Invalid value."`), disabled-input native validity sync short-circuit, and modality no-op when invalid events are already default-prevented.
+  - Added adapted branch-parity coverage for:
+    - joining multiple validation errors into native custom-validity messages
+    - non-native (`aria`) no-op native validity snapshot sync
+    - preserving existing input `title` attributes during native validity synchronization
+    - restoring patched `form.reset` implementation on effect cleanup
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3800,3 +3805,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added upstream-aligned examples for native/aria validation behavior, server-error context wiring, and `mergeValidation` usage.
 - Expanded `@vue-aria/form-state` validation-state parity:
   - added adapted tests for private-state passthrough, validationState compatibility mapping, native reset/commit queue cancellation, and multi-name server-error aggregation.
+- Expanded `@vue-aria/form` native-validation branch parity:
+  - added adapted tests for multi-error custom-validity joining, `aria`-mode native-sync no-op behavior, existing-title preservation, and reset-patch cleanup restoration.

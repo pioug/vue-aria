@@ -24,6 +24,27 @@ describe("useFormValidation", () => {
     scope.stop();
   });
 
+  it("joins multiple validation errors for native custom validity message", () => {
+    const input = document.createElement("input");
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      realtimeValidation: {
+        isInvalid: true,
+        validationErrors: ["Bad input", "Too short"],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    expect(input.validationMessage).toBe("Bad input Too short");
+    scope.stop();
+  });
+
   it("sets fallback custom validity message when invalid with no validation errors", () => {
     const input = document.createElement("input");
     const inputRef = ref<HTMLInputElement | null>(input);
@@ -139,6 +160,28 @@ describe("useFormValidation", () => {
     scope.stop();
   });
 
+  it("does not sync native validity in aria validation behavior", () => {
+    const input = document.createElement("input");
+    input.required = true;
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      realtimeValidation: {
+        isInvalid: false,
+        validationErrors: [],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "aria" }, state as any, inputRef);
+    });
+
+    expect(state.updateValidation).not.toHaveBeenCalled();
+    scope.stop();
+  });
+
   it("does not sync native validity when input is disabled", () => {
     const input = document.createElement("input");
     input.disabled = true;
@@ -158,6 +201,28 @@ describe("useFormValidation", () => {
     });
 
     expect(state.updateValidation).not.toHaveBeenCalled();
+    scope.stop();
+  });
+
+  it("preserves existing title when syncing native validity", () => {
+    const input = document.createElement("input");
+    input.title = "Custom title";
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      realtimeValidation: {
+        isInvalid: true,
+        validationErrors: ["Bad input"],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    expect(input.title).toBe("Custom title");
     scope.stop();
   });
 
@@ -270,6 +335,30 @@ describe("useFormValidation", () => {
     expect(state.resetValidation).not.toHaveBeenCalled();
 
     scope.stop();
+    form.remove();
+  });
+
+  it("restores the original form.reset implementation on cleanup", () => {
+    const input = document.createElement("input");
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      resetValidation: vi.fn(),
+      commitValidation: vi.fn(),
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+    };
+
+    const originalReset = form.reset;
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+    expect(form.reset).not.toBe(originalReset);
+
+    scope.stop();
+    expect(form.reset).toBe(originalReset);
     form.remove();
   });
 });
