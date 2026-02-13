@@ -581,8 +581,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port remaining advanced `FocusScope` integration cases from upstream `FocusScope.test.js`:
-    - remaining high-complexity portal/container restoration scenarios
   - Continue validating behavior parity details where Vue test adapters differ from upstream harness behavior.
 
 ### Tests
@@ -634,8 +632,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - tabbable-only traversal behavior
     - `from` container traversal semantics (forward and backward)
     - accept-filter traversal skipping behavior
-- Full upstream assertion-level parity migration remains pending for selected integration scenarios.
-- [ ] All relevant upstream tests migrated
+- Upstream `FocusScope` + `FocusScopeOwnerDocument` assertions are adapted; continue validating downstream integration paths.
+- [x] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
 ### Docs
@@ -658,10 +656,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Port remaining upstream `FocusScope.test.js` integration edge cases (remaining complex portal/container restoration paths).
-2. Continue converting unported upstream assertions into adapted Vue tests while preserving intent.
-3. Reconcile any remaining implementation gaps discovered by newly ported assertions.
-4. Keep `docs/packages/focus.md` notes synchronized as remaining upstream cases land.
+1. Validate `FocusScope` behavior through downstream consumers (`@vue-aria/overlays`, `@vue-aria/select`, and dialog/popover flows).
+2. Reconcile any remaining implementation gaps discovered during downstream integration.
+3. Expand docs/example parity for focus package APIs (`FocusScope`, `useFocusManager`, `useFocusRing`, `FocusRing`).
+4. Keep `docs/packages/focus.md` notes synchronized as downstream parity work lands.
 
 ## 9) Package Record: @vue-aria/live-announcer
 - Upstream source path(s):
@@ -3072,3 +3070,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - sibling contained-scope traversal isolation with active-scope lock maintained during forward/reverse tab cycling
   - restoration to last focused in-scope element across blur-driven browser re-entry and explicit focusout transitions
 - Validation: `npm run check` passed, `npm test` passed (125 files, 536 tests).
+- Updated `@vue-aria/focus` tracker parity milestone:
+  - completed adaptation coverage for upstream `FocusScope.test.js` + `FocusScopeOwnerDocument.test.js` assertions
+  - moved focus package next actions toward downstream integration validation and docs/example parity
