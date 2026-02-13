@@ -192,12 +192,12 @@ export class ListKeyboardDelegate<T> {
     return null;
   }
 
-  getFirstKey(): Key | null {
+  getFirstKey(_fromKey?: Key | null, _global?: boolean): Key | null {
     const key = this.collection.getFirstKey();
     return this.findNextNonDisabled(key, (candidate) => this.collection.getKeyAfter(candidate));
   }
 
-  getLastKey(): Key | null {
+  getLastKey(_fromKey?: Key | null, _global?: boolean): Key | null {
     const key = this.collection.getLastKey();
     return this.findNextNonDisabled(key, (candidate) => this.collection.getKeyBefore(candidate));
   }

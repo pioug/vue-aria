@@ -29,8 +29,8 @@ export interface KeyboardDelegate {
   getKeyAbove(key: Key): Key | null;
   getKeyLeftOf?(key: Key): Key | null;
   getKeyRightOf?(key: Key): Key | null;
-  getFirstKey(): Key | null;
-  getLastKey(): Key | null;
+  getFirstKey(fromKey?: Key | null, global?: boolean): Key | null;
+  getLastKey(fromKey?: Key | null, global?: boolean): Key | null;
   getKeyPageBelow(key: Key): Key | null;
   getKeyPageAbove(key: Key): Key | null;
   getKeyForSearch?(search: string, fromKey?: Key): Key | null;
@@ -38,8 +38,8 @@ export interface KeyboardDelegate {
 
 export interface SearchableCollection<T> {
   getItem(key: Key): Node<T> | null;
-  getFirstKey(): Key | null;
-  getLastKey(): Key | null;
+  getFirstKey(fromKey?: Key | null, global?: boolean): Key | null;
+  getLastKey(fromKey?: Key | null, global?: boolean): Key | null;
   getKeyBefore(key: Key): Key | null;
   getKeyAfter(key: Key): Key | null;
 }

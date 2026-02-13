@@ -162,6 +162,72 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("passes focused key and ctrl context to Home delegate lookup", () => {
+    const manager = createManager();
+    manager.setFocusedKey("b");
+    (manager.setFocusedKey as any).mockClear();
+    const getFirstKey = vi.fn(() => "a");
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: {
+          ...delegate,
+          getFirstKey,
+        },
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", { key: "Home", ctrlKey: true, bubbles: true, cancelable: true });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(getFirstKey).toHaveBeenCalledWith("b", true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("passes focused key and ctrl context to End delegate lookup", () => {
+    const manager = createManager();
+    manager.setFocusedKey("b");
+    (manager.setFocusedKey as any).mockClear();
+    const getLastKey = vi.fn(() => "z");
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: {
+          ...delegate,
+          getLastKey,
+        },
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", { key: "End", ctrlKey: true, bubbles: true, cancelable: true });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(getLastKey).toHaveBeenCalledWith("b", true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("z");
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("supports select all shortcut", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };

@@ -423,6 +423,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - virtual first-focus strategy deferred across empty-to-loaded collection transitions
     - autoFocus retry behavior for initially empty collections resolving after data load
     - autoFocus-driven focused item scroll behavior independent of current interaction modality
+    - Home/End delegate lookup context passing (`focusedKey`, ctrl-global flag)
   - Added adapted `useSelectableItem` interaction coverage for:
     - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
     - keyboard Enter/Space selection behavior and secondary action routing
@@ -3223,3 +3224,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/selection/useSelectableCollection` autoFocus scroll coverage:
   - added adapted test asserting auto-focused item scroll behavior when interaction modality is pointer
 - Validation: `npm run check` passed, `npm test` passed (126 files, 584 tests).
+- Expanded `@vue-aria/selection` keyboard-delegate API parity:
+  - updated keyboard delegate signatures to accept optional context parameters for first/last-key lookup
+  - wired `useSelectableCollection` Home/End and wrap lookup paths to pass focused-key and ctrl-global context
+- Expanded `@vue-aria/selection/useSelectableCollection` keyboard delegate coverage:
+  - added adapted tests asserting Home/End delegate calls receive focused-key and ctrl context
+- Validation: `npm run check` passed, `npm test` passed (126 files, 586 tests).

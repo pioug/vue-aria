@@ -211,7 +211,7 @@ export function useSelectableCollection(
             ? delegate.getKeyBelow?.(manager.focusedKey)
             : delegate.getFirstKey?.();
         if (nextKey == null && shouldFocusWrap) {
-          nextKey = delegate.getFirstKey?.();
+          nextKey = delegate.getFirstKey?.(manager.focusedKey);
         }
 
         if (nextKey != null) {
@@ -226,7 +226,7 @@ export function useSelectableCollection(
             ? delegate.getKeyAbove?.(manager.focusedKey)
             : delegate.getLastKey?.();
         if (nextKey == null && shouldFocusWrap) {
-          nextKey = delegate.getLastKey?.();
+          nextKey = delegate.getLastKey?.(manager.focusedKey);
         }
 
         if (nextKey != null) {
@@ -242,7 +242,9 @@ export function useSelectableCollection(
 
         let nextKey = manager.focusedKey != null ? delegate.getKeyLeftOf(manager.focusedKey) : null;
         if (nextKey == null && shouldFocusWrap) {
-          nextKey = locale.value.direction === "rtl" ? delegate.getFirstKey() : delegate.getLastKey();
+          nextKey = locale.value.direction === "rtl"
+            ? delegate.getFirstKey(manager.focusedKey)
+            : delegate.getLastKey(manager.focusedKey);
         }
 
         if (nextKey != null) {
@@ -258,7 +260,9 @@ export function useSelectableCollection(
 
         let nextKey = manager.focusedKey != null ? delegate.getKeyRightOf(manager.focusedKey) : null;
         if (nextKey == null && shouldFocusWrap) {
-          nextKey = locale.value.direction === "rtl" ? delegate.getLastKey() : delegate.getFirstKey();
+          nextKey = locale.value.direction === "rtl"
+            ? delegate.getLastKey(manager.focusedKey)
+            : delegate.getFirstKey(manager.focusedKey);
         }
 
         if (nextKey != null) {
@@ -272,7 +276,7 @@ export function useSelectableCollection(
           return;
         }
 
-        const firstKey = delegate.getFirstKey();
+        const firstKey = delegate.getFirstKey(manager.focusedKey, isCtrlKeyPressed(event));
         if (firstKey != null) {
           event.preventDefault();
           manager.setFocusedKey(firstKey);
@@ -289,7 +293,7 @@ export function useSelectableCollection(
           return;
         }
 
-        const lastKey = delegate.getLastKey();
+        const lastKey = delegate.getLastKey(manager.focusedKey, isCtrlKeyPressed(event));
         if (lastKey != null) {
           event.preventDefault();
           manager.setFocusedKey(lastKey);
