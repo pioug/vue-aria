@@ -109,6 +109,12 @@ export default defineConfig({
       ),
       "@vue-aria/tooltip": fileURLToPath(
         new URL("./packages/@vue-aria/tooltip/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/disclosure-state": fileURLToPath(
+        new URL("./packages/@vue-aria/disclosure-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/disclosure": fileURLToPath(
+        new URL("./packages/@vue-aria/disclosure/src/index.ts", import.meta.url)
       )
     }
   }

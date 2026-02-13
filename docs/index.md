@@ -35,3 +35,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/breadcrumbs](/packages/breadcrumbs)
 - [@vue-aria/separator](/packages/separator)
 - [@vue-aria/tooltip](/packages/tooltip)
+- [@vue-aria/disclosure](/packages/disclosure)

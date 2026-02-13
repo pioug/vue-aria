@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/tooltip`
+- Current focus package: `@vue-aria/overlays`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -60,6 +60,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/breadcrumbs`: In progress
 - `@vue-aria/dialog`: In progress
 - `@vue-aria/separator`: In progress
+- `@vue-aria/disclosure`: In progress
 - `@vue-aria/tooltip`: In progress
 - `@vue-aria/progress`: In progress
 - `@vue-aria/meter`: In progress
@@ -74,6 +75,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/searchfield-state`: In progress
 - `@vue-aria/overlays-state`: In progress
 - `@vue-aria/tooltip-state`: In progress
+- `@vue-aria/disclosure-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
@@ -1321,7 +1323,60 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum tooltip components.
 2. Validate warmup/cooldown semantics against integration scenarios.
 
-## 26) Session Log
+## 26) Package Record: @vue-aria/disclosure (+ @vue-aria/disclosure-state)
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/disclosure/src`
+  - `references/react-spectrum/packages/@react-aria/disclosure/test/useDisclosure.test.ts`
+  - `references/react-spectrum/packages/@react-stately/disclosure/src`
+- Local package path:
+  - `packages/@vue-aria/disclosure`
+  - `packages/@vue-aria/disclosure-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useDisclosure`
+  - `useDisclosureState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path aliases
+- Open adaptation note:
+  - `flushSync`/animation behavior is adapted to Vue lifecycle primitives and simplified style transitions.
+
+### Tests
+- Total upstream test files: 1 in `@react-aria/disclosure` + no dedicated `useDisclosureState` test file in reference path
+- Ported test files: 2
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted tests for expanded/collapsed aria mapping, press semantics, disabled behavior, id wiring, and `beforematch` handling.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/disclosure.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate disclosure behavior in downstream Spectrum accordion/disclosure integrations
+
+### Visual Parity
+- Not applicable for hook/state package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum disclosure/accordion components.
+2. Revisit transition animation parity for panel open/close behavior.
+
+## 27) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1619,3 +1674,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted tests for tooltip role/trigger semantics and stately delay behavior.
 - Added VitePress docs page for `@vue-aria/tooltip` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (80 files, 248 tests).
+- Started disclosure state/trigger stack:
+  - `@vue-aria/disclosure-state/useDisclosureState`
+  - `@vue-aria/disclosure/useDisclosure`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted tests for disclosure aria attributes, press semantics, id wiring, and beforematch behavior.
+- Added VitePress docs page for `@vue-aria/disclosure` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (82 files, 256 tests).
