@@ -66,6 +66,7 @@ export function useSelectableCollection(
   let scrollPosition = { top: 0, left: 0 };
   let lastFocusedKey = manager.focusedKey;
   let shouldVirtualFocusFirst = false;
+  let shouldAutoFocus = autoFocus;
 
   const onScroll = () => {
     scrollPosition = {
@@ -442,7 +443,11 @@ export function useSelectableCollection(
   const tabIndex = shouldUseVirtualFocus ? undefined : manager.focusedKey == null ? 0 : -1;
   const collectionId = useCollectionId(manager.collection as object);
 
-  if (autoFocus) {
+  const applyAutoFocus = () => {
+    if (!shouldAutoFocus) {
+      return;
+    }
+
     let focusedKey: Key | null = null;
     if (autoFocus === "first") {
       focusedKey = delegate.getFirstKey?.() ?? null;
@@ -464,7 +469,21 @@ export function useSelectableCollection(
     if (focusedKey == null && !shouldUseVirtualFocus && ref.current) {
       focusSafely(ref.current);
     }
-  }
+    const collectionSize = (manager.collection as { size?: number } | undefined)?.size;
+    if (collectionSize == null || collectionSize > 0) {
+      shouldAutoFocus = false;
+    }
+  };
+
+  applyAutoFocus();
+
+  watch(
+    () => manager.collection,
+    () => {
+      applyAutoFocus();
+    },
+    { flush: "post" }
+  );
 
   if (shouldUseVirtualFocus && ref.current) {
     const onVirtualFocus = ((event: Event) => {

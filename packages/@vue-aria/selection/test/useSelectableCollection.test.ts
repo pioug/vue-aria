@@ -956,6 +956,66 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("retries autoFocus when collection is initially empty and resolves after load", async () => {
+    const emptyCollection = {
+      size: 0,
+      getItem: () => null,
+      getFirstKey: () => null,
+      getLastKey: () => null,
+      getKeyAfter: () => null,
+      getChildren: function* () {},
+    };
+    const loadedCollection = {
+      size: 1,
+      getItem: (key: Key) => (key === "a" ? ({ key, type: "item" } as any) : null),
+      getFirstKey: () => "a" as Key,
+      getLastKey: () => "a" as Key,
+      getKeyAfter: () => null,
+      getChildren: function* () {},
+    };
+
+    const collectionRef = ref<typeof emptyCollection | typeof loadedCollection>(emptyCollection);
+    const { manager } = createReactiveManager({
+      selectedKeys: new Set<Key>(),
+      canSelectItem: vi.fn(() => true),
+    });
+    Object.defineProperty(manager, "collection", {
+      get() {
+        return collectionRef.value;
+      },
+    });
+
+    const refEl = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: {
+          ...delegate,
+          getFirstKey: () => collectionRef.value.getFirstKey(),
+          getLastKey: () => collectionRef.value.getLastKey(),
+        },
+        ref: refEl,
+        autoFocus: "first",
+      })
+    );
+
+    try {
+      expect(manager.setFocusedKey).toHaveBeenCalledWith(null);
+
+      (manager.setFocusedKey as any).mockClear();
+      collectionRef.value = loadedCollection;
+      await nextTick();
+      await nextTick();
+
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("handles virtual focus events when enabled", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
