@@ -194,6 +194,43 @@ describe("useSelect", () => {
     ref.current?.remove();
   });
 
+  it("prevents default but does not select when no first key is available", () => {
+    const state = createState();
+    state.selectedKey = null;
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          keyboardDelegate: {
+            getKeyAbove: () => null,
+            getKeyBelow: () => null,
+            getFirstKey: () => null,
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const preventDefault = vi.fn();
+    const onKeyDown = result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
+    onKeyDown?.({
+      key: "ArrowRight",
+      preventDefault,
+    } as unknown as KeyboardEvent);
+
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(state.setSelectedKey).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
   it("wires focus and blur lifecycle callbacks", () => {
     const state = createState();
     const onFocusChange = vi.fn();
@@ -354,6 +391,43 @@ describe("useSelect", () => {
       relatedTarget: document.createElement("div"),
     } as unknown as FocusEvent);
     expect(onBlur).toHaveBeenCalled();
+    expect(onFocusChange).toHaveBeenCalledWith(false);
+
+    scope.stop();
+  });
+
+  it("propagates menu blur when relatedTarget is null", () => {
+    const state = createState();
+    const onBlur = vi.fn();
+    const onFocusChange = vi.fn();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    const menu = document.createElement("div");
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          onBlur,
+          onFocusChange,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onMenuBlur = result.menuProps.onBlur as ((event: FocusEvent) => void) | undefined;
+    onMenuBlur?.({
+      currentTarget: menu,
+      relatedTarget: null,
+    } as unknown as FocusEvent);
+    expect(onBlur).toHaveBeenCalledTimes(1);
     expect(onFocusChange).toHaveBeenCalledWith(false);
 
     scope.stop();
