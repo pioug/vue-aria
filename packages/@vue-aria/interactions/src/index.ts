@@ -6,6 +6,7 @@ export { useInteractOutside } from "./useInteractOutside";
 export { useHover } from "./useHover";
 export { useScrollWheel } from "./useScrollWheel";
 export { useMove } from "./useMove";
+export { usePress } from "./usePress";
 export {
   isFocusVisible,
   getInteractionModality,
@@ -41,3 +42,9 @@ export type {
   MoveEvents,
   MoveResult,
 } from "./useMove";
+export type {
+  PressEvent,
+  PressProps,
+  PressHookProps,
+  PressResult,
+} from "./usePress";

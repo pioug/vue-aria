@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/selection`
+- Current focus package: `@vue-aria/interactions`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -318,6 +318,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useHover`
   - `useScrollWheel`
   - `useMove`
+  - `usePress`
   - `textSelection` helpers (`disableTextSelection`, `restoreTextSelection`)
 - [x] Package scaffolding created and wired:
   - `package.json`
@@ -325,13 +326,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port `usePress`, `useLongPress`, `useMove`, `useHover`, `useFocus`, `useFocusWithin`, `useKeyboard`, `useInteractOutside`, and related helpers/context.
+  - Port `useLongPress` and remaining interaction helpers/context modules.
   - Migrate upstream interaction tests module-by-module.
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 9
-- Passing test files: 9
+- Ported test files: 10
+- Passing test files: 10
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
@@ -342,6 +343,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `useHover` callback flow, disabled behavior, and touch/emulated hover suppression.
   - Added adapted tests for `useScrollWheel` delta emission, ctrl+wheel suppression, and disabled behavior.
   - Added adapted tests for `useMove` keyboard and drag delta behavior, plus non-primary-button ignore behavior.
+  - Added adapted tests for `usePress` pointer/mouse fallback flow, keyboard flow, disabled behavior, pointer-exit cancellation, and propagation semantics.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -596,3 +598,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `textSelection` helpers
 - Added adapted tests for keyboard-move semantics, drag delta events, and right-click ignore behavior.
 - Validation: `npm run check` passed, `npm test` passed (47 files, 130 tests).
+- Ported `@vue-aria/interactions/usePress` with upstream-aligned API surface and pointer/keyboard/mouse fallback behavior.
+- Added adapted `usePress` tests from upstream intent and wired interactions exports.
+- Validation: `npm run check` passed, `npm test` passed (48 files, 135 tests).
