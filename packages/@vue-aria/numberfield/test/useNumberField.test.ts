@@ -203,4 +203,28 @@ describe("useNumberField hook", () => {
     expect(result.inputProps["aria-required"]).toBeUndefined();
     scope.stop();
   });
+
+  it("commits validation on native invalid events", () => {
+    const state = createState();
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
 });

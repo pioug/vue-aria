@@ -141,6 +141,45 @@ describe("useSpinButton", () => {
     scope.stop();
   });
 
+  it("decrements on touch press up + press end", () => {
+    const onDecrement = vi.fn();
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton({ value: 1, onDecrement }))!;
+
+    (result.decrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+    (result.decrementButtonProps.onPressUp as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+    (result.decrementButtonProps.onPressEnd as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+
+    expect(onDecrement).toHaveBeenCalledTimes(1);
+    scope.stop();
+  });
+
+  it("cancels touch spin when pointercancel fires", () => {
+    vi.useFakeTimers();
+    const onIncrement = vi.fn();
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton({ value: 1, onIncrement }))!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: document.createElement("button"),
+    });
+    window.dispatchEvent(new Event("pointercancel"));
+    vi.advanceTimersByTime(700);
+
+    expect(onIncrement).not.toHaveBeenCalled();
+    scope.stop();
+  });
+
   it("does not emit repeated increments when value props are static", () => {
     vi.useFakeTimers();
     const onIncrement = vi.fn();

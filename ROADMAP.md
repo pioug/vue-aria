@@ -2435,3 +2435,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted tests for form-state commit behavior and numberfield-state native validation commit queue.
 - Added VitePress docs page for `@vue-aria/form-state` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (116 files, 360 tests).
+- Expanded `@vue-aria/spinbutton` touch parity coverage:
+  - touch decrement press-up/press-end sequence
+  - pointer-cancel touch spin cancellation
+- Expanded `@vue-aria/numberfield` native-validation parity coverage:
+  - invalid-event commit behavior integration with `useFormValidation`
+- Validation: `npm run check` passed, `npm test` passed (116 files, 363 tests).
