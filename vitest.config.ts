@@ -76,6 +76,9 @@ export default defineConfig({
       ),
       "@vue-aria/switch": fileURLToPath(
         new URL("./packages/@vue-aria/switch/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/textfield": fileURLToPath(
+        new URL("./packages/@vue-aria/textfield/src/index.ts", import.meta.url)
       )
     }
   }

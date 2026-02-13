@@ -18,6 +18,7 @@ export default defineConfig({
       { text: "Checkbox", link: "/packages/checkbox" },
       { text: "Radio", link: "/packages/radio" },
       { text: "Switch", link: "/packages/switch" },
+      { text: "TextField", link: "/packages/textfield" },
     ],
     sidebar: [
       {
@@ -35,6 +36,7 @@ export default defineConfig({
           { text: "@vue-aria/checkbox", link: "/packages/checkbox" },
           { text: "@vue-aria/radio", link: "/packages/radio" },
           { text: "@vue-aria/switch", link: "/packages/switch" },
+          { text: "@vue-aria/textfield", link: "/packages/textfield" },
         ],
       },
     ],

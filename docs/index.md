@@ -27,3 +27,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/checkbox](/packages/checkbox)
 - [@vue-aria/radio](/packages/radio)
 - [@vue-aria/switch](/packages/switch)
+- [@vue-aria/textfield](/packages/textfield)

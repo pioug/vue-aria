@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/switch`
+- Current focus package: `@vue-aria/textfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -42,7 +42,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/checkbox`: In progress
 - `@vue-aria/radio`: In progress
 - `@vue-aria/switch`: In progress
-- `@vue-aria/textfield`: Not started
+- `@vue-aria/textfield`: In progress
 - `@vue-aria/searchfield`: Not started
 - `@vue-aria/numberfield`: Not started
 - `@vue-aria/slider`: Not started
@@ -918,7 +918,57 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum switch component implementations.
 2. Expand switch behavior coverage as consumers are integrated.
 
-## 18) Session Log
+## 18) Package Record: @vue-aria/textfield
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/textfield/src`
+  - `references/react-spectrum/packages/@react-aria/textfield/test/useTextField.test.js`
+- Local package path:
+  - `packages/@vue-aria/textfield`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useTextField`
+  - `useFormattedTextField`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useTextField.ts`
+  - `src/useFormattedTextField.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: 1 (`useTextField.test.js`)
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Adapted upstream assertions for default props, type/disabled/required/readonly/validation/autocapitalize behavior, onChange payload semantics, and textarea type/pattern omissions.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/textfield.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate behavior parity against downstream Spectrum textfield/searchfield components
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port downstream Spectrum textfield/searchfield components.
+2. Deepen form validation semantics as form package ports land.
+
+## 19) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1162,3 +1212,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted switch tests for role/checked semantics and disabled/read-only passthrough behavior.
 - Added VitePress docs page for `@vue-aria/switch` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (68 files, 205 tests).
+- Started `@vue-aria/textfield` package:
+  - `useTextField`
+  - `useFormattedTextField`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted upstream `useTextField` test coverage for prop mapping, change behavior, and textarea-specific attribute omission semantics.
+- Added VitePress docs page for `@vue-aria/textfield` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (69 files, 214 tests).
