@@ -2451,6 +2451,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted upstream `useToast` coverage for default props, close-button invocation, data-attribute passthrough, and timer reset/pause lifecycle behavior.
   - Added adapted story-driven `single toast at a time` lifecycle coverage for queued toast replacement and focus restoration to trigger after final close.
   - Added adapted queue-rotation timer coverage to ensure timeout timers pause/reset correctly across `A -> B -> A` single-visible transitions.
+  - Added adapted mixed-modality queue coverage for story-equivalent `F6 -> close (keyboard Enter) -> close (pointer)` dismissal ordering with focus restoration.
   - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props and hover/focus pause/resume timer transitions.
   - Added adapted interaction coverage for focused-toast replacement focus transfer and restoring focus to the pre-region element when the toast list becomes empty.
   - Added adapted pointer-modality regression coverage for restoring focus when toast count drops to zero.
@@ -2462,7 +2463,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Port remaining story-backed single-toast lifecycle parity (including close-button tab/focus sequences across queued toasts).
+- [ ] Port remaining story-backed single-toast lifecycle tab-order assertions (explicit close-button tab traversal across queued toasts).
 
 ### Visual Parity
 - Not applicable for utility hooks beyond interaction semantics.
@@ -2471,8 +2472,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port additional upstream `single toast at a time` keyboard order assertions that explicitly traverse F6/tab paths before dismissal.
-2. Expand story-equivalent tests for mixed pointer/keyboard dismissal ordering with queued toasts.
+1. Port remaining upstream `single toast at a time` tab-order assertions that explicitly traverse close-button focus order before dismissal.
+2. Validate F6/tab ordering in downstream Vue Spectrum toast story harness once available.
 
 ## 41) Session Log
 ### 2026-02-13
@@ -3766,3 +3767,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` keyboard/wrap/label-update parity:
   - added adapted tests for single-landmark F6/Alt+F6 focus loops, backward-wrap custom-event cancellation, `tabIndex` reset when focus enters child controls, and warning refresh after dynamic label changes.
   - updated `useLandmark` to re-register landmarks on role/label/focus prop updates and expose dynamic role/label landmark attributes with getters.
+- Expanded `@vue-aria/toast` mixed-modality lifecycle parity:
+  - added adapted story-equivalent integration coverage for `F6` entry into the toast region, keyboard Enter dismissal of the visible toast, pointer dismissal of the queued toast, and final focus restoration to the launcher.

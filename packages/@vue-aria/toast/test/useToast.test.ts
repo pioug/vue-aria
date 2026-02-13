@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { useButton } from "@vue-aria/button";
 import { defineComponent, effectScope, h, nextTick, reactive, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useToast, useToastRegion } from "../src";
@@ -124,7 +125,7 @@ describe("useToast", () => {
     type ToastItem = { key: number; content: string };
     const queue: ToastItem[] = [];
     let nextKey = 0;
-    let latestRegionProps: { onFocus?: (event: FocusEvent) => void } | null = null;
+    let latestRegionProps: Record<string, unknown> | null = null;
     let regionElement: HTMLElement | null = null;
 
     const ToastItemView = defineComponent({
@@ -242,5 +243,145 @@ describe("useToast", () => {
 
     wrapper.unmount();
     regionElement = null;
+  });
+
+  it("supports mixed keyboard and pointer dismissal ordering in a single-visible queue", async () => {
+    type ToastItem = { key: number; content: string };
+    const queue: ToastItem[] = [];
+    let nextKey = 0;
+    let latestRegionProps: { onFocus?: (event: FocusEvent) => void } | null = null;
+
+    const ToastItemView = defineComponent({
+      name: "ToastItemViewWithButtonPress",
+      props: {
+        toast: { type: Object, required: true },
+        state: { type: Object, required: true },
+      },
+      setup(props) {
+        const toastRef = ref<HTMLElement | null>(null);
+        const closeButtonRef = ref<HTMLElement | null>(null);
+        const toastRefAdapter = {
+          get current() {
+            return toastRef.value;
+          },
+          set current(value: Element | null) {
+            toastRef.value = value as HTMLElement | null;
+          },
+        };
+        const closeButtonAdapter = {
+          get current() {
+            return closeButtonRef.value;
+          },
+          set current(value: Element | null) {
+            closeButtonRef.value = value as HTMLElement | null;
+          },
+        };
+
+        const { toastProps, contentProps, titleProps, closeButtonProps } = useToast(
+          { toast: props.toast as any },
+          props.state as any,
+          toastRefAdapter
+        );
+        const { buttonProps } = useButton(closeButtonProps as any, closeButtonAdapter);
+
+        return () =>
+          h("div", { ...toastProps, ref: toastRef }, [
+            h("div", { ...contentProps }, [h("div", { ...titleProps }, (props.toast as ToastItem).content)]),
+            h("button", { ...buttonProps, ref: closeButtonRef, "data-testid": `close-${(props.toast as ToastItem).key}` }, "x"),
+          ]);
+      },
+    });
+
+    const App = defineComponent({
+      name: "ToastMixedDismissalApp",
+      setup() {
+        const containerRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return containerRef.value;
+          },
+          set current(value: HTMLElement | null) {
+            containerRef.value = value;
+          },
+        };
+        const state = reactive({
+          visibleToasts: [] as ToastItem[],
+          close(key: number) {
+            if (state.visibleToasts[0]?.key !== key) {
+              return;
+            }
+
+            const nextToast = queue.shift();
+            state.visibleToasts = nextToast ? [nextToast] : [];
+          },
+          pauseAll: vi.fn(),
+          resumeAll: vi.fn(),
+        });
+
+        const addToast = () => {
+          const toast: ToastItem = { key: ++nextKey, content: `Mmmmm toast ${nextKey}x` };
+          if (state.visibleToasts.length > 0) {
+            queue.unshift(state.visibleToasts[0]);
+          }
+          state.visibleToasts = [toast];
+        };
+
+        const { regionProps } = useToastRegion({}, state as any, refAdapter);
+        latestRegionProps = regionProps;
+
+        return () =>
+          h("div", [
+            h("button", { "data-testid": "add-toast", onClick: addToast }, "Add toast"),
+            h(
+              "div",
+              { ...regionProps, ref: containerRef },
+              state.visibleToasts.map((toast) => h(ToastItemView, { key: toast.key, toast, state }))
+            ),
+          ]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    const addButton = wrapper.get('[data-testid="add-toast"]').element as HTMLButtonElement;
+    addButton.focus();
+
+    await wrapper.get('[data-testid="add-toast"]').trigger("click");
+    await wrapper.get('[data-testid="add-toast"]').trigger("click");
+    await nextTick();
+
+    let toast = wrapper.get('[role="alertdialog"]');
+    expect(toast.text()).toContain("Mmmmm toast 2x");
+
+    const region = wrapper.get('[role="region"]').element as HTMLElement;
+    addButton.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region);
+
+    const firstClose = toast.get('[data-testid="close-2"]');
+    const firstCloseElement = firstClose.element as HTMLElement;
+    firstCloseElement.focus();
+    const focusEvent = new FocusEvent("focus", { relatedTarget: addButton });
+    Object.defineProperty(focusEvent, "currentTarget", { value: region });
+    Object.defineProperty(focusEvent, "target", { value: firstCloseElement });
+    const onRegionFocus = (latestRegionProps as { onFocus?: (event: FocusEvent) => void } | null)?.onFocus;
+    if (typeof onRegionFocus === "function") {
+      onRegionFocus(focusEvent);
+    }
+    firstCloseElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }));
+    firstCloseElement.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true, cancelable: true }));
+    await nextTick();
+
+    toast = wrapper.get('[role="alertdialog"]');
+    expect(toast.text()).toContain("Mmmmm toast 1x");
+    expect(document.activeElement).toBe(toast.element);
+
+    const finalClose = toast.get('[data-testid="close-1"]');
+    await finalClose.trigger("click");
+    await nextTick();
+
+    expect(wrapper.find('[role="alertdialog"]').exists()).toBe(false);
+    expect(document.activeElement).toBe(addButton);
+
+    wrapper.unmount();
   });
 });
