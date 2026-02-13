@@ -1,4 +1,4 @@
-import { effectScope } from "vue";
+import { effectScope, nextTick, reactive } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSliderState } from "../src/useSliderState";
 
@@ -231,5 +231,53 @@ describe("useSliderState", () => {
     nonEditable.state.setThumbValue(0, 40);
     expect(nonEditable.state.values).toEqual([40]);
     nonEditable.stop();
+  });
+
+  it("reflects controlled array value updates from reactive props", async () => {
+    const onChange = vi.fn();
+    const controlledProps = reactive({
+      value: [10, 40],
+      onChange,
+      numberFormatter,
+    });
+
+    const { state, stop } = setupSliderState(controlledProps as any);
+    expect(state.values).toEqual([10, 40]);
+
+    state.setThumbValue(0, 20);
+    expect(onChange).toHaveBeenLastCalledWith([20, 40]);
+    expect(state.values).toEqual([10, 40]);
+
+    controlledProps.value = [20, 40];
+    await nextTick();
+    expect(state.values).toEqual([20, 40]);
+
+    controlledProps.value = [30, 60];
+    await nextTick();
+    expect(state.values).toEqual([30, 60]);
+
+    stop();
+  });
+
+  it("uses numeric callback shape for controlled single value", async () => {
+    const onChange = vi.fn();
+    const controlledProps = reactive({
+      value: 25,
+      onChange,
+      numberFormatter,
+    });
+
+    const { state, stop } = setupSliderState(controlledProps as any);
+    expect(state.values).toEqual([25]);
+
+    state.incrementThumb(0);
+    expect(onChange).toHaveBeenLastCalledWith(26);
+    expect(state.values).toEqual([25]);
+
+    controlledProps.value = 26;
+    await nextTick();
+    expect(state.values).toEqual([26]);
+
+    stop();
   });
 });

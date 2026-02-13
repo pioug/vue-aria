@@ -1,5 +1,5 @@
 import { clamp, snapValueToStep, useControlledState } from "@vue-aria/utils-state";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export interface SliderState {
   values: number[];
@@ -100,10 +100,15 @@ export function useSliderState<T extends number | number[]>(
       return snapValueToStep(value, min, max, step);
     });
 
-  const controlledValue = restrictValues(convertValue(props.value as number | number[] | undefined));
-  const defaultValue = restrictValues(
-    convertValue(props.defaultValue as number | number[] | undefined) ?? [minValue]
-  )!;
+  const controlledValue = computed(() =>
+    restrictValues(convertValue(props.value as number | number[] | undefined))
+  );
+  const defaultValue = computed(
+    () =>
+      restrictValues(
+        convertValue(props.defaultValue as number | number[] | undefined) ?? [minValue]
+      )!
+  );
   const onChange = createOnChange(
     props.value as number | number[] | undefined,
     props.defaultValue as number | number[] | undefined,
@@ -116,8 +121,8 @@ export function useSliderState<T extends number | number[]>(
   );
 
   const [valuesState, setValuesState] = useControlledState<number[]>(
-    () => controlledValue,
-    defaultValue,
+    () => controlledValue.value,
+    () => defaultValue.value,
     onChange
   );
 
@@ -136,13 +141,20 @@ export function useSliderState<T extends number | number[]>(
     isDraggingsRef.value = draggings;
   };
 
+  watch(
+    () => valuesState.value,
+    (next) => {
+      valuesRef.value = next;
+    }
+  );
+
   const getValuePercent = (value: number) => (value - minValue) / (maxValue - minValue);
 
   const getThumbMinValue = (index: number) =>
-    index === 0 ? minValue : valuesRef.value[index - 1];
+    index === 0 ? minValue : valuesState.value[index - 1];
 
   const getThumbMaxValue = (index: number) =>
-    index === valuesRef.value.length - 1 ? maxValue : valuesRef.value[index + 1];
+    index === valuesState.value.length - 1 ? maxValue : valuesState.value[index + 1];
 
   const isThumbEditable = (index: number) => isEditablesRef.value[index];
 
@@ -158,7 +170,7 @@ export function useSliderState<T extends number | number[]>(
     const thisMin = getThumbMinValue(index);
     const thisMax = getThumbMaxValue(index);
     const snapped = snapValueToStep(value, thisMin, thisMax, step);
-    const newValues = replaceIndex(valuesRef.value, index, snapped);
+    const newValues = replaceIndex(valuesState.value, index, snapped);
     setValues(newValues);
   };
 
@@ -196,20 +208,20 @@ export function useSliderState<T extends number | number[]>(
 
   const incrementThumb = (index: number, stepSize = 1) => {
     const size = Math.max(stepSize, step);
-    updateValue(index, snapValueToStep(valuesRef.value[index] + size, minValue, maxValue, step));
+    updateValue(index, snapValueToStep(valuesState.value[index] + size, minValue, maxValue, step));
   };
 
   const decrementThumb = (index: number, stepSize = 1) => {
     const size = Math.max(stepSize, step);
-    updateValue(index, snapValueToStep(valuesRef.value[index] - size, minValue, maxValue, step));
+    updateValue(index, snapValueToStep(valuesState.value[index] - size, minValue, maxValue, step));
   };
 
   return {
     get values() {
-      return valuesRef.value;
+      return valuesState.value;
     },
-    defaultValues: props.defaultValue !== undefined ? defaultValue : initialValues,
-    getThumbValue: (index) => valuesRef.value[index],
+    defaultValues: props.defaultValue !== undefined ? defaultValue.value : initialValues,
+    getThumbValue: (index) => valuesState.value[index],
     setThumbValue: updateValue,
     setThumbPercent,
     isThumbDragging: (index) => Boolean(isDraggingsRef.value[index]),
@@ -220,9 +232,9 @@ export function useSliderState<T extends number | number[]>(
     setFocusedThumb: (index) => {
       focusedIndexRef.value = index;
     },
-    getThumbPercent: (index) => getValuePercent(valuesRef.value[index]),
+    getThumbPercent: (index) => getValuePercent(valuesState.value[index]),
     getValuePercent,
-    getThumbValueLabel: (index) => getFormattedValue(valuesRef.value[index]),
+    getThumbValueLabel: (index) => getFormattedValue(valuesState.value[index]),
     getFormattedValue,
     getThumbMinValue,
     getThumbMaxValue,

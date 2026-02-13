@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/slider`
+- Current focus package: `@vue-aria/slider-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -2602,7 +2602,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current state logic is source-aligned and already exercised in slider hook integration tests; remaining parity work is focused on additional controlled/uncontrolled lifecycle edge cases.
+  - Current state logic is source-aligned and exercised in slider hook integration tests; controlled-value reactivity now mirrors upstream expectations via `useControlledState` getters.
 
 ### Tests
 - Total upstream test files: 1 (`useSliderState.test.js`)
@@ -2612,6 +2612,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for value/percent/label getters, step snapping, min/max constraints for multi-thumb state, and percent-to-value mapping.
   - Added adapted coverage for drag lifecycle change callbacks (`onChange` and `onChangeEnd`) and no-op unchanged-value updates.
   - Added adapted coverage for single-value callback conversion (`number` instead of `number[]`) and disabled/non-editable thumb update guards.
+  - Added adapted controlled-value coverage for reactive external updates in both array and single-value (`number`) modes.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -4005,3 +4006,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted track touch lifecycle coverage (`touchstart` -> `touchmove` -> `touchend`) for nearest-thumb selection and drag updates.
   - added adapted thumb touch drag lifecycle coverage (`touchstart` -> `touchmove` -> `touchend`) with real thumb value updates and drag-state teardown.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 757 tests).
+- Expanded `@vue-aria/slider-state` controlled reactivity parity:
+  - updated `useSliderState` to source controlled/default values through reactive `useControlledState` getters, aligning controlled-value behavior with upstream expectations.
+  - switched state reads (`values`, thumb bounds, increments/decrements, value labels) to `valuesState` so externally controlled updates are reflected without internal stale snapshots.
+  - added adapted tests for reactive controlled array updates and controlled single-value callback shape/update flow.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 759 tests).
