@@ -444,4 +444,100 @@ describe("useSelectableCollection", () => {
       scope.stop();
     }
   });
+
+  it("moves focus to the last tabbable item on Tab when tab navigation is disabled", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+    const first = document.createElement("button");
+    const last = document.createElement("button");
+    const outside = document.createElement("button");
+    ref.current.append(first, last);
+    document.body.append(ref.current, outside);
+    outside.focus();
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        allowsTabNavigation: false,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+      expect(document.activeElement).toBe(last);
+    } finally {
+      scope.stop();
+      ref.current.remove();
+      outside.remove();
+    }
+  });
+
+  it("clears focus on blur when focus leaves the collection", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+    const outside = document.createElement("button");
+    document.body.append(ref.current, outside);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onBlur = collectionProps.onBlur as (event: FocusEvent) => void;
+      const blurEvent = new FocusEvent("blur", { relatedTarget: outside });
+      Object.defineProperty(blurEvent, "currentTarget", { value: ref.current });
+
+      onBlur(blurEvent);
+      expect(manager.setFocused).toHaveBeenCalledWith(false);
+    } finally {
+      scope.stop();
+      ref.current.remove();
+      outside.remove();
+    }
+  });
+
+  it("prevents default mousedown on the scroll container itself", () => {
+    const manager = createManager();
+    const scrollEl = document.createElement("div");
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        scrollRef: { current: scrollEl },
+      })
+    )!;
+
+    try {
+      const onMousedown = collectionProps.onMousedown as (event: MouseEvent) => void;
+      const event = {
+        target: scrollEl,
+        preventDefault: vi.fn(),
+      } as unknown as MouseEvent;
+
+      onMousedown(event);
+      expect((event.preventDefault as any).mock.calls.length).toBe(1);
+    } finally {
+      scope.stop();
+    }
+  });
 });

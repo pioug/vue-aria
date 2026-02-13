@@ -277,6 +277,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - Escape clear-selection behavior and disabled clear branch
     - Home/End range-extension behavior with ctrl+shift modifiers
     - focus-entry strategy selecting the last selected key when entering from a following element
+    - Tab focus handoff to last tabbable item when tab navigation is disabled
+    - blur leave behavior clearing collection focus state
+    - scroll-container mousedown prevention behavior
   - Upstream `useSelectableCollection` component-level pointer/touch semantics remain pending full listbox/story parity harness migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2649,3 +2652,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Firefox keyboard `_blank` behavior on non-Mac (ctrl modifier)
   - Firefox keyboard `_blank` behavior on Mac (meta modifier)
 - Validation: `npm run check` passed, `npm test` passed (121 files, 444 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` branch parity with adapted tests for:
+  - Tab fallback focus handoff to last tabbable item when tab navigation is disabled
+  - blur leave behavior clearing collection focus state
+  - scroll-container mousedown default-prevention behavior
+- Validation: `npm run check` passed, `npm test` passed (121 files, 447 tests).
