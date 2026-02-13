@@ -1903,6 +1903,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - no focus transfer when an earlier form field is first-invalid
     - no focus transfer when invalid event is already default-prevented
     - first-invalid ordering re-evaluation after earlier field validity changes
+    - first-invalid ordering re-evaluation after inserting a new earlier invalid field
   - Added adapted `useSelect` keyboard/focus parity coverage for:
     - arrow-key no-op selection path when delegate has no first key available (with preserved default prevention)
     - menu blur propagation when `relatedTarget` is `null`
@@ -3417,6 +3418,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/select/useHiddenSelect` dynamic first-invalid mutation parity:
   - added adapted coverage for re-evaluating first-invalid ordering after earlier field validity changes in native validation mode
 - Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
+- Expanded `@vue-aria/select/useHiddenSelect` dynamic insertion ordering parity:
+  - added adapted coverage for re-evaluating first-invalid ordering after inserting new earlier invalid controls
+- Validation: `npm run check` passed, `npm test` passed (130 files, 639 tests).
 - Tightened `@vue-aria/select/useSelect` multiple-selection keyboard guard parity:
   - strengthened adapted assertions to ensure arrow-key handlers in multiple selection mode do not force `preventDefault`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
