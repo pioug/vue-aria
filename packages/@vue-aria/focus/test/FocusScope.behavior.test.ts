@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { disableShadowDOM, enableShadowDOM } from "@vue-aria/flags";
 import { Teleport, defineComponent, h, nextTick, onMounted, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { FocusScope, useFocusManager, type FocusManager } from "../src";
@@ -1250,6 +1251,72 @@ describe("FocusScope behavior", () => {
     expect(document.activeElement).toBe(beforeScope);
 
     wrapper.unmount();
+  });
+
+  it("contains focus within a shadow-dom focus scope", () => {
+    enableShadowDOM();
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const shadowRoot = host.attachShadow({ mode: "open" });
+
+    const wrapper = mount(defineComponent({
+      render() {
+        return h(
+          Teleport,
+          { to: shadowRoot },
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+                h("input", { id: "input3" }),
+              ],
+            }
+          )
+        );
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    try {
+      const input1 = shadowRoot.querySelector("#input1") as HTMLInputElement;
+      const input2 = shadowRoot.querySelector("#input2") as HTMLInputElement;
+      const input3 = shadowRoot.querySelector("#input3") as HTMLInputElement;
+
+      const tabFromShadowActive = (shiftKey = false) => {
+        const active = shadowRoot.activeElement as HTMLElement | null;
+        if (!active) {
+          return;
+        }
+        active.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Tab",
+            shiftKey,
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+      };
+
+      input1.focus();
+      expect(document.activeElement).toBe(host);
+      expect(shadowRoot.activeElement).toBe(input1);
+
+      tabFromShadowActive(false);
+      expect(shadowRoot.activeElement).toBe(input2);
+      tabFromShadowActive(false);
+      expect(shadowRoot.activeElement).toBe(input3);
+      tabFromShadowActive(false);
+      expect(shadowRoot.activeElement).toBe(input1);
+    } finally {
+      wrapper.unmount();
+      host.remove();
+      disableShadowDOM();
+    }
   });
 
   it("does not bubble restore focus events out of nested scopes", async () => {

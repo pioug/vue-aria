@@ -2997,3 +2997,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` DOM-order navigation parity for non-containing scopes with adapted upstream coverage for:
   - moving focus from an in-scope element to the next/previous sibling controls in document order when tabbing forward/backward
 - Validation: `npm run check` passed, `npm test` passed (125 files, 518 tests).
+- Expanded `@vue-aria/focus/FocusScope` shadow DOM parity with adapted upstream coverage for:
+  - containing focus traversal inside a shadow-root mounted scope
+- Improved shadow-root containment key handling:
+  - containment now checks `getActiveElement(ownerDocument)` so shadow-root active descendants are recognized instead of the shadow host element
+- Validation: `npm run check` passed, `npm test` passed (125 files, 519 tests).

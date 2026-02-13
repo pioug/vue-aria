@@ -352,7 +352,7 @@ export const FocusScope = defineComponent({
               || event.metaKey
               || !scopeRoot
               || activeScopeRef.value !== scopeRoot
-              || !nodeContains(scopeRoot, getOwnerDocument(scopeRoot).activeElement)
+              || !nodeContains(scopeRoot, getActiveElement(getOwnerDocument(scopeRoot)))
             ) {
               return;
             }

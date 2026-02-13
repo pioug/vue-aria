@@ -116,4 +116,5 @@ onBeforeUnmount(() => {
   - radio-group tabbable traversal rules for containment
   - owner-document/iframe containment, autofocus, restore-focus, and focus-manager traversal behavior
   - teleported child-scope containment behavior for both `contain` and non-`contain` child scopes
+  - shadow-root containment tab traversal behavior
 - Remaining work focuses on broader full upstream FocusScope test-file migration.
