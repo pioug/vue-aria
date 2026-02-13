@@ -2581,8 +2581,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 4 (`useTable.test.tsx`, `useTableBackwardCompat.test.tsx`, `ariaTableResizing.test.tsx`, `tableResizingTests.tsx`)
-- Ported test files: 7 (adapted)
-- Passing test files: 7 (validated 2026-02-13)
+- Ported test files: 8 (adapted)
+- Passing test files: 8 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for table ID utilities and row-header labeling.
   - Added adapted coverage for `TableKeyboardDelegate` vertical/horizontal/search behavior.
@@ -2594,6 +2594,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
   - Added upstream-aligned `ariaTableResizing.test.ts` Vue adaptation covering resize-start and resize-end callback map semantics.
   - Added shared `tableResizingTests.ts` helper to mirror upstream resize-test suite structure.
+  - Added integration-style table action coverage (`useTableActions.test.ts`) for replace-selection double-click row action and legacy row `onAction` behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5061,3 +5062,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added shared `packages/@vue-aria/table/test/tableResizingTests.ts` helper and wired `ariaTableResizing.test.ts` through it for upstream-structure parity.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (7 files, 22 tests).
+- Expanded `@vue-aria/table` action interaction parity:
+  - added `packages/@vue-aria/table/test/useTableActions.test.ts` with integration-style double-click action coverage.
+  - covered both `onRowAction` and legacy row-level `onAction` behavior in replace-selection mode.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (8 files, 24 tests).
