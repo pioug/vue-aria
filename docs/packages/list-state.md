@@ -15,14 +15,18 @@
 import { useSingleSelectListState } from "@vue-aria/list-state";
 
 const state = useSingleSelectListState({
-  defaultSelectedKey: "a",
+  defaultSelectedKey: "2",
   items: [
-    { type: "item", key: "a", textValue: "A", childNodes: [] } as any,
-    { type: "item", key: "b", textValue: "B", childNodes: [] } as any
-  ]
+    { id: "1", label: "Red" },
+    { id: "2", label: "Blue" },
+    { id: "3", label: "Green" }
+  ],
+  getKey: (item) => item.id,
+  getTextValue: (item) => item.label
 });
 ```
 
 ## Notes
 
+- `items` accepts either prebuilt `Node` objects or plain data records with `getKey`/`getTextValue`.
 - `Spectrum S2` is ignored for this port.

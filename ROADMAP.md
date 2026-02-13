@@ -1489,8 +1489,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Add richer keyboard/action/link behavior parity tests around listbox option interactions.
-2. Validate listbox/list-state behavior in downstream Spectrum listbox/select integrations.
+1. Validate listbox/list-state behavior in downstream Spectrum listbox/select integrations.
+2. Expand docs toward upstream example parity depth (states, sections, disabled and action-link variants).
 
 ## 29) Package Record: @vue-aria/list-state
 - Upstream source path(s):
@@ -1544,7 +1544,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Add full collection-builder parity to support upstream children-driven collection construction (beyond current plain-item extractor support).
-2. Integrate listbox hooks to consume `@vue-aria/list-state` state constructors directly in docs/examples.
+2. Expand list-state docs parity with sectioned collections and filtering walkthroughs.
 
 ## 30) Session Log
 ### 2026-02-13
@@ -1919,4 +1919,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added `getKey` and `getTextValue` extractors for key/text parity mapping
   - preserved existing `collection` override behavior
 - Added adapted tests for plain-item list-state and single-select state construction with extractors.
+- Validation: `npm run check` passed, `npm test` passed (101 files, 299 tests).
+- Updated docs examples so `@vue-aria/listbox` and `@vue-aria/list-state` are demonstrated together using state constructors and plain-item extractor support.
 - Validation: `npm run check` passed, `npm test` passed (101 files, 299 tests).

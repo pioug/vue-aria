@@ -15,36 +15,34 @@
 ```vue
 <script setup lang="ts">
 import { useListBox, useOption } from "@vue-aria/listbox";
+import { useListState } from "@vue-aria/list-state";
 
 const listRef = { current: null as HTMLElement | null };
-const optionRef = { current: null as HTMLElement | null };
+const optionARef = { current: null as HTMLElement | null };
+const optionBRef = { current: null as HTMLElement | null };
 
-// Placeholder state shape; in real usage this comes from list state management.
-const state = {
-  collection: {
-    getItem: () => null,
-    getFirstKey: () => null,
-    getLastKey: () => null,
-    getKeyBefore: () => null,
-    getKeyAfter: () => null
-  },
-  disabledKeys: new Set(),
-  selectionManager: {
-    selectionMode: "single",
-    selectionBehavior: "toggle",
-    isFocused: false,
-    focusedKey: null
-  }
-} as any;
+const state = useListState({
+  selectionMode: "single",
+  items: [
+    { id: "a", label: "Option A" },
+    { id: "b", label: "Option B" }
+  ],
+  getKey: (item) => item.id,
+  getTextValue: (item) => item.label
+});
 
 const { listBoxProps } = useListBox({ "aria-label": "Example list" }, state, listRef);
-const { optionProps } = useOption({ key: "a" }, state, optionRef);
+const { optionProps: optionAProps } = useOption({ key: "a" }, state, optionARef);
+const { optionProps: optionBProps } = useOption({ key: "b" }, state, optionBRef);
 </script>
 
 <template>
   <ul :ref="(el) => (listRef.current = el as HTMLElement | null)" v-bind="listBoxProps">
-    <li :ref="(el) => (optionRef.current = el as HTMLElement | null)" v-bind="optionProps">
+    <li :ref="(el) => (optionARef.current = el as HTMLElement | null)" v-bind="optionAProps">
       Option A
+    </li>
+    <li :ref="(el) => (optionBRef.current = el as HTMLElement | null)" v-bind="optionBProps">
+      Option B
     </li>
   </ul>
 </template>
@@ -52,4 +50,5 @@ const { optionProps } = useOption({ key: "a" }, state, optionRef);
 
 ## Notes
 
+- Pair `useListBox` with `useListState` from `@vue-aria/list-state` for upstream-equivalent behavior.
 - `Spectrum S2` is ignored for this port.
