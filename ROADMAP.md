@@ -2528,6 +2528,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 2
 - Test parity notes:
   - Added adapted `useSlider` coverage for label/group/output prop wiring and track click/drag behavior.
+  - Added adapted `useSlider` coverage for label-click focus handoff to first thumb and keyboard-modality forcing.
   - Added adapted `useSlider` coverage for disabled-track no-op behavior.
   - Added adapted `useSlider` coverage for `aria-label` group labeling, vertical track interaction behavior, and stacked-thumb nearest-selection resolution.
   - Added adapted `useSlider` touch-path coverage for track `touchstart`/`touchmove`/`touchend` interaction lifecycle.
@@ -4055,3 +4056,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - public API checklist complete
   - upstream tests fully migrated
   - docs/examples parity checklist complete for current package scope
+- Expanded `@vue-aria/slider` label interaction parity:
+  - added adapted `useSlider` test coverage for label-click focus handoff to the first thumb and keyboard modality forcing path.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 765 tests).

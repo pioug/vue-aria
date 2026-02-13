@@ -1,6 +1,7 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSlider, type SliderState } from "../src/useSlider";
+import * as interactions from "@vue-aria/interactions";
 
 function createSliderState(initialValues: number[] = [10, 80]) {
   const dragging = new Set<number>();
@@ -135,6 +136,41 @@ describe("useSlider", () => {
     expect((result.outputProps.htmlFor as string).split(" ")).toHaveLength(1);
 
     scope.stop();
+  });
+
+  it("focuses first thumb and sets keyboard modality when label is clicked", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 10,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([0]);
+    const setInteractionModalitySpy = vi.spyOn(interactions, "setInteractionModality");
+
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useSlider({ label: "Slider" }, state, { current: track })
+    )!;
+
+    const thumb = document.createElement("input");
+    thumb.id = (result.outputProps.htmlFor as string).split(" ")[0];
+    const focusSpy = vi.spyOn(thumb, "focus");
+    document.body.appendChild(thumb);
+
+    (result.labelProps.onClick as () => void)?.();
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    expect(setInteractionModalitySpy).toHaveBeenCalledWith("keyboard");
+
+    scope.stop();
+    thumb.remove();
   });
 
   it("returns expected group props for aria-label", () => {
