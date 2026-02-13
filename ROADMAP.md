@@ -32,7 +32,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/i18n`: In progress
 - `@vue-aria/ssr`: In progress
 - `@vue-aria/interactions`: In progress
-- `@vue-aria/focus`: Not started
+- `@vue-aria/focus`: In progress
 - `@vue-aria/live-announcer`: Not started
 - `@vue-aria/overlays`: Not started
 - `@vue-aria/visually-hidden`: Not started
@@ -345,7 +345,75 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 3. Port/migrate upstream interaction tests incrementally after each module.
 4. Wire downstream consumers (`@vue-aria/selection`) once required interaction primitives are available.
 
-## 8) Session Log
+## 8) Package Record: @vue-aria/focus
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/focus/src`
+  - `references/react-spectrum/packages/@react-aria/focus/test`
+- Local package path: `packages/@vue-aria/focus`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules for initial prerequisite slice enumerated
+- [ ] Public API checklist complete (full package not yet ported)
+
+### Implementation
+- [x] Initial prerequisite slice ported:
+  - `virtualFocus` APIs:
+    - `moveVirtualFocus`
+    - `dispatchVirtualBlur`
+    - `dispatchVirtualFocus`
+    - `getVirtuallyFocusedElement`
+  - `FocusScope` utility APIs:
+    - `getFocusableTreeWalker`
+    - `createFocusManager`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Remaining:
+  - Port `FocusScope` component behavior and focus containment logic.
+  - Port `FocusRing`, `useFocusRing`, `useHasTabbableChild`.
+  - Align tree walker behavior with full upstream radio/scope handling.
+  - Migrate full upstream focus tests.
+
+### Tests
+- Total upstream test files: Pending full inventory
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
+  - Full upstream focus test migration remains pending.
+- [ ] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [ ] VitePress/Storybook pages ported
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Focus containment parity validated
+- [ ] Virtual focus parity validated across components
+
+### Visual Parity
+- [ ] Upstream example comparisons complete
+- [ ] Variant/state comparisons complete
+- [ ] Open visual deltas documented
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+- Remaining dependencies:
+  - None in current runtime slice; full package parity pending.
+
+### Next Actions
+1. Port `FocusScope` component and focus containment stack behavior.
+2. Port `useFocusRing` + `FocusRing`.
+3. Port upstream focus tests incrementally with Vue test adapters.
+4. Integrate focus package with `@vue-aria/selection` selectable hooks.
+
+## 9) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -420,3 +488,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `setInteractionModality`
 - Added adapted tests for focus safety (virtual/non-virtual) and modality state.
 - Validation: `npm run check` passed, `npm test` passed (34 files, 81 tests).
+- Started `@vue-aria/focus` prerequisite slice from upstream `@react-aria/focus`:
+  - `moveVirtualFocus`
+  - `dispatchVirtualBlur`
+  - `dispatchVirtualFocus`
+  - `getVirtuallyFocusedElement`
+  - `getFocusableTreeWalker`
+  - `createFocusManager`
+- Added adapted tests for virtual focus behavior and focusable tree walker traversal.
+- Validation: `npm run check` passed, `npm test` passed (35 files, 85 tests).

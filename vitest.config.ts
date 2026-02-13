@@ -40,6 +40,9 @@ export default defineConfig({
       ),
       "@vue-aria/interactions": fileURLToPath(
         new URL("./packages/@vue-aria/interactions/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/focus": fileURLToPath(
+        new URL("./packages/@vue-aria/focus/src/index.ts", import.meta.url)
       )
     }
   }
