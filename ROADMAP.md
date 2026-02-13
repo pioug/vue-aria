@@ -314,6 +314,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useKeyboard`
   - `useFocus`
   - `useFocusWithin`
+  - `useInteractOutside`
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -325,14 +326,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 5
-- Passing test files: 5
+- Ported test files: 6
+- Passing test files: 6
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
   - Added adapted tests for `useKeyboard` event handling and propagation semantics.
   - Added adapted tests for `useFocus` immediate-target and disabled behaviors.
   - Added adapted tests for `useFocusWithin` target/child focus behavior and outside-focus blur handling.
+  - Added adapted tests for `useInteractOutside` outside detection, left-button gating, start/end callback flow, and disabled behavior.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -570,3 +572,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useFocusWithin`
 - Added adapted tests for target/child focus handling and outside-focus blur transitions.
 - Validation: `npm run check` passed, `npm test` passed (43 files, 116 tests).
+- Ported `@vue-aria/interactions` outside-interaction utility slice:
+  - `useInteractOutside`
+- Added adapted tests for outside pointer/mouse semantics, disabled behavior, and `onInteractOutsideStart` ordering.
+- Validation: `npm run check` passed, `npm test` passed (44 files, 121 tests).
