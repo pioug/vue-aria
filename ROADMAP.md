@@ -1593,7 +1593,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 5 (adapted)
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, non-touch onPressStart open behavior with disabled short-circuit, and virtualized menu item `aria-posinset`/`aria-setsize` metadata across full item sets.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, safe-mouse touch/pen pointer-move ignore behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, non-touch onPressStart open behavior with disabled short-circuit, and virtualized menu item `aria-posinset`/`aria-setsize` metadata across full item sets.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2550,3 +2550,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - skipping focus callback propagation when select state is already focused
   - skipping blur callback propagation while menu is open
 - Validation: `npm run check` passed, `npm test` passed (118 files, 403 tests).
+- Expanded `@vue-aria/menu/useSafelyMouseToSubmenu` edge coverage with adapted tests for:
+  - ignoring touch and pen pointer-move events in safe-pointer tracking
+- Validation: `npm run check` passed, `npm test` passed (118 files, 404 tests).

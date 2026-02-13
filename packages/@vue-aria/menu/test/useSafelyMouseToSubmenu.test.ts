@@ -17,27 +17,18 @@ function rect(left: number, top: number, right: number, bottom: number): DOMRect
   } as DOMRect;
 }
 
-function dispatchPointerMove(x: number, y: number) {
-  let event: PointerEvent;
-  if (typeof PointerEvent !== "undefined") {
-    event = new PointerEvent("pointermove", {
-      bubbles: true,
-      pointerType: "mouse",
-      clientX: x,
-      clientY: y,
-    });
-  } else {
-    event = new Event("pointermove", { bubbles: true }) as PointerEvent;
-    (event as any).pointerType = "mouse";
-    (event as any).clientX = x;
-    (event as any).clientY = y;
-  }
+function dispatchPointerMove(x: number, y: number, pointerType: string = "mouse") {
+  const event = new Event("pointermove", { bubbles: true }) as PointerEvent;
+  (event as any).pointerType = pointerType;
+  (event as any).clientX = x;
+  (event as any).clientY = y;
   window.dispatchEvent(event);
 }
 
 describe("useSafelyMouseToSubmenu", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.useRealTimers();
     setInteractionModality("keyboard");
   });
 
@@ -97,6 +88,33 @@ describe("useSafelyMouseToSubmenu", () => {
     });
     await nextTick();
 
+    expect(menu.style.pointerEvents).toBe("");
+
+    scope.stop();
+    menu.remove();
+    submenu.remove();
+  });
+
+  it("ignores touch and pen pointer movements", async () => {
+    setInteractionModality("pointer");
+    const menu = document.createElement("ul");
+    const submenu = document.createElement("ul");
+    document.body.append(menu, submenu);
+    vi.spyOn(menu, "getBoundingClientRect").mockReturnValue(rect(0, 0, 100, 100));
+    vi.spyOn(submenu, "getBoundingClientRect").mockReturnValue(rect(120, 0, 220, 100));
+
+    const scope = effectScope();
+    scope.run(() => {
+      useSafelyMouseToSubmenu({
+        menuRef: { current: menu },
+        submenuRef: { current: submenu },
+        isOpen: true,
+      });
+    });
+    await nextTick();
+
+    dispatchPointerMove(30, 50, "touch");
+    dispatchPointerMove(40, 50, "pen");
     expect(menu.style.pointerEvents).toBe("");
 
     scope.stop();
