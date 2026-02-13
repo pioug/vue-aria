@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/progress`
+- Current focus package: `@vue-aria/meter`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -61,7 +61,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/dialog`: Not started
 - `@vue-aria/tooltip`: Not started
 - `@vue-aria/progress`: In progress
-- `@vue-aria/meter`: Not started
+- `@vue-aria/meter`: In progress
 - `@vue-aria/collections`: In progress
 - `@vue-aria/selection`: In progress
 
@@ -1069,7 +1069,54 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum progress component implementations.
 2. Expand to meter package parity.
 
-## 21) Session Log
+## 21) Package Record: @vue-aria/meter
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/meter/src`
+- Local package path:
+  - `packages/@vue-aria/meter`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useMeter`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useMeter.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: none in `@react-aria/meter` reference package
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted coverage for meter role fallback token and aria value forwarding from progress semantics.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/meter.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate downstream Spectrum meter component behavior
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum meter component implementations.
+2. Continue queue progression to overlay/navigation packages.
+
+## 22) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1334,3 +1381,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted upstream progress tests for defaults, labeling, determinate/indeterminate behavior, and custom value labels.
 - Added VitePress docs page for `@vue-aria/progress` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (72 files, 226 tests).
+- Started `@vue-aria/meter` package:
+  - `useMeter`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted meter tests for role fallback and aria value forwarding behavior.
+- Added VitePress docs page for `@vue-aria/meter` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (73 files, 228 tests).
