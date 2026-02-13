@@ -23,6 +23,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/ssr](/packages/ssr)
 - [@vue-aria/live-announcer](/packages/live-announcer)
 - [@vue-aria/aria-modal-polyfill](/packages/aria-modal-polyfill)
+- [@vue-aria/landmark](/packages/landmark)
 - [@vue-aria/visually-hidden](/packages/visually-hidden)
 - [@vue-aria/label](/packages/label)
 - [@vue-aria/button](/packages/button)

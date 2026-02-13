@@ -50,6 +50,9 @@ export default defineConfig({
       "@vue-aria/aria-modal-polyfill": fileURLToPath(
         new URL("./packages/@vue-aria/aria-modal-polyfill/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/landmark": fileURLToPath(
+        new URL("./packages/@vue-aria/landmark/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/visually-hidden": fileURLToPath(
         new URL("./packages/@vue-aria/visually-hidden/src/index.ts", import.meta.url)
       ),

@@ -35,6 +35,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/focus`: In progress
 - `@vue-aria/live-announcer`: In progress
 - `@vue-aria/aria-modal-polyfill`: In progress
+- `@vue-aria/landmark`: In progress
 - `@vue-aria/overlays`: In progress
 - `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: In progress
@@ -2345,7 +2346,58 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Validate behavior in downstream component implementations once `@vue-spectrum/actiongroup` lands.
 2. Expand docs examples to include fully interactive Vue component snippets matching upstream stories.
 
-## 39) Session Log
+## 39) Package Record: @vue-aria/landmark
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/landmark/src`
+  - `references/react-spectrum/packages/@react-aria/landmark/test`
+- Local package path:
+  - `packages/@vue-aria/landmark`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useLandmark`
+  - `UNSTABLE_createLandmarkController`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useLandmark.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: 2
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, and controller-based forward/backward/main navigation.
+  - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/landmark.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Expand parity coverage for landmark warning/focus restoration edge cases from upstream’s full interaction suite.
+
+### Visual Parity
+- Not applicable for this utility package beyond landmark semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port additional upstream `useLandmark.test.tsx` interaction coverage (hidden landmarks, custom-event wrapping, nested focus restoration).
+2. Integrate `@vue-aria/landmark` into downstream `@vue-aria/toast` porting work.
+
+## 40) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -3572,3 +3624,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted integration coverage for nested-toolbar role downgrade behavior (`toolbar` -> `group`).
   - updated `useActionGroup` role/orientation wiring to compute from current DOM nesting at runtime.
 - Validation: `npm run check` passed, `npm test` passed (134 files, 658 tests).
+- Started `@vue-aria/landmark` package parity slice:
+  - ported `useLandmark` and `UNSTABLE_createLandmarkController` with upstream-aligned singleton manager behavior and F6 navigation handling.
+  - added adapted tests for landmark prop wiring, F6/Alt+F6 navigation, and controller-based forward/backward/main focus operations.
+  - added adapted SSR render coverage for `useLandmark`.
+  - added VitePress docs page (`docs/packages/landmark.md`) and wired docs index/nav/sidebar links.
+  - added package-level roadmap record and execution queue tracking entry.
+- Validation: `npm run check` passed, `npm test` passed (136 files, 663 tests).
