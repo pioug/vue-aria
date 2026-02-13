@@ -1988,7 +1988,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current locale string parity is en-US seeded while broader locale bundle parity remains pending.
+  - Locale dictionary wiring now imports full upstream `@react-aria/spinbutton` intl bundle; remaining parity is focused on interaction timing edge cases.
 
 ### Tests
 - Total upstream test files: 1 (`useSpinButton.test.js`)
@@ -2017,7 +2017,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Integrate spinbutton package into `@vue-aria/numberfield` consumer parity and verify end-to-end interaction timing semantics.
-2. Expand locale bundle parity beyond current en-US seeded strings.
+2. Add integration coverage validating localized `Empty` announcements through locale-provider overrides.
 
 ## 34) Package Record: @vue-aria/numberfield
 - Upstream source path(s):
@@ -3337,4 +3337,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` locale dictionary parity:
   - replaced inline en-US-only strings with generated upstream intl bundle from `@react-aria/numberfield/intl`
   - wired `useNumberField` to consume the full locale set via `intlMessages.ts`
+- Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
+- Expanded `@vue-aria/spinbutton` locale dictionary parity:
+  - replaced inline en-US-only strings with generated upstream intl bundle from `@react-aria/spinbutton/intl`
+  - wired `useSpinButton` to consume the full locale set via `intlMessages.ts`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).

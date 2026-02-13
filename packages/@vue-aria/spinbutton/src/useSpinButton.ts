@@ -2,12 +2,7 @@ import { announce, clearAnnouncer } from "@vue-aria/live-announcer";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useEffectEvent, useGlobalListeners } from "@vue-aria/utils";
 import { computed, onScopeDispose, ref, watch } from "vue";
-
-const intlMessages = {
-  "en-US": {
-    Empty: "Empty",
-  },
-};
+import { intlMessages } from "./intlMessages";
 
 const noop = () => {};
 
