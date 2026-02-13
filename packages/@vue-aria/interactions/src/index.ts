@@ -5,6 +5,7 @@ export { useFocusWithin } from "./useFocusWithin";
 export { useInteractOutside } from "./useInteractOutside";
 export { useHover } from "./useHover";
 export { useScrollWheel } from "./useScrollWheel";
+export { useMove } from "./useMove";
 export {
   isFocusVisible,
   getInteractionModality,
@@ -32,3 +33,11 @@ export type { FocusWithinProps, FocusWithinResult } from "./useFocusWithin";
 export type { InteractOutsideProps } from "./useInteractOutside";
 export type { HoverEvent, HoverProps, HoverResult } from "./useHover";
 export type { ScrollWheelProps } from "./useScrollWheel";
+export type {
+  MovePointerType,
+  MoveStartEvent,
+  MoveMoveEvent,
+  MoveEndEvent,
+  MoveEvents,
+  MoveResult,
+} from "./useMove";
