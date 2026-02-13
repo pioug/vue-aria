@@ -563,4 +563,29 @@ describe("useNumberField hook", () => {
     expect(announceSpy).not.toHaveBeenCalled();
     scope.stop();
   });
+
+  it("calls user onBlur while still running commit/announce flow", () => {
+    const state = createState();
+    const onBlur = vi.fn();
+    const input = document.createElement("input");
+    input.value = "1";
+    state.commit.mockImplementation(() => {
+      input.value = "2";
+    });
+    const announceSpy = vi.spyOn(liveAnnouncer, "announce").mockImplementation(() => {});
+    const ref = { current: input as HTMLInputElement | null };
+
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField({ "aria-label": "Quantity", onBlur }, state as any, ref)
+    )!;
+    const event = new FocusEvent("blur");
+
+    (result.inputProps.onBlur as (event: FocusEvent) => void)?.(event);
+
+    expect(onBlur).toHaveBeenCalledWith(event);
+    expect(state.commit).toHaveBeenCalled();
+    expect(announceSpy).toHaveBeenCalledWith("2", "assertive");
+    scope.stop();
+  });
 });

@@ -2079,6 +2079,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - default-prevented invalid-event guard that skips native focus transfer
     - focus transfer behavior when earlier siblings are disabled or non-validatable
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
+  - Added adapted blur merge-path coverage ensuring user-provided `onBlur` callbacks are preserved while commit/announce logic still runs.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
   - Added adapted keydown propagation parity coverage for non-Enter keys (`continuePropagation` passthrough path).
 - [ ] All relevant upstream tests migrated
@@ -2098,7 +2099,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining numberfield interaction parity (commit/announce timing edge cases).
+1. Port remaining numberfield interaction parity for commit/announce timing in controlled-value rerender edge cases.
 2. Expand native-invalid integration parity for mixed custom-validity and multi-field first-invalid scenarios.
 
 ## 35) Package Record: @vue-aria/numberfield-state
@@ -3384,3 +3385,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` touch repeat-threshold integration parity:
   - added adapted coverage for no-increment-before-threshold and increment-after-threshold touch timer behavior
 - Validation: `npm run check` passed, `npm test` passed (130 files, 628 tests).
+- Expanded `@vue-aria/numberfield` blur commit/announce merge-path parity:
+  - added adapted coverage ensuring user `onBlur` handlers run alongside commit normalization and live announcement behavior
+- Validation: `npm run check` passed, `npm test` passed (130 files, 629 tests).
