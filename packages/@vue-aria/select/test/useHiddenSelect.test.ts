@@ -307,6 +307,42 @@ describe("useHiddenSelect", () => {
     form.remove();
   });
 
+  it("re-evaluates first-invalid ordering after reordering controls", async () => {
+    const state = createState("single");
+    const precedingInput = document.createElement("input");
+    precedingInput.required = true;
+    const selectElement = document.createElement("select");
+    selectElement.required = true;
+    const form = document.createElement("form");
+    form.appendChild(precedingInput);
+    form.appendChild(selectElement);
+    document.body.appendChild(form);
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(selectElement);
+    const trigger = document.createElement("button");
+    const triggerRef = { current: trigger as Element | null };
+    const focusSpy = vi.spyOn(trigger, "focus");
+    selectData.set(state as object, {
+      validationBehavior: "native",
+      isRequired: true,
+    });
+
+    const scope = effectScope();
+    scope.run(() => {
+      useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+    await nextTick();
+
+    selectElement.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    form.appendChild(precedingInput);
+    selectElement.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    form.remove();
+  });
+
   it("resets selection state on parent form reset via hidden select integration", async () => {
     const state = createState("single");
     state.defaultValue = "a";

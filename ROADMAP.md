@@ -1830,6 +1830,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - localized long-press accessibility description wiring
     - `useLongPress` callback wiring for `onLongPressStart` (`close`) and `onLongPress` (`open("first")`)
     - disabled-state propagation to `useLongPress` options
+  - Added menu-trigger pointer modality branch coverage for virtual press start (`open("first")` focus strategy path).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1904,6 +1905,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - no focus transfer when invalid event is already default-prevented
     - first-invalid ordering re-evaluation after earlier field validity changes
     - first-invalid ordering re-evaluation after inserting a new earlier invalid field
+    - first-invalid ordering re-evaluation after control reordering within the form
   - Added adapted `useSelect` keyboard/focus parity coverage for:
     - arrow-key no-op selection path when delegate has no first key available (with preserved default prevention)
     - menu blur propagation when `relatedTarget` is `null`
@@ -3431,3 +3433,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/select` docs parity for native form integration:
   - documented first-invalid focus-transfer guards, default-prevented invalid behavior, and form-reset default-value restoration in `docs/packages/select.md`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
+- Expanded `@vue-aria/menu/useMenuTrigger` virtual-pointer parity:
+  - added adapted coverage for virtual `onPressStart` opening behavior with `"first"` focus strategy.
+- Expanded `@vue-aria/select/useHiddenSelect` dynamic reorder parity:
+  - added adapted coverage for first-invalid ordering re-evaluation after reordering controls within the same form.
+- Validation: `npm run check` passed, `npm test` passed (130 files, 642 tests).

@@ -265,6 +265,28 @@ describe("useMenuTrigger", () => {
     disabledScope.stop();
   });
 
+  it("opens with first focus strategy for virtual press start", () => {
+    const state = createState();
+    const target = document.createElement("button");
+    const focusSpy = vi.spyOn(target, "focus");
+    const ref = { current: target as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ menuTriggerProps } = useMenuTrigger({ type: "menu" }, state, ref));
+    });
+
+    (menuTriggerProps.onPressStart as ((event: any) => void))?.({
+      pointerType: "virtual",
+      target,
+    });
+    expect(state.open).toHaveBeenCalledTimes(1);
+    expect(state.open).toHaveBeenCalledWith("first");
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    scope.stop();
+  });
+
   it("toggles on touch press and ignores touch press when disabled", () => {
     const state = createState();
     const target = document.createElement("button");
