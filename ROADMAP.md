@@ -2382,6 +2382,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
   - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
   - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
+  - Added adapted nested-first/nested-last variants to verify F6 traversal when nested region placement changes within `main`.
   - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
   - Added adapted focus-state coverage for blur/re-focus F6 restoration and preventing mouse-based landmark focus.
   - Added adapted visibility/window focus regression coverage for keeping focused landmarks active across tab/window blur-focus transitions.
@@ -2403,8 +2404,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port nested-first/nested-last explicit assertion variants from upstream parity suite.
-2. Port multi-component focus-management parity case from upstream (`ActionGroup` + `TableView` managed focus handoff).
+1. Port multi-component focus-management parity case from upstream (`ActionGroup` + `TableView` managed focus handoff).
+2. Port remaining upstream warning assertion exactness (`console.warn` argument list alignment with queried landmark arrays).
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3740,3 +3741,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/toast` queue timer parity:
   - added adapted lifecycle test for timeout timer pause/reset behavior across single-visible queue rotation (`toast-a` -> `toast-b` -> `toast-a`).
 - Validation: `npm run check` passed, `npm test` passed (138 files, 693 tests).
+- Expanded `@vue-aria/landmark` nested placement parity:
+  - added adapted nested-first and nested-last traversal tests to ensure stable F6 ordering regardless of nested region placement inside `main`.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 695 tests).

@@ -274,6 +274,116 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("navigates a nested landmark that appears first in main content", async () => {
+    const App = defineComponent({
+      setup() {
+        const mainRef = ref<HTMLElement | null>(null);
+        const regionRef = ref<HTMLElement | null>(null);
+
+        const mainAdapter = {
+          get current() {
+            return mainRef.value;
+          },
+          set current(value: Element | null) {
+            mainRef.value = value as HTMLElement | null;
+          },
+        };
+        const regionAdapter = {
+          get current() {
+            return regionRef.value;
+          },
+          set current(value: Element | null) {
+            regionRef.value = value as HTMLElement | null;
+          },
+        };
+
+        const { landmarkProps: mainProps } = useLandmark({ role: "main" }, mainAdapter);
+        const { landmarkProps: regionProps } = useLandmark({ role: "region", "aria-label": "Nested region" }, regionAdapter);
+
+        return () =>
+          h("div", [
+            h("main", { ...mainProps, ref: mainRef }, [
+              h("article", { ...regionProps, ref: regionRef }, "Nested"),
+              h("p", "Main content"),
+            ]),
+          ]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const main = wrapper.get("main").element as HTMLElement;
+    const region = wrapper.get("article").element as HTMLElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region);
+
+    region.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+    wrapper.unmount();
+  });
+
+  it("navigates a nested landmark that appears last in main content", async () => {
+    const App = defineComponent({
+      setup() {
+        const mainRef = ref<HTMLElement | null>(null);
+        const regionRef = ref<HTMLElement | null>(null);
+
+        const mainAdapter = {
+          get current() {
+            return mainRef.value;
+          },
+          set current(value: Element | null) {
+            mainRef.value = value as HTMLElement | null;
+          },
+        };
+        const regionAdapter = {
+          get current() {
+            return regionRef.value;
+          },
+          set current(value: Element | null) {
+            regionRef.value = value as HTMLElement | null;
+          },
+        };
+
+        const { landmarkProps: mainProps } = useLandmark({ role: "main" }, mainAdapter);
+        const { landmarkProps: regionProps } = useLandmark({ role: "region", "aria-label": "Nested region" }, regionAdapter);
+
+        return () =>
+          h("div", [
+            h("main", { ...mainProps, ref: mainRef }, [
+              h("p", "Main content"),
+              h("article", { ...regionProps, ref: regionRef }, "Nested"),
+            ]),
+          ]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const main = wrapper.get("main").element as HTMLElement;
+    const region = wrapper.get("article").element as HTMLElement;
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+
+    main.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(region);
+
+    region.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(main);
+    wrapper.unmount();
+  });
+
   it("fires a custom navigation event when wrapping forward", async () => {
     const Navigation = createLandmark("nav", "navigation", "Navigation");
     const Main = createLandmark("main", "main", "Main");
