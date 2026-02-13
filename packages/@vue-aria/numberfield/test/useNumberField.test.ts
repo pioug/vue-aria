@@ -324,6 +324,39 @@ describe("useNumberField hook", () => {
     form.remove();
   });
 
+  it("focuses numberfield on invalid when earlier siblings are disabled or non-validatable", () => {
+    const state = createState();
+    const disabledInput = document.createElement("input");
+    disabledInput.required = true;
+    disabledInput.disabled = true;
+    const helperButton = document.createElement("button");
+    const input = document.createElement("input");
+    input.required = true;
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(disabledInput);
+    form.appendChild(helperButton);
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+    const focusSpy = vi.spyOn(input, "focus");
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalled();
+    expect(focusSpy).toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
+
   it("does not focus numberfield on invalid when event is already default prevented", () => {
     const state = createState();
     const input = document.createElement("input");
