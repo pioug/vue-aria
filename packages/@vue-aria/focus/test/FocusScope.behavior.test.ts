@@ -1188,6 +1188,70 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("navigates in DOM order when scope focus starts on an in-scope element", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h("input", { id: "beforeScope" }),
+          h(
+            FocusScope,
+            {},
+            {
+              default: () => [h("input", { id: "inScope" })],
+            }
+          ),
+          h("input", { id: "afterScope" }),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const beforeScope = document.getElementById("beforeScope") as HTMLInputElement;
+    const inScope = document.getElementById("inScope") as HTMLInputElement;
+    const afterScope = document.getElementById("afterScope") as HTMLInputElement;
+
+    const tabOrder = [beforeScope, inScope, afterScope];
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      const handled = active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+      if (!handled) {
+        return;
+      }
+
+      const index = tabOrder.findIndex((element) => element === active);
+      if (index < 0) {
+        return;
+      }
+
+      const nextIndex = shiftKey
+        ? Math.max(index - 1, 0)
+        : Math.min(index + 1, tabOrder.length - 1);
+      tabOrder[nextIndex]?.focus();
+    };
+
+    inScope.focus();
+    tabFromActive(false);
+    expect(document.activeElement).toBe(afterScope);
+
+    inScope.focus();
+    tabFromActive(true);
+    expect(document.activeElement).toBe(beforeScope);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

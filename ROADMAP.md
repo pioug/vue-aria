@@ -2994,3 +2994,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - ancestor scopes can no longer reclaim active-scope state while a descendant contained scope is active
   - descendant scopes (including teleported descendants) retain focus ownership until focus moves within allowed hierarchy
 - Validation: `npm run check` passed, `npm test` passed (125 files, 517 tests).
+- Expanded `@vue-aria/focus/FocusScope` DOM-order navigation parity for non-containing scopes with adapted upstream coverage for:
+  - moving focus from an in-scope element to the next/previous sibling controls in document order when tabbing forward/backward
+- Validation: `npm run check` passed, `npm test` passed (125 files, 518 tests).
