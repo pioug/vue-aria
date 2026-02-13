@@ -271,4 +271,80 @@ describe("useMenuItem", () => {
     refs[1].current?.remove();
     refs[2].current?.remove();
   });
+
+  it("closes on Enter keyboard activation when selection mode is none", () => {
+    const localAction = vi.fn();
+    const onClose = vi.fn();
+    const manager = createManager("none");
+    const state = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+    menuData.set(state as object, { onClose });
+
+    const ref = { current: document.createElement("li") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    let menuItemProps: Record<string, unknown> = {};
+    const scope = effectScope();
+    scope.run(() => {
+      ({ menuItemProps } = useMenuItem({ key: "a", onAction: localAction }, state as any, ref));
+    });
+
+    ref.current!.onclick = menuItemProps.onClick as ((event: MouseEvent) => void) | null;
+    const onKeyDown = (menuItemProps.onKeyDown ?? menuItemProps.onKeydown) as ((event: any) => void) | undefined;
+    onKeyDown?.({
+      key: "Enter",
+      repeat: false,
+      target: ref.current,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+      continuePropagation: vi.fn(),
+    });
+
+    expect(localAction).toHaveBeenCalledWith("a");
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("does not close on Space keyboard activation in multiple selection mode", () => {
+    const localAction = vi.fn();
+    const onClose = vi.fn();
+    const manager = createManager("multiple");
+    const state = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+    menuData.set(state as object, { onClose });
+
+    const ref = { current: document.createElement("li") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    let menuItemProps: Record<string, unknown> = {};
+    const scope = effectScope();
+    scope.run(() => {
+      ({ menuItemProps } = useMenuItem({ key: "a", onAction: localAction }, state as any, ref));
+    });
+
+    ref.current!.onclick = menuItemProps.onClick as ((event: MouseEvent) => void) | null;
+    const onKeyDown = (menuItemProps.onKeyDown ?? menuItemProps.onKeydown) as ((event: any) => void) | undefined;
+    onKeyDown?.({
+      key: " ",
+      repeat: false,
+      target: ref.current,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+      continuePropagation: vi.fn(),
+    });
+
+    expect(localAction).toHaveBeenCalledWith("a");
+    expect(onClose).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
 });
