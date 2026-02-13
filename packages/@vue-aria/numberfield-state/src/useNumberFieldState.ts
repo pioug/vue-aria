@@ -258,17 +258,28 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     incrementToMax,
     decrement,
     decrementToMin,
-    canIncrement: canIncrement.value,
-    canDecrement: canDecrement.value,
+    get canIncrement() {
+      return canIncrement.value;
+    },
+    get canDecrement() {
+      return canDecrement.value;
+    },
     minValue,
     maxValue,
-    numberValue: parsedValue.value,
+    get numberValue() {
+      return parsedValue.value;
+    },
     defaultNumberValue: Number.isNaN(defaultValue) ? initialValue : defaultValue,
-    setNumberValue: setControlledValue,
+    setNumberValue: (next) => {
+      setControlledValue(next);
+      inputValueRef.value = format(next);
+    },
     setInputValue: (next) => {
       inputValueRef.value = next;
     },
-    inputValue: inputValueRef.value,
+    get inputValue() {
+      return inputValueRef.value;
+    },
     commit,
     displayValidation: validation,
     realtimeValidation: validation,

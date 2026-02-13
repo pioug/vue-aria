@@ -57,4 +57,25 @@ describe("useNumberFieldState", () => {
     expect(onChange).toHaveBeenCalledWith(0);
     scope.stop();
   });
+
+  it("keeps live canIncrement/canDecrement and numberValue in sync", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        minValue: 0,
+        maxValue: 1,
+      })
+    )!;
+
+    expect(state.canDecrement).toBe(false);
+    expect(state.canIncrement).toBe(true);
+
+    state.increment();
+    expect(state.numberValue).toBe(1);
+    expect(state.canIncrement).toBe(false);
+    expect(state.canDecrement).toBe(true);
+    scope.stop();
+  });
 });

@@ -1845,6 +1845,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for default formatting, step increment/decrement math, and clamped commit behavior.
+  - Added adapted coverage for live synchronization of `canIncrement`/`canDecrement` and `numberValue` after state transitions.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2346,3 +2347,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (115 files, 347 tests).
 - Expanded `@vue-aria/spinbutton` touch parity coverage with adapted tests for touch press-up/press-end sequencing behavior.
 - Validation: `npm run check` passed, `npm test` passed (115 files, 349 tests).
+- Hardened `@vue-aria/numberfield-state` live state behavior:
+  - switched key outputs (`inputValue`, `numberValue`, `canIncrement`, `canDecrement`) to getter-backed synchronized state
+  - aligned setter behavior to immediately keep text representation in sync
+- Added adapted state test coverage for synchronized increment/decrement boundary transitions.
+- Validation: `npm run check` passed, `npm test` passed (115 files, 350 tests).
