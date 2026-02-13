@@ -107,6 +107,9 @@ export default defineConfig({
       "@vue-aria/numberfield-state": fileURLToPath(
         new URL("./packages/@vue-aria/numberfield-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/slider-state": fileURLToPath(
+        new URL("./packages/@vue-aria/slider-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/numberfield": fileURLToPath(
         new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
       ),

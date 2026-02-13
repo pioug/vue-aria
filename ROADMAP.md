@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/slider`
+- Current focus package: `@vue-aria/slider-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -81,6 +81,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/searchfield-state`: In progress
 - `@vue-aria/form-state`: In progress
 - `@vue-aria/numberfield-state`: In progress
+- `@vue-aria/slider-state`: In progress
 - `@vue-aria/overlays-state`: In progress
 - `@vue-aria/tooltip-state`: In progress
 - `@vue-aria/disclosure-state`: In progress
@@ -2556,7 +2557,60 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 2. Expand `useSlider`/`useSliderThumb` tests toward full upstream track/thumb interaction matrix (pointer, mouse, touch, RTL, stacked thumbs, and multi-thumb constraints).
 3. Expand docs/examples toward upstream story parity with range, orientation, disabled, and labeled-thumb variants.
 
-## 42) Session Log
+## 42) Package Record: @vue-aria/slider-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/slider/src`
+  - `references/react-spectrum/packages/@react-stately/slider/test/useSliderState.test.js`
+- Local package path:
+  - `packages/@vue-aria/slider-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useSliderState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useSliderState.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Current state logic is source-aligned and ready for integration into `@vue-aria/slider`; next parity step is replacing mocked state usage in slider hook tests with this package.
+
+### Tests
+- Total upstream test files: 1 (`useSliderState.test.js`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted coverage for value/percent/label getters, step snapping, min/max constraints for multi-thumb state, and percent-to-value mapping.
+  - Added adapted coverage for drag lifecycle change callbacks (`onChange` and `onChangeEnd`) and no-op unchanged-value updates.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/slider-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- Not directly applicable for stately state package; validated through hook consumers.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Integrate `@vue-aria/slider-state` into `@vue-aria/slider` test harnesses and downstream consumers.
+2. Expand parity coverage for controlled/uncontrolled transition edge cases and disabled/editable thumb combinations.
+3. Expand docs examples with range-slider and callback lifecycle walkthroughs.
+
+## 43) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -3883,3 +3937,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider` thumb-label parity:
   - added adapted tests for slider label wiring, thumb visible-label wiring, and multi-thumb per-label ARIA behavior with dynamic thumb bounds.
 - Validation: `npm run check` passed, `npm test` passed (140 files, 730 tests).
+- Started `@vue-aria/slider-state` package parity slice:
+  - ported `useSliderState` with upstream-aligned value restriction, step snapping, min/max thumb bounds, drag lifecycle, and callback conversion behavior.
+  - added adapted `useSliderState` tests for value/percent/label helpers, multi-thumb boundary enforcement, step rounding with two/three thumbs, drag lifecycle callbacks, and unchanged-value no-op behavior.
+  - added VitePress docs page (`docs/packages/slider-state.md`) and wired docs nav/sidebar/index links.
+  - added package-level roadmap record and execution queue tracking entry.
+- Validation: `npm run check` passed, `npm test` passed (141 files, 736 tests).
