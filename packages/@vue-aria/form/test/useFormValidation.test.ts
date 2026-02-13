@@ -118,6 +118,70 @@ describe("useFormValidation", () => {
     scope.stop();
   });
 
+  it("focuses only the first invalid input in a form", () => {
+    const form = document.createElement("form");
+    const first = document.createElement("input");
+    first.required = true;
+    const second = document.createElement("input");
+    second.required = true;
+    form.appendChild(first);
+    form.appendChild(second);
+    document.body.appendChild(form);
+    const firstRef = ref<HTMLInputElement | null>(first);
+    const secondRef = ref<HTMLInputElement | null>(second);
+
+    const firstState = {
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+      commitValidation: vi.fn(),
+    };
+    const secondState = {
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+      commitValidation: vi.fn(),
+    };
+
+    const firstFocusSpy = vi.spyOn(first, "focus");
+    const secondFocusSpy = vi.spyOn(second, "focus");
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, firstState as any, firstRef);
+      useFormValidation({ validationBehavior: "native" }, secondState as any, secondRef);
+    });
+
+    second.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(secondFocusSpy).not.toHaveBeenCalled();
+
+    first.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(firstFocusSpy).toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("uses provided focus callback for first invalid input", () => {
+    const input = document.createElement("input");
+    input.required = true;
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const focus = vi.fn();
+    const state = {
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+      commitValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native", focus }, state as any, inputRef);
+    });
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(focus).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    form.remove();
+  });
+
   it("resets validation on form reset event", () => {
     const input = document.createElement("input");
     const form = document.createElement("form");

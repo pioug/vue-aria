@@ -1701,6 +1701,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for native custom validity wiring, invalid-event commit behavior, form reset listener behavior, and programmatic reset ignore path.
   - Added adapted coverage for change-event commit behavior, invalid-event short-circuit when display state is already invalid, and native validity snapshot propagation when realtime validation is valid.
+  - Added adapted focus-order behavior coverage for first-invalid-only focus and custom `focus` callback invocation.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1718,8 +1719,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand first-invalid focus-order parity coverage in multi-input forms.
-2. Expand integration tests through `@vue-aria/select` hidden select/native validation paths.
+1. Expand integration tests through `@vue-aria/select` hidden select/native validation paths.
+2. Validate keyboard modality side effects around invalid focus paths.
 
 ## 33) Package Record: @vue-aria/spinbutton
 - Upstream source path(s):
@@ -2499,3 +2500,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - invalid-event commit short-circuit when already invalid
   - native validity snapshot update path when realtime validation is valid
 - Validation: `npm run check` passed, `npm test` passed (117 files, 381 tests).
+- Expanded `@vue-aria/form` focus-order parity coverage with adapted tests for:
+  - first-invalid-only focus behavior in multi-input forms
+  - custom `focus` callback invocation on invalid
+- Validation: `npm run check` passed, `npm test` passed (117 files, 383 tests).
