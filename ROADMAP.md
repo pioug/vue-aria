@@ -2219,6 +2219,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - server-error display when provider payload includes matching field names
     - server-error clearing after `commitValidation`
     - redisplay when provider payload changes to a new server error object
+  - Added adapted state-behavior coverage for:
+    - `validationState="invalid"` backward-compatibility mapping
+    - `privateValidationStateProp` passthrough behavior
+    - native commit-queue cancellation when `resetValidation()` is called before queued commit flush
+    - server-error aggregation across multi-name fields
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3793,3 +3798,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added upstream-aligned usage notes and examples for modal marker shapes, custom-document usage, and watcher cleanup lifecycle.
 - Expanded `@vue-aria/form-state` docs parity:
   - added upstream-aligned examples for native/aria validation behavior, server-error context wiring, and `mergeValidation` usage.
+- Expanded `@vue-aria/form-state` validation-state parity:
+  - added adapted tests for private-state passthrough, validationState compatibility mapping, native reset/commit queue cancellation, and multi-name server-error aggregation.

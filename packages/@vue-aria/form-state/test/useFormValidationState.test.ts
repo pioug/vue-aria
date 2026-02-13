@@ -5,6 +5,7 @@ import {
   DEFAULT_VALIDATION_RESULT,
   FormValidationContext,
   mergeValidation,
+  privateValidationStateProp,
   useFormValidationState,
   type FormValidationState,
   type ValidationResult,
@@ -66,6 +67,56 @@ describe("useFormValidationState", () => {
 
     expect(state.realtimeValidation.isInvalid).toBe(true);
     expect(state.displayValidation.isInvalid).toBe(true);
+    expect(state.displayValidation.validationErrors).toEqual([]);
+    scope.stop();
+  });
+
+  it("supports validationState compatibility for invalid state", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useFormValidationState<number>({
+        value: ref(5),
+        validationState: "invalid",
+      })
+    )!;
+
+    expect(state.realtimeValidation.isInvalid).toBe(true);
+    expect(state.displayValidation.isInvalid).toBe(true);
+    expect(state.displayValidation.validationErrors).toEqual([]);
+    scope.stop();
+  });
+
+  it("returns injected private validation state when provided", () => {
+    const passthrough: FormValidationState = {
+      realtimeValidation: DEFAULT_VALIDATION_RESULT,
+      displayValidation: DEFAULT_VALIDATION_RESULT,
+      updateValidation: () => {},
+      resetValidation: () => {},
+      commitValidation: () => {},
+    };
+    const state = useFormValidationState<number>({
+      value: ref(5),
+      [privateValidationStateProp]: passthrough,
+    });
+
+    expect(state).toBe(passthrough);
+  });
+
+  it("cancels queued native commit when resetValidation is called before flush", async () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useFormValidationState<number>({
+        validationBehavior: "native",
+        value: ref(5),
+      })
+    )!;
+
+    state.updateValidation(INVALID_RESULT);
+    state.commitValidation();
+    state.resetValidation();
+    await nextTick();
+
+    expect(state.displayValidation.isInvalid).toBe(false);
     expect(state.displayValidation.validationErrors).toEqual([]);
     scope.stop();
   });
@@ -135,6 +186,44 @@ describe("useFormValidationState", () => {
     await nextTick();
     expect(state.value?.displayValidation.isInvalid).toBe(true);
     expect(state.value?.displayValidation.validationErrors).toEqual(["Server invalid", "Server still invalid"]);
+
+    wrapper.unmount();
+  });
+
+  it("aggregates server errors from multiple field names", async () => {
+    const value = ref("abc");
+    const serverErrors = ref<Record<string, string | string[]>>({
+      first: "First invalid",
+      second: ["Second invalid", "Second still invalid"],
+    });
+    const state = ref<FormValidationState | null>(null);
+
+    const TestHarness = defineComponent({
+      setup() {
+        state.value = useFormValidationState<string>({
+          name: ["first", "second"],
+          value,
+          validationBehavior: "aria",
+        });
+        return () => null;
+      },
+    });
+
+    const wrapper = mount(TestHarness, {
+      global: {
+        provide: {
+          [FormValidationContext as symbol]: serverErrors,
+        },
+      },
+    });
+    await nextTick();
+
+    expect(state.value?.displayValidation.isInvalid).toBe(true);
+    expect(state.value?.displayValidation.validationErrors).toEqual([
+      "First invalid",
+      "Second invalid",
+      "Second still invalid",
+    ]);
 
     wrapper.unmount();
   });
