@@ -84,11 +84,34 @@ const state = useSliderState({
 });
 ```
 
+```ts
+// Multi-thumb drag lifecycle:
+// onChangeEnd is emitted only after all dragging thumbs stop.
+const rangeLifecycleState = useSliderState({
+  defaultValue: [10, 80],
+  numberFormatter: new Intl.NumberFormat("en-US", {}),
+  onChange(values) {
+    console.log("change", values);
+  },
+  onChangeEnd(values) {
+    console.log("change end", values);
+  },
+});
+
+rangeLifecycleState.setThumbDragging(0, true);
+rangeLifecycleState.setThumbDragging(1, true);
+rangeLifecycleState.setThumbValue(0, 20);
+rangeLifecycleState.setThumbValue(1, 90);
+rangeLifecycleState.setThumbDragging(0, false); // no onChangeEnd yet
+rangeLifecycleState.setThumbDragging(1, false); // onChangeEnd now fires
+```
+
 ## Notes
 
 - Supports single and multi-thumb value arrays.
 - Handles step snapping, min/max clamping, drag lifecycle flags, and `onChange`/`onChangeEnd` conversion for single-value sliders.
 - Controlled values can be driven from reactive external state while preserving upstream callback semantics.
+- Keep `value`/`defaultValue` callback shape stable at runtime (`number` or `number[]`) to avoid callback payload type churn.
 - Exposes thumb-level helpers used directly by `@vue-aria/slider`:
   - `getThumbMinValue` / `getThumbMaxValue`
   - `setThumbPercent` / `getPercentValue`

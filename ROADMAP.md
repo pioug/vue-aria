@@ -2623,6 +2623,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] VitePress package page scaffolded (`docs/packages/slider-state.md`)
 - [x] Expanded parity examples for single-value vs range callback behavior and lifecycle usage notes.
 - [x] Added controlled/reactive usage example aligning with upstream controlled callback semantics.
+- [x] Added multi-thumb drag lifecycle walkthrough and callback-shape stability note.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2636,9 +2637,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand docs examples with range-slider and callback lifecycle walkthroughs.
-2. Audit controlled callback-shape behavior under runtime type switches (`number` <-> `number[]`) and document expected constraints.
-3. Consider porting upstream story-equivalent slider-state walkthrough examples into VitePress playground snippets.
+1. Consider porting upstream story-equivalent slider-state walkthrough examples into VitePress playground snippets.
+2. Expand slider-state docs with SSR-focused usage note where state is initialized from server-rendered values.
+3. Revisit whether runtime `number` <-> `number[]` switching should be explicitly guarded at runtime versus documented as unsupported.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4031,4 +4032,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider-state` multi-thumb drag lifecycle parity:
   - added adapted test coverage ensuring `onChangeEnd` is emitted only after all active thumb drags have completed.
   - validated multi-thumb callback behavior when thumbs end dragging at different times.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 763 tests).
+- Expanded `@vue-aria/slider-state` docs lifecycle parity:
+  - added a multi-thumb drag lifecycle walkthrough example clarifying `onChange`/`onChangeEnd` sequencing.
+  - documented callback-shape stability guidance for runtime `number` vs `number[]` usage.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 763 tests).
