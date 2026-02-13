@@ -10,8 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {HTMLAttributes} from 'react';
-import {Key, RefObject} from '@vue-types/shared';
+import {DOMAttributes, Key, RefObject} from '@vue-types/shared';
 import {StepListState} from '@vue-stately/steplist';
 import {useSelectableItem} from '@vue-aria/selection';
 
@@ -21,9 +20,9 @@ export interface AriaStepListItemProps {
 
 export interface StepListItemAria {
   /** Props for the step link element. */
-  stepProps: HTMLAttributes<HTMLElement>,
+  stepProps: DOMAttributes<HTMLElement>,
   /** Props for the visually hidden element indicating the step state. */
-  stepStateProps?: HTMLAttributes<HTMLElement>,
+  stepStateProps?: DOMAttributes<HTMLElement>,
   /** Text content for the visually hidden message indicating the status of the step state. */
   stepStateText?: String
 }

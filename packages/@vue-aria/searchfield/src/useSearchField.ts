@@ -14,7 +14,7 @@ import {AriaButtonProps} from '@vue-types/button';
 import {AriaSearchFieldProps} from '@vue-types/searchfield';
 import {chain} from '@vue-aria/utils';
 import {DOMAttributes, RefObject, ValidationResult} from '@vue-types/shared';
-import {InputHTMLAttributes, LabelHTMLAttributes} from 'react';
+import type {TextFieldAria} from '@vue-aria/textfield';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {SearchFieldState} from '@vue-stately/searchfield';
@@ -23,9 +23,9 @@ import {useTextField} from '@vue-aria/textfield';
 
 export interface SearchFieldAria extends ValidationResult {
   /** Props for the text field's visible label element (if any). */
-  labelProps: LabelHTMLAttributes<HTMLLabelElement>,
+  labelProps: TextFieldAria['labelProps'],
   /** Props for the input element. */
-  inputProps: InputHTMLAttributes<HTMLInputElement>,
+  inputProps: TextFieldAria['inputProps'],
   /** Props for the clear button. */
   clearButtonProps: AriaButtonProps,
   /** Props for the searchfield's description element, if any. */

@@ -10,9 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, DOMProps, RefObject} from '@vue-types/shared';
+import {AriaLabelingProps, DOMAttributes, DOMProps, RefObject} from '@vue-types/shared';
 import {filterDOMProps, mergeProps} from '@vue-aria/utils';
-import {HTMLAttributes} from 'react';
 // @ts-ignore
 import intlMessages from '../intl/*.json';
 import {StepListProps, StepListState} from '@vue-stately/steplist';
@@ -22,7 +21,7 @@ import {useSelectableList} from '@vue-aria/selection';
 export interface AriaStepListProps<T> extends StepListProps<T>, AriaLabelingProps, DOMProps {}
 
 export interface StepListAria {
-  listProps: HTMLAttributes<HTMLElement>
+  listProps: DOMAttributes<HTMLElement>
 }
 
 export function useStepList<T>(props: AriaStepListProps<T>, state: StepListState<T>, ref: RefObject<HTMLOListElement | null>): StepListAria {
@@ -37,7 +36,7 @@ export function useStepList<T>(props: AriaStepListProps<T>, state: StepListState
   });
 
   const strings = useLocalizedStringFormatter(intlMessages, '@vue-aria/steplist');
-  const stepListProps: HTMLAttributes<HTMLElement> = {
+  const stepListProps: DOMAttributes<HTMLElement> = {
     ...mergeProps(listProps, filterDOMProps(props, {labelable: true})),
     'aria-label': ariaLabel || strings.format('steplist')
   };
@@ -49,5 +48,4 @@ export function useStepList<T>(props: AriaStepListProps<T>, state: StepListState
     }
   };
 }
-
 

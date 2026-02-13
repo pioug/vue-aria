@@ -11,16 +11,16 @@
  */
 
 import {AriaSwitchProps} from '@vue-types/switch';
-import {InputHTMLAttributes, LabelHTMLAttributes} from 'react';
 import {RefObject} from '@vue-types/shared';
 import {ToggleState} from '@vue-stately/toggle';
 import {useToggle} from '@vue-aria/toggle';
+import type {ToggleAria} from '@vue-aria/toggle';
 
 export interface SwitchAria {
   /** Props for the label wrapper element. */
-  labelProps: LabelHTMLAttributes<HTMLLabelElement>,
+  labelProps: ToggleAria['labelProps'],
   /** Props for the input element. */
-  inputProps: InputHTMLAttributes<HTMLInputElement>,
+  inputProps: ToggleAria['inputProps'],
   /** Whether the switch is selected. */
   isSelected: boolean,
   /** Whether the switch is in a pressed state. */
