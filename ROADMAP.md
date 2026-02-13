@@ -3158,4 +3158,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented press-timing option usage (`shouldSelectOnPressUp`, `allowsDifferentPressOrigin`)
   - documented virtual-focus interaction behavior for selectable items
   - documented touch long-press toggle-selection behavior and touch drag suppression notes
+- Expanded docs package coverage:
+  - added VitePress page for `@vue-aria/selection-state` with state and manager usage examples
+  - wired `@vue-aria/selection-state` into docs index and VitePress nav/sidebar
 - Validation: `npm run check` passed, `npm test` passed (126 files, 566 tests).

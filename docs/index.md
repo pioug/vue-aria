@@ -16,6 +16,7 @@ This project ports the current upstream Spectrum version.
 ## Current docs
 
 - [@vue-aria/selection](/packages/selection)
+- [@vue-aria/selection-state](/packages/selection-state)
 - [@vue-aria/i18n](/packages/i18n)
 - [@vue-aria/interactions](/packages/interactions)
 - [@vue-aria/focus](/packages/focus)
