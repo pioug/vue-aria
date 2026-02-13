@@ -456,6 +456,74 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("locks tab containment to the active child scope when nested scopes are present", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "parent1" }),
+                h("input", { id: "parent2" }),
+                h("input", { id: "parent3" }),
+                h(
+                  FocusScope,
+                  { contain: true },
+                  {
+                    default: () => [
+                      h("input", { id: "child1" }),
+                      h("input", { id: "child2" }),
+                      h("input", { id: "child3" }),
+                    ],
+                  }
+                ),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const child1 = wrapper.get("#child1").element as HTMLInputElement;
+    const child2 = wrapper.get("#child2").element as HTMLInputElement;
+    const child3 = wrapper.get("#child3").element as HTMLInputElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    child1.focus();
+    expect(document.activeElement).toBe(child1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child1);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(child3);
+
+    wrapper.unmount();
+  });
+
   it("does not autoFocus when an element inside the scope is already focused", async () => {
     const FocusInside = defineComponent({
       setup() {

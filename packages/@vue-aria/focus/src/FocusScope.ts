@@ -225,6 +225,16 @@ export const FocusScope = defineComponent({
           return;
         }
 
+        const currentActiveScope = activeScopeRef.value;
+        if (
+          currentActiveScope
+          && currentActiveScope !== scopeRootRef.value
+          && nodeContains(scopeRootRef.value, currentActiveScope)
+          && nodeContains(currentActiveScope, target)
+        ) {
+          return;
+        }
+
         activeScopeRef.value = scopeRootRef.value;
         lastFocusedInScope.value = target;
       };
@@ -248,6 +258,7 @@ export const FocusScope = defineComponent({
             || event.ctrlKey
             || event.metaKey
             || !(scopeRoot instanceof HTMLElement)
+            || activeScopeRef.value !== scopeRoot
             || !nodeContains(scopeRoot, getOwnerDocument(scopeRoot).activeElement)
           ) {
             return;

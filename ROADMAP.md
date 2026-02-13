@@ -478,6 +478,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - containment traversal through tabbable `contenteditable` descendants
     - containment skipping hidden/non-tabbable descendants
     - active-scope enforcement across multiple contained scopes
+    - nested-scope containment lock (active child scope owns tab loop)
     - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
@@ -2742,3 +2743,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `from`-based traversal from container/group elements
   - accept-filter traversal skipping semantics
 - Validation: `npm run check` passed, `npm test` passed (123 files, 483 tests).
+- Improved `@vue-aria/focus/FocusScope` nested containment parity:
+  - active-scope tracking now preserves child-scope ownership when focus is inside nested scopes
+  - containment key handling now executes only for the current active scope
+- Expanded `@vue-aria/focus/FocusScope` behavior tests for:
+  - nested-scope containment lock (child scope tab cycling remains isolated)
+- Validation: `npm run check` passed, `npm test` passed (123 files, 484 tests).
