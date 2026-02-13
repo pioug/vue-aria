@@ -288,6 +288,25 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("ensures keyboard listeners are active while a controller is alive", () => {
+    const onLandmarkNavigation = vi.fn((event: Event) => event.preventDefault());
+    window.addEventListener("react-aria-landmark-navigation", onLandmarkNavigation as EventListener);
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    expect(onLandmarkNavigation).not.toHaveBeenCalled();
+
+    const controller = UNSTABLE_createLandmarkController();
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    expect(onLandmarkNavigation).toHaveBeenCalledTimes(1);
+
+    controller.dispose();
+    onLandmarkNavigation.mockClear();
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    expect(onLandmarkNavigation).not.toHaveBeenCalled();
+    window.removeEventListener("react-aria-landmark-navigation", onLandmarkNavigation as EventListener);
+  });
+
   it("allows duplicate role landmarks when labels are unique", async () => {
     const RegionA = defineComponent({
       setup() {

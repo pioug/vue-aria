@@ -2380,6 +2380,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, controller-based forward/backward/main navigation, backward wrapping, wrap custom events, aria-hidden landmark skipping, focused `tabIndex` behavior, and duplicate-role labeling warning behaviors.
   - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
+  - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2399,7 +2400,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port additional upstream `useLandmark.test.tsx` interaction coverage for dynamic DOM mutation and focus restoration corner-cases.
-2. Port remaining upstream `LandmarkController` keyboard-listener lifecycle coverage (`ensure keyboard listeners are active`).
+2. Port remaining nested landmark traversal parity cases (nested-first/nested-last ordering and DOM-order assertions).
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3708,3 +3709,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `useToastRegion` to track visible-toast key transitions and move focus to the replacement toast when a focused toast is removed.
   - added adapted `useToastRegion` tests for replacement-toast focus transfer and restoring focus to the pre-region element when no toasts remain.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 682 tests).
+- Expanded `@vue-aria/landmark` controller lifecycle parity:
+  - added adapted `LandmarkController` coverage to verify global F6 keyboard listener activation while a controller exists and teardown after `dispose()`.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 683 tests).
