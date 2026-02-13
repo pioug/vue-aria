@@ -1894,3 +1894,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added VitePress docs page for `@vue-aria/list-state` and wired docs navigation entries.
 - Updated `@vue-aria/listbox` types to consume `@vue-aria/list-state` `ListState` typing.
 - Validation: `npm run check` passed, `npm test` passed (99 files, 287 tests).
+- Expanded `@vue-aria/listbox/useListBox` tests for upstream linkBehavior derivation rules:
+  - `selectionBehavior='replace'` defaults `linkBehavior` to `action`
+  - `selectionBehavior='toggle'` + `linkBehavior='action'` coerces to `override`
+- Validation: `npm run check` passed, `npm test` passed (99 files, 289 tests).

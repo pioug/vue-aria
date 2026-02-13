@@ -1,6 +1,7 @@
 import { effectScope } from "vue";
 import { describe, expect, it } from "vitest";
 import { useListBox } from "../src/useListBox";
+import { listData } from "../src/utils";
 import type { ListState } from "../src/types";
 
 function createCollection() {
@@ -81,6 +82,58 @@ describe("useListBox", () => {
 
     expect(listBoxProps.role).toBe("listbox");
     expect(listBoxProps["aria-multiselectable"]).toBe("true");
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("derives linkBehavior from selectionBehavior replace", () => {
+    const manager = createManager("single");
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    scope.run(() => {
+      useListBox({ "aria-label": "List", selectionBehavior: "replace" }, state, ref);
+    });
+
+    expect(listData.get(state as any)?.linkBehavior).toBe("action");
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("forces linkBehavior override when selectionBehavior is toggle and linkBehavior is action", () => {
+    const manager = createManager("single");
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    scope.run(() => {
+      useListBox(
+        {
+          "aria-label": "List",
+          selectionBehavior: "toggle",
+          linkBehavior: "action",
+        },
+        state,
+        ref
+      );
+    });
+
+    expect(listData.get(state as any)?.linkBehavior).toBe("override");
 
     scope.stop();
     ref.current?.remove();
