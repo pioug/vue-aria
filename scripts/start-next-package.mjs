@@ -1,15 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import {execFileSync} from 'node:child_process';
 
 const ROOT = process.cwd();
 const STATUS_PATH = path.join(ROOT, 'status.json');
 const ORDER_PATH = path.join(ROOT, 'port-order.json');
 
-if (!fs.existsSync(ORDER_PATH)) {
-  console.error('Missing port-order.json. Run: npm run compute:port-order');
-  process.exit(1);
-}
+execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'compute-port-order.mjs')], {
+  cwd: ROOT,
+  stdio: 'inherit'
+});
 
 const status = JSON.parse(fs.readFileSync(STATUS_PATH, 'utf8'));
 const order = JSON.parse(fs.readFileSync(ORDER_PATH, 'utf8'));
