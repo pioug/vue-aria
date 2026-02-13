@@ -2382,7 +2382,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted singleton coverage for manager existence and manager-version replacement with controller proxy handoff + component re-registration.
   - Added adapted controller lifecycle coverage to ensure F6 keyboard listeners are active while a standalone controller is mounted and cleaned up on dispose.
   - Added adapted controller return-value coverage for `navigate`/`focusNext`/`focusPrevious`/`focusMain` when no landmarks are registered.
-  - Added adapted managed-focus parity coverage for heterogeneous components (actiongroup/table-style child focus handoff across F6 navigation).
+  - Added adapted managed-focus parity coverage for heterogeneous components (actiongroup/table-style child focus handoff across F6 navigation), including `LandmarkController`-driven navigation assertions.
   - Added adapted nested landmark traversal coverage for forward/backward F6 navigation order within a single `main` landmark.
   - Added adapted nested-first/nested-last variants to verify F6 traversal when nested region placement changes within `main`.
   - Added adapted dynamic DOM coverage for removing an intermediate landmark and inserting a new landmark into the traversal sequence.
@@ -2408,7 +2408,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components.
-2. Add controller-driven assertions for managed-focus landmarks (`focusNext`/`navigate`) to complement keyboard-driven parity.
+2. Revisit upstream component-level parity once Vue Spectrum table/actiongroup components land (currently hook-level equivalent coverage).
 
 ## 40) Package Record: @vue-aria/toast
 - Upstream source path(s):
@@ -3754,5 +3754,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests asserting controller method return values when no landmarks are registered.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 698 tests).
 - Expanded `@vue-aria/landmark` managed-focus handoff parity:
-  - added adapted test covering actiongroup/table-like focus-managed child restoration across repeated F6 navigation between landmarks.
+  - added adapted test covering actiongroup/table-like focus-managed child restoration across repeated F6 navigation between landmarks, plus controller-driven `focusNext`/`navigate("backward")` assertions.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 699 tests).

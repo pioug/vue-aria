@@ -838,6 +838,17 @@ describe("useLandmark", () => {
     navButton2.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
     await nextTick();
     expect(document.activeElement).toBe(mainCell1);
+
+    const controller = UNSTABLE_createLandmarkController();
+    navButton2.focus();
+    expect(controller.focusNext()).toBe(true);
+    await nextTick();
+    expect(document.activeElement).toBe(mainCell1);
+
+    expect(controller.navigate("backward")).toBe(true);
+    await nextTick();
+    expect(document.activeElement).toBe(navButton2);
+    controller.dispose();
     wrapper.unmount();
   });
 
