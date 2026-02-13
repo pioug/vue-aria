@@ -2596,6 +2596,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/table.md`)
+- [x] Expanded docs examples for sorting, selection, and column resizing usage.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -5043,5 +5044,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/table` resize callback parity:
   - added adapted callback-map assertions for `onResizeStart` / `onResize` / `onResizeEnd`.
   - added adapted no-movement resize-end callback coverage.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 20 tests).
+- Expanded `@vue-aria/table` docs parity:
+  - extended `docs/packages/table.md` with sorting, selection checkbox, and column-resize usage examples plus updated base markup snippet.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 20 tests).

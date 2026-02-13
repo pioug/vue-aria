@@ -63,6 +63,105 @@ const { inputProps, resizerProps } = useTableColumnResize(
 );
 ```
 
+## Sorting example
+
+```ts
+import { useTable, useTableColumnHeader } from "@vue-aria/table";
+
+const state = {} as any;
+const tableRef = { current: document.createElement("table") as HTMLElement | null };
+const headerCellRef = { current: document.createElement("th") as HTMLElement | null };
+
+const { gridProps } = useTable(
+  {
+    "aria-label": "Sortable table",
+    sortDescriptor: { column: "name", direction: "ascending" },
+    onSortChange: (nextSort) => {
+      // sync external sort state
+      console.log(nextSort);
+    },
+  },
+  state,
+  tableRef
+);
+
+const { columnHeaderProps, isPressed } = useTableColumnHeader(
+  { node: state.collection.columns[0] },
+  state,
+  headerCellRef
+);
+```
+
+```html
+<th v-bind="columnHeaderProps" ref="headerCellRef">
+  Name
+  <span aria-hidden="true">{{ isPressed ? "..." : "⇅" }}</span>
+</th>
+```
+
+## Selection checkbox example
+
+```ts
+import { useTableSelectionCheckbox, useTableSelectAllCheckbox } from "@vue-aria/table";
+
+const state = {} as any;
+const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(state);
+const { checkboxProps: rowCheckboxProps } = useTableSelectionCheckbox({ key: "row-1" }, state);
+```
+
+```html
+<th>
+  <input
+    type="checkbox"
+    :checked="Boolean(selectAllCheckboxProps.isSelected)"
+    :disabled="Boolean(selectAllCheckboxProps.isDisabled)"
+    :aria-label="String(selectAllCheckboxProps['aria-label'])"
+    @change="selectAllCheckboxProps.onChange?.()"
+  />
+</th>
+
+<td>
+  <input
+    type="checkbox"
+    :checked="Boolean(rowCheckboxProps.isSelected)"
+    :disabled="Boolean(rowCheckboxProps.isDisabled)"
+    :aria-labelledby="String(rowCheckboxProps['aria-labelledby'])"
+    @change="rowCheckboxProps.onChange?.($event)"
+  />
+</td>
+```
+
+## Column resize example
+
+```ts
+import { useTableColumnResize } from "@vue-aria/table";
+import { useTableColumnResizeState } from "@vue-aria/table-state";
+
+const state = {} as any;
+const resizeState = useTableColumnResizeState({ tableWidth: 960 }, state);
+const resizeInputRef = { current: document.createElement("input") as HTMLInputElement | null };
+const triggerRef = { current: document.createElement("button") as HTMLElement | null };
+
+const { inputProps, resizerProps, isResizing } = useTableColumnResize(
+  {
+    column: state.collection.columns[0],
+    "aria-label": "Resize Name",
+    triggerRef,
+    onResizeStart: (widths) => console.log("resize start", widths),
+    onResize: (widths) => console.log("resize", widths),
+    onResizeEnd: (widths) => console.log("resize end", widths),
+  },
+  resizeState,
+  resizeInputRef
+);
+```
+
+```html
+<span v-bind="resizerProps" class="resizer-handle" :data-resizing="isResizing">
+  <input v-bind="inputProps" ref="resizeInputRef" />
+</span>
+```
+
 ## Base markup example
 
 ```html
@@ -102,6 +201,10 @@ const { inputProps, resizerProps } = useTableColumnResize(
   width: 12px;
   margin-left: 6px;
   cursor: col-resize;
+}
+
+.resizer-handle[data-resizing="true"] {
+  background: #e5efff;
 }
 ```
 
