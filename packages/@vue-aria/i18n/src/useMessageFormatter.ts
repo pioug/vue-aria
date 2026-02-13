@@ -1,16 +1,16 @@
 import { MessageDictionary, MessageFormatter, type LocalizedStrings } from "@internationalized/message";
-import { computed } from "vue";
 import { useLocale } from "./context";
 
 export type FormatMessage = (key: string, variables?: { [key: string]: any }) => string;
 
-const cache = new WeakMap<object, MessageDictionary>();
+const dictionaryCache = new WeakMap<object, MessageDictionary>();
+const formatterCache = new Map<string, MessageFormatter>();
 
 function getCachedDictionary(strings: LocalizedStrings): MessageDictionary {
-  let dictionary = cache.get(strings as object);
+  let dictionary = dictionaryCache.get(strings as object);
   if (!dictionary) {
     dictionary = new MessageDictionary(strings);
-    cache.set(strings as object, dictionary);
+    dictionaryCache.set(strings as object, dictionary);
   }
 
   return dictionary;
@@ -20,7 +20,16 @@ export function useMessageFormatter(strings: LocalizedStrings): FormatMessage {
   const locale = useLocale();
   const dictionary = getCachedDictionary(strings);
 
-  const formatter = computed(() => new MessageFormatter(locale.value.locale, dictionary));
+  return (key, variables) => {
+    const localeKey = locale.value.locale;
+    const cacheKey = `${localeKey}:${dictionary as unknown as object}`;
+    let formatter = formatterCache.get(cacheKey);
 
-  return (key, variables) => formatter.value.format(key, variables);
+    if (!formatter) {
+      formatter = new MessageFormatter(localeKey, dictionary);
+      formatterCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(key, variables);
+  };
 }

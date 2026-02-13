@@ -247,3 +247,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - RTL utility and server localization script serialization
 - Added adapted i18n tests (`languagechange`, `server`) and integrated dependencies.
 - Validation: `npm run check` passed, `npm test` passed (23 files, 56 tests).
+- Hardened i18n formatter reactivity:
+  - Locale-aware live formatter proxies for message/string/list/date/number/collator hooks.
+  - Added regression test ensuring formatted output updates on `languagechange`.
+- Validation: `npm run check` passed, `npm test` passed (24 files, 57 tests).

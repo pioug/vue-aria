@@ -1,7 +1,7 @@
 import { DateFormatter, type DateFormatterOptions as IntlDateFormatterOptions } from "@internationalized/date";
 import { useDeepMemo } from "@vue-aria/utils";
-import { computed } from "vue";
 import { useLocale } from "./context";
+import { createFormatterProxy } from "./formatterProxy";
 
 export interface DateFormatterOptions extends IntlDateFormatterOptions {
   calendar?: string;
@@ -27,8 +27,23 @@ function isEqual(a: DateFormatterOptions, b: DateFormatterOptions) {
   return true;
 }
 
+const cache = new Map<string, DateFormatter>();
+
 export function useDateFormatter(options?: DateFormatterOptions): DateFormatter {
   options = useDeepMemo(options ?? {}, isEqual);
   const locale = useLocale();
-  return computed(() => new DateFormatter(locale.value.locale, options)).value;
+
+  return createFormatterProxy<DateFormatter>(() => {
+    const localeKey = locale.value.locale;
+    const optionsKey = JSON.stringify(options);
+    const cacheKey = `${localeKey}:${optionsKey}`;
+
+    let formatter = cache.get(cacheKey);
+    if (!formatter) {
+      formatter = new DateFormatter(localeKey, options);
+      cache.set(cacheKey, formatter);
+    }
+
+    return formatter;
+  });
 }

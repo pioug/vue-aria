@@ -4,18 +4,19 @@ import {
   type LocalizedString,
   type LocalizedStrings,
 } from "@internationalized/string";
-import { computed } from "vue";
 import { useLocale } from "./context";
+import { createFormatterProxy } from "./formatterProxy";
 
-const cache = new WeakMap<object, LocalizedStringDictionary<any, any>>();
+const dictionaryCache = new WeakMap<object, LocalizedStringDictionary<any, any>>();
+const formatterCache = new Map<string, LocalizedStringFormatter<any, any>>();
 
 function getCachedDictionary<K extends string, T extends LocalizedString>(
   strings: LocalizedStrings<K, T>
 ): LocalizedStringDictionary<K, T> {
-  let dictionary = cache.get(strings as object) as LocalizedStringDictionary<K, T> | undefined;
+  let dictionary = dictionaryCache.get(strings as object) as LocalizedStringDictionary<K, T> | undefined;
   if (!dictionary) {
     dictionary = new LocalizedStringDictionary(strings);
-    cache.set(strings as object, dictionary);
+    dictionaryCache.set(strings as object, dictionary);
   }
 
   return dictionary;
@@ -34,6 +35,17 @@ export function useLocalizedStringFormatter<K extends string = string, T extends
 ): LocalizedStringFormatter<K, T> {
   const locale = useLocale();
   const dictionary = useLocalizedStringDictionary(strings, packageName);
-  const formatter = computed(() => new LocalizedStringFormatter(locale.value.locale, dictionary));
-  return formatter.value;
+
+  return createFormatterProxy<LocalizedStringFormatter<K, T>>(() => {
+    const localeKey = locale.value.locale;
+    const cacheKey = `${localeKey}:${dictionary as unknown as object}`;
+    let formatter = formatterCache.get(cacheKey) as LocalizedStringFormatter<K, T> | undefined;
+
+    if (!formatter) {
+      formatter = new LocalizedStringFormatter(localeKey, dictionary);
+      formatterCache.set(cacheKey, formatter);
+    }
+
+    return formatter;
+  });
 }
