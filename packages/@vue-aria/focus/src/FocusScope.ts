@@ -230,6 +230,7 @@ const activeScopeRef = shallowRef<Element | null>(null);
 const FocusManagerContext: InjectionKey<FocusManager> = Symbol("FocusManagerContext");
 const ScopeParentContext: InjectionKey<{ current: Element | null }> = Symbol("FocusScopeParentContext");
 const scopeParentMap = new WeakMap<Element, Element | null>();
+const scopeContainMap = new WeakMap<Element, boolean>();
 
 function isDescendantScope(scope: Element | null, ancestor: Element | null): boolean {
   if (!scope || !ancestor) {
@@ -241,6 +242,23 @@ function isDescendantScope(scope: Element | null, ancestor: Element | null): boo
     if (parent === ancestor) {
       return true;
     }
+    parent = scopeParentMap.get(parent) ?? null;
+  }
+
+  return false;
+}
+
+function hasContainingAncestor(scope: Element | null): boolean {
+  if (!scope) {
+    return false;
+  }
+
+  let parent = scopeParentMap.get(scope) ?? null;
+  while (parent) {
+    if (scopeContainMap.get(parent)) {
+      return true;
+    }
+
     parent = scopeParentMap.get(parent) ?? null;
   }
 
@@ -260,6 +278,7 @@ export const FocusScope = defineComponent({
     const previousFocused = shallowRef<Element | null>(null);
     const lastFocusedInScope = shallowRef<Element | null>(null);
     let keydownListener: ((event: KeyboardEvent) => void) | null = null;
+    let restoreTabListener: ((event: KeyboardEvent) => void) | null = null;
     let scopeFocusInListener: ((event: FocusEvent) => void) | null = null;
     let scopeFocusOutListener: ((event: FocusEvent) => void) | null = null;
     let documentFocusInListener: ((event: FocusEvent) => void) | null = null;
@@ -299,6 +318,7 @@ export const FocusScope = defineComponent({
 
         const root = scopeRootRef.value;
         scopeParentMap.set(root, parentScopeRef?.current ?? null);
+        scopeContainMap.set(root, !!props.contain);
         const ownerDocument = getOwnerDocument(root);
         if (!previousFocused.value) {
           previousFocused.value = getActiveElement(ownerDocument);
@@ -462,6 +482,85 @@ export const FocusScope = defineComponent({
 
           ownerDocument.addEventListener("focusin", documentFocusInListener as EventListener, true);
         }
+
+        if (props.restoreFocus && !props.contain) {
+          restoreTabListener = (event: KeyboardEvent) => {
+            if (
+              event.key !== "Tab"
+              || event.altKey
+              || event.ctrlKey
+              || event.metaKey
+              || event.isComposing
+            ) {
+              return;
+            }
+
+            const scopeRoot = scopeRootRef.value;
+            if (!scopeRoot || activeScopeRef.value !== scopeRoot) {
+              return;
+            }
+
+            if (hasContainingAncestor(scopeRoot)) {
+              return;
+            }
+
+            const ownerDocument = getOwnerDocument(scopeRoot);
+            const activeElement = getActiveElement(ownerDocument);
+            if (!activeElement || !nodeContains(scopeRoot, activeElement)) {
+              return;
+            }
+
+            const scopeWalker = getFocusableTreeWalker(scopeRoot, { tabbable: true });
+            scopeWalker.currentNode = scopeRoot;
+            const first = scopeWalker.nextNode() as Element | null;
+            if (!first) {
+              return;
+            }
+
+            let last: Element | null = first;
+            let next: Element | null = null;
+            do {
+              next = scopeWalker.nextNode() as Element | null;
+              if (next) {
+                last = next;
+              }
+            } while (next);
+
+            if (!last) {
+              return;
+            }
+
+            const leavingScope = event.shiftKey ? activeElement === first : activeElement === last;
+            if (!leavingScope) {
+              return;
+            }
+
+            const nodeToRestore = previousFocused.value;
+            if (!nodeToRestore || !nodeToRestore.isConnected) {
+              return;
+            }
+
+            const root = ownerDocument.body;
+            if (!root) {
+              return;
+            }
+
+            const walker = getFocusableTreeWalker(root, { tabbable: true });
+            walker.currentNode = nodeContains(root, nodeToRestore) ? nodeToRestore : root;
+            let candidate = (event.shiftKey ? walker.previousNode() : walker.nextNode()) as Element | null;
+
+            while (candidate && nodeContains(scopeRoot, candidate)) {
+              candidate = (event.shiftKey ? walker.previousNode() : walker.nextNode()) as Element | null;
+            }
+
+            if (candidate) {
+              event.preventDefault();
+              focusElement(candidate);
+            }
+          };
+
+          ownerDocument.addEventListener("keydown", restoreTabListener as EventListener, true);
+        }
       };
 
       initializeScope();
@@ -487,6 +586,10 @@ export const FocusScope = defineComponent({
         scopeRootRef.value.removeEventListener("keydown", keydownListener as EventListener);
       }
 
+      if (restoreTabListener && scopeRootRef.value) {
+        getOwnerDocument(scopeRootRef.value).removeEventListener("keydown", restoreTabListener as EventListener, true);
+      }
+
       if (documentFocusInListener && scopeRootRef.value) {
         getOwnerDocument(scopeRootRef.value).removeEventListener("focusin", documentFocusInListener as EventListener, true);
       }
@@ -502,6 +605,7 @@ export const FocusScope = defineComponent({
 
       if (scopeRootRef.value) {
         scopeParentMap.delete(scopeRootRef.value);
+        scopeContainMap.delete(scopeRootRef.value);
       }
 
       let canRestoreFocus = true;

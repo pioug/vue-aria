@@ -1682,6 +1682,113 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("moves focus after previously focused element when tabbing forward out of restore scope", async () => {
+    const Host = defineComponent({
+      props: {
+        show: Boolean,
+      },
+      render() {
+        return h("div", [
+          h("input", { id: "before" }),
+          h("input", { id: "outside" }),
+          h("input", { id: "after" }),
+          this.show
+            ? h(
+              FocusScope,
+              { restoreFocus: true },
+              {
+                default: () => [
+                  h("input", { id: "input1" }),
+                  h("input", { id: "input2" }),
+                  h("input", { id: "input3" }),
+                ],
+              }
+            )
+            : null,
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, {
+      attachTo: document.body,
+      props: { show: false },
+    });
+
+    const outside = wrapper.get("#outside").element as HTMLInputElement;
+    outside.focus();
+    expect(document.activeElement).toBe(outside);
+
+    await wrapper.setProps({ show: true });
+    const input3 = wrapper.get("#input3").element as HTMLInputElement;
+    input3.focus();
+    expect(document.activeElement).toBe(input3);
+
+    input3.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(document.activeElement).toBe(wrapper.get("#after").element);
+
+    wrapper.unmount();
+  });
+
+  it("moves focus before previously focused element when shift-tabbing out of restore scope", async () => {
+    const Host = defineComponent({
+      props: {
+        show: Boolean,
+      },
+      render() {
+        return h("div", [
+          h("input", { id: "before" }),
+          h("input", { id: "outside" }),
+          h("input", { id: "after" }),
+          this.show
+            ? h(
+              FocusScope,
+              { restoreFocus: true },
+              {
+                default: () => [
+                  h("input", { id: "input1" }),
+                  h("input", { id: "input2" }),
+                  h("input", { id: "input3" }),
+                ],
+              }
+            )
+            : null,
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, {
+      attachTo: document.body,
+      props: { show: false },
+    });
+
+    const outside = wrapper.get("#outside").element as HTMLInputElement;
+    outside.focus();
+    expect(document.activeElement).toBe(outside);
+
+    await wrapper.setProps({ show: true });
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    input1.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(document.activeElement).toBe(wrapper.get("#before").element);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

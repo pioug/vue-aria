@@ -3025,3 +3025,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added delayed focusout recovery for contain scopes so focus loss-to-body during node removal is coerced back inside scope
   - containment fallback now tries first tabbable, then first focusable, matching upstream fallback order
 - Validation: `npm run check` passed, `npm test` passed (125 files, 525 tests).
+- Expanded `@vue-aria/focus/FocusScope` restore-tab navigation parity with adapted upstream coverage for:
+  - moving focus to the element after the previously focused node when tabbing forward out of a restore-focus scope
+  - moving focus to the element before the previously focused node when shift-tabbing out of a restore-focus scope
+- Improved restore-tab handling:
+  - added restore-scope boundary tab key management for non-containing scopes
+  - added ancestor-containment gating so nested restore scopes do not escape when an ancestor `contain` scope is active
+- Validation: `npm run check` passed, `npm test` passed (125 files, 527 tests).
