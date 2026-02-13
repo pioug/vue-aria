@@ -2590,6 +2590,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for `useTableRow`, `useTableCell`, `useTableHeaderRow`, `useTableColumnHeader`, and selection checkbox hooks.
   - Added adapted hook-level `useTableColumnResize` coverage for keyboard-start/resize/end flow and slider input step behavior.
   - Expanded `useTableColumnResize` coverage for pointer press-start/blur-end lifecycle and trigger-focus restoration behavior.
+  - Expanded `useTableColumnResize` callback-map assertions for `onResizeStart` / `onResize` / `onResizeEnd`, including no-movement resize-end behavior.
   - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
 - [ ] All relevant upstream tests migrated
 
@@ -5039,3 +5040,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted trigger focus-restoration coverage when column resizing exits.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 19 tests).
+- Expanded `@vue-aria/table` resize callback parity:
+  - added adapted callback-map assertions for `onResizeStart` / `onResize` / `onResizeEnd`.
+  - added adapted no-movement resize-end callback coverage.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 20 tests).

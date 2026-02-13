@@ -2,6 +2,7 @@ import { effectScope } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { setInteractionModality } from "@vue-aria/interactions";
 import { useTableColumnResizeState, type TableColumnResizeState } from "@vue-aria/table-state";
+import type { ColumnSize, Key } from "@vue-aria/table-state";
 import { useTableColumnResize } from "../src/useTableColumnResize";
 import { gridIds } from "../src/utils";
 import { createTableState } from "./helpers";
@@ -119,17 +120,26 @@ describe("useTableColumnResize", () => {
     expect(harness.state.isKeyboardNavigationDisabled).toBe(true);
     expect(harness.resizeState.resizingColumn).toBe("name");
     expect(onResizeStart).toHaveBeenCalledTimes(1);
+    const startMap = onResizeStart.mock.calls[0]?.[0] as Map<Key, ColumnSize>;
+    expect(startMap).toBeInstanceOf(Map);
+    expect(typeof startMap.get("name")).toBe("number");
 
     callKeydown(harness.aria.resizerProps.onKeydown, "ArrowRight");
 
     expect(onResize.mock.calls.length).toBeGreaterThanOrEqual(1);
     expect(harness.resizeState.getColumnWidth("name")).not.toBe(before);
+    const resizeMap = onResize.mock.calls.at(-1)?.[0] as Map<Key, ColumnSize>;
+    expect(resizeMap).toBeInstanceOf(Map);
+    expect(typeof resizeMap.get("name")).toBe("number");
 
     callKeydown(harness.aria.resizerProps.onKeydown, "Escape");
 
     expect(onResizeEnd).toHaveBeenCalledTimes(1);
     expect(harness.state.isKeyboardNavigationDisabled).toBe(false);
     expect(harness.resizeState.resizingColumn).toBeNull();
+    const endMap = onResizeEnd.mock.calls[0]?.[0] as Map<Key, ColumnSize>;
+    expect(endMap).toBeInstanceOf(Map);
+    expect(typeof endMap.get("name")).toBe("number");
 
     harness.cleanup();
   });
@@ -162,6 +172,25 @@ describe("useTableColumnResize", () => {
     onBlur();
     expect(onResizeEnd).toHaveBeenCalledTimes(1);
     expect(harness.resizeState.resizingColumn).toBeNull();
+
+    harness.cleanup();
+  });
+
+  it("reports width values on resize end even when no movement occurs", () => {
+    const onResizeStart = vi.fn();
+    const onResizeEnd = vi.fn();
+    const harness = createResizeHarness({ onResizeStart, onResizeEnd });
+
+    callKeydown(harness.aria.resizerProps.onKeydown, "Enter");
+    callKeydown(harness.aria.resizerProps.onKeydown, "Escape");
+
+    expect(onResizeStart).toHaveBeenCalledTimes(1);
+    expect(onResizeEnd).toHaveBeenCalledTimes(1);
+    const startMap = onResizeStart.mock.calls[0]?.[0] as Map<Key, ColumnSize>;
+    const widthMap = onResizeEnd.mock.calls[0]?.[0] as Map<Key, ColumnSize>;
+    expect(startMap).toBeInstanceOf(Map);
+    expect(widthMap).toBeInstanceOf(Map);
+    expect(widthMap.get("name")).toBe(startMap.get("name"));
 
     harness.cleanup();
   });
