@@ -1765,3 +1765,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (91 files, 276 tests).
 - Added adapted `useOverlayPosition` tests for baseline computed placement/style output and close-on-scroll behavior when `onClose` is provided.
 - Validation: `npm run check` passed, `npm test` passed (92 files, 278 tests).
+- Expanded overlays tests with:
+  - `useOverlay` top-most-overlay dismissal behavior
+  - `useModal` error behavior outside provider
+- Validation: `npm run check` passed, `npm test` passed (92 files, 280 tests).

@@ -68,4 +68,15 @@ describe("useModal", () => {
     expect(rootProvider.attributes("aria-hidden")).toBeUndefined();
     wrapper.unmount();
   });
+
+  it("throws when used outside provider", () => {
+    const Outside = defineComponent({
+      setup() {
+        useModal();
+        return () => h("div");
+      },
+    });
+
+    expect(() => mount(Outside)).toThrowError("Modal is not contained within a provider");
+  });
 });
