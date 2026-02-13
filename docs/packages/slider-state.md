@@ -66,10 +66,29 @@ const rangeState = useSliderState({
 });
 ```
 
+```ts
+import { reactive } from "vue";
+import { useSliderState } from "@vue-aria/slider-state";
+
+// Controlled/reactive usage: state values follow external prop updates.
+const props = reactive({
+  value: [15, 65],
+});
+
+const state = useSliderState({
+  value: props.value,
+  numberFormatter: new Intl.NumberFormat("en-US", {}),
+  onChange(next) {
+    props.value = next;
+  },
+});
+```
+
 ## Notes
 
 - Supports single and multi-thumb value arrays.
 - Handles step snapping, min/max clamping, drag lifecycle flags, and `onChange`/`onChangeEnd` conversion for single-value sliders.
+- Controlled values can be driven from reactive external state while preserving upstream callback semantics.
 - Exposes thumb-level helpers used directly by `@vue-aria/slider`:
   - `getThumbMinValue` / `getThumbMaxValue`
   - `setThumbPercent` / `getPercentValue`

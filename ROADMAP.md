@@ -2618,6 +2618,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/slider-state.md`)
 - [x] Expanded parity examples for single-value vs range callback behavior and lifecycle usage notes.
+- [x] Added controlled/reactive usage example aligning with upstream controlled callback semantics.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -4010,4 +4011,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `useSliderState` to source controlled/default values through reactive `useControlledState` getters, aligning controlled-value behavior with upstream expectations.
   - switched state reads (`values`, thumb bounds, increments/decrements, value labels) to `valuesState` so externally controlled updates are reflected without internal stale snapshots.
   - added adapted tests for reactive controlled array updates and controlled single-value callback shape/update flow.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 759 tests).
+- Expanded `@vue-aria/slider-state` documentation parity:
+  - added controlled/reactive usage example to `docs/packages/slider-state.md` showing external state-driven updates with upstream callback semantics.
+  - documented controlled-values behavior note alongside existing single/range callback examples.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 759 tests).
