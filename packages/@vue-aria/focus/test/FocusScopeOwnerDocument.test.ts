@@ -66,6 +66,10 @@ describe("FocusScope owner document behavior", () => {
 
     tabFromActive(true);
     expect(iframeDocument.activeElement).toBe(input3);
+    tabFromActive(true);
+    expect(iframeDocument.activeElement).toBe(input2);
+    tabFromActive(true);
+    expect(iframeDocument.activeElement).toBe(input1);
 
     wrapper.unmount();
   });
