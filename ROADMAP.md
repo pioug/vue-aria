@@ -3441,3 +3441,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/menu` docs parity for trigger modality/localization notes:
   - documented virtual press-start focus-strategy behavior and localized long-press description usage in `docs/packages/menu.md`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 642 tests).
+- Expanded `@vue-aria/menu/useMenuTrigger` locale-provider integration parity:
+  - added adapted coverage asserting `I18nProvider` locale selection (`fr-FR`) is forwarded into long-press accessibility descriptions.
+- Validation: `npm run check` passed, `npm test` passed (131 files, 643 tests).
