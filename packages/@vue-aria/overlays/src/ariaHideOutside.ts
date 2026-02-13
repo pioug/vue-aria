@@ -1,4 +1,3 @@
-// @ts-nocheck
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -67,7 +66,7 @@ export function ariaHideOutside(targets: Element[], options?: AriaHideOutsideOpt
 
   let walk = (root: Element) => {
     // Keep live announcer and top layer elements (e.g. toasts) visible.
-    for (let element of root.querySelectorAll('[data-live-announcer], [data-react-aria-top-layer]')) {
+    for (let element of Array.from(root.querySelectorAll('[data-live-announcer], [data-react-aria-top-layer]'))) {
       visibleNodes.add(element);
     }
 
@@ -154,7 +153,7 @@ export function ariaHideOutside(targets: Element[], options?: AriaHideOutsideOpt
           nodeContains(node, change.target)
         )
       ) {
-        for (let node of change.addedNodes) {
+        for (let node of Array.from(change.addedNodes)) {
           if (
             (node instanceof HTMLElement || node instanceof SVGElement) &&
             (node.dataset.liveAnnouncer === 'true' || node.dataset.reactAriaTopLayer === 'true')

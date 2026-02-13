@@ -1619,7 +1619,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining temporary `@ts-nocheck` debt is now isolated to `calculatePosition` and `ariaHideOutside`; `usePreventScroll` has been typed.
+  - Remaining temporary `@ts-nocheck` debt is now isolated to `calculatePosition`; `usePreventScroll` and `ariaHideOutside` have been typed.
 
 ### Tests
 - Total upstream test files: 11
@@ -3087,4 +3087,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Improved `@vue-aria/overlays` typing parity:
   - removed temporary `@ts-nocheck` from `usePreventScroll.ts`
   - tightened restore/style typings while preserving existing behavior paths
+- Validation: `npm run check` passed, `npm test` passed (126 files, 540 tests).
+- Improved `@vue-aria/overlays` typing parity:
+  - removed temporary `@ts-nocheck` from `ariaHideOutside.ts`
+  - tightened iterator typing for live announcer/top-layer detection and mutation handling
 - Validation: `npm run check` passed, `npm test` passed (126 files, 540 tests).
