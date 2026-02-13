@@ -1,4 +1,4 @@
-import { NumberFormatter } from "@internationalized/number";
+import { NumberFormatter, NumberParser } from "@internationalized/number";
 import { clamp, snapValueToStep, useControlledState } from "@vue-aria/utils-state";
 import { computed, ref, watch } from "vue";
 
@@ -101,14 +101,11 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
       : new NumberFormatter(locale, formatOptions).format(controlledValue.value)
   );
 
-  const parseNumber = (raw: string): number => {
-    const normalized = raw.replace(/[^\d+.,-]/g, "").replace(/,/g, ".");
-    if (!normalized.length || normalized === "-" || normalized === "+" || normalized === ".") {
-      return Number.NaN;
-    }
-    return Number(normalized);
-  };
-  const formatter = computed(() => new NumberFormatter(locale, { ...formatOptions }));
+  const numberParser = computed(() => new NumberParser(locale, formatOptions));
+  const numberingSystem = computed(() => numberParser.value.getNumberingSystem(inputValueRef.value));
+  const formatter = computed(
+    () => new NumberFormatter(locale, { ...formatOptions, numberingSystem: numberingSystem.value })
+  );
   const intlOptions = computed(() => formatter.value.resolvedOptions());
   const format = (nextValue: number) => (Number.isNaN(nextValue) ? "" : formatter.value.format(nextValue));
 
@@ -119,7 +116,7 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     }
   );
 
-  const parsedValue = computed(() => parseNumber(inputValueRef.value));
+  const parsedValue = computed(() => numberParser.value.parse(inputValueRef.value));
   let clampStep = step !== undefined && !Number.isNaN(step) ? step : 1;
   if (intlOptions.value.style === "percent" && (step === undefined || Number.isNaN(step))) {
     clampStep = 0.01;
@@ -130,7 +127,7 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     const newInputValue = overrideValue === undefined ? inputValueRef.value : overrideValue;
     let newParsedValue = parsedValue.value;
     if (overrideValue !== undefined) {
-      newParsedValue = parseNumber(newInputValue);
+      newParsedValue = numberParser.value.parse(newInputValue);
     }
 
     if (!newInputValue.length) {
@@ -147,7 +144,7 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     let clampedValue = step === undefined || Number.isNaN(step)
       ? clamp(newParsedValue, minValue, maxValue)
       : snapValueToStep(newParsedValue, minValue, maxValue, step);
-    clampedValue = parseNumber(format(clampedValue));
+    clampedValue = numberParser.value.parse(format(clampedValue));
     setControlledValue(clampedValue);
     inputValueRef.value = format(value === undefined ? clampedValue : controlledValue.value);
     commitValidation();
@@ -223,26 +220,8 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
         handleDecimalOperation("-", parsedValue.value, clampStep) >= minValue)
   );
 
-  const validate = (nextValue: string) => {
-    if (!/^[+-]?\d*([.,]\d*)?$/.test(nextValue)) {
-      return false;
-    }
-
-    const parsed = parseNumber(nextValue);
-    if (Number.isNaN(parsed)) {
-      return true;
-    }
-
-    if (minValue !== undefined && !Number.isNaN(minValue) && parsed < minValue) {
-      return false;
-    }
-
-    if (maxValue !== undefined && !Number.isNaN(maxValue) && parsed > maxValue) {
-      return false;
-    }
-
-    return true;
-  };
+  const validate = (nextValue: string) =>
+    numberParser.value.isValidPartialNumber(nextValue, minValue, maxValue);
 
   const updateValidation = () => {};
   const resetValidation = () => {};

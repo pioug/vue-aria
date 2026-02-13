@@ -43,4 +43,11 @@ declare module "@internationalized/number" {
   export class NumberFormatter extends Intl.NumberFormat {
     constructor(locale: string, options?: NumberFormatOptions);
   }
+
+  export class NumberParser {
+    constructor(locale: string, options?: Intl.NumberFormatOptions);
+    parse(value: string): number;
+    isValidPartialNumber(value: string, minValue?: number, maxValue?: number): boolean;
+    getNumberingSystem(value: string): string;
+  }
 }

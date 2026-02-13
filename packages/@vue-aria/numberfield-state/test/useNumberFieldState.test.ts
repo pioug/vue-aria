@@ -78,4 +78,23 @@ describe("useNumberFieldState", () => {
     expect(state.canDecrement).toBe(true);
     scope.stop();
   });
+
+  it("parses localized separators and validates partial input", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "fr-FR",
+        defaultValue: 0,
+        minValue: 0,
+        maxValue: 2000,
+      })
+    )!;
+
+    state.commit("1 234,5");
+    expect(state.numberValue).toBe(1234.5);
+
+    expect(state.validate("-")).toBe(false);
+    expect(state.validate("1,")).toBe(true);
+    scope.stop();
+  });
 });

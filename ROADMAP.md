@@ -1837,7 +1837,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current parser/validation path uses locale-normalized fallback parsing and validation placeholders instead of full upstream parser + form-validation-state internals.
+  - Locale-aware parsing/validation is now wired through `@internationalized/number/NumberParser`; full form-validation-state internals are still pending.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder in upstream stately package
@@ -1863,8 +1863,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Replace fallback parsing/validation with full upstream-equivalent locale parser behavior.
-2. Integrate with full form validation-state parity path and wire into `@vue-aria/numberfield`.
+1. Integrate full form validation-state parity path and wire into `@vue-aria/numberfield`.
+2. Expand parser/validation edge-case tests against upstream `@internationalized/number` fixtures.
 
 ## 36) Session Log
 ### 2026-02-13
@@ -2352,3 +2352,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - aligned setter behavior to immediately keep text representation in sync
 - Added adapted state test coverage for synchronized increment/decrement boundary transitions.
 - Validation: `npm run check` passed, `npm test` passed (115 files, 350 tests).
+- Replaced fallback `@vue-aria/numberfield-state` parsing/validation with `@internationalized/number/NumberParser` parity path:
+  - locale-aware parse/partial-validation behavior now routed through parser APIs
+  - numbering-system-aware formatter construction added
+- Added adapted locale parsing/partial-validation coverage (`fr-FR` separator parsing and partial input checks).
+- Fixed local i18n ambient types to include `NumberParser` in `@internationalized/number` declarations.
+- Validation: `npm run check` passed, `npm test` passed (115 files, 351 tests).
