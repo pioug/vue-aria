@@ -3,6 +3,26 @@ import { describe, expect, it, vi } from "vitest";
 import { useSlider } from "../src/useSlider";
 import { useSliderThumb, type SliderThumbState } from "../src/useSliderThumb";
 
+function dispatchThumbKey(thumbProps: Record<string, unknown>, key: string) {
+  const event = {
+    key,
+    type: "keydown",
+    target: null,
+    currentTarget: null,
+    shiftKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    altKey: false,
+    defaultPrevented: false,
+    preventDefault: vi.fn(),
+    stopPropagation: vi.fn(),
+  } as unknown as KeyboardEvent;
+  const onKeydown = (thumbProps.onKeydown ?? thumbProps.onKeyDown) as
+    | ((event: KeyboardEvent) => void)
+    | undefined;
+  onKeydown?.(event);
+}
+
 function createSliderThumbState(values: number[] = [50]) {
   const dragging = new Set<number>();
   const state: SliderThumbState = {
@@ -328,6 +348,92 @@ describe("useSliderThumb", () => {
 
     expect(state.setThumbDragging).not.toHaveBeenCalledWith(0, true);
     expect(state.isThumbDragging(0)).toBe(false);
+
+    scope.stop();
+  });
+
+  it("handles PageDown/Home/End keyboard interactions", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 10,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 10,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderThumbState();
+    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const scope = effectScope();
+    const result = scope.run(() => {
+      useSlider({ label: "Slider" }, state as any, { current: track });
+      return useSliderThumb(
+        {
+          index: 0,
+          trackRef: { current: track },
+          inputRef,
+        },
+        state
+      );
+    })!;
+
+    dispatchThumbKey(result.thumbProps, "PageDown");
+    expect(state.decrementThumb).toHaveBeenCalledWith(0, state.pageSize);
+
+    dispatchThumbKey(result.thumbProps, "Home");
+    expect(state.getThumbMinValue).toHaveBeenCalledWith(0);
+    expect(state.setThumbValue).toHaveBeenCalledWith(0, 10);
+
+    dispatchThumbKey(result.thumbProps, "End");
+    expect(state.getThumbMaxValue).toHaveBeenCalledWith(0);
+    expect(state.setThumbValue).toHaveBeenCalledWith(0, 200);
+
+    expect(state.setThumbDragging).toHaveBeenCalledWith(0, true);
+    expect(state.setThumbDragging).toHaveBeenCalledWith(0, false);
+
+    scope.stop();
+  });
+
+  it("disables thumb input interactions when thumb is disabled", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 10,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 10,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderThumbState();
+    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const scope = effectScope();
+    const result = scope.run(() => {
+      useSlider({ label: "Slider" }, state as any, { current: track });
+      return useSliderThumb(
+        {
+          index: 0,
+          isDisabled: true,
+          trackRef: { current: track },
+          inputRef,
+        },
+        state
+      );
+    })!;
+
+    expect(result.isDisabled).toBe(true);
+    expect(result.inputProps.disabled).toBe(true);
+    expect(result.inputProps.tabIndex).toBeUndefined();
+    expect(result.thumbProps.onMousedown).toBeUndefined();
+    expect(result.thumbProps.onPointerdown).toBeUndefined();
+    expect(state.setThumbEditable).toHaveBeenCalledWith(0, false);
 
     scope.stop();
   });
