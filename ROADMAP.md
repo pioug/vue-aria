@@ -2550,6 +2550,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - horizontal keyboard arrow movement and start/end boundary callback behavior
     - vertical keyboard arrow movement and top/bottom boundary callback behavior
     - track-containing-thumb drag path where bubbled thumb interactions should not trigger duplicate track handling
+    - RTL horizontal track click behavior and RTL arrow-key thumb movement semantics
   - Added adapted interaction-guard coverage for:
     - dense stacked-thumb nearest selection behavior
     - modified mouse interaction no-op behavior on slider track
@@ -2577,9 +2578,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Add explicit RTL interaction tests for track and thumb movement semantics.
-2. Replace remaining mocked-state slider tests with `@vue-aria/slider-state` integration where practical.
-3. Validate downstream visual parity against upstream story compositions with a Vue wrapper harness.
+1. Replace remaining mocked-state slider tests with `@vue-aria/slider-state` integration where practical.
+2. Validate downstream visual parity against upstream story compositions with a Vue wrapper harness.
+3. Decide whether `@vue-aria/slider` package can be marked `Complete` after downstream visual/accessibility verification tasks.
 
 ## 42) Package Record: @vue-aria/slider-state
 - Upstream source path(s):

@@ -1,8 +1,9 @@
-import { effectScope, ref } from "vue";
+import { computed, effectScope, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSlider } from "../src/useSlider";
 import { useSliderThumb } from "../src/useSliderThumb";
 import { useSliderState } from "@vue-aria/slider-state";
+import * as i18n from "@vue-aria/i18n";
 
 const TRACK_RECT = {
   width: 100,
@@ -636,5 +637,78 @@ describe("useSlider integration with useSliderState", () => {
     expect(onChangeEnd).toHaveBeenLastCalledWith([40]);
 
     scope.stop();
+  });
+
+  it("mirrors horizontal track click behavior in RTL", () => {
+    const localeSpy = vi.spyOn(i18n, "useLocale").mockReturnValue(
+      computed(() => ({ locale: "ar-EG", direction: "rtl" as const })) as any
+    );
+
+    const track = createTrack();
+    const scope = effectScope();
+    const { state, trackProps } = scope.run(() => {
+      const state = useSliderState({
+        defaultValue: [10, 80],
+        numberFormatter,
+      });
+      const { trackProps } = useSlider({ "aria-label": "Slider" }, state as any, { current: track });
+      return { state, trackProps };
+    })!;
+
+    const kind = dispatchTrackDown(trackProps, 80);
+    dispatchTrackUp(kind, 80);
+    expect(state.values).toEqual([20, 80]);
+
+    dispatchTrackDown(trackProps, 10);
+    dispatchTrackUp(kind, 10);
+    expect(state.values).toEqual([20, 90]);
+
+    scope.stop();
+    localeSpy.mockRestore();
+  });
+
+  it("reverses horizontal arrow-key thumb movement in RTL", () => {
+    const localeSpy = vi.spyOn(i18n, "useLocale").mockReturnValue(
+      computed(() => ({ locale: "ar-EG", direction: "rtl" as const })) as any
+    );
+
+    const track = createTrack();
+    const onChange = vi.fn();
+    const onChangeEnd = vi.fn();
+    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+
+    const scope = effectScope();
+    const { state, thumbProps } = scope.run(() => {
+      const state = useSliderState({
+        defaultValue: [10],
+        onChange,
+        onChangeEnd,
+        numberFormatter,
+      });
+      useSlider({ "aria-label": "Slider" }, state as any, { current: track });
+      const { thumbProps } = useSliderThumb(
+        {
+          index: 0,
+          "aria-label": "Thumb",
+          trackRef: { current: track },
+          inputRef,
+        },
+        state as any
+      );
+      return { state, thumbProps };
+    })!;
+
+    dispatchThumbKey(thumbProps, "ArrowRight");
+    expect(state.values).toEqual([9]);
+    expect(onChange).toHaveBeenLastCalledWith([9]);
+    expect(onChangeEnd).toHaveBeenLastCalledWith([9]);
+
+    dispatchThumbKey(thumbProps, "ArrowLeft");
+    expect(state.values).toEqual([10]);
+    expect(onChange).toHaveBeenLastCalledWith([10]);
+    expect(onChangeEnd).toHaveBeenLastCalledWith([10]);
+
+    scope.stop();
+    localeSpy.mockRestore();
   });
 });
