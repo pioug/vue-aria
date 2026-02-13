@@ -1319,6 +1319,68 @@ describe("FocusScope behavior", () => {
     }
   });
 
+  it("manages focus traversal within nested shadow roots", () => {
+    enableShadowDOM();
+
+    const parentHost = document.createElement("div");
+    document.body.appendChild(parentHost);
+    const parentShadowRoot = parentHost.attachShadow({ mode: "open" });
+    const nestedHost = document.createElement("div");
+    parentShadowRoot.appendChild(nestedHost);
+    const childShadowRoot = nestedHost.attachShadow({ mode: "open" });
+
+    const wrapper = mount(defineComponent({
+      render() {
+        return h(
+          Teleport,
+          { to: childShadowRoot },
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+              ],
+            }
+          )
+        );
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    try {
+      const input1 = childShadowRoot.querySelector("#input1") as HTMLInputElement;
+      const input2 = childShadowRoot.querySelector("#input2") as HTMLInputElement;
+
+      const tabFromChildShadowActive = (shiftKey = false) => {
+        const active = childShadowRoot.activeElement as HTMLElement | null;
+        if (!active) {
+          return;
+        }
+        active.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Tab",
+            shiftKey,
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+      };
+
+      input1.focus();
+      expect(childShadowRoot.activeElement).toBe(input1);
+
+      tabFromChildShadowActive(false);
+      expect(childShadowRoot.activeElement).toBe(input2);
+    } finally {
+      wrapper.unmount();
+      parentHost.remove();
+      disableShadowDOM();
+    }
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

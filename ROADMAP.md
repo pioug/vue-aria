@@ -3002,3 +3002,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Improved shadow-root containment key handling:
   - containment now checks `getActiveElement(ownerDocument)` so shadow-root active descendants are recognized instead of the shadow host element
 - Validation: `npm run check` passed, `npm test` passed (125 files, 519 tests).
+- Expanded `@vue-aria/focus/FocusScope` nested shadow-root parity with adapted upstream coverage for:
+  - maintaining contained focus traversal inside a nested shadow-root mounted scope
+- Validation: `npm run check` passed, `npm test` passed (125 files, 520 tests).
