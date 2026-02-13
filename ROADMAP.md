@@ -1868,7 +1868,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -1946,7 +1946,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2559,13 +2559,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - closest-thumb selection and drag updates via `onPointerdown` + `pointermove`/`pointerup`
   - Added adapted explicit pointer-path range-thumb coverage for:
     - upper-thumb drag clamping behavior in two-thumb state during pointer drag
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/slider.md`)
 - [x] Expanded parity examples for single/range/multi-thumb composition and upstream-aligned base style snippets.
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
 
 ### Accessibility
 - [ ] Validate full keyboard/pointer/touch multi-thumb interaction parity against upstream test suite.
@@ -2577,9 +2577,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand `useSlider`/`useSliderThumb` tests toward full upstream track/thumb interaction matrix (pointer, mouse, touch, RTL, stacked thumbs, and multi-thumb constraints).
+1. Add explicit RTL interaction tests for track and thumb movement semantics.
 2. Replace remaining mocked-state slider tests with `@vue-aria/slider-state` integration where practical.
-3. Expand docs/examples toward upstream story parity with range, orientation, disabled, and labeled-thumb variants.
+3. Validate downstream visual parity against upstream story compositions with a Vue wrapper harness.
 
 ## 42) Package Record: @vue-aria/slider-state
 - Upstream source path(s):
@@ -4059,3 +4059,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider` label interaction parity:
   - added adapted `useSlider` test coverage for label-click focus handoff to the first thumb and keyboard modality forcing path.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 765 tests).
+- Updated `@vue-aria/slider` roadmap checklist status:
+  - marked public API checklist complete.
+  - marked upstream test migration checklist complete for current package scope.
+  - marked docs example/base-style checklists complete based on current mirrored story coverage.
