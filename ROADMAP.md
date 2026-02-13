@@ -2376,7 +2376,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 2
 - Passing test files: 2
 - Test parity notes:
-  - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, controller-based forward/backward/main navigation, backward wrapping, wrap custom events, aria-hidden landmark skipping, and focused `tabIndex` behavior.
+  - Added adapted hook coverage for landmark prop wiring, F6/Alt+F6 navigation behavior, controller-based forward/backward/main navigation, backward wrapping, wrap custom events, aria-hidden landmark skipping, focused `tabIndex` behavior, and duplicate-role labeling warning behaviors.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2395,7 +2395,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port additional upstream `useLandmark.test.tsx` interaction coverage for dynamic DOM mutation, warning paths, and focus restoration corner-cases.
+1. Port additional upstream `useLandmark.test.tsx` interaction coverage for dynamic DOM mutation and focus restoration corner-cases.
 2. Expand controller singleton/version replacement coverage from upstream’s dedicated controller tests.
 
 ## 40) Package Record: @vue-aria/toast
@@ -3694,4 +3694,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (138 files, 670 tests).
 - Expanded `@vue-aria/landmark` interaction parity:
   - added adapted coverage for Alt+F6 no-main no-op behavior, Shift+F6 backward wrap navigation, wrapping custom-event dispatch, aria-hidden landmark skipping, and focused landmark `tabIndex` behavior.
-- Validation: `npm run check` passed, `npm test` passed (138 files, 675 tests).
+  - added adapted coverage for duplicate-role warning semantics (unlabeled duplicates and duplicate labels) and no-warning behavior for uniquely labeled duplicates.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 678 tests).

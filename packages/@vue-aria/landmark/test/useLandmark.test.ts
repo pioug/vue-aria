@@ -29,6 +29,7 @@ describe("useLandmark", () => {
     document.body.innerHTML = "";
     const doc = document as Document & Record<symbol, unknown>;
     delete doc[landmarkSymbol];
+    vi.restoreAllMocks();
   });
 
   it("returns landmark props", () => {
@@ -284,6 +285,113 @@ describe("useLandmark", () => {
     expect(document.activeElement).toBe(main);
 
     controller.dispose();
+    wrapper.unmount();
+  });
+
+  it("allows duplicate role landmarks when labels are unique", async () => {
+    const RegionA = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "region", "aria-label": "Region A" }, refAdapter);
+        return () => h("article", { ...landmarkProps, ref: elementRef }, "A");
+      },
+    });
+    const RegionB = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "region", "aria-label": "Region B" }, refAdapter);
+        return () => h("article", { ...landmarkProps, ref: elementRef }, "B");
+      },
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(RegionA), h(RegionB)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    expect(warnSpy).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it("warns when duplicate role landmarks are not labeled", async () => {
+    const Region = createLandmark("article", "region", "Region");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Region), h(Region)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    expect(warnSpy).toHaveBeenCalled();
+    const firstMessage = String(warnSpy.mock.calls[0]?.[0] ?? "");
+    expect(firstMessage).toContain("more than one landmark");
+    wrapper.unmount();
+  });
+
+  it("warns when duplicate role landmarks share the same label", async () => {
+    const RegionA = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "region", "aria-label": "Shared" }, refAdapter);
+        return () => h("article", { ...landmarkProps, ref: elementRef }, "A");
+      },
+    });
+    const RegionB = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "region", "aria-label": "Shared" }, refAdapter);
+        return () => h("article", { ...landmarkProps, ref: elementRef }, "B");
+      },
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(RegionA), h(RegionB)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    expect(warnSpy).toHaveBeenCalled();
+    const joinedMessages = warnSpy.mock.calls.map((call) => String(call[0])).join("\n");
+    expect(joinedMessages).toContain("must have unique labels");
     wrapper.unmount();
   });
 });
