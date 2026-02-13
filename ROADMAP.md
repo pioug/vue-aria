@@ -2970,3 +2970,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus` focus-manager parity coverage for forward filtered traversal:
   - added `focusNext({wrap: true, accept})` branch coverage to mirror backward filtered-wrap behavior
 - Validation: `npm run check` passed, `npm test` passed (125 files, 510 tests).
+- Expanded `@vue-aria/focus/FocusScope` containment restore behavior with adapted coverage for:
+  - restoring focus back to the last focused in-scope element when focus attempts to move outside the active contained scope
+- Validation: `npm run check` passed, `npm test` passed (125 files, 511 tests).

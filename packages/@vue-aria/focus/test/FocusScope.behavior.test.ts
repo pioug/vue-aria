@@ -1008,4 +1008,31 @@ describe("FocusScope behavior", () => {
     expect(document.activeElement).toBe(input1);
     wrapper.unmount();
   });
+
+  it("restores focus to the last focused element in scope when focus moves outside", () => {
+    const outside = document.createElement("button");
+    outside.id = "outside";
+    document.body.appendChild(outside);
+
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("input", { id: "input2" }),
+        ],
+      },
+    });
+
+    const input2 = wrapper.get("#input2").element as HTMLInputElement;
+    input2.focus();
+    expect(document.activeElement).toBe(input2);
+
+    outside.focus();
+    expect(document.activeElement).toBe(input2);
+
+    wrapper.unmount();
+    outside.remove();
+  });
 });
