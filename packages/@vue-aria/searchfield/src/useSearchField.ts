@@ -2,12 +2,7 @@ import type { SearchFieldState } from "@vue-aria/searchfield-state";
 import { chain } from "@vue-aria/utils";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useTextField } from "@vue-aria/textfield";
-
-const intlMessages = {
-  "en-US": {
-    "Clear search": "Clear search",
-  },
-};
+import { intlMessages } from "./intlMessages";
 
 export interface AriaSearchFieldProps {
   isDisabled?: boolean;

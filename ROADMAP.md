@@ -1231,6 +1231,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - composable modules
   - `tsconfig.json` path aliases
+- [x] Locale dictionary parity:
+  - wired full upstream `@react-aria/searchfield/intl` bundle via `src/intlMessages.ts`
 
 ### Tests
 - Total upstream test files: 1 (`useSearchField.test.js`)
@@ -1257,7 +1259,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum searchfield components.
-2. Expand locale dictionary coverage for clear-label parity.
+2. Add locale-provider integration coverage for translated clear-search labels.
 
 ## 20) Package Record: @vue-aria/progress
 - Upstream source path(s):
@@ -1427,6 +1429,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - composable modules
   - `tsconfig.json` path alias
+- [x] Locale dictionary parity:
+  - wired full upstream `@react-aria/breadcrumbs/intl` bundle via `src/intlMessages.ts`
 
 ### Tests
 - Total upstream test files: 2
@@ -1452,7 +1456,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum breadcrumb components.
-2. Expand locale dictionary coverage for breadcrumbs labels.
+2. Add locale-provider integration coverage for translated breadcrumbs labels.
 
 ## 24) Package Record: @vue-aria/separator
 - Upstream source path(s):
@@ -3345,4 +3349,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/menu` locale dictionary parity:
   - replaced inline en-US long-press message strings with generated upstream intl bundle from `@react-aria/menu/intl`
   - updated `useMenuTrigger` long-press accessibility description expectation to upstream message text
+- Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
+- Expanded `@vue-aria/searchfield` and `@vue-aria/breadcrumbs` locale dictionary parity:
+  - replaced inline en-US-only labels with generated upstream intl bundles from `@react-aria/searchfield/intl` and `@react-aria/breadcrumbs/intl`
+  - wired both hooks to consume package-local `intlMessages.ts` locale maps
 - Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).

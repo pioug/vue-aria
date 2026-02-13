@@ -1,11 +1,6 @@
 import { filterDOMProps } from "@vue-aria/utils";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
-
-const intlMessages = {
-  "en-US": {
-    breadcrumbs: "Breadcrumbs",
-  },
-};
+import { intlMessages } from "./intlMessages";
 
 export interface AriaBreadcrumbsProps {
   "aria-label"?: string;
