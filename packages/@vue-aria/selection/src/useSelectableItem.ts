@@ -1,4 +1,5 @@
 import { focusSafely } from "@vue-aria/interactions";
+import { moveVirtualFocus } from "@vue-aria/focus";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { isCtrlKeyPressed, useRouter } from "@vue-aria/utils";
 import { isNonContiguousSelectionModifier } from "./utils";
@@ -126,6 +127,8 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
     } else if (document.activeElement !== ref.current && ref.current) {
       focusSafely(ref.current);
     }
+  } else if (manager.focusedKey === key && manager.isFocused && shouldUseVirtualFocus) {
+    moveVirtualFocus(ref.current);
   }
 
   const itemProps: Record<string, unknown> = {};
@@ -144,6 +147,11 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   }
 
   itemProps.onClick = (event: MouseEvent) => {
+    if (shouldUseVirtualFocus && !isDisabled) {
+      manager.setFocused(true);
+      manager.setFocusedKey(key);
+    }
+
     if (!allowsSelection && hasAction) {
       performAction(event);
       return;
@@ -154,6 +162,12 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
       performAction(event);
     }
   };
+
+  if (shouldUseVirtualFocus && !isDisabled) {
+    itemProps.onMousedown = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+  }
 
   itemProps.onDoubleClick = (event: MouseEvent) => {
     if (hasSecondaryAction) {

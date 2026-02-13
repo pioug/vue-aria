@@ -3,6 +3,9 @@ import { useSelectableItem } from "../src/useSelectableItem";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 
 const open = vi.fn();
+const { moveVirtualFocus } = vi.hoisted(() => ({
+  moveVirtualFocus: vi.fn(),
+}));
 
 vi.mock("@vue-aria/utils", async () => {
   const actual = await vi.importActual<typeof import("@vue-aria/utils")>("@vue-aria/utils");
@@ -14,6 +17,9 @@ vi.mock("@vue-aria/utils", async () => {
 
 vi.mock("@vue-aria/interactions", () => ({
   focusSafely: vi.fn(),
+}));
+vi.mock("@vue-aria/focus", () => ({
+  moveVirtualFocus,
 }));
 
 function createManager(overrides: Partial<MultipleSelectionManager> = {}): MultipleSelectionManager {
@@ -60,6 +66,7 @@ function createManager(overrides: Partial<MultipleSelectionManager> = {}): Multi
 describe("useSelectableItem", () => {
   beforeEach(() => {
     open.mockReset();
+    moveVirtualFocus.mockReset();
   });
 
   it("replaces selection on click in replace mode", () => {
@@ -337,6 +344,59 @@ describe("useSelectableItem", () => {
     const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
     const event = { preventDefault: vi.fn() } as unknown as MouseEvent;
     onMousedown(event);
+    expect((event.preventDefault as any).mock.calls.length).toBe(1);
+  });
+
+  it("moves virtual focus when the item is focused in virtual focus mode", () => {
+    const manager = createManager({
+      focusedKey: "a",
+      isFocused: true,
+    });
+    const ref = { current: document.createElement("div") };
+
+    useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      shouldUseVirtualFocus: true,
+    });
+
+    expect(moveVirtualFocus).toHaveBeenCalledWith(ref.current);
+  });
+
+  it("sets collection focus state on click when using virtual focus", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      shouldUseVirtualFocus: true,
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    expect(manager.setFocused).toHaveBeenCalledWith(true);
+    expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+  });
+
+  it("prevents mousedown focus transfer when virtual focus is enabled", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      shouldUseVirtualFocus: true,
+    });
+
+    const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
+    const event = { preventDefault: vi.fn() } as unknown as MouseEvent;
+    onMousedown(event);
+
     expect((event.preventDefault as any).mock.calls.length).toBe(1);
   });
 });

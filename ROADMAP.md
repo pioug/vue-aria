@@ -425,6 +425,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - keyboard Enter/Space selection behavior and secondary action routing
     - disabled focused-item branches (`setFocusedKey(null)` and mousedown default prevention)
     - multi-item touch/virtual pointer toggle semantics in `selectionBehavior: "replace"`
+    - virtual-focus focus handoff (`moveVirtualFocus`) for focused items
+    - virtual-focus press handling that updates selection-manager focus state and prevents native mousedown focus transfer
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -3116,4 +3118,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added modality-aware `select` behavior checks (`touch`/`virtual` toggle vs mouse replace in replace-mode)
   - added link/disabled metadata branch coverage for `isLink`, `getItemProps`, `isDisabled`, and `canSelectItem`
   - added derived-manager state/options continuity coverage for `withCollection`
-- Validation: `npm run check` passed, `npm test` passed (126 files, 545 tests).
+- Expanded `@vue-aria/selection/useSelectableItem` virtual-focus behavior parity:
+  - wired focused virtual-item path to `moveVirtualFocus`
+  - added virtual-focus click path updates for collection focus + focused key tracking
+  - added virtual-focus mousedown default prevention to avoid native DOM focus transfer
+- Validation: `npm run check` passed, `npm test` passed (126 files, 549 tests).
