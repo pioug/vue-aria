@@ -557,7 +557,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules for initial prerequisite slice enumerated
-- [ ] Public API checklist complete (full package not yet ported)
+- [x] Public API checklist complete (all current upstream module exports mapped)
 
 ### Implementation
 - [x] Initial prerequisite slice ported:
@@ -582,7 +582,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Remaining:
   - Port remaining advanced `FocusScope` integration cases from upstream `FocusScope.test.js`:
-    - dialog/container node-to-restore edge case coverage
     - remaining high-complexity portal/container restoration scenarios
   - Continue validating behavior parity details where Vue test adapters differ from upstream harness behavior.
 
@@ -627,6 +626,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - restore-tab non-interception behavior when `restoreFocus` is disabled
     - dynamic-children restore-focus stability behavior
     - iframe-like null-`relatedTarget` blur transition behavior
+    - node-to-restore tracking when an intermediate restore target is removed in another subtree
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
     - tabbable-only traversal behavior
@@ -656,7 +656,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Port remaining upstream `FocusScope.test.js` integration edge cases (dialog/container node-to-restore branch + related complex restoration paths).
+1. Port remaining upstream `FocusScope.test.js` integration edge cases (remaining complex portal/container restoration paths).
 2. Continue converting unported upstream assertions into adapted Vue tests while preserving intent.
 3. Reconcile any remaining implementation gaps discovered by newly ported assertions.
 4. Keep `docs/packages/focus.md` notes synchronized as remaining upstream cases land.
@@ -3059,3 +3059,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` iframe-like blur transition parity with adapted upstream coverage for:
   - preserving the newly focused target when blur `relatedTarget` is null during contained focus transitions
 - Validation: `npm run check` passed, `npm test` passed (125 files, 532 tests).
+- Expanded `@vue-aria/focus/FocusScope` node-to-restore edge-case parity with adapted upstream coverage for:
+  - tracking restoration targets across scope handoff when the intermediate node-to-restore is removed in another subtree
+- Improved restore-focus handoff behavior:
+  - contain-scope unmount restoration now defers to allow replacement-scope autofocus to settle before fallback restoration
+  - body-active mount snapshots now fall back to the last active scope's focused node to preserve restore-target chains
+  - disconnected restore-target resolution now reuses prior scope restore mappings
+- Validation: `npm run check` passed, `npm test` passed (125 files, 533 tests).

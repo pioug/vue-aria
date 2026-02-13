@@ -1253,6 +1253,96 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("tracks node-to-restore when restore target is removed in another subtree", async () => {
+    const Host = defineComponent({
+      setup() {
+        const showMenu = ref(false);
+        const showDialog = ref(false);
+        const openMenu = () => {
+          showMenu.value = true;
+        };
+        const openDialog = () => {
+          showMenu.value = false;
+          showDialog.value = true;
+        };
+        const closeDialog = () => {
+          showDialog.value = false;
+        };
+
+        return { showMenu, showDialog, openMenu, openDialog, closeDialog };
+      },
+      render() {
+        return h("div", [
+          h("label", { for: "focus-disambiguator" }, "Extra input to disambiguate focus"),
+          h("input", { id: "focus-disambiguator" }),
+          h(
+            FocusScope,
+            null,
+            {
+              default: () => [
+                h("button", { id: "open-menu", onKeydown: this.openMenu }, "Open Menu"),
+                this.showMenu
+                  ? h(
+                    FocusScope,
+                    { contain: true, restoreFocus: true, autoFocus: true },
+                    {
+                      default: () => [
+                        h("button", { id: "open-dialog", onKeydown: this.openDialog }, "Open Dialog"),
+                      ],
+                    }
+                  )
+                  : null,
+              ],
+            }
+          ),
+          this.showDialog
+            ? h(
+              FocusScope,
+              { contain: true, restoreFocus: true, autoFocus: true },
+              {
+                default: () => [h("button", { id: "close-dialog", onKeydown: this.closeDialog }, "Close")],
+              }
+            )
+            : null,
+        ]);
+      },
+    });
+
+    vi.useFakeTimers();
+    const wrapper = mount(Host, { attachTo: document.body });
+
+    try {
+      expect(document.activeElement).toBe(document.body);
+
+      const openMenu = wrapper.get("#open-menu");
+      (openMenu.element as HTMLButtonElement).focus();
+      expect(document.activeElement).toBe(openMenu.element);
+
+      await openMenu.trigger("keydown", { key: "Enter" });
+      await nextTick();
+      expect(document.activeElement).toBe(wrapper.get("#open-dialog").element);
+
+      await wrapper.get("#open-dialog").trigger("keydown", { key: "Enter" });
+      await nextTick();
+      vi.runAllTimers();
+      await nextTick();
+
+      expect(document.activeElement).toBe(wrapper.get("#close-dialog").element);
+
+      await wrapper.get("#close-dialog").trigger("keydown", { key: "Enter" });
+      await nextTick();
+      vi.runAllTimers();
+      vi.runAllTimers();
+      await nextTick();
+
+      expect(document.activeElement).toBe(wrapper.get("#open-menu").element);
+      expect(document.activeElement).not.toBe(document.body);
+    } finally {
+      wrapper.unmount();
+      vi.useRealTimers();
+    }
+  });
+
   it("contains focus within a shadow-dom focus scope", () => {
     enableShadowDOM();
 

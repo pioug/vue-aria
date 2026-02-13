@@ -227,10 +227,14 @@ export function createFocusManager(
 }
 
 const activeScopeRef = shallowRef<Element | null>(null);
+const lastActiveScopeRef = shallowRef<Element | null>(null);
 const FocusManagerContext: InjectionKey<FocusManager> = Symbol("FocusManagerContext");
 const ScopeParentContext: InjectionKey<{ current: Element | null }> = Symbol("FocusScopeParentContext");
 const scopeParentMap = new WeakMap<Element, Element | null>();
 const scopeContainMap = new WeakMap<Element, boolean>();
+const scopeRestoreMap = new WeakMap<Element, Element | null>();
+const scopeLastFocusedMap = new WeakMap<Element, Element | null>();
+const elementScopeMap = new WeakMap<Element, Element>();
 
 function isDescendantScope(scope: Element | null, ancestor: Element | null): boolean {
   if (!scope || !ancestor) {
@@ -263,6 +267,27 @@ function hasContainingAncestor(scope: Element | null): boolean {
   }
 
   return false;
+}
+
+function resolveRestoreTarget(node: Element | null): Element | null {
+  let current = node;
+  const visited = new Set<Element>();
+  while (current && !current.isConnected && !visited.has(current)) {
+    visited.add(current);
+    const sourceScope = current.closest("[data-focus-scope]") ?? elementScopeMap.get(current) ?? null;
+    if (!sourceScope) {
+      break;
+    }
+
+    const mapped = scopeRestoreMap.get(sourceScope) ?? null;
+    if (!mapped || mapped === current) {
+      break;
+    }
+
+    current = mapped;
+  }
+
+  return current;
 }
 
 export const FocusScope = defineComponent({
@@ -304,7 +329,15 @@ export const FocusScope = defineComponent({
 
     onBeforeMount(() => {
       if (typeof document !== "undefined") {
-        previousFocused.value = getActiveElement(document);
+        const activeElement = getActiveElement(document);
+        if (activeElement === document.body) {
+          const sourceScope = activeScopeRef.value ?? lastActiveScopeRef.value;
+          previousFocused.value = sourceScope
+            ? scopeLastFocusedMap.get(sourceScope) ?? activeElement
+            : activeElement;
+        } else {
+          previousFocused.value = activeElement;
+        }
       }
     });
 
@@ -319,12 +352,14 @@ export const FocusScope = defineComponent({
         const root = scopeRootRef.value;
         scopeParentMap.set(root, parentScopeRef?.current ?? null);
         scopeContainMap.set(root, !!props.contain);
+        scopeRestoreMap.set(root, previousFocused.value);
         const ownerDocument = getOwnerDocument(root);
         if (!previousFocused.value) {
           previousFocused.value = getActiveElement(ownerDocument);
         }
         if (!activeScopeRef.value && !parentScopeRef) {
           activeScopeRef.value = root;
+          lastActiveScopeRef.value = root;
         }
         scopeFocusInListener = (event: FocusEvent) => {
           const target = event.target as Element | null;
@@ -344,7 +379,12 @@ export const FocusScope = defineComponent({
           }
 
           activeScopeRef.value = scopeRoot;
+          lastActiveScopeRef.value = scopeRoot;
           lastFocusedInScope.value = target;
+          scopeLastFocusedMap.set(scopeRoot, target);
+          if (target) {
+            elementScopeMap.set(target, scopeRoot);
+          }
         };
 
         root.addEventListener("focusin", scopeFocusInListener as EventListener);
@@ -417,7 +457,12 @@ export const FocusScope = defineComponent({
         const activeElement = getActiveElement(ownerDocument);
         if (nodeContains(root, activeElement)) {
           activeScopeRef.value = root;
+          lastActiveScopeRef.value = root;
           lastFocusedInScope.value = activeElement;
+          scopeLastFocusedMap.set(root, activeElement);
+          if (activeElement) {
+            elementScopeMap.set(activeElement, root);
+          }
         } else if (props.autoFocus) {
           focusManager.focusFirst({ tabbable: true });
         }
@@ -606,35 +651,50 @@ export const FocusScope = defineComponent({
       if (scopeRootRef.value) {
         scopeParentMap.delete(scopeRootRef.value);
         scopeContainMap.delete(scopeRootRef.value);
+        scopeRestoreMap.set(scopeRootRef.value, previousFocused.value);
       }
 
-      let canRestoreFocus = true;
-      if (scopeRootRef.value) {
-        const ownerDocument = getOwnerDocument(scopeRootRef.value);
-        const activeElement = getActiveElement(ownerDocument);
-        if (
-          activeElement
-          && activeElement !== ownerDocument.body
-          && !nodeContains(scopeRootRef.value, activeElement)
-        ) {
-          canRestoreFocus = false;
-        }
-      }
+      if (props.restoreFocus && isHTMLElement(previousFocused.value)) {
+        const restoreScopeRoot = scopeRootRef.value;
+        const ownerDocument = restoreScopeRoot
+          ? getOwnerDocument(restoreScopeRoot)
+          : getOwnerDocument(previousFocused.value);
+        const performRestore = () => {
+          const activeElement = getActiveElement(ownerDocument);
+          if (
+            restoreScopeRoot
+            && activeElement
+            && activeElement !== ownerDocument.body
+            && !nodeContains(restoreScopeRoot, activeElement)
+          ) {
+            return;
+          }
 
-      if (canRestoreFocus && props.restoreFocus && isHTMLElement(previousFocused.value)) {
-        let shouldRestore = true;
-        if (scopeRootRef.value) {
-          const ownerWindow = getOwnerWindow(scopeRootRef.value);
-          const restoreEvent = new ownerWindow.CustomEvent(RESTORE_FOCUS_EVENT, {
-            bubbles: true,
-            cancelable: true,
-            detail: { nodeToRestore: previousFocused.value },
-          });
-          shouldRestore = scopeRootRef.value.dispatchEvent(restoreEvent);
-        }
+          const nodeToRestore = resolveRestoreTarget(previousFocused.value);
+          if (!isHTMLElement(nodeToRestore) || !nodeToRestore.isConnected) {
+            return;
+          }
 
-        if (shouldRestore) {
-          previousFocused.value.focus();
+          let shouldRestore = true;
+          if (restoreScopeRoot) {
+            const ownerWindow = getOwnerWindow(restoreScopeRoot);
+            const restoreEvent = new ownerWindow.CustomEvent(RESTORE_FOCUS_EVENT, {
+              bubbles: true,
+              cancelable: true,
+              detail: { nodeToRestore },
+            });
+            shouldRestore = restoreScopeRoot.dispatchEvent(restoreEvent);
+          }
+
+          if (shouldRestore) {
+            nodeToRestore.focus();
+          }
+        };
+
+        if (props.contain) {
+          setTimeout(performRestore);
+        } else {
+          performRestore();
         }
       }
     });
