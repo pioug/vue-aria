@@ -451,7 +451,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port `FocusScope` component behavior and focus containment logic.
+  - Port advanced `FocusScope` behavior and full focus-containment edge cases (nested scopes, portals, iframe nuances).
   - Align tree walker behavior with full upstream radio/scope handling.
   - Migrate full upstream focus tests.
 
@@ -469,6 +469,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `restoreFocus` restoration to previously focused node on unmount
     - `useFocusManager` next/previous traversal with wrap
     - `useFocusManager` accept-filter traversal behavior
+    - baseline containment wrap behavior on Tab/Shift+Tab when `contain` is enabled
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2695,4 +2696,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `autoFocus` first-focusable behavior
   - `restoreFocus` unmount restoration behavior
   - `useFocusManager` wrap traversal and accept-filter behavior
-- Validation: `npm run check` passed, `npm test` passed (122 files, 465 tests).
+- Implemented baseline `FocusScope contain` wrapping behavior for Tab/Shift+Tab focus cycling.
+- Expanded `@vue-aria/focus/FocusScope` behavior tests for:
+  - `contain` keyboard wrap behavior
+- Validation: `npm run check` passed, `npm test` passed (122 files, 466 tests).

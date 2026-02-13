@@ -182,6 +182,7 @@ export const FocusScope = defineComponent({
   setup(props, { slots }) {
     const scopeRootRef = shallowRef<Element | null>(null);
     const previousFocused = shallowRef<Element | null>(null);
+    let keydownListener: ((event: KeyboardEvent) => void) | null = null;
 
     const focusManager = createFocusManager({
       get current() {
@@ -201,9 +202,44 @@ export const FocusScope = defineComponent({
       if (props.autoFocus) {
         focusManager.focusFirst();
       }
+
+      if (props.contain && scopeRootRef.value instanceof HTMLElement) {
+        keydownListener = (event: KeyboardEvent) => {
+          if (
+            event.key !== "Tab"
+            || event.altKey
+            || event.ctrlKey
+            || event.metaKey
+            || !(scopeRootRef.value instanceof HTMLElement)
+            || !nodeContains(scopeRootRef.value, document.activeElement)
+          ) {
+            return;
+          }
+
+          if (event.shiftKey) {
+            const previous = focusManager.focusPrevious({ tabbable: true });
+            if (!previous) {
+              event.preventDefault();
+              focusManager.focusLast({ tabbable: true });
+            }
+          } else {
+            const next = focusManager.focusNext({ tabbable: true });
+            if (!next) {
+              event.preventDefault();
+              focusManager.focusFirst({ tabbable: true });
+            }
+          }
+        };
+
+        scopeRootRef.value.addEventListener("keydown", keydownListener);
+      }
     });
 
     onBeforeUnmount(() => {
+      if (keydownListener && scopeRootRef.value instanceof HTMLElement) {
+        scopeRootRef.value.removeEventListener("keydown", keydownListener);
+      }
+
       if (activeScopeRef.value === scopeRootRef.value) {
         activeScopeRef.value = null;
       }

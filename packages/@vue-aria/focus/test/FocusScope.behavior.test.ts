@@ -110,4 +110,54 @@ describe("FocusScope behavior", () => {
     expect(document.activeElement).toBe(wrapper.get("#second").element);
     wrapper.unmount();
   });
+
+  it("contains tab focus within the scope when contain is enabled", async () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("input", { id: "input2" }),
+          h("input", { id: "input3" }),
+        ],
+      },
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const input2 = wrapper.get("#input2").element as HTMLInputElement;
+    const input3 = wrapper.get("#input3").element as HTMLInputElement;
+
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(input1);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input3);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(input2);
+
+    wrapper.unmount();
+  });
 });
