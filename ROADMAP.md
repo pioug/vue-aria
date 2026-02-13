@@ -2397,13 +2397,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
   - `useGridRowGroup`
   - `useGridRow`
   - `useGrid`
+  - `useGridCell`
   - `GridKeyboardDelegate`
   - `useHighlightSelectionDescription`
   - `useGridSelectionAnnouncement`
@@ -2414,6 +2415,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - `src/intlMessages.ts`
   - `src/useGrid.ts`
+  - `src/useGridCell.ts`
   - `src/useGridRowGroup.ts`
   - `src/useGridRow.ts`
   - `src/GridKeyboardDelegate.ts`
@@ -2424,17 +2426,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining hook surface is `useGridCell` and its interaction branches.
+  - Remaining parity work is focused on adapting upstream `useGrid.test.js` integration interaction branches.
 
 ### Tests
 - Total upstream test files: 1 (`useGrid.test.js`) plus indirect behavior coverage through hook-level modules
-- Ported test files: 5 (adapted for current slice)
-- Passing test files: 5 (validated 2026-02-13)
+- Ported test files: 6 (adapted for current slice)
+- Passing test files: 6 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for `useGridRowGroup` role props.
   - Added adapted coverage for `useGridRow` aria row semantics, virtualized row index, row action chaining, and selection-mode/disabled behavior.
   - Added adapted coverage for `GridKeyboardDelegate` row/cell traversal, RTL direction behavior, disabled-row skipping, paging, and search.
   - Added adapted coverage for `useGrid` role/aria wiring, virtualized count props, shared action registration, and announcement hook integration.
+  - Added adapted coverage for `useGridCell` focus handoff, keyboard child traversal/redispatch, virtualized colindex behavior, and pointer press-up tabIndex handling.
   - Added adapted coverage for `useGridSelectionCheckbox` row-selection toggling and disabled-item behavior.
 - [ ] All relevant upstream tests migrated
 
@@ -2444,18 +2447,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Full cell-focus semantics and grid-cell keyboard interaction branches pending `useGridCell` port.
+- [ ] Full grid focus-mode integration semantics pending adaptation of remaining upstream `useGrid.test.js` interaction matrix.
 
 ### Visual Parity
-- Hook package parity in progress; downstream consumer validation pending `useGridCell` and full story parity pass.
+- Hook package parity in progress; downstream consumer validation pending full story parity pass.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `useGridCell` with state integration against `@vue-aria/grid-state`.
-2. Adapt remaining upstream `useGrid.test.js` interaction branches (cell actions, focus modes, keyboard flows).
-3. Expand docs examples to mirror upstream grid composition patterns once `useGridCell` lands.
+1. Adapt remaining upstream `useGrid.test.js` interaction branches (focus-mode matrix and keyboard flows).
+2. Add a Vue grid story harness mirroring upstream row/cell/child focus compositions for interaction assertions.
+3. Expand docs examples to mirror upstream grid composition patterns including `useGridCell`.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4808,3 +4811,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31f` implementation/test checklists to reflect completed grid-root and selection-helper slices.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/grid/test` passed (5 files, 11 tests).
+- Expanded `@vue-aria/grid` cell parity:
+  - ported upstream-aligned `useGridCell` and exported `GridCellProps` / `GridCellAria` from package index.
+  - added adapted `useGridCell` tests for focus routing, keyboard child traversal and redispatch behavior, virtualized colindex semantics, and press-up pointer tabIndex handling.
+  - updated `@vue-aria/grid` docs and package record to reflect completed hook surface with remaining upstream integration-matrix adaptation work.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/grid/test` passed (6 files, 19 tests).
