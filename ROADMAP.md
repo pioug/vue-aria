@@ -2520,7 +2520,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current hook slice uses upstream-aligned state interfaces while `@vue-aria/slider-state` is not ported yet; full interaction parity requires deeper integration once slider state lands.
+  - Hook/state integration is now wired through `@vue-aria/slider-state` in adapted integration tests; remaining parity work is concentrated on deeper pointer/touch/RTL edge-case paths.
 
 ### Tests
 - Total upstream test files: 2 (`useSlider.test.js`, `useSliderThumb.test.js`)
@@ -2543,6 +2543,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/slider.md`)
+- [x] Expanded parity examples for single/range/multi-thumb composition and upstream-aligned base style snippets.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2556,8 +2557,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `@react-stately/slider` state package and wire end-to-end integration parity.
-2. Expand `useSlider`/`useSliderThumb` tests toward full upstream track/thumb interaction matrix (pointer, mouse, touch, RTL, stacked thumbs, and multi-thumb constraints).
+1. Expand `useSlider`/`useSliderThumb` tests toward full upstream track/thumb interaction matrix (pointer, mouse, touch, RTL, stacked thumbs, and multi-thumb constraints).
+2. Replace remaining mocked-state slider tests with `@vue-aria/slider-state` integration where practical.
 3. Expand docs/examples toward upstream story parity with range, orientation, disabled, and labeled-thumb variants.
 
 ## 42) Package Record: @vue-aria/slider-state
@@ -2583,7 +2584,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current state logic is source-aligned and ready for integration into `@vue-aria/slider`; next parity step is replacing mocked state usage in slider hook tests with this package.
+  - Current state logic is source-aligned and already exercised in slider hook integration tests; remaining parity work is focused on additional controlled/uncontrolled lifecycle edge cases.
 
 ### Tests
 - Total upstream test files: 1 (`useSliderState.test.js`)
@@ -2596,6 +2597,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/slider-state.md`)
+- [x] Expanded parity examples for single-value vs range callback behavior and lifecycle usage notes.
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -2609,8 +2611,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Integrate `@vue-aria/slider-state` into `@vue-aria/slider` test harnesses and downstream consumers.
-2. Expand parity coverage for controlled/uncontrolled transition edge cases and disabled/editable thumb combinations.
+1. Expand parity coverage for controlled/uncontrolled transition edge cases and disabled/editable thumb combinations.
+2. Validate callback and drag-lifecycle behavior in additional multi-thumb integration scenarios.
 3. Expand docs examples with range-slider and callback lifecycle walkthroughs.
 
 ## 43) Session Log
@@ -3948,4 +3950,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (141 files, 736 tests).
 - Expanded `@vue-aria/slider` end-to-end state integration parity:
   - added adapted integration tests exercising `useSlider` and `useSliderThumb` against real `useSliderState` behavior for track-click nearest-thumb updates and thumb drag value updates.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 738 tests).
+- Expanded `@vue-aria/slider` and `@vue-aria/slider-state` docs parity:
+  - updated `docs/packages/slider.md` with upstream story-aligned variant coverage (single/range/multi-thumb, disabled-thumb patterns, and base style snippet parity).
+  - updated `docs/packages/slider-state.md` with callback-shape examples for single vs range usage and additional lifecycle helper notes.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 738 tests).
