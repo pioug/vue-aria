@@ -2528,6 +2528,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted `useSlider` coverage for label/group/output prop wiring and track click/drag behavior.
   - Added adapted `useSlider` coverage for disabled-track no-op behavior.
+  - Added adapted `useSlider` coverage for `aria-label` group labeling, vertical track interaction behavior, and stacked-thumb nearest-selection resolution.
   - Added adapted `useSliderThumb` coverage for range input prop wiring, change-event value parsing, and `PageUp` keyboard behavior.
   - Added adapted `useSliderThumb` coverage for merged slider/thumb `aria-describedby` metadata.
 - [ ] All relevant upstream tests migrated
@@ -3872,3 +3873,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page (`docs/packages/slider.md`) and wired docs nav/sidebar/index links.
   - added package-level roadmap record and execution queue tracking entry.
 - Validation: `npm run check` passed, `npm test` passed (140 files, 723 tests).
+- Expanded `@vue-aria/slider` track interaction parity:
+  - added adapted tests for `aria-label` labeling path, vertical track dragging behavior, and stacked-thumb nearest-selection behavior (before/after click paths).
+- Validation: `npm run check` passed, `npm test` passed (140 files, 727 tests).

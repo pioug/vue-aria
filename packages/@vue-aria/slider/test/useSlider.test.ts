@@ -89,7 +89,7 @@ describe("useSlider", () => {
     const track = document.createElement("div");
     vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
       width: 100,
-      height: 10,
+      height: 100,
       top: 0,
       left: 0,
       right: 100,
@@ -113,11 +113,38 @@ describe("useSlider", () => {
     scope.stop();
   });
 
+  it("returns expected group props for aria-label", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([0]);
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    expect(result.labelProps).toEqual({});
+    expect(result.groupProps.role).toBe("group");
+    expect(result.groupProps["aria-label"]).toBe("Slider");
+
+    scope.stop();
+  });
+
   it("sets nearest thumb value and supports track dragging", () => {
     const track = document.createElement("div");
     vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
       width: 100,
-      height: 10,
+      height: 100,
       top: 0,
       left: 0,
       right: 100,
@@ -150,7 +177,7 @@ describe("useSlider", () => {
     const track = document.createElement("div");
     vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
       width: 100,
-      height: 10,
+      height: 100,
       top: 0,
       left: 0,
       right: 100,
@@ -169,6 +196,93 @@ describe("useSlider", () => {
     dispatchTrackDown(trackProps, 20);
     expect(state.setThumbValue).not.toHaveBeenCalled();
     expect(state.values).toEqual([10, 80]);
+
+    scope.stop();
+  });
+
+  it("supports vertical track dragging", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([10, 80]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider", orientation: "vertical" }, state, { current: track })
+    )!;
+
+    const kind = dispatchTrackDown(trackProps, 80);
+    expect(state.setThumbValue).toHaveBeenLastCalledWith(0, 20);
+    expect(state.values).toEqual([20, 80]);
+
+    dispatchTrackMove(kind, 70);
+    expect(state.values).toEqual([30, 80]);
+
+    dispatchTrackUp(kind, 70);
+    expect(state.setThumbDragging).toHaveBeenCalledWith(0, false);
+
+    scope.stop();
+  });
+
+  it("picks the left thumb when stacked and click is before", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([40, 40]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    dispatchTrackDown(trackProps, 20);
+    expect(state.setThumbValue).toHaveBeenLastCalledWith(0, 20);
+    expect(state.values).toEqual([20, 40]);
+
+    scope.stop();
+  });
+
+  it("picks the right thumb when stacked and click is after", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([40, 40]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    dispatchTrackDown(trackProps, 60);
+    expect(state.setThumbValue).toHaveBeenLastCalledWith(1, 60);
+    expect(state.values).toEqual([40, 60]);
 
     scope.stop();
   });
