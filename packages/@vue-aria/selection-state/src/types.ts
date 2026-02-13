@@ -44,6 +44,7 @@ export interface MultipleSelectionState extends FocusState {
 export interface MultipleSelectionManager extends FocusState {
   readonly selectionMode: SelectionMode;
   readonly selectionBehavior: SelectionBehavior;
+  setSelectionBehavior(selectionBehavior: SelectionBehavior): void;
   readonly disallowEmptySelection?: boolean;
   readonly selectedKeys: Set<Key>;
   readonly isEmpty: boolean;

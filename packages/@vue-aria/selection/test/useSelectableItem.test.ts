@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSelectableItem } from "../src/useSelectableItem";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { useCollectionId } from "../src/utils";
@@ -46,6 +46,7 @@ function createManager(overrides: Partial<MultipleSelectionManager> = {}): Multi
     },
     setFocused: vi.fn(),
     setFocusedKey: vi.fn(),
+    setSelectionBehavior: vi.fn(),
     isSelected: vi.fn(() => false),
     isSelectionEqual: vi.fn(() => false),
     extendSelection: vi.fn(),
@@ -68,6 +69,10 @@ describe("useSelectableItem", () => {
   beforeEach(() => {
     open.mockReset();
     moveVirtualFocus.mockReset();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("replaces selection on click in replace mode", () => {
@@ -610,5 +615,70 @@ describe("useSelectableItem", () => {
     expect(onCollectionClick).toHaveBeenCalledTimes(1);
     expect(onCollectionKeydown).toHaveBeenCalledTimes(1);
     expect(manager.replaceSelection).toHaveBeenCalledTimes(2);
+  });
+
+  it("switches to toggle selection behavior on touch long press", () => {
+    vi.useFakeTimers();
+    const manager = createManager({
+      selectionBehavior: "replace",
+      canSelectItem: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      onAction: vi.fn(),
+    });
+
+    const onTouchstart = itemProps.onTouchstart as (event: TouchEvent) => void;
+    onTouchstart({
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+    } as TouchEvent);
+
+    vi.advanceTimersByTime(500);
+
+    expect(manager.toggleSelection).toHaveBeenCalledWith("a");
+    expect(manager.setSelectionBehavior).toHaveBeenCalledWith("toggle");
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+  });
+
+  it("cancels touch long press when touch ends before threshold", () => {
+    vi.useFakeTimers();
+    const manager = createManager({
+      selectionBehavior: "replace",
+      canSelectItem: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      onAction: vi.fn(),
+    });
+
+    const onTouchstart = itemProps.onTouchstart as (event: TouchEvent) => void;
+    onTouchstart({
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+    } as TouchEvent);
+
+    const onTouchend = itemProps.onTouchend as () => void;
+    onTouchend();
+    vi.advanceTimersByTime(500);
+
+    expect(manager.toggleSelection).not.toHaveBeenCalled();
+    expect(manager.setSelectionBehavior).not.toHaveBeenCalled();
   });
 });

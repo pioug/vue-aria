@@ -434,6 +434,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `UNSTABLE_itemBehavior: "action"` branch forcing action-first behavior without selection mutations
     - collection-provided handler chaining (`onFocus`, `onMousedown`, `onMouseup`, `onClick`, `onDoubleClick`, `onKeydown`)
     - secondary-action double-click behavior gated by interaction pointer modality
+    - touch long-press behavior for action+selection items switching selection behavior to `toggle`
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -3146,7 +3147,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/selection/useSelectableItem` event wiring parity:
   - chained collection-provided event handlers with local item interaction handlers
   - added pointer-modality gate for secondary-action double-click behavior
+- Expanded `@vue-aria/selection/useSelectableItem` touch parity:
+  - added touch long-press timer behavior that toggles selection and switches manager selection behavior to `toggle`
+  - added long-press cancellation behavior when touch ends before threshold
+- Expanded `@vue-aria/selection-state` manager type parity:
+  - added `setSelectionBehavior` to `MultipleSelectionManager` contract to match runtime manager capabilities
 - Expanded `@vue-aria/selection` docs parity:
   - documented press-timing option usage (`shouldSelectOnPressUp`, `allowsDifferentPressOrigin`)
   - documented virtual-focus interaction behavior for selectable items
-- Validation: `npm run check` passed, `npm test` passed (126 files, 563 tests).
+- Validation: `npm run check` passed, `npm test` passed (126 files, 565 tests).

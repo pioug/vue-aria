@@ -50,6 +50,7 @@ function createManager(overrides: Partial<MultipleSelectionManager> = {}): Multi
     setFocusedKey: vi.fn((key: Key | null) => {
       focusedKey = key;
     }),
+    setSelectionBehavior: vi.fn(),
     isSelected: vi.fn(() => false),
     isSelectionEqual: vi.fn(() => false),
     extendSelection: vi.fn(),

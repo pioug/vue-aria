@@ -3,6 +3,7 @@ import { moveVirtualFocus } from "@vue-aria/focus";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { chain, isCtrlKeyPressed, useRouter } from "@vue-aria/utils";
 import type { RouterOptions } from "@vue-aria/utils";
+import { getCurrentScope, onScopeDispose } from "vue";
 import { getCollectionId, isNonContiguousSelectionModifier } from "./utils";
 
 export interface SelectableItemOptions {
@@ -33,6 +34,8 @@ export interface SelectableItemStates {
 export interface SelectableItemAria extends SelectableItemStates {
   itemProps: Record<string, unknown>;
 }
+
+const LONG_PRESS_DELAY_MS = 500;
 
 export function useSelectableItem(options: SelectableItemOptions): SelectableItemAria {
   const {
@@ -65,10 +68,23 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   const shouldSelectOnMouseUp =
     !shouldUseVirtualFocus && Boolean(options.shouldSelectOnPressUp && options.allowsDifferentPressOrigin);
   const canSelectViaMousePress = allowsSelection && !hasPrimaryAction;
+  const longPressEnabled = hasAction && allowsSelection && !isDisabled;
   let selectedOnMouseDown = false;
   let selectedOnMouseUp = false;
+  let ignoreClickAfterLongPress = false;
   let interactionPointerType: string | null = null;
   const collectionItemProps = manager.getItemProps(key) as Record<string, unknown>;
+  let longPressTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const clearLongPressTimer = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = undefined;
+    }
+  };
+  if (getCurrentScope()) {
+    onScopeDispose(clearLongPressTimer);
+  }
 
   const performAction = (event: MouseEvent | KeyboardEvent) => {
     if (onAction) {
@@ -176,6 +192,11 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
       event.preventDefault();
     }
 
+    if (ignoreClickAfterLongPress) {
+      ignoreClickAfterLongPress = false;
+      return;
+    }
+
     if (selectedOnMouseDown || selectedOnMouseUp) {
       selectedOnMouseDown = false;
       selectedOnMouseUp = false;
@@ -227,6 +248,34 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
     };
   }
 
+  if (longPressEnabled) {
+    itemProps.onTouchstart = (event: TouchEvent) => {
+      clearLongPressTimer();
+      longPressTimer = setTimeout(() => {
+        const longPressEvent = {
+          shiftKey: event.shiftKey,
+          ctrlKey: event.ctrlKey,
+          metaKey: event.metaKey,
+          altKey: event.altKey,
+          pointerType: "touch",
+        } as unknown as MouseEvent;
+
+        onSelect(longPressEvent);
+        manager.setSelectionBehavior("toggle");
+        ignoreClickAfterLongPress = true;
+        longPressTimer = undefined;
+      }, LONG_PRESS_DELAY_MS);
+    };
+
+    itemProps.onTouchend = () => {
+      clearLongPressTimer();
+    };
+
+    itemProps.onTouchcancel = () => {
+      clearLongPressTimer();
+    };
+  }
+
   itemProps.onDoubleClick = (event: MouseEvent) => {
     if (hasSecondaryAction && (interactionPointerType == null || interactionPointerType === "mouse")) {
       performAction(event);
@@ -257,6 +306,9 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
     "onFocus",
     "onMousedown",
     "onMouseup",
+    "onTouchstart",
+    "onTouchend",
+    "onTouchcancel",
     "onClick",
     "onDoubleClick",
     "onKeydown",

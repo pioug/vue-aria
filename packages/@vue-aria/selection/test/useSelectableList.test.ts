@@ -33,6 +33,7 @@ function createManager(): MultipleSelectionManager {
     },
     setFocused: vi.fn(),
     setFocusedKey: vi.fn(),
+    setSelectionBehavior: vi.fn(),
     isSelected: vi.fn(() => false),
     isSelectionEqual: vi.fn(() => false),
     extendSelection: vi.fn(),
