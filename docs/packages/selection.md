@@ -46,6 +46,8 @@ const items = [
 
 `useSelectableItem` follows upstream behavior where touch/virtual interactions toggle selection in multi-select replace mode.
 
+When an item supports both selection and action behavior, touch long-press switches the manager selection behavior to `toggle` and suppresses native drag start for that touch interaction.
+
 ### `useSelectableItem` press timing options
 
 ```ts

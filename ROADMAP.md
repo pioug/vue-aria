@@ -3157,4 +3157,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/selection` docs parity:
   - documented press-timing option usage (`shouldSelectOnPressUp`, `allowsDifferentPressOrigin`)
   - documented virtual-focus interaction behavior for selectable items
+  - documented touch long-press toggle-selection behavior and touch drag suppression notes
 - Validation: `npm run check` passed, `npm test` passed (126 files, 566 tests).
