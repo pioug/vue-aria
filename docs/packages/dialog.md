@@ -37,4 +37,4 @@ const { dialogProps, titleProps } = useDialog({}, dialogRef);
 ## Notes
 
 - `Spectrum S2` is ignored for this port.
-- Overlay focus containment from `@react-aria/overlays` is queued for integration when overlays package parity lands.
+- Overlay focus containment parity is wired through `@vue-aria/overlays/useOverlayFocusContain`.

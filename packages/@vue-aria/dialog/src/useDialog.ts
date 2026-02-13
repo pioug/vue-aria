@@ -1,6 +1,7 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { filterDOMProps, nodeContains, useSlotId } from "@vue-aria/utils";
 import { focusSafely } from "@vue-aria/interactions";
+import { useOverlayFocusContain } from "@vue-aria/overlays";
 
 export interface AriaDialogProps {
   role?: "dialog" | "alertdialog";
@@ -48,6 +49,8 @@ export function useDialog(
       timeout = null;
     }
   });
+
+  useOverlayFocusContain();
 
   return {
     dialogProps: {
