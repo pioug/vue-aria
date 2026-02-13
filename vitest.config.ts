@@ -37,6 +37,9 @@ export default defineConfig({
       ),
       "@vue-aria/selection": fileURLToPath(
         new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/interactions": fileURLToPath(
+        new URL("./packages/@vue-aria/interactions/src/index.ts", import.meta.url)
       )
     }
   }

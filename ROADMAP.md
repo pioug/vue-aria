@@ -31,7 +31,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/utils`: In progress
 - `@vue-aria/i18n`: In progress
 - `@vue-aria/ssr`: In progress
-- `@vue-aria/interactions`: Not started
+- `@vue-aria/interactions`: In progress
 - `@vue-aria/focus`: Not started
 - `@vue-aria/live-announcer`: Not started
 - `@vue-aria/overlays`: Not started
@@ -283,7 +283,69 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 4. Add docs/examples for selection patterns after hook surface is complete.
 5. Mark completion only after all package gates pass.
 
-## 7) Session Log
+## 7) Package Record: @vue-aria/interactions
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/interactions/src`
+  - `references/react-spectrum/packages/@react-aria/interactions/test`
+- Local package path: `packages/@vue-aria/interactions`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules for initial prerequisite slice enumerated
+- [ ] Public API checklist complete (full package not yet ported)
+
+### Implementation
+- [x] Initial prerequisite slice ported:
+  - `focusSafely`
+  - `getInteractionModality`
+  - `setInteractionModality`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Remaining:
+  - Port full `useFocusVisible` global modality tracking behavior.
+  - Port `usePress`, `useLongPress`, `useMove`, `useHover`, `useFocus`, `useFocusWithin`, `useKeyboard`, `useInteractOutside`, and related helpers/context.
+  - Migrate upstream interaction tests module-by-module.
+
+### Tests
+- Total upstream test files: Pending full inventory
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for `focusSafely` behavior and modality getter/setter.
+  - Full upstream test migration pending with broader API coverage.
+- [ ] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [ ] VitePress/Storybook pages ported
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Modality and focus-visible parity validated
+- [ ] Pointer/keyboard/virtual interaction parity validated
+
+### Visual Parity
+- [ ] Upstream example comparisons complete
+- [ ] Variant/state comparisons complete
+- [ ] Open visual deltas documented
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+- Remaining dependencies:
+  - None in current runtime slice; full package parity pending.
+
+### Next Actions
+1. Port `useFocusVisible` with global event listeners and change handlers.
+2. Port `usePress` and `useLongPress` with Vue event adaptation.
+3. Port/migrate upstream interaction tests incrementally after each module.
+4. Wire downstream consumers (`@vue-aria/selection`) once required interaction primitives are available.
+
+## 8) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -352,3 +414,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `utils.getItemElement`
 - Added adapted tests for keyboard delegate navigation/search and typeahead debounce behavior.
 - Validation: `npm run check` passed, `npm test` passed (33 files, 78 tests).
+- Started `@vue-aria/interactions` prerequisite slice from upstream `@react-aria/interactions`:
+  - `focusSafely`
+  - `getInteractionModality`
+  - `setInteractionModality`
+- Added adapted tests for focus safety (virtual/non-virtual) and modality state.
+- Validation: `npm run check` passed, `npm test` passed (34 files, 81 tests).
