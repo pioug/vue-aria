@@ -58,7 +58,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/select`: Complete
 - `@vue-aria/combobox`: Complete
 - `@vue-aria/tabs`: Complete
-- `@vue-aria/grid`: Not started
+- `@vue-aria/grid`: In progress
 - `@vue-aria/table`: Not started
 - `@vue-aria/tree`: Not started
 - `@vue-aria/calendar`: Not started
@@ -2385,6 +2385,63 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Integrate `@vue-aria/grid-state` with upcoming `@vue-aria/grid` hook port and expand regression coverage with rowheader/column node variants.
+
+## 31f) Package Record: @vue-aria/grid
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/grid/src`
+  - `references/react-spectrum/packages/@react-aria/grid/test/useGrid.test.js`
+- Local package path:
+  - `packages/@vue-aria/grid`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useGridRowGroup`
+  - `useGridRow`
+  - `gridMap` shared utility
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useGridRowGroup.ts`
+  - `src/useGridRow.ts`
+  - `src/utils.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Remaining hook/delegate surface (`useGrid`, `useGridCell`, `GridKeyboardDelegate`, and selection-announcement helpers) is pending.
+
+### Tests
+- Total upstream test files: 1 (`useGrid.test.js`) plus indirect behavior coverage through hook-level modules
+- Ported test files: 2 (adapted for current slice)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for `useGridRowGroup` role props.
+  - Added adapted coverage for `useGridRow` aria row semantics, virtualized row index, row action chaining, and selection-mode/disabled behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/grid.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Full grid keyboard navigation and cell-focus semantics pending `useGrid`/`useGridCell`/delegate port.
+
+### Visual Parity
+- Hook package parity in progress; downstream consumer validation pending remaining hook surface.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `GridKeyboardDelegate`.
+2. Port `useGrid` and `useGridCell` with state integration against `@vue-aria/grid-state`.
+3. Adapt remaining upstream `useGrid.test.js` interaction cases.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4718,3 +4775,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added package record `31e` and marked `@vue-aria/grid-state` execution-queue status `Complete`.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/grid-state/test` passed (2 files, 5 tests).
+- Started `@vue-aria/grid` hook port:
+  - scaffolded `@vue-aria/grid` with initial upstream-aligned modules `useGridRowGroup`, `useGridRow`, and shared `gridMap`.
+  - added alias wiring plus in-progress VitePress page (`docs/packages/grid.md`) with docs nav/sidebar/index links.
+  - added adapted tests for row-group role semantics and row action/selection wiring behavior.
+  - added package record `31f` and marked `@vue-aria/grid` execution queue status `In progress`.

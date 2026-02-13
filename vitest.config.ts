@@ -155,6 +155,9 @@ export default defineConfig({
       "@vue-aria/grid-state": fileURLToPath(
         new URL("./packages/@vue-aria/grid-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/grid": fileURLToPath(
+        new URL("./packages/@vue-aria/grid/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/tabs-state": fileURLToPath(
         new URL("./packages/@vue-aria/tabs-state/src/index.ts", import.meta.url)
       ),
