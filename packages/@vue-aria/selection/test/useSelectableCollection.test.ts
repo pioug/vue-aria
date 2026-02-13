@@ -625,6 +625,41 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("focuses first selected key when focus enters from a preceding element", () => {
+    const manager = createManager({
+      firstSelectedKey: "a",
+      lastSelectedKey: "z",
+    });
+    const ref = { current: document.createElement("div") };
+    const preceding = document.createElement("button");
+    document.body.append(preceding, ref.current);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus", { relatedTarget: preceding });
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+    } finally {
+      scope.stop();
+      ref.current.remove();
+      preceding.remove();
+    }
+  });
+
   it("applies autoFocus strategy and falls back to collection focus", () => {
     const manager = createManager({
       selectedKeys: new Set<Key>(),
@@ -650,6 +685,33 @@ describe("useSelectableCollection", () => {
       expect(manager.setFocused).toHaveBeenCalledWith(true);
       expect(manager.setFocusedKey).toHaveBeenCalledWith(null);
       expect(focusSafely).toHaveBeenCalledWith(ref.current);
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("prioritizes the first selectable selected key during autoFocus", () => {
+    const focusSafelyCallsBefore = (focusSafely as any).mock.calls.length;
+    const manager = createManager({
+      selectedKeys: new Set<Key>(["disabled", "enabled"]),
+      canSelectItem: vi.fn((key: Key) => key === "enabled"),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        autoFocus: "first",
+      })
+    );
+
+    try {
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("enabled");
+      expect((focusSafely as any).mock.calls.length).toBe(focusSafelyCallsBefore);
     } finally {
       scope.stop();
     }
@@ -750,6 +812,35 @@ describe("useSelectableCollection", () => {
       scope.stop();
       ref.current.remove();
       outside.remove();
+    }
+  });
+
+  it("does not clear focus on blur when focus remains within the collection", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+    const inside = document.createElement("button");
+    ref.current.appendChild(inside);
+    document.body.append(ref.current);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onBlur = collectionProps.onBlur as (event: FocusEvent) => void;
+      const blurEvent = new FocusEvent("blur", { relatedTarget: inside });
+      Object.defineProperty(blurEvent, "currentTarget", { value: ref.current });
+
+      onBlur(blurEvent);
+      expect(manager.setFocused).not.toHaveBeenCalledWith(false);
+    } finally {
+      scope.stop();
+      ref.current.remove();
     }
   });
 

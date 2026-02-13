@@ -410,10 +410,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - scroll-container mousedown prevention behavior
     - PageUp/PageDown keyboard navigation behavior with selection updates
     - already-focused `onFocus` outside-target clearing behavior
+    - focus-entry selecting `firstSelectedKey` when entering from a preceding element
     - `disallowSelectAll` guard behavior for ctrl/cmd + a
     - Alt+Tab keyboard-prevention behavior
     - ArrowLeft/ArrowRight wrap behavior in LTR with child-focus strategy propagation
     - link item keyboard navigation behavior for `linkBehavior: "selection"` and `linkBehavior: "override"`
+    - autoFocus selected-key prioritization (`canSelectItem` filtering)
+    - blur no-op when related target remains within collection
   - Added adapted `useSelectableItem` interaction coverage for:
     - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
     - keyboard Enter/Space selection behavior and secondary action routing
@@ -2931,3 +2934,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - aligned `I18nProvider` structure to upstream split-provider behavior
   - expanded languagechange coverage for RTL/LTR direction transitions
 - Validation: `npm run check` passed, `npm test` passed (124 files, 495 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` parity tests for:
+  - focus-entry `firstSelectedKey` branch when entering from preceding elements
+  - autoFocus selected-key prioritization with `canSelectItem` filtering
+  - blur no-op path when focus remains within the collection
+- Validation: `npm run check` passed, `npm test` passed (124 files, 498 tests).
