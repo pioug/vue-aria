@@ -8,13 +8,14 @@
 - `useMenuItem`
 - `useMenuSection`
 - `useMenuTrigger`
+- `useSubmenuTrigger`
 - `menuData`
 
 ## Upstream-aligned example
 
 ```vue
 <script setup lang="ts">
-import { useMenu, useMenuItem, useMenuSection, useMenuTrigger } from "@vue-aria/menu";
+import { useMenu, useMenuItem, useMenuSection, useMenuTrigger, useSubmenuTrigger } from "@vue-aria/menu";
 import { useListState } from "@vue-aria/list-state";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 
@@ -36,10 +37,16 @@ const { menuProps } = useMenu({ ...triggerMenuProps, "aria-label": "File actions
 const itemRef = { current: null as HTMLElement | null };
 const { menuItemProps } = useMenuItem({ key: "new" }, state as any, itemRef);
 const { itemProps, headingProps, groupProps } = useMenuSection({ heading: "File" });
+const submenuRef = { current: null as HTMLElement | null };
+const { submenuTriggerProps, submenuProps, popoverProps } = useSubmenuTrigger({
+  parentMenuRef: menuRef,
+  submenuRef
+}, triggerState as any, itemRef);
 </script>
 ```
 
 ## Notes
 
-- Current slice includes `useMenu`, `useMenuItem`, `useMenuSection`, and `useMenuTrigger`; submenu hooks are pending.
+- Current slice includes `useMenu`, `useMenuItem`, `useMenuSection`, `useMenuTrigger`, and `useSubmenuTrigger`.
+- Full safe-triangle pointer movement logic (`useSafelyMouseToSubmenu`) is still a parity gap.
 - `Spectrum S2` is ignored for this port.
