@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/breadcrumbs`
+- Current focus package: `@vue-aria/separator`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -59,6 +59,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/datepicker`: Not started
 - `@vue-aria/breadcrumbs`: In progress
 - `@vue-aria/dialog`: In progress
+- `@vue-aria/separator`: In progress
 - `@vue-aria/tooltip`: Not started
 - `@vue-aria/progress`: In progress
 - `@vue-aria/meter`: In progress
@@ -1216,7 +1217,54 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum breadcrumb components.
 2. Expand locale dictionary coverage for breadcrumbs labels.
 
-## 24) Session Log
+## 24) Package Record: @vue-aria/separator
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/separator/src`
+- Local package path:
+  - `packages/@vue-aria/separator`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useSeparator`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useSeparator.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: none in `@react-aria/separator` reference package
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted coverage for default role semantics, vertical orientation aria mapping, and `hr` role omission behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/separator.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate downstream Spectrum separator component behavior
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum separator components.
+2. Continue queue progression to tooltip/overlay stack.
+
+## 25) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1500,3 +1548,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted breadcrumbs tests for nav label defaults/overrides and item current/disabled/link semantics.
 - Added VitePress docs page for `@vue-aria/breadcrumbs` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (76 files, 238 tests).
+- Started `@vue-aria/separator` package:
+  - `useSeparator`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted separator tests for orientation and role behavior.
+- Added VitePress docs page for `@vue-aria/separator` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (77 files, 241 tests).

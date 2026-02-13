@@ -97,6 +97,9 @@ export default defineConfig({
       ),
       "@vue-aria/breadcrumbs": fileURLToPath(
         new URL("./packages/@vue-aria/breadcrumbs/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/separator": fileURLToPath(
+        new URL("./packages/@vue-aria/separator/src/index.ts", import.meta.url)
       )
     }
   }

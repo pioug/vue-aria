@@ -24,6 +24,7 @@ export default defineConfig({
       { text: "Meter", link: "/packages/meter" },
       { text: "Dialog", link: "/packages/dialog" },
       { text: "Breadcrumbs", link: "/packages/breadcrumbs" },
+      { text: "Separator", link: "/packages/separator" },
     ],
     sidebar: [
       {
@@ -47,6 +48,7 @@ export default defineConfig({
           { text: "@vue-aria/meter", link: "/packages/meter" },
           { text: "@vue-aria/dialog", link: "/packages/dialog" },
           { text: "@vue-aria/breadcrumbs", link: "/packages/breadcrumbs" },
+          { text: "@vue-aria/separator", link: "/packages/separator" },
         ],
       },
     ],
