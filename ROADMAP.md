@@ -9,7 +9,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 - Current focus package: `@vue-aria/selection`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
-  - Docs stack (VitePress/Storybook parity pages) not scaffolded yet
+  - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
 
 ## 2) Global Acceptance Gates
 A package can be marked `Complete` only if all are true:
@@ -180,9 +180,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [ ] VitePress/Storybook pages ported
+- [x] VitePress page scaffolded for package parity notes and examples
 - [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Base styles parity started (selection list base style mirrored)
 
 ### Accessibility
 - [ ] Roles/attributes parity
@@ -281,10 +281,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Port `useSelectableCollection` with parity-first keyboard/focus behavior.
-2. Port `useSelectableItem` and `useSelectableList`.
-3. Migrate upstream `useSelectableCollection` tests and adapt assertions to Vue events/composables.
-4. Add docs/examples for selection patterns after hook surface is complete.
+1. Deepen `useSelectableItem` parity for press/long-press behavior and modality-specific edge cases.
+2. Deepen `useSelectableCollection` virtualization/scroll lifecycle parity paths.
+3. Migrate more upstream `useSelectableCollection` test intent into Vue harness with expanded DOM interaction coverage.
+4. Expand docs from parity notes to runnable Vue examples for each upstream story variant.
 5. Mark completion only after all package gates pass.
 
 ## 7) Package Record: @vue-aria/interactions
@@ -531,3 +531,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `Ctrl+Arrow` navigation moves focus without replacing selection
   - `Shift+Arrow` navigation extends selection in multiple mode
 - Validation: `npm run check` passed, `npm test` passed (39 files, 101 tests).
+- Scaffolded VitePress documentation:
+  - `docs/.vitepress/config.mts`
+  - `docs/index.md`
+  - `docs/packages/selection.md`
+  - `docs/styles/selection.css`
+- Ported initial `@react-aria/selection` story-aligned docs content and base list style references.
+- Validation: `npm run check` passed, `npm test` passed, `npm run docs:build` passed.
