@@ -1653,6 +1653,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added parity coverage for no-op arrow-key selection behavior in multiple-selection mode and `currentTarget`-based hidden-select change handling.
   - Added adapted `HiddenSelect` render-path coverage for no-selected-key behavior across small/large collections and for initial `FormData` value consistency when collection items are initially empty.
   - Added adapted `useSelect` interaction coverage for label-click trigger focus and keyboard-modality setting (and disabled short-circuit path).
+  - Added adapted hidden-input fallback parity coverage for native invalid-event handling (commit + trigger-focus path) when collection size exceeds native select threshold.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2523,3 +2524,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - label click focusing trigger and setting keyboard interaction modality
   - disabled label click short-circuit (no focus/modality mutation)
 - Validation: `npm run check` passed, `npm test` passed (118 files, 392 tests).
+- Expanded `@vue-aria/select/HiddenSelect` native invalid fallback parity with adapted integration coverage for:
+  - hidden text-input required path (`collection.size > 300`) committing validation and focusing trigger on invalid
+- Validation: `npm run check` passed, `npm test` passed (118 files, 393 tests).

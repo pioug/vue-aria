@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { nextTick } from "vue";
+import { describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import { HiddenSelect } from "../src/HiddenSelect";
 import { selectData } from "../src/useSelect";
@@ -28,6 +29,8 @@ function createLargeState() {
     value: "a",
     defaultValue: "a",
     setValue: () => {},
+    commitValidation: () => {},
+    displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
   } as any;
 }
 
@@ -40,6 +43,8 @@ function createLargeMultiState() {
     value: ["a", "b"],
     defaultValue: ["a", "b"],
     setValue: () => {},
+    commitValidation: () => {},
+    displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
   } as any;
 }
 
@@ -169,5 +174,39 @@ describe("HiddenSelect component", () => {
     expect(inputs).toHaveLength(2);
     expect(inputs[0].attributes("required")).toBeDefined();
     expect(inputs[1].attributes("required")).toBeUndefined();
+  });
+
+  it("focuses trigger when native invalid fires on hidden input fallback", async () => {
+    const state = createLargeState();
+    state.value = "";
+    state.defaultValue = "";
+    state.commitValidation = vi.fn();
+    selectData.set(state as object, {
+      validationBehavior: "native",
+      isRequired: true,
+    });
+
+    const trigger = document.createElement("button");
+    const focusSpy = vi.spyOn(trigger, "focus");
+    const form = document.createElement("form");
+    document.body.appendChild(form);
+    const wrapper = mount(HiddenSelect, {
+      attachTo: form,
+      props: {
+        state,
+        name: "choice",
+        triggerRef: { current: trigger },
+      },
+    });
+
+    const input = wrapper.find("input");
+    expect(input.attributes("type")).toBe("text");
+    await nextTick();
+    input.element.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalledTimes(1);
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+
+    wrapper.unmount();
+    form.remove();
   });
 });
