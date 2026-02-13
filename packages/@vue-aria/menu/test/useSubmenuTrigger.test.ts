@@ -137,6 +137,47 @@ describe("useSubmenuTrigger", () => {
     submenu.remove();
   });
 
+  it("closes submenu on ArrowLeft from submenu in ltr and restores focus to trigger", () => {
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const submenu = document.createElement("ul");
+    const submenuItem = document.createElement("li");
+    submenuItem.tabIndex = -1;
+    submenu.appendChild(submenuItem);
+    parent.appendChild(trigger);
+    document.body.append(parent, submenu);
+
+    const focusSpy = vi.spyOn(trigger, "focus");
+    const state = createState({ isOpen: true });
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    let submenuProps: any = null;
+    scope.run(() => {
+      ({ submenuProps } = useSubmenuTrigger(
+        { parentMenuRef, submenuRef },
+        state,
+        triggerRef
+      ));
+    });
+
+    submenuItem.focus();
+    submenuProps.onKeyDown(
+      createKeyboardEvent("ArrowLeft", submenu, submenuItem, {
+        currentTarget: submenu,
+        target: submenuItem,
+      })
+    );
+    expect(state.close).toHaveBeenCalled();
+    expect(focusSpy).toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+  });
+
   it("opens on keyboard/virtual press start and touch/mouse press", () => {
     const parent = document.createElement("ul");
     const trigger = document.createElement("li");
@@ -198,5 +239,39 @@ describe("useSubmenuTrigger", () => {
     scope.stop();
     parent.remove();
     submenu.remove();
+  });
+
+  it("cancels delayed hover open when pointer leaves before delay", () => {
+    vi.useFakeTimers();
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const submenu = document.createElement("ul");
+    parent.appendChild(trigger);
+    document.body.append(parent, submenu);
+
+    const state = createState();
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    let submenuTriggerProps: any = null;
+    scope.run(() => {
+      ({ submenuTriggerProps } = useSubmenuTrigger(
+        { parentMenuRef, submenuRef, delay: 150 },
+        state,
+        triggerRef
+      ));
+    });
+
+    submenuTriggerProps.onHoverChange(true);
+    submenuTriggerProps.onHoverChange(false);
+    vi.advanceTimersByTime(200);
+    expect(state.open).not.toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+    vi.useRealTimers();
   });
 });
