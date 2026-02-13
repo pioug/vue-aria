@@ -3,6 +3,7 @@ export { ListKeyboardDelegate } from "./ListKeyboardDelegate";
 export { useTypeSelect } from "./useTypeSelect";
 export { useSelectableCollection } from "./useSelectableCollection";
 export { useSelectableList } from "./useSelectableList";
+export { useSelectableItem } from "./useSelectableItem";
 
 export type {
   AriaTypeSelectOptions,
@@ -24,3 +25,8 @@ export type {
   SelectableCollectionAria,
 } from "./useSelectableCollection";
 export type { AriaSelectableListOptions, SelectableListAria } from "./useSelectableList";
+export type {
+  SelectableItemOptions,
+  SelectableItemStates,
+  SelectableItemAria,
+} from "./useSelectableItem";

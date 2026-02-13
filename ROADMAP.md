@@ -236,6 +236,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `utils.getItemElement`
   - `useSelectableCollection`
   - `useSelectableList`
+  - `useSelectableItem`
   - `utils.isNonContiguousSelectionModifier`
   - `utils.useCollectionId`
   - `utils.getCollectionId`
@@ -245,14 +246,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port `useSelectableItem`
-  - Deepen `useSelectableCollection` parity for virtualization/auto-focus lifecycle nuances and custom virtual focus events.
+  - Deepen `useSelectableCollection` and `useSelectableItem` parity for virtualization/auto-focus lifecycle nuances, press/long-press semantics, and custom virtual focus events.
   - Reconcile API/type parity against full upstream `index.ts` surface
 
 ### Tests
 - Total upstream test files: 1
-- Ported test files: 5
-- Passing test files: 5
+- Ported test files: 6
+- Passing test files: 6
 - Test parity notes:
   - Added adapted tests for keyboard delegate navigation/search behavior.
   - Added adapted tests for typeahead buffer, focus movement, and debounce reset.
@@ -513,3 +513,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useSelectableList`
 - Added adapted tests for keyboard navigation/select-all/focus behaviors and list hook wiring.
 - Validation: `npm run check` passed, `npm test` passed (38 files, 93 tests).
+- Ported initial `useSelectableItem` behavior slice in `@vue-aria/selection`:
+  - selection toggling/replacement semantics
+  - primary/secondary action wiring
+  - focus/tab index behavior and keyboard activation
+- Added adapted tests for click/ctrl-click selection and action-only behavior.
+- Validation: `npm run check` passed, `npm test` passed (39 files, 96 tests).
