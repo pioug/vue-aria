@@ -51,6 +51,8 @@ export default defineConfig({
       { text: "List State", link: "/packages/list-state" },
       { text: "Select", link: "/packages/select" },
       { text: "Menu", link: "/packages/menu" },
+      { text: "ComboBox State", link: "/packages/combobox-state" },
+      { text: "ComboBox", link: "/packages/combobox" },
     ],
     sidebar: [
       {
@@ -101,6 +103,8 @@ export default defineConfig({
           { text: "@vue-aria/list-state", link: "/packages/list-state" },
           { text: "@vue-aria/select", link: "/packages/select" },
           { text: "@vue-aria/menu", link: "/packages/menu" },
+          { text: "@vue-aria/combobox-state", link: "/packages/combobox-state" },
+          { text: "@vue-aria/combobox", link: "/packages/combobox" },
         ],
       },
     ],

@@ -56,7 +56,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/menu`: Complete
 - `@vue-aria/listbox`: Complete
 - `@vue-aria/select`: Complete
-- `@vue-aria/combobox`: Not started
+- `@vue-aria/combobox`: In progress
 - `@vue-aria/tabs`: Not started
 - `@vue-aria/grid`: Not started
 - `@vue-aria/table`: Not started
@@ -90,7 +90,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/table-state`: Not started
 - `@vue-aria/calendar-state`: Not started
 - `@vue-aria/datepicker-state`: Not started
-- `@vue-aria/combobox-state`: Not started
+- `@vue-aria/combobox-state`: In progress
 - `@vue-aria/selection-state`: Complete
 
 ### React Spectrum component packages
@@ -2119,6 +2119,107 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Monitor upstream `@react-aria/select` for drift and add targeted regression coverage as needed.
+
+## 31a) Package Record: @vue-aria/combobox-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/combobox/src`
+  - `references/react-spectrum/packages/@react-stately/combobox/test/useComboBoxState.test.js`
+- Local package path:
+  - `packages/@vue-aria/combobox-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useComboBoxState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useComboBoxState.ts`
+- Open adaptation note:
+  - Current Vue adaptation preserves open/close/input/filter/selection semantics from upstream tests for plain-item collections; additional parity remains for reactive controlled-item rerender flows.
+
+### Tests
+- Total upstream test files: 1 (`useComboBoxState.test.js`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for open/toggle reason reporting, controlled/uncontrolled input value behavior, selection behavior (`selectedKey`/`defaultSelectedKey`), and filtered-collection freeze/restore behavior across close/reopen cycles.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/combobox-state.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [ ] Validate commit/revert and blur-close behavior in downstream combobox hook/component integrations.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Expand parity for controlled-item reactive rerender scenarios once list-state collection reactivity is deepened.
+
+## 31b) Package Record: @vue-aria/combobox
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/combobox/src`
+  - `references/react-spectrum/packages/@react-aria/combobox/test/useComboBox.test.js`
+- Local package path:
+  - `packages/@vue-aria/combobox`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useComboBox`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useComboBox.ts`
+  - `src/intlMessages.ts`
+- Open adaptation note:
+  - Current locale dictionary is seeded with `en-US` strings; full upstream locale bundle parity remains.
+
+### Tests
+- Total upstream test files: 1 (`useComboBox.test.js`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for default returned aria props, Enter-key default prevention while open, arrow-key open behavior, trigger press/touch toggle behavior, blur propagation when no trigger button exists, and disabled/read-only trigger keyboard guards.
+  - Added cache-collision regression coverage transitively by validating combobox + menu formatter coexistence after i18n formatter-cache keying fix.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/combobox.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Hook package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [ ] Validate Apple-device live-announcement parity and full aria-hide outside behavior in downstream integrated combobox stories/components.
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Import the full upstream `@react-aria/combobox/intl` locale dictionary bundle.
+2. Expand combobox interaction coverage for link-action and announcement edge paths from upstream behavior.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4410,3 +4511,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs pages for `@vue-aria/collections`, `@vue-aria/utils-state`, and `@vue-aria/toggle-state`, and linked them in docs nav/sidebar/index.
   - added `@vue-aria/utils` export alias regression test (`indexExports.test.ts`) for `UNSTABLE_useLoadMoreSentinel`.
 - Validation: `npm test -- packages/@vue-aria/utils/test packages/@vue-aria/collections/test packages/@vue-aria/utils-state/test packages/@vue-aria/toggle-state/test packages/@vue-aria/selection-state/test` passed (31 files, 100 tests).
+- Started combobox stack port:
+  - added new packages `@vue-aria/combobox-state` and `@vue-aria/combobox` with upstream-aligned API slices (`useComboBoxState`, `useComboBox`).
+  - added adapted upstream test suites for both packages and wired tsconfig/vitest aliases.
+  - added docs pages for `@vue-aria/combobox-state` and `@vue-aria/combobox`, and linked them in docs nav/sidebar/index.
+  - fixed `@vue-aria/i18n/useLocalizedStringFormatter` cache keying to avoid cross-package formatter collisions (dictionary identity + locale cache map).
+- Validation: `npm test -- packages/@vue-aria/i18n/test packages/@vue-aria/menu/test packages/@vue-aria/combobox-state/test packages/@vue-aria/combobox/test` passed (12 files, 55 tests).

@@ -8,7 +8,7 @@ import { useLocale } from "./context";
 import { createFormatterProxy } from "./formatterProxy";
 
 const dictionaryCache = new WeakMap<object, LocalizedStringDictionary<any, any>>();
-const formatterCache = new Map<string, LocalizedStringFormatter<any, any>>();
+const formatterCache = new WeakMap<object, Map<string, LocalizedStringFormatter<any, any>>>();
 
 function getCachedDictionary<K extends string, T extends LocalizedString>(
   strings: LocalizedStrings<K, T>
@@ -38,12 +38,17 @@ export function useLocalizedStringFormatter<K extends string = string, T extends
 
   return createFormatterProxy<LocalizedStringFormatter<K, T>>(() => {
     const localeKey = locale.value.locale;
-    const cacheKey = `${localeKey}:${dictionary as unknown as object}`;
-    let formatter = formatterCache.get(cacheKey) as LocalizedStringFormatter<K, T> | undefined;
+    let dictionaryFormatters = formatterCache.get(dictionary as unknown as object);
+    if (!dictionaryFormatters) {
+      dictionaryFormatters = new Map<string, LocalizedStringFormatter<any, any>>();
+      formatterCache.set(dictionary as unknown as object, dictionaryFormatters);
+    }
+
+    let formatter = dictionaryFormatters.get(localeKey) as LocalizedStringFormatter<K, T> | undefined;
 
     if (!formatter) {
       formatter = new LocalizedStringFormatter(localeKey, dictionary);
-      formatterCache.set(cacheKey, formatter);
+      dictionaryFormatters.set(localeKey, formatter);
     }
 
     return formatter;
