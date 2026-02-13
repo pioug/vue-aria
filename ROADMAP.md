@@ -3122,4 +3122,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - wired focused virtual-item path to `moveVirtualFocus`
   - added virtual-focus click path updates for collection focus + focused key tracking
   - added virtual-focus mousedown default prevention to avoid native DOM focus transfer
-- Validation: `npm run check` passed, `npm test` passed (126 files, 549 tests).
+- Expanded `@vue-aria/selection-state/useMultipleSelectionState` coverage:
+  - added duplicate-selection-event behavior when `allowDuplicateSelectionEvents` is enabled
+  - added selection normalization coverage for controlled/default/all selection inputs
+  - added disabled-key set exposure coverage
+- Validation: `npm run check` passed, `npm test` passed (126 files, 552 tests).
