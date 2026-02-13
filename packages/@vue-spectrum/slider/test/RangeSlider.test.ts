@@ -119,6 +119,53 @@ describe("Spectrum RangeSlider", () => {
     wrapper.unmount();
   });
 
+  it("supports custom getValueLabel formatting", async () => {
+    const Test = defineComponent({
+      setup() {
+        const value = ref({ start: 10, end: 40 });
+        return () =>
+          h(RangeSlider as any, {
+            label: "The Label",
+            value: value.value,
+            onChange: (next: { start: number; end: number }) => {
+              value.value = next;
+            },
+            getValueLabel: (next: { start: number; end: number }) =>
+              `A${next.start}B${next.end}C`,
+          });
+      },
+    });
+
+    const wrapper = mount(Test as any);
+    const sliders = wrapper.findAll('input[type="range"]');
+    expect(wrapper.find("output").text()).toBe("A10B40C");
+    expect(sliders[0].attributes("aria-valuetext")).toBe("10");
+    expect(sliders[1].attributes("aria-valuetext")).toBe("40");
+
+    await sliders[0].setValue("5");
+    expect(wrapper.find("output").text()).toBe("A5B40C");
+    await sliders[1].setValue("60");
+    expect(wrapper.find("output").text()).toBe("A5B60C");
+
+    wrapper.unmount();
+  });
+
+  it("supports disabled state for both thumbs", () => {
+    const wrapper = mount(RangeSlider as any, {
+      props: {
+        label: "The Label",
+        isDisabled: true,
+      },
+    });
+
+    const sliders = wrapper.findAll('input[type="range"]');
+    expect(sliders).toHaveLength(2);
+    expect(sliders[0].attributes("disabled")).toBeDefined();
+    expect(sliders[1].attributes("disabled")).toBeDefined();
+
+    wrapper.unmount();
+  });
+
   it("supports thumb form names", () => {
     const wrapper = mount(RangeSlider as any, {
       props: {

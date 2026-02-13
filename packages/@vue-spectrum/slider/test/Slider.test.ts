@@ -84,6 +84,53 @@ describe("Spectrum Slider", () => {
     wrapper.unmount();
   });
 
+  it.each([
+    {
+      name: "defaultValue minValue",
+      props: { defaultValue: 20, minValue: 50 },
+      expected: "50",
+    },
+    {
+      name: "defaultValue maxValue",
+      props: { defaultValue: 20, maxValue: 10 },
+      expected: "10",
+    },
+    {
+      name: "defaultValue maxValue step",
+      props: { defaultValue: 20, maxValue: 10, step: 3 },
+      expected: "9",
+    },
+    {
+      name: "value minValue",
+      props: { value: 20, minValue: 50 },
+      expected: "50",
+    },
+    {
+      name: "value maxValue",
+      props: { value: 20, maxValue: 10 },
+      expected: "10",
+    },
+    {
+      name: "value maxValue step",
+      props: { value: 20, maxValue: 10, step: 3 },
+      expected: "9",
+    },
+  ])("clamps value/defaultValue to range: $name", ({ props, expected }) => {
+    const wrapper = mount(Slider as any, {
+      props: {
+        label: "The Label",
+        ...(props as Record<string, unknown>),
+      },
+    });
+
+    const slider = wrapper.find('input[type="range"]');
+    expect((slider.element as HTMLInputElement).value).toBe(expected);
+    expect(slider.attributes("aria-valuetext")).toBe(expected);
+    expect(wrapper.find("output").text()).toBe(expected);
+
+    wrapper.unmount();
+  });
+
   it("supports controlled value updates via onChange", async () => {
     const onChangeValues: number[] = [];
     const Test = defineComponent({
@@ -109,6 +156,51 @@ describe("Spectrum Slider", () => {
     await slider.setValue("55");
     expect((slider.element as HTMLInputElement).value).toBe("55");
     expect(onChangeValues).toEqual([55]);
+
+    wrapper.unmount();
+  });
+
+  it("supports custom getValueLabel formatting", async () => {
+    const Test = defineComponent({
+      setup() {
+        const value = ref(50);
+        return () =>
+          h(Slider as any, {
+            label: "The Label",
+            value: value.value,
+            onChange: (next: number) => {
+              value.value = next;
+            },
+            getValueLabel: (next: number) => `A${next}B`,
+          });
+      },
+    });
+
+    const wrapper = mount(Test as any);
+    const slider = wrapper.find('input[type="range"]');
+    expect(wrapper.find("output").text()).toBe("A50B");
+    expect(slider.attributes("aria-valuetext")).toBe("50");
+
+    await slider.setValue("55");
+    expect(wrapper.find("output").text()).toBe("A55B");
+
+    wrapper.unmount();
+  });
+
+  it("supports form name wiring", () => {
+    const wrapper = mount(Slider as any, {
+      props: {
+        label: "Value",
+        value: 10,
+        name: "cookies",
+        form: "test",
+      },
+    });
+
+    const slider = wrapper.find('input[type="range"]');
+    expect(slider.attributes("name")).toBe("cookies");
+    expect(slider.attributes("form")).toBe("test");
+    expect((slider.element as HTMLInputElement).value).toBe("10");
 
     wrapper.unmount();
   });
