@@ -135,6 +135,77 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("does not replace selection when navigating with ctrl+arrow", () => {
+    const manager = createManager({
+      focusedKey: "a",
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowDown",
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("b", undefined);
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+      expect(manager.extendSelection).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("extends selection on shift+arrow in multiple mode", () => {
+    const manager = createManager({
+      focusedKey: "a",
+      selectionMode: "multiple",
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowDown",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("b", undefined);
+      expect(manager.extendSelection).toHaveBeenCalledWith("b");
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("marks manager focused on focus events", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };

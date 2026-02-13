@@ -527,3 +527,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - touch/virtual pointer toggle semantics in replace mode
 - Added adapted tests for auto-focus fallback, virtual focus event behavior, and touch/virtual toggle interactions.
 - Validation: `npm run check` passed, `npm test` passed (39 files, 99 tests).
+- Added upstream-aligned keyboard interaction coverage for `useSelectableCollection`:
+  - `Ctrl+Arrow` navigation moves focus without replacing selection
+  - `Shift+Arrow` navigation extends selection in multiple mode
+- Validation: `npm run check` passed, `npm test` passed (39 files, 101 tests).
