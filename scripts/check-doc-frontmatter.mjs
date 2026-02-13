@@ -4,6 +4,8 @@ import process from 'node:process';
 
 const ROOT = process.cwd();
 const PACKAGES_DIR = path.join(ROOT, 'packages');
+const STATUS_MARKER_START = '<!-- PORT_STATUS_START -->';
+const STATUS_MARKER_END = '<!-- PORT_STATUS_END -->';
 const errors = [];
 
 function walk(dirPath, onFile) {
@@ -52,6 +54,10 @@ for (const filePath of mdxFiles) {
   if (!packageValue) {
     errors.push(`${relative}: missing frontmatter key "package"`);
     continue;
+  }
+
+  if (!content.includes(STATUS_MARKER_START) || !content.includes(STATUS_MARKER_END)) {
+    errors.push(`${relative}: missing generated status header block`);
   }
 
   const pathMatch = relative.match(/^packages\/[^/]+\/([^/]+)\/docs\/.+\.mdx$/);
