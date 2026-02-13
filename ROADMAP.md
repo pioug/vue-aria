@@ -2539,6 +2539,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted integration coverage for `@vue-aria/slider` + `@vue-aria/slider-state`:
     - closest-thumb track click behavior with real state
     - thumb drag lifecycle updates with real state
+  - Added adapted interaction-guard coverage for:
+    - dense stacked-thumb nearest selection behavior
+    - modified mouse interaction no-op behavior on slider track
+    - non-primary/modified mouse interaction no-op behavior on slider thumbs
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3959,3 +3963,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider-state` edge-case parity:
   - added adapted tests for single-value callback conversion behavior and disabled/non-editable thumb update guards.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 740 tests).
+- Expanded `@vue-aria/slider` pointer/guard interaction parity:
+  - added adapted tests for dense stacked-thumb nearest-selection behavior and mouse-modifier/non-primary guard no-op branches on both track and thumb interactions.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 743 tests).

@@ -284,4 +284,51 @@ describe("useSliderThumb", () => {
 
     scope.stop();
   });
+
+  it("ignores modified or non-primary mouse interactions on thumb", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 10,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 10,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderThumbState();
+    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const scope = effectScope();
+    const result = scope.run(() => {
+      useSlider({ label: "Slider" }, state as any, { current: track });
+      return useSliderThumb(
+        {
+          index: 0,
+          trackRef: { current: track },
+          inputRef,
+        },
+        state
+      );
+    })!;
+
+    const onMousedown = result.thumbProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+    expect(onMousedown).toBeDefined();
+
+    const rightClick = new MouseEvent("mousedown", { bubbles: true, cancelable: true });
+    Object.defineProperty(rightClick, "button", { value: 2 });
+    onMousedown?.(rightClick);
+
+    const modifiedClick = new MouseEvent("mousedown", { bubbles: true, cancelable: true });
+    Object.defineProperty(modifiedClick, "button", { value: 0 });
+    Object.defineProperty(modifiedClick, "ctrlKey", { value: true });
+    onMousedown?.(modifiedClick);
+
+    expect(state.setThumbDragging).not.toHaveBeenCalledWith(0, true);
+    expect(state.isThumbDragging(0)).toBe(false);
+
+    scope.stop();
+  });
 });

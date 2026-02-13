@@ -286,4 +286,69 @@ describe("useSlider", () => {
 
     scope.stop();
   });
+
+  it("picks nearest thumbs correctly in dense stacked sets", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([25, 25, 50, 75, 75]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    const kind = dispatchTrackDown(trackProps, 70);
+    expect(state.setThumbValue).toHaveBeenLastCalledWith(3, 70);
+    expect(state.values).toEqual([25, 25, 50, 70, 75]);
+    dispatchTrackUp(kind, 70);
+
+    dispatchTrackDown(trackProps, 20);
+    expect(state.setThumbValue).toHaveBeenLastCalledWith(0, 20);
+    expect(state.values).toEqual([20, 25, 50, 70, 75]);
+
+    scope.stop();
+  });
+
+  it("ignores modified mouse interactions on track", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([10, 80]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    const modifiedMouseEvent = new MouseEvent("mousedown", { bubbles: true, cancelable: true });
+    Object.defineProperty(modifiedMouseEvent, "button", { value: 0 });
+    Object.defineProperty(modifiedMouseEvent, "clientX", { value: 20 });
+    Object.defineProperty(modifiedMouseEvent, "clientY", { value: 20 });
+    Object.defineProperty(modifiedMouseEvent, "altKey", { value: true });
+    (trackProps.onMousedown as (event: MouseEvent) => void)(modifiedMouseEvent);
+
+    expect(state.setThumbValue).not.toHaveBeenCalled();
+    expect(state.values).toEqual([10, 80]);
+
+    scope.stop();
+  });
 });
