@@ -27,6 +27,26 @@ const { spinButtonProps, incrementButtonProps, decrementButtonProps } = useSpinB
 });
 ```
 
+## Localized empty text
+
+```vue
+<script setup lang="ts">
+import { I18nProvider } from "@vue-aria/i18n";
+import { useSpinButton } from "@vue-aria/spinbutton";
+
+const { spinButtonProps } = useSpinButton({
+  value: Number.NaN,
+  textValue: "",
+});
+</script>
+
+<template>
+  <I18nProvider locale="fr-FR">
+    <div v-bind="spinButtonProps" tabindex="-1" />
+  </I18nProvider>
+</template>
+```
+
 ## Notes
 
 - This package is a prerequisite for `@vue-aria/numberfield`.

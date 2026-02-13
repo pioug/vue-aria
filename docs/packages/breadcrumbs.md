@@ -27,6 +27,25 @@ const current = useBreadcrumbItem({ isCurrent: true, children: "Buttons", elemen
 </template>
 ```
 
+## Localized labels
+
+```vue
+<script setup lang="ts">
+import { I18nProvider } from "@vue-aria/i18n";
+import { useBreadcrumbs } from "@vue-aria/breadcrumbs";
+
+const { navProps } = useBreadcrumbs({});
+</script>
+
+<template>
+  <I18nProvider locale="fr-FR">
+    <nav v-bind="navProps">
+      <a href="/docs">Docs</a>
+    </nav>
+  </I18nProvider>
+</template>
+```
+
 ## Notes
 
 - `Spectrum S2` is ignored for this port.

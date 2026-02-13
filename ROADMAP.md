@@ -1260,7 +1260,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum searchfield components.
-2. Expand docs/examples with localized clear-search behavior and locale-provider usage.
+2. Expand docs/examples toward full upstream searchfield story parity (clear-button variants and field compositions).
 
 ## 20) Package Record: @vue-aria/progress
 - Upstream source path(s):
@@ -1458,7 +1458,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum breadcrumb components.
-2. Expand docs/examples with localized breadcrumbs labeling and locale-provider usage.
+2. Expand docs/examples toward full upstream breadcrumb story parity (disabled/current-link variations).
 
 ## 24) Package Record: @vue-aria/separator
 - Upstream source path(s):
@@ -2024,7 +2024,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Integrate spinbutton package into `@vue-aria/numberfield` consumer parity and verify end-to-end interaction timing semantics.
-2. Expand docs/examples with localized spinbutton empty-state behavior and locale-provider usage.
+2. Expand docs/examples toward full upstream spinbutton story parity (value states and interaction timing guidance).
 
 ## 34) Package Record: @vue-aria/numberfield
 - Upstream source path(s):
@@ -3363,4 +3363,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 622 tests).
 - Expanded `@vue-aria/spinbutton` locale-provider integration parity:
   - added adapted test coverage for localized `Empty` spinbutton `aria-valuetext` under `I18nProvider` (`fr-FR`)
+- Validation: `npm run check` passed, `npm test` passed (130 files, 623 tests).
+- Expanded localized docs parity for touched hook packages:
+  - added locale-provider usage examples to `docs/packages/searchfield.md`, `docs/packages/breadcrumbs.md`, and `docs/packages/spinbutton.md`
+  - synchronized roadmap next actions to target broader story/example parity beyond localized-label baselines
 - Validation: `npm run check` passed, `npm test` passed (130 files, 623 tests).
