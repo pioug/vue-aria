@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/slider-state`
+- Current focus package: `@vue-aria/slider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -2540,6 +2540,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - closest-thumb track click behavior with real state
     - thumb drag lifecycle updates with real state
     - upper-thumb drag clamping when crossing lower-thumb bounds
+    - callback lifecycle assertions (`onChange`, `onChangeEnd`) during thumb drag updates
+    - explicit pointer-path thumb dragging when `PointerEvent` is available
+    - horizontal keyboard arrow movement and start/end boundary callback behavior
+    - vertical keyboard arrow movement and top/bottom boundary callback behavior
   - Added adapted interaction-guard coverage for:
     - dense stacked-thumb nearest selection behavior
     - modified mouse interaction no-op behavior on slider track
@@ -3970,3 +3974,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider` multi-thumb drag-boundary parity:
   - added adapted integration coverage ensuring upper-thumb drags clamp at lower-thumb bounds when crossing in real state integration flows.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 744 tests).
+- Expanded `@vue-aria/slider` keyboard/pointer interaction matrix parity:
+  - added adapted integration coverage for horizontal arrow-key thumb movement and min/max boundary callback behavior.
+  - added adapted integration coverage for vertical arrow-key thumb movement and top/bottom boundary callback behavior.
+  - added callback lifecycle assertions (`onChange`, `onChangeEnd`) during thumb drag with real slider-state integration.
+  - added explicit pointer-event branch coverage for thumb dragging when `PointerEvent` is available.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 750 tests).
