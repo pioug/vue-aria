@@ -17,20 +17,13 @@ import {
 } from "@vue-aria/utils";
 import { ref } from "vue";
 import type { NumberFieldState } from "@vue-aria/numberfield-state";
+import { intlMessages } from "./intlMessages";
 
 interface ValidationResult {
   isInvalid: boolean;
   validationErrors: string[];
   validationDetails: ValidityState | null;
 }
-
-const intlMessages = {
-  "en-US": {
-    decrease: "Decrease {fieldLabel}",
-    increase: "Increase {fieldLabel}",
-    numberField: "Number field",
-  },
-};
 
 export interface AriaNumberFieldProps {
   id?: string;

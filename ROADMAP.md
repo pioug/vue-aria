@@ -2042,7 +2042,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Hook state typing and form validation-state wiring are now aligned to `@vue-aria/numberfield-state` + `@vue-aria/form-state`; form reset wiring now uses a reactive value-ref adapter for native reset parity. Remaining parity is focused on additional interaction edge cases.
+  - Hook state typing and form validation-state wiring are now aligned to `@vue-aria/numberfield-state` + `@vue-aria/form-state`; form reset wiring now uses a reactive value-ref adapter for native reset parity.
+  - Locale dictionary wiring now imports full upstream `@react-aria/numberfield` intl bundle (instead of en-US-only seeded strings).
+  - Remaining parity is focused on additional interaction edge cases.
 
 ### Tests
 - Total upstream test files: 1 (`useNumberField.test.ts`)
@@ -3331,4 +3333,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` first-invalid native focus parity:
   - added adapted multi-field form coverage for first-invalid ordering guard behavior
   - added adapted default-prevented invalid-event guard coverage to ensure focus is not forcibly moved
+- Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
+- Expanded `@vue-aria/numberfield` locale dictionary parity:
+  - replaced inline en-US-only strings with generated upstream intl bundle from `@react-aria/numberfield/intl`
+  - wired `useNumberField` to consume the full locale set via `intlMessages.ts`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
