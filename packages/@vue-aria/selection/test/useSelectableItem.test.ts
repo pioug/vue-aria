@@ -101,6 +101,74 @@ describe("useSelectableItem", () => {
     expect(manager.toggleSelection).toHaveBeenCalledWith("a");
   });
 
+  it("selects on mousedown by default and does not reselection on click", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
+    onMousedown(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
+    expect(manager.replaceSelection).toHaveBeenCalledWith("a");
+  });
+
+  it("defers selection to click when shouldSelectOnPressUp is enabled", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      shouldSelectOnPressUp: true,
+    });
+
+    const onMousedown = itemProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+    onMousedown?.(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
+    expect(manager.replaceSelection).toHaveBeenCalledWith("a");
+  });
+
+  it("selects on mouseup when press-up selection allows different press origin", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      shouldSelectOnPressUp: true,
+      allowsDifferentPressOrigin: true,
+    });
+
+    const onMousedown = itemProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+    onMousedown?.(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+
+    const onMouseup = itemProps.onMouseup as (event: MouseEvent) => void;
+    onMouseup(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
+    expect(manager.replaceSelection).toHaveBeenCalledWith("a");
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
+  });
+
   it("toggles selection for touch/virtual pointer interactions", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };

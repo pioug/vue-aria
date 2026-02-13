@@ -58,6 +58,12 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   const hasSecondaryAction =
     allowsActions && allowsSelection && manager.selectionBehavior === "replace";
   const hasAction = hasPrimaryAction || hasSecondaryAction;
+  const shouldSelectOnMouseDown = !shouldUseVirtualFocus && !options.shouldSelectOnPressUp;
+  const shouldSelectOnMouseUp =
+    !shouldUseVirtualFocus && Boolean(options.shouldSelectOnPressUp && options.allowsDifferentPressOrigin);
+  const canSelectViaMousePress = allowsSelection && !hasPrimaryAction;
+  let selectedOnMouseDown = false;
+  let selectedOnMouseUp = false;
 
   const performAction = (event: MouseEvent | KeyboardEvent) => {
     if (onAction) {
@@ -147,6 +153,12 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   }
 
   itemProps.onClick = (event: MouseEvent) => {
+    if (selectedOnMouseDown || selectedOnMouseUp) {
+      selectedOnMouseDown = false;
+      selectedOnMouseUp = false;
+      return;
+    }
+
     if (shouldUseVirtualFocus && !isDisabled) {
       manager.setFocused(true);
       manager.setFocusedKey(key);
@@ -166,6 +178,26 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   if (shouldUseVirtualFocus && !isDisabled) {
     itemProps.onMousedown = (event: MouseEvent) => {
       event.preventDefault();
+    };
+  } else if (shouldSelectOnMouseDown && canSelectViaMousePress && !isDisabled) {
+    itemProps.onMousedown = (event: MouseEvent) => {
+      if (event.button !== 0) {
+        return;
+      }
+
+      onSelect(event);
+      selectedOnMouseDown = true;
+    };
+  }
+
+  if (shouldSelectOnMouseUp && canSelectViaMousePress && !isDisabled) {
+    itemProps.onMouseup = (event: MouseEvent) => {
+      if (event.button !== 0) {
+        return;
+      }
+
+      onSelect(event);
+      selectedOnMouseUp = true;
     };
   }
 

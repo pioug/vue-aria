@@ -427,6 +427,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - multi-item touch/virtual pointer toggle semantics in `selectionBehavior: "replace"`
     - virtual-focus focus handoff (`moveVirtualFocus`) for focused items
     - virtual-focus press handling that updates selection-manager focus state and prevents native mousedown focus transfer
+    - `shouldSelectOnPressUp` behavior for click-phase selection
+    - `allowsDifferentPressOrigin` behavior selecting on mouseup when press-up selection is enabled
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -3126,4 +3128,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added duplicate-selection-event behavior when `allowDuplicateSelectionEvents` is enabled
   - added selection normalization coverage for controlled/default/all selection inputs
   - added disabled-key set exposure coverage
-- Validation: `npm run check` passed, `npm test` passed (126 files, 552 tests).
+- Expanded `@vue-aria/selection/useSelectableItem` press-phase parity:
+  - implemented default mouse-down selection path with click dedupe for replace-mode selectable rows
+  - implemented `shouldSelectOnPressUp` click-phase selection semantics
+  - implemented `allowsDifferentPressOrigin` mouse-up selection path when press-up selection is enabled
+- Validation: `npm run check` passed, `npm test` passed (126 files, 555 tests).
