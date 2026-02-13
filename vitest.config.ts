@@ -18,6 +18,8 @@ export default defineConfig({
       {find: 'react-aria-components', replacement: path.resolve(rootDir, 'test-shims/reactAriaComponents.tsx')},
       {find: 'react-transition-group', replacement: path.resolve(rootDir, 'test-shims/reactTransitionGroup.tsx')},
       {find: 'use-sync-external-store/shim/index.js', replacement: path.resolve(rootDir, 'test-shims/useSyncExternalStore.ts')},
+      {find: '@react-stately/flags', replacement: path.resolve(rootDir, 'test-shims/reactStatelyFlags.ts')},
+      {find: '@react-stately/table', replacement: path.resolve(rootDir, 'test-shims/reactStatelyTable.tsx')},
       {find: /^@vue-aria\/([^/]+)$/, replacement: path.resolve(rootDir, 'packages/@vue-aria/$1/index.ts')},
       {find: /^@vue-stately\/([^/]+)$/, replacement: path.resolve(rootDir, 'packages/@vue-stately/$1/index.ts')},
       {find: /^@vue-spectrum\/([^/]+)$/, replacement: path.resolve(rootDir, 'packages/@vue-spectrum/$1/index.ts')}
