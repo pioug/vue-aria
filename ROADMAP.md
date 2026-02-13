@@ -2064,6 +2064,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - no-op increment path for touch `onPressStart` + `onPressEnd` without `onPressUp`
     - single increment path for touch `onPressStart` + `onPressUp` + `onPressEnd`
     - pointer-cancel path coverage ensuring touch repeat timers are canceled without increment side effects
+    - repeat-threshold timing behavior (no increment before threshold, increment after threshold)
     - mouse press-up repeat-stop behavior through integrated stepper handlers
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
@@ -2097,7 +2098,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining numberfield interaction parity (touch repeat cadence thresholds and commit/announce timing edge cases).
+1. Port remaining numberfield interaction parity (commit/announce timing edge cases).
 2. Expand native-invalid integration parity for mixed custom-validity and multi-field first-invalid scenarios.
 
 ## 35) Package Record: @vue-aria/numberfield-state
@@ -3380,3 +3381,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` repeat-stop integration parity:
   - added adapted coverage ensuring mouse `onPressUp` halts additional increment repeats in integrated stepper flows
 - Validation: `npm run check` passed, `npm test` passed (130 files, 626 tests).
+- Expanded `@vue-aria/numberfield` touch repeat-threshold integration parity:
+  - added adapted coverage for no-increment-before-threshold and increment-after-threshold touch timer behavior
+- Validation: `npm run check` passed, `npm test` passed (130 files, 628 tests).
