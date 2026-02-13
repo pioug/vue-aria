@@ -2551,6 +2551,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - modified pointer interaction no-op behavior on slider track (`pointerType: mouse`)
   - Added adapted explicit pointer-path track coverage for:
     - closest-thumb selection and drag updates via `onPointerdown` + `pointermove`/`pointerup`
+  - Added adapted explicit pointer-path range-thumb coverage for:
+    - upper-thumb drag clamping behavior in two-thumb state during pointer drag
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3987,3 +3989,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted unit coverage for track dragging via pointer events when `PointerEvent` is available.
   - added adapted guard coverage for modified mouse-pointer interactions on track (`pointerType: mouse`) no-op behavior.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 752 tests).
+- Expanded `@vue-aria/slider` pointer range-thumb parity:
+  - added adapted integration coverage for pointer-driven upper-thumb drag clamping against the lower-thumb bound in two-thumb state.
+  - added callback lifecycle assertions for pointer-driven range-thumb clamp completion (`onChange`/`onChangeEnd`).
+- Validation: `npm run check` passed, `npm test` passed (142 files, 753 tests).

@@ -276,6 +276,68 @@ describe("useSlider integration with useSliderState", () => {
     }
   });
 
+  it("supports pointer range-thumb dragging and upper-thumb clamping", () => {
+    const originalPointerEvent = globalThis.PointerEvent;
+    vi.stubGlobal("PointerEvent", MouseEvent);
+
+    const track = createTrack();
+    const onChange = vi.fn();
+    const onChangeEnd = vi.fn();
+    const minInputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const maxInputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+
+    const scope = effectScope();
+    const { state, maxThumbProps } = scope.run(() => {
+      const state = useSliderState({
+        defaultValue: [40, 80],
+        onChange,
+        onChangeEnd,
+        numberFormatter,
+      });
+      useSlider({ "aria-label": "Slider" }, state as any, { current: track });
+      useSliderThumb(
+        {
+          index: 0,
+          "aria-label": "Min",
+          trackRef: { current: track },
+          inputRef: minInputRef,
+        },
+        state as any
+      );
+      const { thumbProps } = useSliderThumb(
+        {
+          index: 1,
+          "aria-label": "Max",
+          trackRef: { current: track },
+          inputRef: maxInputRef,
+        },
+        state as any
+      );
+      return { state, maxThumbProps: thumbProps };
+    })!;
+
+    const kind = dispatchThumbDown(maxThumbProps, 80);
+    expect(kind).toBe("pointer");
+
+    dispatchThumbMove(kind, 60);
+    expect(state.values).toEqual([40, 60]);
+
+    dispatchThumbMove(kind, 30);
+    expect(state.values).toEqual([40, 40]);
+
+    dispatchThumbUp(kind, 30);
+    expect(onChange).toHaveBeenLastCalledWith([40, 40]);
+    expect(onChangeEnd).toHaveBeenLastCalledWith([40, 40]);
+    expect(state.isThumbDragging(1)).toBe(false);
+
+    scope.stop();
+    if (originalPointerEvent === undefined) {
+      vi.unstubAllGlobals();
+    } else {
+      vi.stubGlobal("PointerEvent", originalPointerEvent);
+    }
+  });
+
   it("supports arrow-key thumb movement in horizontal orientation", () => {
     const track = createTrack();
     const onChange = vi.fn();
