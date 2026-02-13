@@ -7,7 +7,9 @@ export interface SingleSelectListProps<T> {
   defaultSelectedKey?: Key | null;
   onSelectionChange?: (key: Key | null) => void;
   collection?: ListState<T>["collection"];
-  items?: Iterable<Node<T>>;
+  items?: Iterable<T | Node<T>>;
+  getKey?: (item: T) => Key;
+  getTextValue?: (item: T) => string;
   disabledKeys?: Iterable<Key>;
 }
 

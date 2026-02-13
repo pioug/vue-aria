@@ -63,4 +63,26 @@ describe("useSingleSelectListState", () => {
 
     scope.stop();
   });
+
+  it("supports plain items with extractor functions", () => {
+    const scope = effectScope();
+    let state: any = null;
+
+    scope.run(() => {
+      state = useSingleSelectListState({
+        defaultSelectedKey: "2",
+        items: [
+          { code: "1", label: "One" },
+          { code: "2", label: "Two" },
+        ],
+        getKey: (item) => item.code,
+        getTextValue: (item) => item.label,
+      });
+    });
+
+    expect(state?.selectedKey).toBe("2");
+    expect(state?.selectedItem?.textValue).toBe("Two");
+
+    scope.stop();
+  });
 });

@@ -65,4 +65,27 @@ describe("useListState", () => {
 
     scope.stop();
   });
+
+  it("builds collection nodes from plain items with key/text extractors", () => {
+    const scope = effectScope();
+    let state: any = null;
+
+    scope.run(() => {
+      state = useListState({
+        items: [
+          { id: "k-1", label: "Alpha" },
+          { id: "k-2", label: "Beta" },
+        ],
+        getKey: (item) => item.id,
+        getTextValue: (item) => item.label.toUpperCase(),
+        selectionMode: "multiple",
+      });
+    });
+
+    expect(state?.collection.getFirstKey()).toBe("k-1");
+    expect(state?.collection.getItem("k-2")?.textValue).toBe("BETA");
+    expect(state?.collection.getItem("k-1")?.value).toEqual({ id: "k-1", label: "Alpha" });
+
+    scope.stop();
+  });
 });

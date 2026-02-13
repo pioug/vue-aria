@@ -1518,14 +1518,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Collection-building hooks from upstream stately collections are not fully mirrored yet; this slice currently accepts provided `collection`/`items` inputs.
+  - Collection-building hooks from upstream stately collections are not fully mirrored yet; plain-item `items` support with `getKey`/`getTextValue` extractors is now supported, but JSX/children-driven collection construction parity remains.
 
 ### Tests
 - Total upstream test files: 0 dedicated unit tests in package path
 - Ported test files: 3 (adapted)
 - Passing test files: 3 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for key traversal/indexing in `ListCollection` (including `at(index)`), baseline `useListState` selection manager wiring, and `useSingleSelectListState` selected-key/item behavior.
+  - Added adapted coverage for key traversal/indexing in `ListCollection` (including `at(index)`), baseline `useListState` selection manager wiring, plain-item collection building with extractor functions, and `useSingleSelectListState` selected-key/item behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1543,7 +1543,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Add collection-builder parity to remove reduced `items`/`collection` adaptation constraints.
+1. Add full collection-builder parity to support upstream children-driven collection construction (beyond current plain-item extractor support).
 2. Integrate listbox hooks to consume `@vue-aria/list-state` state constructors directly in docs/examples.
 
 ## 30) Session Log
@@ -1914,3 +1914,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - does not force focus on hover when focus is keyboard-visible
   - keeps hover-focus behavior disabled when `shouldFocusOnHover` is false
 - Validation: `npm run check` passed, `npm test` passed (101 files, 297 tests).
+- Expanded `@vue-aria/list-state` collection-building adaptation:
+  - `useListState` now accepts plain-item `items` in addition to prebuilt `Node` collections
+  - added `getKey` and `getTextValue` extractors for key/text parity mapping
+  - preserved existing `collection` override behavior
+- Added adapted tests for plain-item list-state and single-select state construction with extractors.
+- Validation: `npm run check` passed, `npm test` passed (101 files, 299 tests).
