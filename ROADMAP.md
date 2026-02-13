@@ -2396,6 +2396,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - backward wrap custom-event cancellation semantics (`react-aria-landmark-navigation` with `direction: "backward"`).
     - landmark `tabIndex=-1` reset when focus moves from the landmark container to a child control.
     - duplicate-label warning updates after dynamic landmark label changes.
+  - Added adapted last-focused-child restoration parity for link/input traversal across F6 and Shift+F6 between navigation/main landmarks.
   - Added adapted SSR render coverage to ensure `useLandmark` is safe during server rendering.
 - [ ] All relevant upstream tests migrated
 
@@ -2414,7 +2415,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components (shift+tab/last-focused link traversal paths).
+1. Port remaining story-backed keyboard focus loop assertions for `LandmarkController` across heterogeneous focus-managed components (explicit tab/shift+tab traversal paths).
 2. Revisit upstream component-level parity once Vue Spectrum table/actiongroup components land (currently hook-level equivalent coverage).
 
 ## 40) Package Record: @vue-aria/toast
@@ -3769,3 +3770,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `useLandmark` to re-register landmarks on role/label/focus prop updates and expose dynamic role/label landmark attributes with getters.
 - Expanded `@vue-aria/toast` mixed-modality lifecycle parity:
   - added adapted story-equivalent integration coverage for `F6` entry into the toast region, keyboard Enter dismissal of the visible toast, pointer dismissal of the queued toast, and final focus restoration to the launcher.
+- Expanded `@vue-aria/landmark` last-focused child restoration parity:
+  - added adapted test coverage for preserving/restoring focused link/input descendants across forward and backward landmark navigation (`F6`/`Shift+F6`).

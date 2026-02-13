@@ -241,6 +241,76 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("restores last focused child elements when navigating between landmarks", async () => {
+    const Navigation = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "navigation" }, refAdapter);
+        return () =>
+          h("nav", { ...landmarkProps, ref: elementRef }, [
+            h("a", { href: "#", "data-testid": "link-1" }, "Home"),
+            h("a", { href: "#", "data-testid": "link-2" }, "About"),
+            h("a", { href: "#", "data-testid": "link-3" }, "Contact"),
+          ]);
+      },
+    });
+    const Main = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark({ role: "main" }, refAdapter);
+        return () =>
+          h("main", { ...landmarkProps, ref: elementRef }, [
+            h("input", { "data-testid": "first-name", type: "text" }),
+          ]);
+      },
+    });
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(Navigation), h(Main)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const navLink3 = wrapper.get('[data-testid="link-3"]').element as HTMLAnchorElement;
+    const textField = wrapper.get('[data-testid="first-name"]').element as HTMLInputElement;
+
+    navLink3.focus();
+    expect(document.activeElement).toBe(navLink3);
+
+    navLink3.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(wrapper.get("main").element);
+
+    textField.focus();
+    expect(document.activeElement).toBe(textField);
+
+    textField.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(navLink3);
+
+    navLink3.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", shiftKey: true, bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(textField);
+    wrapper.unmount();
+  });
+
   it("navigates nested landmarks in DOM order", async () => {
     const App = defineComponent({
       setup() {
