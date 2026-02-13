@@ -431,6 +431,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `allowsDifferentPressOrigin` behavior selecting on mouseup when press-up selection is enabled
     - collection metadata wiring (`data-key`, `data-collection`) and explicit `id` forwarding
     - native link-click prevention for actionable link items (router-controlled navigation)
+    - open-link guard parity to avoid preventing default during active `openLink` dispatch cycles
     - `UNSTABLE_itemBehavior: "action"` branch forcing action-first behavior without selection mutations
     - collection-provided handler chaining (`onFocus`, `onMousedown`, `onMouseup`, `onClick`, `onDoubleClick`, `onKeydown`)
     - secondary-action double-click behavior gated by interaction pointer modality
@@ -3144,6 +3145,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - wired explicit item `id` forwarding support
 - Expanded `@vue-aria/selection/useSelectableItem` action/link parity:
   - added native link-click prevention to keep navigation under router/open-link control
+  - added `openLink.isOpening` guard parity for link-click default prevention behavior
   - added `UNSTABLE_itemBehavior: "action"` branch coverage ensuring action-only click behavior without selection mutation
 - Expanded `@vue-aria/selection/useSelectableItem` event wiring parity:
   - chained collection-provided event handlers with local item interaction handlers
@@ -3161,4 +3163,4 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded docs package coverage:
   - added VitePress page for `@vue-aria/selection-state` with state and manager usage examples
   - wired `@vue-aria/selection-state` into docs index and VitePress nav/sidebar
-- Validation: `npm run check` passed, `npm test` passed (126 files, 566 tests).
+- Validation: `npm run check` passed, `npm test` passed (126 files, 567 tests).

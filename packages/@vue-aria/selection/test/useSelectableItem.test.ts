@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSelectableItem } from "../src/useSelectableItem";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { useCollectionId } from "../src/utils";
+import { openLink } from "@vue-aria/utils";
 
 const open = vi.fn();
 const { moveVirtualFocus } = vi.hoisted(() => ({
@@ -69,6 +70,7 @@ describe("useSelectableItem", () => {
   beforeEach(() => {
     open.mockReset();
     moveVirtualFocus.mockReset();
+    openLink.isOpening = false;
   });
 
   afterEach(() => {
@@ -346,6 +348,33 @@ describe("useSelectableItem", () => {
     onClick(event);
 
     expect((event.preventDefault as any).mock.calls.length).toBe(1);
+  });
+
+  it("does not prevent native link click when openLink is already opening", () => {
+    const manager = createManager({
+      isLink: vi.fn(() => true),
+      getItemProps: vi.fn(() => ({ href: "/docs" })),
+    });
+    const ref = { current: document.createElement("a") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    openLink.isOpening = true;
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    const event = {
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      preventDefault: vi.fn(),
+    } as unknown as MouseEvent;
+    onClick(event);
+
+    expect((event.preventDefault as any).mock.calls.length).toBe(0);
   });
 
   it("does nothing for link selection when link behavior is none", () => {

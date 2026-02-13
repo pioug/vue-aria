@@ -1,7 +1,7 @@
 import { focusSafely } from "@vue-aria/interactions";
 import { moveVirtualFocus } from "@vue-aria/focus";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
-import { chain, isCtrlKeyPressed, useRouter } from "@vue-aria/utils";
+import { chain, isCtrlKeyPressed, openLink, useRouter } from "@vue-aria/utils";
 import type { RouterOptions } from "@vue-aria/utils";
 import { getCurrentScope, onScopeDispose } from "vue";
 import { getCollectionId, isNonContiguousSelectionModifier } from "./utils";
@@ -188,7 +188,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   itemProps.onClick = (event: MouseEvent) => {
     interactionPointerType = (event as MouseEvent & { pointerType?: string }).pointerType ?? "mouse";
 
-    if (shouldPreventNativeLinkClick) {
+    if (shouldPreventNativeLinkClick && !openLink.isOpening) {
       event.preventDefault();
     }
 
