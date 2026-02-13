@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/slider-state`
+- Current focus package: `@vue-aria/slider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -81,7 +81,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/searchfield-state`: In progress
 - `@vue-aria/form-state`: In progress
 - `@vue-aria/numberfield-state`: In progress
-- `@vue-aria/slider-state`: In progress
+- `@vue-aria/slider-state`: Complete
 - `@vue-aria/overlays-state`: In progress
 - `@vue-aria/tooltip-state`: In progress
 - `@vue-aria/disclosure-state`: In progress
@@ -135,7 +135,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/utils/src`
   - `references/react-spectrum/packages/@react-aria/utils/test`
 - Local package path: `packages/@vue-aria/utils`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -1802,7 +1802,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -1836,7 +1836,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `useLongPress` callback wiring for `onLongPressStart` (`close`) and `onLongPress` (`open("first")`)
     - disabled-state propagation to `useLongPress` options
   - Added menu-trigger pointer modality branch coverage for virtual press start (`open("first")` focus strategy path).
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/menu.md`)
@@ -2628,8 +2628,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Added SSR initialization guidance for deterministic slider-state hydration behavior.
 - [x] Added Vue SFC (`<script setup>`) usage snippet for copy/paste fidelity.
 - [x] Added minimal base-markup/style snippet mapping slider-state percentages to rendered thumb positions.
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
 
 ### Accessibility
 - Not directly applicable for stately state package; validated through hook consumers.
@@ -2641,9 +2641,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Consider porting upstream story-equivalent slider-state walkthrough examples into VitePress playground snippets.
-2. Revisit whether runtime `number` <-> `number[]` switching should be explicitly guarded at runtime versus documented as unsupported.
-3. Decide whether slider-state docs should include a stronger boundary between state-only examples and full `@vue-aria/slider` interaction examples.
+1. Monitor upstream slider-state changes for drift and add regression coverage as needed.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4053,3 +4051,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/slider-state` base-markup docs parity:
   - added minimal template/style snippet showing how `getThumbPercent` output maps slider-state values to rendered thumb positions.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).
+- Marked `@vue-aria/slider-state` package record as `Complete`:
+  - public API checklist complete
+  - upstream tests fully migrated
+  - docs/examples parity checklist complete for current package scope
