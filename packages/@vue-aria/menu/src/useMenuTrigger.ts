@@ -1,6 +1,7 @@
 import { focusWithoutScrolling, useId } from "@vue-aria/utils";
 import { useLongPress, type PressProps } from "@vue-aria/interactions";
 import { useOverlayTrigger } from "@vue-aria/overlays";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type { AriaMenuOptions } from "./useMenu";
 
 export interface AriaMenuTriggerProps {
@@ -22,6 +23,12 @@ export interface MenuTriggerAria<T> {
   menuProps: AriaMenuOptions<T>;
 }
 
+const intlMessages = {
+  "en-US": {
+    longPressMessage: "Long press to open menu",
+  },
+};
+
 function isDefaultPrevented(event: KeyboardEvent & { isDefaultPrevented?: () => boolean }) {
   if (typeof event.isDefaultPrevented === "function") {
     return event.isDefaultPrevented();
@@ -36,6 +43,7 @@ export function useMenuTrigger<T>(
   ref: { current: Element | null }
 ): MenuTriggerAria<T> {
   const { type = "menu", isDisabled, trigger = "press" } = props;
+  const stringFormatter = useLocalizedStringFormatter(intlMessages as any, "@react-aria/menu");
 
   const menuTriggerId = useId();
   const { triggerProps, overlayProps } = useOverlayTrigger({ type }, state as any, ref);
@@ -86,7 +94,7 @@ export function useMenuTrigger<T>(
 
   const { longPressProps } = useLongPress({
     isDisabled: isDisabled || trigger !== "longPress",
-    accessibilityDescription: "Long press to open menu",
+    accessibilityDescription: stringFormatter.format("longPressMessage"),
     onLongPressStart() {
       state.close();
     },

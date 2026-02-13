@@ -1,5 +1,27 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { effectScope } from "vue";
+const { useLongPressMock, longPressProps } = vi.hoisted(() => {
+  const longPressProps = {
+    onPressStart: vi.fn(),
+    onPressEnd: vi.fn(),
+  };
+
+  return {
+    useLongPressMock: vi.fn(() => ({
+      longPressProps,
+    })),
+    longPressProps,
+  };
+});
+
+vi.mock("@vue-aria/interactions", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/interactions")>("@vue-aria/interactions");
+  return {
+    ...actual,
+    useLongPress: useLongPressMock,
+  };
+});
+
 import { useMenuTrigger } from "../src/useMenuTrigger";
 
 function createState() {
@@ -23,6 +45,12 @@ function createKeyEvent(key: string, options: { altKey?: boolean; defaultPrevent
 }
 
 describe("useMenuTrigger", () => {
+  beforeEach(() => {
+    useLongPressMock.mockClear();
+    longPressProps.onPressStart.mockClear();
+    longPressProps.onPressEnd.mockClear();
+  });
+
   it("returns default aria props when menu is closed", () => {
     const state = createState();
     const ref = { current: document.createElement("button") as Element | null };
@@ -101,6 +129,52 @@ describe("useMenuTrigger", () => {
 
     expect(state.toggle).toHaveBeenCalledTimes(1);
     expect(state.toggle).toHaveBeenCalledWith("first");
+    scope.stop();
+  });
+
+  it("wires long-press callbacks through useLongPress with accessibility description", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ menuTriggerProps } = useMenuTrigger({ trigger: "longPress" }, state, ref));
+    });
+
+    expect(menuTriggerProps.onPressStart).toBe(longPressProps.onPressStart);
+    const longPressOptions = (useLongPressMock as any).mock.calls.at(-1)?.[0] as
+      | {
+          isDisabled: boolean;
+          accessibilityDescription: string;
+          onLongPressStart?: () => void;
+          onLongPress?: () => void;
+        }
+      | undefined;
+    expect(longPressOptions?.isDisabled).toBe(false);
+    expect(longPressOptions?.accessibilityDescription).toBe("Long press to open menu");
+
+    longPressOptions?.onLongPressStart?.();
+    expect(state.close).toHaveBeenCalledTimes(1);
+    longPressOptions?.onLongPress?.();
+    expect(state.open).toHaveBeenCalledWith("first");
+
+    scope.stop();
+  });
+
+  it("disables long-press behavior when menu trigger is disabled", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useMenuTrigger({ trigger: "longPress", isDisabled: true }, state, ref);
+    });
+
+    const longPressOptions = (useLongPressMock as any).mock.calls.at(-1)?.[0] as
+      | { isDisabled: boolean }
+      | undefined;
+    expect(longPressOptions?.isDisabled).toBe(true);
     scope.stop();
   });
 

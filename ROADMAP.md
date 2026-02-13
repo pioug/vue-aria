@@ -1805,6 +1805,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Open adaptation note:
   - `useSafelyMouseToSubmenu` now tracks interaction-modality transitions and includes jsdom-compatible pointerover fallback dispatch; remaining parity is focused on deeper submenu trigger integration cases.
+  - `useMenuTrigger` long-press path now uses localized string formatter wiring for accessibility descriptions (current dictionary remains minimal and should be expanded to full upstream locale coverage in later parity passes).
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -1815,6 +1816,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added safe-mouse timeout fallback coverage for stalled movement paths:
     - pointer-events reset on interaction-modality changes (`pointer` -> `keyboard`)
     - delayed pointerover redispatch when safe-triangle movement stalls
+  - Added menu-trigger long-press contract coverage:
+    - localized long-press accessibility description wiring
+    - `useLongPress` callback wiring for `onLongPressStart` (`close`) and `onLongPress` (`open("first")`)
+    - disabled-state propagation to `useLongPress` options
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1833,7 +1838,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Deepen `useMenuItem` / `useMenuTrigger` / `useSubmenuTrigger` parity tests for keyboard-triggered click paths and long-press behavior in integration harnesses.
+1. Deepen `useMenuItem` / `useMenuTrigger` / `useSubmenuTrigger` parity tests for long-press behavior in downstream integration harnesses (Spectrum-level `MenuTrigger` paths).
 2. Validate safe-pointer retention and submenu auto-close behavior against downstream Spectrum submenu implementations/stories.
 
 ## 31) Package Record: @vue-aria/select
@@ -3240,3 +3245,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for pointer-event suppression reset on modality transitions
   - added adapted timeout fallback tests asserting delayed pointerover redispatch when pointer movement toward submenu stalls
 - Validation: `npm run check` passed, `npm test` passed (126 files, 588 tests).
+- Expanded `@vue-aria/menu/useMenuTrigger` long-press parity:
+  - switched long-press accessibility description wiring to `useLocalizedStringFormatter` (`longPressMessage`) instead of hardcoded inline hook options
+  - added adapted long-press contract coverage for `useLongPress` option wiring (`onLongPressStart` closes, `onLongPress` opens first item) and disabled propagation
+- Validation: `npm run check` passed, `npm test` passed (126 files, 590 tests).
