@@ -2581,8 +2581,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 4 (`useTable.test.tsx`, `useTableBackwardCompat.test.tsx`, `ariaTableResizing.test.tsx`, `tableResizingTests.tsx`)
-- Ported test files: 6 (adapted)
-- Passing test files: 6 (validated 2026-02-13)
+- Ported test files: 7 (adapted)
+- Passing test files: 7 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for table ID utilities and row-header labeling.
   - Added adapted coverage for `TableKeyboardDelegate` vertical/horizontal/search behavior.
@@ -2592,6 +2592,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Expanded `useTableColumnResize` coverage for pointer press-start/blur-end lifecycle and trigger-focus restoration behavior.
   - Expanded `useTableColumnResize` callback-map assertions for `onResizeStart` / `onResize` / `onResizeEnd`, including no-movement resize-end behavior.
   - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
+  - Added upstream-aligned `ariaTableResizing.test.ts` Vue adaptation covering resize-start and resize-end callback map semantics.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5050,3 +5051,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - extended `docs/packages/table.md` with sorting, selection checkbox, and column-resize usage examples plus updated base markup snippet.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 20 tests).
+- Expanded `@vue-aria/table` test-structure parity:
+  - added `packages/@vue-aria/table/test/ariaTableResizing.test.ts` as an upstream-aligned resize-suite entry point.
+  - added adapted resize-start/resize-end callback-map assertions in that suite.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (7 files, 22 tests).
