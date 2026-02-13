@@ -1241,6 +1241,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted tests for search input props, enter submit behavior, escape clear behavior, and clear-button semantics.
   - Added searchfield-state tests for controlled/uncontrolled value semantics and numeric coercion.
+  - Added adapted locale-provider integration coverage for translated clear-search button labels (`fr-FR`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1259,7 +1260,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum searchfield components.
-2. Add locale-provider integration coverage for translated clear-search labels.
+2. Expand docs/examples with localized clear-search behavior and locale-provider usage.
 
 ## 20) Package Record: @vue-aria/progress
 - Upstream source path(s):
@@ -1438,6 +1439,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 2
 - Test parity notes:
   - Added adapted coverage for breadcrumbs nav labeling and item states (current/disabled/span/link semantics).
+  - Added adapted locale-provider integration coverage for translated default breadcrumbs nav labels (`fr-FR`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1456,7 +1458,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum breadcrumb components.
-2. Add locale-provider integration coverage for translated breadcrumbs labels.
+2. Expand docs/examples with localized breadcrumbs labeling and locale-provider usage.
 
 ## 24) Package Record: @vue-aria/separator
 - Upstream source path(s):
@@ -3354,3 +3356,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - replaced inline en-US-only labels with generated upstream intl bundles from `@react-aria/searchfield/intl` and `@react-aria/breadcrumbs/intl`
   - wired both hooks to consume package-local `intlMessages.ts` locale maps
 - Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
+- Expanded locale-provider integration parity for localized labels:
+  - added adapted `@vue-aria/searchfield` test coverage for translated clear-search labels under `I18nProvider` (`fr-FR`)
+  - added adapted `@vue-aria/breadcrumbs` test coverage for translated default nav labels under `I18nProvider` (`fr-FR`)
+- Validation: `npm run check` passed, `npm test` passed (130 files, 622 tests).

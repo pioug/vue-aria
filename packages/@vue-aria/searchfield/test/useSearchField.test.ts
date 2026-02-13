@@ -1,6 +1,10 @@
+import { mount } from "@vue/test-utils";
+import { I18nProvider } from "@vue-aria/i18n";
+import { useSearchFieldState } from "@vue-aria/searchfield-state";
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSearchField } from "../src";
+import { defineComponent, h } from "vue";
 
 describe("useSearchField hook", () => {
   const renderSearchHook = (props: Record<string, unknown> = {}, stateOverrides: Record<string, unknown> = {}) => {
@@ -82,5 +86,27 @@ describe("useSearchField hook", () => {
     expect(focus).toHaveBeenCalledTimes(1);
     expect(onClear).toHaveBeenCalledTimes(1);
     stop();
+  });
+
+  it("uses localized clear button label from i18n provider locale", () => {
+    const SearchProbe = defineComponent({
+      setup() {
+        const state = useSearchFieldState({ defaultValue: "" });
+        const inputRef = { current: null as HTMLInputElement | null };
+        const { clearButtonProps } = useSearchField({ "aria-label": "Search" }, state, inputRef);
+        return () => h("button", { ...clearButtonProps, "data-testid": "clear" });
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        return () => h(I18nProvider, { locale: "fr-FR" }, { default: () => h(SearchProbe) });
+      },
+    });
+
+    const wrapper = mount(App);
+    expect(wrapper.find('[data-testid="clear"]').attributes("aria-label")).toBe(
+      "Effacer la recherche"
+    );
   });
 });
