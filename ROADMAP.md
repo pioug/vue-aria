@@ -2191,7 +2191,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/useComboBox.ts`
   - `src/intlMessages.ts`
 - Open adaptation note:
-  - Current locale dictionary is seeded with `en-US` strings; full upstream locale bundle parity remains.
+  - Locale dictionary now mirrors the full upstream `@react-aria/combobox/intl` bundle; remaining parity focuses on deeper interaction and announcement edge flows.
 
 ### Tests
 - Total upstream test files: 1 (`useComboBox.test.js`)
@@ -2218,8 +2218,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Import the full upstream `@react-aria/combobox/intl` locale dictionary bundle.
-2. Expand combobox interaction coverage for link-action and announcement edge paths from upstream behavior.
+1. Expand combobox interaction coverage for link-action and announcement edge paths from upstream behavior.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4517,3 +4516,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added docs pages for `@vue-aria/combobox-state` and `@vue-aria/combobox`, and linked them in docs nav/sidebar/index.
   - fixed `@vue-aria/i18n/useLocalizedStringFormatter` cache keying to avoid cross-package formatter collisions (dictionary identity + locale cache map).
 - Validation: `npm test -- packages/@vue-aria/i18n/test packages/@vue-aria/menu/test packages/@vue-aria/combobox-state/test packages/@vue-aria/combobox/test` passed (12 files, 55 tests).
+- Expanded `@vue-aria/combobox` locale parity:
+  - replaced the initial `en-US` combobox intl stub with the full upstream `@react-aria/combobox/intl` locale bundle.
+- Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/i18n/test` passed (4 files, 11 tests).
