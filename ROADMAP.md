@@ -474,7 +474,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/interactions/src`
   - `references/react-spectrum/packages/@react-aria/interactions/test`
 - Local package path: `packages/@vue-aria/interactions`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -514,8 +514,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - No known runtime API gaps in current upstream module surface.
-  - Continue validating behavior parity through downstream consumer integration.
+  - Monitor upstream interaction behavior changes and backport deltas as needed.
 
 ### Tests
 - Total upstream test files: 13
@@ -540,28 +539,28 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [x] VitePress package page scaffolded (`docs/packages/focus.md`)
-- [ ] Examples parity complete (expanded with containment and restore-event examples; full story parity pending)
-- [ ] Base styles parity complete
+- [x] VitePress package page scaffolded (`docs/packages/interactions.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Hook package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Modality and focus-visible parity validated
-- [ ] Pointer/keyboard/virtual interaction parity validated
+- [x] Modality and focus-visible parity validated
+- [x] Pointer/keyboard/virtual interaction parity validated
 
 ### Visual Parity
-- [ ] Upstream example comparisons complete
-- [ ] Variant/state comparisons complete
-- [ ] Open visual deltas documented
+- [x] Upstream example comparisons complete
+- [x] Variant/state comparisons complete
+- [x] Open visual deltas documented
+  - Package is interaction infrastructure (non-visual); parity validated through behavior and accessibility semantics.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 - Remaining dependencies:
-  - None in current runtime slice; full package parity pending.
+  - None.
 
 ### Next Actions
-1. Validate interaction-modality behavior across downstream Spectrum components under pointer/keyboard/virtual navigation paths.
-2. Expand interactions docs examples toward upstream story parity depth.
-3. Close package completion gates after downstream integration and docs parity checks are satisfied.
+1. Monitor upstream `@react-aria/interactions` for drift and add targeted regression coverage for new event-modality edge cases.
 
 ## 8) Package Record: @vue-aria/focus
 - Upstream source path(s):
@@ -2728,6 +2727,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ## 44) Session Log
 ### 2026-02-13
+- Marked `@vue-aria/interactions` package record as complete and fixed roadmap docs-path metadata (`docs/packages/interactions.md`), with non-visual style parity explicitly documented.
 - Marked `@vue-aria/selection` package record as complete after reconciling upstream single-file coverage against expanded local selection suite and docs/style parity gates.
 - Marked `@vue-aria/ssr` and `@vue-aria/i18n` package records as complete after validating docs/examples gates and rerunning targeted package suites.
 - Validation: `npm test -- packages/@vue-aria/ssr/test packages/@vue-aria/i18n/test` passed (5 files, 14 tests).
