@@ -67,6 +67,7 @@ export function useSelectableCollection(
   let lastFocusedKey = manager.focusedKey;
   let shouldVirtualFocusFirst = false;
   let shouldAutoFocus = autoFocus;
+  let didAutoFocus = false;
 
   const onScroll = () => {
     scrollPosition = {
@@ -86,12 +87,15 @@ export function useSelectableCollection(
       if (
         manager.isFocused &&
         manager.focusedKey != null &&
-        manager.focusedKey !== lastFocusedKey &&
+        (manager.focusedKey !== lastFocusedKey || didAutoFocus) &&
         scrollRef.current &&
         ref.current
       ) {
         const element = getItemElement(ref, manager.focusedKey);
-        if (element instanceof HTMLElement && getInteractionModality() === "keyboard") {
+        if (
+          element instanceof HTMLElement &&
+          (getInteractionModality() === "keyboard" || didAutoFocus)
+        ) {
           element.scrollIntoView({ block: "nearest" });
         }
       }
@@ -107,6 +111,7 @@ export function useSelectableCollection(
       }
 
       lastFocusedKey = manager.focusedKey;
+      didAutoFocus = false;
     },
     { flush: "post" }
   );
@@ -472,6 +477,7 @@ export function useSelectableCollection(
     const collectionSize = (manager.collection as { size?: number } | undefined)?.size;
     if (collectionSize == null || collectionSize > 0) {
       shouldAutoFocus = false;
+      didAutoFocus = true;
     }
   };
 

@@ -422,6 +422,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - virtual-focus mode preserving active element during collection focus handling
     - virtual first-focus strategy deferred across empty-to-loaded collection transitions
     - autoFocus retry behavior for initially empty collections resolving after data load
+    - autoFocus-driven focused item scroll behavior independent of current interaction modality
   - Added adapted `useSelectableItem` interaction coverage for:
     - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
     - keyboard Enter/Space selection behavior and secondary action routing
@@ -3217,3 +3218,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/selection/useSelectableCollection` autoFocus coverage:
   - added adapted test for empty-to-loaded autoFocus transitions with deferred focused-key assignment
 - Validation: `npm run check` passed, `npm test` passed (126 files, 583 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` post-autofocus scroll parity:
+  - added `didAutoFocus` lifecycle tracking so focused item scrolling runs after autoFocus resolution even when modality is pointer/virtual
+- Expanded `@vue-aria/selection/useSelectableCollection` autoFocus scroll coverage:
+  - added adapted test asserting auto-focused item scroll behavior when interaction modality is pointer
+- Validation: `npm run check` passed, `npm test` passed (126 files, 584 tests).

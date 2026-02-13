@@ -1016,6 +1016,50 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("scrolls auto-focused item into view even when modality is pointer", async () => {
+    getInteractionModality.mockReturnValue("pointer");
+    const { manager } = createReactiveManager({
+      selectedKeys: new Set<Key>(),
+      canSelectItem: vi.fn(() => true),
+    });
+    manager.collection = {
+      size: 1,
+      getItem: (key: Key) => (key === "a" ? ({ key, type: "item" } as any) : null),
+      getFirstKey: () => "a" as Key,
+      getLastKey: () => "a" as Key,
+      getKeyAfter: () => null,
+      getChildren: function* () {},
+    } as any;
+
+    const refEl = { current: document.createElement("div") };
+    const option = document.createElement("div");
+    option.setAttribute("data-key", "a");
+    option.scrollIntoView = vi.fn();
+    refEl.current.appendChild(option);
+    document.body.append(refEl.current);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref: refEl,
+        autoFocus: "first",
+      })
+    );
+
+    try {
+      await nextTick();
+      await nextTick();
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+      expect((option.scrollIntoView as any).mock.calls.length).toBe(1);
+      expect((option.scrollIntoView as any).mock.calls[0]?.[0]).toEqual({ block: "nearest" });
+    } finally {
+      scope.stop();
+      refEl.current.remove();
+    }
+  });
+
   it("handles virtual focus events when enabled", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
