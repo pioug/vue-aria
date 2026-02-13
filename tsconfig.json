@@ -25,6 +25,9 @@
       "@vue-aria/button": ["packages/@vue-aria/button/src/index.ts"],
       "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
       "@vue-aria/toggle": ["packages/@vue-aria/toggle/src/index.ts"]
+      ,
+      "@vue-aria/checkbox-state": ["packages/@vue-aria/checkbox-state/src/index.ts"],
+      "@vue-aria/checkbox": ["packages/@vue-aria/checkbox/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

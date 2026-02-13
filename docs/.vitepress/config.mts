@@ -15,6 +15,7 @@ export default defineConfig({
       { text: "Button", link: "/packages/button" },
       { text: "Link", link: "/packages/link" },
       { text: "Toggle", link: "/packages/toggle" },
+      { text: "Checkbox", link: "/packages/checkbox" },
     ],
     sidebar: [
       {
@@ -29,6 +30,7 @@ export default defineConfig({
           { text: "@vue-aria/button", link: "/packages/button" },
           { text: "@vue-aria/link", link: "/packages/link" },
           { text: "@vue-aria/toggle", link: "/packages/toggle" },
+          { text: "@vue-aria/checkbox", link: "/packages/checkbox" },
         ],
       },
     ],

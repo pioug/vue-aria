@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/interactions`
+- Current focus package: `@vue-aria/checkbox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -39,7 +39,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/label`: In progress
 - `@vue-aria/button`: In progress
 - `@vue-aria/toggle`: In progress
-- `@vue-aria/checkbox`: Not started
+- `@vue-aria/checkbox`: In progress
 - `@vue-aria/radio`: Not started
 - `@vue-aria/switch`: Not started
 - `@vue-aria/textfield`: Not started
@@ -68,6 +68,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### React Stately packages
 - `@vue-aria/utils-state`: In progress
 - `@vue-aria/toggle-state`: In progress
+- `@vue-aria/checkbox-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
@@ -763,7 +764,61 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Integrate with downstream checkbox/switch packages and validate behavior.
 2. Expand tests as consumers are ported.
 
-## 15) Session Log
+## 15) Package Record: @vue-aria/checkbox (+ @vue-aria/checkbox-state)
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/checkbox/src`
+  - `references/react-spectrum/packages/@react-aria/checkbox/test/useCheckboxGroup.test.tsx`
+  - `references/react-spectrum/packages/@react-stately/checkbox/src`
+- Local package path:
+  - `packages/@vue-aria/checkbox`
+  - `packages/@vue-aria/checkbox-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist created for initial package slice
+
+### Implementation
+- [x] Ported upstream API surface:
+  - `useCheckbox`
+  - `useCheckboxGroup`
+  - `useCheckboxGroupItem`
+  - `useCheckboxGroupState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path aliases
+
+### Tests
+- Total upstream test files: 1 (`@react-aria/checkbox`) + state package behavior from source
+- Ported test files: 3
+- Passing test files: pending validation run
+- Test parity notes:
+  - Adapted upstream checkbox group behavior checks for Vue composable usage.
+  - Added checkbox-state tests for controlled selection and required-validation reactivity.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/checkbox.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate group/item validation parity against upcoming form package ports
+
+### Visual Parity
+- Not applicable for hook/state packages beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Deepen validation semantics after `@vue-aria/form` and related state ports land.
+2. Port remaining checkbox-edge assertions as downstream consumers are introduced.
+
+## 16) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -985,3 +1040,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted toggle tests for base props, a11y warning behavior, and selection updates from change events.
 - Added VitePress docs page for `@vue-aria/toggle` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (62 files, 181 tests).
+- Started checkbox package slice:
+  - `@vue-aria/checkbox-state/useCheckboxGroupState`
+  - `@vue-aria/checkbox/useCheckbox`
+  - `@vue-aria/checkbox/useCheckboxGroup`
+  - `@vue-aria/checkbox/useCheckboxGroupItem`
+- Added adapted checkbox/checkbox-state tests covering defaults, name/label wiring, disabled/readonly handling, and required-group validation reactivity.
+- Added VitePress docs page for `@vue-aria/checkbox` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (65 files, 195 tests).

@@ -43,6 +43,30 @@ export default defineConfig({
       ),
       "@vue-aria/focus": fileURLToPath(
         new URL("./packages/@vue-aria/focus/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/live-announcer": fileURLToPath(
+        new URL("./packages/@vue-aria/live-announcer/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/visually-hidden": fileURLToPath(
+        new URL("./packages/@vue-aria/visually-hidden/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/label": fileURLToPath(
+        new URL("./packages/@vue-aria/label/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/button": fileURLToPath(
+        new URL("./packages/@vue-aria/button/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/link": fileURLToPath(
+        new URL("./packages/@vue-aria/link/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/toggle": fileURLToPath(
+        new URL("./packages/@vue-aria/toggle/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/checkbox-state": fileURLToPath(
+        new URL("./packages/@vue-aria/checkbox-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/checkbox": fileURLToPath(
+        new URL("./packages/@vue-aria/checkbox/src/index.ts", import.meta.url)
       )
     }
   }
