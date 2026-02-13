@@ -23,6 +23,44 @@ function createKeyEvent(key: string, options: { altKey?: boolean; defaultPrevent
 }
 
 describe("useMenuTrigger", () => {
+  it("returns default aria props when menu is closed", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    let menuProps: any = {};
+    scope.run(() => {
+      ({ menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref));
+    });
+
+    expect(menuTriggerProps["aria-controls"]).toBeFalsy();
+    expect(menuTriggerProps["aria-expanded"]).toBeFalsy();
+    expect(menuTriggerProps["aria-haspopup"]).toBeTruthy();
+    expect(menuProps["aria-labelledby"]).toBe(menuTriggerProps.id);
+    expect(menuProps.id).toBeTruthy();
+    scope.stop();
+  });
+
+  it("returns expanded aria props when menu is open", () => {
+    const state = createState();
+    state.isOpen = true;
+    const ref = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    let menuProps: any = {};
+    scope.run(() => {
+      ({ menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref));
+    });
+
+    expect(menuTriggerProps["aria-controls"]).toBe(menuProps.id);
+    expect(menuTriggerProps["aria-expanded"]).toBe(true);
+    expect(menuProps["aria-labelledby"]).toBe(menuTriggerProps.id);
+    expect(menuProps.id).toBeTruthy();
+    scope.stop();
+  });
+
   it("toggles first/last focus strategy on arrow keys", () => {
     const state = createState();
     const ref = { current: document.createElement("button") as Element | null };
@@ -114,5 +152,40 @@ describe("useMenuTrigger", () => {
     onKeyDown2?.(createKeyEvent("Enter", { defaultPrevented: true }));
     scope2.stop();
     expect(state2.toggle).not.toHaveBeenCalled();
+  });
+
+  it("opens on press start for non-touch pointers and respects disabled state", () => {
+    const state = createState();
+    const target = document.createElement("button");
+    const focusSpy = vi.spyOn(target, "focus");
+    const ref = { current: target as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ menuTriggerProps } = useMenuTrigger({ type: "menu" }, state, ref));
+    });
+
+    (menuTriggerProps.onPressStart as ((event: any) => void))?.({
+      pointerType: "mouse",
+      target,
+    });
+    expect(state.open).toHaveBeenCalledTimes(1);
+    expect(state.open).toHaveBeenCalledWith(null);
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    scope.stop();
+
+    const disabledState = createState();
+    const disabledScope = effectScope();
+    let disabledProps: Record<string, unknown> = {};
+    disabledScope.run(() => {
+      ({ menuTriggerProps: disabledProps } = useMenuTrigger({ isDisabled: true }, disabledState, ref));
+    });
+    (disabledProps.onPressStart as ((event: any) => void))?.({
+      pointerType: "mouse",
+      target,
+    });
+    expect(disabledState.open).not.toHaveBeenCalled();
+    disabledScope.stop();
   });
 });

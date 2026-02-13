@@ -1593,7 +1593,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 5 (adapted)
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, additional close/disabled/default-prevented keyboard-path semantics, and submenu focusin/press-path behavior.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, safe-mouse hook lifecycle/reset behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, and non-touch onPressStart open behavior with disabled short-circuit.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2532,3 +2532,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - no-selected-key arrow navigation falling back to delegate first key
   - ArrowLeft/ArrowRight default prevention behavior
 - Validation: `npm run check` passed, `npm test` passed (118 files, 394 tests).
+- Expanded `@vue-aria/menu/useMenuTrigger` parity with adapted tests for:
+  - open/closed trigger aria-controls and aria-expanded semantics
+  - non-touch `onPressStart` open behavior and disabled short-circuit
+- Validation: `npm run check` passed, `npm test` passed (118 files, 397 tests).
