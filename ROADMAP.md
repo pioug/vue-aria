@@ -36,7 +36,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/live-announcer`: In progress
 - `@vue-aria/overlays`: Not started
 - `@vue-aria/visually-hidden`: In progress
-- `@vue-aria/label`: Not started
+- `@vue-aria/label`: In progress
 - `@vue-aria/button`: Not started
 - `@vue-aria/toggle`: Not started
 - `@vue-aria/checkbox`: Not started
@@ -559,7 +559,58 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Validate integration behavior in downstream component packages.
 2. Expand docs with side-by-side Vue usage examples from upstream scenarios.
 
-## 11) Session Log
+## 11) Package Record: @vue-aria/label
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/label/src`
+  - `references/react-spectrum/packages/@react-aria/label/test`
+- Local package path: `packages/@vue-aria/label`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useLabel`
+  - `useField`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useLabel.ts`
+  - `src/useField.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: 2
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted `useLabel` tests for visible/aria labels, composed `aria-labelledby`, warning behavior, and non-label element type.
+  - Added adapted `useField` tests for label props, description/error id behavior, and `aria-describedby` linkage when rendered.
+- [x] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/label.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] End-to-end field labeling parity validation with downstream field components
+
+### Visual Parity
+- Not applicable for this utility package beyond ARIA wiring behavior.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Validate integration behavior in textfield/numberfield/searchfield ports.
+2. Reconcile any upstream id/slot edge cases after downstream integration.
+
+## 12) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -755,3 +806,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Updated `useFocusWithin` to include bubbling `focusin/focusout` handlers for Vue DOM parity in child-focus flows.
 - Added VitePress docs page for `@vue-aria/visually-hidden` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (57 files, 161 tests).
+- Started `@vue-aria/label` package:
+  - `useLabel`
+  - `useField`
+  - package scaffolding and tsconfig alias wiring
+- Added adapted `@react-aria/label` test coverage for label/field behavior, warning semantics, and described-by wiring.
+- Added VitePress docs page for `@vue-aria/label` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (59 files, 169 tests).

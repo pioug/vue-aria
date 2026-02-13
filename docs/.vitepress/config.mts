@@ -11,6 +11,7 @@ export default defineConfig({
       { text: "Focus", link: "/packages/focus" },
       { text: "Live Announcer", link: "/packages/live-announcer" },
       { text: "Visually Hidden", link: "/packages/visually-hidden" },
+      { text: "Label", link: "/packages/label" },
     ],
     sidebar: [
       {
@@ -21,6 +22,7 @@ export default defineConfig({
           { text: "@vue-aria/focus", link: "/packages/focus" },
           { text: "@vue-aria/live-announcer", link: "/packages/live-announcer" },
           { text: "@vue-aria/visually-hidden", link: "/packages/visually-hidden" },
+          { text: "@vue-aria/label", link: "/packages/label" },
         ],
       },
     ],
