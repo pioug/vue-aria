@@ -62,6 +62,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tooltip`: Not started
 - `@vue-aria/progress`: Not started
 - `@vue-aria/meter`: Not started
+- `@vue-aria/collections`: In progress
 
 ### React Stately packages
 - `@vue-aria/utils-state`: Not started
@@ -251,3 +252,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Locale-aware live formatter proxies for message/string/list/date/number/collator hooks.
   - Added regression test ensuring formatted output updates on `languagechange`.
 - Validation: `npm run check` passed, `npm test` passed (24 files, 57 tests).
+- Started `@vue-aria/collections` foundational slice:
+  - Ported upstream `BaseCollection`/node model core
+  - Added Vue `useCachedChildren` adaptation
+  - Added initial hideable/collection-builder compatibility layer (provisional APIs for downstream integration)
+  - Added base collection tests
+- Validation: `npm run check` passed, `npm test` passed (25 files, 59 tests).

@@ -22,6 +22,9 @@ export default defineConfig({
       ),
       "@vue-aria/i18n": fileURLToPath(
         new URL("./packages/@vue-aria/i18n/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/collections": fileURLToPath(
+        new URL("./packages/@vue-aria/collections/src/index.ts", import.meta.url)
       )
     }
   }
