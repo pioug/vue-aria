@@ -98,4 +98,43 @@ describe("useSelect", () => {
     scope.stop();
     ref.current?.remove();
   });
+
+  it("updates selected key on left/right arrow keys", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onKeydown = result.triggerProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
+    onKeydown?.({
+      key: "ArrowLeft",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+    onKeydown?.({
+      key: "ArrowRight",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(state.setSelectedKey).toHaveBeenNthCalledWith(1, "a");
+    expect(state.setSelectedKey).toHaveBeenNthCalledWith(2, "b");
+
+    scope.stop();
+    ref.current?.remove();
+  });
 });

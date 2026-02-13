@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, ref, type PropType } from "vue";
+import { computed, defineComponent, h, ref, toRaw, type PropType } from "vue";
 import { useVisuallyHidden } from "@vue-aria/visually-hidden";
 import { useFormReset } from "@vue-aria/utils";
 import { selectData, type SelectState } from "./useSelect";
@@ -31,7 +31,8 @@ export function useHiddenSelect(
   state: SelectState,
   triggerRef: { current: Element | null }
 ): HiddenSelectAria {
-  const data = selectData.get(state as object) || {};
+  const stateObject = (toRaw(state as object) as object) ?? (state as object);
+  const data = selectData.get(stateObject) || selectData.get(state as object) || {};
   const name = props.name ?? data.name;
   const form = props.form ?? data.form;
   const isDisabled = props.isDisabled ?? data.isDisabled;
@@ -143,15 +144,21 @@ export const HiddenSelect = defineComponent({
       if (props.name) {
         const nodes: any[] = [];
         const list = values.value.length === 0 ? [null] : values.value;
+        const stateObject = (toRaw(props.state as object) as object) ?? (props.state as object);
+        const data = selectData.get(stateObject) || selectData.get(props.state as object) || {};
+        const validationBehavior = data.validationBehavior;
         for (const value of list) {
           nodes.push(
             h("input", {
-              type: "hidden",
+              type: validationBehavior === "native" ? "text" : "hidden",
+              style: validationBehavior === "native" ? { display: "none" } : undefined,
               autoComplete: selectProps.autoComplete as string | undefined,
               name: props.name,
               form: props.form,
               disabled: props.isDisabled,
               value: value ?? "",
+              required: validationBehavior === "native",
+              onChange: () => {},
               ref: selectRef,
             })
           );

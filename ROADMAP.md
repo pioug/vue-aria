@@ -1633,10 +1633,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 2 (adapted)
-- Passing test files: 2 (validated 2026-02-13)
+- Ported test files: 3 (adapted)
+- Passing test files: 3 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for trigger/menu/hidden-select prop wiring, plus hidden-select single and multiple change handling.
+  - Added adapted coverage for trigger/menu/hidden-select prop wiring, hidden-select single and multiple change handling, select arrow-key key selection behavior, and hidden-input fallback behavior for large collections/native validation.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1654,7 +1654,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining hidden select parity behaviors (native validation/focus integration and large-collection hidden input fallback semantics).
+1. Port remaining hidden select parity behaviors around browser form validation integration (`@react-aria/form` path).
 2. Deepen `useSelect` behavior parity (focus/blur lifecycle edge cases and expanded keyboard/typeahead interactions).
 
 ## 32) Session Log
@@ -2080,3 +2080,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted select tests for trigger/menu/hidden-select prop wiring and hidden select single/multiple change handling.
 - Added VitePress docs page for `@vue-aria/select` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (109 files, 320 tests).
+- Expanded `@vue-aria/select` parity with:
+  - hidden-input fallback behavior for large collections
+  - native validation hidden text-input path in `HiddenSelect`
+  - arrow-key selection behavior coverage in `useSelect`
+- Added adapted `HiddenSelect` component tests and additional select behavior tests.
+- Validation: `npm run check` passed, `npm test` passed (110 files, 323 tests).
