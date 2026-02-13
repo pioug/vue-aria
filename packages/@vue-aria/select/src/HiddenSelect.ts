@@ -1,6 +1,7 @@
 import { computed, defineComponent, h, ref, toRaw, type PropType } from "vue";
 import { useVisuallyHidden } from "@vue-aria/visually-hidden";
 import { useFormReset } from "@vue-aria/utils";
+import { useFormValidation } from "@vue-aria/form";
 import { selectData, type SelectState } from "./useSelect";
 
 export interface AriaHiddenSelectProps {
@@ -51,6 +52,14 @@ export function useHiddenSelect(
     props.selectRef as any,
     state.defaultValue,
     (value) => state.setValue?.(value as string | string[])
+  );
+  useFormValidation(
+    {
+      validationBehavior,
+      focus: () => (triggerRef.current as HTMLElement | null)?.focus(),
+    },
+    state as any,
+    props.selectRef as any
   );
 
   const onChange = (event: Event) => {

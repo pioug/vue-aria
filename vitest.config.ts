@@ -86,6 +86,9 @@ export default defineConfig({
       "@vue-aria/searchfield": fileURLToPath(
         new URL("./packages/@vue-aria/searchfield/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/form": fileURLToPath(
+        new URL("./packages/@vue-aria/form/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/progress": fileURLToPath(
         new URL("./packages/@vue-aria/progress/src/index.ts", import.meta.url)
       ),

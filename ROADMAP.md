@@ -44,6 +44,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/switch`: In progress
 - `@vue-aria/textfield`: In progress
 - `@vue-aria/searchfield`: In progress
+- `@vue-aria/form`: In progress
 - `@vue-aria/numberfield`: Not started
 - `@vue-aria/slider`: Not started
 - `@vue-aria/link`: In progress
@@ -1629,7 +1630,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Uses adapter-based select state typing and currently omits `@react-aria/form` validation hook integration.
+  - Uses adapter-based select state typing; `@vue-aria/form/useFormValidation` is now integrated for hidden-select validation wiring, with additional edge-case parity still pending.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -1657,7 +1658,56 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port remaining hidden select parity behaviors around browser form validation integration (`@react-aria/form` path).
 2. Deepen `useSelect` behavior parity (focus/blur lifecycle edge cases and expanded keyboard/typeahead interactions).
 
-## 32) Session Log
+## 32) Package Record: @vue-aria/form
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/form/src`
+- Local package path:
+  - `packages/@vue-aria/form`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useFormValidation`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Current hook covers native validity wiring and invalid/change/reset event integration; React-specific form-reset interception nuances still need parity hardening.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for native custom validity wiring and invalid-event commit behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/form.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate browser-native invalid-focus behavior across form contexts and grouped inputs
+
+### Visual Parity
+- Not applicable for hook package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Deepen native form reset parity behavior and React scheduling edge-case handling in `useFormValidation`.
+2. Expand integration tests through `@vue-aria/select` hidden select/native validation paths.
+
+## 33) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -2086,3 +2136,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - arrow-key selection behavior coverage in `useSelect`
 - Added adapted `HiddenSelect` component tests and additional select behavior tests.
 - Validation: `npm run check` passed, `npm test` passed (110 files, 323 tests).
+- Started `@vue-aria/form` package:
+  - `useFormValidation`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Integrated `@vue-aria/form/useFormValidation` into `@vue-aria/select/useHiddenSelect`.
+- Added adapted form tests for native custom-validity updates and invalid-event commit behavior.
+- Added VitePress docs page for `@vue-aria/form` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (111 files, 325 tests).
