@@ -23,6 +23,30 @@ function dispatchThumbKey(thumbProps: Record<string, unknown>, key: string) {
   onKeydown?.(event);
 }
 
+function dispatchThumbTouchStart(thumbProps: Record<string, unknown>, value: number) {
+  const event = new Event("touchstart", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [{ identifier: 1, pageX: value, pageY: value }],
+  });
+  (thumbProps.onTouchstart as (event: TouchEvent) => void)(event as TouchEvent);
+}
+
+function dispatchThumbTouchMove(value: number) {
+  const event = new Event("touchmove", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [{ identifier: 1, pageX: value, pageY: value }],
+  });
+  window.dispatchEvent(event);
+}
+
+function dispatchThumbTouchEnd(value: number) {
+  const event = new Event("touchend", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [{ identifier: 1, pageX: value, pageY: value }],
+  });
+  window.dispatchEvent(event);
+}
+
 function createSliderThumbState(values: number[] = [50]) {
   const dragging = new Set<number>();
   const state: SliderThumbState = {
@@ -434,6 +458,47 @@ describe("useSliderThumb", () => {
     expect(result.thumbProps.onMousedown).toBeUndefined();
     expect(result.thumbProps.onPointerdown).toBeUndefined();
     expect(state.setThumbEditable).toHaveBeenCalledWith(0, false);
+
+    scope.stop();
+  });
+
+  it("supports touch thumb dragging interactions", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 10,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 10,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderThumbState([50]);
+    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+    const scope = effectScope();
+    const result = scope.run(() => {
+      useSlider({ label: "Slider" }, state as any, { current: track });
+      return useSliderThumb(
+        {
+          index: 0,
+          trackRef: { current: track },
+          inputRef,
+        },
+        state
+      );
+    })!;
+
+    dispatchThumbTouchStart(result.thumbProps, 10);
+    expect(state.isThumbDragging(0)).toBe(true);
+
+    dispatchThumbTouchMove(40);
+    expect(state.values).toEqual([80]);
+
+    dispatchThumbTouchEnd(40);
+    expect(state.isThumbDragging(0)).toBe(false);
 
     scope.stop();
   });

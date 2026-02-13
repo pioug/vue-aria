@@ -2530,10 +2530,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useSlider` coverage for label/group/output prop wiring and track click/drag behavior.
   - Added adapted `useSlider` coverage for disabled-track no-op behavior.
   - Added adapted `useSlider` coverage for `aria-label` group labeling, vertical track interaction behavior, and stacked-thumb nearest-selection resolution.
+  - Added adapted `useSlider` touch-path coverage for track `touchstart`/`touchmove`/`touchend` interaction lifecycle.
   - Added adapted `useSliderThumb` coverage for range input prop wiring, change-event value parsing, and `PageUp` keyboard behavior.
   - Added adapted `useSliderThumb` coverage for `PageDown`, `Home`, and `End` keyboard behavior.
   - Added adapted `useSliderThumb` coverage for merged slider/thumb `aria-describedby` metadata.
   - Added adapted `useSliderThumb` disabled behavior coverage (`isDisabled`, disabled input props, and thumb editability registration).
+  - Added adapted `useSliderThumb` touch-path coverage for thumb `touchstart`/`touchmove`/`touchend` drag lifecycle.
   - Added adapted `useSliderThumb` coverage for upstream label wiring variants:
     - slider-level visible label
     - thumb-level visible label with slider `aria-label`
@@ -3999,3 +4001,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted `useSliderThumb` tests for `PageDown`, `Home`, and `End` keyboard handling.
   - added adapted `useSliderThumb` disabled-mode coverage for thumb editability registration and disabled input/interaction props.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 755 tests).
+- Expanded `@vue-aria/slider` touch interaction parity:
+  - added adapted track touch lifecycle coverage (`touchstart` -> `touchmove` -> `touchend`) for nearest-thumb selection and drag updates.
+  - added adapted thumb touch drag lifecycle coverage (`touchstart` -> `touchmove` -> `touchend`) with real thumb value updates and drag-state teardown.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 757 tests).

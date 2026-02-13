@@ -84,6 +84,30 @@ function dispatchTrackUp(kind: "pointer" | "mouse", value: number) {
   window.dispatchEvent(event);
 }
 
+function dispatchTrackTouchStart(trackProps: Record<string, unknown>, value: number) {
+  const event = new Event("touchstart", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [{ identifier: 1, clientX: value, clientY: value, pageX: value, pageY: value }],
+  });
+  (trackProps.onTouchstart as (event: TouchEvent) => void)(event as TouchEvent);
+}
+
+function dispatchTrackTouchMove(value: number) {
+  const event = new Event("touchmove", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [{ identifier: 1, pageX: value, pageY: value }],
+  });
+  window.dispatchEvent(event);
+}
+
+function dispatchTrackTouchEnd(value: number) {
+  const event = new Event("touchend", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "changedTouches", {
+    value: [{ identifier: 1, pageX: value, pageY: value }],
+  });
+  window.dispatchEvent(event);
+}
+
 describe("useSlider", () => {
   it("returns expected label and group props for visible label", () => {
     const track = document.createElement("div");
@@ -434,5 +458,37 @@ describe("useSlider", () => {
     } else {
       vi.stubGlobal("PointerEvent", originalPointerEvent);
     }
+  });
+
+  it("supports touch track dragging interactions", () => {
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([10, 80]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    dispatchTrackTouchStart(trackProps, 20);
+    expect(state.values).toEqual([20, 80]);
+
+    dispatchTrackTouchMove(30);
+    expect(state.values).toEqual([30, 80]);
+
+    dispatchTrackTouchEnd(30);
+    expect(state.setThumbDragging).toHaveBeenCalledWith(0, false);
+
+    scope.stop();
   });
 });
