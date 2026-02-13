@@ -6,6 +6,8 @@
 
 - `useButton`
 - `useToggleButton`
+- `useToggleButtonGroup`
+- `useToggleButtonGroupItem`
 
 ## Upstream-aligned examples
 
@@ -46,7 +48,34 @@ const state = {
 const { buttonProps } = useToggleButton({ elementType: "button" }, state);
 ```
 
+### useToggleButtonGroup + useToggleButtonGroupItem
+
+```ts
+import { useToggleButtonGroup, useToggleButtonGroupItem } from "@vue-aria/button";
+import { useToggleGroupState } from "@vue-aria/toggle-state";
+
+const state = useToggleGroupState({
+  selectionMode: "single",
+  defaultSelectedKeys: ["bold"]
+});
+
+const groupRef = { current: null as HTMLElement | null };
+const itemRef = { current: null as HTMLButtonElement | null };
+
+const { groupProps } = useToggleButtonGroup(
+  { selectionMode: "single", "aria-label": "Text style" },
+  state,
+  groupRef
+);
+
+const { buttonProps } = useToggleButtonGroupItem(
+  { id: "bold", elementType: "button" },
+  state,
+  itemRef
+);
+```
+
 ## Notes
 
 - `Spectrum S2` is ignored for this port.
-- Remaining work focuses on `useToggleButtonGroup` and downstream integration across Spectrum button components.
+- Remaining work focuses on downstream integration across Spectrum button components.

@@ -823,28 +823,35 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules for initial slice enumerated
-- [ ] Public API checklist complete (full package not yet ported)
+- [x] Public API checklist complete (all current upstream module exports mapped)
 
 ### Implementation
-- [x] Ported initial upstream APIs:
+- [x] Ported upstream APIs:
   - `useButton`
   - `useToggleButton`
+  - `useToggleButtonGroup`
+  - `useToggleButtonGroupItem`
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
   - `src/useButton.ts`
   - `src/useToggleButton.ts`
+  - `src/useToggleButtonGroup.ts`
   - `tsconfig.json` path alias
 - Remaining:
-  - Port `useToggleButtonGroup`.
   - Reconcile any behavior deltas once downstream button components are integrated.
 
 ### Tests
 - Total upstream test files: 1
-- Ported test files: 1
-- Passing test files: 1
+- Ported test files: 2
+- Passing test files: 2
 - Test parity notes:
   - Added adapted `useButton` tests for defaults, non-button element behavior, disabled behavior, rel passthrough, input handling, and aria-disabled passthrough.
+  - Added adapted tests for `useToggleButtonGroup` and `useToggleButtonGroupItem` parity:
+    - `radiogroup` role mapping for single selection mode
+    - arrow-key and tab focus management semantics for toolbar mode
+    - single-selection radio semantics (`role="radio"`, `aria-checked`, no `aria-pressed`)
+    - disabled inheritance from group state
 - [x] All currently present upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -863,8 +870,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `useToggleButtonGroup`.
-2. Wire and validate consumers (`@vue-spectrum/button` and related controls).
+1. Wire and validate consumers (`@vue-spectrum/button` and related controls).
+2. Reconcile any integration deltas in press/focus semantics once consumers land.
 3. Expand docs with full Vue component examples once consumers exist.
 
 ## 13) Package Record: @vue-aria/link
@@ -3073,3 +3080,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Updated `@vue-aria/focus` tracker parity milestone:
   - completed adaptation coverage for upstream `FocusScope.test.js` + `FocusScopeOwnerDocument.test.js` assertions
   - moved focus package next actions toward downstream integration validation and docs/example parity
+- Expanded `@vue-aria/button` API parity with adapted upstream coverage for:
+  - `useToggleButtonGroup` group semantics (`toolbar`/`radiogroup` role mapping and keyboard focus traversal)
+  - `useToggleButtonGroupItem` selection semantics and disabled inheritance
+- Validation: `npm run check` passed, `npm test` passed (126 files, 540 tests).
