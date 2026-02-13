@@ -5,7 +5,8 @@
   "description": "Vue port of React Aria and React Spectrum",
   "type": "module",
   "workspaces": [
-    "packages/*/*"
+    "packages/*/*",
+    "upstream/react-spectrum/packages/@adobe/spectrum-css-temp"
   ],
   "upstreamBaselineSha": "1a2b8f860ef2cee6aa579aa6b5e7032ca3be1cb1",
   "scripts": {

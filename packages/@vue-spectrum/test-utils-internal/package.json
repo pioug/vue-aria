@@ -1,0 +1,7 @@
+{
+  "name": "@vue-spectrum/test-utils-internal",
+  "version": "3.0.0-alpha.1",
+  "description": "Internal test utilities placeholder for workspace resolution",
+  "private": true,
+  "main": "index.js"
+}
