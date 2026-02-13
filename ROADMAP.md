@@ -3005,3 +3005,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` nested shadow-root parity with adapted upstream coverage for:
   - maintaining contained focus traversal inside a nested shadow-root mounted scope
 - Validation: `npm run check` passed, `npm test` passed (125 files, 520 tests).
+- Expanded `@vue-aria/focus/FocusScope` shadow restore-focus parity with adapted upstream coverage for:
+  - preserving focus on an external element when a shadow-root restore-focus scope unmounts while an outer restore-focus scope is present
+- Validation: `npm run check` passed, `npm test` passed (125 files, 521 tests).

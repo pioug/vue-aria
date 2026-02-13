@@ -1381,6 +1381,71 @@ describe("FocusScope behavior", () => {
     }
   });
 
+  it("restores focus outside shadow DOM on unmount when an outer restore scope exists", () => {
+    enableShadowDOM();
+
+    const outerWrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { restoreFocus: true },
+            {
+              default: () => [h("input", { id: "outside" })],
+            }
+          ),
+          h("div", { id: "shadow-host" }),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const shadowHost = outerWrapper.get("#shadow-host").element as HTMLDivElement;
+    const shadowRoot = shadowHost.attachShadow({ mode: "open" });
+
+    const innerWrapper = mount(defineComponent({
+      render() {
+        return h(
+          Teleport,
+          { to: shadowRoot },
+          h(
+            FocusScope,
+            { restoreFocus: true },
+            {
+              default: () => [
+                h("input", { id: "input1" }),
+                h("input", { id: "input2" }),
+                h("input", { id: "input3" }),
+              ],
+            }
+          )
+        );
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    try {
+      const input1 = shadowRoot.querySelector("#input1") as HTMLInputElement;
+      input1.focus();
+      expect(shadowRoot.activeElement).toBe(input1);
+
+      const outside = outerWrapper.get("#outside").element as HTMLInputElement;
+      outside.focus();
+      expect(document.activeElement).toBe(outside);
+
+      innerWrapper.unmount();
+      expect(document.activeElement).toBe(outside);
+    } finally {
+      if (innerWrapper.exists()) {
+        innerWrapper.unmount();
+      }
+      outerWrapper.unmount();
+      disableShadowDOM();
+    }
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {
