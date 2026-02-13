@@ -1799,6 +1799,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
+  - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2468,3 +2469,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `@vue-aria/radio-state/useRadioGroupState`
 - Updated checkbox validation result typing alignment (`validationDetails: null` parity with shared validation result contract).
 - Validation: `npm run check` passed, `npm test` passed (117 files, 370 tests).
+- Expanded `@vue-aria/numberfield` interaction parity coverage with adapted tests for:
+  - touch press-start focus target behavior
+  - already-focused-input no-op focus transfer behavior
+  - Enter key commit/validation behavior with IME composing guard
+- Validation: `npm run check` passed, `npm test` passed (117 files, 374 tests).

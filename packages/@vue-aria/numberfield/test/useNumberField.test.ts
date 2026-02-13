@@ -160,6 +160,57 @@ describe("useNumberField hook", () => {
     target.remove();
   });
 
+  it("focuses touch target instead of input on touch press start", () => {
+    const state = createState();
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const target = document.createElement("button");
+    document.body.appendChild(input);
+    document.body.appendChild(target);
+
+    const scope = effectScope();
+    const result = scope.run(() => useNumberField({ "aria-label": "count" }, state as any, ref))!;
+
+    const inputFocusSpy = vi.spyOn(input, "focus");
+    const targetFocusSpy = vi.spyOn(target, "focus");
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target,
+    });
+
+    expect(inputFocusSpy).not.toHaveBeenCalled();
+    expect(targetFocusSpy).toHaveBeenCalled();
+    scope.stop();
+    input.remove();
+    target.remove();
+  });
+
+  it("does not move focus on press start when input is already focused", () => {
+    const state = createState();
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const target = document.createElement("button");
+    document.body.appendChild(input);
+    document.body.appendChild(target);
+    input.focus();
+
+    const scope = effectScope();
+    const result = scope.run(() => useNumberField({ "aria-label": "count" }, state as any, ref))!;
+
+    const inputFocusSpy = vi.spyOn(input, "focus");
+    const targetFocusSpy = vi.spyOn(target, "focus");
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "mouse",
+      target,
+    });
+
+    expect(inputFocusSpy).not.toHaveBeenCalled();
+    expect(targetFocusSpy).not.toHaveBeenCalled();
+    scope.stop();
+    input.remove();
+    target.remove();
+  });
+
   it("increments and decrements on wheel while focused within group", async () => {
     const state = createState();
     const input = document.createElement("input");
@@ -231,6 +282,44 @@ describe("useNumberField hook", () => {
 
     scope.stop();
     form.remove();
+  });
+
+  it("commits and validates on Enter keydown when not composing", () => {
+    const state = createState();
+    const ref = { current: document.createElement("input") as HTMLInputElement | null };
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField({ "aria-label": "Quantity" }, state as any, ref)
+    )!;
+
+    (result.inputProps.onKeyDown as (event: KeyboardEvent & { nativeEvent?: any }) => void)({
+      key: "Enter",
+      preventDefault: vi.fn(),
+      nativeEvent: { isComposing: false },
+    } as unknown as KeyboardEvent & { nativeEvent?: any });
+
+    expect(state.commit).toHaveBeenCalledTimes(1);
+    expect(state.commitValidation).toHaveBeenCalledTimes(1);
+    scope.stop();
+  });
+
+  it("does not commit on Enter keydown while composing", () => {
+    const state = createState();
+    const ref = { current: document.createElement("input") as HTMLInputElement | null };
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField({ "aria-label": "Quantity" }, state as any, ref)
+    )!;
+
+    (result.inputProps.onKeyDown as (event: KeyboardEvent & { nativeEvent?: any }) => void)({
+      key: "Enter",
+      preventDefault: vi.fn(),
+      nativeEvent: { isComposing: true },
+    } as unknown as KeyboardEvent & { nativeEvent?: any });
+
+    expect(state.commit).not.toHaveBeenCalled();
+    expect(state.commitValidation).not.toHaveBeenCalled();
+    scope.stop();
   });
 
   it("announces normalized value on blur when commit changes the input value", () => {
