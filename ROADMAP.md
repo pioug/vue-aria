@@ -2436,6 +2436,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted upstream `useToast` coverage for default props, close-button invocation, data-attribute passthrough, and timer reset/pause lifecycle behavior.
   - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props and hover/focus pause/resume timer transitions.
   - Added adapted interaction coverage for focused-toast replacement focus transfer and restoring focus to the pre-region element when the toast list becomes empty.
+  - Added adapted pointer-modality regression coverage for restoring focus when toast count drops to zero.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2454,7 +2455,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port additional upstream `useToast` story-driven interaction coverage (`single toast at a time`) for keyboard tab/order and close-button lifecycle flows.
-2. Add explicit pointer-modality focus-restoration regression coverage for toast removal paths.
+2. Port upstream close/dismiss interaction ordering assertions from story-based `single toast at a time` coverage.
 
 ## 41) Session Log
 ### 2026-02-13
@@ -3712,3 +3713,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` controller lifecycle parity:
   - added adapted `LandmarkController` coverage to verify global F6 keyboard listener activation while a controller exists and teardown after `dispose()`.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 683 tests).
+- Expanded `@vue-aria/toast` pointer-modality restoration parity:
+  - added adapted `useToastRegion` coverage for restoring focus in pointer modality when the final toast is removed.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 684 tests).

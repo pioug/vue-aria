@@ -1,5 +1,6 @@
 import { effectScope, nextTick, reactive } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { setInteractionModality } from "@vue-aria/interactions";
 import { useToastRegion } from "../src";
 
 describe("useToastRegion", () => {
@@ -164,6 +165,43 @@ describe("useToastRegion", () => {
 
     launcher.remove();
     cleanup();
+  });
+
+  it("restores focus in pointer modality when no toasts remain", async () => {
+    setInteractionModality("pointer");
+    const state = reactive({
+      visibleToasts: [] as Array<{ key: string }>,
+      pauseAll: vi.fn(),
+      resumeAll: vi.fn(),
+    });
+    const { regionProps, regionElement, cleanup } = run({ "aria-label": "Notifications" }, state);
+
+    const launcher = document.createElement("button");
+    document.body.append(launcher);
+    launcher.focus();
+
+    const toast = document.createElement("div");
+    toast.setAttribute("role", "alertdialog");
+    toast.tabIndex = 0;
+    regionElement.append(toast);
+    state.visibleToasts = [{ key: "toast-1" }];
+    await nextTick();
+
+    const focusEvent = new FocusEvent("focus", { relatedTarget: launcher });
+    Object.defineProperty(focusEvent, "currentTarget", { value: regionElement });
+    Object.defineProperty(focusEvent, "target", { value: toast });
+    (regionProps.onFocus as (event: FocusEvent) => void)?.(focusEvent);
+    toast.focus();
+    expect(document.activeElement).toBe(toast);
+
+    toast.remove();
+    state.visibleToasts = [];
+    await nextTick();
+    expect(document.activeElement).toBe(launcher);
+
+    launcher.remove();
+    cleanup();
+    setInteractionModality("keyboard");
   });
 
 });
