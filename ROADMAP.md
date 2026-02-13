@@ -3038,3 +3038,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` restore-tab guard parity with adapted upstream coverage for:
   - ensuring tab boundary navigation is not intercepted when `restoreFocus` is disabled
 - Validation: `npm run check` passed, `npm test` passed (125 files, 529 tests).
+- Expanded `@vue-aria/focus/FocusScope` trigger-anchored restore-tab parity with adapted upstream coverage for:
+  - moving focus to the element after a trigger when tabbing forward out of a restore-focus scope
+  - moving focus to the element before a trigger when shift-tabbing out of a restore-focus scope
+- Validation: `npm run check` passed, `npm test` passed (125 files, 531 tests).
