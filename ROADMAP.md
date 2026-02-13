@@ -1804,7 +1804,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - `useSafelyMouseToSubmenu` is now implemented with core movement/pointer-event logic, but still needs edge-case hardening to fully match upstream behavior.
+  - `useSafelyMouseToSubmenu` now tracks interaction-modality transitions and includes jsdom-compatible pointerover fallback dispatch; remaining parity is focused on deeper submenu trigger integration cases.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -1812,6 +1812,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, keyboard-triggered item activation close semantics (Enter/Space behavior by selection mode), menu trigger keyboard/menu-prop wiring semantics, menu trigger touch-press open behavior with disabled short-circuit, submenu trigger open/close interactions, submenu ArrowLeft close/focus behavior (LTR) and hover-delay cancellation behavior, safe-mouse hook lifecycle/reset behavior, safe-mouse touch/pen pointer-move ignore behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, non-touch onPressStart open behavior with disabled short-circuit, and virtualized menu item `aria-posinset`/`aria-setsize` metadata across full item sets.
+  - Added safe-mouse timeout fallback coverage for stalled movement paths:
+    - pointer-events reset on interaction-modality changes (`pointer` -> `keyboard`)
+    - delayed pointerover redispatch when safe-triangle movement stalls
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1821,7 +1824,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [ ] Validate full keyboard/press/hover parity details for `useMenuItem` against upstream edge cases
-- [ ] Validate full safe-pointer movement and submenu hover retention behavior once `useSafelyMouseToSubmenu` parity is complete
+- [ ] Validate full safe-pointer movement and submenu hover retention behavior in downstream submenu integrations
 
 ### Visual Parity
 - Not applicable for hook package beyond downstream consumer validation.
@@ -1830,8 +1833,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Harden `useSafelyMouseToSubmenu` edge-case parity (hit-testing behavior, movement heuristics calibration, and submenu auto-close fallbacks).
-2. Deepen `useMenuItem` / `useMenuTrigger` / `useSubmenuTrigger` parity tests for keyboard-triggered click paths, long-press behavior, and virtualized aria metadata.
+1. Deepen `useMenuItem` / `useMenuTrigger` / `useSubmenuTrigger` parity tests for keyboard-triggered click paths and long-press behavior in integration harnesses.
+2. Validate safe-pointer retention and submenu auto-close behavior against downstream Spectrum submenu implementations/stories.
 
 ## 31) Package Record: @vue-aria/select
 - Upstream source path(s):
@@ -3230,3 +3233,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/selection/useSelectableCollection` keyboard delegate coverage:
   - added adapted tests asserting Home/End delegate calls receive focused-key and ctrl context
 - Validation: `npm run check` passed, `npm test` passed (126 files, 586 tests).
+- Hardened `@vue-aria/menu/useSafelyMouseToSubmenu` edge-case parity:
+  - added modality-change tracking so safe-triangle pointer-event suppression resets correctly when interaction modality changes
+  - added submenu timeout auto-close fallback redispatch using pointerover with jsdom-safe event fallback when `PointerEvent` is unavailable
+- Expanded `@vue-aria/menu/useSafelyMouseToSubmenu` coverage:
+  - added adapted tests for pointer-event suppression reset on modality transitions
+  - added adapted timeout fallback tests asserting delayed pointerover redispatch when pointer movement toward submenu stalls
+- Validation: `npm run check` passed, `npm test` passed (126 files, 588 tests).
