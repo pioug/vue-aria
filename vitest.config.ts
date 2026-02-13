@@ -79,6 +79,12 @@ export default defineConfig({
       ),
       "@vue-aria/textfield": fileURLToPath(
         new URL("./packages/@vue-aria/textfield/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/searchfield-state": fileURLToPath(
+        new URL("./packages/@vue-aria/searchfield-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/searchfield": fileURLToPath(
+        new URL("./packages/@vue-aria/searchfield/src/index.ts", import.meta.url)
       )
     }
   }

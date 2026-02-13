@@ -31,7 +31,9 @@
       "@vue-aria/radio-state": ["packages/@vue-aria/radio-state/src/index.ts"],
       "@vue-aria/radio": ["packages/@vue-aria/radio/src/index.ts"],
       "@vue-aria/switch": ["packages/@vue-aria/switch/src/index.ts"],
-      "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"]
+      "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],
+      "@vue-aria/searchfield-state": ["packages/@vue-aria/searchfield-state/src/index.ts"],
+      "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

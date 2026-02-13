@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/textfield`
+- Current focus package: `@vue-aria/searchfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -43,7 +43,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/radio`: In progress
 - `@vue-aria/switch`: In progress
 - `@vue-aria/textfield`: In progress
-- `@vue-aria/searchfield`: Not started
+- `@vue-aria/searchfield`: In progress
 - `@vue-aria/numberfield`: Not started
 - `@vue-aria/slider`: Not started
 - `@vue-aria/link`: In progress
@@ -70,6 +70,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/toggle-state`: In progress
 - `@vue-aria/checkbox-state`: In progress
 - `@vue-aria/radio-state`: In progress
+- `@vue-aria/searchfield-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
@@ -968,7 +969,59 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum textfield/searchfield components.
 2. Deepen form validation semantics as form package ports land.
 
-## 19) Session Log
+## 19) Package Record: @vue-aria/searchfield (+ @vue-aria/searchfield-state)
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/searchfield/src`
+  - `references/react-spectrum/packages/@react-aria/searchfield/test/useSearchField.test.js`
+  - `references/react-spectrum/packages/@react-stately/searchfield/src`
+- Local package path:
+  - `packages/@vue-aria/searchfield`
+  - `packages/@vue-aria/searchfield-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useSearchField`
+  - `useSearchFieldState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path aliases
+
+### Tests
+- Total upstream test files: 1 (`useSearchField.test.js`)
+- Ported test files: 2 (aria + stately)
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted tests for search input props, enter submit behavior, escape clear behavior, and clear-button semantics.
+  - Added searchfield-state tests for controlled/uncontrolled value semantics and numeric coercion.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/searchfield.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate searchfield behavior parity within downstream Spectrum search components
+
+### Visual Parity
+- Not applicable for hook/state package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port downstream Spectrum searchfield components.
+2. Expand locale dictionary coverage for clear-label parity.
+
+## 20) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1219,3 +1272,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted upstream `useTextField` test coverage for prop mapping, change behavior, and textarea-specific attribute omission semantics.
 - Added VitePress docs page for `@vue-aria/textfield` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (69 files, 214 tests).
+- Started `@vue-aria/searchfield` and `@vue-aria/searchfield-state` packages:
+  - `useSearchField`
+  - `useSearchFieldState`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted searchfield tests for submit/clear keyboard behavior, clear-button semantics, and searchfield-state value management.
+- Added VitePress docs page for `@vue-aria/searchfield` and wired docs navigation entries.
+- Hardened `createEventHandler` to preserve native event fields (e.g. keyboard `key`) while retaining `continuePropagation` semantics for interaction parity.
+- Validation: `npm run check` passed, `npm test` passed (71 files, 221 tests).

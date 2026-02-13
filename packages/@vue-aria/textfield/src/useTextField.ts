@@ -47,6 +47,9 @@ export interface AriaTextFieldOptions {
   onSelect?: (event: Event) => void;
   onBeforeInput?: (event: InputEvent) => void;
   onInput?: (event: InputEvent) => void;
+  onKeydown?: (event: KeyboardEvent) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
+  onKeyup?: (event: KeyboardEvent) => void;
   [key: string]: unknown;
 }
 
@@ -148,6 +151,9 @@ export function useTextField(
         onSelect: props.onSelect,
         onBeforeInput: props.onBeforeInput,
         onInput: props.onInput,
+        onKeydown: props.onKeydown ?? props.onKeyDown,
+        onKeyDown: props.onKeydown ?? props.onKeyDown,
+        onKeyup: props.onKeyup,
         ...focusableProps,
         ...fieldProps,
       }
