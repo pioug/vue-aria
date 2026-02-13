@@ -96,4 +96,16 @@ describe("SSRProvider", () => {
     const html = await renderToString(ssrApp);
     expect(html).toContain("ssr");
   });
+
+  it("returns client state without provider in browser environments", () => {
+    const Probe = defineComponent({
+      setup() {
+        const isSSR = useIsSSR();
+        return () => h("div", { "data-testid": "state" }, isSSR ? "ssr" : "client");
+      },
+    });
+
+    const wrapper = mount(Probe);
+    expect(wrapper.get('[data-testid="state"]').text()).toBe("client");
+  });
 });
