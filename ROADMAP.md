@@ -2429,8 +2429,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 2
 - Passing test files: 2
 - Test parity notes:
-  - Added adapted upstream `useToast` coverage for default props, close-button invocation, and data-attribute passthrough.
-  - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props.
+  - Added adapted upstream `useToast` coverage for default props, close-button invocation, data-attribute passthrough, and timer reset/pause lifecycle behavior.
+  - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props and hover/focus pause/resume timer transitions.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3687,8 +3687,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (136 files, 663 tests).
 - Started `@vue-aria/toast` package parity slice:
   - ported `useToast` and `useToastRegion` hooks with localized messages and landmark/interactions integration.
-  - added adapted upstream `useToast` tests for defaults, close-button behavior, and data attribute passthrough.
-  - added adapted baseline `useToastRegion` test for region role/label/top-layer props.
+  - added adapted upstream `useToast` tests for defaults, close-button behavior, data attribute passthrough, and timer reset/pause lifecycle.
+  - added adapted `useToastRegion` tests for region role/label/top-layer props and hover/focus timer pause/resume transitions.
   - added VitePress docs page (`docs/packages/toast.md`) and wired docs index/nav/sidebar links.
   - added package-level roadmap record and execution queue tracking entry.
-- Validation: `npm run check` passed, `npm test` passed (138 files, 667 tests).
+- Validation: `npm run check` passed, `npm test` passed (138 files, 670 tests).
