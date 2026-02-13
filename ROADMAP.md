@@ -404,6 +404,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `FocusScope` utility APIs:
     - `getFocusableTreeWalker`
     - `createFocusManager`
+  - `useFocusRing`
+  - `FocusRing`
+  - focus package compatibility exports:
+    - `isFocusable` re-export
+    - `FocusableProvider`, `Focusable`, `useFocusable`, `focusSafely` passthrough re-exports
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -411,16 +416,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Remaining:
   - Port `FocusScope` component behavior and focus containment logic.
-  - Port `FocusRing`, `useFocusRing`, `useHasTabbableChild`.
+  - Port `FocusScope` component API exports (`FocusScope`, `useFocusManager`, `isElementInChildOfActiveScope`).
+  - Port `useHasTabbableChild`.
   - Align tree walker behavior with full upstream radio/scope handling.
   - Migrate full upstream focus tests.
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 1
-- Passing test files: 1
+- Ported test files: 2
+- Passing test files: 2
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
+  - Added adapted tests for `useFocusRing` focus/focus-visible state transitions and `within` handler path.
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -620,3 +627,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted tests for `useFocusable` and `Pressable` baseline parity paths.
 - Validation: `npm run check` passed, `npm test` passed (52 files, 148 tests).
 - Added VitePress docs page for `@vue-aria/interactions` and wired docs nav/sidebar entry.
+- Ported `@vue-aria/focus` `useFocusRing` and `FocusRing` with Vue-adapted behavior and merged focus props.
+- Added focus package compatibility exports to match upstream index expectations.
+- Validation: `npm run check` passed, `npm test` passed (53 files, 150 tests).
