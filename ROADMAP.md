@@ -1798,6 +1798,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added integration coverage validating `@vue-aria/numberfield-state` interoperability with stepper press handlers.
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
+  - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2454,3 +2455,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` parity with adapted iOS branch coverage:
   - `aria-roledescription` is omitted when `isIOS()` is true.
 - Validation: `npm run check` passed, `npm test` passed (117 files, 367 tests).
+- Expanded `@vue-aria/numberfield` parity with adapted blur announce behavior coverage:
+  - announces normalized value after blur commit when text changes
+  - does not announce when blur commit leaves text unchanged
+- Validation: `npm run check` passed, `npm test` passed (117 files, 369 tests).

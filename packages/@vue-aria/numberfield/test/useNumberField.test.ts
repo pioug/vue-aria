@@ -1,6 +1,7 @@
 import { effectScope, nextTick } from "vue";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { useNumberField } from "../src";
+import * as liveAnnouncer from "@vue-aria/live-announcer";
 
 function createState() {
   return {
@@ -28,6 +29,10 @@ function createState() {
 }
 
 describe("useNumberField hook", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("returns default input props", () => {
     const state = createState();
     const ref = { current: document.createElement("input") as HTMLInputElement | null };
@@ -226,5 +231,48 @@ describe("useNumberField hook", () => {
 
     scope.stop();
     form.remove();
+  });
+
+  it("announces normalized value on blur when commit changes the input value", () => {
+    const state = createState();
+    const input = document.createElement("input");
+    input.value = "1";
+    state.commit.mockImplementation(() => {
+      input.value = "2";
+    });
+    const announceSpy = vi.spyOn(liveAnnouncer, "announce").mockImplementation(() => {});
+
+    const ref = { current: input as HTMLInputElement | null };
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField({ "aria-label": "Quantity" }, state as any, ref)
+    )!;
+
+    (result.inputProps.onBlur as (event: FocusEvent) => void)?.(new FocusEvent("blur"));
+
+    expect(state.commit).toHaveBeenCalled();
+    expect(announceSpy).toHaveBeenCalledWith("2", "assertive");
+    scope.stop();
+  });
+
+  it("does not announce on blur when commit does not change the input value", () => {
+    const state = createState();
+    const input = document.createElement("input");
+    input.value = "4";
+    state.commit.mockImplementation(() => {
+      input.value = "4";
+    });
+    const announceSpy = vi.spyOn(liveAnnouncer, "announce").mockImplementation(() => {});
+    const ref = { current: input as HTMLInputElement | null };
+
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField({ "aria-label": "Quantity" }, state as any, ref)
+    )!;
+
+    (result.inputProps.onBlur as (event: FocusEvent) => void)?.(new FocusEvent("blur"));
+
+    expect(announceSpy).not.toHaveBeenCalled();
+    scope.stop();
   });
 });
