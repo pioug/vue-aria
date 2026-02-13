@@ -11,10 +11,9 @@
  */
 
 import {chain, getActiveElement, getEventTarget, getScrollParent, isFocusWithin, mergeProps, nodeContains, scrollIntoViewport, useSlotId, useSyntheticLinkProps} from '@vue-aria/utils';
-import {DOMAttributes, FocusableElement, Key, RefObject, Node as RSNode} from '@vue-types/shared';
+import {DOMAttributes, FocusableElement, Key, KeyboardEvent as AriaKeyboardEvent, RefObject, Node as RSNode} from '@vue-types/shared';
 import {focusSafely, getFocusableTreeWalker} from '@vue-aria/focus';
 import {getRowId, listMap} from './utils';
-import {HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, useRef} from 'react';
 import {isFocusVisible} from '@vue-aria/interactions';
 import type {ListState} from '@vue-stately/list';
 import {SelectableItemStates, useSelectableItem} from '@vue-aria/selection';
@@ -72,7 +71,7 @@ export function useGridListItem<T>(props: AriaGridListItemOptions, state: ListSt
 
   // We need to track the key of the item at the time it was last focused so that we force
   // focus to go to the item when the DOM node is reused for a different item in a virtualizer.
-  let keyWhenFocused = useRef<Key | null>(null);
+  let keyWhenFocused: {current: Key | null} = {current: null};
   let focus = () => {
     // Don't shift focus to the row if the active element is a element within the row already
     // (e.g. clicking on a row button)
@@ -85,7 +84,7 @@ export function useGridListItem<T>(props: AriaGridListItemOptions, state: ListSt
     }
   };
 
-  let treeGridRowProps: HTMLAttributes<HTMLElement> = {};
+  let treeGridRowProps: DOMAttributes<HTMLElement> = {};
   let hasChildRows = props.hasChildItems;
   let hasLink = state.selectionManager.isLink(node.key);
   if (node != null && 'expandedKeys' in state) {
@@ -130,7 +129,7 @@ export function useGridListItem<T>(props: AriaGridListItemOptions, state: ListSt
     linkBehavior
   });
 
-  let onKeyDownCapture = (e: ReactKeyboardEvent) => {
+  let onKeyDownCapture = (e: AriaKeyboardEvent) => {
     let activeElement = getActiveElement();
     if (!nodeContains(e.currentTarget, getEventTarget(e) as Element) || !ref.current || !activeElement) {
       return;
