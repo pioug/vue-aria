@@ -31,4 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: port-status
-          path: docs/port-status.md
+          path: |
+            status.md
+            docs/port-status.md
+            docs/package-status.json
