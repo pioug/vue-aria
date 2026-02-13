@@ -475,6 +475,44 @@ describe("useSelect", () => {
     ref.current?.remove();
   });
 
+  it("does not trigger typeahead selection when first typed character is space", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => "b",
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onKeyDown = result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
+    onKeyDown?.({
+      key: " ",
+      currentTarget: ref.current,
+      target: ref.current,
+      ctrlKey: false,
+      metaKey: false,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+    } as unknown as KeyboardEvent);
+    expect(state.setSelectedKey).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
   it("focuses trigger and sets keyboard modality when label is clicked", () => {
     const state = createState();
     const ref = { current: document.createElement("button") as HTMLElement | null };
