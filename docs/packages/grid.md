@@ -15,7 +15,7 @@
 
 ## In progress
 
-- Remaining `useGrid.test.js` interaction parity branches
+- Downstream docs/story parity examples for full consumer composition
 
 ## Upstream-aligned example (implemented slice)
 

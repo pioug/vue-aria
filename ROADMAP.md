@@ -2426,20 +2426,21 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining parity work is focused on adapting upstream `useGrid.test.js` integration interaction branches.
+  - Remaining parity work is focused on docs/example/story parity validation for downstream consumers.
 
 ### Tests
 - Total upstream test files: 1 (`useGrid.test.js`) plus indirect behavior coverage through hook-level modules
-- Ported test files: 6 (adapted for current slice)
-- Passing test files: 6 (validated 2026-02-13)
+- Ported test files: 7 (adapted for current slice)
+- Passing test files: 7 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for `useGridRowGroup` role props.
   - Added adapted coverage for `useGridRow` aria row semantics, virtualized row index, row action chaining, and selection-mode/disabled behavior.
   - Added adapted coverage for `GridKeyboardDelegate` row/cell traversal, RTL direction behavior, disabled-row skipping, paging, and search.
   - Added adapted coverage for `useGrid` role/aria wiring, virtualized count props, shared action registration, and announcement hook integration.
   - Added adapted coverage for `useGridCell` focus handoff, keyboard child traversal/redispatch, virtualized colindex behavior, and pointer press-up tabIndex handling.
+  - Added adapted `useGrid` interaction matrix coverage for upstream focus-mode scenarios: `row/cell`, `row/child`, `cell/child`, `cell/cell`.
   - Added adapted coverage for `useGridSelectionCheckbox` row-selection toggling and disabled-item behavior.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/grid.md`)
@@ -2447,7 +2448,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Full grid focus-mode integration semantics pending adaptation of remaining upstream `useGrid.test.js` interaction matrix.
+- [x] Grid focus-mode integration semantics validated against adapted upstream interaction matrix.
 
 ### Visual Parity
 - Hook package parity in progress; downstream consumer validation pending full story parity pass.
@@ -2456,9 +2457,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Adapt remaining upstream `useGrid.test.js` interaction branches (focus-mode matrix and keyboard flows).
-2. Add a Vue grid story harness mirroring upstream row/cell/child focus compositions for interaction assertions.
-3. Expand docs examples to mirror upstream grid composition patterns including `useGridCell`.
+1. Add a Vue grid story harness mirroring upstream row/cell/child focus compositions for downstream visual/consumer validation.
+2. Expand docs examples to mirror upstream grid composition patterns including `useGridCell`.
+3. Re-run full-package parity gate and determine whether `@vue-aria/grid` can move from `In progress` to `Complete`.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4822,3 +4823,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - validated no regressions in adapted selection-item behavior coverage.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-aria/selection/test/useSelectableItem.test.ts` passed (7 files, 46 tests).
+- Expanded `@vue-aria/grid` interaction-matrix parity:
+  - added adapted `useGrid.interactions.test.ts` covering upstream `useGrid.test.js` focus-mode scenarios (`row/cell`, `row/child`, `cell/child`, `cell/cell`) with keyboard traversal assertions.
+  - wired a hook-level DOM harness that preserves upstream interaction intent while matching Vue composable wiring.
+  - updated package record `31f` test/accessibility checklists to reflect completed upstream interaction-branch adaptation.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-aria/selection/test/useSelectableItem.test.ts` passed (8 files, 50 tests).
