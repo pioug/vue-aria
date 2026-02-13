@@ -2,7 +2,7 @@ import { focusSafely } from "@vue-aria/interactions";
 import { moveVirtualFocus } from "@vue-aria/focus";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { isCtrlKeyPressed, useRouter } from "@vue-aria/utils";
-import { isNonContiguousSelectionModifier } from "./utils";
+import { getCollectionId, isNonContiguousSelectionModifier } from "./utils";
 
 export interface SelectableItemOptions {
   id?: string;
@@ -35,6 +35,7 @@ export interface SelectableItemAria extends SelectableItemStates {
 
 export function useSelectableItem(options: SelectableItemOptions): SelectableItemAria {
   const {
+    id,
     selectionManager: manager,
     key,
     ref,
@@ -138,6 +139,14 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   }
 
   const itemProps: Record<string, unknown> = {};
+  const collectionId = getCollectionId(manager.collection as object);
+  if (collectionId) {
+    itemProps["data-collection"] = collectionId;
+  }
+  itemProps["data-key"] = key;
+  if (id) {
+    itemProps.id = id;
+  }
 
   if (!shouldUseVirtualFocus && !isDisabled) {
     itemProps.tabIndex = key === manager.focusedKey ? 0 : -1;

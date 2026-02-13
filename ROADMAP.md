@@ -429,6 +429,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - virtual-focus press handling that updates selection-manager focus state and prevents native mousedown focus transfer
     - `shouldSelectOnPressUp` behavior for click-phase selection
     - `allowsDifferentPressOrigin` behavior selecting on mouseup when press-up selection is enabled
+    - collection metadata wiring (`data-key`, `data-collection`) and explicit `id` forwarding
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -3132,7 +3133,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - implemented default mouse-down selection path with click dedupe for replace-mode selectable rows
   - implemented `shouldSelectOnPressUp` click-phase selection semantics
   - implemented `allowsDifferentPressOrigin` mouse-up selection path when press-up selection is enabled
+- Expanded `@vue-aria/selection/useSelectableItem` metadata parity:
+  - wired `data-key` and collection-scoped `data-collection` attributes to item props
+  - wired explicit item `id` forwarding support
 - Expanded `@vue-aria/selection` docs parity:
   - documented press-timing option usage (`shouldSelectOnPressUp`, `allowsDifferentPressOrigin`)
   - documented virtual-focus interaction behavior for selectable items
-- Validation: `npm run check` passed, `npm test` passed (126 files, 558 tests).
+- Validation: `npm run check` passed, `npm test` passed (126 files, 559 tests).

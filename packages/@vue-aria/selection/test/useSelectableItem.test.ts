@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useSelectableItem } from "../src/useSelectableItem";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import { useCollectionId } from "../src/utils";
 
 const open = vi.fn();
 const { moveVirtualFocus } = vi.hoisted(() => ({
@@ -466,5 +467,29 @@ describe("useSelectableItem", () => {
     onMousedown(event);
 
     expect((event.preventDefault as any).mock.calls.length).toBe(1);
+  });
+
+  it("adds collection metadata attributes and forwards explicit ids", () => {
+    const manager = createManager();
+    const collectionId = useCollectionId(manager.collection as object);
+    const ref = { current: document.createElement("div") };
+
+    const first = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      id: "custom-item-id",
+    });
+    const second = useSelectableItem({
+      selectionManager: manager,
+      key: "b",
+      ref: { current: document.createElement("div") },
+    });
+
+    expect(first.itemProps["data-key"]).toBe("a");
+    expect(second.itemProps["data-key"]).toBe("b");
+    expect(first.itemProps["data-collection"]).toBe(collectionId);
+    expect(second.itemProps["data-collection"]).toBe(collectionId);
+    expect(first.itemProps.id).toBe("custom-item-id");
   });
 });
