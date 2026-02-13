@@ -2477,6 +2477,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `TableCollection`
   - `buildHeaderRows`
   - `useTableState`
+  - `useTableColumnResizeState`
   - `UNSTABLE_useFilteredTableState`
   - `TableColumnLayout`
   - `TableUtils` sizing helpers (`calculateColumnSizes`, static/fraction/width parsers)
@@ -2487,20 +2488,22 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/TableUtils.ts`
   - `src/TableCollection.ts`
   - `src/TableColumnLayout.ts`
+  - `src/useTableColumnResizeState.ts`
   - `src/useTableState.ts`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining modules (`useTableColumnResizeState`, `useTreeGridState`, and collection element builders) are pending.
+  - Remaining modules (`useTreeGridState` and collection element builders) are pending.
 
 ### Tests
 - Total upstream test files: 1 (`TableUtils.test.js`)
-- Ported test files: 3 (adapted)
-- Passing test files: 3 (validated 2026-02-13)
+- Ported test files: 4 (adapted)
+- Passing test files: 4 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted column-building and column-resize baseline assertions from upstream `TableUtils.test.js`.
   - Added adapted coverage for `TableCollection` row-header text extraction, injected selection/drag columns, and collection filtering behavior.
   - Added adapted coverage for `useTableState` sort direction toggling, keyboard-navigation-disable state, disabled row keys, and `UNSTABLE_useFilteredTableState`.
+  - Added adapted coverage for `useTableColumnResizeState` width/min/max map calculation, resize lifecycle callbacks, controlled-column behavior, and uncontrolled-width reset when columns change.
   - Additional upstream resize edge-case scenarios remain to be ported in follow-up slices.
 - [ ] All relevant upstream tests migrated
 
@@ -2519,10 +2522,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `useTableColumnResizeState`.
-2. Port `UNSTABLE_useTreeGridState`.
-3. Port collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`) with Vue-adapted equivalents.
-4. Complete remaining upstream `TableUtils.test.js` resize edge-case scenarios.
+1. Port `UNSTABLE_useTreeGridState`.
+2. Port collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`) with Vue-adapted equivalents.
+3. Complete remaining upstream `TableUtils.test.js` resize edge-case scenarios.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4911,3 +4913,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded package exports/docs to include the new state/collection APIs.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/table-state/test` passed (3 files, 14 tests).
+- Continued `@vue-aria/table-state` resize-state slice:
+  - ported `useTableColumnResizeState` with uncontrolled-width tracking, controlled/uncontrolled column split handling, and resize lifecycle callbacks.
+  - added adapted parity coverage for resize state map calculation and controlled/uncontrolled column behavior.
+  - updated package docs + roadmap status for the new resize-state API surface.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/table-state/test` passed (4 files, 18 tests).

@@ -9,6 +9,7 @@ export {
 export { TableColumnLayout } from "./TableColumnLayout";
 export { TableCollection, buildHeaderRows } from "./TableCollection";
 export { useTableState, UNSTABLE_useFilteredTableState } from "./useTableState";
+export { useTableColumnResizeState } from "./useTableColumnResizeState";
 
 export type {
   ColumnSize,
@@ -20,6 +21,10 @@ export type {
 } from "./types";
 export type { IColumn } from "./TableUtils";
 export type { TableColumnLayoutOptions } from "./TableColumnLayout";
+export type {
+  TableColumnResizeState,
+  TableColumnResizeStateProps,
+} from "./useTableColumnResizeState";
 export type {
   CollectionBuilderContext,
   TableState,

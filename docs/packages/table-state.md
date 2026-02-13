@@ -7,6 +7,7 @@
 - `TableCollection`
 - `buildHeaderRows`
 - `useTableState`
+- `useTableColumnResizeState`
 - `UNSTABLE_useFilteredTableState`
 - `TableColumnLayout`
 - Table sizing utilities from `TableUtils`:
@@ -20,12 +21,17 @@
 ## In progress
 
 - Table collection element builders (`TableHeader`, `TableBody`, `Column`, `Row`, `Cell`)
-- Resize/treegrid hooks (`useTableColumnResizeState`, `UNSTABLE_useTreeGridState`)
+- Treegrid hook (`UNSTABLE_useTreeGridState`)
 
 ## Upstream-aligned example (implemented slice)
 
 ```ts
-import { TableCollection, TableColumnLayout, useTableState } from "@vue-aria/table-state";
+import {
+  TableCollection,
+  TableColumnLayout,
+  useTableState,
+  useTableColumnResizeState,
+} from "@vue-aria/table-state";
 
 const layout = new TableColumnLayout({
   getDefaultWidth: () => "1fr",
@@ -37,10 +43,11 @@ const state = useTableState({
   collection,
   selectionMode: "single",
 });
+const resizeState = useTableColumnResizeState({ tableWidth: 960 }, state);
 
 const widths = layout.buildColumnWidths(
   960,
-  state.collection,
+  resizeState.tableState.collection,
   new Map()
 );
 ```
