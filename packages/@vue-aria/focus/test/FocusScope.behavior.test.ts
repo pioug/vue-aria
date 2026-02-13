@@ -1586,6 +1586,102 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("restores focus to first focusable in scope when focused items are removed", async () => {
+    const ScopeItem = defineComponent({
+      props: {
+        id: {
+          type: String,
+          required: true,
+        },
+        tabIndex: {
+          type: Number,
+          required: true,
+        },
+      },
+      emits: ["remove"],
+      setup(props, { emit }) {
+        const focusManager = useFocusManager();
+        const onClick = (event: MouseEvent) => {
+          focusManager?.focusNext();
+          const target = event.currentTarget as HTMLElement | null;
+          target?.blur();
+          emit("remove", props.id);
+        };
+        return () =>
+          h("button", {
+            id: props.id,
+            tabIndex: props.tabIndex,
+            onClick,
+          });
+      },
+    });
+
+    const Host = defineComponent({
+      setup() {
+        const items = ref([
+          { id: "tabbable1", tabIndex: 0 },
+          { id: "item1", tabIndex: 0 },
+          { id: "item2", tabIndex: -1 },
+        ]);
+        const removeItem = (id: string) => {
+          items.value = items.value.filter((item) => item.id !== id);
+        };
+        return { items, removeItem };
+      },
+      render() {
+        return h("div", [
+          h(
+            FocusScope,
+            { contain: true },
+            {
+              default: () => [
+                h(
+                  "div",
+                  { id: "focusable", role: "dialog", tabIndex: -1 },
+                  this.items.map((item) =>
+                    h(ScopeItem, {
+                      id: item.id,
+                      key: item.id,
+                      tabIndex: item.tabIndex,
+                      onRemove: this.removeItem,
+                    })
+                  )
+                ),
+              ],
+            }
+          ),
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, { attachTo: document.body });
+
+    const focusable = wrapper.get("#focusable").element as HTMLDivElement;
+    const tabbable1 = wrapper.get("#tabbable1").element as HTMLButtonElement;
+    tabbable1.focus();
+    expect(document.activeElement).toBe(tabbable1);
+
+    await wrapper.get("#tabbable1").trigger("click");
+    await nextTick();
+    expect(wrapper.find("#tabbable1").exists()).toBe(false);
+    expect(document.activeElement).toBe(wrapper.get("#item1").element);
+
+    await wrapper.get("#item1").trigger("click");
+    await nextTick();
+    expect(wrapper.find("#item1").exists()).toBe(false);
+    expect(document.activeElement).toBe(wrapper.get("#item2").element);
+
+    await wrapper.get("#item2").trigger("click");
+    await nextTick();
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 0);
+    });
+    expect(wrapper.find("#item2").exists()).toBe(false);
+    expect(document.activeElement).toBe(focusable);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

@@ -3019,3 +3019,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Improved restore-focus unmount behavior:
   - restore now short-circuits when current active element is outside the scope (except `document.body` fallback cases)
 - Validation: `npm run check` passed, `npm test` passed (125 files, 524 tests).
+- Expanded `@vue-aria/focus/FocusScope` containment removal parity with adapted upstream coverage for:
+  - restoring focus to the first focusable in-scope element when focused descendants are removed from a contained scope
+- Improved containment blur-recovery behavior:
+  - added delayed focusout recovery for contain scopes so focus loss-to-body during node removal is coerced back inside scope
+  - containment fallback now tries first tabbable, then first focusable, matching upstream fallback order
+- Validation: `npm run check` passed, `npm test` passed (125 files, 525 tests).

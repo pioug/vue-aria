@@ -261,9 +261,11 @@ export const FocusScope = defineComponent({
     const lastFocusedInScope = shallowRef<Element | null>(null);
     let keydownListener: ((event: KeyboardEvent) => void) | null = null;
     let scopeFocusInListener: ((event: FocusEvent) => void) | null = null;
+    let scopeFocusOutListener: ((event: FocusEvent) => void) | null = null;
     let documentFocusInListener: ((event: FocusEvent) => void) | null = null;
     let restoreEventListener: ((event: Event) => void) | null = null;
     let restoringFocus = false;
+    let focusOutTimer: ReturnType<typeof setTimeout> | null = null;
 
     const focusManager = createFocusManager({
       get current() {
@@ -326,6 +328,64 @@ export const FocusScope = defineComponent({
         };
 
         root.addEventListener("focusin", scopeFocusInListener as EventListener);
+        const restoreScopeFocus = (scopeRoot: Element) => {
+          const fallback = lastFocusedInScope.value && nodeContains(scopeRoot, lastFocusedInScope.value)
+            ? lastFocusedInScope.value
+            : null;
+          if (isHTMLElement(fallback)) {
+            fallback.focus();
+            return;
+          }
+
+          if (!focusManager.focusFirst({ tabbable: true })) {
+            focusManager.focusFirst({ tabbable: false });
+          }
+        };
+
+        scopeFocusOutListener = () => {
+          const scopeRoot = scopeRootRef.value;
+          if (!scopeRoot || activeScopeRef.value !== scopeRoot) {
+            return;
+          }
+
+          const ownerDocument = getOwnerDocument(scopeRoot);
+          if (focusOutTimer !== null) {
+            clearTimeout(focusOutTimer);
+          }
+
+          focusOutTimer = setTimeout(() => {
+            focusOutTimer = null;
+            const currentScopeRoot = scopeRootRef.value;
+            if (!currentScopeRoot || activeScopeRef.value !== currentScopeRoot || restoringFocus) {
+              return;
+            }
+
+            const activeElement = getActiveElement(ownerDocument);
+            if (!activeElement || nodeContains(currentScopeRoot, activeElement)) {
+              return;
+            }
+
+            const activeScopeElement = activeElement instanceof Element
+              ? activeElement.closest("[data-focus-scope]")
+              : null;
+            if (
+              activeScopeElement
+              && activeScopeElement !== currentScopeRoot
+              && isDescendantScope(activeScopeElement, currentScopeRoot)
+            ) {
+              return;
+            }
+
+            restoringFocus = true;
+            try {
+              restoreScopeFocus(currentScopeRoot);
+            } finally {
+              restoringFocus = false;
+            }
+          });
+        };
+        root.addEventListener("focusout", scopeFocusOutListener as EventListener);
+
         restoreEventListener = (event: Event) => {
           const target = event.target as Element | null;
           if (target && target !== root && nodeContains(root, target)) {
@@ -394,14 +454,7 @@ export const FocusScope = defineComponent({
 
             restoringFocus = true;
             try {
-              const fallback = lastFocusedInScope.value && nodeContains(scopeRoot, lastFocusedInScope.value)
-                ? lastFocusedInScope.value
-                : null;
-              if (isHTMLElement(fallback)) {
-                fallback.focus();
-              } else {
-                focusManager.focusFirst({ tabbable: true });
-              }
+              restoreScopeFocus(scopeRoot);
             } finally {
               restoringFocus = false;
             }
@@ -422,6 +475,10 @@ export const FocusScope = defineComponent({
         scopeRootRef.value.removeEventListener("focusin", scopeFocusInListener as EventListener);
       }
 
+      if (scopeFocusOutListener && scopeRootRef.value) {
+        scopeRootRef.value.removeEventListener("focusout", scopeFocusOutListener as EventListener);
+      }
+
       if (restoreEventListener && scopeRootRef.value) {
         scopeRootRef.value.removeEventListener(RESTORE_FOCUS_EVENT, restoreEventListener);
       }
@@ -432,6 +489,11 @@ export const FocusScope = defineComponent({
 
       if (documentFocusInListener && scopeRootRef.value) {
         getOwnerDocument(scopeRootRef.value).removeEventListener("focusin", documentFocusInListener as EventListener, true);
+      }
+
+      if (focusOutTimer !== null) {
+        clearTimeout(focusOutTimer);
+        focusOutTimer = null;
       }
 
       if (activeScopeRef.value === scopeRootRef.value) {
