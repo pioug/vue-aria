@@ -2434,6 +2434,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted upstream `useToast` coverage for default props, close-button invocation, data-attribute passthrough, and timer reset/pause lifecycle behavior.
   - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props and hover/focus pause/resume timer transitions.
+  - Added adapted interaction coverage for focused-toast replacement focus transfer and restoring focus to the pre-region element when the toast list becomes empty.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2442,7 +2443,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Port full upstream toast-region interaction behavior (focus restoration and multi-toast transitions) from story-backed tests.
+- [ ] Port remaining story-backed single-toast lifecycle parity (including close-button tab/focus sequences across queued toasts).
 
 ### Visual Parity
 - Not applicable for utility hooks beyond interaction semantics.
@@ -2451,8 +2452,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port additional upstream `useToast` story-driven interaction coverage (`single toast at a time` focus transfer flows).
-2. Tighten `useToastRegion` parity for focused-toast removal and pointer-modality focus restoration.
+1. Port additional upstream `useToast` story-driven interaction coverage (`single toast at a time`) for keyboard tab/order and close-button lifecycle flows.
+2. Add explicit pointer-modality focus-restoration regression coverage for toast removal paths.
 
 ## 41) Session Log
 ### 2026-02-13
@@ -3703,3 +3704,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `useLandmark` registration flow to re-register on `react-aria-landmark-manager-change` events so components follow manager version replacements.
   - added adapted singleton tests for manager storage on `document` and controller/component behavior after singleton version replacement.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 680 tests).
+- Expanded `@vue-aria/toast` focus-transfer parity:
+  - updated `useToastRegion` to track visible-toast key transitions and move focus to the replacement toast when a focused toast is removed.
+  - added adapted `useToastRegion` tests for replacement-toast focus transfer and restoring focus to the pre-region element when no toasts remain.
+- Validation: `npm run check` passed, `npm test` passed (138 files, 682 tests).

@@ -1,4 +1,4 @@
-import { effectScope, reactive } from "vue";
+import { effectScope, nextTick, reactive } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useToastRegion } from "../src";
 
@@ -12,6 +12,7 @@ describe("useToastRegion", () => {
     )!;
     return {
       ...result,
+      regionElement,
       cleanup() {
         scope.stop();
         regionElement.remove();
@@ -89,4 +90,80 @@ describe("useToastRegion", () => {
     expect(state.resumeAll).toHaveBeenCalledTimes(1);
     cleanup();
   });
+
+  it("moves focus to a replacement toast when the focused toast is removed", async () => {
+    const state = reactive({
+      visibleToasts: [] as Array<{ key: string }>,
+      pauseAll: vi.fn(),
+      resumeAll: vi.fn(),
+    });
+    const { regionProps, regionElement, cleanup } = run({ "aria-label": "Notifications" }, state);
+
+    const launcher = document.createElement("button");
+    document.body.append(launcher);
+    launcher.focus();
+
+    const firstToast = document.createElement("div");
+    firstToast.setAttribute("role", "alertdialog");
+    firstToast.tabIndex = 0;
+    regionElement.append(firstToast);
+    state.visibleToasts = [{ key: "toast-1" }];
+    await nextTick();
+
+    const firstFocusEvent = new FocusEvent("focus", { relatedTarget: launcher });
+    Object.defineProperty(firstFocusEvent, "currentTarget", { value: regionElement });
+    Object.defineProperty(firstFocusEvent, "target", { value: firstToast });
+    (regionProps.onFocus as (event: FocusEvent) => void)?.(firstFocusEvent);
+    firstToast.focus();
+    expect(document.activeElement).toBe(firstToast);
+
+    const secondToast = document.createElement("div");
+    secondToast.setAttribute("role", "alertdialog");
+    secondToast.tabIndex = 0;
+    firstToast.remove();
+    regionElement.append(secondToast);
+    state.visibleToasts = [{ key: "toast-2" }];
+    await nextTick();
+
+    expect(document.activeElement).toBe(secondToast);
+
+    launcher.remove();
+    cleanup();
+  });
+
+  it("restores focus to the previous element when no toasts remain", async () => {
+    const state = reactive({
+      visibleToasts: [] as Array<{ key: string }>,
+      pauseAll: vi.fn(),
+      resumeAll: vi.fn(),
+    });
+    const { regionProps, regionElement, cleanup } = run({ "aria-label": "Notifications" }, state);
+
+    const launcher = document.createElement("button");
+    document.body.append(launcher);
+    launcher.focus();
+
+    const toast = document.createElement("div");
+    toast.setAttribute("role", "alertdialog");
+    toast.tabIndex = 0;
+    regionElement.append(toast);
+    state.visibleToasts = [{ key: "toast-1" }];
+    await nextTick();
+
+    const focusEvent = new FocusEvent("focus", { relatedTarget: launcher });
+    Object.defineProperty(focusEvent, "currentTarget", { value: regionElement });
+    Object.defineProperty(focusEvent, "target", { value: toast });
+    (regionProps.onFocus as (event: FocusEvent) => void)?.(focusEvent);
+    toast.focus();
+    expect(document.activeElement).toBe(toast);
+
+    toast.remove();
+    state.visibleToasts = [];
+    await nextTick();
+    expect(document.activeElement).toBe(launcher);
+
+    launcher.remove();
+    cleanup();
+  });
+
 });

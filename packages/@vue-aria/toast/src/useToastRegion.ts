@@ -39,6 +39,7 @@ export function useToastRegion<T>(
   const isFocused = ref(false);
   const lastFocused = ref<Element | null>(null);
   const toasts = ref<Element[]>([]);
+  const prevVisibleToasts = ref<Array<QueuedToast<T>>>(state.visibleToasts);
   const focusedToast = ref<number | null>(null);
 
   const updateTimers = () => {
@@ -68,29 +69,99 @@ export function useToastRegion<T>(
     },
     onBlurWithin: () => {
       isFocused.value = false;
+      lastFocused.value = null;
       updateTimers();
     },
   });
 
+  const restoreFocusToLastFocused = () => {
+    if (!lastFocused.value || !(lastFocused.value as Node).isConnected) {
+      return;
+    }
+
+    if (getInteractionModality() === "pointer") {
+      focusWithoutScrolling(lastFocused.value as HTMLElement);
+    } else {
+      (lastFocused.value as HTMLElement).focus();
+    }
+    lastFocused.value = null;
+  };
+
   useLayoutEffect(() => {
-    if (!refValue.current) {
+    if (focusedToast.value === -1 || state.visibleToasts.length === 0 || !refValue.current) {
       toasts.value = [];
+      prevVisibleToasts.value = state.visibleToasts;
       return;
     }
 
     toasts.value = Array.from(refValue.current.querySelectorAll('[role="alertdialog"]'));
-  }, [() => refValue.current, () => state.visibleToasts.length]);
+    if (
+      prevVisibleToasts.value.length === state.visibleToasts.length
+      && state.visibleToasts.every((toast, index) => toast.key === prevVisibleToasts.value[index]?.key)
+    ) {
+      prevVisibleToasts.value = state.visibleToasts;
+      return;
+    }
 
-  useLayoutEffect(() => {
-    if (state.visibleToasts.length === 0 && lastFocused.value && (lastFocused.value as Node).isConnected) {
-      if (getInteractionModality() === "pointer") {
+    const allToasts = prevVisibleToasts.value.map((toast, index) => ({
+      ...toast,
+      i: index,
+      isRemoved: !state.visibleToasts.some((currentToast) => currentToast.key === toast.key),
+    }));
+
+    const removedFocusedToastIndex = allToasts.findIndex(
+      (toast) => toast.i === focusedToast.value && toast.isRemoved
+    );
+
+    if (removedFocusedToastIndex > -1) {
+      if (getInteractionModality() === "pointer" && lastFocused.value && (lastFocused.value as Node).isConnected) {
         focusWithoutScrolling(lastFocused.value as HTMLElement);
       } else {
-        (lastFocused.value as HTMLElement).focus();
+        let index = 0;
+        let nextToast: number | undefined;
+        let prevToast: number | undefined;
+
+        while (index <= removedFocusedToastIndex) {
+          if (!allToasts[index]?.isRemoved) {
+            prevToast = Math.max(0, index - 1);
+          }
+          index++;
+        }
+
+        while (index < allToasts.length) {
+          if (!allToasts[index]?.isRemoved) {
+            nextToast = index - 1;
+            break;
+          }
+          index++;
+        }
+
+        if (prevToast === undefined && nextToast === undefined) {
+          prevToast = 0;
+        }
+
+        if (prevToast != null && prevToast >= 0 && prevToast < toasts.value.length) {
+          focusWithoutScrolling(toasts.value[prevToast] as HTMLElement);
+        } else if (nextToast != null && nextToast >= 0 && nextToast < toasts.value.length) {
+          focusWithoutScrolling(toasts.value[nextToast] as HTMLElement);
+        }
       }
-      lastFocused.value = null;
+    }
+
+    prevVisibleToasts.value = state.visibleToasts;
+  }, [() => refValue.current, () => state.visibleToasts.map((toast) => String(toast.key)).join("|")]);
+
+  useLayoutEffect(() => {
+    if (state.visibleToasts.length === 0) {
+      restoreFocusToLastFocused();
     }
   }, [() => state.visibleToasts.length]);
+
+  useLayoutEffect(() => {
+    return () => {
+      restoreFocusToLastFocused();
+    };
+  }, []);
 
   return {
     regionProps: mergeProps(landmarkProps, hoverProps, focusWithinProps, {
