@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/select`
+- Current focus package: `@vue-aria/numberfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -46,7 +46,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/searchfield`: In progress
 - `@vue-aria/form`: In progress
 - `@vue-aria/spinbutton`: In progress
-- `@vue-aria/numberfield`: Not started
+- `@vue-aria/numberfield`: In progress
 - `@vue-aria/slider`: Not started
 - `@vue-aria/link`: In progress
 - `@vue-aria/menu`: In progress
@@ -1761,7 +1761,58 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port remaining upstream spinbutton interaction/timing edge-case coverage (touch pointer-cancel and repeated press cadence).
 2. Integrate spinbutton package into `@vue-aria/numberfield` port.
 
-## 34) Session Log
+## 34) Package Record: @vue-aria/numberfield
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/numberfield/src`
+  - `references/react-spectrum/packages/@react-aria/numberfield/test/useNumberField.test.ts`
+- Local package path:
+  - `packages/@vue-aria/numberfield`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useNumberField`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useNumberField.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Current package uses an adapter state type; full stately parity (`@react-stately/numberfield`) is pending.
+
+### Tests
+- Total upstream test files: 1 (`useNumberField.test.ts`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for default input props, placeholder forwarding, and merged input event handlers.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/numberfield.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full stepper-button press/touch focus heuristics and iOS/Android input-mode branching parity
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port remaining numberfield interaction parity (wheel behavior, touch/mouse focus transfer logic, and commit/announce edge cases).
+2. Port `@vue-aria/numberfield-state` (`@react-stately/numberfield`) and wire full integration.
+
+## 35) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -2221,3 +2272,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted spinbutton tests for aria attributes, keyboard handlers, fallback behavior, and minus-sign normalization.
 - Added VitePress docs page for `@vue-aria/spinbutton` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (112 files, 338 tests).
+- Started `@vue-aria/numberfield` package:
+  - `useNumberField` (initial slice)
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted numberfield tests for default props, placeholder forwarding, and merged input event handlers.
+- Added VitePress docs page for `@vue-aria/numberfield` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (113 files, 341 tests).

@@ -92,6 +92,9 @@ export default defineConfig({
       "@vue-aria/spinbutton": fileURLToPath(
         new URL("./packages/@vue-aria/spinbutton/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/numberfield": fileURLToPath(
+        new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/progress": fileURLToPath(
         new URL("./packages/@vue-aria/progress/src/index.ts", import.meta.url)
       ),
