@@ -140,4 +140,42 @@ describe("useSpinButton", () => {
     expect(onIncrement).toHaveBeenCalledTimes(1);
     scope.stop();
   });
+
+  it("does not emit repeated increments when value props are static", () => {
+    vi.useFakeTimers();
+    const onIncrement = vi.fn();
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton({ value: 1, onIncrement }))!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "mouse",
+      target: document.createElement("button"),
+    });
+
+    vi.advanceTimersByTime(500);
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+    scope.stop();
+  });
+
+  it("stops repeating increment after press up", () => {
+    vi.useFakeTimers();
+    const onIncrement = vi.fn();
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton({ value: 1, onIncrement }))!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "mouse",
+      target: document.createElement("button"),
+    });
+    vi.advanceTimersByTime(450);
+    const countBeforeRelease = onIncrement.mock.calls.length;
+    (result.incrementButtonProps.onPressUp as (event: any) => void)({
+      pointerType: "mouse",
+      target: document.createElement("button"),
+    });
+    vi.advanceTimersByTime(300);
+
+    expect(onIncrement.mock.calls.length).toBe(countBeforeRelease);
+    scope.stop();
+  });
 });
