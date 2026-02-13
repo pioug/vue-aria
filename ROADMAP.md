@@ -1887,6 +1887,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useHiddenSelect` input-event parity coverage ensuring `onInput` mirrors change-driven state updates.
   - Added adapted typeahead guard coverage ensuring an initial Space key does not trigger selection when no search string is active.
   - Added adapted `HiddenSelect` selectData-fallback parity coverage for `name` propagation in large-collection hidden-input rendering and empty-collection initial form submission behavior.
+  - Added adapted `HiddenSelect` selectData-fallback coverage for `isDisabled` propagation when component `isDisabled` prop is omitted.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3268,3 +3269,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/form-state` server-error context parity coverage:
   - added adapted provider-based `FormValidationContext` tests for initial server-error display, clear-on-commit behavior, and redisplay when server payload changes
 - Validation: `npm run check` passed, `npm test` passed (126 files, 594 tests).
+- Expanded `@vue-aria/select/HiddenSelect` fallback parity:
+  - fixed optional `isDisabled` prop handling in `HiddenSelect` so omitted boolean props no longer override `selectData` disabled fallback
+  - added adapted regression coverage asserting selectData-driven disabled propagation when component `isDisabled` is not passed
+- Validation: `npm run check` passed, `npm test` passed (126 files, 595 tests).

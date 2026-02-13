@@ -104,7 +104,10 @@ export const HiddenSelect = defineComponent({
     label: String as PropType<string | undefined>,
     name: String as PropType<string | undefined>,
     form: String as PropType<string | undefined>,
-    isDisabled: Boolean as PropType<boolean | undefined>,
+    isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     state: {
       type: Object as PropType<SelectState>,
       required: true,

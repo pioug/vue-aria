@@ -160,6 +160,23 @@ describe("HiddenSelect component", () => {
     expect(input.attributes("name")).toBe("fallback-name");
   });
 
+  it("uses selectData disabled fallback when isDisabled prop is omitted", () => {
+    const state = createSmallState();
+    selectData.set(state as object, {
+      isDisabled: true,
+    });
+
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const select = wrapper.find("select");
+    expect((select.element as HTMLSelectElement).disabled).toBe(true);
+  });
+
   it("keeps initial form data value when collection is empty", () => {
     const state = {
       collection: createCollection([]),
