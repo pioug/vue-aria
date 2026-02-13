@@ -1839,6 +1839,61 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("does not intercept tab boundary navigation when restoreFocus is disabled", async () => {
+    const Host = defineComponent({
+      props: {
+        show: Boolean,
+      },
+      render() {
+        return h("div", [
+          h("input", { id: "before" }),
+          h("button", { id: "trigger" }),
+          h("input", { id: "after-trigger" }),
+          this.show
+            ? h(
+              FocusScope,
+              { autoFocus: true },
+              {
+                default: () => [
+                  h("input", { id: "input1" }),
+                  h("input", { id: "input2" }),
+                  h("input", { id: "input3" }),
+                ],
+              }
+            )
+            : null,
+          h("input", { id: "after" }),
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, {
+      attachTo: document.body,
+      props: { show: false },
+    });
+
+    const trigger = wrapper.get("#trigger").element as HTMLButtonElement;
+    trigger.focus();
+    expect(document.activeElement).toBe(trigger);
+
+    await wrapper.setProps({ show: true });
+    const input3 = wrapper.get("#input3").element as HTMLInputElement;
+    input3.focus();
+    expect(document.activeElement).toBe(input3);
+
+    const notIntercepted = input3.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(notIntercepted).toBe(true);
+    expect(document.activeElement).toBe(input3);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {

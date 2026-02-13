@@ -3035,3 +3035,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScope` restore-focus dynamic-children parity with adapted upstream coverage for:
   - restoring to the previously focused external element after scope children update and focus changes before unmount
 - Validation: `npm run check` passed, `npm test` passed (125 files, 528 tests).
+- Expanded `@vue-aria/focus/FocusScope` restore-tab guard parity with adapted upstream coverage for:
+  - ensuring tab boundary navigation is not intercepted when `restoreFocus` is disabled
+- Validation: `npm run check` passed, `npm test` passed (125 files, 529 tests).
