@@ -33,7 +33,8 @@
       "@vue-aria/switch": ["packages/@vue-aria/switch/src/index.ts"],
       "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],
       "@vue-aria/searchfield-state": ["packages/@vue-aria/searchfield-state/src/index.ts"],
-      "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"]
+      "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
+      "@vue-aria/progress": ["packages/@vue-aria/progress/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

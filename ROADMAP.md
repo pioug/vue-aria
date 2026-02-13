@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/searchfield`
+- Current focus package: `@vue-aria/progress`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -60,7 +60,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/breadcrumbs`: Not started
 - `@vue-aria/dialog`: Not started
 - `@vue-aria/tooltip`: Not started
-- `@vue-aria/progress`: Not started
+- `@vue-aria/progress`: In progress
 - `@vue-aria/meter`: Not started
 - `@vue-aria/collections`: In progress
 - `@vue-aria/selection`: In progress
@@ -1021,7 +1021,55 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum searchfield components.
 2. Expand locale dictionary coverage for clear-label parity.
 
-## 20) Session Log
+## 20) Package Record: @vue-aria/progress
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/progress/src`
+  - `references/react-spectrum/packages/@react-aria/progress/test/useProgressBar.test.js`
+- Local package path:
+  - `packages/@vue-aria/progress`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useProgressBar`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useProgressBar.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: 1 (`useProgressBar.test.js`)
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted upstream coverage for defaults, labeling, determinate/indeterminate values, and custom value labels.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/progress.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate downstream Spectrum progress component behavior
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum progress component implementations.
+2. Expand to meter package parity.
+
+## 21) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1280,3 +1328,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added VitePress docs page for `@vue-aria/searchfield` and wired docs navigation entries.
 - Hardened `createEventHandler` to preserve native event fields (e.g. keyboard `key`) while retaining `continuePropagation` semantics for interaction parity.
 - Validation: `npm run check` passed, `npm test` passed (71 files, 221 tests).
+- Started `@vue-aria/progress` package:
+  - `useProgressBar`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted upstream progress tests for defaults, labeling, determinate/indeterminate behavior, and custom value labels.
+- Added VitePress docs page for `@vue-aria/progress` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (72 files, 226 tests).

@@ -20,6 +20,7 @@ export default defineConfig({
       { text: "Switch", link: "/packages/switch" },
       { text: "TextField", link: "/packages/textfield" },
       { text: "SearchField", link: "/packages/searchfield" },
+      { text: "Progress", link: "/packages/progress" },
     ],
     sidebar: [
       {
@@ -39,6 +40,7 @@ export default defineConfig({
           { text: "@vue-aria/switch", link: "/packages/switch" },
           { text: "@vue-aria/textfield", link: "/packages/textfield" },
           { text: "@vue-aria/searchfield", link: "/packages/searchfield" },
+          { text: "@vue-aria/progress", link: "/packages/progress" },
         ],
       },
     ],

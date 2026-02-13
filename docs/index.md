@@ -29,3 +29,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/switch](/packages/switch)
 - [@vue-aria/textfield](/packages/textfield)
 - [@vue-aria/searchfield](/packages/searchfield)
+- [@vue-aria/progress](/packages/progress)
