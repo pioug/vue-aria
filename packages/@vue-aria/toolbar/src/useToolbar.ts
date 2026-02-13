@@ -10,10 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-import {AriaLabelingProps, Orientation, RefObject} from '@vue-types/shared';
+import {AriaLabelingProps, DOMAttributes, Orientation, RefObject} from '@vue-types/shared';
 import {createFocusManager} from '@vue-aria/focus';
-import {filterDOMProps, getActiveElement, getEventTarget, nodeContains, useLayoutEffect} from '@vue-aria/utils';
-import {FocusEventHandler, HTMLAttributes, KeyboardEventHandler, useRef, useState} from 'react';
+import {filterDOMProps, getActiveElement, getEventTarget, nodeContains} from '@vue-aria/utils';
 import {useLocale} from '@vue-aria/i18n';
 
 export interface AriaToolbarProps extends AriaLabelingProps {
@@ -28,7 +27,7 @@ export interface ToolbarAria {
   /**
    * Props for the toolbar container.
    */
-  toolbarProps: HTMLAttributes<HTMLElement>
+  toolbarProps: DOMAttributes<HTMLElement>
 }
 
 /**
@@ -43,18 +42,12 @@ export function useToolbar(props: AriaToolbarProps, ref: RefObject<HTMLElement |
     'aria-labelledby': ariaLabelledBy,
     orientation = 'horizontal'
   } = props;
-  let [isInToolbar, setInToolbar] = useState(false);
-  // should be safe because re-calling set state with the same value it already has is a no-op
-  // this will allow us to react should a parent re-render and change its role though
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useLayoutEffect(() => {
-    setInToolbar(!!(ref.current && ref.current.parentElement?.closest('[role="toolbar"]')));
-  });
+  let isInToolbar = !!(ref.current && ref.current.parentElement?.closest('[role="toolbar"]'));
   const {direction} = useLocale();
   const shouldReverse = direction === 'rtl' && orientation === 'horizontal';
   let focusManager = createFocusManager(ref);
 
-  const onKeyDown: KeyboardEventHandler = (e) => {
+  const onKeyDown = (e) => {
     // don't handle portalled events
     if (!nodeContains(e.currentTarget, getEventTarget(e) as HTMLElement)) {
       return;
@@ -99,8 +92,8 @@ export function useToolbar(props: AriaToolbarProps, ref: RefObject<HTMLElement |
   };
 
   // Record the last focused child when focus moves out of the toolbar.
-  const lastFocused = useRef<HTMLElement | null>(null);
-  const onBlur: FocusEventHandler<HTMLElement> = (e) => {
+  const lastFocused: {current: HTMLElement | null} = {current: null};
+  const onBlur = (e) => {
     if (!nodeContains(e.currentTarget, e.relatedTarget) && !lastFocused.current) {
       lastFocused.current = getEventTarget(e);
     }
@@ -109,7 +102,7 @@ export function useToolbar(props: AriaToolbarProps, ref: RefObject<HTMLElement |
   // Restore focus to the last focused child when focus returns into the toolbar.
   // If the element was removed, do nothing, either the first item in the first group,
   // or the last item in the last group will be focused, depending on direction.
-  const onFocus: FocusEventHandler<HTMLElement> = (e) => {
+  const onFocus = (e) => {
     if (lastFocused.current && !nodeContains(e.currentTarget, e.relatedTarget) && nodeContains(ref.current, getEventTarget(e))) {
       lastFocused.current?.focus();
       lastFocused.current = null;
