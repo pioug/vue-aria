@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 178 |
-| Passing tests | 178 |
+| Ported tests | 181 |
+| Passing tests | 181 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -118,7 +118,7 @@
 | @vue-spectrum/radio | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/radio | packages/@react-spectrum/radio |
 | @vue-spectrum/s2 | complete | 19 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/s2 | packages/@react-spectrum/s2 |
 | @vue-spectrum/searchfield | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/searchfield | packages/@react-spectrum/searchfield |
-| @vue-spectrum/slider | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/slider | packages/@react-spectrum/slider |
+| @vue-spectrum/slider | complete | 3 | 3 | 3 | 0 | 0 | 0 | 0 | true | @react-spectrum/slider | packages/@react-spectrum/slider |
 | @vue-spectrum/statuslight | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/statuslight | packages/@react-spectrum/statuslight |
 | @vue-spectrum/steplist | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/steplist | packages/@react-spectrum/steplist |
 | @vue-spectrum/story-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/story-utils | packages/@react-spectrum/story-utils |
