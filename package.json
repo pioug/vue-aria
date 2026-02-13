@@ -24,7 +24,7 @@
     "sync:status": "node scripts/sync-status-from-upstream.mjs",
     "compute:port-order": "node scripts/compute-port-order.mjs",
     "start:next-package": "node scripts/start-next-package.mjs",
-    "status:refresh": "npm run sync:status && npm run generate:status && npm run validate:status"
+    "status:refresh": "npm run sync:status && npm run generate:status && npm run generate:docs && npm run validate:status && npm run compute:port-order"
   },
   "devDependencies": {
     "@vue/server-renderer": "^3.5.13",
