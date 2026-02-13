@@ -1786,7 +1786,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current package uses an adapter state type; full stately parity (`@react-stately/numberfield`) is pending.
+  - Hook state typing is now wired to `@vue-aria/numberfield-state`; deeper form-validation-state parity is still pending.
 
 ### Tests
 - Total upstream test files: 1 (`useNumberField.test.ts`)
@@ -2357,4 +2357,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - numbering-system-aware formatter construction added
 - Added adapted locale parsing/partial-validation coverage (`fr-FR` separator parsing and partial input checks).
 - Fixed local i18n ambient types to include `NumberParser` in `@internationalized/number` declarations.
+- Validation: `npm run check` passed, `npm test` passed (115 files, 351 tests).
+- Aligned `@vue-aria/numberfield` public state typing with `@vue-aria/numberfield-state` exports and updated docs example to use `useNumberFieldState`.
 - Validation: `npm run check` passed, `npm test` passed (115 files, 351 tests).

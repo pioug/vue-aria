@@ -14,9 +14,10 @@
 
 ```ts
 import { useNumberField } from "@vue-aria/numberfield";
+import { useNumberFieldState } from "@vue-aria/numberfield-state";
 
 const inputRef = { current: null as HTMLInputElement | null };
-const state = {} as any;
+const state = useNumberFieldState({ locale: "en-US", defaultValue: 0 });
 
 const { groupProps, inputProps, incrementButtonProps, decrementButtonProps } = useNumberField(
   { label: "Quantity" },

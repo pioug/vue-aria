@@ -5,6 +5,13 @@ import { useSpinButton } from "@vue-aria/spinbutton";
 import { useFormattedTextField } from "@vue-aria/textfield";
 import { chain, filterDOMProps, isAndroid, isIPhone, mergeProps, useFormReset, useId } from "@vue-aria/utils";
 import { ref } from "vue";
+import type { NumberFieldState } from "@vue-aria/numberfield-state";
+
+interface ValidationResult {
+  isInvalid: boolean;
+  validationErrors: string[];
+  validationDetails: ValidityState | null;
+}
 
 const intlMessages = {
   "en-US": {
@@ -13,31 +20,6 @@ const intlMessages = {
     numberField: "Number field",
   },
 };
-
-export interface ValidationResult {
-  isInvalid: boolean;
-  validationErrors: string[];
-  validationDetails: ValidityState | null;
-}
-
-export interface NumberFieldState {
-  increment: () => void;
-  incrementToMax: () => void;
-  decrement: () => void;
-  decrementToMin: () => void;
-  numberValue: number;
-  inputValue: string;
-  commit: (value?: string) => void;
-  commitValidation: () => void;
-  validate: (value: string) => boolean;
-  setInputValue: (value: string) => void;
-  defaultNumberValue?: number;
-  setNumberValue?: (value: number) => void;
-  canIncrement?: boolean;
-  canDecrement?: boolean;
-  minValue?: number;
-  displayValidation: ValidationResult;
-}
 
 export interface AriaNumberFieldProps {
   id?: string;
