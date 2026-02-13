@@ -1,10 +1,12 @@
-import { effectScope } from "vue";
+import { effectScope, nextTick, reactive } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import * as liveAnnouncer from "@vue-aria/live-announcer";
 import { useSpinButton } from "../src";
 
 describe("useSpinButton", () => {
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns spinbutton role and aria value attributes", () => {
@@ -98,6 +100,45 @@ describe("useSpinButton", () => {
     )!;
 
     expect(result.spinButtonProps["aria-valuetext"]).toBe("−2 items");
+    scope.stop();
+  });
+
+  it("announces updated value while focused and ignores updates when blurred", async () => {
+    const announceSpy = vi.spyOn(liveAnnouncer, "announce").mockImplementation(() => {});
+    const clearSpy = vi.spyOn(liveAnnouncer, "clearAnnouncer").mockImplementation(() => {});
+    const props = reactive({ value: 2 });
+
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton(props))!;
+    (result.spinButtonProps.onFocus as (() => void))?.();
+
+    props.value = 3;
+    await nextTick();
+    expect(clearSpy).toHaveBeenCalledTimes(1);
+    expect(announceSpy).toHaveBeenCalledTimes(1);
+    expect(announceSpy).toHaveBeenCalledWith("3", "assertive");
+
+    (result.spinButtonProps.onBlur as (() => void))?.();
+    props.value = 4;
+    await nextTick();
+    expect(announceSpy).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+  });
+
+  it("announces updated textValue with minus-sign normalization while focused", async () => {
+    const announceSpy = vi.spyOn(liveAnnouncer, "announce").mockImplementation(() => {});
+    const props = reactive({ value: -2, textValue: "-2 items" });
+
+    const scope = effectScope();
+    const result = scope.run(() => useSpinButton(props))!;
+    (result.spinButtonProps.onFocus as (() => void))?.();
+
+    props.value = -3;
+    props.textValue = "-3 items";
+    await nextTick();
+
+    expect(announceSpy).toHaveBeenCalledWith("−3 items", "assertive");
     scope.stop();
   });
 

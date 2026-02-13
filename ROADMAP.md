@@ -1992,7 +1992,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for spinbutton aria attributes, keyboard increment/decrement/page/home/end handlers, page-key fallback behavior, and minus-sign text normalization.
   - Added adapted touch press flow coverage for no-op press-end without press-up and increment-on-touch press-up + press-end sequence.
-- [ ] All relevant upstream tests migrated
+  - Added adapted live-announcer parity coverage for focused value/text updates (including minus-sign normalized text announcements) and blur no-op behavior.
+  - Added adapted touch repetition edge coverage for pointer-cancel stop behavior and repeat-stop behavior after press up.
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/spinbutton.md`)
@@ -2009,8 +2011,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream spinbutton interaction/timing edge-case coverage (touch pointer-cancel and repeated press cadence).
-2. Integrate spinbutton package into `@vue-aria/numberfield` port.
+1. Integrate spinbutton package into `@vue-aria/numberfield` consumer parity and verify end-to-end interaction timing semantics.
+2. Expand locale bundle parity beyond current en-US seeded strings.
 
 ## 34) Package Record: @vue-aria/numberfield
 - Upstream source path(s):
@@ -3249,3 +3251,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - switched long-press accessibility description wiring to `useLocalizedStringFormatter` (`longPressMessage`) instead of hardcoded inline hook options
   - added adapted long-press contract coverage for `useLongPress` option wiring (`onLongPressStart` closes, `onLongPress` opens first item) and disabled propagation
 - Validation: `npm run check` passed, `npm test` passed (126 files, 590 tests).
+- Expanded `@vue-aria/spinbutton` announcement/touch interaction parity:
+  - made `ariaTextValue` reactive via computed/watch to align focused live-announcer behavior with upstream value/text updates
+  - added adapted live-announcer tests for focused value change announcements, textValue announcements, and blur no-op behavior
+  - added adapted touch interaction coverage for pointer-cancel stopping behavior and repeat stop after press-up lifecycle
+- Validation: `npm run check` passed, `npm test` passed (126 files, 592 tests).

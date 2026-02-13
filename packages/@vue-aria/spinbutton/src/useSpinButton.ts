@@ -1,7 +1,7 @@
 import { announce, clearAnnouncer } from "@vue-aria/live-announcer";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useEffectEvent, useGlobalListeners } from "@vue-aria/utils";
-import { onScopeDispose, ref, watch } from "vue";
+import { computed, onScopeDispose, ref, watch } from "vue";
 
 const intlMessages = {
   "en-US": {
@@ -126,20 +126,18 @@ export function useSpinButton(props: SpinButtonProps): SpinbuttonAria {
     }
   });
 
-  const ariaTextValue =
+  const ariaTextValue = computed(() =>
     props.textValue === ""
       ? stringFormatter.format("Empty")
-      : (props.textValue || `${props.value ?? ""}`).replace("-", "\u2212");
-
-  watch(
-    () => ariaTextValue,
-    (value) => {
-      if (isFocused.value) {
-        clearAnnouncer("assertive");
-        announce(value, "assertive");
-      }
-    }
+      : (props.textValue || `${props.value}`).replace("-", "\u2212")
   );
+
+  watch(ariaTextValue, (value) => {
+    if (isFocused.value) {
+      clearAnnouncer("assertive");
+      announce(value, "assertive");
+    }
+  });
 
   const onFocus = () => {
     isFocused.value = true;
@@ -211,7 +209,7 @@ export function useSpinButton(props: SpinButtonProps): SpinbuttonAria {
       role: "spinbutton",
       "aria-valuenow":
         props.value !== undefined && !Number.isNaN(props.value) ? props.value : undefined,
-      "aria-valuetext": ariaTextValue,
+      "aria-valuetext": ariaTextValue.value,
       "aria-valuemin": props.minValue,
       "aria-valuemax": props.maxValue,
       "aria-disabled": props.isDisabled || undefined,
