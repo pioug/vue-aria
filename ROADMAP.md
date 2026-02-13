@@ -2946,3 +2946,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - cross-window element/input checks now support both global and owner-window constructors
   - `isElementVisible` now falls back to style/attribute traversal in jsdom when `checkVisibility` misreports iframe-owned elements
 - Validation: `npm run check` passed, `npm test` passed (125 files, 500 tests).
+- Expanded adapted upstream `@vue-aria/focus/FocusScopeOwnerDocument` coverage for:
+  - internal focus-shift stability when focus moves between iframe scope elements
+  - `autoFocus` first-tabbable behavior in iframe-owned scopes
+  - `autoFocus` no-op behavior when focus is already inside iframe-owned scope
+  - `useFocusManager.focusNext` forward traversal and wrap traversal inside iframe-owned scopes
+- Updated focus docs parity note to mark owner-document/iframe focus behavior as implemented.
+- Validation: `npm run check` passed, `npm test` passed (125 files, 505 tests).

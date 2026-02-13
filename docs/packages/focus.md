@@ -114,4 +114,5 @@ onBeforeUnmount(() => {
   - nested active-scope containment locking
   - restore event cancellation and nested propagation isolation
   - radio-group tabbable traversal rules for containment
-- Remaining work focuses on owner-document/iframe parity, deeper portal behavior, and full upstream test migration.
+  - owner-document/iframe containment, autofocus, restore-focus, and focus-manager traversal behavior
+- Remaining work focuses on deeper portal behavior and full upstream test migration.
