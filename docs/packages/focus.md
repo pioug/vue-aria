@@ -120,4 +120,5 @@ onBeforeUnmount(() => {
   - restore-focus skip behavior when scope unmounts while focus is already outside the scope
   - contained-scope focus recovery when focused descendants are removed (fallback to first focusable)
   - restore-focus boundary tab handoff relative to the previously focused node (forward and reverse)
+  - restore-focus stability across dynamic child updates before unmount
 - Remaining work focuses on broader full upstream FocusScope test-file migration.

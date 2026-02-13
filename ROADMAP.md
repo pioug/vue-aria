@@ -3032,3 +3032,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added restore-scope boundary tab key management for non-containing scopes
   - added ancestor-containment gating so nested restore scopes do not escape when an ancestor `contain` scope is active
 - Validation: `npm run check` passed, `npm test` passed (125 files, 527 tests).
+- Expanded `@vue-aria/focus/FocusScope` restore-focus dynamic-children parity with adapted upstream coverage for:
+  - restoring to the previously focused external element after scope children update and focus changes before unmount
+- Validation: `npm run check` passed, `npm test` passed (125 files, 528 tests).

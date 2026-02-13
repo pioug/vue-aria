@@ -1789,6 +1789,56 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("restores focus to previously focused element after scope children change", async () => {
+    const Host = defineComponent({
+      props: {
+        show: Boolean,
+        showChild: Boolean,
+      },
+      render() {
+        return h("div", [
+          h("input", { id: "outside" }),
+          this.show
+            ? h(
+              FocusScope,
+              { restoreFocus: true, autoFocus: true },
+              {
+                default: () => [
+                  h("input", { id: "input1" }),
+                  this.showChild ? h("input", { id: "dynamic" }) : null,
+                ],
+              }
+            )
+            : null,
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, {
+      attachTo: document.body,
+      props: {
+        show: false,
+        showChild: false,
+      },
+    });
+
+    const outside = wrapper.get("#outside").element as HTMLInputElement;
+    outside.focus();
+    expect(document.activeElement).toBe(outside);
+
+    await wrapper.setProps({ show: true, showChild: false });
+    await wrapper.setProps({ show: true, showChild: true });
+
+    const dynamic = wrapper.get("#dynamic").element as HTMLInputElement;
+    dynamic.focus();
+    expect(document.activeElement).toBe(dynamic);
+
+    await wrapper.setProps({ show: false, showChild: false });
+    expect(document.activeElement).toBe(outside);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {
