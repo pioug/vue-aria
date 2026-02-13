@@ -1,4 +1,4 @@
-import { effectScope } from "vue";
+import { effectScope, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useNumberField } from "../src";
 
@@ -130,5 +130,60 @@ describe("useNumberField hook", () => {
     expect(onBeforeInput).toHaveBeenCalled();
     expect(onInput).toHaveBeenCalled();
     scope.stop();
+  });
+
+  it("moves focus to input on mouse press start for stepper buttons", () => {
+    const state = createState();
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    document.body.appendChild(input);
+    const target = document.createElement("button");
+    document.body.appendChild(target);
+
+    const scope = effectScope();
+    const result = scope.run(() => useNumberField({ "aria-label": "count" }, state as any, ref))!;
+
+    const focusSpy = vi.spyOn(input, "focus");
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "mouse",
+      target,
+    });
+
+    expect(focusSpy).toHaveBeenCalled();
+    scope.stop();
+    input.remove();
+    target.remove();
+  });
+
+  it("increments and decrements on wheel while focused within group", async () => {
+    const state = createState();
+    const input = document.createElement("input");
+    const group = document.createElement("div");
+    group.appendChild(input);
+    document.body.appendChild(group);
+    const ref = { current: input as HTMLInputElement | null };
+
+    const scope = effectScope();
+    const result = scope.run(() => useNumberField({ "aria-label": "count" }, state as any, ref))!;
+
+    (result.groupProps.onFocusin as (event: FocusEvent) => void)?.({
+      currentTarget: group,
+      target: input,
+      relatedTarget: null,
+    } as unknown as FocusEvent);
+    await nextTick();
+
+    (result.inputProps.onWheel as (event: WheelEvent) => void)?.(
+      new WheelEvent("wheel", { deltaY: 10, bubbles: true, cancelable: true })
+    );
+    (result.inputProps.onWheel as (event: WheelEvent) => void)?.(
+      new WheelEvent("wheel", { deltaY: -10, bubbles: true, cancelable: true })
+    );
+
+    expect(state.increment).toHaveBeenCalledTimes(1);
+    expect(state.decrement).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    group.remove();
   });
 });

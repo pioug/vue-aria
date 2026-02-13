@@ -1791,7 +1791,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 1 (adapted)
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for default input props, placeholder forwarding, and merged input event handlers.
+  - Added adapted coverage for default input props, placeholder forwarding, merged input event handlers, stepper mouse press-start focus transfer, and wheel increment/decrement behavior when focus is within the field group.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1809,7 +1809,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining numberfield interaction parity (wheel behavior, touch/mouse focus transfer logic, and commit/announce edge cases).
+1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
 2. Port `@vue-aria/numberfield-state` (`@react-stately/numberfield`) and wire full integration.
 
 ## 35) Session Log
@@ -2278,3 +2278,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted numberfield tests for default props, placeholder forwarding, and merged input event handlers.
 - Added VitePress docs page for `@vue-aria/numberfield` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (113 files, 341 tests).
+- Hardened `@vue-aria/numberfield` interaction parity:
+  - added stepper mouse press-start focus transfer behavior
+  - added wheel increment/decrement handling gated by focus-within state
+- Expanded adapted numberfield coverage for the above interaction paths.
+- Validation: `npm run check` passed, `npm test` passed (113 files, 343 tests).

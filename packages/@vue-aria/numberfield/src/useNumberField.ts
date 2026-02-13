@@ -3,7 +3,8 @@ import { useLocalizedStringFormatter, useNumberFormatter } from "@vue-aria/i18n"
 import { useFocus, useFocusWithin } from "@vue-aria/interactions";
 import { useSpinButton } from "@vue-aria/spinbutton";
 import { useFormattedTextField } from "@vue-aria/textfield";
-import { chain, filterDOMProps, mergeProps, useFormReset, useId } from "@vue-aria/utils";
+import { chain, filterDOMProps, isAndroid, isIPhone, mergeProps, useFormReset, useId } from "@vue-aria/utils";
+import { ref } from "vue";
 
 const intlMessages = {
   "en-US": {
@@ -162,13 +163,42 @@ export function useNumberField(
     textValue,
   });
 
-  const { focusWithinProps } = useFocusWithin({ isDisabled });
+  const focusWithin = ref(false);
+  const { focusWithinProps } = useFocusWithin({
+    isDisabled,
+    onFocusWithinChange: (isFocused) => {
+      focusWithin.value = isFocused;
+    },
+  });
 
   const hasDecimals = (intlOptions.maximumFractionDigits ?? 0) > 0;
   const hasNegative =
     state.minValue === undefined || Number.isNaN(state.minValue) || state.minValue < 0;
-  const inputMode: "numeric" | "decimal" | "text" =
-    hasNegative ? "text" : hasDecimals ? "decimal" : "numeric";
+  let inputMode: "numeric" | "decimal" | "text" = "numeric";
+  if (isIPhone()) {
+    if (hasNegative) {
+      inputMode = "text";
+    } else if (hasDecimals) {
+      inputMode = "decimal";
+    }
+  } else if (isAndroid()) {
+    if (hasNegative) {
+      inputMode = "numeric";
+    } else if (hasDecimals) {
+      inputMode = "decimal";
+    }
+  }
+
+  const onWheel = ({ deltaX, deltaY }: { deltaX: number; deltaY: number }) => {
+    if (Math.abs(deltaY) <= Math.abs(deltaX)) {
+      return;
+    }
+    if (deltaY > 0) {
+      increment();
+    } else if (deltaY < 0) {
+      decrement();
+    }
+  };
 
   const onChange = (value: string) => {
     if (state.validate(value)) {
@@ -251,6 +281,16 @@ export function useNumberField(
     "aria-valuetext": null,
     autoCorrect: "off",
     spellCheck: "false",
+    onWheel: (event: WheelEvent) => {
+      const scrollingDisabled = props.isWheelDisabled || isDisabled || isReadOnly || !focusWithin.value;
+      if (event.ctrlKey || scrollingDisabled) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      onWheel({ deltaX: event.deltaX, deltaY: event.deltaY });
+    },
   });
 
   if (props.validationBehavior === "native") {
@@ -275,6 +315,16 @@ export function useNumberField(
     preventFocusOnPress: true,
     allowFocusWhenDisabled: true,
     isDisabled: state.canIncrement === undefined ? false : !state.canIncrement,
+    onPressStart: (event: { pointerType: string; target: HTMLElement }) => {
+      if (document.activeElement === inputRef.current) {
+        return;
+      }
+      if (event.pointerType === "mouse") {
+        inputRef.current?.focus();
+      } else {
+        event.target.focus();
+      }
+    },
   });
 
   const decrementButtonProps = mergeProps(decButtonProps, {
@@ -286,6 +336,16 @@ export function useNumberField(
     preventFocusOnPress: true,
     allowFocusWhenDisabled: true,
     isDisabled: state.canDecrement === undefined ? false : !state.canDecrement,
+    onPressStart: (event: { pointerType: string; target: HTMLElement }) => {
+      if (document.activeElement === inputRef.current) {
+        return;
+      }
+      if (event.pointerType === "mouse") {
+        inputRef.current?.focus();
+      } else {
+        event.target.focus();
+      }
+    },
   });
 
   return {
