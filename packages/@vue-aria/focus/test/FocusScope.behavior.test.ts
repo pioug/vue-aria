@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, nextTick, onMounted } from "vue";
+import { defineComponent, h, nextTick, onMounted, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { FocusScope, useFocusManager, type FocusManager } from "../src";
 
@@ -94,6 +94,32 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
     expect(document.activeElement).toBe(outside);
     outside.remove();
+  });
+
+  it("allows restore focus to be prevented via restore event", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    container.addEventListener("react-aria-focus-scope-restore", (event) => {
+      event.preventDefault();
+    });
+
+    const outside = document.createElement("button");
+    outside.id = "outside-focus";
+    container.appendChild(outside);
+    outside.focus();
+
+    const wrapper = mount(FocusScope, {
+      attachTo: container,
+      props: { autoFocus: true, restoreFocus: true },
+      slots: {
+        default: () => [h("input", { id: "inside-focus" })],
+      },
+    });
+
+    expect(document.activeElement).toBe(wrapper.get("#inside-focus").element);
+    wrapper.unmount();
+    expect(document.activeElement).not.toBe(outside);
+    container.remove();
   });
 
   it("supports focus manager next/previous traversal with wrap", () => {
@@ -520,6 +546,57 @@ describe("FocusScope behavior", () => {
 
     tabFromActive(true);
     expect(document.activeElement).toBe(child3);
+
+    wrapper.unmount();
+  });
+
+  it("does not bubble restore focus events out of nested scopes", async () => {
+    const Host = defineComponent({
+      setup() {
+        const show = ref(false);
+        return { show };
+      },
+      render() {
+        return h("div", { id: "host-root" }, [
+          h(
+            FocusScope,
+            { restoreFocus: true, contain: true },
+            {
+              default: () => [
+                h("button", { id: "trigger" }, "Trigger"),
+                this.show
+                  ? h(
+                    FocusScope,
+                    { restoreFocus: true, autoFocus: true },
+                    {
+                      default: () => [h("input", { id: "inside" })],
+                    }
+                  )
+                  : null,
+              ],
+            }
+          ),
+        ]);
+      },
+    });
+
+    const wrapper = mount(Host, { attachTo: document.body });
+    const root = wrapper.get("#host-root").element;
+    root.addEventListener("react-aria-focus-scope-restore", (event) => {
+      event.preventDefault();
+    });
+
+    const trigger = wrapper.get("#trigger").element as HTMLButtonElement;
+    trigger.focus();
+    expect(document.activeElement).toBe(trigger);
+
+    (wrapper.vm as unknown as { show: boolean }).show = true;
+    await nextTick();
+    expect(document.activeElement).toBe(wrapper.get("#inside").element);
+
+    (wrapper.vm as unknown as { show: boolean }).show = false;
+    await nextTick();
+    expect(document.activeElement).toBe(trigger);
 
     wrapper.unmount();
   });

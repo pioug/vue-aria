@@ -480,6 +480,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - active-scope enforcement across multiple contained scopes
     - nested-scope containment lock (active child scope owns tab loop)
     - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
+    - restore-focus cancellation via `react-aria-focus-scope-restore`
+    - nested restore-focus event propagation isolation
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
     - tabbable-only traversal behavior
@@ -2752,3 +2754,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus` focus-manager parity tests for:
   - backward `from` traversal semantics, including no-wrap no-op branch
 - Validation: `npm run check` passed, `npm test` passed (123 files, 485 tests).
+- Improved `@vue-aria/focus/FocusScope` restore-focus parity:
+  - dispatches cancelable `react-aria-focus-scope-restore` events before restoring focus
+  - supports restore-focus cancellation via `preventDefault()`
+  - prevents nested scope restore events from bubbling past ancestor focus scopes
+- Expanded `@vue-aria/focus/FocusScope` behavior tests for:
+  - restore-focus cancellation custom event behavior
+  - nested scope restore-event propagation isolation
+- Validation: `npm run check` passed, `npm test` passed (123 files, 487 tests).

@@ -29,6 +29,8 @@ export interface FocusScopeProps {
   autoFocus?: boolean;
 }
 
+const RESTORE_FOCUS_EVENT = "react-aria-focus-scope-restore";
+
 export function getFocusableTreeWalker(
   root: Element,
   opts?: FocusManagerOptions,
@@ -186,6 +188,7 @@ export const FocusScope = defineComponent({
     let keydownListener: ((event: KeyboardEvent) => void) | null = null;
     let scopeFocusInListener: ((event: FocusEvent) => void) | null = null;
     let documentFocusInListener: ((event: FocusEvent) => void) | null = null;
+    let restoreEventListener: ((event: Event) => void) | null = null;
     let restoringFocus = false;
 
     const focusManager = createFocusManager({
@@ -240,6 +243,13 @@ export const FocusScope = defineComponent({
       };
 
       root.addEventListener("focusin", scopeFocusInListener);
+      restoreEventListener = (event: Event) => {
+        const target = event.target as Element | null;
+        if (target && target !== root && nodeContains(root, target)) {
+          event.stopPropagation();
+        }
+      };
+      root.addEventListener(RESTORE_FOCUS_EVENT, restoreEventListener);
 
       const activeElement = getActiveElement(ownerDocument);
       if (nodeContains(root, activeElement)) {
@@ -318,6 +328,10 @@ export const FocusScope = defineComponent({
         scopeRootRef.value.removeEventListener("focusin", scopeFocusInListener);
       }
 
+      if (restoreEventListener && scopeRootRef.value instanceof HTMLElement) {
+        scopeRootRef.value.removeEventListener(RESTORE_FOCUS_EVENT, restoreEventListener);
+      }
+
       if (keydownListener && scopeRootRef.value instanceof HTMLElement) {
         scopeRootRef.value.removeEventListener("keydown", keydownListener);
       }
@@ -331,7 +345,19 @@ export const FocusScope = defineComponent({
       }
 
       if (props.restoreFocus && previousFocused.value instanceof HTMLElement) {
-        previousFocused.value.focus();
+        let shouldRestore = true;
+        if (scopeRootRef.value instanceof HTMLElement) {
+          const restoreEvent = new CustomEvent(RESTORE_FOCUS_EVENT, {
+            bubbles: true,
+            cancelable: true,
+            detail: { nodeToRestore: previousFocused.value },
+          });
+          shouldRestore = scopeRootRef.value.dispatchEvent(restoreEvent);
+        }
+
+        if (shouldRestore) {
+          previousFocused.value.focus();
+        }
       }
     });
 
