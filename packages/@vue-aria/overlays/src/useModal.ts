@@ -61,7 +61,9 @@ export function useModalProvider(): ModalProviderAria {
   const context = useModalContext();
   return {
     modalProviderProps: {
-      "aria-hidden": context && context.modalCount.value > 0 ? true : undefined,
+      get "aria-hidden"() {
+        return context && context.modalCount.value > 0 ? true : undefined;
+      },
     },
   };
 }

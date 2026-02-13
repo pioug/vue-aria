@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/listbox`
+- Current focus package: `@vue-aria/overlays`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -430,7 +430,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 4
+- Ported test files: 7
 - Passing test files: 4
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
@@ -1750,3 +1750,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted overlays tests for outside-dismiss behavior, scroll-lock behavior, `ariaHideOutside`, and trigger close-on-scroll compatibility.
 - Added VitePress docs page for `@vue-aria/overlays` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (86 files, 262 tests).
+- Expanded overlays test parity with adapted upstream-style tests for:
+  - `DismissButton` aria labeling behavior
+  - `useModal` provider aria-hidden behavior while modal is open
+  - `usePopover` scroll behavior (does not close on scroll)
+- Validation: `npm run check` passed, `npm test` passed (89 files, 267 tests).
