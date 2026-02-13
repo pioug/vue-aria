@@ -2984,3 +2984,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - permits descendant teleported scope focus targets during parent-scope containment enforcement
   - avoids nested-scope eager activation during mount-time initialization
 - Validation: `npm run check` passed, `npm test` passed (125 files, 514 tests).
+- Expanded `@vue-aria/focus/FocusScope` nested non-containing child-scope parity with adapted upstream coverage for:
+  - preserving parent-scope tab traversal through nested child scopes that do not use `contain`
+  - preserving parent-scope tab traversal through nested child scopes that use `restoreFocus` without `contain`
+- Validation: `npm run check` passed, `npm test` passed (125 files, 516 tests).

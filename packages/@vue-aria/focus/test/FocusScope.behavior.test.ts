@@ -899,6 +899,176 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("does not lock tab navigation inside a nested scope without contain", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h("input", { id: "outside" }),
+          h(
+            FocusScope,
+            { autoFocus: true, restoreFocus: true, contain: true },
+            {
+              default: () => [
+                h("input", { id: "parent" }),
+                h("div", [
+                  h("div", [
+                    h(
+                      FocusScope,
+                      {},
+                      {
+                        default: () => [
+                          h("input", { id: "child1" }),
+                          h("input", { id: "child2" }),
+                          h("input", { id: "child3" }),
+                        ],
+                      }
+                    ),
+                  ]),
+                ]),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const parent = wrapper.get("#parent").element as HTMLInputElement;
+    const child1 = wrapper.get("#child1").element as HTMLInputElement;
+    const child2 = wrapper.get("#child2").element as HTMLInputElement;
+    const child3 = wrapper.get("#child3").element as HTMLInputElement;
+
+    const tabOrder = [parent, child1, child2, child3];
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      const handled = active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+      if (!handled) {
+        return;
+      }
+
+      const index = tabOrder.findIndex((element) => element === active);
+      if (index < 0) {
+        return;
+      }
+
+      const nextIndex = shiftKey
+        ? (index - 1 + tabOrder.length) % tabOrder.length
+        : (index + 1) % tabOrder.length;
+      tabOrder[nextIndex]?.focus();
+    };
+
+    expect(document.activeElement).toBe(parent);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child1);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(parent);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(child3);
+
+    wrapper.unmount();
+  });
+
+  it("does not lock tab navigation inside a nested scope with restoreFocus and without contain", () => {
+    const wrapper = mount(defineComponent({
+      render() {
+        return h("div", [
+          h("input", { id: "outside" }),
+          h(
+            FocusScope,
+            { autoFocus: true, restoreFocus: true, contain: true },
+            {
+              default: () => [
+                h("input", { id: "parent" }),
+                h("div", [
+                  h("div", [
+                    h(
+                      FocusScope,
+                      { restoreFocus: true },
+                      {
+                        default: () => [
+                          h("input", { id: "child1" }),
+                          h("input", { id: "child2" }),
+                          h("input", { id: "child3" }),
+                        ],
+                      }
+                    ),
+                  ]),
+                ]),
+              ],
+            }
+          ),
+        ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const parent = wrapper.get("#parent").element as HTMLInputElement;
+    const child1 = wrapper.get("#child1").element as HTMLInputElement;
+    const child2 = wrapper.get("#child2").element as HTMLInputElement;
+    const child3 = wrapper.get("#child3").element as HTMLInputElement;
+
+    const tabOrder = [parent, child1, child2, child3];
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      const handled = active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+      if (!handled) {
+        return;
+      }
+
+      const index = tabOrder.findIndex((element) => element === active);
+      if (index < 0) {
+        return;
+      }
+
+      const nextIndex = shiftKey
+        ? (index - 1 + tabOrder.length) % tabOrder.length
+        : (index + 1) % tabOrder.length;
+      tabOrder[nextIndex]?.focus();
+    };
+
+    expect(document.activeElement).toBe(parent);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child1);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child2);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(child3);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(parent);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(child3);
+
+    wrapper.unmount();
+  });
+
   it("does not bubble restore focus events out of nested scopes", async () => {
     const Host = defineComponent({
       setup() {
