@@ -406,6 +406,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `createFocusManager`
   - `useFocusRing`
   - `FocusRing`
+  - `useHasTabbableChild`
   - focus package compatibility exports:
     - `isFocusable` re-export
     - `FocusableProvider`, `Focusable`, `useFocusable`, `focusSafely` passthrough re-exports
@@ -417,17 +418,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Remaining:
   - Port `FocusScope` component behavior and focus containment logic.
   - Port `FocusScope` component API exports (`FocusScope`, `useFocusManager`, `isElementInChildOfActiveScope`).
-  - Port `useHasTabbableChild`.
   - Align tree walker behavior with full upstream radio/scope handling.
   - Migrate full upstream focus tests.
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 2
-- Passing test files: 2
+- Ported test files: 3
+- Passing test files: 3
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
   - Added adapted tests for `useFocusRing` focus/focus-visible state transitions and `within` handler path.
+  - Added adapted tests for `useHasTabbableChild` initial tabbable detection and disabled behavior.
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -630,3 +631,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported `@vue-aria/focus` `useFocusRing` and `FocusRing` with Vue-adapted behavior and merged focus props.
 - Added focus package compatibility exports to match upstream index expectations.
 - Validation: `npm run check` passed, `npm test` passed (53 files, 150 tests).
+- Ported `@vue-aria/focus/useHasTabbableChild` with sync tabbable detection and mutation-observer parity hook-up.
+- Added adapted tests for `useHasTabbableChild` behavior.
+- Validation: `npm run check` passed, `npm test` passed (54 files, 152 tests).
