@@ -457,13 +457,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 8
-- Passing test files: 4
+- Ported test files: 5
+- Passing test files: 5
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
   - Added adapted tests for `useFocusRing` focus/focus-visible state transitions and `within` handler path.
   - Added adapted tests for `useHasTabbableChild` initial tabbable detection and disabled behavior.
   - Added adapted tests for `FocusScope` API exports (`useFocusManager`, `isElementInChildOfActiveScope`).
+  - Added adapted behavior tests for `FocusScope`:
+    - `autoFocus` first-focusable behavior
+    - `restoreFocus` restoration to previously focused node on unmount
+    - `useFocusManager` next/previous traversal with wrap
+    - `useFocusManager` accept-filter traversal behavior
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2686,3 +2691,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/utils/router` parity with adapted WebKit branch coverage for:
   - keyboard event synthesis path (`keyIdentifier`) outside test mode
 - Validation: `npm run check` passed, `npm test` passed (121 files, 461 tests).
+- Expanded `@vue-aria/focus/FocusScope` parity with adapted behavior tests for:
+  - `autoFocus` first-focusable behavior
+  - `restoreFocus` unmount restoration behavior
+  - `useFocusManager` wrap traversal and accept-filter behavior
+- Validation: `npm run check` passed, `npm test` passed (122 files, 465 tests).
