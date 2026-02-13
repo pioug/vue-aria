@@ -1692,7 +1692,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Current hook covers native validity wiring and invalid/change/reset event integration; React-specific form-reset interception nuances still need parity hardening.
+  - Current hook now covers native validity wiring plus invalid/change/reset scheduling branches; remaining parity is focused on first-invalid focus ordering and deeper select integration flows.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -1700,6 +1700,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for native custom validity wiring, invalid-event commit behavior, form reset listener behavior, and programmatic reset ignore path.
+  - Added adapted coverage for change-event commit behavior, invalid-event short-circuit when display state is already invalid, and native validity snapshot propagation when realtime validation is valid.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1717,7 +1718,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Deepen native form reset parity behavior and React scheduling edge-case handling in `useFormValidation`.
+1. Expand first-invalid focus-order parity coverage in multi-input forms.
 2. Expand integration tests through `@vue-aria/select` hidden select/native validation paths.
 
 ## 33) Package Record: @vue-aria/spinbutton
@@ -2493,3 +2494,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `@vue-aria/checkbox-state` native validation commit-queue behavior
   - `@vue-aria/radio-state` native validation commit-queue behavior
 - Validation: `npm run check` passed, `npm test` passed (117 files, 378 tests).
+- Expanded `@vue-aria/form` hook parity tests with adapted coverage for:
+  - change-event commit behavior
+  - invalid-event commit short-circuit when already invalid
+  - native validity snapshot update path when realtime validation is valid
+- Validation: `npm run check` passed, `npm test` passed (117 files, 381 tests).

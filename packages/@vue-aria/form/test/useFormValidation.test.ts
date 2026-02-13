@@ -47,6 +47,77 @@ describe("useFormValidation", () => {
     form.remove();
   });
 
+  it("commits validation on change event", () => {
+    const input = document.createElement("input");
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+      commitValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(state.commitValidation).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("does not commit again on invalid when display validation is already invalid", () => {
+    const input = document.createElement("input");
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      displayValidation: { isInvalid: true, validationErrors: ["Invalid"], validationDetails: null },
+      commitValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    input.dispatchEvent(new Event("invalid", { cancelable: true, bubbles: true }));
+    expect(state.commitValidation).not.toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("updates native validity snapshot when realtime validation is valid", () => {
+    const input = document.createElement("input");
+    input.required = true;
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      realtimeValidation: {
+        isInvalid: false,
+        validationErrors: [],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    expect(state.updateValidation).toHaveBeenCalled();
+    const [result] = state.updateValidation.mock.calls[0];
+    expect(result.isInvalid).toBe(true);
+    expect(result.validationDetails?.valueMissing).toBe(true);
+    scope.stop();
+  });
+
   it("resets validation on form reset event", () => {
     const input = document.createElement("input");
     const form = document.createElement("form");
