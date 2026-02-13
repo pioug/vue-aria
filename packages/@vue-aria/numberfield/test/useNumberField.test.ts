@@ -22,12 +22,12 @@ function createState() {
     minValue: 0,
     displayValidation: {
       isInvalid: false,
-      validationErrors: [],
+      validationErrors: [] as string[],
       validationDetails: null,
     },
     realtimeValidation: {
       isInvalid: false,
-      validationErrors: [],
+      validationErrors: [] as string[],
       validationDetails: null,
     },
     updateValidation: vi.fn(),
@@ -347,6 +347,77 @@ describe("useNumberField hook", () => {
         ref
       )
     )!;
+    const focusSpy = vi.spyOn(input, "focus");
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalled();
+    expect(focusSpy).toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("does not focus custom-invalid numberfield when an earlier required field is first invalid", async () => {
+    const state = createState();
+    state.realtimeValidation = {
+      isInvalid: true,
+      validationErrors: ["Invalid"],
+      validationDetails: null,
+    };
+
+    const precedingInput = document.createElement("input");
+    precedingInput.required = true;
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(precedingInput);
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+    await nextTick();
+    const focusSpy = vi.spyOn(input, "focus");
+
+    input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));
+    expect(state.commitValidation).toHaveBeenCalled();
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
+
+  it("focuses custom-invalid numberfield when no earlier invalid field exists", async () => {
+    const state = createState();
+    state.realtimeValidation = {
+      isInvalid: true,
+      validationErrors: ["Invalid"],
+      validationDetails: null,
+    };
+
+    const precedingInput = document.createElement("input");
+    const input = document.createElement("input");
+    const ref = { current: input as HTMLInputElement | null };
+    const form = document.createElement("form");
+    form.appendChild(precedingInput);
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const scope = effectScope();
+    scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+    await nextTick();
     const focusSpy = vi.spyOn(input, "focus");
 
     input.dispatchEvent(new Event("invalid", { bubbles: true, cancelable: true }));

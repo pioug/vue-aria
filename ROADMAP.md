@@ -2078,6 +2078,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - first-invalid ordering guard when an earlier form field is invalid
     - default-prevented invalid-event guard that skips native focus transfer
     - focus transfer behavior when earlier siblings are disabled or non-validatable
+    - mixed custom-validity + first-invalid ordering scenarios (custom-invalid numberfield with and without earlier invalid siblings)
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted blur merge-path coverage ensuring user-provided `onBlur` callbacks are preserved while commit/announce logic still runs.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
@@ -2100,7 +2101,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining numberfield interaction parity for commit/announce timing in controlled-value rerender edge cases.
-2. Expand native-invalid integration parity for mixed custom-validity and multi-field first-invalid scenarios.
+2. Expand native-invalid integration parity for dynamic multi-field form mutations (insert/remove/reorder first-invalid elements).
 
 ## 35) Package Record: @vue-aria/numberfield-state
 - Upstream source path(s):
@@ -3388,3 +3389,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` blur commit/announce merge-path parity:
   - added adapted coverage ensuring user `onBlur` handlers run alongside commit normalization and live announcement behavior
 - Validation: `npm run check` passed, `npm test` passed (130 files, 629 tests).
+- Expanded `@vue-aria/numberfield` mixed custom-validity first-invalid parity:
+  - added adapted coverage for custom-invalid numberfield focus behavior with and without earlier invalid siblings in native validation mode
+- Validation: `npm run check` passed, `npm test` passed (130 files, 631 tests).
