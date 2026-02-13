@@ -192,7 +192,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted upstream coverage for `shadowTreeWalker` multi-shadow traversal (peer and nested shadow hosts).
   - Added adapted router/openLink parity coverage (`openLink.isOpening`, synthetic href mapping, and deprecated `getSyntheticLinkProps` behavior).
   - Added adapted animation parity coverage for `useEnterAnimation`/`useExitAnimation` (completion and interrupted-exit flows).
-  - Remaining parity gaps include advanced `openLink` browser-specific event synthesis branches.
+  - Added adapted `openLink` browser-branch coverage for Firefox keyboard-triggered `_blank` handling (ctrl/meta modifier synthesis).
+  - Remaining parity gap: WebKit-specific keyboard event synthesis path (`keyIdentifier` branch) is implemented but still unverified in the test environment.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2641,3 +2642,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Home/End ctrl+shift range-extension behavior in multiple selection mode
   - focus entry from following elements selecting `lastSelectedKey`
 - Validation: `npm run check` passed, `npm test` passed (121 files, 442 tests).
+- Hardened `@vue-aria/utils/router` open-link browser parity:
+  - added upstream-aligned Firefox keyboard `_blank` modifier synthesis (`ctrl`/`meta` promotion)
+  - implemented upstream WebKit keyboard event synthesis branch (`keyIdentifier`) for non-test runtime parity
+- Expanded router parity tests for:
+  - Firefox keyboard `_blank` behavior on non-Mac (ctrl modifier)
+  - Firefox keyboard `_blank` behavior on Mac (meta modifier)
+- Validation: `npm run check` passed, `npm test` passed (121 files, 444 tests).

@@ -1,5 +1,6 @@
 import { getCurrentInstance, inject, provide } from "vue";
 import { focusWithoutScrolling } from "./focusWithoutScrolling";
+import { isFirefox, isIPad, isMac, isWebKit } from "./platform";
 
 export type Href = string;
 
@@ -117,16 +118,34 @@ export const openLink: OpenLinkFn = ((
   modifiers: Modifiers,
   setOpening = true
 ) => {
-  const { metaKey, ctrlKey, altKey, shiftKey } = modifiers;
-  const event = new MouseEvent("click", {
-    metaKey,
-    ctrlKey,
-    altKey,
-    shiftKey,
-    detail: 1,
-    bubbles: true,
-    cancelable: true,
-  });
+  let { metaKey, ctrlKey, altKey, shiftKey } = modifiers;
+
+  if (isFirefox() && window.event?.type?.startsWith("key") && target.target === "_blank") {
+    if (isMac()) {
+      metaKey = true;
+    } else {
+      ctrlKey = true;
+    }
+  }
+
+  const event = isWebKit() && isMac() && !isIPad() && process.env.NODE_ENV !== "test"
+    ? new KeyboardEvent("keydown", {
+      // keyIdentifier is non-standard but required by WebKit parity behavior.
+      keyIdentifier: "Enter",
+      metaKey,
+      ctrlKey,
+      altKey,
+      shiftKey,
+    } as KeyboardEventInit & { keyIdentifier?: string })
+    : new MouseEvent("click", {
+      metaKey,
+      ctrlKey,
+      altKey,
+      shiftKey,
+      detail: 1,
+      bubbles: true,
+      cancelable: true,
+    });
 
   openLink.isOpening = setOpening;
   try {

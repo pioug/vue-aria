@@ -181,4 +181,102 @@ describe("router utilities", () => {
     expect(openingStates).toEqual([false]);
     expect(openLink.isOpening).toBe(false);
   });
+
+  it("sets ctrlKey when opening _blank links from keyboard events in Firefox on non-Mac", () => {
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const eventDescriptor = Object.getOwnPropertyDescriptor(window, "event");
+
+    try {
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "Mozilla/5.0 Firefox/121.0",
+      });
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "Win32",
+      });
+      Object.defineProperty(window, "event", {
+        configurable: true,
+        value: new KeyboardEvent("keydown"),
+      });
+
+      const anchor = document.createElement("a");
+      anchor.href = "/reports";
+      anchor.target = "_blank";
+
+      let clickEvent: MouseEvent | undefined;
+      anchor.addEventListener("click", (event) => {
+        event.preventDefault();
+        clickEvent = event as MouseEvent;
+      });
+
+      openLink(anchor, {});
+
+      expect(clickEvent).toBeDefined();
+      expect(clickEvent!.ctrlKey).toBe(true);
+      expect(clickEvent!.metaKey).toBe(false);
+    } finally {
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+      if (eventDescriptor) {
+        Object.defineProperty(window, "event", eventDescriptor);
+      } else {
+        delete (window as any).event;
+      }
+    }
+  });
+
+  it("sets metaKey when opening _blank links from keyboard events in Firefox on Mac", () => {
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const eventDescriptor = Object.getOwnPropertyDescriptor(window, "event");
+
+    try {
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "Mozilla/5.0 Firefox/121.0",
+      });
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "MacIntel",
+      });
+      Object.defineProperty(window, "event", {
+        configurable: true,
+        value: new KeyboardEvent("keydown"),
+      });
+
+      const anchor = document.createElement("a");
+      anchor.href = "/reports";
+      anchor.target = "_blank";
+
+      let clickEvent: MouseEvent | undefined;
+      anchor.addEventListener("click", (event) => {
+        event.preventDefault();
+        clickEvent = event as MouseEvent;
+      });
+
+      openLink(anchor, {});
+
+      expect(clickEvent).toBeDefined();
+      expect(clickEvent!.metaKey).toBe(true);
+      expect(clickEvent!.ctrlKey).toBe(false);
+    } finally {
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+      if (eventDescriptor) {
+        Object.defineProperty(window, "event", eventDescriptor);
+      } else {
+        delete (window as any).event;
+      }
+    }
+  });
 });
