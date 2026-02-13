@@ -392,7 +392,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Remaining:
   - Deepen `useSelectableCollection` parity for virtualization/scroll lifecycle nuances.
-  - Reconcile remaining `useSelectableItem` press-responder edge semantics against upstream pointer/keyboard path details.
+  - Validate remaining pointer down/up integration details against downstream listbox/story harnesses.
 
 ### Tests
 - Total upstream test files: 1
@@ -438,7 +438,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - touch long-press behavior for action+selection items switching selection behavior to `toggle`
     - drag-start suppression after touch interaction when long-press selection behavior is active
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
-  - Remaining `useSelectableItem` parity focuses on full press-responder lifecycle alignment beyond current click/touch long-press behavior coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -3177,4 +3176,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for focus-entry selection/non-mutation branches
   - added adapted tests for scroll restore on focused-key re-entry
   - added adapted tests for Shift+Tab, Home/End shift guards, and focus-scope restore handling
+- Validation: `npm run check` passed, `npm test` passed (126 files, 577 tests).
+- Expanded `@vue-aria/selection/useSelectableItem` press lifecycle parity:
+  - migrated item interaction flow to `usePress` and `useLongPress` semantics with upstream-aligned pointer/keyboard action-vs-selection branching
+  - aligned `shouldSelectOnPressUp` + `allowsDifferentPressOrigin` behavior to press-phase callbacks (`onPress`, `onPressUp`)
+  - aligned virtual-focus press behavior using `preventFocusOnPress` and press-phase focused-key updates
+  - aligned long-press behavior to `useLongPress` (`touch` toggles selection + `setSelectionBehavior("toggle")`) and drag suppression after touch press-start
+  - aligned item `isPressed` state to press responder state instead of static false
+- Expanded `@vue-aria/selection` and downstream listbox harness coverage:
+  - updated `useSelectableItem` adapted tests to run within effect scopes and to exercise press responder event sequencing
+  - added pointer-event test harness helpers for touch/virtual interaction branches in jsdom
+  - adapted `@vue-aria/listbox/useOption` hover-pointer tests to provide full event contracts expected by press handlers
 - Validation: `npm run check` passed, `npm test` passed (126 files, 577 tests).

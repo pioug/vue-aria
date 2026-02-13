@@ -1,5 +1,5 @@
 import { effectScope } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { listData } from "../src/utils";
 import { useOption } from "../src/useOption";
 import type { ListState } from "../src/types";
@@ -155,6 +155,7 @@ describe("useOption", () => {
       currentTarget: ref.current,
       target: ref.current,
       pointerType: "mouse",
+      stopPropagation: vi.fn(),
     } as unknown as PointerEvent);
     setInteractionModality("keyboard");
 
@@ -203,6 +204,7 @@ describe("useOption", () => {
       currentTarget: ref.current,
       target: ref.current,
       pointerType: "mouse",
+      stopPropagation: vi.fn(),
     } as unknown as PointerEvent);
 
     expect(focusCalls).toEqual([]);
@@ -250,6 +252,7 @@ describe("useOption", () => {
       currentTarget: ref.current,
       target: ref.current,
       pointerType: "mouse",
+      stopPropagation: vi.fn(),
     } as unknown as PointerEvent);
     setInteractionModality("keyboard");
 

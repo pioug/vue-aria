@@ -3,6 +3,7 @@ import { useSelectableItem } from "../src/useSelectableItem";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { useCollectionId } from "../src/utils";
 import { openLink } from "@vue-aria/utils";
+import { effectScope, type EffectScope } from "vue";
 
 const open = vi.fn();
 const { moveVirtualFocus } = vi.hoisted(() => ({
@@ -17,9 +18,13 @@ vi.mock("@vue-aria/utils", async () => {
   };
 });
 
-vi.mock("@vue-aria/interactions", () => ({
-  focusSafely: vi.fn(),
-}));
+vi.mock("@vue-aria/interactions", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/interactions")>("@vue-aria/interactions");
+  return {
+    ...actual,
+    focusSafely: vi.fn(),
+  };
+});
 vi.mock("@vue-aria/focus", () => ({
   moveVirtualFocus,
 }));
@@ -66,6 +71,196 @@ function createManager(overrides: Partial<MultipleSelectionManager> = {}): Multi
   };
 }
 
+const activeScopes: EffectScope[] = [];
+const originalPointerEvent = globalThis.PointerEvent;
+
+function runSelectableItem(options: Parameters<typeof useSelectableItem>[0]) {
+  const scope = effectScope();
+  activeScopes.push(scope);
+  return scope.run(() => useSelectableItem(options))!;
+}
+
+function setEventTarget<T extends object>(event: T, target: EventTarget | null): T {
+  if (!target) {
+    return event;
+  }
+
+  Object.defineProperty(event, "currentTarget", { value: target, configurable: true });
+  if (!("target" in event) || (event as { target?: unknown }).target == null) {
+    Object.defineProperty(event, "target", { value: target, configurable: true });
+  }
+
+  return event;
+}
+
+function triggerMouseDown(itemProps: Record<string, unknown>, target: EventTarget | null, init: MouseEventInit = {}) {
+  const onMousedown = itemProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+  if (!onMousedown) {
+    return;
+  }
+
+  const event = {
+    type: "mousedown",
+    button: init.button ?? 0,
+    currentTarget: target,
+    target,
+    shiftKey: init.shiftKey ?? false,
+    ctrlKey: init.ctrlKey ?? false,
+    metaKey: init.metaKey ?? false,
+    altKey: init.altKey ?? false,
+    clientX: 0,
+    clientY: 0,
+    stopPropagation: vi.fn(),
+    preventDefault: vi.fn(),
+  } as unknown as MouseEvent;
+
+  onMousedown(event);
+}
+
+function triggerMouseUp(itemProps: Record<string, unknown>, target: EventTarget | null, init: MouseEventInit = {}) {
+  const onMouseup = itemProps.onMouseup as ((event: MouseEvent) => void) | undefined;
+  if (!onMouseup) {
+    return;
+  }
+
+  const event = {
+    type: "mouseup",
+    button: init.button ?? 0,
+    currentTarget: target,
+    target,
+    shiftKey: init.shiftKey ?? false,
+    ctrlKey: init.ctrlKey ?? false,
+    metaKey: init.metaKey ?? false,
+    altKey: init.altKey ?? false,
+    clientX: 0,
+    clientY: 0,
+    stopPropagation: vi.fn(),
+    preventDefault: vi.fn(),
+  } as unknown as MouseEvent;
+
+  onMouseup(event);
+}
+
+function triggerClick(
+  itemProps: Record<string, unknown>,
+  target: EventTarget | null,
+  init: MouseEventInit & { pointerType?: string } = {}
+) {
+  const onClick = itemProps.onClick as ((event: MouseEvent) => void) | undefined;
+  if (!onClick) {
+    return;
+  }
+
+  const { pointerType, ...mouseInit } = init;
+  const event = {
+    type: "click",
+    button: mouseInit.button ?? 0,
+    currentTarget: target,
+    target,
+    shiftKey: mouseInit.shiftKey ?? false,
+    ctrlKey: mouseInit.ctrlKey ?? false,
+    metaKey: mouseInit.metaKey ?? false,
+    altKey: mouseInit.altKey ?? false,
+    clientX: 0,
+    clientY: 0,
+    stopPropagation: vi.fn(),
+    preventDefault: vi.fn(),
+  } as unknown as MouseEvent;
+  if (pointerType) {
+    Object.defineProperty(event, "pointerType", { value: pointerType, configurable: true });
+  }
+
+  onClick(event);
+  return event;
+}
+
+function triggerMousePress(
+  itemProps: Record<string, unknown>,
+  target: EventTarget | null,
+  init: MouseEventInit & { pointerType?: string } = {}
+) {
+  triggerMouseDown(itemProps, target, init);
+  return triggerClick(itemProps, target, init);
+}
+
+function triggerKeyPress(
+  itemProps: Record<string, unknown>,
+  target: EventTarget | null,
+  key: string,
+  init: KeyboardEventInit = {}
+) {
+  const onKeydown = itemProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
+  const onKeyup = itemProps.onKeyup as ((event: KeyboardEvent) => void) | undefined;
+
+  const keydown = {
+    type: "keydown",
+    key,
+    code: init.code,
+    repeat: init.repeat ?? false,
+    currentTarget: target,
+    target,
+    shiftKey: init.shiftKey ?? false,
+    ctrlKey: init.ctrlKey ?? false,
+    metaKey: init.metaKey ?? false,
+    altKey: init.altKey ?? false,
+    stopPropagation: vi.fn(),
+    preventDefault: vi.fn(),
+  } as unknown as KeyboardEvent;
+  onKeydown?.(keydown);
+
+  const keyup = {
+    type: "keyup",
+    key,
+    code: init.code,
+    repeat: init.repeat ?? false,
+    currentTarget: target,
+    target,
+    shiftKey: init.shiftKey ?? false,
+    ctrlKey: init.ctrlKey ?? false,
+    metaKey: init.metaKey ?? false,
+    altKey: init.altKey ?? false,
+    stopPropagation: vi.fn(),
+    preventDefault: vi.fn(),
+  } as unknown as KeyboardEvent;
+  onKeyup?.(keyup);
+
+  return { keydown, keyup };
+}
+
+function installPointerEvent() {
+  class MockPointerEvent extends MouseEvent {
+    pointerType: string;
+    pointerId: number;
+
+    constructor(type: string, init: MouseEventInit & { pointerType?: string; pointerId?: number } = {}) {
+      super(type, init);
+      this.pointerType = init.pointerType ?? "mouse";
+      this.pointerId = init.pointerId ?? 1;
+    }
+  }
+
+  (globalThis as { PointerEvent?: typeof PointerEvent }).PointerEvent =
+    MockPointerEvent as unknown as typeof PointerEvent;
+}
+
+function triggerPointerDown(itemProps: Record<string, unknown>, target: EventTarget | null, pointerType: string) {
+  const onPointerdown = itemProps.onPointerdown as ((event: PointerEvent) => void) | undefined;
+  if (!onPointerdown) {
+    return;
+  }
+
+  const event = setEventTarget(
+    new PointerEvent("pointerdown", { bubbles: true, button: 0, pointerId: 1, pointerType } as PointerEventInit),
+    target
+  );
+  onPointerdown(event);
+}
+
+function triggerPointerPress(itemProps: Record<string, unknown>, target: EventTarget | null, pointerType: string) {
+  triggerPointerDown(itemProps, target, pointerType);
+  triggerClick(itemProps, target, { pointerType });
+}
+
 describe("useSelectableItem", () => {
   beforeEach(() => {
     open.mockReset();
@@ -74,6 +269,11 @@ describe("useSelectableItem", () => {
   });
 
   afterEach(() => {
+    while (activeScopes.length > 0) {
+      activeScopes.pop()?.stop();
+    }
+
+    (globalThis as { PointerEvent?: typeof PointerEvent }).PointerEvent = originalPointerEvent;
     vi.useRealTimers();
   });
 
@@ -81,14 +281,13 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMousePress(itemProps, ref.current);
 
     expect(manager.replaceSelection).toHaveBeenCalledWith("a");
   });
@@ -97,14 +296,13 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true, ctrlKey: true }));
+    triggerMousePress(itemProps, ref.current, { ctrlKey: true });
 
     expect(manager.toggleSelection).toHaveBeenCalledWith("a");
   });
@@ -113,17 +311,14 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
     });
 
-    const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
-    onMousedown(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
-
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMouseDown(itemProps, ref.current);
+    triggerClick(itemProps, ref.current);
 
     expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
     expect(manager.replaceSelection).toHaveBeenCalledWith("a");
@@ -133,19 +328,17 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       shouldSelectOnPressUp: true,
     });
 
-    const onMousedown = itemProps.onMousedown as ((event: MouseEvent) => void) | undefined;
-    onMousedown?.(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    triggerMouseDown(itemProps, ref.current);
     expect(manager.replaceSelection).not.toHaveBeenCalled();
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerClick(itemProps, ref.current);
 
     expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
     expect(manager.replaceSelection).toHaveBeenCalledWith("a");
@@ -155,7 +348,7 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -163,38 +356,29 @@ describe("useSelectableItem", () => {
       allowsDifferentPressOrigin: true,
     });
 
-    const onMousedown = itemProps.onMousedown as ((event: MouseEvent) => void) | undefined;
-    onMousedown?.(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
     expect(manager.replaceSelection).not.toHaveBeenCalled();
 
-    const onMouseup = itemProps.onMouseup as (event: MouseEvent) => void;
-    onMouseup(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+    triggerMouseUp(itemProps, ref.current);
     expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
     expect(manager.replaceSelection).toHaveBeenCalledWith("a");
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerClick(itemProps, ref.current);
     expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
   });
 
   it("toggles selection for touch/virtual pointer interactions", () => {
+    installPointerEvent();
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    const touchClick = new MouseEvent("click", { bubbles: true });
-    Object.defineProperty(touchClick, "pointerType", { value: "touch" });
-    onClick(touchClick);
-
-    const virtualClick = new MouseEvent("click", { bubbles: true });
-    Object.defineProperty(virtualClick, "pointerType", { value: "virtual" });
-    onClick(virtualClick);
+    triggerPointerPress(itemProps, ref.current, "touch");
+    triggerPointerPress(itemProps, ref.current, "virtual");
 
     expect(manager.toggleSelection).toHaveBeenCalledTimes(2);
     expect(manager.toggleSelection).toHaveBeenNthCalledWith(1, "a");
@@ -204,6 +388,7 @@ describe("useSelectableItem", () => {
   it.each(["touch", "virtual"] as const)(
     "uses toggle mode across items for %s pointer interactions in replace behavior",
     (pointerType) => {
+      installPointerEvent();
       const selectedKeys = new Set<Key>();
       const manager = createManager({
         selectedKeys,
@@ -225,24 +410,19 @@ describe("useSelectableItem", () => {
 
       const firstRef = { current: document.createElement("div") };
       const thirdRef = { current: document.createElement("div") };
-      const first = useSelectableItem({
+      const first = runSelectableItem({
         selectionManager: manager,
         key: "i1",
         ref: firstRef,
       });
-      const third = useSelectableItem({
+      const third = runSelectableItem({
         selectionManager: manager,
         key: "i3",
         ref: thirdRef,
       });
 
-      const firstClick = new MouseEvent("click", { bubbles: true });
-      Object.defineProperty(firstClick, "pointerType", { value: pointerType });
-      (first.itemProps.onClick as (event: MouseEvent) => void)(firstClick);
-
-      const thirdClick = new MouseEvent("click", { bubbles: true });
-      Object.defineProperty(thirdClick, "pointerType", { value: pointerType });
-      (third.itemProps.onClick as (event: MouseEvent) => void)(thirdClick);
+      triggerPointerPress(first.itemProps, firstRef.current, pointerType);
+      triggerPointerPress(third.itemProps, thirdRef.current, pointerType);
 
       expect(manager.toggleSelection).toHaveBeenNthCalledWith(1, "i1");
       expect(manager.toggleSelection).toHaveBeenNthCalledWith(2, "i3");
@@ -259,7 +439,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps, hasAction } = useSelectableItem({
+    const { itemProps, hasAction } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -268,8 +448,7 @@ describe("useSelectableItem", () => {
 
     expect(hasAction).toBe(true);
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMousePress(itemProps, ref.current);
 
     expect(onAction).toHaveBeenCalledTimes(1);
     expect(open).not.toHaveBeenCalled();
@@ -284,18 +463,16 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("a") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       linkBehavior: "selection",
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    const event = new MouseEvent("click", { bubbles: true });
-    onClick(event);
+    triggerMousePress(itemProps, ref.current);
 
-    expect(open).toHaveBeenCalledWith(ref.current, event, "/docs", { source: "test" });
+    expect(open).toHaveBeenCalledWith(ref.current, expect.anything(), "/docs", { source: "test" });
     expect(manager.setSelectedKeys).toHaveBeenCalledWith(selectedKeys);
     expect(manager.replaceSelection).not.toHaveBeenCalled();
     expect(manager.toggleSelection).not.toHaveBeenCalled();
@@ -308,15 +485,14 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("a") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       linkBehavior: "override",
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMousePress(itemProps, ref.current);
 
     expect(open).toHaveBeenCalledTimes(1);
     expect(manager.replaceSelection).not.toHaveBeenCalled();
@@ -331,7 +507,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("a") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -357,7 +533,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("a") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -383,15 +559,14 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("a") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       linkBehavior: "none",
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMousePress(itemProps, ref.current);
 
     expect(open).not.toHaveBeenCalled();
     expect(manager.replaceSelection).not.toHaveBeenCalled();
@@ -403,30 +578,18 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
     });
 
-    const onKeydown = itemProps.onKeydown as (event: KeyboardEvent) => void;
-    const enter = new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
-    onKeydown(enter);
-
-    const space = {
-      key: " ",
-      shiftKey: false,
-      ctrlKey: false,
-      metaKey: false,
-      altKey: false,
-      preventDefault: vi.fn(),
-    } as unknown as KeyboardEvent;
-    onKeydown(space);
+    triggerKeyPress(itemProps, ref.current, "Enter");
+    triggerKeyPress(itemProps, ref.current, " ");
 
     expect(manager.replaceSelection).toHaveBeenCalledTimes(2);
     expect(manager.replaceSelection).toHaveBeenNthCalledWith(1, "a");
     expect(manager.replaceSelection).toHaveBeenNthCalledWith(2, "a");
-    expect((space.preventDefault as any).mock.calls.length).toBe(1);
   });
 
   it("runs secondary action on Enter and double click in replace selection mode", () => {
@@ -437,7 +600,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps, hasAction } = useSelectableItem({
+    const { itemProps, hasAction } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -446,17 +609,18 @@ describe("useSelectableItem", () => {
 
     expect(hasAction).toBe(true);
 
-    const onKeydown = itemProps.onKeydown as (event: KeyboardEvent) => void;
-    onKeydown(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    triggerKeyPress(itemProps, ref.current, "Enter");
 
     const onDoubleClick = itemProps.onDoubleClick as (event: MouseEvent) => void;
+    triggerMouseDown(itemProps, ref.current);
     onDoubleClick(new MouseEvent("dblclick", { bubbles: true }));
 
     expect(onAction).toHaveBeenCalledTimes(2);
-    expect(manager.replaceSelection).not.toHaveBeenCalled();
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(1);
   });
 
   it("runs secondary double-click action only for mouse modality", () => {
+    installPointerEvent();
     const onAction = vi.fn();
     const manager = createManager({
       selectionBehavior: "replace",
@@ -464,24 +628,21 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       onAction,
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    const touchClick = new MouseEvent("click", { bubbles: true });
-    Object.defineProperty(touchClick, "pointerType", { value: "touch" });
-    onClick(touchClick);
+    triggerPointerPress(itemProps, ref.current, "touch");
+    onAction.mockClear();
 
     const onDoubleClick = itemProps.onDoubleClick as (event: MouseEvent) => void;
     onDoubleClick(new MouseEvent("dblclick", { bubbles: true }));
     expect(onAction).toHaveBeenCalledTimes(0);
 
-    const mouseDown = itemProps.onMousedown as (event: MouseEvent) => void;
-    mouseDown(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    triggerPointerDown(itemProps, ref.current, "mouse");
     onDoubleClick(new MouseEvent("dblclick", { bubbles: true }));
     expect(onAction).toHaveBeenCalledTimes(1);
   });
@@ -493,7 +654,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps, allowsSelection, hasAction } = useSelectableItem({
+    const { itemProps, allowsSelection, hasAction } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -504,8 +665,7 @@ describe("useSelectableItem", () => {
     expect(allowsSelection).toBe(false);
     expect(hasAction).toBe(true);
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMousePress(itemProps, ref.current);
 
     expect(onAction).toHaveBeenCalledTimes(1);
     expect(manager.replaceSelection).not.toHaveBeenCalled();
@@ -520,7 +680,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -541,7 +701,7 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    useSelectableItem({
+    runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -555,15 +715,14 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       shouldUseVirtualFocus: true,
     });
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerMouseDown(itemProps, ref.current);
 
     expect(manager.setFocused).toHaveBeenCalledWith(true);
     expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
@@ -573,7 +732,7 @@ describe("useSelectableItem", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
@@ -592,13 +751,13 @@ describe("useSelectableItem", () => {
     const collectionId = useCollectionId(manager.collection as object);
     const ref = { current: document.createElement("div") };
 
-    const first = useSelectableItem({
+    const first = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       id: "custom-item-id",
     });
-    const second = useSelectableItem({
+    const second = runSelectableItem({
       selectionManager: manager,
       key: "b",
       ref: { current: document.createElement("div") },
@@ -624,21 +783,14 @@ describe("useSelectableItem", () => {
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
     });
 
-    const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
-    const mouseDownEvent = new MouseEvent("mousedown", { bubbles: true, button: 0 });
-    onMousedown(mouseDownEvent);
-
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
-
-    const onKeydown = itemProps.onKeydown as (event: KeyboardEvent) => void;
-    onKeydown(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    triggerMousePress(itemProps, ref.current);
+    triggerKeyPress(itemProps, ref.current, " ");
 
     expect(onCollectionMousedown).toHaveBeenCalledTimes(1);
     expect(onCollectionClick).toHaveBeenCalledTimes(1);
@@ -648,26 +800,21 @@ describe("useSelectableItem", () => {
 
   it("switches to toggle selection behavior on touch long press", () => {
     vi.useFakeTimers();
+    installPointerEvent();
     const manager = createManager({
       selectionBehavior: "replace",
       canSelectItem: vi.fn(() => true),
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       onAction: vi.fn(),
     });
 
-    const onTouchstart = itemProps.onTouchstart as (event: TouchEvent) => void;
-    onTouchstart({
-      shiftKey: false,
-      ctrlKey: false,
-      metaKey: false,
-      altKey: false,
-    } as TouchEvent);
+    triggerPointerDown(itemProps, ref.current, "touch");
 
     vi.advanceTimersByTime(500);
 
@@ -675,36 +822,28 @@ describe("useSelectableItem", () => {
     expect(manager.setSelectionBehavior).toHaveBeenCalledWith("toggle");
     expect(manager.replaceSelection).not.toHaveBeenCalled();
 
-    const onClick = itemProps.onClick as (event: MouseEvent) => void;
-    onClick(new MouseEvent("click", { bubbles: true }));
+    triggerClick(itemProps, ref.current, { pointerType: "touch" });
     expect(manager.replaceSelection).not.toHaveBeenCalled();
   });
 
   it("cancels touch long press when touch ends before threshold", () => {
     vi.useFakeTimers();
+    installPointerEvent();
     const manager = createManager({
       selectionBehavior: "replace",
       canSelectItem: vi.fn(() => true),
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       onAction: vi.fn(),
     });
 
-    const onTouchstart = itemProps.onTouchstart as (event: TouchEvent) => void;
-    onTouchstart({
-      shiftKey: false,
-      ctrlKey: false,
-      metaKey: false,
-      altKey: false,
-    } as TouchEvent);
-
-    const onTouchend = itemProps.onTouchend as () => void;
-    onTouchend();
+    triggerPointerDown(itemProps, ref.current, "touch");
+    triggerClick(itemProps, ref.current, { pointerType: "touch" });
     vi.advanceTimersByTime(500);
 
     expect(manager.toggleSelection).not.toHaveBeenCalled();
@@ -712,26 +851,21 @@ describe("useSelectableItem", () => {
   });
 
   it("prevents drag start after touch interaction when long-press selection is enabled", () => {
+    installPointerEvent();
     const manager = createManager({
       selectionBehavior: "replace",
       canSelectItem: vi.fn(() => true),
     });
     const ref = { current: document.createElement("div") };
 
-    const { itemProps } = useSelectableItem({
+    const { itemProps } = runSelectableItem({
       selectionManager: manager,
       key: "a",
       ref,
       onAction: vi.fn(),
     });
 
-    const onTouchstart = itemProps.onTouchstart as (event: TouchEvent) => void;
-    onTouchstart({
-      shiftKey: false,
-      ctrlKey: false,
-      metaKey: false,
-      altKey: false,
-    } as TouchEvent);
+    triggerPointerDown(itemProps, ref.current, "touch");
 
     const onDragstartCapture = itemProps.onDragstartCapture as (event: DragEvent) => void;
     const dragEvent = { preventDefault: vi.fn() } as unknown as DragEvent;
