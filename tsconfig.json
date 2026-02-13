@@ -41,6 +41,7 @@
       "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"],
       "@vue-aria/overlays-state": ["packages/@vue-aria/overlays-state/src/index.ts"],
       "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
+      "@vue-aria/list-state": ["packages/@vue-aria/list-state/src/index.ts"],
       "@vue-aria/tooltip-state": ["packages/@vue-aria/tooltip-state/src/index.ts"],
       "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
       "@vue-aria/disclosure-state": ["packages/@vue-aria/disclosure-state/src/index.ts"],

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/listbox`
+- Current focus package: `@vue-aria/list-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -76,7 +76,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/overlays-state`: In progress
 - `@vue-aria/tooltip-state`: In progress
 - `@vue-aria/disclosure-state`: In progress
-- `@vue-aria/list-state`: Not started
+- `@vue-aria/list-state`: In progress
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
 - `@vue-aria/calendar-state`: Not started
@@ -1489,10 +1489,64 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Port list-state package to remove temporary structural state typing in listbox hooks.
-2. Add more behavior parity tests for keyboard navigation and action/link interaction paths.
+1. Add richer keyboard/action/link behavior parity tests around listbox option interactions.
+2. Validate listbox/list-state behavior in downstream Spectrum listbox/select integrations.
 
-## 29) Session Log
+## 29) Package Record: @vue-aria/list-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/list/src`
+  - `references/react-spectrum/packages/@react-stately/list/docs`
+- Local package path:
+  - `packages/@vue-aria/list-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `ListCollection`
+  - `useListState`
+  - `UNSTABLE_useFilteredListState`
+  - `useSingleSelectListState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - state modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Collection-building hooks from upstream stately collections are not fully mirrored yet; this slice currently accepts provided `collection`/`items` inputs.
+
+### Tests
+- Total upstream test files: 0 dedicated unit tests in package path
+- Ported test files: 3 (adapted)
+- Passing test files: 3 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for key traversal/indexing in `ListCollection`, baseline `useListState` selection manager wiring, and `useSingleSelectListState` selected-key/item behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/list-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate list-state behavior through downstream listbox/select widgets
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Add collection-builder parity to remove reduced `items`/`collection` adaptation constraints.
+2. Integrate listbox hooks to consume `@vue-aria/list-state` state constructors directly in docs/examples.
+
+## 30) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1833,3 +1887,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted listbox tests for listbox role/multiselect behavior, option virtualized aria metadata/id wiring, and section semantics.
 - Added VitePress docs page for `@vue-aria/listbox` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (96 files, 284 tests).
+- Started `@vue-aria/list-state` package:
+  - `ListCollection`, `useListState`, `UNSTABLE_useFilteredListState`, `useSingleSelectListState`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted list-state tests for collection traversal/indexing, list-state selection manager wiring, and single-select selected-key/item behavior.
+- Added VitePress docs page for `@vue-aria/list-state` and wired docs navigation entries.
+- Updated `@vue-aria/listbox` types to consume `@vue-aria/list-state` `ListState` typing.
+- Validation: `npm run check` passed, `npm test` passed (99 files, 287 tests).

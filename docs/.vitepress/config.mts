@@ -29,6 +29,7 @@ export default defineConfig({
       { text: "Disclosure", link: "/packages/disclosure" },
       { text: "Overlays", link: "/packages/overlays" },
       { text: "ListBox", link: "/packages/listbox" },
+      { text: "List State", link: "/packages/list-state" },
     ],
     sidebar: [
       {
@@ -57,6 +58,7 @@ export default defineConfig({
           { text: "@vue-aria/disclosure", link: "/packages/disclosure" },
           { text: "@vue-aria/overlays", link: "/packages/overlays" },
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
+          { text: "@vue-aria/list-state", link: "/packages/list-state" },
         ],
       },
     ],

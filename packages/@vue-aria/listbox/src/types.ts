@@ -1,14 +1,14 @@
 import type { Key, Node } from "@vue-aria/collections";
 import type { LayoutDelegate, KeyboardDelegate, SearchableCollection } from "@vue-aria/selection";
 import type { MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { ListState as ListStateBase } from "@vue-aria/list-state";
 
-export interface ListState<T> {
+export type ListState<T> = ListStateBase<T> & {
   collection: SearchableCollection<T> & {
     getItem(key: Key): Node<T> | null;
   };
-  disabledKeys: Set<Key>;
   selectionManager: MultipleSelectionManager;
-}
+};
 
 export interface AriaListBoxProps<T> {
   id?: string;
