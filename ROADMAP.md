@@ -1850,6 +1850,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for live synchronization of `canIncrement`/`canDecrement` and `numberValue` after state transitions.
   - Added adapted coverage for locale-aware separator parsing (`fr-FR`), partial sign validation under bounds, and default percent step behavior (`0.01`).
   - Added adapted native validation commit-queue coverage (`validationBehavior='native'` updates display state on `commitValidation`).
+  - Added adapted parser edge-case coverage for decimal shorthand (`.5`/`-.5`), accounting-currency negatives (`($1.50)`), and unknown-currency rejection fallback behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1867,8 +1868,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand parser/validation edge-case tests against upstream `@internationalized/number` fixtures.
-2. Validate remaining server-error form-context parity paths through consuming packages.
+1. Validate remaining server-error form-context parity paths through consuming packages.
+2. Expand locale-numbering-system parser edge-case coverage against upstream fixtures.
 ## 36) Package Record: @vue-aria/form-state
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-stately/form/src`
@@ -2441,3 +2442,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` native-validation parity coverage:
   - invalid-event commit behavior integration with `useFormValidation`
 - Validation: `npm run check` passed, `npm test` passed (116 files, 363 tests).
+- Expanded `@vue-aria/numberfield-state` parser parity coverage with adapted tests for:
+  - decimal shorthand parsing (`.5` and `-.5`)
+  - accounting currency negative parsing (`($1.50)`)
+  - unknown currency rejection fallback (restore formatted controlled value)
+- Validation: `npm run check` passed, `npm test` passed (116 files, 366 tests).

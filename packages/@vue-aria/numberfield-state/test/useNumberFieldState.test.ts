@@ -166,4 +166,63 @@ describe("useNumberFieldState", () => {
     expect(state.displayValidation.isInvalid).toBe(true);
     scope.stop();
   });
+
+  it("parses decimal shorthand input", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        minValue: -10,
+      })
+    )!;
+
+    state.commit(".5");
+    expect(state.numberValue).toBe(0.5);
+
+    state.commit("-.5");
+    expect(state.numberValue).toBe(-0.5);
+    scope.stop();
+  });
+
+  it("parses accounting currency negatives with parentheses", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        formatOptions: {
+          style: "currency",
+          currency: "USD",
+          currencySign: "accounting",
+        },
+      })
+    )!;
+
+    state.commit("($1.50)");
+    expect(state.numberValue).toBe(-1.5);
+    scope.stop();
+  });
+
+  it("ignores unknown currency symbols and restores formatted value", () => {
+    const onChange = vi.fn();
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 2,
+        formatOptions: {
+          style: "currency",
+          currency: "USD",
+        },
+        onChange,
+      })
+    )!;
+
+    state.commit("€10.50");
+    expect(onChange).not.toHaveBeenCalled();
+    expect(state.numberValue).toBe(2);
+    expect(state.inputValue).toBe("$2.00");
+    scope.stop();
+  });
 });
