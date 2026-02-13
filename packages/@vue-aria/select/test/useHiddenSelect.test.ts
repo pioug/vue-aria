@@ -44,6 +44,27 @@ describe("useHiddenSelect", () => {
     scope.stop();
   });
 
+  it("updates single value on input events", () => {
+    const state = createState("single");
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(null);
+    const triggerRef = { current: document.createElement("button") as Element | null };
+    const selectElement = document.createElement("select");
+    selectElement.innerHTML = `<option value="a">A</option><option value="b">B</option>`;
+    selectElement.value = "b";
+    selectRef.value = selectElement;
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+
+    (result.selectProps.onInput as (event: Event) => void)({ target: selectElement } as unknown as Event);
+    expect(state.setValue).toHaveBeenCalledWith("b");
+
+    scope.stop();
+  });
+
   it("reads currentTarget when event target is missing", () => {
     const state = createState("single");
     const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(null);

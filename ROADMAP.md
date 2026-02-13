@@ -1658,6 +1658,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `HiddenSelect` behavioral parity coverage for small-collection native select change handling (autofill path) and container dataset attributes (`data-a11y-ignore` and `data-react-aria-prevent-focus`).
   - Added adapted `useSelect` focus lifecycle guard-path coverage for already-focused focus no-op and open-menu blur no-op branches.
   - Added adapted typeahead parity coverage for single-selection character-key selection behavior and multiple-selection typeahead suppression.
+  - Added adapted `useHiddenSelect` input-event parity coverage ensuring `onInput` mirrors change-driven state updates.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2571,3 +2572,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - touch press opening behavior in enabled state
   - touch press disabled short-circuit behavior
 - Validation: `npm run check` passed, `npm test` passed (118 files, 411 tests).
+- Expanded `@vue-aria/select/useHiddenSelect` event parity with adapted tests for:
+  - hidden select `onInput` value synchronization behavior
+- Validation: `npm run check` passed, `npm test` passed (118 files, 412 tests).
