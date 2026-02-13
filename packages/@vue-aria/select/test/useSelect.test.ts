@@ -239,6 +239,80 @@ describe("useSelect", () => {
     ref.current?.remove();
   });
 
+  it("skips focus callback propagation when state is already focused", () => {
+    const state = createState();
+    state.isFocused = true;
+    const onFocusChange = vi.fn();
+    const onFocus = vi.fn();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          onFocus,
+          onFocusChange,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onFocusHandler = result.triggerProps.onFocus as ((event: FocusEvent) => void) | undefined;
+    onFocusHandler?.({} as FocusEvent);
+    expect(onFocus).not.toHaveBeenCalled();
+    expect(onFocusChange).not.toHaveBeenCalled();
+    expect(state.setFocused).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("skips blur callback propagation while menu is open", () => {
+    const state = createState();
+    state.isOpen = true;
+    const onFocusChange = vi.fn();
+    const onBlur = vi.fn();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          onBlur,
+          onFocusChange,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onBlurHandler = result.triggerProps.onBlur as ((event: FocusEvent) => void) | undefined;
+    onBlurHandler?.({} as FocusEvent);
+    expect(onBlur).not.toHaveBeenCalled();
+    expect(onFocusChange).not.toHaveBeenCalledWith(false);
+    expect(state.setFocused).not.toHaveBeenCalledWith(false);
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
   it("does not propagate menu blur when focus stays within menu", () => {
     const state = createState();
     const onBlur = vi.fn();
