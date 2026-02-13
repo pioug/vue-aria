@@ -2593,6 +2593,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Expanded `useTableColumnResize` callback-map assertions for `onResizeStart` / `onResize` / `onResizeEnd`, including no-movement resize-end behavior.
   - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
   - Added upstream-aligned `ariaTableResizing.test.ts` Vue adaptation covering resize-start and resize-end callback map semantics.
+  - Added shared `tableResizingTests.ts` helper to mirror upstream resize-test suite structure.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5054,5 +5055,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/table` test-structure parity:
   - added `packages/@vue-aria/table/test/ariaTableResizing.test.ts` as an upstream-aligned resize-suite entry point.
   - added adapted resize-start/resize-end callback-map assertions in that suite.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (7 files, 22 tests).
+- Continued `@vue-aria/table` resize suite mirroring:
+  - added shared `packages/@vue-aria/table/test/tableResizingTests.ts` helper and wired `ariaTableResizing.test.ts` through it for upstream-structure parity.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (7 files, 22 tests).
