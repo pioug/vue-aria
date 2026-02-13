@@ -23,7 +23,7 @@ Vue port of React Aria and React Spectrum.
   - status page generation + validation
   - port order computation
   - dedicated SSR test suite
-  - full test suite
+  - dedicated unit test suite
 
 ## Status Artifacts
 

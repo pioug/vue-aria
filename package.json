@@ -12,6 +12,7 @@
   "scripts": {
     "test": "vitest run",
     "test:ssr": "node scripts/run-ssr-tests.mjs",
+    "test:unit": "node scripts/run-unit-tests.mjs",
     "test:watch": "vitest",
     "check:parity": "node scripts/check-parity-regression.mjs",
     "check:test-parity": "node scripts/check-test-parity.mjs",
@@ -20,7 +21,7 @@
     "check:docs-frontmatter": "node scripts/check-doc-frontmatter.mjs",
     "check:baseline": "node scripts/check-baseline.mjs",
     "check:generated": "npm run generate:status && npm run generate:docs && npm run compute:port-order && git diff --exit-code status.md docs/port-status.md docs/package-status.json port-order.json",
-    "check:ci": "npm run check:baseline && npm run check:local-deps && npm run check:parity && npm run check:test-parity && npm run check:deviations && npm run check:docs-frontmatter && npm run validate:status && npm run check:generated && npm run test:ssr && npm test",
+    "check:ci": "npm run check:baseline && npm run check:local-deps && npm run check:parity && npm run check:test-parity && npm run check:deviations && npm run check:docs-frontmatter && npm run validate:status && npm run check:generated && npm run test:ssr && npm run test:unit",
     "generate:status": "node scripts/generate-status-md.mjs",
     "generate:docs-status": "node scripts/generate-docs-status.mjs",
     "generate:docs-package-status": "node scripts/generate-docs-package-status.mjs",
