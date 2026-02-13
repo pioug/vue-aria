@@ -12,10 +12,9 @@
 
 import {DOMAttributes, FocusableElement, RefObject} from '@vue-types/shared';
 import {getInteractionModality, isFocusVisible, useFocusable, useHover} from '@vue-aria/interactions';
-import {mergeProps, useId} from '@vue-aria/utils';
+import {mergeProps, useId, useLayoutEffect} from '@vue-aria/utils';
 import {TooltipTriggerProps} from '@vue-types/tooltip';
 import {TooltipTriggerState} from '@vue-stately/tooltip';
-import {useEffect, useRef} from 'react';
 
 export interface TooltipTriggerAria {
   /**
@@ -42,8 +41,8 @@ export function useTooltipTrigger(props: TooltipTriggerProps, state: TooltipTrig
 
   let tooltipId = useId();
 
-  let isHovered = useRef(false);
-  let isFocused = useRef(false);
+  let isHovered = {current: false};
+  let isFocused = {current: false};
 
   let handleShow = () => {
     if (isHovered.current || isFocused.current) {
@@ -57,7 +56,7 @@ export function useTooltipTrigger(props: TooltipTriggerProps, state: TooltipTrig
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let onKeyDown = (e) => {
       if (ref && ref.current) {
         // Escape after clicking something can give it keyboard focus
@@ -74,7 +73,7 @@ export function useTooltipTrigger(props: TooltipTriggerProps, state: TooltipTrig
         document.removeEventListener('keydown', onKeyDown, true);
       };
     }
-  }, [ref, state]);
+  }, [ref, state.isOpen]);
 
   let onHoverStart = () => {
     if (trigger === 'focus') {

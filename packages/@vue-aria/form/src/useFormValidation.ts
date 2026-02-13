@@ -14,7 +14,6 @@ import {FormValidationState} from '@vue-stately/form';
 import {getEventTarget, useEffectEvent, useLayoutEffect} from '@vue-aria/utils';
 import {RefObject, Validation, ValidationResult} from '@vue-types/shared';
 import {setInteractionModality} from '@vue-aria/interactions';
-import {useEffect, useRef} from 'react';
 
 type ValidatableElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
@@ -43,7 +42,7 @@ export function useFormValidation<T>(props: FormValidationProps<T>, state: FormV
     }
   });
 
-  let isIgnoredReset = useRef(false);
+  let isIgnoredReset = {current: false};
   let onReset = useEffectEvent(() => {
     if (!isIgnoredReset.current) {
       state.resetValidation();
@@ -78,7 +77,7 @@ export function useFormValidation<T>(props: FormValidationProps<T>, state: FormV
     state.commitValidation();
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let input = ref?.current;
     if (!input) {
       return;
