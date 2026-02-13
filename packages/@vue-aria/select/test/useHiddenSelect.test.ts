@@ -1,0 +1,66 @@
+import { effectScope, ref } from "vue";
+import { describe, expect, it, vi } from "vitest";
+import { useHiddenSelect } from "../src/HiddenSelect";
+
+function createState(selectionMode: "single" | "multiple" = "single") {
+  return {
+    collection: {
+      size: 2,
+      getKeys: () => ["a", "b"][Symbol.iterator](),
+      getItem: (key: string) => ({ key, type: "item", textValue: key.toUpperCase() }),
+    },
+    selectionManager: {
+      selectionMode,
+    },
+    value: selectionMode === "multiple" ? ["a"] : "a",
+    defaultValue: selectionMode === "multiple" ? ["a"] : "a",
+    setValue: vi.fn(),
+  } as any;
+}
+
+describe("useHiddenSelect", () => {
+  it("maps select props and updates single value on change", () => {
+    const state = createState("single");
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(null);
+    const triggerRef = { current: document.createElement("button") as Element | null };
+    const selectElement = document.createElement("select");
+    selectElement.innerHTML = `<option value="a">A</option><option value="b">B</option>`;
+    selectElement.value = "b";
+    selectRef.value = selectElement;
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+
+    (result.selectProps.onChange as (event: Event) => void)({ target: selectElement } as unknown as Event);
+    expect(result.selectProps.multiple).toBe(false);
+    expect(state.setValue).toHaveBeenCalledWith("b");
+
+    scope.stop();
+  });
+
+  it("maps multiple mode and updates selected options", () => {
+    const state = createState("multiple");
+    const triggerRef = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useHiddenSelect({ name: "x" }, state, triggerRef);
+    });
+
+    const selectedOptions = [{ value: "a" }, { value: "b" }] as any;
+    const target = {
+      multiple: true,
+      selectedOptions,
+    } as HTMLSelectElement;
+    (result.selectProps.onChange as (event: Event) => void)({ target } as unknown as Event);
+
+    expect(result.selectProps.multiple).toBe(true);
+    expect(state.setValue).toHaveBeenCalledWith(["a", "b"]);
+
+    scope.stop();
+  });
+});

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/menu`
+- Current focus package: `@vue-aria/select`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -49,7 +49,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/link`: In progress
 - `@vue-aria/menu`: In progress
 - `@vue-aria/listbox`: In progress
-- `@vue-aria/select`: Not started
+- `@vue-aria/select`: In progress
 - `@vue-aria/combobox`: Not started
 - `@vue-aria/tabs`: Not started
 - `@vue-aria/grid`: Not started
@@ -1603,7 +1603,61 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Harden `useSafelyMouseToSubmenu` edge-case parity (hit-testing behavior, movement heuristics calibration, and submenu auto-close fallbacks).
 2. Deepen `useMenuItem` / `useMenuTrigger` / `useSubmenuTrigger` parity tests for keyboard-triggered click paths, long-press behavior, and virtualized aria metadata.
 
-## 31) Session Log
+## 31) Package Record: @vue-aria/select
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/select/src`
+  - `references/react-spectrum/packages/@react-aria/select/docs`
+- Local package path:
+  - `packages/@vue-aria/select`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useSelect`
+  - `useHiddenSelect`
+  - `HiddenSelect`
+  - `selectData`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable/modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Uses adapter-based select state typing and currently omits `@react-aria/form` validation hook integration.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for trigger/menu/hidden-select prop wiring, plus hidden-select single and multiple change handling.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/select.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full hidden native select/input behavior against upstream browser/autofill/form integration semantics
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port remaining hidden select parity behaviors (native validation/focus integration and large-collection hidden input fallback semantics).
+2. Deepen `useSelect` behavior parity (focus/blur lifecycle edge cases and expanded keyboard/typeahead interactions).
+
+## 32) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -2018,3 +2072,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - focusin-driven close behavior when focus moves to sibling items in parent menu
   - keyboard/virtual press-start and touch/mouse press opening paths
 - Validation: `npm run check` passed, `npm test` passed (107 files, 317 tests).
+- Started `@vue-aria/select` package:
+  - `useSelect`
+  - `useHiddenSelect`
+  - `HiddenSelect`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted select tests for trigger/menu/hidden-select prop wiring and hidden select single/multiple change handling.
+- Added VitePress docs page for `@vue-aria/select` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (109 files, 320 tests).

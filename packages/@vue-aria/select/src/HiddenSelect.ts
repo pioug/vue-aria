@@ -1,0 +1,165 @@
+import { computed, defineComponent, h, ref, type PropType } from "vue";
+import { useVisuallyHidden } from "@vue-aria/visually-hidden";
+import { useFormReset } from "@vue-aria/utils";
+import { selectData, type SelectState } from "./useSelect";
+
+export interface AriaHiddenSelectProps {
+  autoComplete?: string;
+  label?: string;
+  name?: string;
+  form?: string;
+  isDisabled?: boolean;
+}
+
+export interface HiddenSelectProps extends AriaHiddenSelectProps {
+  state: SelectState;
+  triggerRef: { current: Element | null };
+}
+
+export interface AriaHiddenSelectOptions extends AriaHiddenSelectProps {
+  selectRef?: { value: HTMLSelectElement | HTMLInputElement | null };
+}
+
+export interface HiddenSelectAria {
+  containerProps: Record<string, unknown>;
+  inputProps: Record<string, unknown>;
+  selectProps: Record<string, unknown>;
+}
+
+export function useHiddenSelect(
+  props: AriaHiddenSelectOptions,
+  state: SelectState,
+  triggerRef: { current: Element | null }
+): HiddenSelectAria {
+  const data = selectData.get(state as object) || {};
+  const name = props.name ?? data.name;
+  const form = props.form ?? data.form;
+  const isDisabled = props.isDisabled ?? data.isDisabled;
+  const validationBehavior = data.validationBehavior;
+  const isRequired = data.isRequired;
+
+  const { visuallyHiddenProps } = useVisuallyHidden({
+    style: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+    },
+  });
+
+  useFormReset(
+    props.selectRef as any,
+    state.defaultValue,
+    (value) => state.setValue?.(value as string | string[])
+  );
+
+  const onChange = (event: Event) => {
+    const target = event.target as HTMLSelectElement;
+    if (target.multiple) {
+      state.setValue?.(Array.from(target.selectedOptions, (option) => option.value));
+    } else {
+      state.setValue?.(target.value);
+    }
+  };
+
+  return {
+    containerProps: {
+      ...visuallyHiddenProps,
+      "aria-hidden": true,
+      "data-react-aria-prevent-focus": true,
+      "data-a11y-ignore": "aria-hidden-focus",
+    },
+    inputProps: {
+      style: { display: "none" },
+    },
+    selectProps: {
+      tabIndex: -1,
+      autoComplete: props.autoComplete,
+      disabled: isDisabled,
+      multiple: state.selectionManager.selectionMode === "multiple",
+      required: validationBehavior === "native" && isRequired,
+      name,
+      form,
+      value: (state.value as string | string[]) ?? "",
+      onChange,
+      onInput: onChange,
+      onFocus: () => (triggerRef.current as HTMLElement | null)?.focus(),
+    },
+  };
+}
+
+export const HiddenSelect = defineComponent({
+  name: "HiddenSelect",
+  props: {
+    autoComplete: String as PropType<string | undefined>,
+    label: String as PropType<string | undefined>,
+    name: String as PropType<string | undefined>,
+    form: String as PropType<string | undefined>,
+    isDisabled: Boolean as PropType<boolean | undefined>,
+    state: {
+      type: Object as PropType<SelectState>,
+      required: true,
+    },
+    triggerRef: {
+      type: Object as PropType<{ current: Element | null }>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(null);
+    const { containerProps, selectProps } = useHiddenSelect(
+      { ...props, selectRef },
+      props.state,
+      props.triggerRef
+    );
+
+    const values = computed<(string | null)[]>(() =>
+      Array.isArray(props.state.value) ? props.state.value : [props.state.value ?? null]
+    );
+
+    return () => {
+      if (props.state.collection?.size <= 300) {
+        const optionNodes: any[] = [];
+        optionNodes.push(h("option"));
+        for (const key of props.state.collection?.getKeys?.() ?? []) {
+          const item = props.state.collection.getItem(key);
+          if (item && item.type === "item") {
+            optionNodes.push(h("option", { value: String(item.key) }, String(item.textValue)));
+          }
+        }
+
+        if ((props.state.collection?.size ?? 0) === 0 && props.name) {
+          for (const [index, value] of values.value.entries()) {
+            optionNodes.push(h("option", { key: index, value: value ?? "" }));
+          }
+        }
+
+        return h(
+          "div",
+          { ...containerProps, "data-testid": "hidden-select-container" },
+          h("label", [props.label, h("select", { ...selectProps, ref: selectRef }, optionNodes)])
+        );
+      }
+
+      if (props.name) {
+        const nodes: any[] = [];
+        const list = values.value.length === 0 ? [null] : values.value;
+        for (const value of list) {
+          nodes.push(
+            h("input", {
+              type: "hidden",
+              autoComplete: selectProps.autoComplete as string | undefined,
+              name: props.name,
+              form: props.form,
+              disabled: props.isDisabled,
+              value: value ?? "",
+              ref: selectRef,
+            })
+          );
+        }
+        return h("div", nodes);
+      }
+
+      return null;
+    };
+  },
+});

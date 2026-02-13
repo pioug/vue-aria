@@ -30,6 +30,7 @@ export default defineConfig({
       { text: "Overlays", link: "/packages/overlays" },
       { text: "ListBox", link: "/packages/listbox" },
       { text: "List State", link: "/packages/list-state" },
+      { text: "Select", link: "/packages/select" },
       { text: "Menu", link: "/packages/menu" },
     ],
     sidebar: [
@@ -60,6 +61,7 @@ export default defineConfig({
           { text: "@vue-aria/overlays", link: "/packages/overlays" },
           { text: "@vue-aria/listbox", link: "/packages/listbox" },
           { text: "@vue-aria/list-state", link: "/packages/list-state" },
+          { text: "@vue-aria/select", link: "/packages/select" },
           { text: "@vue-aria/menu", link: "/packages/menu" },
         ],
       },
