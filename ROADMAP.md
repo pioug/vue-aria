@@ -2581,14 +2581,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 4 (`useTable.test.tsx`, `useTableBackwardCompat.test.tsx`, `ariaTableResizing.test.tsx`, `tableResizingTests.tsx`)
-- Ported test files: 5 (adapted)
-- Passing test files: 5 (validated 2026-02-13)
+- Ported test files: 6 (adapted)
+- Passing test files: 6 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for table ID utilities and row-header labeling.
   - Added adapted coverage for `TableKeyboardDelegate` vertical/horizontal/search behavior.
   - Added adapted coverage for `useTable` role/aria-rowcount/treegrid wiring.
   - Added adapted coverage for `useTableRow`, `useTableCell`, `useTableHeaderRow`, `useTableColumnHeader`, and selection checkbox hooks.
   - Added adapted hook-level `useTableColumnResize` coverage for keyboard-start/resize/end flow and slider input step behavior.
+  - Added adapted backward-compat coverage for legacy row `onAction` forwarding semantics (`useTableBackwardCompat.test.ts`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2607,9 +2608,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port/adapt upstream `useTableBackwardCompat.test.tsx` interaction expectations.
-2. Port/adapt upstream resizing integration tests (`ariaTableResizing.test.tsx` + shared `tableResizingTests.tsx`) with Vue harness components.
-3. Expand VitePress docs examples to mirror upstream table docs variants and finalize visual/accessibility parity gates.
+1. Port/adapt upstream resizing integration tests (`ariaTableResizing.test.tsx` + shared `tableResizingTests.tsx`) with Vue harness components.
+2. Expand VitePress docs examples to mirror upstream table docs variants and finalize visual/accessibility parity gates.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -5029,3 +5029,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added package record `31h` and marked `@vue-aria/table` execution queue status `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (5 files, 16 tests).
+- Expanded `@vue-aria/table` backward-compat parity:
+  - added adapted `useTableBackwardCompat.test.ts` coverage for legacy row `onAction` forwarding behavior.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (6 files, 17 tests).
