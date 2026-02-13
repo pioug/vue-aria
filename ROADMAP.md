@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/checkbox`
+- Current focus package: `@vue-aria/radio`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -40,7 +40,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/button`: In progress
 - `@vue-aria/toggle`: In progress
 - `@vue-aria/checkbox`: In progress
-- `@vue-aria/radio`: Not started
+- `@vue-aria/radio`: In progress
 - `@vue-aria/switch`: Not started
 - `@vue-aria/textfield`: Not started
 - `@vue-aria/searchfield`: Not started
@@ -69,6 +69,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/utils-state`: In progress
 - `@vue-aria/toggle-state`: In progress
 - `@vue-aria/checkbox-state`: In progress
+- `@vue-aria/radio-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
@@ -794,7 +795,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Tests
 - Total upstream test files: 1 (`@react-aria/checkbox`) + state package behavior from source
 - Ported test files: 3
-- Passing test files: pending validation run
+- Passing test files: 3
 - Test parity notes:
   - Adapted upstream checkbox group behavior checks for Vue composable usage.
   - Added checkbox-state tests for controlled selection and required-validation reactivity.
@@ -818,7 +819,59 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Deepen validation semantics after `@vue-aria/form` and related state ports land.
 2. Port remaining checkbox-edge assertions as downstream consumers are introduced.
 
-## 16) Session Log
+## 16) Package Record: @vue-aria/radio (+ @vue-aria/radio-state)
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/radio/src`
+  - `references/react-spectrum/packages/@react-stately/radio/src`
+- Local package path:
+  - `packages/@vue-aria/radio`
+  - `packages/@vue-aria/radio-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist created for initial package slice
+
+### Implementation
+- [x] Ported upstream API surface:
+  - `useRadio`
+  - `useRadioGroup`
+  - `useRadioGroupState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path aliases
+
+### Tests
+- Total upstream test files: none in `@react-aria/radio` reference package
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted parity tests for group role/ARIA wiring, selection state updates, tab index semantics, and keyboard arrow navigation.
+  - Added radio-state tests for controlled selection, disabled/read-only guards, and required validation behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/radio.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full keyboard/focus behavior in downstream Spectrum radio components
+
+### Visual Parity
+- Not applicable for hook/state packages beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port downstream Spectrum radio components for visual/interaction parity.
+2. Deepen validation semantics after form package ports.
+
+## 17) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1048,3 +1101,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted checkbox/checkbox-state tests covering defaults, name/label wiring, disabled/readonly handling, and required-group validation reactivity.
 - Added VitePress docs page for `@vue-aria/checkbox` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (65 files, 195 tests).
+- Started radio package slice:
+  - `@vue-aria/radio-state/useRadioGroupState`
+  - `@vue-aria/radio/useRadio`
+  - `@vue-aria/radio/useRadioGroup`
+- Added adapted radio/radio-state tests for selection updates, tab-index behavior, arrow-key group navigation, and required/read-only/disabled semantics.
+- Added VitePress docs page for `@vue-aria/radio` and wired docs navigation entries.
+- Hardened `useLocale` fallback for composable usage outside component setup to avoid inject warnings in parity tests.
+- Validation: `npm run check` passed, `npm test` passed (67 files, 203 tests).

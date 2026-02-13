@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, provide, type PropType } from "vue";
+import { computed, defineComponent, getCurrentInstance, h, inject, provide, type PropType } from "vue";
 import { isRTL } from "./utils";
 import { type Locale, useDefaultLocale } from "./useDefaultLocale";
 import type { ReadonlyRef } from "@vue-aria/types";
@@ -38,6 +38,10 @@ export const I18nProvider = defineComponent({
 
 export function useLocale(): ReadonlyRef<Locale> {
   const defaultLocale = useDefaultLocale();
+  if (!getCurrentInstance()) {
+    return defaultLocale;
+  }
+
   const context = inject<ReadonlyRef<Locale> | null>(I18nContext, null);
   return computed(() => context?.value || defaultLocale.value);
 }
