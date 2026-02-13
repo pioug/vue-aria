@@ -5,6 +5,7 @@
 ## Implemented modules
 
 - `useMenu`
+- `useMenuItem`
 - `useMenuSection`
 - `menuData`
 
@@ -12,7 +13,7 @@
 
 ```vue
 <script setup lang="ts">
-import { useMenu, useMenuSection } from "@vue-aria/menu";
+import { useMenu, useMenuItem, useMenuSection } from "@vue-aria/menu";
 import { useListState } from "@vue-aria/list-state";
 
 const menuRef = { current: null as HTMLElement | null };
@@ -27,11 +28,13 @@ const state = useListState({
 });
 
 const { menuProps } = useMenu({ "aria-label": "File actions" }, state as any, menuRef);
+const itemRef = { current: null as HTMLElement | null };
+const { menuItemProps } = useMenuItem({ key: "new" }, state as any, itemRef);
 const { itemProps, headingProps, groupProps } = useMenuSection({ heading: "File" });
 </script>
 ```
 
 ## Notes
 
-- Current slice focuses on `useMenu`/`useMenuSection`; `useMenuItem`, trigger, and submenu hooks are pending.
+- Current slice includes `useMenu`, `useMenuItem`, and `useMenuSection`; trigger/submenu hooks are pending.
 - `Spectrum S2` is ignored for this port.
