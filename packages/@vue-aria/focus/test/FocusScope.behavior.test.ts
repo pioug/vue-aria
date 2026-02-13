@@ -160,4 +160,33 @@ describe("FocusScope behavior", () => {
 
     wrapper.unmount();
   });
+
+  it("does not wrap focus for contain when modifier keys are pressed", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("input", { id: "input2" }),
+        ],
+      },
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    input1.focus();
+    expect(document.activeElement).toBe(input1);
+
+    input1.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        altKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    expect(document.activeElement).toBe(input1);
+    wrapper.unmount();
+  });
 });

@@ -457,8 +457,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 5
-- Passing test files: 5
+- Ported test files: 6
+- Passing test files: 6
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
   - Added adapted tests for `useFocusRing` focus/focus-visible state transitions and `within` handler path.
@@ -470,6 +470,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `useFocusManager` next/previous traversal with wrap
     - `useFocusManager` accept-filter traversal behavior
     - baseline containment wrap behavior on Tab/Shift+Tab when `contain` is enabled
+    - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2699,4 +2700,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Implemented baseline `FocusScope contain` wrapping behavior for Tab/Shift+Tab focus cycling.
 - Expanded `@vue-aria/focus/FocusScope` behavior tests for:
   - `contain` keyboard wrap behavior
-- Validation: `npm run check` passed, `npm test` passed (122 files, 466 tests).
+- Expanded `@vue-aria/focus/FocusScope` behavior tests for:
+  - containment no-op when modifier keys are pressed (`Alt+Tab` path)
+- Validation: `npm run check` passed, `npm test` passed (122 files, 467 tests).
