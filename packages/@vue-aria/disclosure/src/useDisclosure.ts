@@ -12,8 +12,7 @@
 
 import {AriaButtonProps} from '@vue-types/button';
 import {DisclosureState} from '@vue-stately/disclosure';
-import {flushSync} from 'react-dom';
-import {HTMLAttributes, RefObject, useCallback, useEffect, useRef} from 'react';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
 import {useEvent, useId, useLayoutEffect} from '@vue-aria/utils';
 import {useIsSSR} from '@vue-aria/ssr';
 
@@ -32,7 +31,7 @@ export interface DisclosureAria {
   /** Props for the disclosure button. */
   buttonProps: AriaButtonProps,
   /** Props for the disclosure panel. */
-  panelProps: HTMLAttributes<HTMLElement>
+  panelProps: DOMAttributes<HTMLElement>
 }
 
 /**
@@ -49,25 +48,22 @@ export function useDisclosure(props: AriaDisclosureProps, state: DisclosureState
   let panelId = useId();
   let isSSR = useIsSSR();
 
-  let raf = useRef<number | null>(null);
+  let raf: {current: number | null} = {current: null};
 
-  let handleBeforeMatch = useCallback(() => {
+  let handleBeforeMatch = () => {
     // Wait a frame to revert browser's removal of hidden attribute
     raf.current = requestAnimationFrame(() => {
       if (ref.current) {
         ref.current.setAttribute('hidden', 'until-found');
       }
     });
-    // Force sync state update
-    flushSync(() => {
-      state.toggle();
-    });
-  }, [ref, state]);
+    state.toggle();
+  };
 
   // @ts-ignore https://github.com/facebook/react/pull/24741
   useEvent(ref, 'beforematch', handleBeforeMatch);
 
-  let isExpandedRef = useRef<boolean | null>(null);
+  let isExpandedRef: {current: boolean | null} = {current: null};
   useLayoutEffect(() => {
     // Cancel any pending RAF to prevent stale updates
     if (raf.current) {
@@ -124,7 +120,7 @@ export function useDisclosure(props: AriaDisclosureProps, state: DisclosureState
     }
   }, [isDisabled, ref, state.isExpanded, isSSR]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     return () => {
       if (raf.current) {
         cancelAnimationFrame(raf.current);
