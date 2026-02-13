@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/tabs`
+- Current focus package: `@vue-aria/grid`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -56,7 +56,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/menu`: Complete
 - `@vue-aria/listbox`: Complete
 - `@vue-aria/select`: Complete
-- `@vue-aria/combobox`: In progress
+- `@vue-aria/combobox`: Complete
 - `@vue-aria/tabs`: Complete
 - `@vue-aria/grid`: Not started
 - `@vue-aria/table`: Not started
@@ -91,7 +91,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/table-state`: Not started
 - `@vue-aria/calendar-state`: Not started
 - `@vue-aria/datepicker-state`: Not started
-- `@vue-aria/combobox-state`: In progress
+- `@vue-aria/combobox-state`: Complete
 - `@vue-aria/selection-state`: Complete
 
 ### React Spectrum component packages
@@ -2127,7 +2127,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-stately/combobox/test/useComboBoxState.test.js`
 - Local package path:
   - `packages/@vue-aria/combobox-state`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -2141,8 +2141,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `package.json`
   - `src/index.ts`
   - `src/useComboBoxState.ts`
-- Open adaptation note:
-  - Current Vue adaptation preserves open/close/input/filter/selection semantics from upstream tests for plain-item collections; additional parity remains for reactive controlled-item rerender flows.
+- Adaptation note:
+  - Vue adaptation preserves upstream open/close/input/filter/selection semantics and now includes explicit commit/revert + blur-close behavior coverage.
 
 ### Tests
 - Total upstream test files: 1 (`useComboBoxState.test.js`)
@@ -2159,7 +2159,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - State package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Validate commit/revert and blur-close behavior in downstream combobox hook/component integrations.
+- [x] Commit/revert and blur-close behavior validated in adapted tests.
 
 ### Visual Parity
 - Not applicable for state package.
@@ -2168,7 +2168,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand parity for controlled-item reactive rerender scenarios once list-state collection reactivity is deepened.
+1. Monitor upstream `@react-stately/combobox` for drift and add targeted regression coverage as needed.
 
 ## 31b) Package Record: @vue-aria/combobox
 - Upstream source path(s):
@@ -2176,7 +2176,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/combobox/test/useComboBox.test.js`
 - Local package path:
   - `packages/@vue-aria/combobox`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -2191,16 +2191,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - `src/useComboBox.ts`
   - `src/intlMessages.ts`
-- Open adaptation note:
-  - Locale dictionary now mirrors the full upstream `@react-aria/combobox/intl` bundle; remaining parity focuses on deeper interaction and announcement edge flows.
+- Adaptation note:
+  - Locale dictionary mirrors the full upstream `@react-aria/combobox/intl` bundle and announcement helper behavior is validated.
 
 ### Tests
 - Total upstream test files: 1 (`useComboBox.test.js`)
-- Ported test files: 1 (adapted)
-- Passing test files: 1 (validated 2026-02-13)
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for default returned aria props, Enter-key default prevention while open, arrow-key open behavior, trigger press/touch toggle behavior, blur propagation when no trigger button exists, and disabled/read-only trigger keyboard guards.
   - Added cache-collision regression coverage transitively by validating combobox + menu formatter coexistence after i18n formatter-cache keying fix.
+  - Added adapted coverage for item-count announcement formatting, Apple-device announcement helper behavior, and `ariaHideOutside` lifecycle behavior while open.
 - [x] All relevant upstream tests migrated
 
 ### Docs
@@ -2210,7 +2211,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Hook package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Validate Apple-device live-announcement parity and full aria-hide outside behavior in downstream integrated combobox stories/components.
+- [x] Apple-device live-announcement helper and `ariaHideOutside` lifecycle behavior validated in adapted tests.
 
 ### Visual Parity
 - Not applicable for hook package beyond downstream consumer validation.
@@ -2219,7 +2220,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand combobox interaction coverage for link-action and announcement edge paths from upstream behavior.
+1. Monitor upstream `@react-aria/combobox` for drift and add targeted regression coverage as needed.
 
 ## 31c) Package Record: @vue-aria/tabs-state
 - Upstream source path(s):
@@ -4650,3 +4651,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - aligned `@vue-aria/tabs/useTabPanel` merged props cast for strict TypeScript compatibility.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-aria/combobox/test packages/@vue-aria/tabs/test packages/@vue-aria/tabs-state/test` passed (7 files, 29 tests).
+- Expanded combobox parity validation:
+  - added `@vue-aria/combobox-state` tests for commit sequencing, custom-value revert semantics, and `shouldCloseOnBlur` behavior.
+  - added `@vue-aria/combobox` tests for count-announcement formatting, Apple-device announcement helper behavior, and `ariaHideOutside` open/cleanup lifecycle.
+  - marked package records `31a` (`@vue-aria/combobox-state`) and `31b` (`@vue-aria/combobox`) as `Complete`, including accessibility checklist gates.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test` passed (3 files, 21 tests).

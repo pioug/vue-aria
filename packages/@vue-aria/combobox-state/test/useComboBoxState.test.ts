@@ -153,4 +153,58 @@ describe("useComboBoxState", () => {
     state.open();
     expect(state.collection.size).toBe(2);
   });
+
+  it("commits focused key on first commit and closes on second commit", () => {
+    const state = useComboBoxState(createProps());
+
+    state.open();
+    state.selectionManager.setFocusedKey("1");
+    state.commit();
+    expect(state.selectedKey).toBe("1");
+    expect(state.isOpen).toBe(true);
+
+    state.commit();
+    expect(state.isOpen).toBe(false);
+    expect(state.inputValue).toBe("onomatopoeia");
+  });
+
+  it("reverts to custom value flow when custom values are allowed", () => {
+    const state = useComboBoxState(
+      createProps({
+        allowsCustomValue: true,
+        defaultSelectedKey: "0",
+      })
+    );
+
+    state.open();
+    state.setInputValue("custom");
+    state.setSelectedKey(null);
+    state.revert();
+
+    expect(state.selectedKey).toBeNull();
+    expect(state.isOpen).toBe(false);
+    expect(state.inputValue).toBe("custom");
+  });
+
+  it("respects shouldCloseOnBlur", () => {
+    const closesOnBlur = useComboBoxState(
+      createProps({
+        shouldCloseOnBlur: true,
+      })
+    );
+    closesOnBlur.open();
+    closesOnBlur.setFocused(true);
+    closesOnBlur.setFocused(false);
+    expect(closesOnBlur.isOpen).toBe(false);
+
+    const staysOpenOnBlur = useComboBoxState(
+      createProps({
+        shouldCloseOnBlur: false,
+      })
+    );
+    staysOpenOnBlur.open();
+    staysOpenOnBlur.setFocused(true);
+    staysOpenOnBlur.setFocused(false);
+    expect(staysOpenOnBlur.isOpen).toBe(true);
+  });
 });

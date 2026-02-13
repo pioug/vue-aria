@@ -1,5 +1,21 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { effectScope } from "vue";
+
+const { ariaHideCleanupMock, ariaHideOutsideMock } = vi.hoisted(() => ({
+  ariaHideCleanupMock: vi.fn(),
+  ariaHideOutsideMock: vi.fn(() => ariaHideCleanupMock),
+}));
+
+vi.mock("@vue-aria/overlays", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/overlays")>(
+    "@vue-aria/overlays"
+  );
+  return {
+    ...actual,
+    ariaHideOutside: ariaHideOutsideMock,
+  };
+});
+
 import { useComboBox } from "../src/useComboBox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
 
@@ -68,6 +84,11 @@ function createScopedComboBox(
 }
 
 describe("useComboBox", () => {
+  beforeEach(() => {
+    ariaHideCleanupMock.mockClear();
+    ariaHideOutsideMock.mockClear();
+  });
+
   it("returns default aria props", () => {
     const { aria, stop } = createScopedComboBox();
 
@@ -172,4 +193,20 @@ describe("useComboBox", () => {
       scope.stop();
     }
   );
+
+  it("invokes ariaHideOutside while open and restores on cleanup", () => {
+    const { state, props, refresh, stop } = createScopedComboBox();
+
+    state.open();
+    refresh();
+
+    expect(ariaHideOutsideMock).toHaveBeenCalledTimes(1);
+    expect(ariaHideOutsideMock).toHaveBeenCalledWith([
+      props.inputRef.current,
+      props.popoverRef.current,
+    ]);
+
+    stop();
+    expect(ariaHideCleanupMock).toHaveBeenCalledTimes(1);
+  });
 });
