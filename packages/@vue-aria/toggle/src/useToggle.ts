@@ -11,17 +11,16 @@
  */
 
 import {AriaToggleProps} from '@vue-types/checkbox';
-import {ChangeEventHandler, InputHTMLAttributes, LabelHTMLAttributes} from 'react';
 import {filterDOMProps, getEventTarget, mergeProps, useFormReset} from '@vue-aria/utils';
-import {RefObject} from '@vue-types/shared';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
 import {ToggleState} from '@vue-stately/toggle';
 import {useFocusable, usePress} from '@vue-aria/interactions';
 
 export interface ToggleAria {
   /** Props to be spread on the label element. */
-  labelProps: LabelHTMLAttributes<HTMLLabelElement>,
+  labelProps: DOMAttributes<HTMLLabelElement>,
   /** Props to be spread on the input element. */
-  inputProps: InputHTMLAttributes<HTMLInputElement>,
+  inputProps: DOMAttributes<HTMLInputElement>,
   /** Whether the toggle is selected. */
   isSelected: boolean,
   /** Whether the toggle is in a pressed state. */
@@ -57,7 +56,7 @@ export function useToggle(props: AriaToggleProps, state: ToggleState, ref: RefOb
     onClick
   } = props;
 
-  let onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  let onChange: NonNullable<DOMAttributes<HTMLInputElement>['onChange']> = (e) => {
     // since we spread props on label, onChange will end up there as well as in here.
     // so we have to stop propagation at the lowest level that we care about
     e.stopPropagation();
