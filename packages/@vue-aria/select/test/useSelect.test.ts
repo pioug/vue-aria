@@ -1,5 +1,17 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@vue-aria/interactions", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/interactions")>(
+    "@vue-aria/interactions"
+  );
+  return {
+    ...actual,
+    setInteractionModality: vi.fn(),
+  };
+});
+
+import { setInteractionModality } from "@vue-aria/interactions";
 import { useSelect } from "../src/useSelect";
 
 function createCollection() {
@@ -263,6 +275,73 @@ describe("useSelect", () => {
     } as unknown as KeyboardEvent);
 
     expect(state.setSelectedKey).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("focuses trigger and sets keyboard modality when label is clicked", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    const trigger = ref.current as HTMLButtonElement;
+    const focusSpy = vi.spyOn(trigger, "focus");
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    (setInteractionModality as any).mockClear();
+    (result.labelProps.onClick as () => void)();
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    expect(setInteractionModality).toHaveBeenCalledWith("keyboard");
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("does not focus trigger or set modality when disabled label is clicked", () => {
+    const state = createState();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    const trigger = ref.current as HTMLButtonElement;
+    const focusSpy = vi.spyOn(trigger, "focus");
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          isDisabled: true,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    (setInteractionModality as any).mockClear();
+    (result.labelProps.onClick as () => void)();
+    expect(focusSpy).not.toHaveBeenCalled();
+    expect(setInteractionModality).not.toHaveBeenCalled();
 
     scope.stop();
     ref.current?.remove();

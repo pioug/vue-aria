@@ -1652,6 +1652,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added parity coverage for hidden-select native-required behavior across multi-value hidden input fallback (only first native text input marked required).
   - Added parity coverage for no-op arrow-key selection behavior in multiple-selection mode and `currentTarget`-based hidden-select change handling.
   - Added adapted `HiddenSelect` render-path coverage for no-selected-key behavior across small/large collections and for initial `FormData` value consistency when collection items are initially empty.
+  - Added adapted `useSelect` interaction coverage for label-click trigger focus and keyboard-modality setting (and disabled short-circuit path).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2518,3 +2519,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - no-selected-key render behavior across small and large collection code paths
   - initial `FormData` consistency when collection is initially empty
 - Validation: `npm run check` passed, `npm test` passed (118 files, 390 tests).
+- Expanded `@vue-aria/select/useSelect` interaction parity with adapted tests for:
+  - label click focusing trigger and setting keyboard interaction modality
+  - disabled label click short-circuit (no focus/modality mutation)
+- Validation: `npm run check` passed, `npm test` passed (118 files, 392 tests).
