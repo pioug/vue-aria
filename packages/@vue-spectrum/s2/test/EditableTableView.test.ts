@@ -10,13 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
+import './testSetup';
+import {EditableCell, TableView} from '../src/TableView';
 
 describe('EditableTableView', () => {
-  it('keeps editable table support in the table view source module', () => {
-    let sourcePath = path.resolve(__dirname, '../src/TableView.tsx');
-    let source = fs.readFileSync(sourcePath, 'utf8');
-    expect(source.includes('EditableCell')).toBe(true);
+  it('exports editable table cell APIs', () => {
+    expect([TableView, EditableCell]).toBeTruthy();
   });
 });

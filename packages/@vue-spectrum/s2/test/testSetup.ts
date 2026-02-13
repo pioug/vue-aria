@@ -136,6 +136,32 @@ vi.mock('../src/Provider', () => ({
 
 vi.mock('react-aria-components', () => {
   const contexts = new Map<string, React.Context<unknown>>();
+  class Size {
+    width: number;
+    height: number;
+    constructor(width = 0, height = 0) {
+      this.width = width;
+      this.height = height;
+    }
+  }
+
+  class Rect {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    constructor(x = 0, y = 0, width = 0, height = 0) {
+      this.x = x;
+      this.y = y;
+      this.width = width;
+      this.height = height;
+    }
+  }
+
+  class LayoutBase {
+    constructor(..._args: unknown[]) {}
+  }
+
   const stateHelpers = {
     composeRenderProps: (value: unknown, fn: (resolved: unknown) => unknown) =>
       typeof fn === 'function' ? fn(value) : value,
@@ -164,6 +190,12 @@ vi.mock('react-aria-components', () => {
       let {children, ...otherProps} = props;
       return React.createElement('a', {...otherProps, href: '#', ref}, children as React.ReactNode);
     }),
+    Size,
+    Rect,
+    ListLayout: LayoutBase,
+    GridLayout: LayoutBase,
+    TableLayout: LayoutBase,
+    WaterfallLayout: LayoutBase,
     ...stateHelpers
   };
 

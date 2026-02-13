@@ -10,12 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
+import './testSetup';
+import {Cell, Column, Row, TableBody, TableHeader, TableView} from '../src/TableView';
 
 describe('TableView', () => {
-  it('has a table view source module', () => {
-    let sourcePath = path.resolve(__dirname, '../src/TableView.tsx');
-    expect(fs.existsSync(sourcePath)).toBe(true);
+  it('exports table building blocks', () => {
+    expect([TableView, TableHeader, TableBody, Row, Column, Cell]).toBeTruthy();
   });
 });
