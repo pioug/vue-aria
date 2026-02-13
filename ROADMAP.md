@@ -310,6 +310,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useInteractionModality`
   - `useFocusVisible`
   - `useFocusVisibleListener`
+  - `createEventHandler`
+  - `useKeyboard`
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -321,11 +323,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 2
-- Passing test files: 2
+- Ported test files: 3
+- Passing test files: 3
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
+  - Added adapted tests for `useKeyboard` event handling and propagation semantics.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -550,3 +553,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `isFocusVisible`, `getPointerType`, `useInteractionModality`, `useFocusVisible`, `useFocusVisibleListener`
 - Added adapted tests for modality/pointer state, listener lifecycle, and window tracking behavior.
 - Validation: `npm run check` passed, `npm test` passed (40 files, 106 tests).
+- Ported `@vue-aria/interactions` keyboard utility slice:
+  - `createEventHandler`
+  - `useKeyboard`
+- Added adapted tests for disabled handling and default/continued event propagation semantics.
+- Validation: `npm run check` passed, `npm test` passed (41 files, 110 tests).
