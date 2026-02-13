@@ -2278,8 +2278,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/aria-modal-polyfill.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Expanded parity examples for default/custom roots, modal marker shapes, custom-document usage, and teardown cleanup.
+- [x] Examples parity complete
+- [x] Base styles parity complete (not applicable beyond consumer overlay styling)
 
 ### Accessibility
 - [ ] Validate screen-reader navigation behavior in integrated overlay consumers.
@@ -3787,3 +3788,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added upstream-aligned interactive examples for group/item wiring and nested-toolbar role semantics, and marked package docs example/base-style gates complete.
 - Expanded `@vue-aria/aria-modal-polyfill` marker/mutation parity:
   - added adapted tests for `aria-modal` marker handling and no-op behavior for non-modal child-list mutations.
+- Expanded `@vue-aria/aria-modal-polyfill` docs parity:
+  - added upstream-aligned usage notes and examples for modal marker shapes, custom-document usage, and watcher cleanup lifecycle.
