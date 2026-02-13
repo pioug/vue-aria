@@ -181,13 +181,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 7
-- Ported test files: 18
-- Passing test files: 18
+- Ported test files: 19
+- Passing test files: 19
 - Test parity notes:
   - Added adapted upstream coverage for `domHelpers` and `mergeRefs`.
   - Added adapted upstream coverage for `runAfterTransition`.
   - Added adapted coverage for `useObjectRef`.
-  - Remaining upstream files (`useViewportSize`, `useDrag1D`, `useEnterAnimation`/`useExitAnimation`, `openLink` API alignment, full `shadowTreeWalker` parity test migration) are still pending parity port/adaptation.
+  - Added adapted upstream coverage for `shadowTreeWalker` traversal parity (non-shadow and root-shadow scenarios).
+  - Remaining parity gaps include `useViewportSize` SSR-specific coverage, expanded `shadowTreeWalker` multi-shadow scenarios, `useEnterAnimation`/`useExitAnimation`, and `openLink` API alignment.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2601,3 +2602,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - non-special prop override behavior
   - merged ref fan-out behavior
 - Validation: `npm run check` passed, `npm test` passed (118 files, 424 tests).
+- Expanded `@vue-aria/utils/shadowTreeWalker` parity with adapted upstream tests for:
+  - non-shadow traversal equivalence with native `TreeWalker`
+  - filter-object callback parity in nested traversal
+  - root-shadow traversal equivalence with native shadow-root walker
+- Validation: `npm run check` passed, `npm test` passed (119 files, 427 tests).
