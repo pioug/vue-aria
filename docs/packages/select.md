@@ -76,6 +76,18 @@ Use `isDisabled` for full-control disablement and provide disabled keys on the s
 
 Use `validationBehavior: "native"` to enable required/custom-validity propagation through hidden native elements.
 
+### Native form integration details
+
+- Hidden select invalid events only transfer focus to the trigger when it is the first invalid form control.
+- If an invalid event is already prevented, trigger focus transfer is skipped.
+- Hidden select wiring participates in native form reset; calling `form.reset()` restores `state.defaultValue`.
+
+```ts
+// Pseudocode example:
+const form = document.querySelector("form");
+form?.reset(); // hidden select integration restores default selection value
+```
+
 ## Notes
 
 - Current select state integration is adapter-based and expects an upstream-equivalent state shape.

@@ -3420,3 +3420,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Tightened `@vue-aria/select/useSelect` multiple-selection keyboard guard parity:
   - strengthened adapted assertions to ensure arrow-key handlers in multiple selection mode do not force `preventDefault`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
+- Expanded `@vue-aria/select` docs parity for native form integration:
+  - documented first-invalid focus-transfer guards, default-prevented invalid behavior, and form-reset default-value restoration in `docs/packages/select.md`
+- Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
