@@ -2548,6 +2548,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - explicit pointer-path thumb dragging when `PointerEvent` is available
     - horizontal keyboard arrow movement and start/end boundary callback behavior
     - vertical keyboard arrow movement and top/bottom boundary callback behavior
+    - track-containing-thumb drag path where bubbled thumb interactions should not trigger duplicate track handling
   - Added adapted interaction-guard coverage for:
     - dense stacked-thumb nearest selection behavior
     - modified mouse interaction no-op behavior on slider track
@@ -4037,3 +4038,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added a multi-thumb drag lifecycle walkthrough example clarifying `onChange`/`onChangeEnd` sequencing.
   - documented callback-shape stability guidance for runtime `number` vs `number[]` usage.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 763 tests).
+- Expanded `@vue-aria/slider` track-contained-thumb integration parity:
+  - added adapted integration coverage ensuring thumb drags bubbling within the track do not trigger duplicate track handling or duplicate `onChangeEnd` emissions.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 764 tests).

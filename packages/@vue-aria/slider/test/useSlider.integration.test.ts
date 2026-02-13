@@ -583,4 +583,58 @@ describe("useSlider integration with useSliderState", () => {
     expect(topChangeEnd).toHaveBeenLastCalledWith([99]);
     topScope.stop();
   });
+
+  it("does not double-handle drag when thumb interaction bubbles within track", () => {
+    const track = createTrack();
+    const onChange = vi.fn();
+    const onChangeEnd = vi.fn();
+    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
+
+    const scope = effectScope();
+    const { state, trackProps, thumbProps } = scope.run(() => {
+      const state = useSliderState({
+        defaultValue: [10],
+        onChange,
+        onChangeEnd,
+        numberFormatter,
+      });
+      const { trackProps } = useSlider({ "aria-label": "Slider" }, state as any, { current: track });
+      const { thumbProps } = useSliderThumb(
+        {
+          index: 0,
+          "aria-label": "Thumb",
+          trackRef: { current: track },
+          inputRef,
+        },
+        state as any
+      );
+      return { state, trackProps, thumbProps };
+    })!;
+
+    const kind = dispatchThumbDown(thumbProps, 10);
+    if (kind === "mouse") {
+      const bubbleEvent = new MouseEvent("mousedown", { bubbles: true, cancelable: true });
+      Object.defineProperty(bubbleEvent, "button", { value: 0 });
+      Object.defineProperty(bubbleEvent, "clientX", { value: 10 });
+      Object.defineProperty(bubbleEvent, "clientY", { value: 10 });
+      (trackProps.onMousedown as (event: MouseEvent) => void)(bubbleEvent);
+    } else {
+      const bubbleEvent = new MouseEvent("pointerdown", { bubbles: true, cancelable: true });
+      Object.defineProperty(bubbleEvent, "button", { value: 0 });
+      Object.defineProperty(bubbleEvent, "clientX", { value: 10 });
+      Object.defineProperty(bubbleEvent, "clientY", { value: 10 });
+      Object.defineProperty(bubbleEvent, "pointerId", { value: 1 });
+      Object.defineProperty(bubbleEvent, "pointerType", { value: "mouse" });
+      (trackProps.onPointerdown as (event: PointerEvent) => void)(bubbleEvent as PointerEvent);
+    }
+
+    dispatchThumbMove(kind, 40);
+    dispatchThumbUp(kind, 40);
+
+    expect(state.values).toEqual([40]);
+    expect(onChangeEnd).toHaveBeenCalledTimes(1);
+    expect(onChangeEnd).toHaveBeenLastCalledWith([40]);
+
+    scope.stop();
+  });
 });
