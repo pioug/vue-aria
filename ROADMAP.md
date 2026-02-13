@@ -279,7 +279,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [ ] VitePress package page scaffolded
+- [x] VitePress package page scaffolded (`docs/packages/ssr.md`)
 - [ ] Examples parity complete
 
 ### Accessibility
@@ -292,8 +292,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Add VitePress package docs page with usage and SSR guidance.
-2. Verify `useIsSSR` hydration transition behavior in integration tests.
+1. Verify `useIsSSR` hydration transition behavior in integration tests.
+2. Expand docs examples with end-to-end Vue SSR + hydration usage.
 
 ## 6) Package Record: @vue-aria/selection
 - Upstream source path(s):
@@ -2848,4 +2848,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - nested provider SSR render paths
   - deep nested provider SSR render paths
 - Updated SSR package record test parity status to full upstream test-file coverage.
+- Validation: `npm run check` passed, `npm test` passed (124 files, 493 tests).
+- Added `@vue-aria/ssr` docs parity baseline:
+  - new `docs/packages/ssr.md` package page
+  - docs nav/sidebar/index wiring for `@vue-aria/ssr`
 - Validation: `npm run check` passed, `npm test` passed (124 files, 493 tests).

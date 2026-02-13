@@ -18,6 +18,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/selection](/packages/selection)
 - [@vue-aria/interactions](/packages/interactions)
 - [@vue-aria/focus](/packages/focus)
+- [@vue-aria/ssr](/packages/ssr)
 - [@vue-aria/live-announcer](/packages/live-announcer)
 - [@vue-aria/visually-hidden](/packages/visually-hidden)
 - [@vue-aria/label](/packages/label)
