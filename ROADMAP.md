@@ -59,7 +59,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/combobox`: Complete
 - `@vue-aria/tabs`: Complete
 - `@vue-aria/grid`: Complete
-- `@vue-aria/table`: Not started
+- `@vue-aria/table`: In progress
 - `@vue-aria/tree`: Not started
 - `@vue-aria/calendar`: Not started
 - `@vue-aria/datepicker`: Not started
@@ -2535,6 +2535,82 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Monitor upstream `@react-stately/table` for API/test/docs drift and port deltas as needed.
 
+## 31h) Package Record: @vue-aria/table
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/table/src`
+  - `references/react-spectrum/packages/@react-aria/table/test`
+- Local package path:
+  - `packages/@vue-aria/table`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useTable`
+  - `useTableRowGroup`
+  - `useTableHeaderRow`
+  - `useTableRow`
+  - `useTableCell`
+  - `useTableColumnHeader`
+  - `useTableSelectionCheckbox`
+  - `useTableSelectAllCheckbox`
+  - `useTableColumnResize`
+  - `TableKeyboardDelegate`
+  - table ID utilities (`gridIds`, `getColumnHeaderId`, `getCellId`, `getRowLabelledBy`)
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/intlMessages.ts`
+  - `src/utils.ts`
+  - `src/TableKeyboardDelegate.ts`
+  - `src/useTable.ts`
+  - `src/useTableRow.ts`
+  - `src/useTableCell.ts`
+  - `src/useTableHeaderRow.ts`
+  - `src/useTableColumnHeader.ts`
+  - `src/useTableSelectionCheckbox.ts`
+  - `src/useTableColumnResize.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Full upstream integration-style table rendering tests are still being expanded in Vue-adapted form.
+
+### Tests
+- Total upstream test files: 4 (`useTable.test.tsx`, `useTableBackwardCompat.test.tsx`, `ariaTableResizing.test.tsx`, `tableResizingTests.tsx`)
+- Ported test files: 5 (adapted)
+- Passing test files: 5 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for table ID utilities and row-header labeling.
+  - Added adapted coverage for `TableKeyboardDelegate` vertical/horizontal/search behavior.
+  - Added adapted coverage for `useTable` role/aria-rowcount/treegrid wiring.
+  - Added adapted coverage for `useTableRow`, `useTableCell`, `useTableHeaderRow`, `useTableColumnHeader`, and selection checkbox hooks.
+  - Added adapted hook-level `useTableColumnResize` coverage for keyboard-start/resize/end flow and slider input step behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/table.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [x] Basic aria role/id/label wiring covered in adapted tests.
+- [ ] Full interaction parity validation for upstream integration scenarios.
+
+### Visual Parity
+- [ ] Pending upstream example-by-example comparison for table markup/states.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port/adapt upstream `useTableBackwardCompat.test.tsx` interaction expectations.
+2. Port/adapt upstream resizing integration tests (`ariaTableResizing.test.tsx` + shared `tableResizingTests.tsx`) with Vue harness components.
+3. Expand VitePress docs examples to mirror upstream table docs variants and finalize visual/accessibility parity gates.
+
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/form/src`
@@ -4942,3 +5018,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - marked execution queue status `Complete` and closed package-level scope/test/docs gates.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/table-state/test` passed (6 files, 30 tests).
+- Started `@vue-aria/table` foundational hook slice:
+  - scaffolded `@vue-aria/table` package with upstream-aligned core hooks (`useTable`, row/cell/header/selection hooks, `TableKeyboardDelegate`, table utils).
+  - added `@vue-aria/table` path aliases for TypeScript and Vitest.
+  - added initial adapted hook tests for utility, delegate, table root, and table-piece hook behavior.
+  - added VitePress package page (`docs/packages/table.md`) and linked it in docs nav/sidebar/index.
+- Expanded `@vue-aria/table` resizing parity:
+  - ported `useTableColumnResize` behavior from upstream including keyboard/pointer resize lifecycle, slider aria wiring, and resize callbacks.
+  - added adapted `useTableColumnResize` tests for keyboard start/resize/end and input step-change behavior.
+  - added package record `31h` and marked `@vue-aria/table` execution queue status `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/table/test` passed (5 files, 16 tests).

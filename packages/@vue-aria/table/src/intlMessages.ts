@@ -1,0 +1,13 @@
+export const intlMessages = {
+  "en-US": {
+    select: "Select",
+    selectAll: "Select All",
+    sortable: "sortable column",
+    ascending: "ascending",
+    descending: "descending",
+    ascendingSort: "sorted by column {columnName} in ascending order",
+    descendingSort: "sorted by column {columnName} in descending order",
+    columnSize: "{value} pixels",
+    resizerDescription: "Press Enter to start resizing",
+  },
+} as const;
