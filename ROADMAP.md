@@ -420,6 +420,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - focus-entry direction behavior without mutating selection state
     - focused-item DOM focus + `scrollIntoView` behavior gated by interaction modality
     - virtual-focus mode preserving active element during collection focus handling
+    - virtual first-focus strategy deferred across empty-to-loaded collection transitions
   - Added adapted `useSelectableItem` interaction coverage for:
     - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
     - keyboard Enter/Space selection behavior and secondary action routing
@@ -3202,3 +3203,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added pointer-press delegation test asserting option props route selection updates through `useSelectableItem` in replace-selection mode
   - added Enter-key action delegation test asserting option props route keyboard action behavior for actionable items
 - Validation: `npm run check` passed, `npm test` passed (126 files, 581 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` virtual-focus lifecycle parity:
+  - added deferred `focusStrategy: "first"` behavior for virtual-focus collections when no focusable key exists yet
+  - added empty-state fallback path that moves virtual focus to the collection and re-dispatches virtual focus to the previous active element
+  - added collection-update retry path that resolves the first focusable key when data becomes available
+- Expanded `@vue-aria/selection/useSelectableCollection` virtual-focus coverage:
+  - added adapted test for empty-to-loaded virtual first-focus transitions and deferred focused-key updates
+- Validation: `npm run check` passed, `npm test` passed (126 files, 582 tests).

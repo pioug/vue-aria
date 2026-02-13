@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { effectScope, ref } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { useSelectableCollection } from "../src/useSelectableCollection";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import type { KeyboardDelegate } from "../src/types";
@@ -12,10 +12,27 @@ const { focusSafely, getInteractionModality } = vi.hoisted(() => ({
   focusSafely: vi.fn(),
   getInteractionModality: vi.fn(() => "keyboard"),
 }));
-vi.mock("@vue-aria/interactions", () => ({
-  getInteractionModality,
-  focusSafely,
+vi.mock("@vue-aria/interactions", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/interactions")>("@vue-aria/interactions");
+  return {
+    ...actual,
+    getInteractionModality,
+    focusSafely,
+  };
+});
+
+const { moveVirtualFocus, dispatchVirtualFocus } = vi.hoisted(() => ({
+  moveVirtualFocus: vi.fn(),
+  dispatchVirtualFocus: vi.fn(),
 }));
+vi.mock("@vue-aria/focus", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/focus")>("@vue-aria/focus");
+  return {
+    ...actual,
+    moveVirtualFocus,
+    dispatchVirtualFocus,
+  };
+});
 
 function createManager(overrides: Partial<MultipleSelectionManager> = {}): MultipleSelectionManager {
   let focused = false;
@@ -114,6 +131,8 @@ const delegate: KeyboardDelegate = {
 describe("useSelectableCollection", () => {
   beforeEach(() => {
     getInteractionModality.mockReturnValue("keyboard");
+    moveVirtualFocus.mockReset();
+    dispatchVirtualFocus.mockReset();
   });
 
   it("handles arrow navigation and focus selection", () => {
@@ -965,6 +984,70 @@ describe("useSelectableCollection", () => {
       expect(manager.setFocusedKey).toHaveBeenCalledWith(null);
     } finally {
       scope.stop();
+    }
+  });
+
+  it("defers virtual first-focus strategy until collection has a focusable key", async () => {
+    const emptyCollection = {
+      size: 0,
+      getItem: () => null,
+      getFirstKey: () => null,
+      getKeyAfter: () => null,
+      getChildren: function* () {},
+    };
+    const loadedCollection = {
+      size: 1,
+      getItem: (key: Key) => (key === "a" ? ({ key, type: "item" } as any) : null),
+      getFirstKey: () => "a" as Key,
+      getKeyAfter: () => null,
+      getChildren: function* () {},
+    };
+
+    const collectionRef = ref<typeof emptyCollection | typeof loadedCollection>(emptyCollection);
+    const { manager } = createReactiveManager();
+    Object.defineProperty(manager, "collection", {
+      get() {
+        return collectionRef.value;
+      },
+    });
+
+    const collectionRefEl = { current: document.createElement("div") };
+    const input = document.createElement("input");
+    document.body.append(input, collectionRefEl.current);
+    input.focus();
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: {
+          ...delegate,
+          getFirstKey: () => collectionRef.value.getFirstKey(),
+        },
+        ref: collectionRefEl,
+        shouldUseVirtualFocus: true,
+      })
+    );
+
+    try {
+      collectionRefEl.current.dispatchEvent(
+        new CustomEvent("react-aria-focus", { detail: { focusStrategy: "first" }, bubbles: true })
+      );
+
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).not.toHaveBeenCalled();
+      expect(moveVirtualFocus).toHaveBeenCalledWith(collectionRefEl.current);
+      expect(dispatchVirtualFocus).toHaveBeenCalled();
+
+      collectionRef.value = loadedCollection;
+      await nextTick();
+      await nextTick();
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+    } finally {
+      scope.stop();
+      input.remove();
+      collectionRefEl.current.remove();
     }
   });
 

@@ -1,4 +1,4 @@
-import { getFocusableTreeWalker } from "@vue-aria/focus";
+import { dispatchVirtualFocus, getFocusableTreeWalker, moveVirtualFocus } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
 import { focusSafely } from "@vue-aria/interactions";
 import type { FocusStrategy, Key, MultipleSelectionManager } from "@vue-aria/selection-state";
@@ -11,6 +11,7 @@ import {
   isTabbable,
   mergeProps,
   nodeContains,
+  getActiveElement,
   useRouter,
 } from "@vue-aria/utils";
 import { getInteractionModality } from "@vue-aria/interactions";
@@ -64,6 +65,7 @@ export function useSelectableCollection(
   const locale = useLocale();
   let scrollPosition = { top: 0, left: 0 };
   let lastFocusedKey = manager.focusedKey;
+  let shouldVirtualFocusFirst = false;
 
   const onScroll = () => {
     scrollPosition = {
@@ -104,6 +106,49 @@ export function useSelectableCollection(
       }
 
       lastFocusedKey = manager.focusedKey;
+    },
+    { flush: "post" }
+  );
+
+  const resolveVirtualFocusFirst = () => {
+    if (!shouldUseVirtualFocus || !ref.current || !shouldVirtualFocusFirst) {
+      return;
+    }
+
+    const keyToFocus = delegate.getFirstKey?.() ?? null;
+    if (keyToFocus == null) {
+      const previousActiveElement = getActiveElement();
+      moveVirtualFocus(ref.current);
+      if (previousActiveElement instanceof Element) {
+        dispatchVirtualFocus(previousActiveElement, null);
+      }
+
+      const collectionSize = (manager.collection as { size?: number } | undefined)?.size;
+      if (typeof collectionSize === "number" && collectionSize > 0) {
+        shouldVirtualFocusFirst = false;
+      }
+      return;
+    }
+
+    manager.setFocusedKey(keyToFocus);
+    shouldVirtualFocusFirst = false;
+  };
+
+  watch(
+    () => manager.collection,
+    () => {
+      resolveVirtualFocusFirst();
+    },
+    { flush: "post" }
+  );
+
+  watch(
+    () => manager.focusedKey,
+    () => {
+      const collectionSize = (manager.collection as { size?: number } | undefined)?.size;
+      if (typeof collectionSize === "number" && collectionSize > 0) {
+        shouldVirtualFocusFirst = false;
+      }
     },
     { flush: "post" }
   );
@@ -427,7 +472,8 @@ export function useSelectableCollection(
       event.stopPropagation();
       manager.setFocused(true);
       if (customEvent.detail?.focusStrategy === "first") {
-        manager.setFocusedKey(delegate.getFirstKey?.() ?? null);
+        shouldVirtualFocusFirst = true;
+        resolveVirtualFocusFirst();
       }
     }) as EventListener;
 
