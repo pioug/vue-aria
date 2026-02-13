@@ -127,16 +127,28 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Initial utility/composable slice ported
 - [x] Folder structure mirrors package boundary
 - [x] Vue idioms applied where hooks were adapted
+- [x] Added upstream-aligned pure utility tranche:
+  - `chain`
+  - `mergeRefs`
+  - `domHelpers`
+  - `shadowdom/DOMFunctions`
+  - `shadowdom/ShadowTreeWalker`
+  - `getScrollParents`
+  - `focusWithoutScrolling`
+  - `platform`
+  - `constants`
+  - `inertValue`
 - Remaining:
   - Port full upstream `@react-aria/utils` export surface
   - Reconcile naming/semantics gaps to upstream API
 
 ### Tests
 - Total upstream test files: 7
-- Ported test files: 10
-- Passing test files: 10
+- Ported test files: 14
+- Passing test files: 14
 - Test parity notes:
-  - Current test set includes Vue-adapted behavior tests, not yet a 1:1 mapped set for all upstream files.
+  - Added adapted upstream coverage for `domHelpers` and `mergeRefs`.
+  - Remaining upstream files (`runAfterTransition`, `useObjectRef`, full `shadowTreeWalker`) are still pending parity port/adaptation.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -164,6 +176,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Open Gaps
 - Upstream reference now added as submodule, but many `@react-aria/utils` exports remain unported.
 - SSR/documentation scaffolding is baseline only and needs parity-level implementation.
+- `mergeProps` still lacks upstream `id` dedupe integration (`mergeIds/useId` parity path pending).
+- `inertValue` is Vue-native simplified and needs explicit parity decision per API surface.
 
 ### Next Actions
 1. Build explicit upstream export-to-local mapping for `@react-aria/utils`.
@@ -182,3 +196,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Started first package implementation: `@vue-aria/utils`.
 - Added foundational packages needed by current utils slice: `@vue-aria/types`, `@vue-aria/ssr`.
 - Validation: `npm run check` passed, `npm test` passed (10 files, 33 tests).
+- Added `@vue-aria/flags` and shadow DOM utility infrastructure.
+- Ported additional upstream utility modules and expanded utils exports.
+- Validation: `npm run check` passed, `npm test` passed (14 files, 41 tests).

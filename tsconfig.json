@@ -9,7 +9,8 @@
     "paths": {
       "@vue-aria/utils": ["packages/@vue-aria/utils/src/index.ts"],
       "@vue-aria/types": ["packages/@vue-aria/types/src/index.ts"],
-      "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"]
+      "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"],
+      "@vue-aria/flags": ["packages/@vue-aria/flags/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

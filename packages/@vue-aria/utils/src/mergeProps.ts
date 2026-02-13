@@ -1,64 +1,53 @@
-type Props = Record<string, unknown>;
+import { chain } from "./chain";
+import { mergeRefs } from "./mergeRefs";
 
-const EVENT_HANDLER = /^on[A-Z]/;
+type Props = Record<string, any>;
+type PropsArg = Props | null | undefined;
+type TupleTypes<T> = { [P in keyof T]: T[P] } extends { [key: number]: infer V } ? NullToObject<V> : never;
+type NullToObject<T> = T extends (null | undefined) ? {} : T;
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
-const isFunction = (value: unknown): value is (...args: unknown[]) => void =>
-  typeof value === "function";
+export function mergeProps<T extends PropsArg[]>(...args: T): UnionToIntersection<TupleTypes<T>> {
+  const result: Props = { ...args[0] };
 
-export function mergeProps<T extends Props>(...allProps: T[]): T {
-  const merged: Props = {};
-
-  for (const props of allProps) {
-    for (const [key, value] of Object.entries(props ?? {})) {
-      if (value === undefined) {
-        continue;
-      }
-
-      const existing = merged[key];
-
-      if (EVENT_HANDLER.test(key) && isFunction(existing) && isFunction(value)) {
-        merged[key] = (...args: unknown[]) => {
-          existing(...args);
-          value(...args);
-        };
-        continue;
-      }
-
-      if (key === "class" && existing && value) {
-        merged[key] = [existing, value];
-        continue;
-      }
-
-      if (key === "UNSAFE_className" && existing && value) {
-        merged[key] = `${String(existing)} ${String(value)}`.trim();
-        continue;
-      }
+  for (let i = 1; i < args.length; i++) {
+    const props = args[i];
+    for (const key in props) {
+      const a = result[key];
+      const b = props[key];
 
       if (
-        key === "style" &&
-        existing &&
-        value &&
-        typeof existing === "object" &&
-        typeof value === "object"
+        typeof a === "function"
+        && typeof b === "function"
+        && key[0] === "o"
+        && key[1] === "n"
+        && key.charCodeAt(2) >= 65
+        && key.charCodeAt(2) <= 90
       ) {
-        merged[key] = { ...(existing as Props), ...(value as Props) };
-        continue;
-      }
-
-      if (
-        key === "UNSAFE_style" &&
-        existing &&
-        value &&
-        typeof existing === "object" &&
-        typeof value === "object"
+        result[key] = chain(a, b);
+      } else if (
+        (key === "className" || key === "UNSAFE_className")
+        && typeof a === "string"
+        && typeof b === "string"
       ) {
-        merged[key] = { ...(existing as Props), ...(value as Props) };
-        continue;
+        result[key] = `${a} ${b}`.trim();
+      } else if (key === "class" && a && b) {
+        result[key] = [a, b];
+      } else if (
+        (key === "style" || key === "UNSAFE_style")
+        && a
+        && b
+        && typeof a === "object"
+        && typeof b === "object"
+      ) {
+        result[key] = { ...a, ...b };
+      } else if (key === "ref" && a && b) {
+        result[key] = mergeRefs(a, b);
+      } else {
+        result[key] = b !== undefined ? b : a;
       }
-
-      merged[key] = value;
     }
   }
 
-  return merged as T;
+  return result as UnionToIntersection<TupleTypes<T>>;
 }

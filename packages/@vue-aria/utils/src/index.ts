@@ -1,8 +1,34 @@
+export { chain } from "./chain";
+export { mergeRefs } from "./mergeRefs";
 export { mergeProps } from "./mergeProps";
 export { filterDOMProps } from "./filterDOMProps";
-export { nodeContains } from "./nodeContains";
+export { getOwnerDocument, getOwnerWindow, isShadowRoot } from "./domHelpers";
+export {
+  createShadowTreeWalker,
+  ShadowTreeWalker,
+} from "./shadowdom/ShadowTreeWalker";
+export {
+  getActiveElement,
+  getEventTarget,
+  nodeContains,
+} from "./shadowdom/DOMFunctions";
 export { isScrollable } from "./isScrollable";
 export { getScrollParent } from "./getScrollParent";
+export { getScrollParents } from "./getScrollParents";
+export { focusWithoutScrolling } from "./focusWithoutScrolling";
+export { inertValue } from "./inertValue";
+export { CLEAR_FOCUS_EVENT, FOCUS_EVENT } from "./constants";
+export {
+  isMac,
+  isIPhone,
+  isIPad,
+  isIOS,
+  isAppleDevice,
+  isWebKit,
+  isChrome,
+  isAndroid,
+  isFirefox,
+} from "./platform";
 export { useLoadMore } from "./useLoadMore";
 export { useLoadMoreSentinel } from "./useLoadMoreSentinel";
 export { useDescription } from "./useDescription";
