@@ -10,7 +10,6 @@
  * governing permissions and limitations under the License.
  */
 
-import React from 'react';
 import {renderHook} from '@testing-library/react';
 import {useLink} from '../src/useLink';
 
@@ -41,7 +40,7 @@ describe('useLink', function () {
   });
 
   it('handles custom element type', function () {
-    let {linkProps} = renderLinkHook({children: React.createElement('div', null, 'Test Link'), elementType: 'div'});
+    let {linkProps} = renderLinkHook({children: 'Test Link', elementType: 'div'});
     expect(linkProps.role).toBe('link');
     expect(linkProps.tabIndex).toBe(0);
   });

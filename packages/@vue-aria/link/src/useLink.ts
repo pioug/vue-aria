@@ -13,7 +13,6 @@
 import {AriaLinkProps} from '@vue-types/link';
 import {DOMAttributes, FocusableElement, RefObject} from '@vue-types/shared';
 import {filterDOMProps, handleLinkClick, mergeProps, useLinkProps, useRouter} from '@vue-aria/utils';
-import React from 'react';
 import {useFocusable, usePress} from '@vue-aria/interactions';
 
 export interface AriaLinkOptions extends AriaLinkProps {
@@ -70,7 +69,7 @@ export function useLink(props: AriaLinkOptions, ref: RefObject<FocusableElement 
       ...linkProps,
       'aria-disabled': isDisabled || undefined,
       'aria-current': props['aria-current'],
-      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+      onClick: (e: MouseEvent) => {
         pressProps.onClick?.(e);
         handleLinkClick(e, router, props.href, props.routerOptions);
       }
