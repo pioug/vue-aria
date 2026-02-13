@@ -2054,6 +2054,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
   - Added adapted platform input-mode parity coverage for iPhone and Android branches, including negative-number and decimal/fraction-digit combinations.
+  - Added adapted default-platform input-mode parity coverage (non-iPhone/non-Android paths) for negative, decimal-capable, and integer-only branches.
   - Added adapted native form reset parity coverage to ensure parent `form.reset()` restores `defaultNumberValue` via `setNumberValue`.
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
@@ -2066,7 +2067,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Validate full stepper-button press/touch focus heuristics and remaining input-mode parity branches (iPad/macOS WebKit matrix paths)
+- [ ] Validate full stepper-button press/touch focus heuristics and native invalid branch behavior
 
 ### Visual Parity
 - Not applicable for hook package beyond downstream consumer validation.
@@ -2076,7 +2077,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
-2. Expand parity coverage for native invalid flows and remaining non-iPhone input-mode matrix branches.
+2. Expand parity coverage for native invalid flows in integration-style harnesses.
 
 ## 35) Package Record: @vue-aria/numberfield-state
 - Upstream source path(s):
@@ -3306,3 +3307,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` native form-reset coverage:
   - added adapted test asserting parent `form.reset()` restores `defaultNumberValue` via `state.setNumberValue`
 - Validation: `npm run check` passed, `npm test` passed (129 files, 611 tests).
+- Expanded `@vue-aria/numberfield` input-mode matrix parity:
+  - added adapted default-platform (`!isIPhone && !isAndroid`) branch tests to cover numeric mode behavior across negative, decimal-capable, and integer-only paths
+- Validation: `npm run check` passed, `npm test` passed (130 files, 614 tests).
