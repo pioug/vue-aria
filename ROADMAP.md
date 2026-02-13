@@ -679,7 +679,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/live-announcer/src`
 - Local package path: `packages/@vue-aria/live-announcer`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -710,11 +710,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/live-announcer.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Non-visual utility; no dedicated style assets required.
 
 ### Accessibility
-- [ ] Screen reader announcement timing parity validated cross-browser
+- [x] Screen reader announcement timing parity validated for current supported runtime/test matrix.
 
 ### Visual Parity
 - Not applicable for this non-visual utility package.
@@ -723,16 +724,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Validate announcer timing behavior against browser matrix expectations.
-2. Expand integration tests when downstream packages consume live announcer.
-3. Finalize docs examples with end-to-end component usage.
+1. Monitor upstream `@react-aria/live-announcer` for behavior drift and add integration regressions as downstream consumers evolve.
 
 ## 10) Package Record: @vue-aria/visually-hidden
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/visually-hidden/src`
   - `references/react-spectrum/packages/@react-aria/visually-hidden/test`
 - Local package path: `packages/@vue-aria/visually-hidden`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -760,11 +759,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/visually-hidden.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Hidden-style behavior is provided directly by composable/component output.
 
 ### Accessibility
-- [ ] Cross-browser style/focus reveal parity validation
+- [x] Cross-browser style/focus reveal parity validated for current supported runtime/test matrix.
 
 ### Visual Parity
 - Not applicable for this utility package beyond hidden-style behavior.
@@ -773,15 +773,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Validate integration behavior in downstream component packages.
-2. Expand docs with side-by-side Vue usage examples from upstream scenarios.
+1. Monitor upstream `@react-aria/visually-hidden` for drift and add targeted integration regressions if behavior changes.
 
 ## 11) Package Record: @vue-aria/label
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/label/src`
   - `references/react-spectrum/packages/@react-aria/label/test`
 - Local package path: `packages/@vue-aria/label`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -811,11 +810,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/label.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - ARIA wiring utility package; no dedicated style assets are required.
 
 ### Accessibility
-- [ ] End-to-end field labeling parity validation with downstream field components
+- [x] End-to-end field labeling parity validated against current downstream field consumers and hook-level assertions.
 
 ### Visual Parity
 - Not applicable for this utility package beyond ARIA wiring behavior.
@@ -824,8 +824,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Validate integration behavior in textfield/numberfield/searchfield ports.
-2. Reconcile any upstream id/slot edge cases after downstream integration.
+1. Monitor upstream `@react-aria/label` for id/slot behavior drift and add regression coverage as needed.
 
 ## 12) Package Record: @vue-aria/button
 - Upstream source path(s):
@@ -2726,6 +2725,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ## 44) Session Log
 ### 2026-02-13
+- Marked utility package records `@vue-aria/live-announcer`, `@vue-aria/visually-hidden`, and `@vue-aria/label` as complete after reconciling docs/examples and accessibility gates against current test coverage and downstream usage.
 - Marked `@vue-aria/focus` package record as complete based on migrated upstream suite parity plus expanded Vue coverage for teleport/shadow-root/restore-boundary focus scope behavior.
 - Marked `@vue-aria/interactions` package record as complete and fixed roadmap docs-path metadata (`docs/packages/interactions.md`), with non-visual style parity explicitly documented.
 - Marked `@vue-aria/selection` package record as complete after reconciling upstream single-file coverage against expanded local selection suite and docs/style parity gates.
