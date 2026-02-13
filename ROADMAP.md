@@ -1413,10 +1413,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 11
-- Ported test files: 4
-- Passing test files: 4 (validated 2026-02-13)
+- Ported test files: 9
+- Passing test files: 9 (validated 2026-02-13)
 - Test parity notes:
-  - Current adapted coverage includes outside-dismiss behavior, scroll-lock behavior, `ariaHideOutside` hide/restore behavior, and overlay-trigger backward-compat close-on-scroll behavior.
+  - Current adapted coverage includes outside-dismiss behavior, scroll-lock behavior, `ariaHideOutside` hide/restore behavior, overlay-trigger semantics/compatibility behavior, `DismissButton`/`useModal`/`useModalOverlay`/`usePopover` behavior, and core `calculatePosition` math/flip/arrow boundary behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1761,3 +1761,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (90 files, 271 tests).
 - Expanded `usePreventScroll` test coverage with a disabled-path case.
 - Validation: `npm run check` passed, `npm test` passed (90 files, 272 tests).
+- Added adapted `calculatePosition` parity tests for baseline placement math, flip behavior, and arrow boundary constraints.
+- Validation: `npm run check` passed, `npm test` passed (91 files, 276 tests).
