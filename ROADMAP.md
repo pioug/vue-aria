@@ -2687,8 +2687,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `Slider` coverage for aria-label and visible-label output semantics.
   - Added adapted `Slider` coverage for default, controlled, and disabled behavior.
   - Added adapted `Slider` coverage for clamping semantics (value/defaultValue with min/max/step constraints), custom `getValueLabel`, and slider form-name wiring.
+  - Added adapted `Slider` coverage for controlled form-reset lifecycle behavior.
   - Added adapted `RangeSlider` coverage for label wiring, min/max thumb labeling, default/controlled behavior, and start/end form names.
   - Added adapted `RangeSlider` coverage for custom `getValueLabel` output semantics and disabled-state behavior across both thumbs.
+  - Added adapted `RangeSlider` coverage for controlled form-reset lifecycle behavior across both thumbs.
   - Added adapted locale coverage validating localized range-thumb `aria-label` output (`ar-AE` minimum/maximum strings).
 - [ ] All relevant upstream tests migrated
 
@@ -2707,7 +2709,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream Slider/RangeSlider tests (keyboard, pointer, tab-order focus, and form lifecycle reset/action paths).
+1. Port remaining upstream Slider/RangeSlider tests (keyboard, pointer, tab-order focus, and form action-state reset paths).
 2. Align style classes/tokens with upstream docs stories and validate with wrapper harness.
 
 ## 44) Session Log
@@ -4158,3 +4160,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `Slider`: added custom `getValueLabel` coverage and explicit form-name/form-id wiring assertions.
   - `RangeSlider`: added custom `getValueLabel` coverage and disabled-state assertions across both thumbs.
 - Validation: `npm run check` passed, `npm test` passed (145 files, 793 tests).
+- Expanded `@vue-spectrum/slider` form lifecycle parity:
+  - `Slider`: added adapted controlled form-reset coverage (`reset` input restores prior value state).
+  - `RangeSlider`: added adapted controlled dual-thumb form-reset coverage (`reset` restores both start/end values).
+- Validation: `npm run check` passed, `npm test` passed (145 files, 795 tests).

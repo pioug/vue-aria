@@ -205,6 +205,37 @@ describe("Spectrum Slider", () => {
     wrapper.unmount();
   });
 
+  it("supports form reset with controlled value", async () => {
+    const Test = defineComponent({
+      setup() {
+        const value = ref(10);
+        return () =>
+          h("form", {}, [
+            h(Slider as any, {
+              label: "Value",
+              value: value.value,
+              onChange: (next: number) => {
+                value.value = next;
+              },
+            }),
+            h("input", { type: "reset", "data-testid": "reset" }),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Test as any, { attachTo: document.body });
+    const slider = wrapper.find('input[type="range"]');
+    expect((slider.element as HTMLInputElement).value).toBe("10");
+
+    await slider.setValue("55");
+    expect((slider.element as HTMLInputElement).value).toBe("55");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    expect((slider.element as HTMLInputElement).value).toBe("10");
+
+    wrapper.unmount();
+  });
+
   it("supports disabled state", async () => {
     const wrapper = mount(Slider as any, {
       props: {

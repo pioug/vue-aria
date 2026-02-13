@@ -166,6 +166,41 @@ describe("Spectrum RangeSlider", () => {
     wrapper.unmount();
   });
 
+  it("supports form reset with controlled values", async () => {
+    const Test = defineComponent({
+      setup() {
+        const value = ref({ start: 10, end: 40 });
+        return () =>
+          h("form", {}, [
+            h(RangeSlider as any, {
+              label: "Value",
+              value: value.value,
+              onChange: (next: { start: number; end: number }) => {
+                value.value = next;
+              },
+            }),
+            h("input", { type: "reset", "data-testid": "reset" }),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Test as any, { attachTo: document.body });
+    const sliders = wrapper.findAll('input[type="range"]');
+    expect((sliders[0].element as HTMLInputElement).value).toBe("10");
+    expect((sliders[1].element as HTMLInputElement).value).toBe("40");
+
+    await sliders[0].setValue("30");
+    await sliders[1].setValue("60");
+    expect((sliders[0].element as HTMLInputElement).value).toBe("30");
+    expect((sliders[1].element as HTMLInputElement).value).toBe("60");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    expect((sliders[0].element as HTMLInputElement).value).toBe("10");
+    expect((sliders[1].element as HTMLInputElement).value).toBe("40");
+
+    wrapper.unmount();
+  });
+
   it("supports thumb form names", () => {
     const wrapper = mount(RangeSlider as any, {
       props: {
