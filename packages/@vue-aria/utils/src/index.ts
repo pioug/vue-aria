@@ -15,6 +15,7 @@ export {
 export { isScrollable } from "./isScrollable";
 export { getScrollParent } from "./getScrollParent";
 export { getScrollParents } from "./getScrollParents";
+export { getOffset } from "./getOffset";
 export { focusWithoutScrolling } from "./focusWithoutScrolling";
 export { inertValue } from "./inertValue";
 export { CLEAR_FOCUS_EVENT, FOCUS_EVENT } from "./constants";
@@ -29,6 +30,13 @@ export {
   isAndroid,
   isFirefox,
 } from "./platform";
+export { isVirtualClick, isVirtualPointerEvent } from "./isVirtualEvent";
+export { isCtrlKeyPressed, willOpenKeyboard } from "./keyboard";
+export { isElementVisible } from "./isElementVisible";
+export { isFocusable, isTabbable } from "./isFocusable";
+export { runAfterTransition } from "./runAfterTransition";
+export { scrollIntoView, scrollIntoViewport } from "./scrollIntoView";
+export { clamp, snapValueToStep } from "./math";
 export { useLoadMore } from "./useLoadMore";
 export { useLoadMoreSentinel } from "./useLoadMoreSentinel";
 export { useDescription } from "./useDescription";
@@ -37,9 +45,11 @@ export { useResizeObserver } from "./useResizeObserver";
 export { useValueEffect } from "./useValueEffect";
 export {
   provideRouter,
+  RouterProvider,
   useRouter,
   shouldClientNavigate,
   openLink,
+  getSyntheticLinkProps,
   useLinkProps,
   useSyntheticLinkProps,
   handleLinkClick,

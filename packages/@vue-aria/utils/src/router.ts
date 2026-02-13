@@ -194,6 +194,9 @@ export function useSyntheticLinkProps(props?: LinkDOMProps): Record<string, unkn
   };
 }
 
+export const getSyntheticLinkProps = useSyntheticLinkProps;
+export const RouterProvider = provideRouter;
+
 export function handleLinkClick(
   event: MouseEvent,
   router: Router,

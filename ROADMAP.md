@@ -138,17 +138,28 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `platform`
   - `constants`
   - `inertValue`
+- [x] Added additional upstream utility parity slice:
+  - `getOffset`
+  - `isElementVisible`
+  - `isFocusable` / `isTabbable`
+  - `isVirtualClick` / `isVirtualPointerEvent`
+  - `isCtrlKeyPressed` / `willOpenKeyboard`
+  - `runAfterTransition`
+  - `scrollIntoView` / `scrollIntoViewport`
+  - `clamp` / `snapValueToStep`
+  - router aliases: `RouterProvider`, `getSyntheticLinkProps`
 - Remaining:
   - Port full upstream `@react-aria/utils` export surface
   - Reconcile naming/semantics gaps to upstream API
 
 ### Tests
 - Total upstream test files: 7
-- Ported test files: 14
-- Passing test files: 14
+- Ported test files: 16
+- Passing test files: 16
 - Test parity notes:
   - Added adapted upstream coverage for `domHelpers` and `mergeRefs`.
-  - Remaining upstream files (`runAfterTransition`, `useObjectRef`, full `shadowTreeWalker`) are still pending parity port/adaptation.
+  - Added adapted upstream coverage for `runAfterTransition`.
+  - Remaining upstream files (`useObjectRef`, full `shadowTreeWalker`, hook-level utilities) are still pending parity port/adaptation.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -178,6 +189,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - SSR/documentation scaffolding is baseline only and needs parity-level implementation.
 - `mergeProps` still lacks upstream `id` dedupe integration (`mergeIds/useId` parity path pending).
 - `inertValue` is Vue-native simplified and needs explicit parity decision per API surface.
+- Hook-level exports from upstream index are still pending in this package (`useEvent`, `useGlobalListeners`, `useLayoutEffect`, `useUpdateEffect`, `useUpdateLayoutEffect`, `useSyncRef`, `useViewportSize`, `useDrag1D`, `useEnterAnimation`, `useExitAnimation`, etc.).
 
 ### Next Actions
 1. Build explicit upstream export-to-local mapping for `@react-aria/utils`.
@@ -199,3 +211,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added `@vue-aria/flags` and shadow DOM utility infrastructure.
 - Ported additional upstream utility modules and expanded utils exports.
 - Validation: `npm run check` passed, `npm test` passed (14 files, 41 tests).
+- Ported another utility tranche (offset/visibility/focusability/virtual-event/keyboard/transition/scroll/math helpers) and router parity aliases.
+- Validation: `npm run check` passed, `npm test` passed (16 files, 45 tests).
