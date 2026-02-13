@@ -1898,6 +1898,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted typeahead guard coverage ensuring an initial Space key does not trigger selection when no search string is active.
   - Added adapted `HiddenSelect` selectData-fallback parity coverage for `name` propagation in large-collection hidden-input rendering and empty-collection initial form submission behavior.
   - Added adapted `HiddenSelect` selectData-fallback coverage for `isDisabled` propagation when component `isDisabled` prop is omitted.
+  - Added adapted `useHiddenSelect` form-reset integration coverage ensuring parent `form.reset()` restores `state.defaultValue`.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1915,7 +1916,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining hidden select parity behaviors around browser form validation integration (`@react-aria/form` path).
+1. Port remaining hidden select parity behaviors around browser form validation integration (`@react-aria/form` path), including dynamic first-invalid ordering scenarios.
 2. Deepen `useSelect` behavior parity (focus/blur lifecycle edge cases and expanded keyboard/typeahead interactions).
 
 ## 32) Package Record: @vue-aria/form
@@ -3396,3 +3397,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/numberfield` dynamic first-invalid mutation parity:
   - added adapted coverage for re-evaluating first-invalid ordering after earlier field validity changes within the same form
 - Validation: `npm run check` passed, `npm test` passed (130 files, 632 tests).
+- Expanded `@vue-aria/select/useHiddenSelect` form-reset integration parity:
+  - added adapted coverage ensuring hidden-select wiring restores `defaultValue` on parent `form.reset()` events
+- Validation: `npm run check` passed, `npm test` passed (130 files, 633 tests).

@@ -171,6 +171,29 @@ describe("useHiddenSelect", () => {
     form.remove();
   });
 
+  it("resets selection state on parent form reset via hidden select integration", async () => {
+    const state = createState("single");
+    state.defaultValue = "a";
+    const selectElement = document.createElement("select");
+    const form = document.createElement("form");
+    form.appendChild(selectElement);
+    document.body.appendChild(form);
+    const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(selectElement);
+    const triggerRef = { current: document.createElement("button") as Element | null };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useHiddenSelect({ name: "x", selectRef }, state, triggerRef);
+    });
+    await nextTick();
+
+    form.dispatchEvent(new Event("reset"));
+    expect(state.setValue).toHaveBeenCalledWith("a");
+
+    scope.stop();
+    form.remove();
+  });
+
   it("forwards hidden select focus to trigger element", () => {
     const state = createState("single");
     const selectRef = ref<HTMLSelectElement | HTMLInputElement | null>(null);
