@@ -2154,3 +2154,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `HiddenSelect` now has adapted coverage for first-input-required semantics in multi-value native validation fallback
   - `useFormValidation` now has adapted coverage for form `reset` listener behavior and ignored programmatic resets
 - Validation: `npm run check` passed, `npm test` passed (111 files, 331 tests).
+- Expanded `@vue-aria/select` and `@vue-aria/form` docs toward upstream parity:
+  - added API/features/anatomy/usage sections
+  - expanded Vue-idiomatic examples and integration notes
+- Validation: `npm run check` passed, `npm test` passed (111 files, 331 tests).
