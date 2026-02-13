@@ -11,20 +11,25 @@
  */
 
 import {AriaLabelingProps, DOMAttributes, DOMProps, LabelableProps} from '@vue-types/shared';
-import {ElementType, LabelHTMLAttributes} from 'react';
 import {useId, useLabels} from '@vue-aria/utils';
+
+type LabelElementType = 'label' | (string & {});
+
+interface LabelElementProps extends DOMAttributes<HTMLLabelElement> {
+  htmlFor?: string
+}
 
 export interface LabelAriaProps extends LabelableProps, DOMProps, AriaLabelingProps {
   /**
    * The HTML element used to render the label, e.g. 'label', or 'span'.
    * @default 'label'
    */
-  labelElementType?: ElementType
+  labelElementType?: LabelElementType
 }
 
 export interface LabelAria {
   /** Props to apply to the label container element. */
-  labelProps: DOMAttributes | LabelHTMLAttributes<HTMLLabelElement>,
+  labelProps: DOMAttributes | LabelElementProps,
   /** Props to apply to the field container element being labeled. */
   fieldProps: AriaLabelingProps & DOMProps
 }
