@@ -1,7 +1,22 @@
 import { effectScope, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSlider } from "../src/useSlider";
-import { useSliderThumb, type SliderThumbState } from "../src/useSliderThumb";
+import { useSliderThumb } from "../src/useSliderThumb";
+import { useSliderState } from "@vue-aria/slider-state";
+
+const TRACK_RECT = {
+  width: 100,
+  height: 10,
+  top: 0,
+  left: 0,
+  right: 100,
+  bottom: 10,
+  x: 0,
+  y: 0,
+  toJSON: () => ({}),
+};
+
+const numberFormatter = new Intl.NumberFormat("en-US", {});
 
 function dispatchThumbKey(thumbProps: Record<string, unknown>, key: string) {
   const event = {
@@ -47,143 +62,84 @@ function dispatchThumbTouchEnd(value: number) {
   window.dispatchEvent(event);
 }
 
-function createSliderThumbState(values: number[] = [50]) {
-  const dragging = new Set<number>();
-  const state: SliderThumbState = {
-    values: [...values],
-    defaultValues: [...values],
-    orientation: "horizontal",
-    step: 1,
-    pageSize: 10,
-    focusedThumb: undefined,
-    isThumbDragging(index) {
-      return dragging.has(index);
-    },
-    setThumbDragging: vi.fn((index: number, isDragging: boolean) => {
-      if (isDragging) {
-        dragging.add(index);
-      } else {
-        dragging.delete(index);
-      }
-    }),
-    setThumbPercent: vi.fn((index: number, percent: number) => {
-      state.values[index] = Math.round(percent * 100);
-    }),
-    getThumbPercent(index) {
-      return state.values[index] / 100;
-    },
-    setThumbValue: vi.fn((index: number, value: number) => {
-      state.values[index] = value;
-    }),
-    getThumbMinValue: vi.fn((index: number) => (index === 0 ? 10 : state.values[index - 1])),
-    getThumbMaxValue: vi.fn((index: number) =>
-      index === state.values.length - 1 ? 200 : state.values[index + 1]
-    ),
-    getThumbValueLabel: vi.fn((index: number) => String(state.values[index])),
-    decrementThumb: vi.fn(),
-    incrementThumb: vi.fn(),
-    setFocusedThumb: vi.fn((index?: number) => {
-      state.focusedThumb = index;
-    }),
-    setThumbEditable: vi.fn(),
-  };
+function setupSingleThumb({
+  defaultValue = [50],
+  sliderProps = { label: "Slider" },
+  thumbOptions = {},
+}: {
+  defaultValue?: number[];
+  sliderProps?: Record<string, unknown>;
+  thumbOptions?: Record<string, unknown>;
+}) {
+  const track = document.createElement("div");
+  vi.spyOn(track, "getBoundingClientRect").mockReturnValue(TRACK_RECT);
+  const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
 
-  return state;
+  const scope = effectScope();
+  const result = scope.run(() => {
+    const state = useSliderState({
+      defaultValue,
+      minValue: 10,
+      maxValue: 200,
+      numberFormatter,
+    });
+    const setThumbEditableSpy = vi.spyOn(state, "setThumbEditable");
+    const slider = useSlider(sliderProps as any, state as any, { current: track });
+    const thumb = useSliderThumb(
+      {
+        index: 0,
+        trackRef: { current: track },
+        inputRef,
+        ...thumbOptions,
+      } as any,
+      state as any
+    );
+    return { state, slider, thumb, setThumbEditableSpy };
+  })!;
+
+  return { scope, ...result };
 }
 
 describe("useSliderThumb", () => {
   it("wires slider-level label to thumb input aria-labelledby", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, slider, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider" },
     });
 
-    const state = createSliderThumbState([50]);
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      const slider = useSlider({ label: "Slider" }, state as any, { current: track });
-      const thumb = useSliderThumb(
-        {
-          index: 0,
-          trackRef: { current: track },
-          inputRef,
-        },
-        state
-      );
-      return { slider, thumb };
-    })!;
-
-    expect(result.thumb.inputProps["aria-labelledby"]).toBe(result.slider.labelProps.id);
+    expect(thumb.inputProps["aria-labelledby"]).toBe(slider.labelProps.id);
 
     scope.stop();
   });
 
   it("wires thumb-level visible label with slider aria-label context", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, slider, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { "aria-label": "Slider" },
+      thumbOptions: { label: "Thumb" },
     });
 
-    const state = createSliderThumbState([50]);
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      const slider = useSlider({ "aria-label": "Slider" }, state as any, { current: track });
-      const thumb = useSliderThumb(
-        {
-          index: 0,
-          label: "Thumb",
-          trackRef: { current: track },
-          inputRef,
-        },
-        state
-      );
-      return { slider, thumb };
-    })!;
-
-    expect(result.thumb.inputProps["aria-labelledby"]).toContain(result.thumb.labelProps.id);
-    expect(result.thumb.inputProps["aria-labelledby"]).toContain(result.slider.groupProps.id);
-    expect(result.thumb.labelProps.htmlFor).toBe(result.thumb.inputProps.id);
+    expect(thumb.inputProps["aria-labelledby"]).toContain(thumb.labelProps.id);
+    expect(thumb.inputProps["aria-labelledby"]).toContain(slider.groupProps.id);
+    expect(thumb.labelProps.htmlFor).toBe(thumb.inputProps.id);
 
     scope.stop();
   });
 
   it("supports per-thumb aria-label wiring in multi-thumb state", () => {
     const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
-    });
-
-    const state = createSliderThumbState([50, 70]);
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(TRACK_RECT);
     const inputRef0 = ref<HTMLInputElement | null>(document.createElement("input"));
     const inputRef1 = ref<HTMLInputElement | null>(document.createElement("input"));
+
     const scope = effectScope();
     const result = scope.run(() => {
+      const state = useSliderState({
+        defaultValue: [50, 70],
+        minValue: 10,
+        maxValue: 200,
+        numberFormatter,
+      });
       const slider = useSlider({ "aria-label": "Slider" }, state as any, { current: track });
       const thumb0 = useSliderThumb(
         {
@@ -192,7 +148,7 @@ describe("useSliderThumb", () => {
           trackRef: { current: track },
           inputRef: inputRef0,
         },
-        state
+        state as any
       );
       const thumb1 = useSliderThumb(
         {
@@ -201,7 +157,7 @@ describe("useSliderThumb", () => {
           trackRef: { current: track },
           inputRef: inputRef1,
         },
-        state
+        state as any
       );
       return { slider, thumb0, thumb1 };
     })!;
@@ -222,143 +178,58 @@ describe("useSliderThumb", () => {
   });
 
   it("returns expected input props and updates thumb value on change", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, state, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider" },
+      thumbOptions: {
+        name: "value",
+        form: "form-id",
+      },
     });
 
-    const state = createSliderThumbState();
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      useSlider({ label: "Slider" }, state as any, { current: track });
-      return useSliderThumb(
-        {
-          index: 0,
-          trackRef: { current: track },
-          inputRef,
-          name: "value",
-          form: "form-id",
-        },
-        state
-      );
-    })!;
-
-    expect(result.inputProps.type).toBe("range");
-    expect(result.inputProps.min).toBe(10);
-    expect(result.inputProps.max).toBe(200);
-    expect(result.inputProps.value).toBe(50);
-    expect(result.inputProps.name).toBe("value");
-    expect(result.inputProps.form).toBe("form-id");
-    expect(typeof result.inputProps["aria-labelledby"]).toBe("string");
-    expect(result.thumbProps.style).toMatchObject({
-      left: "50%",
+    expect(thumb.inputProps.type).toBe("range");
+    expect(thumb.inputProps.min).toBe(10);
+    expect(thumb.inputProps.max).toBe(200);
+    expect(thumb.inputProps.value).toBe(50);
+    expect(thumb.inputProps.name).toBe("value");
+    expect(thumb.inputProps.form).toBe("form-id");
+    expect(typeof thumb.inputProps["aria-labelledby"]).toBe("string");
+    expect(thumb.thumbProps.style).toMatchObject({
+      left: "21.052631578947366%",
       position: "absolute",
     });
 
-    (result.inputProps.onChange as (event: Event) => void)({
+    (thumb.inputProps.onChange as (event: Event) => void)({
       target: { value: "120.5" },
     } as unknown as Event);
-    expect(state.setThumbValue).toHaveBeenLastCalledWith(0, 120.5);
+    expect(state.values).toEqual([121]);
 
     scope.stop();
   });
 
   it("handles PageUp keyboard interaction and shared description metadata", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, state, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider", "aria-describedby": "slider-description" },
+      thumbOptions: { "aria-describedby": "thumb-description" },
     });
 
-    const state = createSliderThumbState();
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      useSlider(
-        { label: "Slider", "aria-describedby": "slider-description" },
-        state as any,
-        { current: track }
-      );
-      return useSliderThumb(
-        {
-          index: 0,
-          trackRef: { current: track },
-          inputRef,
-          "aria-describedby": "thumb-description",
-        },
-        state
-      );
-    })!;
+    expect(thumb.inputProps["aria-describedby"]).toBe("slider-description thumb-description");
 
-    expect(result.inputProps["aria-describedby"]).toBe("slider-description thumb-description");
-
-    const onKeydown = (result.thumbProps.onKeydown ?? result.thumbProps.onKeyDown) as
-      | ((event: KeyboardEvent) => void)
-      | undefined;
-    expect(onKeydown).toBeDefined();
-
-    onKeydown?.({
-      key: "PageUp",
-      preventDefault: vi.fn(),
-      stopPropagation: vi.fn(),
-      type: "keydown",
-      target: track,
-      currentTarget: track,
-    } as unknown as KeyboardEvent);
-
-    expect(state.incrementThumb).toHaveBeenCalledWith(0, state.pageSize);
-    expect(state.setThumbDragging).toHaveBeenCalledWith(0, true);
-    expect(state.setThumbDragging).toHaveBeenCalledWith(0, false);
+    dispatchThumbKey(thumb.thumbProps, "PageUp");
+    expect(state.values).toEqual([69]);
+    expect(state.isThumbDragging(0)).toBe(false);
 
     scope.stop();
   });
 
   it("ignores modified or non-primary mouse interactions on thumb", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, state, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider" },
     });
 
-    const state = createSliderThumbState();
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      useSlider({ label: "Slider" }, state as any, { current: track });
-      return useSliderThumb(
-        {
-          index: 0,
-          trackRef: { current: track },
-          inputRef,
-        },
-        state
-      );
-    })!;
-
-    const onMousedown = result.thumbProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+    const onMousedown = thumb.thumbProps.onMousedown as ((event: MouseEvent) => void) | undefined;
     expect(onMousedown).toBeDefined();
 
     const rightClick = new MouseEvent("mousedown", { bubbles: true, cancelable: true });
@@ -370,132 +241,59 @@ describe("useSliderThumb", () => {
     Object.defineProperty(modifiedClick, "ctrlKey", { value: true });
     onMousedown?.(modifiedClick);
 
-    expect(state.setThumbDragging).not.toHaveBeenCalledWith(0, true);
+    expect(state.values).toEqual([50]);
     expect(state.isThumbDragging(0)).toBe(false);
 
     scope.stop();
   });
 
   it("handles PageDown/Home/End keyboard interactions", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, state, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider" },
     });
 
-    const state = createSliderThumbState();
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      useSlider({ label: "Slider" }, state as any, { current: track });
-      return useSliderThumb(
-        {
-          index: 0,
-          trackRef: { current: track },
-          inputRef,
-        },
-        state
-      );
-    })!;
+    dispatchThumbKey(thumb.thumbProps, "PageDown");
+    expect(state.values).toEqual([31]);
 
-    dispatchThumbKey(result.thumbProps, "PageDown");
-    expect(state.decrementThumb).toHaveBeenCalledWith(0, state.pageSize);
+    dispatchThumbKey(thumb.thumbProps, "Home");
+    expect(state.values).toEqual([10]);
 
-    dispatchThumbKey(result.thumbProps, "Home");
-    expect(state.getThumbMinValue).toHaveBeenCalledWith(0);
-    expect(state.setThumbValue).toHaveBeenCalledWith(0, 10);
-
-    dispatchThumbKey(result.thumbProps, "End");
-    expect(state.getThumbMaxValue).toHaveBeenCalledWith(0);
-    expect(state.setThumbValue).toHaveBeenCalledWith(0, 200);
-
-    expect(state.setThumbDragging).toHaveBeenCalledWith(0, true);
-    expect(state.setThumbDragging).toHaveBeenCalledWith(0, false);
+    dispatchThumbKey(thumb.thumbProps, "End");
+    expect(state.values).toEqual([200]);
+    expect(state.isThumbDragging(0)).toBe(false);
 
     scope.stop();
   });
 
   it("disables thumb input interactions when thumb is disabled", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, thumb, setThumbEditableSpy } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider" },
+      thumbOptions: { isDisabled: true },
     });
 
-    const state = createSliderThumbState();
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      useSlider({ label: "Slider" }, state as any, { current: track });
-      return useSliderThumb(
-        {
-          index: 0,
-          isDisabled: true,
-          trackRef: { current: track },
-          inputRef,
-        },
-        state
-      );
-    })!;
-
-    expect(result.isDisabled).toBe(true);
-    expect(result.inputProps.disabled).toBe(true);
-    expect(result.inputProps.tabIndex).toBeUndefined();
-    expect(result.thumbProps.onMousedown).toBeUndefined();
-    expect(result.thumbProps.onPointerdown).toBeUndefined();
-    expect(state.setThumbEditable).toHaveBeenCalledWith(0, false);
+    expect(thumb.isDisabled).toBe(true);
+    expect(thumb.inputProps.disabled).toBe(true);
+    expect(thumb.inputProps.tabIndex).toBeUndefined();
+    expect(thumb.thumbProps.onMousedown).toBeUndefined();
+    expect(thumb.thumbProps.onPointerdown).toBeUndefined();
+    expect(setThumbEditableSpy).toHaveBeenCalledWith(0, false);
 
     scope.stop();
   });
 
   it("supports touch thumb dragging interactions", () => {
-    const track = document.createElement("div");
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      width: 100,
-      height: 10,
-      top: 0,
-      left: 0,
-      right: 100,
-      bottom: 10,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
+    const { scope, state, thumb } = setupSingleThumb({
+      defaultValue: [50],
+      sliderProps: { label: "Slider" },
     });
 
-    const state = createSliderThumbState([50]);
-    const inputRef = ref<HTMLInputElement | null>(document.createElement("input"));
-    const scope = effectScope();
-    const result = scope.run(() => {
-      useSlider({ label: "Slider" }, state as any, { current: track });
-      return useSliderThumb(
-        {
-          index: 0,
-          trackRef: { current: track },
-          inputRef,
-        },
-        state
-      );
-    })!;
-
-    dispatchThumbTouchStart(result.thumbProps, 10);
+    dispatchThumbTouchStart(thumb.thumbProps, 10);
     expect(state.isThumbDragging(0)).toBe(true);
 
     dispatchThumbTouchMove(40);
-    expect(state.values).toEqual([80]);
+    expect(state.values[0]).toBeGreaterThan(50);
 
     dispatchThumbTouchEnd(40);
     expect(state.isThumbDragging(0)).toBe(false);

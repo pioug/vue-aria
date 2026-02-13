@@ -128,6 +128,15 @@ state.setThumbEditable(3, false);
 }
 ```
 
+## Visual parity harness
+
+- Story-shaped Vue wrapper harness coverage is maintained in:
+  - `packages/@vue-aria/slider/test/sliderStoryHarness.test.ts`
+- Mirrored compositions:
+  - range slider geometry (filled rail start/width)
+  - multi-thumb disabled-thumb combinations
+  - vertical orientation output (`aria-orientation`, filled rail top/height)
+
 ## Notes
 
 - Track and thumb interactions include pointer, mouse, touch, and keyboard flows.
