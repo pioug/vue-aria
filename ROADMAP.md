@@ -319,6 +319,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useScrollWheel`
   - `useMove`
   - `usePress`
+  - `useLongPress`
   - `textSelection` helpers (`disableTextSelection`, `restoreTextSelection`)
 - [x] Package scaffolding created and wired:
   - `package.json`
@@ -326,13 +327,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port `useLongPress` and remaining interaction helpers/context modules.
+  - Port remaining interaction helpers/context modules.
   - Migrate upstream interaction tests module-by-module.
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 10
-- Passing test files: 10
+- Ported test files: 11
+- Passing test files: 11
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
@@ -344,6 +345,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `useScrollWheel` delta emission, ctrl+wheel suppression, and disabled behavior.
   - Added adapted tests for `useMove` keyboard and drag delta behavior, plus non-primary-button ignore behavior.
   - Added adapted tests for `usePress` pointer/mouse fallback flow, keyboard flow, disabled behavior, pointer-exit cancellation, and propagation semantics.
+  - Added adapted tests for `useLongPress` timer threshold behavior, cancellation semantics, `usePress` composition, keyboard non-trigger behavior, and accessibility description handling.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -601,3 +603,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported `@vue-aria/interactions/usePress` with upstream-aligned API surface and pointer/keyboard/mouse fallback behavior.
 - Added adapted `usePress` tests from upstream intent and wired interactions exports.
 - Validation: `npm run check` passed, `npm test` passed (48 files, 135 tests).
+- Ported `@vue-aria/interactions/useLongPress` with `usePress` composition, threshold handling, context-menu suppression, and accessibility description wiring.
+- Added adapted `useLongPress` tests from upstream intent and exported public long-press types/APIs.
+- Validation: `npm run check` passed, `npm test` passed (49 files, 142 tests).
