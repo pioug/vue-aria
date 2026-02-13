@@ -12,18 +12,17 @@
 
 import {AriaRadioProps} from '@vue-types/radio';
 import {filterDOMProps, mergeProps, useFormReset} from '@vue-aria/utils';
-import {InputHTMLAttributes, LabelHTMLAttributes, useMemo} from 'react';
 import {radioGroupData} from './utils';
 import {RadioGroupState} from '@vue-stately/radio';
-import {RefObject} from '@vue-types/shared';
+import {DOMAttributes, RefObject} from '@vue-types/shared';
 import {useFocusable, usePress} from '@vue-aria/interactions';
 import {useFormValidation} from '@vue-aria/form';
 
 export interface RadioAria {
   /** Props for the label wrapper element. */
-  labelProps: LabelHTMLAttributes<HTMLLabelElement>,
+  labelProps: DOMAttributes<HTMLLabelElement>,
   /** Props for the input element. */
-  inputProps: InputHTMLAttributes<HTMLInputElement>,
+  inputProps: DOMAttributes<HTMLInputElement>,
   /** Whether the radio is disabled. */
   isDisabled: boolean,
   /** Whether the radio is currently selected. */
@@ -118,13 +117,13 @@ export function useRadio(props: AriaRadioProps, state: RadioGroupState, ref: Ref
   return {
     labelProps: mergeProps(
       labelProps,
-      useMemo(() => ({
+      {
         onClick: e => e.preventDefault(),
 
         // Prevent label from being focused when mouse down on it.
         // Note, this does not prevent the input from being focused in the `click` event.
         onMouseDown: e => e.preventDefault()
-      }), [])),
+      }),
     inputProps: mergeProps(domProps, {
       ...interactions,
       type: 'radio',
