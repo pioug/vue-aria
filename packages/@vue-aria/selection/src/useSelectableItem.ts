@@ -11,6 +11,7 @@ import { moveVirtualFocus } from "@vue-aria/focus";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
 import { chain, isCtrlKeyPressed, mergeProps, openLink, useId, useRouter } from "@vue-aria/utils";
 import type { RouterOptions } from "@vue-aria/utils";
+import { watchEffect } from "vue";
 import { getCollectionId, isNonContiguousSelectionModifier } from "./utils";
 
 export interface SelectableItemOptions {
@@ -117,17 +118,19 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
     manager.replaceSelection(key);
   };
 
-  if (manager.focusedKey === key && manager.isFocused) {
-    if (!shouldUseVirtualFocus) {
-      if (focus) {
-        focus();
-      } else if (document.activeElement !== ref.current && ref.current) {
-        focusSafely(ref.current);
+  watchEffect(() => {
+    if (manager.focusedKey === key && manager.isFocused) {
+      if (!shouldUseVirtualFocus) {
+        if (focus) {
+          focus();
+        } else if (document.activeElement !== ref.current && ref.current) {
+          focusSafely(ref.current);
+        }
+      } else {
+        moveVirtualFocus(ref.current);
       }
-    } else {
-      moveVirtualFocus(ref.current);
     }
-  }
+  });
 
   isDisabled = Boolean(isDisabled || manager.isDisabled(key));
 

@@ -4817,3 +4817,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `@vue-aria/grid` docs and package record to reflect completed hook surface with remaining upstream integration-matrix adaptation work.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/grid/test` passed (6 files, 19 tests).
+- Hardened shared selection focus reactivity:
+  - updated `@vue-aria/selection/useSelectableItem` to reactively track `focusedKey` / `isFocused` via `watchEffect`, aligning focus handoff behavior with state updates in Vue composable usage.
+  - validated no regressions in adapted selection-item behavior coverage.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-aria/selection/test/useSelectableItem.test.ts` passed (7 files, 46 tests).
