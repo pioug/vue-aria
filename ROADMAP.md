@@ -70,12 +70,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tooltip`: Complete
 - `@vue-aria/progress`: Complete
 - `@vue-aria/meter`: Complete
-- `@vue-aria/collections`: In progress
+- `@vue-aria/collections`: Complete
 - `@vue-aria/selection`: Complete
 
 ### React Stately packages
-- `@vue-aria/utils-state`: In progress
-- `@vue-aria/toggle-state`: In progress
+- `@vue-aria/utils-state`: Complete
+- `@vue-aria/toggle-state`: Complete
 - `@vue-aria/checkbox-state`: Complete
 - `@vue-aria/radio-state`: Complete
 - `@vue-aria/searchfield-state`: Complete
@@ -91,7 +91,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/calendar-state`: Not started
 - `@vue-aria/datepicker-state`: Not started
 - `@vue-aria/combobox-state`: Not started
-- `@vue-aria/selection-state`: In progress
+- `@vue-aria/selection-state`: Complete
 
 ### React Spectrum component packages
 - `@vue-spectrum/provider`: Not started
@@ -458,6 +458,211 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Monitor upstream `@react-aria/selection` for drift and add targeted regression coverage for new edge cases.
+
+## 6a) Package Record: @vue-aria/collections
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/collections/src`
+- Local package path: `packages/@vue-aria/collections`
+- Status: Complete
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `BaseCollection`
+  - `CollectionBuilder`
+  - `createLeafComponent`
+  - `createBranchComponent`
+  - `createHideableComponent`
+  - `useIsHidden`
+  - `useCachedChildren`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable/collection modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: none in package-local upstream path
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for base collection key navigation, size bookkeeping, and text filtering behavior.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/collections.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State/data package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- Not directly applicable for collection-state package; validated through downstream selection/list consumers.
+
+### Visual Parity
+- Not applicable for state/data package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Monitor upstream `@react-stately/collections` for drift and add targeted regression coverage as needed.
+
+## 6b) Package Record: @vue-aria/utils-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/utils/src`
+  - `references/react-spectrum/packages/@react-stately/utils/test`
+- Local package path: `packages/@vue-aria/utils-state`
+- Status: Complete
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useControlledState`
+  - `clamp`
+  - `snapValueToStep`
+  - `toFixedNumber`
+  - `roundToStepPrecision`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - state utility modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: 2 (`useControlledState.test.tsx`, `number.test.ts`)
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for controlled/uncontrolled state behavior and `onChange` semantics.
+  - Added adapted number-helper coverage for clamp, step snapping, and precision rounding behavior.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/utils-state.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State utility package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- Not directly applicable for state utility package; validated through consuming state/hook packages.
+
+### Visual Parity
+- Not applicable for state utility package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Monitor upstream `@react-stately/utils` for drift and add targeted regression coverage as needed.
+
+## 6c) Package Record: @vue-aria/toggle-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/toggle/src`
+- Local package path: `packages/@vue-aria/toggle-state`
+- Status: Complete
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useToggleState`
+  - `useToggleGroupState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - state modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: none in package-local upstream path
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted `useToggleState` coverage for uncontrolled toggling and read-only guard behavior.
+  - Added adapted `useToggleGroupState` coverage for single and multiple selection modes.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/toggle-state.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- Not directly applicable for state package; validated through checkbox/radio/switch consumers.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Monitor upstream `@react-stately/toggle` for drift and add targeted regression coverage as needed.
+
+## 6d) Package Record: @vue-aria/selection-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/selection/src`
+- Local package path: `packages/@vue-aria/selection-state`
+- Status: Complete
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `Selection`
+  - `SelectionManager`
+  - `useMultipleSelectionState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - selection state modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: none in package-local upstream path
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for focus/selection state transitions and duplicate-event behavior controls.
+  - Added adapted `SelectionManager` coverage for replace/toggle selection, selection behavior switching, select-all flows, disabled/link metadata, collection rebinding, and touch/virtual pointer behavior.
+- [x] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/selection-state.md`)
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- Not directly applicable for state package; validated through downstream selection/list/menu/select consumers.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Monitor upstream `@react-stately/selection` for drift and add targeted regression coverage as needed.
 
 ## 7) Package Record: @vue-aria/interactions
 - Upstream source path(s):
@@ -4199,3 +4404,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page `docs/packages/utils.md` and linked it in docs nav/sidebar/index.
   - marked package checklist gates complete and updated execution queue status to `Complete`.
 - Validation: `npm test -- packages/@vue-aria/utils/test` passed (23 files, 73 tests).
+- Completed foundational state/data package records:
+  - added package records for `@vue-aria/collections`, `@vue-aria/utils-state`, `@vue-aria/toggle-state`, and `@vue-aria/selection-state` with full gate breakdown.
+  - updated execution queue statuses for these packages to `Complete`.
+  - added VitePress docs pages for `@vue-aria/collections`, `@vue-aria/utils-state`, and `@vue-aria/toggle-state`, and linked them in docs nav/sidebar/index.
+  - added `@vue-aria/utils` export alias regression test (`indexExports.test.ts`) for `UNSTABLE_useLoadMoreSentinel`.
+- Validation: `npm test -- packages/@vue-aria/utils/test packages/@vue-aria/collections/test packages/@vue-aria/utils-state/test packages/@vue-aria/toggle-state/test packages/@vue-aria/selection-state/test` passed (31 files, 100 tests).

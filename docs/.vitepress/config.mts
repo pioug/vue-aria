@@ -7,6 +7,9 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/" },
       { text: "Utils", link: "/packages/utils" },
+      { text: "Collections", link: "/packages/collections" },
+      { text: "Utils State", link: "/packages/utils-state" },
+      { text: "Toggle State", link: "/packages/toggle-state" },
       { text: "Selection", link: "/packages/selection" },
       { text: "Selection State", link: "/packages/selection-state" },
       { text: "I18n", link: "/packages/i18n" },
@@ -54,6 +57,9 @@ export default defineConfig({
         text: "Packages",
         items: [
           { text: "@vue-aria/utils", link: "/packages/utils" },
+          { text: "@vue-aria/collections", link: "/packages/collections" },
+          { text: "@vue-aria/utils-state", link: "/packages/utils-state" },
+          { text: "@vue-aria/toggle-state", link: "/packages/toggle-state" },
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/selection-state", link: "/packages/selection-state" },
           { text: "@vue-aria/i18n", link: "/packages/i18n" },
