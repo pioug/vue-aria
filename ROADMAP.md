@@ -462,7 +462,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules for initial prerequisite slice enumerated
-- [ ] Public API checklist complete (full package not yet ported)
+- [x] Public API checklist complete (all current upstream module exports mapped)
 
 ### Implementation
 - [x] Initial prerequisite slice ported:
@@ -581,12 +581,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port advanced `FocusScope` behavior and full focus-containment edge cases (nested scopes, portals, iframe nuances).
-  - Align tree walker behavior with full upstream radio/scope handling.
-  - Migrate full upstream focus tests.
+  - Port remaining advanced `FocusScope` integration cases from upstream `FocusScope.test.js`:
+    - dialog/container node-to-restore edge case coverage
+    - remaining high-complexity portal/container restoration scenarios
+  - Continue validating behavior parity details where Vue test adapters differ from upstream harness behavior.
 
 ### Tests
-- Total upstream test files: Pending full inventory
+- Total upstream test files: 2 (`FocusScope.test.js`, `FocusScopeOwnerDocument.test.js`)
 - Ported test files: 7
 - Passing test files: 7
 - Test parity notes:
@@ -613,12 +614,25 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - restore-focus cancellation via `react-aria-focus-scope-restore`
     - nested restore-focus event propagation isolation
     - containment traversal skips non-selected radios in same group
+    - teleported child-scope containment behavior (`contain` and non-`contain`)
+    - nested non-containing child-scope traversal behavior
+    - nested contained-scope unmount restoration behavior
+    - DOM-order navigation behavior for scope child of `document.body`
+    - shadow-root containment traversal (single and nested shadow roots)
+    - shadow-root restore-focus behavior with outer restore scope
+    - cleanup/timer leak guard behavior
+    - restore-focus outside-active-element skip behavior
+    - contained removal fallback to first focusable element behavior
+    - restore-tab boundary handoff behavior relative to previously focused node (forward/reverse)
+    - restore-tab non-interception behavior when `restoreFocus` is disabled
+    - dynamic-children restore-focus stability behavior
+    - iframe-like null-`relatedTarget` blur transition behavior
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
     - tabbable-only traversal behavior
     - `from` container traversal semantics (forward and backward)
     - accept-filter traversal skipping behavior
-  - Full upstream focus test migration remains pending.
+- Full upstream assertion-level parity migration remains pending for selected integration scenarios.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -642,10 +656,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Port `FocusScope` component and focus containment stack behavior.
-2. Port `useFocusRing` + `FocusRing`.
-3. Port upstream focus tests incrementally with Vue test adapters.
-4. Integrate focus package with `@vue-aria/selection` selectable hooks.
+1. Port remaining upstream `FocusScope.test.js` integration edge cases (dialog/container node-to-restore branch + related complex restoration paths).
+2. Continue converting unported upstream assertions into adapted Vue tests while preserving intent.
+3. Reconcile any remaining implementation gaps discovered by newly ported assertions.
+4. Keep `docs/packages/focus.md` notes synchronized as remaining upstream cases land.
 
 ## 9) Package Record: @vue-aria/live-announcer
 - Upstream source path(s):
