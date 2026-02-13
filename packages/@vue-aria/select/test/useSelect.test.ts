@@ -150,6 +150,49 @@ describe("useSelect", () => {
     ref.current?.remove();
   });
 
+  it("chains external keyboard callbacks with internal arrow-key behavior", () => {
+    const state = createState();
+    const onKeyDown = vi.fn();
+    const onKeyUp = vi.fn();
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          onKeyDown,
+          onKeyUp,
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const keyDownEvent = {
+      key: "ArrowRight",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent;
+    const keyUpEvent = {} as KeyboardEvent;
+
+    (result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(keyDownEvent);
+    (result.triggerProps.onKeyUp as ((event: KeyboardEvent) => void) | undefined)?.(keyUpEvent);
+
+    expect(state.setSelectedKey).toHaveBeenCalledWith("b");
+    expect(onKeyDown).toHaveBeenCalledWith(keyDownEvent);
+    expect(onKeyUp).toHaveBeenCalledWith(keyUpEvent);
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
   it("uses first key and prevents default on arrow keys when there is no selection", () => {
     const state = createState();
     state.selectedKey = null;

@@ -1908,6 +1908,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - arrow-key no-op selection path when delegate has no first key available (with preserved default prevention)
     - menu blur propagation when `relatedTarget` is `null`
     - multiple-selection arrow-key path preserving event propagation (no forced `preventDefault`)
+    - external `onKeyDown`/`onKeyUp` callback chaining alongside internal arrow-key selection behavior
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3421,6 +3422,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/select/useHiddenSelect` dynamic insertion ordering parity:
   - added adapted coverage for re-evaluating first-invalid ordering after inserting new earlier invalid controls
 - Validation: `npm run check` passed, `npm test` passed (130 files, 639 tests).
+- Expanded `@vue-aria/select/useSelect` keyboard callback-chain parity:
+  - added adapted coverage for external `onKeyDown`/`onKeyUp` handlers coexisting with internal arrow-key selection logic
+- Validation: `npm run check` passed, `npm test` passed (130 files, 640 tests).
 - Tightened `@vue-aria/select/useSelect` multiple-selection keyboard guard parity:
   - strengthened adapted assertions to ensure arrow-key handlers in multiple selection mode do not force `preventDefault`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
