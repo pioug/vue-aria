@@ -918,10 +918,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 1
-- Ported test files: 1
-- Passing test files: 1
+- Ported test files: 2
+- Passing test files: 2
 - Test parity notes:
   - Added adapted `useLink` tests for defaults, custom element type behavior, and disabled behavior.
+  - Added adapted router-integration coverage for:
+    - client navigation routing through non-native routers on link click
+    - default-prevented click guard behavior (no client navigation dispatch)
 - [x] All currently present upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -940,7 +943,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Harden router/client-navigation edge-case parity.
+1. Harden remaining router/client-navigation edge-case parity (modified-key and cross-origin guards).
 2. Integrate and validate within downstream link/menu/breadcrumb components.
 
 ## 14) Package Record: @vue-aria/toggle
@@ -3273,3 +3276,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - fixed optional `isDisabled` prop handling in `HiddenSelect` so omitted boolean props no longer override `selectData` disabled fallback
   - added adapted regression coverage asserting selectData-driven disabled propagation when component `isDisabled` is not passed
 - Validation: `npm run check` passed, `npm test` passed (126 files, 595 tests).
+- Expanded `@vue-aria/link` router integration parity:
+  - added adapted tests validating non-native router client-navigation dispatch on click
+  - added adapted default-prevented click guard coverage to ensure router navigation is skipped when the event is already handled
+- Validation: `npm run check` passed, `npm test` passed (127 files, 597 tests).
