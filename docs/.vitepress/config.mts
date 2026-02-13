@@ -7,6 +7,7 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/" },
       { text: "Selection", link: "/packages/selection" },
+      { text: "I18n", link: "/packages/i18n" },
       { text: "Interactions", link: "/packages/interactions" },
       { text: "Focus", link: "/packages/focus" },
       { text: "SSR", link: "/packages/ssr" },
@@ -44,6 +45,7 @@ export default defineConfig({
         text: "Packages",
         items: [
           { text: "@vue-aria/selection", link: "/packages/selection" },
+          { text: "@vue-aria/i18n", link: "/packages/i18n" },
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
           { text: "@vue-aria/focus", link: "/packages/focus" },
           { text: "@vue-aria/ssr", link: "/packages/ssr" },

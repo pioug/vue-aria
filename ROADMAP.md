@@ -296,6 +296,67 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Verify `useIsSSR` hydration transition behavior in integration tests.
 2. Expand docs examples with end-to-end Vue SSR + hydration usage.
 
+## 5b) Package Record: @vue-aria/i18n
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/i18n/src`
+  - `references/react-spectrum/packages/@react-aria/i18n/test`
+- Local package path: `packages/@vue-aria/i18n`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `I18nProvider` / `useLocale`
+  - `useDefaultLocale`
+  - `useMessageFormatter`
+  - `useLocalizedStringFormatter` / `useLocalizedStringDictionary`
+  - `useDateFormatter`
+  - `useNumberFormatter`
+  - `useListFormatter`
+  - `useCollator`
+  - `useFilter`
+  - `isRTL`
+  - `getPackageLocalizationScript`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `tsconfig.json` path alias
+- Remaining:
+  - Validate hydration-transition semantics for locale hooks in downstream integration paths.
+  - Deepen parity review for formatter caching and SSR/client transition timing.
+
+### Tests
+- Total upstream test files: 2 (`languagechange.test.js`, `server.test.js`)
+- Ported test files: 3
+- Passing test files: 3
+- Test parity notes:
+  - Ported/adapted upstream language-change listener coverage.
+  - Ported/adapted upstream server rendering utility coverage.
+  - Added adapted formatter reactivity coverage for locale/provider updates.
+- [x] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/i18n.md`)
+- [ ] Examples parity complete
+
+### Accessibility
+- Not applicable as infrastructure package; behavior validated through downstream consumers.
+
+### Visual Parity
+- Not applicable.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Expand docs examples with end-to-end provider and dictionary usage mirroring upstream docs.
+2. Add integration checks for locale transition behavior in consumer packages.
+
 ## 6) Package Record: @vue-aria/selection
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/selection/src`
@@ -2856,4 +2917,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (124 files, 493 tests).
 - Expanded adapted `@vue-aria/ssr` coverage for:
   - `useIsSSR` server-render state behavior
+- Validation: `npm run check` passed, `npm test` passed (124 files, 494 tests).
+- Added `@vue-aria/i18n` roadmap package record with upstream/module/test parity breakdown.
+- Added `@vue-aria/i18n` docs parity baseline:
+  - new `docs/packages/i18n.md` page
+  - docs nav/sidebar/index wiring for `@vue-aria/i18n`
 - Validation: `npm run check` passed, `npm test` passed (124 files, 494 tests).
