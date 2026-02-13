@@ -320,6 +320,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useMove`
   - `usePress`
   - `useLongPress`
+  - `PressResponder` / `ClearPressResponder` context provider APIs
+  - `PressResponderContext` + `usePress` context consumption/registration
   - `textSelection` helpers (`disableTextSelection`, `restoreTextSelection`)
 - [x] Package scaffolding created and wired:
   - `package.json`
@@ -332,8 +334,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 11
-- Passing test files: 11
+- Ported test files: 12
+- Passing test files: 12
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
@@ -346,6 +348,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `useMove` keyboard and drag delta behavior, plus non-primary-button ignore behavior.
   - Added adapted tests for `usePress` pointer/mouse fallback flow, keyboard flow, disabled behavior, pointer-exit cancellation, and propagation semantics.
   - Added adapted tests for `useLongPress` timer threshold behavior, cancellation semantics, `usePress` composition, keyboard non-trigger behavior, and accessibility description handling.
+  - Added adapted tests for `PressResponder` registration warning semantics and pressable-child registration path.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -606,3 +609,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported `@vue-aria/interactions/useLongPress` with `usePress` composition, threshold handling, context-menu suppression, and accessibility description wiring.
 - Added adapted `useLongPress` tests from upstream intent and exported public long-press types/APIs.
 - Validation: `npm run check` passed, `npm test` passed (49 files, 142 tests).
+- Ported `@vue-aria/interactions` press responder context layer (`PressResponder`, `ClearPressResponder`, `PressResponderContext`) and wired `usePress` context merge behavior.
+- Added adapted `PressResponder` tests for registration warning and pressable-child detection behavior.
+- Validation: `npm run check` passed, `npm test` passed (50 files, 144 tests).

@@ -2,6 +2,7 @@ import {
   getEventTarget,
   getOwnerWindow,
   isMac,
+  mergeProps,
   isVirtualClick,
   isVirtualPointerEvent,
   nodeContains,
@@ -9,7 +10,8 @@ import {
   useGlobalListeners,
 } from "@vue-aria/utils";
 import { disableTextSelection, restoreTextSelection } from "./textSelection";
-import { onScopeDispose } from "vue";
+import { getCurrentInstance, inject, onScopeDispose } from "vue";
+import { PressResponderContext } from "./context";
 
 export type PointerType = "mouse" | "touch" | "keyboard" | "pen" | "virtual";
 
@@ -195,7 +197,23 @@ function createEvent(target: Element, e: EventBase): EventBase {
   };
 }
 
+function usePressResponderContext(props: PressHookProps): PressHookProps {
+  if (!getCurrentInstance()) {
+    return props;
+  }
+
+  const context = inject(PressResponderContext, null);
+  if (!context) {
+    return props;
+  }
+
+  const { register, ref: _ref, ...contextProps } = context;
+  register();
+  return mergeProps(contextProps, props) as PressHookProps;
+}
+
 export function usePress(props: PressHookProps): PressResult {
+  const mergedProps = usePressResponderContext(props);
   const {
     onPress,
     onPressChange,
@@ -207,7 +225,7 @@ export function usePress(props: PressHookProps): PressResult {
     isPressed: isPressedProp,
     shouldCancelOnPointerExit,
     allowTextSelectionOnPress,
-  } = props;
+  } = mergedProps;
 
   let isPressed = false;
   const state: PressState = {

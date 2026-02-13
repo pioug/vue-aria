@@ -8,6 +8,8 @@ export { useScrollWheel } from "./useScrollWheel";
 export { useMove } from "./useMove";
 export { usePress } from "./usePress";
 export { useLongPress } from "./useLongPress";
+export { PressResponder, ClearPressResponder } from "./PressResponder";
+export { PressResponderContext } from "./context";
 export {
   isFocusVisible,
   getInteractionModality,
@@ -49,6 +51,7 @@ export type {
   PressHookProps,
   PressResult,
 } from "./usePress";
+export type { PressResponderContextValue } from "./context";
 export type {
   LongPressEvent,
   LongPressProps,
