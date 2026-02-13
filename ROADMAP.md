@@ -2548,6 +2548,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - dense stacked-thumb nearest selection behavior
     - modified mouse interaction no-op behavior on slider track
     - non-primary/modified mouse interaction no-op behavior on slider thumbs
+    - modified pointer interaction no-op behavior on slider track (`pointerType: mouse`)
+  - Added adapted explicit pointer-path track coverage for:
+    - closest-thumb selection and drag updates via `onPointerdown` + `pointermove`/`pointerup`
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3980,3 +3983,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added callback lifecycle assertions (`onChange`, `onChangeEnd`) during thumb drag with real slider-state integration.
   - added explicit pointer-event branch coverage for thumb dragging when `PointerEvent` is available.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 750 tests).
+- Expanded `@vue-aria/slider` track pointer-path parity:
+  - added adapted unit coverage for track dragging via pointer events when `PointerEvent` is available.
+  - added adapted guard coverage for modified mouse-pointer interactions on track (`pointerType: mouse`) no-op behavior.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 752 tests).

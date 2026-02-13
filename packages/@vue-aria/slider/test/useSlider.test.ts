@@ -351,4 +351,88 @@ describe("useSlider", () => {
 
     scope.stop();
   });
+
+  it("supports pointer track dragging when PointerEvent is available", () => {
+    const originalPointerEvent = globalThis.PointerEvent;
+    vi.stubGlobal("PointerEvent", MouseEvent);
+
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([10, 80]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    const kind = dispatchTrackDown(trackProps, 20);
+    expect(kind).toBe("pointer");
+    expect(state.values).toEqual([20, 80]);
+
+    dispatchTrackMove(kind, 40);
+    expect(state.values).toEqual([40, 80]);
+
+    dispatchTrackUp(kind, 40);
+    expect(state.setThumbDragging).toHaveBeenCalledWith(0, false);
+    scope.stop();
+
+    if (originalPointerEvent === undefined) {
+      vi.unstubAllGlobals();
+    } else {
+      vi.stubGlobal("PointerEvent", originalPointerEvent);
+    }
+  });
+
+  it("ignores modified pointer interactions on track", () => {
+    const originalPointerEvent = globalThis.PointerEvent;
+    vi.stubGlobal("PointerEvent", MouseEvent);
+
+    const track = document.createElement("div");
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      width: 100,
+      height: 100,
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    const state = createSliderState([10, 80]);
+    const scope = effectScope();
+    const { trackProps } = scope.run(() =>
+      useSlider({ "aria-label": "Slider" }, state, { current: track })
+    )!;
+
+    const modifiedPointerEvent = new MouseEvent("pointerdown", { bubbles: true, cancelable: true });
+    Object.defineProperty(modifiedPointerEvent, "button", { value: 0 });
+    Object.defineProperty(modifiedPointerEvent, "ctrlKey", { value: true });
+    Object.defineProperty(modifiedPointerEvent, "clientX", { value: 20 });
+    Object.defineProperty(modifiedPointerEvent, "clientY", { value: 20 });
+    Object.defineProperty(modifiedPointerEvent, "pointerId", { value: 1 });
+    Object.defineProperty(modifiedPointerEvent, "pointerType", { value: "mouse" });
+    (trackProps.onPointerdown as (event: PointerEvent) => void)(modifiedPointerEvent as PointerEvent);
+
+    expect(state.setThumbValue).not.toHaveBeenCalled();
+    expect(state.values).toEqual([10, 80]);
+    scope.stop();
+
+    if (originalPointerEvent === undefined) {
+      vi.unstubAllGlobals();
+    } else {
+      vi.stubGlobal("PointerEvent", originalPointerEvent);
+    }
+  });
 });
