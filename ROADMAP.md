@@ -394,7 +394,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/focus.md`)
-- [ ] Examples parity complete
+- [ ] Examples parity complete (expanded with containment and restore-event examples; full story parity pending)
 - [ ] Base styles parity complete
 
 ### Accessibility
@@ -2768,4 +2768,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - supports both form-owned groups and same-document non-form groups
 - Expanded `@vue-aria/focus/FocusScope` containment tests for:
   - tab traversal skipping non-selected radios in the same group
+- Validation: `npm run check` passed, `npm test` passed (123 files, 488 tests).
+- Expanded `@vue-aria/focus` docs parity in `docs/packages/focus.md` with:
+  - containment usage example
+  - restore-event cancellation usage example
+  - updated parity notes for nested scope, restore-event, and radio traversal behavior
 - Validation: `npm run check` passed, `npm test` passed (123 files, 488 tests).
