@@ -62,7 +62,7 @@ export function useCheckbox(
   const validationResult: ValidationResult = {
     isInvalid,
     validationErrors: isInvalid ? ["Invalid checkbox value"] : [],
-    validationDetails: undefined,
+    validationDetails: null,
   };
 
   return {

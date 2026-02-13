@@ -1,11 +1,11 @@
+import {
+  useFormValidationState,
+  type ValidationResult as FormValidationResult,
+} from "@vue-aria/form-state";
 import { ref } from "vue";
 import { useControlledState } from "@vue-aria/utils-state";
 
-export interface ValidationResult {
-  isInvalid: boolean;
-  validationErrors: string[];
-  validationDetails?: ValidityState | null;
-}
+export type ValidationResult = FormValidationResult;
 
 export interface RadioGroupProps {
   name?: string;
@@ -42,12 +42,6 @@ export interface RadioGroupState {
 let instance = Math.round(Math.random() * 10000000000);
 let i = 0;
 
-const DEFAULT_VALIDATION_RESULT: ValidationResult = {
-  isInvalid: false,
-  validationErrors: [],
-  validationDetails: undefined,
-};
-
 export function useRadioGroupState(props: RadioGroupProps = {}): RadioGroupState {
   const generatedName = props.name || `radio-group-${instance}-${++i}`;
   const [selectedValueRef, setSelectedValueRef] = useControlledState<string | null, string | null>(
@@ -57,19 +51,22 @@ export function useRadioGroupState(props: RadioGroupProps = {}): RadioGroupState
   );
   const initialValue = ref(selectedValueRef.value);
   const lastFocusedValue = ref<string | null>(null);
-  const localValidation = ref<ValidationResult>(DEFAULT_VALIDATION_RESULT);
 
-  const computeValidation = (): ValidationResult => {
+  const builtinValidation = (): ValidationResult => {
     const requiredInvalid = Boolean(props.isRequired) && !selectedValueRef.value;
-    const propIsInvalid = Boolean(props.isInvalid || props.validationState === "invalid");
-    const isInvalid = requiredInvalid || propIsInvalid || localValidation.value.isInvalid;
+    const isInvalid = requiredInvalid;
 
     return {
       isInvalid,
       validationErrors: isInvalid ? ["Invalid radio group value"] : [],
-      validationDetails: undefined,
+      validationDetails: null,
     };
   };
+  const validation = useFormValidationState<string | null>({
+    ...props,
+    value: () => selectedValueRef.value,
+    builtinValidation: () => builtinValidation(),
+  });
 
   return {
     get name() {
@@ -109,19 +106,19 @@ export function useRadioGroupState(props: RadioGroupProps = {}): RadioGroupState
       lastFocusedValue.value = value;
     },
     get realtimeValidation() {
-      return computeValidation();
+      return validation.realtimeValidation;
     },
     get displayValidation() {
-      return computeValidation();
+      return validation.displayValidation;
     },
     resetValidation() {
-      localValidation.value = DEFAULT_VALIDATION_RESULT;
+      validation.resetValidation();
     },
     commitValidation() {
-      // No-op for this slice; validation is derived directly from current state.
+      validation.commitValidation();
     },
-    updateValidation(validation) {
-      localValidation.value = validation;
+    updateValidation(nextValidation) {
+      validation.updateValidation(nextValidation);
     },
   };
 }

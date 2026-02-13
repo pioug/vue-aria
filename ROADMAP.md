@@ -2463,3 +2463,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - deduplicated error accumulation
   - merged `ValidityState` flags and final `valid` resolution
 - Validation: `npm run check` passed, `npm test` passed (117 files, 370 tests).
+- Reused `@vue-aria/form-state/useFormValidationState` in:
+  - `@vue-aria/checkbox-state/useCheckboxGroupState`
+  - `@vue-aria/radio-state/useRadioGroupState`
+- Updated checkbox validation result typing alignment (`validationDetails: null` parity with shared validation result contract).
+- Validation: `npm run check` passed, `npm test` passed (117 files, 370 tests).

@@ -33,7 +33,7 @@ export function useCheckboxGroupItem(
   const localValidation: ValidationResult = {
     isInvalid: Boolean(props.isInvalid || props.validationState === "invalid"),
     validationErrors: [],
-    validationDetails: undefined,
+    validationDetails: null,
   };
 
   state.setInvalid(props.value, localValidation);

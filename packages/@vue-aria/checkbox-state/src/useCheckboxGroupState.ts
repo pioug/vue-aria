@@ -1,11 +1,11 @@
+import {
+  useFormValidationState,
+  type ValidationResult as FormValidationResult,
+} from "@vue-aria/form-state";
 import { ref } from "vue";
 import { useControlledState } from "@vue-aria/utils-state";
 
-export interface ValidationResult {
-  isInvalid: boolean;
-  validationErrors: string[];
-  validationDetails?: ValidityState | null;
-}
+export type ValidationResult = FormValidationResult;
 
 export interface CheckboxGroupProps {
   value?: string[];
@@ -40,12 +40,6 @@ export interface CheckboxGroupState {
   updateValidation(validation: ValidationResult): void;
 }
 
-const DEFAULT_VALIDATION_RESULT: ValidationResult = {
-  isInvalid: false,
-  validationErrors: [],
-  validationDetails: undefined,
-};
-
 export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxGroupState {
   const [selectedValuesRef, setSelectedValues] = useControlledState<string[], string[]>(
     () => props.value,
@@ -54,22 +48,24 @@ export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxG
   );
   const initialValues = ref([...selectedValuesRef.value]);
   const invalidValues = ref(new Map<string, ValidationResult>());
-  const localValidation = ref<ValidationResult>(DEFAULT_VALIDATION_RESULT);
 
-  const computeValidation = (): ValidationResult => {
+  const builtinValidation = (): ValidationResult => {
     const merged = [...invalidValues.value.values()];
     const itemIsInvalid = merged.some((v) => v.isInvalid);
     const requiredIsInvalid = Boolean(props.isRequired) && selectedValuesRef.value.length === 0;
-    const propIsInvalid = Boolean(props.isInvalid || props.validationState === "invalid");
-    const isInvalid =
-      itemIsInvalid || requiredIsInvalid || propIsInvalid || localValidation.value.isInvalid;
+    const isInvalid = itemIsInvalid || requiredIsInvalid;
 
     return {
       isInvalid,
       validationErrors: isInvalid ? ["Invalid checkbox group value"] : [],
-      validationDetails: undefined,
+      validationDetails: null,
     };
   };
+  const validation = useFormValidationState<string[]>({
+    ...props,
+    value: () => selectedValuesRef.value,
+    builtinValidation: () => builtinValidation(),
+  });
 
   return {
     get value() {
@@ -94,10 +90,10 @@ export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxG
       return Boolean(props.isRequired) && selectedValuesRef.value.length === 0;
     },
     get realtimeValidation() {
-      return computeValidation();
+      return validation.realtimeValidation;
     },
     get displayValidation() {
-      return computeValidation();
+      return validation.displayValidation;
     },
     setValue(value) {
       if (props.isReadOnly || props.isDisabled) {
@@ -151,13 +147,13 @@ export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxG
     },
     resetValidation() {
       invalidValues.value = new Map();
-      localValidation.value = DEFAULT_VALIDATION_RESULT;
+      validation.resetValidation();
     },
     commitValidation() {
-      // No-op in this initial port slice; validation is derived live from state.
+      validation.commitValidation();
     },
-    updateValidation(validation) {
-      localValidation.value = validation;
+    updateValidation(nextValidation) {
+      validation.updateValidation(nextValidation);
     },
   };
 }
