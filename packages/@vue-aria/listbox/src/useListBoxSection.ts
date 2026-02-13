@@ -11,12 +11,11 @@
  */
 
 import {DOMAttributes} from '@vue-types/shared';
-import {ReactNode} from 'react';
 import {useId} from '@vue-aria/utils';
 
 export interface AriaListBoxSectionProps {
   /** The heading for the section. */
-  heading?: ReactNode,
+  heading?: unknown,
   /** An accessibility label for the section. Required if `heading` is not present. */
   'aria-label'?: string
 }
