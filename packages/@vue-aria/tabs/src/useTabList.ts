@@ -17,7 +17,6 @@ import {TabListState} from '@vue-stately/tabs';
 import {tabsIds} from './utils';
 import {TabsKeyboardDelegate} from './TabsKeyboardDelegate';
 import {useLocale} from '@vue-aria/i18n';
-import {useMemo} from 'react';
 import {useSelectableCollection} from '@vue-aria/selection';
 
 export interface AriaTabListOptions<T> extends Omit<AriaTabListProps<T>, 'children'> {}
@@ -42,11 +41,7 @@ export function useTabList<T>(props: AriaTabListOptions<T>, state: TabListState<
     disabledKeys
   } = state;
   let {direction} = useLocale();
-  let delegate = useMemo(() => new TabsKeyboardDelegate(
-    collection,
-    direction,
-    orientation,
-    disabledKeys), [collection, disabledKeys, orientation, direction]);
+  let delegate = new TabsKeyboardDelegate(collection, direction, orientation, disabledKeys);
 
   let {collectionProps} = useSelectableCollection({
     ref,
