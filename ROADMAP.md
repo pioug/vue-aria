@@ -2331,8 +2331,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/actiongroup.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Expanded parity examples for group/item wiring, interactive render usage, and nested-toolbar role behavior.
+- [x] Examples parity complete
+- [x] Base styles parity complete (not applicable beyond consumer styling)
 
 ### Accessibility
 - [ ] Validate roving-focus and arrow-key behavior with downstream action group components.
@@ -2345,7 +2346,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Validate behavior in downstream component implementations once `@vue-spectrum/actiongroup` lands.
-2. Expand docs examples to include fully interactive Vue component snippets matching upstream stories.
 
 ## 39) Package Record: @vue-aria/landmark
 - Upstream source path(s):
@@ -3780,3 +3780,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for forward tab entry into navigation landmark descendants and reverse shift+tab traversal from main landmark descendants.
 - Expanded `@vue-aria/landmark` and `@vue-aria/toast` docs parity:
   - updated package docs with upstream-aligned composition/usage examples and base-style guidance snippets for story-equivalent flows.
+- Expanded `@vue-aria/actiongroup` docs parity:
+  - added upstream-aligned interactive examples for group/item wiring and nested-toolbar role semantics, and marked package docs example/base-style gates complete.

@@ -7,13 +7,21 @@
 - `useActionGroup`
 - `useActionGroupItem`
 
+## Features
+
+- Toolbar/radiogroup role mapping based on selection mode.
+- Arrow-key roving focus behavior with locale-aware horizontal direction (LTR/RTL).
+- Item-level role/checked/focus wiring via `useActionGroupItem`.
+- Nested-toolbar role downgrade (`toolbar` parent -> child role `group`).
+
 ## Upstream-aligned examples
 
-### Group-level props
+### Group-level wiring with list state
 
 ```ts
 import { useActionGroup } from "@vue-aria/actiongroup";
 import { useListState } from "@vue-aria/list-state";
+import { ref } from "vue";
 
 const state = useListState({
   selectionMode: "single",
@@ -21,11 +29,20 @@ const state = useListState({
   getKey: (item) => item.id,
 });
 
-const groupRef = { current: null as Element | null };
+const groupRef = ref<HTMLElement | null>(null);
+const groupRefAdapter = {
+  get current() {
+    return groupRef.value;
+  },
+  set current(value: Element | null) {
+    groupRef.value = value as HTMLElement | null;
+  },
+};
+
 const { actionGroupProps } = useActionGroup(
   { selectionMode: "single", "aria-label": "Text alignment" },
   state,
-  groupRef
+  groupRefAdapter
 );
 ```
 
@@ -35,6 +52,29 @@ const { actionGroupProps } = useActionGroup(
 import { useActionGroupItem } from "@vue-aria/actiongroup";
 
 const { buttonProps } = useActionGroupItem({ key: "left" }, state);
+```
+
+### Interactive render pattern (Vue)
+
+```ts
+import { h } from "vue";
+
+return () =>
+  h("div", { ...actionGroupProps, ref: groupRef }, [
+    h("button", { ...useActionGroupItem({ key: "left" }, state).buttonProps }, "Left"),
+    h("button", { ...useActionGroupItem({ key: "center" }, state).buttonProps }, "Center"),
+    h("button", { ...useActionGroupItem({ key: "right" }, state).buttonProps }, "Right"),
+  ]);
+```
+
+### Nested-toolbar behavior
+
+```ts
+return () =>
+  h("div", { role: "toolbar" }, [
+    h("div", { ...actionGroupProps, ref: groupRef }),
+  ]);
+// `actionGroupProps.role` resolves to "group" when nested in a toolbar.
 ```
 
 ## Notes
