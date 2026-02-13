@@ -37,7 +37,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/overlays`: Not started
 - `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: In progress
-- `@vue-aria/button`: Not started
+- `@vue-aria/button`: In progress
 - `@vue-aria/toggle`: Not started
 - `@vue-aria/checkbox`: Not started
 - `@vue-aria/radio`: Not started
@@ -610,7 +610,61 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Validate integration behavior in textfield/numberfield/searchfield ports.
 2. Reconcile any upstream id/slot edge cases after downstream integration.
 
-## 12) Session Log
+## 12) Package Record: @vue-aria/button
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/button/src`
+  - `references/react-spectrum/packages/@react-aria/button/test`
+- Local package path: `packages/@vue-aria/button`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules for initial slice enumerated
+- [ ] Public API checklist complete (full package not yet ported)
+
+### Implementation
+- [x] Ported initial upstream APIs:
+  - `useButton`
+  - `useToggleButton`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useButton.ts`
+  - `src/useToggleButton.ts`
+  - `tsconfig.json` path alias
+- Remaining:
+  - Port `useToggleButtonGroup`.
+  - Reconcile any behavior deltas once downstream button components are integrated.
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted `useButton` tests for defaults, non-button element behavior, disabled behavior, rel passthrough, input handling, and aria-disabled passthrough.
+- [x] All currently present upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/button.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate button semantics across downstream consumer components
+
+### Visual Parity
+- Not applicable for this utility package beyond interaction/state semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `useToggleButtonGroup`.
+2. Wire and validate consumers (`@vue-spectrum/button` and related controls).
+3. Expand docs with full Vue component examples once consumers exist.
+
+## 13) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -813,3 +867,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted `@react-aria/label` test coverage for label/field behavior, warning semantics, and described-by wiring.
 - Added VitePress docs page for `@vue-aria/label` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (59 files, 169 tests).
+- Started `@vue-aria/button` package:
+  - `useButton`
+  - `useToggleButton`
+  - package scaffolding and tsconfig alias wiring
+- Added adapted `useButton` upstream test coverage and resolved scope warnings by running hooks in Vue effect scopes.
+- Added VitePress docs page for `@vue-aria/button` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (60 files, 175 tests).
