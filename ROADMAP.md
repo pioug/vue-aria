@@ -2271,6 +2271,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - nested-modal stack behavior with previous modal restoration
     - live announcer exclusion from `aria-hidden`
     - no-op cleanup behavior for missing selector/missing document
+  - Added adapted modal-marker/lifecycle coverage for:
+    - `aria-modal="true"` marker parity (in addition to `data-ismodal="true"`)
+    - ignoring child-list mutations that do not contain modal containers
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3782,3 +3785,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package docs with upstream-aligned composition/usage examples and base-style guidance snippets for story-equivalent flows.
 - Expanded `@vue-aria/actiongroup` docs parity:
   - added upstream-aligned interactive examples for group/item wiring and nested-toolbar role semantics, and marked package docs example/base-style gates complete.
+- Expanded `@vue-aria/aria-modal-polyfill` marker/mutation parity:
+  - added adapted tests for `aria-modal` marker handling and no-op behavior for non-modal child-list mutations.

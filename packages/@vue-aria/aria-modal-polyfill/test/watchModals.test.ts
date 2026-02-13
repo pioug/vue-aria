@@ -16,6 +16,17 @@ function createModalContainer(id: string) {
   return { container, modal };
 }
 
+function createAriaModalContainer(id: string) {
+  const container = document.createElement("div");
+  container.dataset.container = id;
+  const modal = document.createElement("div");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("role", "dialog");
+  modal.tabIndex = -1;
+  container.append(modal);
+  return { container, modal };
+}
+
 describe("watchModals", () => {
   afterEach(() => {
     document.body.innerHTML = "";
@@ -96,6 +107,54 @@ describe("watchModals", () => {
 
     expect(content.getAttribute("aria-hidden")).toBe("true");
     expect(liveAnnouncer.getAttribute("aria-hidden")).toBeNull();
+
+    stopWatching();
+  });
+
+  it("supports aria-modal markers in addition to data-ismodal", async () => {
+    const root = document.createElement("div");
+    root.id = "root";
+    const content = document.createElement("main");
+    content.textContent = "outside";
+    root.append(content);
+    document.body.append(root);
+
+    const stopWatching = watchModals("#root", { document });
+    const { container, modal } = createAriaModalContainer("aria-modal");
+    root.append(container);
+    await flushMutations();
+
+    expect(content.getAttribute("aria-hidden")).toBe("true");
+    expect(modal.getAttribute("aria-hidden")).toBeNull();
+
+    root.removeChild(container);
+    await flushMutations();
+    expect(content.getAttribute("aria-hidden")).toBeNull();
+
+    stopWatching();
+  });
+
+  it("ignores child-list mutations that do not include modal containers", async () => {
+    const root = document.createElement("div");
+    root.id = "root";
+    const content = document.createElement("main");
+    content.textContent = "outside";
+    root.append(content);
+    document.body.append(root);
+
+    const stopWatching = watchModals("#root", { document });
+    const nonModal = document.createElement("div");
+    nonModal.dataset.container = "non-modal";
+    nonModal.textContent = "regular content";
+    root.append(nonModal);
+    await flushMutations();
+
+    expect(content.getAttribute("aria-hidden")).toBeNull();
+    expect(nonModal.getAttribute("aria-hidden")).toBeNull();
+
+    root.removeChild(nonModal);
+    await flushMutations();
+    expect(content.getAttribute("aria-hidden")).toBeNull();
 
     stopWatching();
   });
