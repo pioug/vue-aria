@@ -280,4 +280,77 @@ describe("useSliderState", () => {
 
     stop();
   });
+
+  it("supports controlled-to-uncontrolled transition", async () => {
+    const onChange = vi.fn();
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const controlledProps = reactive<{
+      value: number[] | undefined;
+      defaultValue?: number[];
+      onChange: (value: number[]) => void;
+      numberFormatter: Intl.NumberFormat;
+    }>({
+      value: [10],
+      onChange,
+      numberFormatter,
+    });
+
+    const { state, stop } = setupSliderState(controlledProps as any);
+    expect(state.values).toEqual([10]);
+
+    controlledProps.value = [20];
+    await nextTick();
+    expect(state.values).toEqual([20]);
+
+    controlledProps.value = undefined;
+    await nextTick();
+    expect(warnSpy).toHaveBeenCalled();
+    expect(state.values).toEqual([20]);
+
+    state.setThumbValue(0, 30);
+    expect(onChange).toHaveBeenLastCalledWith([30]);
+    expect(state.values).toEqual([30]);
+
+    warnSpy.mockRestore();
+    stop();
+  });
+
+  it("supports uncontrolled-to-controlled transition", async () => {
+    const onChange = vi.fn();
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const props = reactive<{
+      value: number[] | undefined;
+      defaultValue: number[];
+      onChange: (value: number[]) => void;
+      numberFormatter: Intl.NumberFormat;
+    }>({
+      value: undefined,
+      defaultValue: [5],
+      onChange,
+      numberFormatter,
+    });
+
+    const { state, stop } = setupSliderState(props as any);
+    expect(state.values).toEqual([5]);
+
+    state.setThumbValue(0, 12);
+    expect(onChange).toHaveBeenLastCalledWith([12]);
+    expect(state.values).toEqual([12]);
+
+    props.value = [40];
+    await nextTick();
+    expect(warnSpy).toHaveBeenCalled();
+    expect(state.values).toEqual([40]);
+
+    state.setThumbValue(0, 50);
+    expect(onChange).toHaveBeenLastCalledWith([50]);
+    expect(state.values).toEqual([40]);
+
+    props.value = [50];
+    await nextTick();
+    expect(state.values).toEqual([50]);
+
+    warnSpy.mockRestore();
+    stop();
+  });
 });

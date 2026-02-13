@@ -2613,6 +2613,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for drag lifecycle change callbacks (`onChange` and `onChangeEnd`) and no-op unchanged-value updates.
   - Added adapted coverage for single-value callback conversion (`number` instead of `number[]`) and disabled/non-editable thumb update guards.
   - Added adapted controlled-value coverage for reactive external updates in both array and single-value (`number`) modes.
+  - Added adapted coverage for controlled/uncontrolled transitions (`controlled -> uncontrolled` and `uncontrolled -> controlled`) including warning behavior and callback semantics.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2632,9 +2633,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand parity coverage for controlled/uncontrolled transition edge cases and disabled/editable thumb combinations.
-2. Validate callback and drag-lifecycle behavior in additional multi-thumb integration scenarios.
-3. Expand docs examples with range-slider and callback lifecycle walkthroughs.
+1. Validate callback and drag-lifecycle behavior in additional multi-thumb integration scenarios.
+2. Expand docs examples with range-slider and callback lifecycle walkthroughs.
+3. Harden parity for dynamic-thumb-count controlled updates and ensure drag/editable bookkeeping remains stable when value array length changes.
 
 ## 43) Session Log
 ### 2026-02-13
@@ -4016,3 +4017,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added controlled/reactive usage example to `docs/packages/slider-state.md` showing external state-driven updates with upstream callback semantics.
   - documented controlled-values behavior note alongside existing single/range callback examples.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 759 tests).
+- Expanded `@vue-aria/slider-state` transition parity:
+  - added adapted test coverage for `controlled -> uncontrolled` transitions, including warning behavior and post-transition internal state updates.
+  - added adapted test coverage for `uncontrolled -> controlled` transitions, including warning behavior and controlled-value update semantics.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 761 tests).
