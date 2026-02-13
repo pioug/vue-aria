@@ -1898,3 +1898,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `selectionBehavior='replace'` defaults `linkBehavior` to `action`
   - `selectionBehavior='toggle'` + `linkBehavior='action'` coerces to `override`
 - Validation: `npm run check` passed, `npm test` passed (99 files, 289 tests).
+- Expanded `@vue-aria/list-state` tests with:
+  - `UNSTABLE_useFilteredListState` collection filtering behavior
+  - duplicate same-key `onSelectionChange` callback semantics in `useSingleSelectListState`
+- Validation: `npm run check` passed, `npm test` passed (99 files, 291 tests).

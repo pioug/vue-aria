@@ -1,5 +1,5 @@
 import { effectScope } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { useSingleSelectListState } from "../src/useSingleSelectListState";
 
 function node(key: string) {
@@ -41,6 +41,25 @@ describe("useSingleSelectListState", () => {
 
     state?.setSelectedKey("b");
     expect(state?.selectedKey).toBe("b");
+
+    scope.stop();
+  });
+
+  it("fires onSelectionChange when replacing with the same key", () => {
+    const onSelectionChange = vi.fn();
+    const scope = effectScope();
+    let state: any = null;
+
+    scope.run(() => {
+      state = useSingleSelectListState({
+        selectedKey: "a",
+        onSelectionChange,
+        items: [node("a"), node("b")],
+      });
+    });
+
+    state.selectionManager.replaceSelection("a");
+    expect(onSelectionChange).toHaveBeenCalledWith("a");
 
     scope.stop();
   });

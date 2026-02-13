@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it } from "vitest";
-import { useListState } from "../src/useListState";
+import { UNSTABLE_useFilteredListState, useListState } from "../src/useListState";
 
 function node(key: string) {
   return {
@@ -39,6 +39,29 @@ describe("useListState", () => {
     expect(state?.collection.getFirstKey()).toBe("a");
     expect(state?.disabledKeys.size).toBe(0);
     expect(state?.selectionManager.selectionMode).toBe("multiple");
+
+    scope.stop();
+  });
+
+  it("filters state collection with UNSTABLE_useFilteredListState", () => {
+    const scope = effectScope();
+    let state: any = null;
+    let filtered: any = null;
+
+    scope.run(() => {
+      state = useListState({
+        items: [node("apple"), node("banana"), node("pear")],
+        selectionMode: "multiple",
+      });
+      filtered = UNSTABLE_useFilteredListState(
+        state,
+        (textValue) => textValue.endsWith("a")
+      );
+    });
+
+    expect(filtered.collection.getItem("banana")?.key).toBe("banana");
+    expect(filtered.collection.getItem("apple")).toBeNull();
+    expect(filtered.collection.getItem("pear")).toBeNull();
 
     scope.stop();
   });
