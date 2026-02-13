@@ -2536,6 +2536,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - slider-level visible label
     - thumb-level visible label with slider `aria-label`
     - per-thumb `aria-label` behavior in multi-thumb state with dynamic min/max boundaries
+  - Added adapted integration coverage for `@vue-aria/slider` + `@vue-aria/slider-state`:
+    - closest-thumb track click behavior with real state
+    - thumb drag lifecycle updates with real state
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3943,3 +3946,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page (`docs/packages/slider-state.md`) and wired docs nav/sidebar/index links.
   - added package-level roadmap record and execution queue tracking entry.
 - Validation: `npm run check` passed, `npm test` passed (141 files, 736 tests).
+- Expanded `@vue-aria/slider` end-to-end state integration parity:
+  - added adapted integration tests exercising `useSlider` and `useSliderThumb` against real `useSliderState` behavior for track-click nearest-thumb updates and thumb drag value updates.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 738 tests).
