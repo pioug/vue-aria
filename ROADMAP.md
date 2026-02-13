@@ -432,6 +432,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - collection metadata wiring (`data-key`, `data-collection`) and explicit `id` forwarding
     - native link-click prevention for actionable link items (router-controlled navigation)
     - `UNSTABLE_itemBehavior: "action"` branch forcing action-first behavior without selection mutations
+    - collection-provided handler chaining (`onFocus`, `onMousedown`, `onMouseup`, `onClick`, `onDoubleClick`, `onKeydown`)
+    - secondary-action double-click behavior gated by interaction pointer modality
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -3141,7 +3143,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/selection/useSelectableItem` action/link parity:
   - added native link-click prevention to keep navigation under router/open-link control
   - added `UNSTABLE_itemBehavior: "action"` branch coverage ensuring action-only click behavior without selection mutation
+- Expanded `@vue-aria/selection/useSelectableItem` event wiring parity:
+  - chained collection-provided event handlers with local item interaction handlers
+  - added pointer-modality gate for secondary-action double-click behavior
 - Expanded `@vue-aria/selection` docs parity:
   - documented press-timing option usage (`shouldSelectOnPressUp`, `allowsDifferentPressOrigin`)
   - documented virtual-focus interaction behavior for selectable items
-- Validation: `npm run check` passed, `npm test` passed (126 files, 561 tests).
+- Validation: `npm run check` passed, `npm test` passed (126 files, 563 tests).

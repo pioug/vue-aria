@@ -297,6 +297,7 @@ describe("useSelectableItem", () => {
   it("opens link without selection when link behavior is override", () => {
     const manager = createManager({
       isLink: vi.fn(() => true),
+      getItemProps: vi.fn(() => ({ href: "/docs", routerOptions: { source: "test" } })),
     });
     const ref = { current: document.createElement("a") };
 
@@ -419,6 +420,36 @@ describe("useSelectableItem", () => {
 
     expect(onAction).toHaveBeenCalledTimes(2);
     expect(manager.replaceSelection).not.toHaveBeenCalled();
+  });
+
+  it("runs secondary double-click action only for mouse modality", () => {
+    const onAction = vi.fn();
+    const manager = createManager({
+      selectionBehavior: "replace",
+      canSelectItem: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      onAction,
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    const touchClick = new MouseEvent("click", { bubbles: true });
+    Object.defineProperty(touchClick, "pointerType", { value: "touch" });
+    onClick(touchClick);
+
+    const onDoubleClick = itemProps.onDoubleClick as (event: MouseEvent) => void;
+    onDoubleClick(new MouseEvent("dblclick", { bubbles: true }));
+    expect(onAction).toHaveBeenCalledTimes(0);
+
+    const mouseDown = itemProps.onMousedown as (event: MouseEvent) => void;
+    mouseDown(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    onDoubleClick(new MouseEvent("dblclick", { bubbles: true }));
+    expect(onAction).toHaveBeenCalledTimes(1);
   });
 
   it("forces action behavior when UNSTABLE_itemBehavior is action", () => {
@@ -544,5 +575,40 @@ describe("useSelectableItem", () => {
     expect(first.itemProps["data-collection"]).toBe(collectionId);
     expect(second.itemProps["data-collection"]).toBe(collectionId);
     expect(first.itemProps.id).toBe("custom-item-id");
+  });
+
+  it("chains collection-provided event handlers with local item handlers", () => {
+    const onCollectionClick = vi.fn();
+    const onCollectionKeydown = vi.fn();
+    const onCollectionMousedown = vi.fn();
+    const manager = createManager({
+      getItemProps: vi.fn(() => ({
+        onClick: onCollectionClick,
+        onKeydown: onCollectionKeydown,
+        onMousedown: onCollectionMousedown,
+      })),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
+    const mouseDownEvent = new MouseEvent("mousedown", { bubbles: true, button: 0 });
+    onMousedown(mouseDownEvent);
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    const onKeydown = itemProps.onKeydown as (event: KeyboardEvent) => void;
+    onKeydown(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+
+    expect(onCollectionMousedown).toHaveBeenCalledTimes(1);
+    expect(onCollectionClick).toHaveBeenCalledTimes(1);
+    expect(onCollectionKeydown).toHaveBeenCalledTimes(1);
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(2);
   });
 });

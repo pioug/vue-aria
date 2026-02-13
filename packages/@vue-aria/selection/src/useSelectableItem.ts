@@ -1,7 +1,8 @@
 import { focusSafely } from "@vue-aria/interactions";
 import { moveVirtualFocus } from "@vue-aria/focus";
 import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
-import { isCtrlKeyPressed, useRouter } from "@vue-aria/utils";
+import { chain, isCtrlKeyPressed, useRouter } from "@vue-aria/utils";
+import type { RouterOptions } from "@vue-aria/utils";
 import { getCollectionId, isNonContiguousSelectionModifier } from "./utils";
 
 export interface SelectableItemOptions {
@@ -66,6 +67,8 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   const canSelectViaMousePress = allowsSelection && !hasPrimaryAction;
   let selectedOnMouseDown = false;
   let selectedOnMouseUp = false;
+  let interactionPointerType: string | null = null;
+  const collectionItemProps = manager.getItemProps(key) as Record<string, unknown>;
 
   const performAction = (event: MouseEvent | KeyboardEvent) => {
     if (onAction) {
@@ -73,9 +76,13 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
       ref.current?.dispatchEvent(new CustomEvent("react-aria-item-action", { bubbles: true }));
     }
 
-    if (hasLinkAction && ref.current) {
-      const itemProps = manager.getItemProps(key);
-      router.open(ref.current, event, itemProps.href, itemProps.routerOptions);
+    if (hasLinkAction && ref.current && typeof collectionItemProps?.href === "string") {
+      router.open(
+        ref.current,
+        event,
+        collectionItemProps.href,
+        collectionItemProps?.routerOptions as RouterOptions | undefined
+      );
     }
   };
 
@@ -163,6 +170,8 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   }
 
   itemProps.onClick = (event: MouseEvent) => {
+    interactionPointerType = (event as MouseEvent & { pointerType?: string }).pointerType ?? "mouse";
+
     if (shouldPreventNativeLinkClick) {
       event.preventDefault();
     }
@@ -191,6 +200,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
 
   if (shouldUseVirtualFocus && !isDisabled) {
     itemProps.onMousedown = (event: MouseEvent) => {
+      interactionPointerType = (event as MouseEvent & { pointerType?: string }).pointerType ?? "mouse";
       event.preventDefault();
     };
   } else if (shouldSelectOnMouseDown && canSelectViaMousePress && !isDisabled) {
@@ -199,6 +209,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
         return;
       }
 
+      interactionPointerType = (event as MouseEvent & { pointerType?: string }).pointerType ?? "mouse";
       onSelect(event);
       selectedOnMouseDown = true;
     };
@@ -210,13 +221,14 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
         return;
       }
 
+      interactionPointerType = (event as MouseEvent & { pointerType?: string }).pointerType ?? "mouse";
       onSelect(event);
       selectedOnMouseUp = true;
     };
   }
 
   itemProps.onDoubleClick = (event: MouseEvent) => {
-    if (hasSecondaryAction) {
+    if (hasSecondaryAction && (interactionPointerType == null || interactionPointerType === "mouse")) {
       performAction(event);
     }
   };
@@ -239,6 +251,24 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
 
   if (isDisabled && manager.focusedKey === key) {
     manager.setFocusedKey(null);
+  }
+
+  const collectionHandlerKeys = [
+    "onFocus",
+    "onMousedown",
+    "onMouseup",
+    "onClick",
+    "onDoubleClick",
+    "onKeydown",
+  ] as const;
+  for (const handlerKey of collectionHandlerKeys) {
+    const collectionHandler = collectionItemProps?.[handlerKey] as ((event: Event) => void) | undefined;
+    if (typeof collectionHandler === "function") {
+      itemProps[handlerKey] = chain(
+        itemProps[handlerKey] as ((event: Event) => void) | undefined,
+        collectionHandler
+      );
+    }
   }
 
   return {
