@@ -1759,3 +1759,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (90 files, 269 tests).
 - Expanded `useOverlayTrigger` test coverage for `aria-haspopup` semantics and open-state `aria-expanded`/`aria-controls` wiring.
 - Validation: `npm run check` passed, `npm test` passed (90 files, 271 tests).
+- Expanded `usePreventScroll` test coverage with a disabled-path case.
+- Validation: `npm run check` passed, `npm test` passed (90 files, 272 tests).

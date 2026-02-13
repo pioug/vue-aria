@@ -39,4 +39,18 @@ describe("usePreventScroll", () => {
     two.stop();
     expect(document.documentElement.style.overflow).not.toBe("hidden");
   });
+
+  it("does not apply overflow hidden when disabled", () => {
+    document.documentElement.style.overflow = "";
+
+    const scope = effectScope();
+    scope.run(() => {
+      usePreventScroll({ isDisabled: true });
+    });
+
+    expect(document.documentElement.style.overflow).not.toBe("hidden");
+
+    scope.stop();
+    expect(document.documentElement.style.overflow).not.toBe("hidden");
+  });
 });
