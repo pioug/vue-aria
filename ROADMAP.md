@@ -1846,6 +1846,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for default formatting, step increment/decrement math, and clamped commit behavior.
   - Added adapted coverage for live synchronization of `canIncrement`/`canDecrement` and `numberValue` after state transitions.
+  - Added adapted coverage for locale-aware separator parsing (`fr-FR`), partial sign validation under bounds, and default percent step behavior (`0.01`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2360,3 +2361,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (115 files, 351 tests).
 - Aligned `@vue-aria/numberfield` public state typing with `@vue-aria/numberfield-state` exports and updated docs example to use `useNumberFieldState`.
 - Validation: `npm run check` passed, `npm test` passed (115 files, 351 tests).
+- Expanded `@vue-aria/numberfield-state` test parity:
+  - min/max sign validation edge behavior
+  - percent-format default step increment behavior
+- Validation: `npm run check` passed, `npm test` passed (115 files, 353 tests).

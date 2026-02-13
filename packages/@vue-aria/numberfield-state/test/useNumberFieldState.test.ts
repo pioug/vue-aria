@@ -97,4 +97,37 @@ describe("useNumberFieldState", () => {
     expect(state.validate("1,")).toBe(true);
     scope.stop();
   });
+
+  it("respects min/max constraints during partial sign validation", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        minValue: 0,
+        maxValue: 10,
+      })
+    )!;
+
+    expect(state.validate("-")).toBe(false);
+    expect(state.validate("+")).toBe(false);
+    scope.stop();
+  });
+
+  it("uses 0.01 default step for percent format without explicit step", () => {
+    const onChange = vi.fn();
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0.1,
+        formatOptions: { style: "percent" },
+        onChange,
+      })
+    )!;
+
+    state.increment();
+    expect(onChange).toHaveBeenCalledWith(0.11);
+    scope.stop();
+  });
 });
