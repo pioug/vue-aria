@@ -705,6 +705,142 @@ describe("useLandmark", () => {
     wrapper.unmount();
   });
 
+  it("preserves focus-managed child focus across landmark navigation", async () => {
+    const ManagedNavigation = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const buttons = ref<Array<HTMLButtonElement | null>>([null, null, null]);
+        const activeIndex = ref(0);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark(
+          {
+            role: "navigation",
+            focus: () => {
+              buttons.value[activeIndex.value]?.focus();
+            },
+          },
+          refAdapter
+        );
+
+        return () =>
+          h("nav", { ...landmarkProps, ref: elementRef }, [
+            h("button", {
+              ref: (node: Element | null) => {
+                buttons.value[0] = node as HTMLButtonElement | null;
+              },
+              "data-testid": "nav-button-0",
+              onFocus: () => {
+                activeIndex.value = 0;
+              },
+            } as any, "One"),
+            h("button", {
+              ref: (node: Element | null) => {
+                buttons.value[1] = node as HTMLButtonElement | null;
+              },
+              "data-testid": "nav-button-1",
+              onFocus: () => {
+                activeIndex.value = 1;
+              },
+            } as any, "Two"),
+            h("button", {
+              ref: (node: Element | null) => {
+                buttons.value[2] = node as HTMLButtonElement | null;
+              },
+              "data-testid": "nav-button-2",
+              onFocus: () => {
+                activeIndex.value = 2;
+              },
+            } as any, "Three"),
+          ]);
+      },
+    });
+
+    const ManagedMain = defineComponent({
+      setup() {
+        const elementRef = ref<HTMLElement | null>(null);
+        const cells = ref<Array<HTMLButtonElement | null>>([null, null]);
+        const activeIndex = ref(0);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { landmarkProps } = useLandmark(
+          {
+            role: "main",
+            focus: () => {
+              cells.value[activeIndex.value]?.focus();
+            },
+          },
+          refAdapter
+        );
+
+        return () =>
+          h("main", { ...landmarkProps, ref: elementRef }, [
+            h("button", {
+              ref: (node: Element | null) => {
+                cells.value[0] = node as HTMLButtonElement | null;
+              },
+              "data-testid": "main-cell-0",
+              onFocus: () => {
+                activeIndex.value = 0;
+              },
+            } as any, "Cell 1"),
+            h("button", {
+              ref: (node: Element | null) => {
+                cells.value[1] = node as HTMLButtonElement | null;
+              },
+              "data-testid": "main-cell-1",
+              onFocus: () => {
+                activeIndex.value = 1;
+              },
+            } as any, "Cell 2"),
+          ]);
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        return () => h("div", [h(ManagedNavigation), h(ManagedMain)]);
+      },
+    });
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await nextTick();
+    const navButton2 = wrapper.get('[data-testid="nav-button-2"]').element as HTMLButtonElement;
+    const mainCell0 = wrapper.get('[data-testid="main-cell-0"]').element as HTMLButtonElement;
+    const mainCell1 = wrapper.get('[data-testid="main-cell-1"]').element as HTMLButtonElement;
+
+    navButton2.focus();
+    expect(document.activeElement).toBe(navButton2);
+
+    navButton2.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(mainCell0);
+
+    mainCell1.focus();
+    expect(document.activeElement).toBe(mainCell1);
+
+    mainCell1.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(navButton2);
+
+    navButton2.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(mainCell1);
+    wrapper.unmount();
+  });
+
   it("ensures keyboard listeners are active while a controller is alive", () => {
     const onLandmarkNavigation = vi.fn((event: Event) => event.preventDefault());
     window.addEventListener("react-aria-landmark-navigation", onLandmarkNavigation as EventListener);
