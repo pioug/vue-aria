@@ -228,4 +228,43 @@ describe("useSelect", () => {
 
     scope.stop();
   });
+
+  it("does not change selected key with arrow keys in multiple selection mode", () => {
+    const state = createState();
+    state.selectionManager.selectionMode = "multiple";
+    const ref = { current: document.createElement("button") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let result: any = null;
+    scope.run(() => {
+      result = useSelect(
+        {
+          keyboardDelegate: {
+            getKeyAbove: () => "a",
+            getKeyBelow: () => "b",
+            getFirstKey: () => "a",
+            getKeyForSearch: () => null,
+          } as any,
+        },
+        state,
+        ref
+      );
+    });
+
+    const onKeyDown = result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
+    onKeyDown?.({
+      key: "ArrowLeft",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+    onKeyDown?.({
+      key: "ArrowRight",
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(state.setSelectedKey).not.toHaveBeenCalled();
+
+    scope.stop();
+    ref.current?.remove();
+  });
 });

@@ -1639,6 +1639,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for trigger/menu/hidden-select prop wiring, hidden-select single and multiple change handling, select arrow-key key selection behavior, focus/blur lifecycle callback behavior, and hidden-input fallback behavior for large collections/native validation.
   - Added parity coverage for hidden-select native-required behavior across multi-value hidden input fallback (only first native text input marked required).
+  - Added parity coverage for no-op arrow-key selection behavior in multiple-selection mode and `currentTarget`-based hidden-select change handling.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2158,3 +2159,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added API/features/anatomy/usage sections
   - expanded Vue-idiomatic examples and integration notes
 - Validation: `npm run check` passed, `npm test` passed (111 files, 331 tests).
+- Expanded select behavior parity coverage:
+  - added explicit test for no arrow-key selection mutation in multiple mode
+  - added hidden-select change test that exercises `event.currentTarget` fallback handling
+- Validation: `npm run check` passed, `npm test` passed (111 files, 333 tests).
