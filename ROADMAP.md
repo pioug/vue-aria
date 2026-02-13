@@ -246,7 +246,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Deepen `useSelectableCollection` and `useSelectableItem` parity for virtualization/auto-focus lifecycle nuances, press/long-press semantics, and custom virtual focus events.
+  - Deepen `useSelectableCollection` and `useSelectableItem` parity for full press/long-press semantics and virtualization lifecycle nuances.
   - Reconcile API/type parity against full upstream `index.ts` surface
 
 ### Tests
@@ -519,3 +519,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - focus/tab index behavior and keyboard activation
 - Added adapted tests for click/ctrl-click selection and action-only behavior.
 - Validation: `npm run check` passed, `npm test` passed (39 files, 96 tests).
+- Expanded `@vue-aria/selection` behavioral parity:
+  - `useSelectableCollection`:
+    - `autoFocus` initialization logic
+    - virtual focus event handling (`FOCUS_EVENT`, `CLEAR_FOCUS_EVENT`)
+  - `useSelectableItem`:
+    - touch/virtual pointer toggle semantics in replace mode
+- Added adapted tests for auto-focus fallback, virtual focus event behavior, and touch/virtual toggle interactions.
+- Validation: `npm run check` passed, `npm test` passed (39 files, 99 tests).

@@ -1,7 +1,11 @@
 import { getFocusableTreeWalker } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
+import { focusSafely } from "@vue-aria/interactions";
 import type { FocusStrategy, Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import { onScopeDispose } from "vue";
 import {
+  CLEAR_FOCUS_EVENT,
+  FOCUS_EVENT,
   focusWithoutScrolling,
   isCtrlKeyPressed,
   isTabbable,
@@ -43,6 +47,7 @@ export function useSelectableCollection(
     selectionManager: manager,
     keyboardDelegate: delegate,
     ref,
+    autoFocus = false,
     shouldFocusWrap = false,
     disallowEmptySelection = false,
     disallowSelectAll = false,
@@ -322,6 +327,57 @@ export function useSelectableCollection(
   const mergedHandlers = disallowTypeAhead ? handlers : mergeProps(typeSelectProps, handlers);
   const tabIndex = shouldUseVirtualFocus ? undefined : manager.focusedKey == null ? 0 : -1;
   const collectionId = useCollectionId(manager.collection as object);
+
+  if (autoFocus) {
+    let focusedKey: Key | null = null;
+    if (autoFocus === "first") {
+      focusedKey = delegate.getFirstKey?.() ?? null;
+    } else if (autoFocus === "last") {
+      focusedKey = delegate.getLastKey?.() ?? null;
+    }
+
+    if (manager.selectedKeys.size > 0) {
+      for (const key of manager.selectedKeys) {
+        if (manager.canSelectItem(key)) {
+          focusedKey = key;
+          break;
+        }
+      }
+    }
+
+    manager.setFocused(true);
+    manager.setFocusedKey(focusedKey);
+    if (focusedKey == null && !shouldUseVirtualFocus && ref.current) {
+      focusSafely(ref.current);
+    }
+  }
+
+  if (shouldUseVirtualFocus && ref.current) {
+    const onVirtualFocus = ((event: Event) => {
+      const customEvent = event as CustomEvent<{ focusStrategy?: FocusStrategy }>;
+      event.stopPropagation();
+      manager.setFocused(true);
+      if (customEvent.detail?.focusStrategy === "first") {
+        manager.setFocusedKey(delegate.getFirstKey?.() ?? null);
+      }
+    }) as EventListener;
+
+    const onVirtualClearFocus = ((event: Event) => {
+      const customEvent = event as CustomEvent<{ clearFocusKey?: boolean }>;
+      event.stopPropagation();
+      manager.setFocused(false);
+      if (customEvent.detail?.clearFocusKey) {
+        manager.setFocusedKey(null);
+      }
+    }) as EventListener;
+
+    ref.current.addEventListener(FOCUS_EVENT, onVirtualFocus);
+    ref.current.addEventListener(CLEAR_FOCUS_EVENT, onVirtualClearFocus);
+    onScopeDispose(() => {
+      ref.current?.removeEventListener(FOCUS_EVENT, onVirtualFocus);
+      ref.current?.removeEventListener(CLEAR_FOCUS_EVENT, onVirtualClearFocus);
+    });
+  }
 
   return {
     collectionProps: mergeProps(mergedHandlers, {

@@ -8,6 +8,14 @@ vi.mock("@vue-aria/i18n", () => ({
   useLocale: () => ref({ locale: "en-US", direction: "ltr" }),
 }));
 
+const { focusSafely } = vi.hoisted(() => ({
+  focusSafely: vi.fn(),
+}));
+vi.mock("@vue-aria/interactions", () => ({
+  getInteractionModality: () => "keyboard",
+  focusSafely,
+}));
+
 function createManager(overrides: Partial<MultipleSelectionManager> = {}): MultipleSelectionManager {
   let focused = false;
   let focusedKey: Key | null = null;
@@ -150,6 +158,67 @@ describe("useSelectableCollection", () => {
 
       expect(manager.setFocused).toHaveBeenCalledWith(true);
       expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("applies autoFocus strategy and falls back to collection focus", () => {
+    const manager = createManager({
+      selectedKeys: new Set<Key>(),
+      canSelectItem: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: {
+          ...delegate,
+          getFirstKey: () => null,
+          getLastKey: () => null,
+        },
+        ref,
+        autoFocus: "first",
+      })
+    );
+
+    try {
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith(null);
+      expect(focusSafely).toHaveBeenCalledWith(ref.current);
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("handles virtual focus events when enabled", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        shouldUseVirtualFocus: true,
+      })
+    );
+
+    try {
+      ref.current.dispatchEvent(
+        new CustomEvent("react-aria-focus", { detail: { focusStrategy: "first" }, bubbles: true })
+      );
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+
+      ref.current.dispatchEvent(
+        new CustomEvent("react-aria-clear-focus", { detail: { clearFocusKey: true }, bubbles: true })
+      );
+      expect(manager.setFocused).toHaveBeenCalledWith(false);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith(null);
     } finally {
       scope.stop();
     }

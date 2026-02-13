@@ -108,7 +108,12 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
 
     if (event.shiftKey) {
       manager.extendSelection(key);
-    } else if (manager.selectionBehavior === "toggle" || isCtrlKeyPressed(event)) {
+    } else if (
+      manager.selectionBehavior === "toggle" ||
+      isCtrlKeyPressed(event) ||
+      (event as PointerEvent).pointerType === "touch" ||
+      (event as PointerEvent).pointerType === "virtual"
+    ) {
       manager.toggleSelection(key);
     } else {
       manager.replaceSelection(key);

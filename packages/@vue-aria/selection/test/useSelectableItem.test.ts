@@ -94,6 +94,30 @@ describe("useSelectableItem", () => {
     expect(manager.toggleSelection).toHaveBeenCalledWith("a");
   });
 
+  it("toggles selection for touch/virtual pointer interactions", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    const touchClick = new MouseEvent("click", { bubbles: true });
+    Object.defineProperty(touchClick, "pointerType", { value: "touch" });
+    onClick(touchClick);
+
+    const virtualClick = new MouseEvent("click", { bubbles: true });
+    Object.defineProperty(virtualClick, "pointerType", { value: "virtual" });
+    onClick(virtualClick);
+
+    expect(manager.toggleSelection).toHaveBeenCalledTimes(2);
+    expect(manager.toggleSelection).toHaveBeenNthCalledWith(1, "a");
+    expect(manager.toggleSelection).toHaveBeenNthCalledWith(2, "a");
+  });
+
   it("runs primary action when selection is disabled", () => {
     const onAction = vi.fn();
     const manager = createManager({
