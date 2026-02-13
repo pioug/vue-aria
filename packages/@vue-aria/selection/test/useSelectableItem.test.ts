@@ -141,4 +141,152 @@ describe("useSelectableItem", () => {
     expect(onAction).toHaveBeenCalledTimes(1);
     expect(open).not.toHaveBeenCalled();
   });
+
+  it("opens links and preserves selected keys for selection link behavior", () => {
+    const selectedKeys = new Set<Key>(["a"]);
+    const manager = createManager({
+      isLink: vi.fn(() => true),
+      getItemProps: vi.fn(() => ({ href: "/docs", routerOptions: { source: "test" } })),
+      selectedKeys,
+    });
+    const ref = { current: document.createElement("a") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      linkBehavior: "selection",
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    const event = new MouseEvent("click", { bubbles: true });
+    onClick(event);
+
+    expect(open).toHaveBeenCalledWith(ref.current, event, "/docs", { source: "test" });
+    expect(manager.setSelectedKeys).toHaveBeenCalledWith(selectedKeys);
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+    expect(manager.toggleSelection).not.toHaveBeenCalled();
+  });
+
+  it("opens link without selection when link behavior is override", () => {
+    const manager = createManager({
+      isLink: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("a") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      linkBehavior: "override",
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    expect(open).toHaveBeenCalledTimes(1);
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+    expect(manager.toggleSelection).not.toHaveBeenCalled();
+    expect(manager.extendSelection).not.toHaveBeenCalled();
+  });
+
+  it("does nothing for link selection when link behavior is none", () => {
+    const manager = createManager({
+      isLink: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("a") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      linkBehavior: "none",
+    });
+
+    const onClick = itemProps.onClick as (event: MouseEvent) => void;
+    onClick(new MouseEvent("click", { bubbles: true }));
+
+    expect(open).not.toHaveBeenCalled();
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+    expect(manager.toggleSelection).not.toHaveBeenCalled();
+    expect(manager.extendSelection).not.toHaveBeenCalled();
+  });
+
+  it("handles Enter and Space keyboard selection paths", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    const onKeydown = itemProps.onKeydown as (event: KeyboardEvent) => void;
+    const enter = new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
+    onKeydown(enter);
+
+    const space = {
+      key: " ",
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent;
+    onKeydown(space);
+
+    expect(manager.replaceSelection).toHaveBeenCalledTimes(2);
+    expect(manager.replaceSelection).toHaveBeenNthCalledWith(1, "a");
+    expect(manager.replaceSelection).toHaveBeenNthCalledWith(2, "a");
+    expect((space.preventDefault as any).mock.calls.length).toBe(1);
+  });
+
+  it("runs secondary action on Enter and double click in replace selection mode", () => {
+    const onAction = vi.fn();
+    const manager = createManager({
+      selectionBehavior: "replace",
+      canSelectItem: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps, hasAction } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      onAction,
+    });
+
+    expect(hasAction).toBe(true);
+
+    const onKeydown = itemProps.onKeydown as (event: KeyboardEvent) => void;
+    onKeydown(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+
+    const onDoubleClick = itemProps.onDoubleClick as (event: MouseEvent) => void;
+    onDoubleClick(new MouseEvent("dblclick", { bubbles: true }));
+
+    expect(onAction).toHaveBeenCalledTimes(2);
+    expect(manager.replaceSelection).not.toHaveBeenCalled();
+  });
+
+  it("prevents mousedown and clears focused key for disabled focused item", () => {
+    const manager = createManager({
+      focusedKey: "a",
+      isDisabled: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+    });
+
+    expect(manager.setFocusedKey).toHaveBeenCalledWith(null);
+
+    const onMousedown = itemProps.onMousedown as (event: MouseEvent) => void;
+    const event = { preventDefault: vi.fn() } as unknown as MouseEvent;
+    onMousedown(event);
+    expect((event.preventDefault as any).mock.calls.length).toBe(1);
+  });
 });

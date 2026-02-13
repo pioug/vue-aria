@@ -286,6 +286,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - Alt+Tab keyboard-prevention behavior
     - ArrowLeft/ArrowRight wrap behavior in LTR with child-focus strategy propagation
     - link item keyboard navigation behavior for `linkBehavior: "selection"` and `linkBehavior: "override"`
+  - Added adapted `useSelectableItem` interaction coverage for:
+    - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
+    - keyboard Enter/Space selection behavior and secondary action routing
+    - disabled focused-item branches (`setFocusedKey(null)` and mousedown default prevention)
   - Upstream `useSelectableCollection` component-level pointer/touch semantics remain pending full listbox/story parity harness migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2673,3 +2677,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - ArrowLeft/ArrowRight wrap behavior with child-focus strategy in LTR
   - link keyboard navigation semantics for `linkBehavior: "selection"` and `linkBehavior: "override"`
 - Validation: `npm run check` passed, `npm test` passed (121 files, 454 tests).
+- Expanded `@vue-aria/selection/useSelectableItem` parity with adapted tests for:
+  - link behavior branches (`selection`, `override`, `none`) and action/selection outcomes
+  - keyboard Enter/Space and double-click action-selection semantics
+  - disabled focused-item cleanup and mousedown-prevention branches
+- Validation: `npm run check` passed, `npm test` passed (121 files, 460 tests).
