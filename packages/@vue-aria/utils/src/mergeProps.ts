@@ -1,5 +1,6 @@
 import { chain } from "./chain";
 import { mergeRefs } from "./mergeRefs";
+import { mergeIds } from "./useId";
 
 type Props = Record<string, any>;
 type PropsArg = Props | null | undefined;
@@ -33,6 +34,8 @@ export function mergeProps<T extends PropsArg[]>(...args: T): UnionToIntersectio
         result[key] = `${a} ${b}`.trim();
       } else if (key === "class" && a && b) {
         result[key] = [a, b];
+      } else if (key === "id" && a && b) {
+        result[key] = mergeIds(a, b);
       } else if (
         (key === "style" || key === "UNSAFE_style")
         && a

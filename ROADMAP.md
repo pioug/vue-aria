@@ -215,11 +215,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Open Gaps
 - Upstream reference now added as submodule, and index export-name parity is now reached for `@vue-aria/utils`.
 - SSR/documentation scaffolding is baseline only and needs parity-level implementation.
-- `mergeProps` still lacks upstream `id` dedupe integration (`mergeIds/useId` parity path pending).
 - `inertValue` is Vue-native simplified and needs explicit parity decision per API surface.
 - `useId`/`mergeIds` behavior is currently simplified vs upstream reactive id reconciliation semantics and needs deeper parity hardening.
 - `useSlotId` is currently a simplified Vue adaptation and needs parity hardening around deferred DOM-resolution timing.
-- API name parity is complete, but behavior parity still needs deepening for complex hooks (`animation`, `drag`, viewport lifecycle timing, and id merging semantics).
+- API name parity is complete, but behavior parity still needs deepening for complex hooks (`animation`, `drag`, viewport lifecycle timing, and advanced id reconciliation semantics).
 
 ### Next Actions
 1. Build explicit upstream export-to-local mapping for `@react-aria/utils`.
@@ -2594,3 +2593,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/menu/useSubmenuTrigger` keyboard propagation parity with adapted tests for:
   - `continuePropagation` behavior on `ArrowLeft` when submenu is closed in LTR flows
 - Validation: `npm run check` passed, `npm test` passed (118 files, 419 tests).
+- Fixed `@vue-aria/utils/mergeProps` id-dedupe parity by delegating merged `id` values to `mergeIds`.
+- Expanded `@vue-aria/utils/mergeProps` parity tests with adapted upstream coverage for:
+  - single-argument pass-through behavior
+  - mixed-key/event merge ordering behavior
+  - id dedupe semantics via `idsUpdaterMap`/`mergeIds`
+  - non-special prop override behavior
+  - merged ref fan-out behavior
+- Validation: `npm run check` passed, `npm test` passed (118 files, 424 tests).
