@@ -128,6 +128,47 @@ const state = useSliderState({
 </template>
 ```
 
+```vue
+<script setup lang="ts">
+import { computed } from "vue";
+import { useSliderState } from "@vue-aria/slider-state";
+
+const state = useSliderState({
+  defaultValue: [30, 70],
+  numberFormatter: new Intl.NumberFormat("en-US", {}),
+});
+
+const minLeft = computed(() => `${state.getThumbPercent(0) * 100}%`);
+const maxLeft = computed(() => `${state.getThumbPercent(1) * 100}%`);
+</script>
+
+<template>
+  <div class="track">
+    <div class="thumb" :style="{ left: minLeft }" />
+    <div class="thumb" :style="{ left: maxLeft }" />
+  </div>
+</template>
+
+<style scoped>
+.track {
+  position: relative;
+  width: 320px;
+  height: 16px;
+  background: #e4e4e4;
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #5a5a5a;
+  transform: translate(-50%, -50%);
+}
+</style>
+```
+
 ## Notes
 
 - Supports single and multi-thumb value arrays.
