@@ -135,6 +135,65 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("does not select all when disallowSelectAll is enabled", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        disallowSelectAll: true,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", { key: "a", ctrlKey: true, bubbles: true, cancelable: true });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+      expect(manager.selectAll).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("prevents default on Alt+Tab keyboard events", () => {
+    const manager = createManager();
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = {
+        key: "Tab",
+        altKey: true,
+        ctrlKey: false,
+        metaKey: false,
+        shiftKey: false,
+        target: ref.current,
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+      } as unknown as KeyboardEvent;
+
+      onKeydown(event);
+      expect((event.preventDefault as any).mock.calls.length).toBe(1);
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("clears selection on Escape when allowed", () => {
     const manager = createManager({
       isEmpty: false,
@@ -266,6 +325,122 @@ describe("useSelectableCollection", () => {
       expect(manager.setFocusedKey).toHaveBeenCalledWith("o", undefined);
       expect(manager.replaceSelection).toHaveBeenCalledWith("p");
       expect(manager.replaceSelection).toHaveBeenCalledWith("o");
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("wraps ArrowLeft and ArrowRight navigation in ltr when enabled", () => {
+    const manager = createManager({
+      focusedKey: "a",
+    });
+    const ref = { current: document.createElement("div") };
+
+    const wrapDelegate: KeyboardDelegate = {
+      ...delegate,
+      getKeyLeftOf: () => null,
+      getKeyRightOf: () => null,
+      getFirstKey: () => "first",
+      getLastKey: () => "last",
+    };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: wrapDelegate,
+        ref,
+        shouldFocusWrap: true,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const left = new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true });
+      Object.defineProperty(left, "target", { value: ref.current });
+      onKeydown(left);
+
+      const right = new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true });
+      Object.defineProperty(right, "target", { value: ref.current });
+      onKeydown(right);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("last", "last");
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("first", "first");
+      expect(manager.replaceSelection).toHaveBeenCalledWith("last");
+      expect(manager.replaceSelection).toHaveBeenCalledWith("first");
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("opens link items on keyboard navigation in selection link behavior", () => {
+    const manager = createManager({
+      focusedKey: "a",
+      isLink: vi.fn((key: Key) => key === "b"),
+      getItemProps: vi.fn(() => ({ href: "/route", routerOptions: { source: "test" } })),
+    });
+    const ref = { current: document.createElement("div") };
+    const link = document.createElement("a");
+    link.setAttribute("data-key", "b");
+    link.href = "#";
+    ref.current.appendChild(link);
+
+    const linkClick = vi.fn((event: Event) => event.preventDefault());
+    link.addEventListener("click", linkClick);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        linkBehavior: "selection",
+        selectOnFocus: true,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true, cancelable: true });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("b", undefined);
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+      expect(linkClick).toHaveBeenCalledTimes(1);
+    } finally {
+      scope.stop();
+      link.remove();
+    }
+  });
+
+  it("does not replace selection for link items when link behavior is override", () => {
+    const manager = createManager({
+      focusedKey: "a",
+      isLink: vi.fn((key: Key) => key === "b"),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        linkBehavior: "override",
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true, cancelable: true });
+      Object.defineProperty(event, "target", { value: ref.current });
+      onKeydown(event);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("b", undefined);
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+      expect(manager.extendSelection).not.toHaveBeenCalled();
     } finally {
       scope.stop();
     }

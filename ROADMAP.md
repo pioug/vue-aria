@@ -282,6 +282,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - scroll-container mousedown prevention behavior
     - PageUp/PageDown keyboard navigation behavior with selection updates
     - already-focused `onFocus` outside-target clearing behavior
+    - `disallowSelectAll` guard behavior for ctrl/cmd + a
+    - Alt+Tab keyboard-prevention behavior
+    - ArrowLeft/ArrowRight wrap behavior in LTR with child-focus strategy propagation
+    - link item keyboard navigation behavior for `linkBehavior: "selection"` and `linkBehavior: "override"`
   - Upstream `useSelectableCollection` component-level pointer/touch semantics remain pending full listbox/story parity harness migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2663,3 +2667,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - PageUp/PageDown navigation updates with select-on-focus behavior
   - already-focused `onFocus` outside-target clearing path
 - Validation: `npm run check` passed, `npm test` passed (121 files, 449 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` interaction parity with adapted tests for:
+  - `disallowSelectAll` ctrl/cmd+A guard behavior
+  - Alt+Tab prevent-default path
+  - ArrowLeft/ArrowRight wrap behavior with child-focus strategy in LTR
+  - link keyboard navigation semantics for `linkBehavior: "selection"` and `linkBehavior: "override"`
+- Validation: `npm run check` passed, `npm test` passed (121 files, 454 tests).
