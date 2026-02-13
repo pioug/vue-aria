@@ -1,5 +1,6 @@
 export { focusSafely } from "./focusSafely";
 export { useKeyboard } from "./useKeyboard";
+export { useFocus } from "./useFocus";
 export {
   isFocusVisible,
   getInteractionModality,
@@ -22,3 +23,4 @@ export type {
 } from "./useFocusVisible";
 export type { BaseEvent } from "./createEventHandler";
 export type { KeyboardProps, KeyboardResult } from "./useKeyboard";
+export type { FocusProps, FocusResult } from "./useFocus";
