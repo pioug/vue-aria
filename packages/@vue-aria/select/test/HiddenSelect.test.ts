@@ -3,13 +3,25 @@ import { mount } from "@vue/test-utils";
 import { HiddenSelect } from "../src/HiddenSelect";
 import { selectData } from "../src/useSelect";
 
+function makeItems(size: number) {
+  return Array.from({ length: size }, (_, index) => ({
+    key: String(index + 1),
+    textValue: String(index + 1),
+    type: "item",
+  }));
+}
+
+function createCollection(items: Array<{ key: string; textValue: string; type: string }>) {
+  return {
+    size: items.length,
+    getKeys: () => items.map((item) => item.key)[Symbol.iterator](),
+    getItem: (key: string) => items.find((item) => item.key === key) ?? null,
+  };
+}
+
 function createLargeState() {
   return {
-    collection: {
-      size: 500,
-      getKeys: () => [][Symbol.iterator](),
-      getItem: () => null,
-    },
+    collection: createCollection(makeItems(500)),
     selectionManager: {
       selectionMode: "single",
     },
@@ -21,11 +33,7 @@ function createLargeState() {
 
 function createLargeMultiState() {
   return {
-    collection: {
-      size: 500,
-      getKeys: () => [][Symbol.iterator](),
-      getItem: () => null,
-    },
+    collection: createCollection(makeItems(500)),
     selectionManager: {
       selectionMode: "multiple",
     },
@@ -36,6 +44,77 @@ function createLargeMultiState() {
 }
 
 describe("HiddenSelect component", () => {
+  it("renders hidden select for small collections with no selected key", () => {
+    const state = {
+      collection: createCollection(makeItems(5)),
+      selectionManager: {
+        selectionMode: "single",
+      },
+      value: null,
+      defaultValue: null,
+      setValue: () => {},
+    } as any;
+
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    expect(wrapper.find("[data-testid='hidden-select-container']").exists()).toBe(true);
+    expect(wrapper.find("select").exists()).toBe(true);
+  });
+
+  it("renders hidden input fallback for large collections with a name and no selected key", () => {
+    const state = {
+      ...createLargeState(),
+      value: null,
+      defaultValue: null,
+    } as any;
+
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        name: "select",
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const input = wrapper.find("input");
+    expect(input.exists()).toBe(true);
+    expect(input.attributes("name")).toBe("select");
+  });
+
+  it("keeps initial form data value when collection is empty", () => {
+    const state = {
+      collection: createCollection([]),
+      selectionManager: {
+        selectionMode: "single",
+      },
+      value: "value",
+      defaultValue: "value",
+      setValue: () => {},
+    } as any;
+
+    const form = document.createElement("form");
+    document.body.appendChild(form);
+    const wrapper = mount(HiddenSelect, {
+      attachTo: form,
+      props: {
+        state,
+        name: "select",
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const formData = new FormData(form);
+    expect(formData.get("select")).toBe("value");
+
+    wrapper.unmount();
+    form.remove();
+  });
+
   it("renders hidden input fallback for large collections", () => {
     const state = createLargeState();
     const wrapper = mount(HiddenSelect, {
