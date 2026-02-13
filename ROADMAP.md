@@ -39,6 +39,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: In progress
 - `@vue-aria/button`: In progress
+- `@vue-aria/actiongroup`: In progress
 - `@vue-aria/toggle`: In progress
 - `@vue-aria/checkbox`: In progress
 - `@vue-aria/radio`: In progress
@@ -2288,7 +2289,59 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Add integration coverage with overlay consumers (`useModal`/`OverlayProvider`) to mirror upstream menu/dialog/popover intent.
 2. Evaluate whether remaining upstream test intents require additional integration harnesses beyond utility-level DOM tests.
 
-## 38) Session Log
+## 38) Package Record: @vue-aria/actiongroup
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/actiongroup/src`
+  - `references/react-spectrum/packages/@react-aria/actiongroup/test`
+- Local package path:
+  - `packages/@vue-aria/actiongroup`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useActionGroup`
+  - `useActionGroupItem`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useActionGroup.ts`
+  - `src/useActionGroupItem.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted upstream `useActionGroup` role/orientation/disabled behavior coverage.
+  - Added adapted `useActionGroupItem` coverage for role/selection/focus wiring in single and none selection modes.
+- [x] All currently present upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/actiongroup.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate roving-focus and arrow-key behavior with downstream action group components.
+
+### Visual Parity
+- Not applicable for this utility package beyond interaction semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Add integration coverage for keyboard navigation + RTL direction handling with concrete button elements.
+2. Validate toolbar nesting role downgrade behavior (`toolbar` -> `group`) in component-level harnesses.
+
+## 39) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -3503,3 +3556,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress docs page (`docs/packages/aria-modal-polyfill.md`) and wired docs index/nav/sidebar links.
   - added package-level roadmap record and execution queue tracking entry.
 - Validation: `npm run check` passed, `npm test` passed (132 files, 647 tests).
+- Started `@vue-aria/actiongroup` package parity slice:
+  - ported `useActionGroup` and `useActionGroupItem` APIs with local `@vue-aria/list-state` and `@vue-aria/focus` integrations.
+  - added adapted upstream role/orientation/disabled coverage for `useActionGroup`.
+  - added adapted item-level coverage for `useActionGroupItem` role/checked/focus/selection wiring.
+  - added VitePress docs page (`docs/packages/actiongroup.md`) and wired docs index/nav/sidebar links.
+  - added package-level roadmap record and execution queue tracking entry.
+- Validation: `npm run check` passed, `npm test` passed (134 files, 655 tests).
