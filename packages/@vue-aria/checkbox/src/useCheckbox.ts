@@ -11,20 +11,20 @@
  */
 
 import {AriaCheckboxProps} from '@vue-types/checkbox';
-import {InputHTMLAttributes, LabelHTMLAttributes, useEffect, useMemo} from 'react';
-import {mergeProps} from '@vue-aria/utils';
+import {mergeProps, useLayoutEffect} from '@vue-aria/utils';
 import {privateValidationStateProp, useFormValidationState} from '@vue-stately/form';
 import {RefObject, ValidationResult} from '@vue-types/shared';
 import {ToggleState} from '@vue-stately/toggle';
 import {useFormValidation} from '@vue-aria/form';
 import {usePress} from '@vue-aria/interactions';
 import {useToggle} from '@vue-aria/toggle';
+import type {ToggleAria} from '@vue-aria/toggle';
 
 export interface CheckboxAria extends ValidationResult {
   /** Props for the label wrapper element. */
-  labelProps: LabelHTMLAttributes<HTMLLabelElement>,
+  labelProps: ToggleAria['labelProps'],
   /** Props for the input element. */
-  inputProps: InputHTMLAttributes<HTMLInputElement>,
+  inputProps: ToggleAria['inputProps'],
   /** Whether the checkbox is selected. */
   isSelected: boolean,
   /** Whether the checkbox is in a pressed state. */
@@ -55,7 +55,7 @@ export function useCheckbox(props: AriaCheckboxProps, state: ToggleState, inputR
   useFormValidation(props, validationState, inputRef);
 
   let {isIndeterminate, isRequired, validationBehavior = 'aria'} = props;
-  useEffect(() => {
+  useLayoutEffect(() => {
     // indeterminate is a property, but it can only be set via javascript
     // https://css-tricks.com/indeterminate-checkboxes/
     if (inputRef.current) {
@@ -82,11 +82,11 @@ export function useCheckbox(props: AriaCheckboxProps, state: ToggleState, inputR
     labelProps: mergeProps(
       labelProps,
       pressProps,
-      useMemo(() => ({
+      {
         // Prevent label from being focused when mouse down on it.
         // Note, this does not prevent the input from being focused in the `click` event.
         onMouseDown: e => e.preventDefault()
-      }), [])),
+      }),
     inputProps: {
       ...inputProps,
       checked: isSelected,

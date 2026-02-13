@@ -16,7 +16,7 @@ import {checkboxGroupData} from './utils';
 import {CheckboxGroupState} from '@vue-stately/checkbox';
 import {DEFAULT_VALIDATION_RESULT, privateValidationStateProp, useFormValidationState} from '@vue-stately/form';
 import {RefObject, ValidationResult} from '@vue-types/shared';
-import {useEffect, useRef} from 'react';
+import {useLayoutEffect} from '@vue-aria/utils';
 import {useToggleState} from '@vue-stately/toggle';
 
 /**
@@ -57,12 +57,12 @@ export function useCheckboxGroupItem(props: AriaCheckboxGroupItemProps, state: C
   });
 
   // Update the checkbox group state when realtime validation changes.
-  let nativeValidation = useRef(DEFAULT_VALIDATION_RESULT);
+  let nativeValidation: {current: ValidationResult} = {current: DEFAULT_VALIDATION_RESULT};
   let updateValidation = () => {
     state.setInvalid(props.value, realtimeValidation.isInvalid ? realtimeValidation : nativeValidation.current);
   };
 
-  useEffect(updateValidation);
+  useLayoutEffect(updateValidation);
 
   // Combine group and checkbox level validation.
   let combinedRealtimeValidation = state.realtimeValidation.isInvalid ? state.realtimeValidation : realtimeValidation;
