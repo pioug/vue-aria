@@ -260,18 +260,22 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
 - Remaining:
   - Reconcile edge-case parity with upstream React 18/StrictMode-specific behavior where applicable in Vue.
-  - Verify SSR hydration parity in dedicated server-render tests.
+  - Verify SSR hydration transition parity for `useIsSSR` in downstream integration contexts.
 
 ### Tests
 - Total upstream test files: 2 (`SSRProvider.test.js`, `SSRProvider.ssr.test.js`)
-- Ported test files: 1
-- Passing test files: 1
+- Ported test files: 2
+- Passing test files: 2
 - Test parity notes:
   - Added adapted tests for deterministic IDs in provider and nested-provider trees.
   - Added adapted tests for environment-dependent no-provider ID prefix behavior:
     - production mode uses random-prefix format
     - test mode uses deterministic `react-aria-<n>` format
-- [ ] All relevant upstream tests migrated
+  - Added adapted SSR render tests covering:
+    - base provider rendering
+    - nested provider rendering
+    - deep nested provider rendering
+- [x] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
 ### Docs
@@ -288,9 +292,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Port adapted SSR render-without-errors test coverage from upstream `SSRProvider.ssr.test.js`.
-2. Add VitePress package docs page with usage and SSR guidance.
-3. Verify `useIsSSR` hydration transition behavior in integration tests.
+1. Add VitePress package docs page with usage and SSR guidance.
+2. Verify `useIsSSR` hydration transition behavior in integration tests.
 
 ## 6) Package Record: @vue-aria/selection
 - Upstream source path(s):
@@ -2840,3 +2843,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - no-provider test/prod prefix-branch behavior
 - Added dedicated `@vue-aria/ssr` package record to roadmap tracking.
 - Validation: `npm run check` passed, `npm test` passed (123 files, 490 tests).
+- Added adapted `@vue-aria/ssr/SSRProvider.ssr` test coverage for:
+  - render-without-errors baseline
+  - nested provider SSR render paths
+  - deep nested provider SSR render paths
+- Updated SSR package record test parity status to full upstream test-file coverage.
+- Validation: `npm run check` passed, `npm test` passed (124 files, 493 tests).
