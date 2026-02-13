@@ -1906,3 +1906,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `getItemId` unknown-list error semantics
   - key normalization behavior in generated option ids
 - Validation: `npm run check` passed, `npm test` passed (100 files, 293 tests).
+- Added adapted Safari/macOS VoiceOver branch coverage for `@vue-aria/listbox/useOption` ensuring aria label slot mappings are omitted under WebKit/macOS conditions.
+- Validation: `npm run check` passed, `npm test` passed (101 files, 294 tests).
