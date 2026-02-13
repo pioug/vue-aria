@@ -15,6 +15,7 @@ Vue port of React Aria and React Spectrum.
 - `npm test`: run all unit + SSR tests.
 - `npm run check:ci`: run the full local CI gate:
   - baseline consistency check
+  - local-only dependency/workspace consistency check
   - parity regression check
   - upstream/status test parity check
   - deviations/status consistency check
