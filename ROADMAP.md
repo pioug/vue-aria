@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/utils`
+- Current focus package: `@vue-aria/selection`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Docs stack (VitePress/Storybook parity pages) not scaffolded yet
@@ -63,6 +63,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/progress`: Not started
 - `@vue-aria/meter`: Not started
 - `@vue-aria/collections`: In progress
+- `@vue-aria/selection`: In progress
 
 ### React Stately packages
 - `@vue-aria/utils-state`: In progress
@@ -215,7 +216,74 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 4. Scaffold docs pages for `@vue-aria/utils` usage and parity notes.
 5. Mark completion only after all package gates pass.
 
-## 6) Session Log
+## 6) Package Record: @vue-aria/selection
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/selection/src`
+  - `references/react-spectrum/packages/@react-aria/selection/test`
+- Local package path: `packages/@vue-aria/selection`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules for initial slice enumerated
+- [ ] Public API checklist complete (full package not yet ported)
+
+### Implementation
+- [x] Initial collection navigation/typeahead slice ported:
+  - `DOMLayoutDelegate`
+  - `ListKeyboardDelegate`
+  - `useTypeSelect`
+  - `utils.getItemElement`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Remaining:
+  - Port `useSelectableCollection`
+  - Port `useSelectableItem`
+  - Port `useSelectableList`
+  - Reconcile API/type parity against full upstream `index.ts` surface
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted tests for keyboard delegate navigation/search behavior.
+  - Added adapted tests for typeahead buffer, focus movement, and debounce reset.
+  - Upstream `useSelectableCollection` test file remains pending until those modules are ported.
+- [ ] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [ ] VitePress/Storybook pages ported
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Keyboard interaction parity fully validated
+- [ ] Focus behavior parity fully validated
+- [ ] Screen reader semantics parity validated for selectable collection hooks
+
+### Visual Parity
+- [ ] Upstream example comparisons complete
+- [ ] Variant/state comparisons complete
+- [ ] Open visual deltas documented
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+- Remaining dependencies:
+  - None in current runtime slice; full package parity pending.
+
+### Next Actions
+1. Port `useSelectableCollection` with parity-first keyboard/focus behavior.
+2. Port `useSelectableItem` and `useSelectableList`.
+3. Migrate upstream `useSelectableCollection` tests and adapt assertions to Vue events/composables.
+4. Add docs/examples for selection patterns after hook surface is complete.
+5. Mark completion only after all package gates pass.
+
+## 7) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -277,3 +345,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - local collection traversal/order helpers for standalone behavior parity
 - Added selection-state tests for focus/selection state semantics and manager operations.
 - Validation: `npm run check` passed, `npm test` passed (31 files, 72 tests).
+- Started `@vue-aria/selection` slice from upstream `@react-aria/selection`:
+  - `DOMLayoutDelegate`
+  - `ListKeyboardDelegate`
+  - `useTypeSelect`
+  - `utils.getItemElement`
+- Added adapted tests for keyboard delegate navigation/search and typeahead debounce behavior.
+- Validation: `npm run check` passed, `npm test` passed (33 files, 78 tests).
