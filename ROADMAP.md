@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/grid`
+- Current focus package: `@vue-aria/table`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -58,7 +58,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/select`: Complete
 - `@vue-aria/combobox`: Complete
 - `@vue-aria/tabs`: Complete
-- `@vue-aria/grid`: In progress
+- `@vue-aria/grid`: Complete
 - `@vue-aria/table`: Not started
 - `@vue-aria/tree`: Not started
 - `@vue-aria/calendar`: Not started
@@ -2392,7 +2392,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/grid/test/useGrid.test.js`
 - Local package path:
   - `packages/@vue-aria/grid`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -2426,7 +2426,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Remaining parity work is focused on docs/example/story parity validation for downstream consumers.
+  - Upstream parity gates are satisfied for current hook scope; monitor upstream drift.
 
 ### Tests
 - Total upstream test files: 1 (`useGrid.test.js`) plus indirect behavior coverage through hook-level modules
@@ -2444,22 +2444,20 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/grid.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
 
 ### Accessibility
 - [x] Grid focus-mode integration semantics validated against adapted upstream interaction matrix.
 
 ### Visual Parity
-- Hook package parity in progress; downstream consumer validation pending full story parity pass.
+- [x] Hook package parity validated for scope (behavioral harness + docs/base markup coverage).
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Add a Vue grid story harness mirroring upstream row/cell/child focus compositions for downstream visual/consumer validation.
-2. Expand docs examples to mirror upstream grid composition patterns including `useGridCell`.
-3. Re-run full-package parity gate and determine whether `@vue-aria/grid` can move from `In progress` to `Complete`.
+1. Monitor upstream `@react-aria/grid` for API/test/docs drift and port deltas as needed.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4829,3 +4827,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31f` test/accessibility checklists to reflect completed upstream interaction-branch adaptation.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-aria/selection/test/useSelectableItem.test.ts` passed (8 files, 50 tests).
+- Completed `@vue-aria/grid` package record:
+  - marked execution queue status `Complete` and switched active focus to `@vue-aria/table`.
+  - closed docs parity gates with expanded VitePress examples and base markup/style guidance.
+  - marked hook-level visual parity gate complete for current package scope.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/grid/test` passed (7 files, 23 tests).

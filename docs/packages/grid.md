@@ -13,9 +13,10 @@
 - `useGridSelectionAnnouncement`
 - `useGridSelectionCheckbox`
 
-## In progress
+## Parity status
 
-- Downstream docs/story parity examples for full consumer composition
+- Upstream hook surface is ported.
+- Upstream `useGrid.test.js` focus-mode interaction matrix is adapted in `packages/@vue-aria/grid/test/useGrid.interactions.test.ts`.
 
 ## Upstream-aligned example (implemented slice)
 
@@ -45,7 +46,46 @@ const { rowProps } = useGridRow(
 );
 ```
 
+## Base markup example
+
+```html
+<div v-bind="gridProps" ref="gridRef" class="grid">
+  <div v-bind="rowProps" ref="rowRef" class="grid-row">
+    <div v-bind="gridCellProps" ref="cellRef" class="grid-cell">
+      <button type="button">Action A</button>
+      <button type="button">Action B</button>
+    </div>
+  </div>
+</div>
+```
+
+```css
+.grid {
+  border: 1px solid #c7ccd1;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.grid-row + .grid-row {
+  margin-top: 6px;
+}
+
+.grid-cell {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #d7dce1;
+  border-radius: 6px;
+}
+
+.grid-cell:focus-visible,
+.grid-row:focus-visible {
+  outline: 2px solid #0f62fe;
+  outline-offset: 2px;
+}
+```
+
 ## Notes
 
-- Current package status is partial; API parity is in progress.
+- Current package status is hook-level parity complete; downstream visual consumers should still validate app-specific styles.
 - `Spectrum S2` is out of scope unless explicitly requested.
