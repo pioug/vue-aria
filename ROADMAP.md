@@ -75,6 +75,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/checkbox-state`: In progress
 - `@vue-aria/radio-state`: In progress
 - `@vue-aria/searchfield-state`: In progress
+- `@vue-aria/numberfield-state`: In progress
 - `@vue-aria/overlays-state`: In progress
 - `@vue-aria/tooltip-state`: In progress
 - `@vue-aria/disclosure-state`: In progress
@@ -1812,7 +1813,57 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
 2. Port `@vue-aria/numberfield-state` (`@react-stately/numberfield`) and wire full integration.
 
-## 35) Session Log
+## 35) Package Record: @vue-aria/numberfield-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/numberfield/src`
+- Local package path:
+  - `packages/@vue-aria/numberfield-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useNumberFieldState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useNumberFieldState.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Current parser/validation path uses locale-normalized fallback parsing and validation placeholders instead of full upstream parser + form-validation-state internals.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder in upstream stately package
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for default formatting, step increment/decrement math, and clamped commit behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/numberfield-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- Not directly applicable for stately state package; validated through hook consumers.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Replace fallback parsing/validation with full upstream-equivalent locale parser behavior.
+2. Integrate with full form validation-state parity path and wire into `@vue-aria/numberfield`.
+
+## 36) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -2283,3 +2334,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added wheel increment/decrement handling gated by focus-within state
 - Expanded adapted numberfield coverage for the above interaction paths.
 - Validation: `npm run check` passed, `npm test` passed (113 files, 343 tests).
+- Started `@vue-aria/numberfield-state` package:
+  - `useNumberFieldState` (initial slice)
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted numberfield-state tests for initialization/formatting, step math, and clamped commit behavior.
+- Added VitePress docs page for `@vue-aria/numberfield-state` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (114 files, 346 tests).
