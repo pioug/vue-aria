@@ -28,4 +28,23 @@ describe("useOverlayTrigger", () => {
     scope.stop();
     scrollable.remove();
   });
+
+  it("sets menu and listbox aria-haspopup semantics", () => {
+    const menuState = useOverlayTriggerState({ isOpen: false });
+    const listboxState = useOverlayTriggerState({ isOpen: false });
+
+    const { triggerProps: menuTriggerProps } = useOverlayTrigger({ type: "menu" }, menuState);
+    const { triggerProps: listboxTriggerProps } = useOverlayTrigger({ type: "listbox" }, listboxState);
+
+    expect(menuTriggerProps["aria-haspopup"]).toBe(true);
+    expect(listboxTriggerProps["aria-haspopup"]).toBe("listbox");
+  });
+
+  it("wires aria-expanded and aria-controls based on open state", () => {
+    const state = useOverlayTriggerState({ isOpen: true });
+    const { triggerProps } = useOverlayTrigger({ type: "dialog" }, state);
+
+    expect(triggerProps["aria-expanded"]).toBe(true);
+    expect(typeof triggerProps["aria-controls"]).toBe("string");
+  });
 });

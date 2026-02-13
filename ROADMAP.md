@@ -1757,3 +1757,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (89 files, 267 tests).
 - Added adapted `useModalOverlay` outside-interaction tests for `shouldCloseOnInteractOutside` true/false behavior.
 - Validation: `npm run check` passed, `npm test` passed (90 files, 269 tests).
+- Expanded `useOverlayTrigger` test coverage for `aria-haspopup` semantics and open-state `aria-expanded`/`aria-controls` wiring.
+- Validation: `npm run check` passed, `npm test` passed (90 files, 271 tests).
