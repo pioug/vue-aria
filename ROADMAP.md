@@ -1655,6 +1655,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useSelect` interaction coverage for label-click trigger focus and keyboard-modality setting (and disabled short-circuit path).
   - Added adapted hidden-input fallback parity coverage for native invalid-event handling (commit + trigger-focus path) when collection size exceeds native select threshold.
   - Added adapted keyboard parity coverage for no-selection arrow-key paths, asserting first-key fallback and default scroll prevention semantics.
+  - Added adapted `HiddenSelect` behavioral parity coverage for small-collection native select change handling (autofill path) and container dataset attributes (`data-a11y-ignore` and `data-react-aria-prevent-focus`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2540,3 +2541,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - 1-based `aria-posinset` values across all menu items
   - stable full-set `aria-setsize` values across all menu items
 - Validation: `npm run check` passed, `npm test` passed (118 files, 398 tests).
+- Expanded `@vue-aria/select/HiddenSelect` parity with adapted tests for:
+  - small-collection select change path updating state value (autofill behavior)
+  - hidden-container dataset invariants (`data-a11y-ignore` and `data-react-aria-prevent-focus`)
+- Validation: `npm run check` passed, `npm test` passed (118 files, 401 tests).

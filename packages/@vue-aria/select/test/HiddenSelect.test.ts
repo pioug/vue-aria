@@ -48,17 +48,23 @@ function createLargeMultiState() {
   } as any;
 }
 
+function createSmallState() {
+  return {
+    collection: createCollection(makeItems(5)),
+    selectionManager: {
+      selectionMode: "single",
+    },
+    value: null,
+    defaultValue: null,
+    setValue: vi.fn(),
+    commitValidation: () => {},
+    displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+  } as any;
+}
+
 describe("HiddenSelect component", () => {
   it("renders hidden select for small collections with no selected key", () => {
-    const state = {
-      collection: createCollection(makeItems(5)),
-      selectionManager: {
-        selectionMode: "single",
-      },
-      value: null,
-      defaultValue: null,
-      setValue: () => {},
-    } as any;
+    const state = createSmallState();
 
     const wrapper = mount(HiddenSelect, {
       props: {
@@ -69,6 +75,49 @@ describe("HiddenSelect component", () => {
 
     expect(wrapper.find("[data-testid='hidden-select-container']").exists()).toBe(true);
     expect(wrapper.find("select").exists()).toBe(true);
+  });
+
+  it("updates state value when hidden select changes (autofill path)", async () => {
+    const state = createSmallState();
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        label: "select",
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const select = wrapper.find("select");
+    (select.element as HTMLSelectElement).value = "5";
+    await select.trigger("change");
+
+    expect(state.setValue).toHaveBeenCalledWith("5");
+  });
+
+  it("always includes data-a11y-ignore on hidden select container", () => {
+    const state = createSmallState();
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const container = wrapper.get("[data-testid='hidden-select-container']");
+    expect(container.attributes("data-a11y-ignore")).toBe("aria-hidden-focus");
+  });
+
+  it("always includes data-react-aria-prevent-focus on hidden select container", () => {
+    const state = createSmallState();
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const container = wrapper.get("[data-testid='hidden-select-container']");
+    expect(container.attributes("data-react-aria-prevent-focus")).toBeDefined();
   });
 
   it("renders hidden input fallback for large collections with a name and no selected key", () => {
