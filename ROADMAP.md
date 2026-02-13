@@ -1902,3 +1902,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `UNSTABLE_useFilteredListState` collection filtering behavior
   - duplicate same-key `onSelectionChange` callback semantics in `useSingleSelectListState`
 - Validation: `npm run check` passed, `npm test` passed (99 files, 291 tests).
+- Added `@vue-aria/listbox` utility parity tests for:
+  - `getItemId` unknown-list error semantics
+  - key normalization behavior in generated option ids
+- Validation: `npm run check` passed, `npm test` passed (100 files, 293 tests).
