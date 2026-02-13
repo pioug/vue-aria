@@ -359,7 +359,43 @@ describe("useToast", () => {
 
     const firstClose = toast.get('[data-testid="close-2"]');
     const firstCloseElement = firstClose.element as HTMLElement;
-    firstCloseElement.focus();
+    const advanceTab = () => {
+      const tabbables = Array.from(document.querySelectorAll<HTMLElement>("button,[href],input,select,textarea,[tabindex]"))
+        .filter((element) => {
+          if (element.getAttribute("tabindex") === "-1") {
+            return false;
+          }
+          if ("disabled" in element && (element as HTMLButtonElement).disabled) {
+            return false;
+          }
+          return element.tabIndex >= 0;
+        });
+      const current = document.activeElement as HTMLElement | null;
+      const index = current ? tabbables.indexOf(current) : -1;
+      if (index >= 0) {
+        const next = tabbables[(index + 1) % tabbables.length];
+        next?.focus();
+        return;
+      }
+
+      let next = tabbables.find((element) => {
+        if (!current) {
+          return false;
+        }
+        const position = current.compareDocumentPosition(element);
+        return Boolean(position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY);
+      });
+      if (!next) {
+        next = tabbables[0];
+      }
+      next?.focus();
+    };
+
+    advanceTab();
+    expect(document.activeElement).toBe(toast.element);
+    advanceTab();
+    expect(document.activeElement).toBe(firstCloseElement);
+
     const focusEvent = new FocusEvent("focus", { relatedTarget: addButton });
     Object.defineProperty(focusEvent, "currentTarget", { value: region });
     Object.defineProperty(focusEvent, "target", { value: firstCloseElement });
