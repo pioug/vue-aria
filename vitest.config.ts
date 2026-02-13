@@ -94,6 +94,9 @@ export default defineConfig({
       ),
       "@vue-aria/dialog": fileURLToPath(
         new URL("./packages/@vue-aria/dialog/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/breadcrumbs": fileURLToPath(
+        new URL("./packages/@vue-aria/breadcrumbs/src/index.ts", import.meta.url)
       )
     }
   }

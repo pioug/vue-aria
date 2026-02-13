@@ -32,3 +32,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/progress](/packages/progress)
 - [@vue-aria/meter](/packages/meter)
 - [@vue-aria/dialog](/packages/dialog)
+- [@vue-aria/breadcrumbs](/packages/breadcrumbs)

@@ -23,6 +23,7 @@ export default defineConfig({
       { text: "Progress", link: "/packages/progress" },
       { text: "Meter", link: "/packages/meter" },
       { text: "Dialog", link: "/packages/dialog" },
+      { text: "Breadcrumbs", link: "/packages/breadcrumbs" },
     ],
     sidebar: [
       {
@@ -45,6 +46,7 @@ export default defineConfig({
           { text: "@vue-aria/progress", link: "/packages/progress" },
           { text: "@vue-aria/meter", link: "/packages/meter" },
           { text: "@vue-aria/dialog", link: "/packages/dialog" },
+          { text: "@vue-aria/breadcrumbs", link: "/packages/breadcrumbs" },
         ],
       },
     ],

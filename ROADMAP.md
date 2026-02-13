@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/dialog`
+- Current focus package: `@vue-aria/breadcrumbs`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -57,7 +57,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tree`: Not started
 - `@vue-aria/calendar`: Not started
 - `@vue-aria/datepicker`: Not started
-- `@vue-aria/breadcrumbs`: Not started
+- `@vue-aria/breadcrumbs`: In progress
 - `@vue-aria/dialog`: In progress
 - `@vue-aria/tooltip`: Not started
 - `@vue-aria/progress`: In progress
@@ -1166,7 +1166,57 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Integrate `useOverlayFocusContain` when `@vue-aria/overlays` is ported.
 2. Validate dialog behavior in downstream Spectrum overlay/dialog components.
 
-## 23) Session Log
+## 23) Package Record: @vue-aria/breadcrumbs
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/breadcrumbs/src`
+  - `references/react-spectrum/packages/@react-aria/breadcrumbs/test/useBreadcrumbs.test.js`
+  - `references/react-spectrum/packages/@react-aria/breadcrumbs/test/useBreadcrumbItem.test.js`
+- Local package path:
+  - `packages/@vue-aria/breadcrumbs`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useBreadcrumbs`
+  - `useBreadcrumbItem`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: 2
+- Ported test files: 2
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted coverage for breadcrumbs nav labeling and item states (current/disabled/span/link semantics).
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/breadcrumbs.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate behavior in downstream Spectrum breadcrumb components
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum breadcrumb components.
+2. Expand locale dictionary coverage for breadcrumbs labels.
+
+## 24) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1443,3 +1493,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted dialog tests for role behavior and focus management semantics.
 - Added VitePress docs page for `@vue-aria/dialog` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (74 files, 232 tests).
+- Started `@vue-aria/breadcrumbs` package:
+  - `useBreadcrumbs`
+  - `useBreadcrumbItem`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted breadcrumbs tests for nav label defaults/overrides and item current/disabled/link semantics.
+- Added VitePress docs page for `@vue-aria/breadcrumbs` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (76 files, 238 tests).
