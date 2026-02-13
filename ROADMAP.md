@@ -33,7 +33,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/ssr`: In progress
 - `@vue-aria/interactions`: In progress
 - `@vue-aria/focus`: In progress
-- `@vue-aria/live-announcer`: Not started
+- `@vue-aria/live-announcer`: In progress
 - `@vue-aria/overlays`: Not started
 - `@vue-aria/visually-hidden`: Not started
 - `@vue-aria/label`: Not started
@@ -434,7 +434,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Current migrated tests passing
 
 ### Docs
-- [ ] VitePress/Storybook pages ported
+- [x] VitePress package page scaffolded (`docs/packages/focus.md`)
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -458,7 +458,59 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 3. Port upstream focus tests incrementally with Vue test adapters.
 4. Integrate focus package with `@vue-aria/selection` selectable hooks.
 
-## 9) Session Log
+## 9) Package Record: @vue-aria/live-announcer
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/live-announcer/src`
+- Local package path: `packages/@vue-aria/live-announcer`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream global announcer APIs:
+  - `announce`
+  - `clearAnnouncer`
+  - `destroyAnnouncer`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/LiveAnnouncer.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: none
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests covering assertive/polite announcements, `aria-labelledby` payloads, clear behavior, and destroy behavior.
+- [ ] All relevant upstream tests migrated
+- Current note:
+  - Upstream package has no dedicated tests in the reference tree; Vue port relies on adapted behavioral tests.
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/live-announcer.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Screen reader announcement timing parity validated cross-browser
+
+### Visual Parity
+- Not applicable for this non-visual utility package.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Validate announcer timing behavior against browser matrix expectations.
+2. Expand integration tests when downstream packages consume live announcer.
+3. Finalize docs examples with end-to-end component usage.
+
+## 10) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -638,3 +690,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted `FocusScope` API tests and revalidated focus package slice.
 - Validation: `npm run check` passed, `npm test` passed (55 files, 154 tests).
 - Added VitePress docs page for `@vue-aria/focus` and wired docs navigation entries.
+- Started `@vue-aria/live-announcer` package:
+  - `announce`
+  - `clearAnnouncer`
+  - `destroyAnnouncer`
+  - package scaffolding and tsconfig alias wiring
+- Added adapted live announcer tests for assertive/polite messages, labelled payloads, clear behavior, and destroy behavior.
+- Added VitePress docs page for `@vue-aria/live-announcer` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (56 files, 159 tests).

@@ -9,6 +9,7 @@ export default defineConfig({
       { text: "Selection", link: "/packages/selection" },
       { text: "Interactions", link: "/packages/interactions" },
       { text: "Focus", link: "/packages/focus" },
+      { text: "Live Announcer", link: "/packages/live-announcer" },
     ],
     sidebar: [
       {
@@ -17,6 +18,7 @@ export default defineConfig({
           { text: "@vue-aria/selection", link: "/packages/selection" },
           { text: "@vue-aria/interactions", link: "/packages/interactions" },
           { text: "@vue-aria/focus", link: "/packages/focus" },
+          { text: "@vue-aria/live-announcer", link: "/packages/live-announcer" },
         ],
       },
     ],

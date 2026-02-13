@@ -18,7 +18,8 @@
       "@vue-aria/selection-state": ["packages/@vue-aria/selection-state/src/index.ts"],
       "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
       "@vue-aria/interactions": ["packages/@vue-aria/interactions/src/index.ts"],
-      "@vue-aria/focus": ["packages/@vue-aria/focus/src/index.ts"]
+      "@vue-aria/focus": ["packages/@vue-aria/focus/src/index.ts"],
+      "@vue-aria/live-announcer": ["packages/@vue-aria/live-announcer/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
