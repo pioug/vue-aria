@@ -1906,6 +1906,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useSelect` keyboard/focus parity coverage for:
     - arrow-key no-op selection path when delegate has no first key available (with preserved default prevention)
     - menu blur propagation when `relatedTarget` is `null`
+    - multiple-selection arrow-key path preserving event propagation (no forced `preventDefault`)
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3415,4 +3416,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 637 tests).
 - Expanded `@vue-aria/select/useHiddenSelect` dynamic first-invalid mutation parity:
   - added adapted coverage for re-evaluating first-invalid ordering after earlier field validity changes in native validation mode
+- Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).
+- Tightened `@vue-aria/select/useSelect` multiple-selection keyboard guard parity:
+  - strengthened adapted assertions to ensure arrow-key handlers in multiple selection mode do not force `preventDefault`
 - Validation: `npm run check` passed, `npm test` passed (130 files, 638 tests).

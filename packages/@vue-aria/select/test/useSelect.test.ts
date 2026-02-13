@@ -456,17 +456,21 @@ describe("useSelect", () => {
       );
     });
 
+    const leftPreventDefault = vi.fn();
+    const rightPreventDefault = vi.fn();
     const onKeyDown = result.triggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
     onKeyDown?.({
       key: "ArrowLeft",
-      preventDefault: vi.fn(),
+      preventDefault: leftPreventDefault,
     } as unknown as KeyboardEvent);
     onKeyDown?.({
       key: "ArrowRight",
-      preventDefault: vi.fn(),
+      preventDefault: rightPreventDefault,
     } as unknown as KeyboardEvent);
 
     expect(state.setSelectedKey).not.toHaveBeenCalled();
+    expect(leftPreventDefault).not.toHaveBeenCalled();
+    expect(rightPreventDefault).not.toHaveBeenCalled();
 
     scope.stop();
     ref.current?.remove();
