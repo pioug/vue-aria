@@ -2439,6 +2439,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted upstream `useToast` coverage for default props, close-button invocation, data-attribute passthrough, and timer reset/pause lifecycle behavior.
   - Added adapted story-driven `single toast at a time` lifecycle coverage for queued toast replacement and focus restoration to trigger after final close.
+  - Added adapted queue-rotation timer coverage to ensure timeout timers pause/reset correctly across `A -> B -> A` single-visible transitions.
   - Added adapted baseline `useToastRegion` coverage for returned region role/label/top-layer props and hover/focus pause/resume timer transitions.
   - Added adapted interaction coverage for focused-toast replacement focus transfer and restoring focus to the pre-region element when the toast list becomes empty.
   - Added adapted pointer-modality regression coverage for restoring focus when toast count drops to zero.
@@ -2460,7 +2461,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port additional upstream `single toast at a time` keyboard order assertions that explicitly traverse F6/tab paths before dismissal.
-2. Expand story-equivalent tests for timer-enabled (`timeout`) queue transitions and focus handoff.
+2. Expand story-equivalent tests for mixed pointer/keyboard dismissal ordering with queued toasts.
 
 ## 41) Session Log
 ### 2026-02-13
@@ -3736,3 +3737,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/landmark` visibility/window focus parity:
   - added adapted tests for landmark focus persistence across browser-window focus toggles and visibility/tab toggles.
 - Validation: `npm run check` passed, `npm test` passed (138 files, 692 tests).
+- Expanded `@vue-aria/toast` queue timer parity:
+  - added adapted lifecycle test for timeout timer pause/reset behavior across single-visible queue rotation (`toast-a` -> `toast-b` -> `toast-a`).
+- Validation: `npm run check` passed, `npm test` passed (138 files, 693 tests).

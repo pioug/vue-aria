@@ -65,6 +65,61 @@ describe("useToast", () => {
     expect(pause).toHaveBeenCalledTimes(1);
   });
 
+  it("restarts timers as toasts rotate through a single-visible queue", async () => {
+    const timerA = { reset: vi.fn(), pause: vi.fn() };
+    const timerB = { reset: vi.fn(), pause: vi.fn() };
+    const close = vi.fn();
+    const control = reactive({
+      visible: { key: "toast-a", timeout: 1000, timer: timerA },
+    });
+
+    const ToastLeaf = defineComponent({
+      name: "ToastLeaf",
+      props: {
+        toast: { type: Object, required: true },
+      },
+      setup(props) {
+        const elementRef = ref<HTMLElement | null>(null);
+        const refAdapter = {
+          get current() {
+            return elementRef.value;
+          },
+          set current(value: Element | null) {
+            elementRef.value = value as HTMLElement | null;
+          },
+        };
+        const { toastProps } = useToast({ toast: props.toast as any }, { close }, refAdapter);
+        return () => h("div", { ...toastProps, ref: elementRef });
+      },
+    });
+
+    const Host = defineComponent({
+      name: "ToastTimerHost",
+      setup() {
+        return () => h("div", [h(ToastLeaf, { key: (control.visible as any).key, toast: control.visible })]);
+      },
+    });
+
+    const wrapper = mount(Host, { attachTo: document.body });
+    await nextTick();
+    expect(timerA.reset).toHaveBeenCalledTimes(1);
+    expect(timerA.reset).toHaveBeenCalledWith(1000);
+
+    control.visible = { key: "toast-b", timeout: 2000, timer: timerB };
+    await nextTick();
+    expect(timerA.pause).toHaveBeenCalledTimes(1);
+    expect(timerB.reset).toHaveBeenCalledTimes(1);
+    expect(timerB.reset).toHaveBeenCalledWith(2000);
+
+    control.visible = { key: "toast-a", timeout: 1000, timer: timerA };
+    await nextTick();
+    expect(timerB.pause).toHaveBeenCalledTimes(1);
+    expect(timerA.reset).toHaveBeenCalledTimes(2);
+
+    wrapper.unmount();
+    expect(timerA.pause).toHaveBeenCalledTimes(2);
+  });
+
   it("handles single-toast lifecycle focus transitions", async () => {
     type ToastItem = { key: number; content: string };
     const queue: ToastItem[] = [];
