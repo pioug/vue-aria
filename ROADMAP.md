@@ -4643,3 +4643,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress package page for `@vue-aria/tabs` and linked it in docs nav/sidebar/index.
   - added dedicated package record `31d` and marked `@vue-aria/tabs` + `@vue-aria/tabs-state` execution queue items `Complete`.
 - Validation: `npm test -- packages/@vue-aria/tabs/test packages/@vue-aria/tabs-state/test` passed (5 files, 14 tests).
+- Hardened combobox stack TypeScript parity:
+  - normalized `@vue-aria/combobox-state/useComboBoxState` collection typing to support upstream collection interfaces while preserving runtime behavior.
+  - resolved `@vue-aria/combobox/useComboBox` strict typing mismatches for list-data and router option handoff paths.
+  - tightened adapted combobox test handler invocation typing so strict type-checking passes without behavior changes.
+  - aligned `@vue-aria/tabs/useTabPanel` merged props cast for strict TypeScript compatibility.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-aria/combobox/test packages/@vue-aria/tabs/test packages/@vue-aria/tabs-state/test` passed (7 files, 29 tests).

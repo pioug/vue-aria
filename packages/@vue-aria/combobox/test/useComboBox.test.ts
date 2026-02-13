@@ -100,12 +100,12 @@ describe("useComboBox", () => {
     state.open();
     let aria = refresh();
     const enterEvent = event({ key: "Enter" });
-    aria.inputProps.onKeyDown(enterEvent);
+    (aria.inputProps.onKeyDown as (event: any) => void)(enterEvent);
     expect(enterEvent.preventDefault).toHaveBeenCalledTimes(1);
 
     state.close();
     aria = refresh();
-    aria.inputProps.onKeyDown(event({ key: "Enter" }));
+    (aria.inputProps.onKeyDown as (event: any) => void)(event({ key: "Enter" }));
     expect(enterEvent.preventDefault).toHaveBeenCalledTimes(1);
     stop();
   });
@@ -118,15 +118,15 @@ describe("useComboBox", () => {
     (state as any).open = openSpy;
     (state as any).toggle = toggleSpy;
 
-    aria.inputProps.onKeyDown(event({ key: "ArrowDown" }));
+    (aria.inputProps.onKeyDown as (event: any) => void)(event({ key: "ArrowDown" }));
     expect(openSpy).toHaveBeenCalledWith("first", "manual");
-    aria.inputProps.onKeyDown(event({ key: "ArrowUp" }));
+    (aria.inputProps.onKeyDown as (event: any) => void)(event({ key: "ArrowUp" }));
     expect(openSpy).toHaveBeenCalledWith("last", "manual");
 
-    aria.buttonProps.onPress(event({ pointerType: "touch" }));
+    (aria.buttonProps.onPress as (event: any) => void)(event({ pointerType: "touch" }));
     expect(toggleSpy).toHaveBeenCalledWith(null, "manual");
 
-    aria.buttonProps.onPressStart(event({ pointerType: "mouse" }));
+    (aria.buttonProps.onPressStart as (event: any) => void)(event({ pointerType: "mouse" }));
     expect(toggleSpy).toHaveBeenCalledWith(null, "manual");
     stop();
   });
@@ -140,7 +140,7 @@ describe("useComboBox", () => {
         onBlur,
       }
     );
-    aria.inputProps.onBlur(event({ relatedTarget: null }));
+    (aria.inputProps.onBlur as (event: any) => void)(event({ relatedTarget: null }));
 
     expect(onBlur).toHaveBeenCalledTimes(1);
     stop();
@@ -163,8 +163,8 @@ describe("useComboBox", () => {
       const aria = scope.run(() => useComboBox(props as any, state as any)) as ReturnType<
         typeof useComboBox<Item>
       >;
-      aria.buttonProps.onKeyDown(event({ key: "ArrowDown" }));
-      aria.buttonProps.onKeyDown(event({ key: "ArrowUp" }));
+      (aria.buttonProps.onKeyDown as (event: any) => void)(event({ key: "ArrowDown" }));
+      (aria.buttonProps.onKeyDown as (event: any) => void)(event({ key: "ArrowUp" }));
 
       expect(openSpy).toHaveBeenCalledTimes(0);
       expect(toggleSpy).toHaveBeenCalledTimes(0);

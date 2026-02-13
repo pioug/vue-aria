@@ -122,16 +122,24 @@ export function useComboBoxState<T extends object>(
   const initialSelectedKey = ref(listState.selectedKey);
   const initialValue = ref(inputValueRef.value);
 
-  const originalCollection = computed(() => listState.collection as ListCollection<T>);
-  const filteredCollection = computed(() => {
+  const originalCollection = computed<ListCollection<T>>(
+    () => listState.collection as unknown as ListCollection<T>
+  );
+  const filteredCollection = computed<ListCollection<T>>(() => {
     if (props.items != null || !defaultFilter) {
       return originalCollection.value;
     }
 
-    return filterCollection(originalCollection.value as any, inputValueRef.value, defaultFilter) as ListCollection<T>;
+    return filterCollection(
+      originalCollection.value as any,
+      inputValueRef.value,
+      defaultFilter
+    ) as ListCollection<T>;
   });
 
-  const lastCollection = ref<ListCollection<T>>(filteredCollection.value as ListCollection<T>);
+  const lastCollection = ref<ListCollection<T>>(
+    filteredCollection.value as ListCollection<T>
+  );
 
   const triggerState = useOverlayTriggerState({
     isOpen: props.isOpen,
@@ -400,12 +408,12 @@ export function useComboBoxState<T extends object>(
 
   const displayedCollection = computed<ListCollection<T>>(() => {
     if (triggerState.isOpen) {
-      return showAllItems.value
+      return (showAllItems.value
         ? originalCollection.value
-        : filteredCollection.value;
+        : filteredCollection.value) as unknown as ListCollection<T>;
     }
 
-    return lastCollection.value;
+    return lastCollection.value as unknown as ListCollection<T>;
   });
 
   const defaultSelectedKey = computed(
@@ -516,7 +524,7 @@ function filterNodes<T>(
 function getDefaultInputValue(
   defaultInputValue: string | null | undefined,
   selectedKey: Key | null,
-  collection: ListCollection<unknown>
+  collection: { getItem(key: Key): { textValue?: string } | null }
 ) {
   if (toValue(defaultInputValue) == null) {
     if (selectedKey != null) {

@@ -35,6 +35,6 @@ export function useTabPanel<T>(
       role: "tabpanel",
       "aria-describedby": props["aria-describedby"],
       "aria-details": props["aria-details"],
-    }) as Record<string, unknown>,
+    }) as unknown as Record<string, unknown>,
   };
 }

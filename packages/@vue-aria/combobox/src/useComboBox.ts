@@ -80,7 +80,7 @@ export function useComboBox<T>(
     buttonRef
   );
 
-  listData.set(state as object, { id: menuProps.id as string });
+  listData.set(state as any, { id: menuProps.id as string });
 
   const delegate =
     keyboardDelegate ??
@@ -133,7 +133,7 @@ export function useComboBox<T>(
                 item,
                 e,
                 collectionItem.props.href as string,
-                collectionItem.props.routerOptions
+                collectionItem.props.routerOptions as any
               );
             }
             state.close();
