@@ -1,7 +1,8 @@
 import { mount } from "@vue/test-utils";
-import { defineComponent, h } from "vue";
+import { createSSRApp, defineComponent, h } from "vue";
+import { renderToString } from "vue/server-renderer";
 import { describe, expect, it } from "vitest";
-import { SSRProvider, useSSRSafeId } from "../src";
+import { SSRProvider, useIsSSR, useSSRSafeId } from "../src";
 
 const Test = defineComponent({
   name: "SsrIdProbe",
@@ -75,5 +76,24 @@ describe("SSRProvider", () => {
 
     expect(id).toMatch(/^react-aria-\d+$/);
     process.env.NODE_ENV = env;
+  });
+
+  it("returns SSR state during server render", async () => {
+    const Probe = defineComponent({
+      setup() {
+        const isSSR = useIsSSR();
+        return () => h("div", { "data-testid": "state" }, isSSR ? "ssr" : "client");
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        return () => h(SSRProvider, null, { default: () => h(Probe) });
+      },
+    });
+
+    const ssrApp = createSSRApp(App);
+    const html = await renderToString(ssrApp);
+    expect(html).toContain("ssr");
   });
 });

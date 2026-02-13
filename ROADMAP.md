@@ -275,6 +275,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - base provider rendering
     - nested provider rendering
     - deep nested provider rendering
+  - Added adapted server-render state test for `useIsSSR` returning SSR state during server rendering.
 - [x] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2853,3 +2854,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - new `docs/packages/ssr.md` package page
   - docs nav/sidebar/index wiring for `@vue-aria/ssr`
 - Validation: `npm run check` passed, `npm test` passed (124 files, 493 tests).
+- Expanded adapted `@vue-aria/ssr` coverage for:
+  - `useIsSSR` server-render state behavior
+- Validation: `npm run check` passed, `npm test` passed (124 files, 494 tests).
