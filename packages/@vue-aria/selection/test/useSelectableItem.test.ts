@@ -681,4 +681,33 @@ describe("useSelectableItem", () => {
     expect(manager.toggleSelection).not.toHaveBeenCalled();
     expect(manager.setSelectionBehavior).not.toHaveBeenCalled();
   });
+
+  it("prevents drag start after touch interaction when long-press selection is enabled", () => {
+    const manager = createManager({
+      selectionBehavior: "replace",
+      canSelectItem: vi.fn(() => true),
+    });
+    const ref = { current: document.createElement("div") };
+
+    const { itemProps } = useSelectableItem({
+      selectionManager: manager,
+      key: "a",
+      ref,
+      onAction: vi.fn(),
+    });
+
+    const onTouchstart = itemProps.onTouchstart as (event: TouchEvent) => void;
+    onTouchstart({
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+    } as TouchEvent);
+
+    const onDragstartCapture = itemProps.onDragstartCapture as (event: DragEvent) => void;
+    const dragEvent = { preventDefault: vi.fn() } as unknown as DragEvent;
+    onDragstartCapture(dragEvent);
+
+    expect((dragEvent.preventDefault as any).mock.calls.length).toBe(1);
+  });
 });

@@ -250,6 +250,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
 
   if (longPressEnabled) {
     itemProps.onTouchstart = (event: TouchEvent) => {
+      interactionPointerType = "touch";
       clearLongPressTimer();
       longPressTimer = setTimeout(() => {
         const longPressEvent = {
@@ -273,6 +274,12 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
 
     itemProps.onTouchcancel = () => {
       clearLongPressTimer();
+    };
+
+    itemProps.onDragstartCapture = (event: DragEvent) => {
+      if (interactionPointerType === "touch") {
+        event.preventDefault();
+      }
     };
   }
 
@@ -309,6 +316,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
     "onTouchstart",
     "onTouchend",
     "onTouchcancel",
+    "onDragstartCapture",
     "onClick",
     "onDoubleClick",
     "onKeydown",
