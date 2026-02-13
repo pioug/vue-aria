@@ -1641,7 +1641,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Uses adapter-based select state typing; `@vue-aria/form/useFormValidation` is now integrated for hidden-select validation wiring, with additional edge-case parity still pending.
+  - Uses adapter-based select state typing; `@vue-aria/form/useFormValidation` is now integrated for hidden-select validation wiring, and hidden-input fallback now consumes `selectData` defaults for `name`/`form`/`isDisabled`; remaining parity is focused on additional edge-case flows.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -1660,6 +1660,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted typeahead parity coverage for single-selection character-key selection behavior and multiple-selection typeahead suppression.
   - Added adapted `useHiddenSelect` input-event parity coverage ensuring `onInput` mirrors change-driven state updates.
   - Added adapted typeahead guard coverage ensuring an initial Space key does not trigger selection when no search string is active.
+  - Added adapted `HiddenSelect` selectData-fallback parity coverage for `name` propagation in large-collection hidden-input rendering and empty-collection initial form submission behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2585,3 +2586,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - disabled-input short-circuit for native validity snapshot syncing
   - no-op modality mutation when invalid events are already default-prevented
 - Validation: `npm run check` passed, `npm test` passed (118 files, 416 tests).
+- Fixed `@vue-aria/select/HiddenSelect` fallback parity to use resolved hidden-select props (`selectData` defaults) in large-collection and empty-collection render paths.
+- Expanded `@vue-aria/select/HiddenSelect` fallback parity tests for:
+  - `name` fallback from `selectData` in large-collection hidden-input rendering
+  - `name` fallback from `selectData` in empty-collection initial `FormData` value propagation
+- Validation: `npm run check` passed, `npm test` passed (118 files, 418 tests).

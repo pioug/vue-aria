@@ -140,6 +140,26 @@ describe("HiddenSelect component", () => {
     expect(input.attributes("name")).toBe("select");
   });
 
+  it("uses selectData name fallback for large-collection hidden input rendering", () => {
+    const state = createLargeState();
+    state.value = null;
+    state.defaultValue = null;
+    selectData.set(state as object, {
+      name: "fallback-name",
+    });
+
+    const wrapper = mount(HiddenSelect, {
+      props: {
+        state,
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const input = wrapper.find("input");
+    expect(input.exists()).toBe(true);
+    expect(input.attributes("name")).toBe("fallback-name");
+  });
+
   it("keeps initial form data value when collection is empty", () => {
     const state = {
       collection: createCollection([]),
@@ -164,6 +184,37 @@ describe("HiddenSelect component", () => {
 
     const formData = new FormData(form);
     expect(formData.get("select")).toBe("value");
+
+    wrapper.unmount();
+    form.remove();
+  });
+
+  it("keeps initial form data value with selectData name fallback when collection is empty", () => {
+    const state = {
+      collection: createCollection([]),
+      selectionManager: {
+        selectionMode: "single",
+      },
+      value: "value",
+      defaultValue: "value",
+      setValue: () => {},
+    } as any;
+    selectData.set(state as object, {
+      name: "fallback-name",
+    });
+
+    const form = document.createElement("form");
+    document.body.appendChild(form);
+    const wrapper = mount(HiddenSelect, {
+      attachTo: form,
+      props: {
+        state,
+        triggerRef: { current: document.createElement("button") },
+      },
+    });
+
+    const formData = new FormData(form);
+    expect(formData.get("fallback-name")).toBe("value");
 
     wrapper.unmount();
     form.remove();

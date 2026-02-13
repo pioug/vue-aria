@@ -127,6 +127,10 @@ export const HiddenSelect = defineComponent({
     );
 
     return () => {
+      const resolvedName = selectProps.name as string | undefined;
+      const resolvedForm = selectProps.form as string | undefined;
+      const resolvedDisabled = selectProps.disabled as boolean | undefined;
+
       if (props.state.collection?.size <= 300) {
         const optionNodes: any[] = [];
         optionNodes.push(h("option"));
@@ -137,7 +141,7 @@ export const HiddenSelect = defineComponent({
           }
         }
 
-        if ((props.state.collection?.size ?? 0) === 0 && props.name) {
+        if ((props.state.collection?.size ?? 0) === 0 && resolvedName) {
           for (const [index, value] of values.value.entries()) {
             optionNodes.push(h("option", { key: index, value: value ?? "" }));
           }
@@ -150,7 +154,7 @@ export const HiddenSelect = defineComponent({
         );
       }
 
-      if (props.name) {
+      if (resolvedName) {
         const nodes: any[] = [];
         const list = values.value.length === 0 ? [null] : values.value;
         const stateObject = (toRaw(props.state as object) as object) ?? (props.state as object);
@@ -162,9 +166,9 @@ export const HiddenSelect = defineComponent({
               type: validationBehavior === "native" ? "text" : "hidden",
               style: validationBehavior === "native" ? { display: "none" } : undefined,
               autoComplete: selectProps.autoComplete as string | undefined,
-              name: props.name,
-              form: props.form,
-              disabled: props.isDisabled,
+              name: resolvedName,
+              form: resolvedForm,
+              disabled: resolvedDisabled,
               value: value ?? "",
               required: validationBehavior === "native" ? index === 0 && Boolean(selectProps.required) : undefined,
               onChange: () => {},
