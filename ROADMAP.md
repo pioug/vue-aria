@@ -89,7 +89,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tabs-state`: Complete
 - `@vue-aria/grid-state`: Complete
 - `@vue-aria/tree-state`: Not started
-- `@vue-aria/table-state`: Not started
+- `@vue-aria/table-state`: In progress
 - `@vue-aria/calendar-state`: Not started
 - `@vue-aria/datepicker-state`: Not started
 - `@vue-aria/combobox-state`: Complete
@@ -2458,6 +2458,62 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Monitor upstream `@react-aria/grid` for API/test/docs drift and port deltas as needed.
+
+## 31g) Package Record: @vue-aria/table-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/table/src`
+  - `references/react-spectrum/packages/@react-stately/table/test/TableUtils.test.js`
+- Local package path:
+  - `packages/@vue-aria/table-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `TableColumnLayout`
+  - `TableUtils` sizing helpers (`calculateColumnSizes`, static/fraction/width parsers)
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/types.ts`
+  - `src/TableUtils.ts`
+  - `src/TableColumnLayout.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Remaining modules (`TableCollection`, `useTableState`, `useTableColumnResizeState`, `useTreeGridState`, and collection element builders) are pending.
+
+### Tests
+- Total upstream test files: 1 (`TableUtils.test.js`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted column-building and column-resize baseline assertions from upstream `TableUtils.test.js`.
+  - Additional upstream resize edge-case scenarios remain to be ported in follow-up slices.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/table-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- Not applicable for state/layout utility package.
+
+### Visual Parity
+- Not applicable for state/layout utility package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `TableCollection` and `useTableState` as the core table-state foundation.
+2. Port `useTableColumnResizeState` and `useTreeGridState`.
+3. Complete remaining upstream `TableUtils.test.js` resize edge-case scenarios.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -4833,3 +4889,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - marked hook-level visual parity gate complete for current package scope.
 - Validation: `npm run check` passed.
 - Validation: `npm test -- packages/@vue-aria/grid/test` passed (7 files, 23 tests).
+- Started `@vue-aria/table-state` foundational slice:
+  - scaffolded `@vue-aria/table-state` package with initial utility/layout modules `TableUtils` and `TableColumnLayout`.
+  - added `@vue-aria/table-state` path aliases for TypeScript/Vitest and a VitePress package page (`docs/packages/table-state.md`), plus docs nav/sidebar/index links.
+  - added adapted `TableUtils.test` coverage for column-size calculation and baseline resize behavior.
+  - added package record `31g` and marked `@vue-aria/table-state` execution queue status `In progress`.
+- Validation: `npm run check` passed.
+- Validation: `npm test -- packages/@vue-aria/table-state/test` passed (expected after current slice).
