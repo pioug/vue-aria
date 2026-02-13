@@ -234,6 +234,64 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 4. Scaffold docs pages for `@vue-aria/utils` usage and parity notes.
 5. Mark completion only after all package gates pass.
 
+## 5a) Package Record: @vue-aria/ssr
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/ssr/src`
+  - `references/react-spectrum/packages/@react-aria/ssr/test`
+- Local package path: `packages/@vue-aria/ssr`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `SSRProvider`
+  - `useSSRSafeId`
+  - `useIsSSR`
+  - `useId`
+  - `useIdString`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/SSRProvider.ts`
+  - `tsconfig.json` path alias
+- Remaining:
+  - Reconcile edge-case parity with upstream React 18/StrictMode-specific behavior where applicable in Vue.
+  - Verify SSR hydration parity in dedicated server-render tests.
+
+### Tests
+- Total upstream test files: 2 (`SSRProvider.test.js`, `SSRProvider.ssr.test.js`)
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for deterministic IDs in provider and nested-provider trees.
+  - Added adapted tests for environment-dependent no-provider ID prefix behavior:
+    - production mode uses random-prefix format
+    - test mode uses deterministic `react-aria-<n>` format
+- [ ] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [ ] VitePress package page scaffolded
+- [ ] Examples parity complete
+
+### Accessibility
+- Not applicable as non-visual infrastructure package.
+
+### Visual Parity
+- Not applicable.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port adapted SSR render-without-errors test coverage from upstream `SSRProvider.ssr.test.js`.
+2. Add VitePress package docs page with usage and SSR guidance.
+3. Verify `useIsSSR` hydration transition behavior in integration tests.
+
 ## 6) Package Record: @vue-aria/selection
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/selection/src`
@@ -2774,3 +2832,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - restore-event cancellation usage example
   - updated parity notes for nested scope, restore-event, and radio traversal behavior
 - Validation: `npm run check` passed, `npm test` passed (123 files, 488 tests).
+- Improved `@vue-aria/ssr` parity for no-provider id behavior:
+  - aligned `useSSRSafeId` test-mode prefix behavior (`react-aria-<n>`)
+  - preserved random-prefix behavior outside providers in production mode
+- Expanded adapted `@vue-aria/ssr/SSRProvider` tests for:
+  - deterministic nested-provider id shape parity
+  - no-provider test/prod prefix-branch behavior
+- Added dedicated `@vue-aria/ssr` package record to roadmap tracking.
+- Validation: `npm run check` passed, `npm test` passed (123 files, 490 tests).

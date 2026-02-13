@@ -36,7 +36,9 @@ function nextId(ctx: SSRContextValue, defaultId?: string): string {
   }
 
   ctx.current += 1;
-  const prefix = ctx.prefix ? `react-aria${ctx.prefix}` : "react-aria";
+  const prefix = ctx === defaultContext && process.env.NODE_ENV === "test"
+    ? "react-aria"
+    : `react-aria${ctx.prefix}`;
   return `${prefix}-${ctx.current}`;
 }
 
