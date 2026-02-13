@@ -22,6 +22,7 @@ export default defineConfig({
       { text: "SearchField", link: "/packages/searchfield" },
       { text: "Progress", link: "/packages/progress" },
       { text: "Meter", link: "/packages/meter" },
+      { text: "Dialog", link: "/packages/dialog" },
     ],
     sidebar: [
       {
@@ -43,6 +44,7 @@ export default defineConfig({
           { text: "@vue-aria/searchfield", link: "/packages/searchfield" },
           { text: "@vue-aria/progress", link: "/packages/progress" },
           { text: "@vue-aria/meter", link: "/packages/meter" },
+          { text: "@vue-aria/dialog", link: "/packages/dialog" },
         ],
       },
     ],

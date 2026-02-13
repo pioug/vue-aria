@@ -91,6 +91,9 @@ export default defineConfig({
       ),
       "@vue-aria/meter": fileURLToPath(
         new URL("./packages/@vue-aria/meter/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/dialog": fileURLToPath(
+        new URL("./packages/@vue-aria/dialog/src/index.ts", import.meta.url)
       )
     }
   }

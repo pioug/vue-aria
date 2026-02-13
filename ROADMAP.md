@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/meter`
+- Current focus package: `@vue-aria/dialog`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -58,7 +58,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/calendar`: Not started
 - `@vue-aria/datepicker`: Not started
 - `@vue-aria/breadcrumbs`: Not started
-- `@vue-aria/dialog`: Not started
+- `@vue-aria/dialog`: In progress
 - `@vue-aria/tooltip`: Not started
 - `@vue-aria/progress`: In progress
 - `@vue-aria/meter`: In progress
@@ -1116,7 +1116,57 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum meter component implementations.
 2. Continue queue progression to overlay/navigation packages.
 
-## 22) Session Log
+## 22) Package Record: @vue-aria/dialog
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/dialog/src`
+  - `references/react-spectrum/packages/@react-aria/dialog/test/useDialog.test.js`
+- Local package path:
+  - `packages/@vue-aria/dialog`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useDialog`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useDialog.ts`
+  - `tsconfig.json` path alias
+- Open adaptation note:
+  - `useOverlayFocusContain` integration is deferred until `@vue-aria/overlays` parity slice.
+
+### Tests
+- Total upstream test files: 1 (`useDialog.test.js`)
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for default/alertdialog roles and mount-focus behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/dialog.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Wire overlay focus containment parity once overlays package is ported
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Integrate `useOverlayFocusContain` when `@vue-aria/overlays` is ported.
+2. Validate dialog behavior in downstream Spectrum overlay/dialog components.
+
+## 23) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1387,3 +1437,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted meter tests for role fallback and aria value forwarding behavior.
 - Added VitePress docs page for `@vue-aria/meter` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (73 files, 228 tests).
+- Started `@vue-aria/dialog` package:
+  - `useDialog`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted dialog tests for role behavior and focus management semantics.
+- Added VitePress docs page for `@vue-aria/dialog` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (74 files, 232 tests).

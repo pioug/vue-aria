@@ -35,7 +35,8 @@
       "@vue-aria/searchfield-state": ["packages/@vue-aria/searchfield-state/src/index.ts"],
       "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
       "@vue-aria/progress": ["packages/@vue-aria/progress/src/index.ts"],
-      "@vue-aria/meter": ["packages/@vue-aria/meter/src/index.ts"]
+      "@vue-aria/meter": ["packages/@vue-aria/meter/src/index.ts"],
+      "@vue-aria/dialog": ["packages/@vue-aria/dialog/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
