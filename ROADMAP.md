@@ -801,6 +801,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - composable modules
   - `tsconfig.json` path aliases
+- [x] Shared validation parity update:
+  - `useCheckboxGroupState` now routes validation through `@vue-aria/form-state/useFormValidationState`.
+  - Built-in required/item invalid state now emits `ValidityState` details compatible with shared form-state filtering/commit semantics.
 
 ### Tests
 - Total upstream test files: 1 (`@react-aria/checkbox`) + state package behavior from source
@@ -809,6 +812,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Adapted upstream checkbox group behavior checks for Vue composable usage.
   - Added checkbox-state tests for controlled selection and required-validation reactivity.
+  - Added checkbox-state native validation commit-queue coverage (`validationBehavior='native'` + `updateValidation`/`commitValidation` flow).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -826,8 +830,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Deepen validation semantics after `@vue-aria/form` and related state ports land.
-2. Port remaining checkbox-edge assertions as downstream consumers are introduced.
+1. Port remaining checkbox-edge assertions as downstream consumers are introduced.
+2. Validate server-error context parity once checkbox-state exposes upstream-equivalent error-key wiring.
 
 ## 16) Package Record: @vue-aria/radio (+ @vue-aria/radio-state)
 - Upstream source path(s):
@@ -853,6 +857,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - composable modules
   - `tsconfig.json` path aliases
+- [x] Shared validation parity update:
+  - `useRadioGroupState` now routes validation through `@vue-aria/form-state/useFormValidationState`.
+  - Built-in required state now emits `ValidityState` details compatible with shared form-state filtering/commit semantics.
 
 ### Tests
 - Total upstream test files: none in `@react-aria/radio` reference package
@@ -861,6 +868,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted parity tests for group role/ARIA wiring, selection state updates, tab index semantics, and keyboard arrow navigation.
   - Added radio-state tests for controlled selection, disabled/read-only guards, and required validation behavior.
+  - Added radio-state native validation commit-queue coverage (`validationBehavior='native'` + `updateValidation`/`commitValidation` flow).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -879,7 +887,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port downstream Spectrum radio components for visual/interaction parity.
-2. Deepen validation semantics after form package ports.
+2. Validate server-error context parity once radio-state exposes upstream-equivalent error-key wiring.
 
 ## 17) Package Record: @vue-aria/switch
 - Upstream source path(s):
@@ -2479,3 +2487,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Swiss grouping apostrophe parsing in CHF currency format
   - Arabic-Indic digit parsing in `ar-EG`
 - Validation: `npm run check` passed, `npm test` passed (117 files, 376 tests).
+- Hardened shared validation parity in `checkbox-state` and `radio-state`:
+  - built-in validation now emits `ValidityState` details compatible with `@vue-aria/form-state` native commit queue semantics.
+- Expanded state-package parity tests:
+  - `@vue-aria/checkbox-state` native validation commit-queue behavior
+  - `@vue-aria/radio-state` native validation commit-queue behavior
+- Validation: `npm run check` passed, `npm test` passed (117 files, 378 tests).

@@ -1,3 +1,4 @@
+import { nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useRadioGroupState } from "../src";
 
@@ -29,5 +30,20 @@ describe("useRadioGroupState", () => {
     expect(state.isInvalid).toBe(true);
     state.setSelectedValue("dragons");
     expect(state.isInvalid).toBe(false);
+  });
+
+  it("queues native validation updates until commit", async () => {
+    const state = useRadioGroupState({ validationBehavior: "native" });
+
+    state.updateValidation({
+      isInvalid: true,
+      validationErrors: ["Invalid radio group"],
+      validationDetails: null,
+    });
+
+    expect(state.isInvalid).toBe(false);
+    state.commitValidation();
+    await nextTick();
+    expect(state.isInvalid).toBe(true);
   });
 });

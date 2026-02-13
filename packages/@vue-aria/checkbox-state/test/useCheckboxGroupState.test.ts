@@ -1,3 +1,4 @@
+import { nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useCheckboxGroupState } from "../src";
 
@@ -41,6 +42,21 @@ describe("useCheckboxGroupState", () => {
     expect(state.isInvalid).toBe(false);
 
     state.removeValue("dragons");
+    expect(state.isInvalid).toBe(true);
+  });
+
+  it("queues native validation updates until commit", async () => {
+    const state = useCheckboxGroupState({ validationBehavior: "native" });
+
+    state.updateValidation({
+      isInvalid: true,
+      validationErrors: ["Invalid checkbox group"],
+      validationDetails: null,
+    });
+
+    expect(state.isInvalid).toBe(false);
+    state.commitValidation();
+    await nextTick();
     expect(state.isInvalid).toBe(true);
   });
 });

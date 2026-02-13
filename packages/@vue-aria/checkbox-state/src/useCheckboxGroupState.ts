@@ -1,4 +1,5 @@
 import {
+  VALID_VALIDITY_STATE,
   useFormValidationState,
   type ValidationResult as FormValidationResult,
 } from "@vue-aria/form-state";
@@ -54,11 +55,19 @@ export function useCheckboxGroupState(props: CheckboxGroupProps = {}): CheckboxG
     const itemIsInvalid = merged.some((v) => v.isInvalid);
     const requiredIsInvalid = Boolean(props.isRequired) && selectedValuesRef.value.length === 0;
     const isInvalid = itemIsInvalid || requiredIsInvalid;
+    const validationDetails = isInvalid
+      ? {
+        ...VALID_VALIDITY_STATE,
+        customError: true,
+        valueMissing: requiredIsInvalid,
+        valid: false,
+      }
+      : VALID_VALIDITY_STATE;
 
     return {
       isInvalid,
       validationErrors: isInvalid ? ["Invalid checkbox group value"] : [],
-      validationDetails: null,
+      validationDetails,
     };
   };
   const validation = useFormValidationState<string[]>({

@@ -1,4 +1,5 @@
 import {
+  VALID_VALIDITY_STATE,
   useFormValidationState,
   type ValidationResult as FormValidationResult,
 } from "@vue-aria/form-state";
@@ -55,11 +56,19 @@ export function useRadioGroupState(props: RadioGroupProps = {}): RadioGroupState
   const builtinValidation = (): ValidationResult => {
     const requiredInvalid = Boolean(props.isRequired) && !selectedValueRef.value;
     const isInvalid = requiredInvalid;
+    const validationDetails = isInvalid
+      ? {
+        ...VALID_VALIDITY_STATE,
+        customError: true,
+        valueMissing: requiredInvalid,
+        valid: false,
+      }
+      : VALID_VALIDITY_STATE;
 
     return {
       isInvalid,
       validationErrors: isInvalid ? ["Invalid radio group value"] : [],
-      validationDetails: null,
+      validationDetails,
     };
   };
   const validation = useFormValidationState<string | null>({
