@@ -457,8 +457,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 6
-- Passing test files: 6
+- Ported test files: 7
+- Passing test files: 7
 - Test parity notes:
   - Added adapted tests for virtual focus event dispatch/focus movement and focusable walker traversal.
   - Added adapted tests for `useFocusRing` focus/focus-visible state transitions and `within` handler path.
@@ -479,6 +479,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - containment skipping hidden/non-tabbable descendants
     - active-scope enforcement across multiple contained scopes
     - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
+  - Added adapted focus-manager parity tests for `FocusScope`:
+    - forward/backward traversal with and without wrap
+    - tabbable-only traversal behavior
+    - `from` container traversal semantics
+    - accept-filter traversal skipping behavior
   - Full upstream focus test migration remains pending.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2731,3 +2736,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - restore-focus behavior when a child is focused during scope mount
   - containment traversal through tabbable `contenteditable` nodes
 - Validation: `npm run check` passed, `npm test` passed (122 files, 475 tests).
+- Expanded `@vue-aria/focus` focus-manager parity with adapted upstream behavior tests for:
+  - forward/backward traversal with and without wrap
+  - tabbable-only traversal filtering
+  - `from`-based traversal from container/group elements
+  - accept-filter traversal skipping semantics
+- Validation: `npm run check` passed, `npm test` passed (123 files, 483 tests).
