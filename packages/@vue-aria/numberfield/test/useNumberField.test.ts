@@ -322,6 +322,28 @@ describe("useNumberField hook", () => {
     scope.stop();
   });
 
+  it("continues propagation for non-Enter keydown events", () => {
+    const state = createState();
+    const ref = { current: document.createElement("input") as HTMLInputElement | null };
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField({ "aria-label": "Quantity" }, state as any, ref)
+    )!;
+    const continuePropagation = vi.fn();
+
+    (result.inputProps.onKeyDown as (event: KeyboardEvent & { continuePropagation?: () => void; nativeEvent?: any }) => void)({
+      key: "ArrowUp",
+      preventDefault: vi.fn(),
+      continuePropagation,
+      nativeEvent: { isComposing: false },
+    } as unknown as KeyboardEvent & { continuePropagation?: () => void; nativeEvent?: any });
+
+    expect(continuePropagation).toHaveBeenCalledTimes(1);
+    expect(state.commit).not.toHaveBeenCalled();
+    expect(state.commitValidation).not.toHaveBeenCalled();
+    scope.stop();
+  });
+
   it("announces normalized value on blur when commit changes the input value", () => {
     const state = createState();
     const input = document.createElement("input");

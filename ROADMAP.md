@@ -2050,6 +2050,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
   - Added adapted blur commit/announce timing coverage: announce only when commit normalizes the rendered input value.
   - Added adapted interaction parity coverage for stepper press-start focus heuristics (touch targets vs focused input) and Enter key commit handling while respecting IME composition state.
+  - Added adapted keydown propagation parity coverage for non-Enter keys (`continuePropagation` passthrough path).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3256,3 +3257,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted live-announcer tests for focused value change announcements, textValue announcements, and blur no-op behavior
   - added adapted touch interaction coverage for pointer-cancel stopping behavior and repeat stop after press-up lifecycle
 - Validation: `npm run check` passed, `npm test` passed (126 files, 592 tests).
+- Expanded `@vue-aria/numberfield` keyboard propagation parity:
+  - aligned non-Enter key handling to call `continuePropagation` from the chained keydown handler
+  - added adapted test coverage asserting non-Enter keydown paths propagate while Enter paths retain commit/validation behavior
+- Validation: `npm run check` passed, `npm test` passed (126 files, 593 tests).

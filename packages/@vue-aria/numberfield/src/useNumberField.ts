@@ -216,13 +216,17 @@ export function useNumberField(
   };
 
   const domProps = filterDOMProps(props);
-  const onKeyDownEnter = (event: KeyboardEvent & { nativeEvent?: { isComposing?: boolean } }) => {
+  const onKeyDownEnter = (
+    event: KeyboardEvent & { nativeEvent?: { isComposing?: boolean }; continuePropagation?: () => void }
+  ) => {
     if (event.nativeEvent?.isComposing) {
       return;
     }
     if (event.key === "Enter") {
       commit();
       commitValidation();
+    } else {
+      event.continuePropagation?.();
     }
   };
 
