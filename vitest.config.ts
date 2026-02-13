@@ -110,6 +110,9 @@ export default defineConfig({
       "@vue-aria/numberfield": fileURLToPath(
         new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/slider": fileURLToPath(
+        new URL("./packages/@vue-aria/slider/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/progress": fileURLToPath(
         new URL("./packages/@vue-aria/progress/src/index.ts", import.meta.url)
       ),

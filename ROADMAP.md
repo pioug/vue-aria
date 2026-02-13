@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/numberfield`
+- Current focus package: `@vue-aria/slider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -51,7 +51,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/form`: In progress
 - `@vue-aria/spinbutton`: In progress
 - `@vue-aria/numberfield`: In progress
-- `@vue-aria/slider`: Not started
+- `@vue-aria/slider`: In progress
 - `@vue-aria/link`: In progress
 - `@vue-aria/menu`: In progress
 - `@vue-aria/listbox`: In progress
@@ -2493,7 +2493,65 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Validate F6/tab ordering in downstream Vue Spectrum toast story harness once available.
 
-## 41) Session Log
+## 41) Package Record: @vue-aria/slider
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/slider/src`
+  - `references/react-spectrum/packages/@react-aria/slider/test`
+- Local package path:
+  - `packages/@vue-aria/slider`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useSlider`
+  - `useSliderThumb`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useSlider.ts`
+  - `src/useSliderThumb.ts`
+  - `src/utils.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Current hook slice uses upstream-aligned state interfaces while `@vue-aria/slider-state` is not ported yet; full interaction parity requires deeper integration once slider state lands.
+
+### Tests
+- Total upstream test files: 2 (`useSlider.test.js`, `useSliderThumb.test.js`)
+- Ported test files: 2 (adapted)
+- Passing test files: 2
+- Test parity notes:
+  - Added adapted `useSlider` coverage for label/group/output prop wiring and track click/drag behavior.
+  - Added adapted `useSlider` coverage for disabled-track no-op behavior.
+  - Added adapted `useSliderThumb` coverage for range input prop wiring, change-event value parsing, and `PageUp` keyboard behavior.
+  - Added adapted `useSliderThumb` coverage for merged slider/thumb `aria-describedby` metadata.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/slider.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full keyboard/pointer/touch multi-thumb interaction parity against upstream test suite.
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `@react-stately/slider` state package and wire end-to-end integration parity.
+2. Expand `useSlider`/`useSliderThumb` tests toward full upstream track/thumb interaction matrix (pointer, mouse, touch, RTL, stacked thumbs, and multi-thumb constraints).
+3. Expand docs/examples toward upstream story parity with range, orientation, disabled, and labeled-thumb variants.
+
+## 42) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -3807,3 +3865,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for private-state passthrough, validationState compatibility mapping, native reset/commit queue cancellation, and multi-name server-error aggregation.
 - Expanded `@vue-aria/form` native-validation branch parity:
   - added adapted tests for multi-error custom-validity joining, `aria`-mode native-sync no-op behavior, existing-title preservation, and reset-patch cleanup restoration.
+- Started `@vue-aria/slider` package parity slice:
+  - ported `useSlider`, `useSliderThumb`, and slider shared utils (`sliderData`, `getSliderThumbId`) with upstream-aligned module names and API surface.
+  - added adapted `useSlider` tests for label/group wiring, closest-thumb track selection/drag behavior, and disabled no-op guard paths.
+  - added adapted `useSliderThumb` tests for range input prop wiring, change parsing behavior, keyboard `PageUp` handling, and merged slider/thumb description metadata.
+  - added VitePress docs page (`docs/packages/slider.md`) and wired docs nav/sidebar/index links.
+  - added package-level roadmap record and execution queue tracking entry.
+- Validation: `npm run check` passed, `npm test` passed (140 files, 723 tests).

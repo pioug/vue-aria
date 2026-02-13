@@ -42,6 +42,7 @@
       "@vue-aria/spinbutton": ["packages/@vue-aria/spinbutton/src/index.ts"],
       "@vue-aria/numberfield-state": ["packages/@vue-aria/numberfield-state/src/index.ts"],
       "@vue-aria/numberfield": ["packages/@vue-aria/numberfield/src/index.ts"],
+      "@vue-aria/slider": ["packages/@vue-aria/slider/src/index.ts"],
       "@vue-aria/progress": ["packages/@vue-aria/progress/src/index.ts"],
       "@vue-aria/meter": ["packages/@vue-aria/meter/src/index.ts"],
       "@vue-aria/dialog": ["packages/@vue-aria/dialog/src/index.ts"],
