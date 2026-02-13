@@ -135,6 +135,73 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("clears selection on Escape when allowed", () => {
+    const manager = createManager({
+      isEmpty: false,
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = {
+        key: "Escape",
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+        shiftKey: false,
+        target: ref.current,
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+      } as unknown as KeyboardEvent;
+
+      onKeydown(event);
+
+      expect(manager.clearSelection).toHaveBeenCalledTimes(1);
+      expect((event.preventDefault as any).mock.calls.length).toBe(1);
+      expect((event.stopPropagation as any).mock.calls.length).toBe(1);
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it("does not clear selection on Escape when escape behavior is none", () => {
+    const manager = createManager({
+      isEmpty: false,
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+        escapeKeyBehavior: "none",
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const event = new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true });
+      Object.defineProperty(event, "target", { value: ref.current });
+
+      onKeydown(event);
+
+      expect(manager.clearSelection).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("does not replace selection when navigating with ctrl+arrow", () => {
     const manager = createManager({
       focusedKey: "a",
@@ -206,6 +273,54 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("extends selection with ctrl+shift on Home and End in multiple mode", () => {
+    const manager = createManager({
+      selectionMode: "multiple",
+      focusedKey: "b",
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const homeEvent = new KeyboardEvent("keydown", {
+        key: "Home",
+        ctrlKey: true,
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(homeEvent, "target", { value: ref.current });
+      onKeydown(homeEvent);
+
+      const endEvent = new KeyboardEvent("keydown", {
+        key: "End",
+        ctrlKey: true,
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(endEvent, "target", { value: ref.current });
+      onKeydown(endEvent);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("z");
+      expect(manager.extendSelection).toHaveBeenCalledWith("a");
+      expect(manager.extendSelection).toHaveBeenCalledWith("z");
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("marks manager focused on focus events", () => {
     const manager = createManager();
     const ref = { current: document.createElement("div") };
@@ -231,6 +346,41 @@ describe("useSelectableCollection", () => {
       expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
     } finally {
       scope.stop();
+    }
+  });
+
+  it("focuses last selected key when focus enters from following element", () => {
+    const manager = createManager({
+      firstSelectedKey: "a",
+      lastSelectedKey: "z",
+    });
+    const ref = { current: document.createElement("div") };
+    const following = document.createElement("button");
+    document.body.append(ref.current, following);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus", { relatedTarget: following });
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: ref.current });
+
+      onFocus(focusEvent);
+
+      expect(manager.setFocused).toHaveBeenCalledWith(true);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("z");
+    } finally {
+      scope.stop();
+      ref.current.remove();
+      following.remove();
     }
   });
 

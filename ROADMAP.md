@@ -272,7 +272,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted tests for keyboard delegate navigation/search behavior.
   - Added adapted tests for typeahead buffer, focus movement, and debounce reset.
-  - Upstream `useSelectableCollection` test file remains pending until those modules are ported.
+  - Added adapted `useSelectableCollection` interaction coverage for:
+    - Escape clear-selection behavior and disabled clear branch
+    - Home/End range-extension behavior with ctrl+shift modifiers
+    - focus-entry strategy selecting the last selected key when entering from a following element
+  - Upstream `useSelectableCollection` component-level pointer/touch semantics remain pending full listbox/story parity harness migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -2632,3 +2636,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useEnterAnimation` staying active until animation promises resolve
   - `useExitAnimation` exit lifecycle completion and interrupted-close recovery
 - Validation: `npm run check` passed, `npm test` passed (121 files, 438 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` parity with adapted tests for:
+  - Escape clear-selection behavior and non-clearing `escapeKeyBehavior: "none"` branch
+  - Home/End ctrl+shift range-extension behavior in multiple selection mode
+  - focus entry from following elements selecting `lastSelectedKey`
+- Validation: `npm run check` passed, `npm test` passed (121 files, 442 tests).
