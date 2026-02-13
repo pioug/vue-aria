@@ -35,7 +35,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/focus`: In progress
 - `@vue-aria/live-announcer`: In progress
 - `@vue-aria/overlays`: Not started
-- `@vue-aria/visually-hidden`: Not started
+- `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: Not started
 - `@vue-aria/button`: Not started
 - `@vue-aria/toggle`: Not started
@@ -510,7 +510,56 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 2. Expand integration tests when downstream packages consume live announcer.
 3. Finalize docs examples with end-to-end component usage.
 
-## 10) Session Log
+## 10) Package Record: @vue-aria/visually-hidden
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/visually-hidden/src`
+  - `references/react-spectrum/packages/@react-aria/visually-hidden/test`
+- Local package path: `packages/@vue-aria/visually-hidden`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream APIs:
+  - `useVisuallyHidden`
+  - `VisuallyHidden`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/VisuallyHidden.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for hidden styles by default and focus-reveal behavior when `isFocusable` is set.
+- [x] All relevant upstream tests migrated
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/visually-hidden.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Cross-browser style/focus reveal parity validation
+
+### Visual Parity
+- Not applicable for this utility package beyond hidden-style behavior.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Validate integration behavior in downstream component packages.
+2. Expand docs with side-by-side Vue usage examples from upstream scenarios.
+
+## 11) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -698,3 +747,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted live announcer tests for assertive/polite messages, labelled payloads, clear behavior, and destroy behavior.
 - Added VitePress docs page for `@vue-aria/live-announcer` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (56 files, 159 tests).
+- Started `@vue-aria/visually-hidden` package:
+  - `useVisuallyHidden`
+  - `VisuallyHidden`
+  - package scaffolding and tsconfig alias wiring
+- Added adapted visually-hidden tests from upstream intent for hidden and focus-reveal behavior.
+- Updated `useFocusWithin` to include bubbling `focusin/focusout` handlers for Vue DOM parity in child-focus flows.
+- Added VitePress docs page for `@vue-aria/visually-hidden` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (57 files, 161 tests).

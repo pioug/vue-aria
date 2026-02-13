@@ -81,6 +81,8 @@ export function useFocusWithin(props: FocusWithinProps): FocusWithinResult {
     focusWithinProps: {
       onFocus,
       onBlur,
+      onFocusin: onFocus,
+      onFocusout: onBlur,
     },
   };
 }
