@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 147 |
-| Passing tests | 147 |
+| Ported tests | 148 |
+| Passing tests | 148 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -103,7 +103,7 @@
 | @vue-spectrum/image | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/image | packages/@react-spectrum/image |
 | @vue-spectrum/inlinealert | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/inlinealert | packages/@react-spectrum/inlinealert |
 | @vue-spectrum/label | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/label | packages/@react-spectrum/label |
-| @vue-spectrum/labeledvalue | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/labeledvalue | packages/@react-spectrum/labeledvalue |
+| @vue-spectrum/labeledvalue | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/labeledvalue | packages/@react-spectrum/labeledvalue |
 | @vue-spectrum/layout | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/layout | packages/@react-spectrum/layout |
 | @vue-spectrum/link | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/link | packages/@react-spectrum/link |
 | @vue-spectrum/list | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/list | packages/@react-spectrum/list |
