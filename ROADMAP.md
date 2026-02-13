@@ -2063,6 +2063,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Expanded integration coverage for touch stepper interactions:
     - no-op increment path for touch `onPressStart` + `onPressEnd` without `onPressUp`
     - single increment path for touch `onPressStart` + `onPressUp` + `onPressEnd`
+    - pointer-cancel path coverage ensuring touch repeat timers are canceled without increment side effects
   - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
   - Added adapted iOS-specific behavior coverage for `aria-roledescription` suppression.
   - Added adapted platform input-mode parity coverage for iPhone and Android branches, including negative-number and decimal/fraction-digit combinations.
@@ -2094,7 +2095,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining numberfield interaction parity (touch cancel/repeat cadence and commit/announce timing edge cases).
+1. Port remaining numberfield interaction parity (touch repeat cadence and commit/announce timing edge cases).
 2. Expand native-invalid integration parity for first-invalid ordering edge cases with disabled/non-validatable siblings.
 
 ## 35) Package Record: @vue-aria/numberfield-state
@@ -3368,3 +3369,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added locale-provider usage examples to `docs/packages/searchfield.md`, `docs/packages/breadcrumbs.md`, and `docs/packages/spinbutton.md`
   - synchronized roadmap next actions to target broader story/example parity beyond localized-label baselines
 - Validation: `npm run check` passed, `npm test` passed (130 files, 623 tests).
+- Expanded `@vue-aria/numberfield` touch-cancel integration parity:
+  - added adapted integration coverage for `pointercancel` during touch press sequences to ensure no unintended increment commits
+- Validation: `npm run check` passed, `npm test` passed (130 files, 624 tests).

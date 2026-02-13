@@ -1,9 +1,13 @@
 import { effectScope } from "vue";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { useNumberField } from "../src";
 import { useNumberFieldState } from "@vue-aria/numberfield-state";
 
 describe("useNumberField integration with useNumberFieldState", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("increments via stepper press handlers", () => {
     const onChange = vi.fn();
     const input = document.createElement("input");
@@ -96,6 +100,37 @@ describe("useNumberField integration with useNumberFieldState", () => {
 
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith(3);
+    scope.stop();
+    input.remove();
+    button.remove();
+  });
+
+  it("cancels touch repeat when pointercancel fires", () => {
+    vi.useFakeTimers();
+    const onChange = vi.fn();
+    const input = document.createElement("input");
+    const button = document.createElement("button");
+    document.body.appendChild(input);
+    document.body.appendChild(button);
+
+    const scope = effectScope();
+    const result = scope.run(() => {
+      const state = useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 2,
+        onChange,
+      });
+      return useNumberField({ "aria-label": "Quantity" }, state as any, { current: input });
+    })!;
+
+    (result.incrementButtonProps.onPressStart as (event: any) => void)({
+      pointerType: "touch",
+      target: button,
+    });
+    window.dispatchEvent(new Event("pointercancel"));
+    vi.advanceTimersByTime(700);
+
+    expect(onChange).not.toHaveBeenCalled();
     scope.stop();
     input.remove();
     button.remove();
