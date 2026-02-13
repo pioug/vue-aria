@@ -152,7 +152,9 @@ describe("useMenuTrigger", () => {
         }
       | undefined;
     expect(longPressOptions?.isDisabled).toBe(false);
-    expect(longPressOptions?.accessibilityDescription).toBe("Long press to open menu");
+    expect(longPressOptions?.accessibilityDescription).toBe(
+      "Long press or press Alt + ArrowDown to open menu"
+    );
 
     longPressOptions?.onLongPressStart?.();
     expect(state.close).toHaveBeenCalledTimes(1);

@@ -1809,7 +1809,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Open adaptation note:
   - `useSafelyMouseToSubmenu` now tracks interaction-modality transitions and includes jsdom-compatible pointerover fallback dispatch; remaining parity is focused on deeper submenu trigger integration cases.
-  - `useMenuTrigger` long-press path now uses localized string formatter wiring for accessibility descriptions (current dictionary remains minimal and should be expanded to full upstream locale coverage in later parity passes).
+  - `useMenuTrigger` long-press path now uses localized string formatter wiring with full upstream locale dictionary coverage from `@react-aria/menu/intl`.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -3341,4 +3341,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/spinbutton` locale dictionary parity:
   - replaced inline en-US-only strings with generated upstream intl bundle from `@react-aria/spinbutton/intl`
   - wired `useSpinButton` to consume the full locale set via `intlMessages.ts`
+- Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).
+- Expanded `@vue-aria/menu` locale dictionary parity:
+  - replaced inline en-US long-press message strings with generated upstream intl bundle from `@react-aria/menu/intl`
+  - updated `useMenuTrigger` long-press accessibility description expectation to upstream message text
 - Validation: `npm run check` passed, `npm test` passed (130 files, 620 tests).

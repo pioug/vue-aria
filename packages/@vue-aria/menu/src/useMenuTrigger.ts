@@ -3,6 +3,7 @@ import { useLongPress, type PressProps } from "@vue-aria/interactions";
 import { useOverlayTrigger } from "@vue-aria/overlays";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type { AriaMenuOptions } from "./useMenu";
+import { intlMessages } from "./intlMessages";
 
 export interface AriaMenuTriggerProps {
   type?: "menu" | "listbox";
@@ -22,12 +23,6 @@ export interface MenuTriggerAria<T> {
   menuTriggerProps: Record<string, unknown>;
   menuProps: AriaMenuOptions<T>;
 }
-
-const intlMessages = {
-  "en-US": {
-    longPressMessage: "Long press to open menu",
-  },
-};
 
 function isDefaultPrevented(event: KeyboardEvent & { isDefaultPrevented?: () => boolean }) {
   if (typeof event.isDefaultPrevented === "function") {
