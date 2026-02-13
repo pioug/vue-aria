@@ -31,6 +31,45 @@ export interface FocusScopeProps {
 
 const RESTORE_FOCUS_EVENT = "react-aria-focus-scope-restore";
 
+function isRadioInput(element: Element): element is HTMLInputElement {
+  return element instanceof HTMLInputElement && element.type === "radio";
+}
+
+function getRadioGroup(node: HTMLInputElement): HTMLInputElement[] {
+  if (!node.name) {
+    return [node];
+  }
+
+  if (node.form) {
+    const namedItem = node.form.elements.namedItem(node.name);
+    if (namedItem instanceof RadioNodeList) {
+      return Array.from(namedItem).filter(
+        (element): element is HTMLInputElement => element instanceof HTMLInputElement
+      );
+    }
+
+    if (namedItem instanceof HTMLInputElement) {
+      return [namedItem];
+    }
+  }
+
+  return Array.from(node.ownerDocument.querySelectorAll("input[type=\"radio\"]")).filter(
+    (element): element is HTMLInputElement =>
+      element instanceof HTMLInputElement && element.name === node.name && !element.form
+  );
+}
+
+function isTabbableRadio(node: HTMLInputElement): boolean {
+  if (!node.name) {
+    return true;
+  }
+
+  const group = getRadioGroup(node);
+  const checked = group.find((radio) => radio.checked);
+
+  return !checked || checked === node;
+}
+
 export function getFocusableTreeWalker(
   root: Element,
   opts?: FocusManagerOptions,
@@ -44,6 +83,10 @@ export function getFocusableTreeWalker(
     acceptNode(node) {
       if (nodeContains(opts?.from, node)) {
         return NodeFilter.FILTER_REJECT;
+      }
+
+      if (opts?.tabbable && isRadioInput(node as Element) && !isTabbableRadio(node as HTMLInputElement)) {
+        return NodeFilter.FILTER_SKIP;
       }
 
       if (filter(node as Element) && (!opts?.accept || opts.accept(node as Element))) {

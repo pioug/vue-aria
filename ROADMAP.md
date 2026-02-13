@@ -482,6 +482,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - modifier-key containment no-op behavior (`Alt+Tab` does not wrap focus)
     - restore-focus cancellation via `react-aria-focus-scope-restore`
     - nested restore-focus event propagation isolation
+    - containment traversal skips non-selected radios in same group
   - Added adapted focus-manager parity tests for `FocusScope`:
     - forward/backward traversal with and without wrap
     - tabbable-only traversal behavior
@@ -2762,3 +2763,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - restore-focus cancellation custom event behavior
   - nested scope restore-event propagation isolation
 - Validation: `npm run check` passed, `npm test` passed (123 files, 487 tests).
+- Improved `@vue-aria/focus/getFocusableTreeWalker` tabbable-radio parity:
+  - skips non-selected radios in same-name groups for tabbable traversal
+  - supports both form-owned groups and same-document non-form groups
+- Expanded `@vue-aria/focus/FocusScope` containment tests for:
+  - tab traversal skipping non-selected radios in the same group
+- Validation: `npm run check` passed, `npm test` passed (123 files, 488 tests).

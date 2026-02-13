@@ -438,6 +438,71 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("skips non-selected radios in the same group during containment tab traversal", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("button", { id: "button1" }, "button"),
+          h("form", [
+            h("fieldset", [
+              h("legend", "Select a drone"),
+              h("div", [
+                h("input", { id: "huey", type: "radio", name: "drone", checked: true }),
+                h("label", { for: "huey" }, "Huey"),
+              ]),
+              h("div", [
+                h("input", { id: "dewey", type: "radio", name: "drone" }),
+                h("label", { for: "dewey" }, "Dewey"),
+              ]),
+              h("div", [
+                h("input", { id: "louie", type: "radio", name: "drone" }),
+                h("label", { for: "louie" }, "Louie"),
+              ]),
+            ]),
+          ]),
+          h("button", { id: "button2" }, "button"),
+        ],
+      },
+    });
+
+    const button1 = wrapper.get("#button1").element as HTMLButtonElement;
+    const selectedRadio = wrapper.get("#huey").element as HTMLInputElement;
+    const button2 = wrapper.get("#button2").element as HTMLButtonElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    button1.focus();
+    expect(document.activeElement).toBe(button1);
+
+    tabFromActive(false);
+    expect(document.activeElement).toBe(selectedRadio);
+    tabFromActive(false);
+    expect(document.activeElement).toBe(button2);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(selectedRadio);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(button1);
+
+    wrapper.unmount();
+  });
+
   it("keeps focus in the active scope when another contain scope receives focus", () => {
     const wrapper = mount(defineComponent({
       components: { FocusScope },
