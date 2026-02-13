@@ -118,6 +118,56 @@ describe("useSelectableItem", () => {
     expect(manager.toggleSelection).toHaveBeenNthCalledWith(2, "a");
   });
 
+  it.each(["touch", "virtual"] as const)(
+    "uses toggle mode across items for %s pointer interactions in replace behavior",
+    (pointerType) => {
+      const selectedKeys = new Set<Key>();
+      const manager = createManager({
+        selectedKeys,
+        isSelected: vi.fn((key: Key) => selectedKeys.has(key)),
+      });
+
+      manager.toggleSelection = vi.fn((key: Key) => {
+        if (selectedKeys.has(key)) {
+          selectedKeys.delete(key);
+        } else {
+          selectedKeys.add(key);
+        }
+      });
+
+      manager.replaceSelection = vi.fn((key: Key) => {
+        selectedKeys.clear();
+        selectedKeys.add(key);
+      });
+
+      const firstRef = { current: document.createElement("div") };
+      const thirdRef = { current: document.createElement("div") };
+      const first = useSelectableItem({
+        selectionManager: manager,
+        key: "i1",
+        ref: firstRef,
+      });
+      const third = useSelectableItem({
+        selectionManager: manager,
+        key: "i3",
+        ref: thirdRef,
+      });
+
+      const firstClick = new MouseEvent("click", { bubbles: true });
+      Object.defineProperty(firstClick, "pointerType", { value: pointerType });
+      (first.itemProps.onClick as (event: MouseEvent) => void)(firstClick);
+
+      const thirdClick = new MouseEvent("click", { bubbles: true });
+      Object.defineProperty(thirdClick, "pointerType", { value: pointerType });
+      (third.itemProps.onClick as (event: MouseEvent) => void)(thirdClick);
+
+      expect(manager.toggleSelection).toHaveBeenNthCalledWith(1, "i1");
+      expect(manager.toggleSelection).toHaveBeenNthCalledWith(2, "i3");
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+      expect(selectedKeys).toEqual(new Set<Key>(["i1", "i3"]));
+    }
+  );
+
   it("runs primary action when selection is disabled", () => {
     const onAction = vi.fn();
     const manager = createManager({

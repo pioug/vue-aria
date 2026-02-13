@@ -618,6 +618,9 @@ describe("useSelectableCollection", () => {
 
       expect(manager.setFocused).toHaveBeenCalledWith(true);
       expect(manager.setFocusedKey).toHaveBeenCalledWith("z");
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+      expect(manager.extendSelection).not.toHaveBeenCalled();
+      expect(manager.toggleSelection).not.toHaveBeenCalled();
     } finally {
       scope.stop();
       ref.current.remove();
@@ -653,6 +656,9 @@ describe("useSelectableCollection", () => {
 
       expect(manager.setFocused).toHaveBeenCalledWith(true);
       expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
+      expect(manager.replaceSelection).not.toHaveBeenCalled();
+      expect(manager.extendSelection).not.toHaveBeenCalled();
+      expect(manager.toggleSelection).not.toHaveBeenCalled();
     } finally {
       scope.stop();
       ref.current.remove();

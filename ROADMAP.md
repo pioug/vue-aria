@@ -417,11 +417,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - link item keyboard navigation behavior for `linkBehavior: "selection"` and `linkBehavior: "override"`
     - autoFocus selected-key prioritization (`canSelectItem` filtering)
     - blur no-op when related target remains within collection
+    - focus-entry direction behavior without mutating selection state
   - Added adapted `useSelectableItem` interaction coverage for:
     - link behaviors (`selection`, `override`, `none`) with correct action vs selection outcomes
     - keyboard Enter/Space selection behavior and secondary action routing
     - disabled focused-item branches (`setFocusedKey(null)` and mousedown default prevention)
-  - Upstream `useSelectableCollection` component-level pointer/touch semantics remain pending full listbox/story parity harness migration.
+    - multi-item touch/virtual pointer toggle semantics in `selectionBehavior: "replace"`
+  - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
