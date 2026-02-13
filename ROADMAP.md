@@ -2960,3 +2960,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/focus/FocusScopeOwnerDocument` containment parity assertions for reverse-tab cycling:
   - added full Shift+Tab traversal checks across iframe-owned scope boundaries (`input3 -> input2 -> input1`)
 - Validation: `npm run check` passed, `npm test` passed (125 files, 506 tests).
+- Expanded `@vue-aria/focus/FocusScope` radio containment parity with adapted backward traversal coverage for unchecked groups:
+  - validates Shift+Tab order through radios and intervening controls in an unchecked same-name radio group (`button3 -> curly -> button2 -> moe -> larry -> button1`)
+- Validation: `npm run check` passed, `npm test` passed (125 files, 507 tests).

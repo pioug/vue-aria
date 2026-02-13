@@ -551,6 +551,74 @@ describe("FocusScope behavior", () => {
     wrapper.unmount();
   });
 
+  it("moves backward through unchecked radio groups and surrounding controls", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("button", { id: "button1" }, "button"),
+          h("fieldset", [
+            h("legend", "Select a ship"),
+            h("div", [
+              h("input", { id: "larry", type: "radio", name: "ship" }),
+              h("label", { for: "larry" }, "Larry"),
+            ]),
+            h("div", [
+              h("input", { id: "moe", type: "radio", name: "ship" }),
+              h("label", { for: "moe" }, "Moe"),
+            ]),
+            h("button", { id: "button2" }, "button"),
+            h("div", [
+              h("input", { id: "curly", type: "radio", name: "ship" }),
+              h("label", { for: "curly" }, "Curly"),
+            ]),
+          ]),
+          h("button", { id: "button3" }, "button"),
+        ],
+      },
+    });
+
+    const button1 = wrapper.get("#button1").element as HTMLButtonElement;
+    const larry = wrapper.get("#larry").element as HTMLInputElement;
+    const moe = wrapper.get("#moe").element as HTMLInputElement;
+    const button2 = wrapper.get("#button2").element as HTMLButtonElement;
+    const curly = wrapper.get("#curly").element as HTMLInputElement;
+    const button3 = wrapper.get("#button3").element as HTMLButtonElement;
+
+    const tabFromActive = (shiftKey = false) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active) {
+        return;
+      }
+
+      active.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    };
+
+    button3.focus();
+    expect(document.activeElement).toBe(button3);
+
+    tabFromActive(true);
+    expect(document.activeElement).toBe(curly);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(button2);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(moe);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(larry);
+    tabFromActive(true);
+    expect(document.activeElement).toBe(button1);
+
+    wrapper.unmount();
+  });
+
   it("keeps focus in the active scope when another contain scope receives focus", () => {
     const wrapper = mount(defineComponent({
       components: { FocusScope },
