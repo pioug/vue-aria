@@ -280,6 +280,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - Tab focus handoff to last tabbable item when tab navigation is disabled
     - blur leave behavior clearing collection focus state
     - scroll-container mousedown prevention behavior
+    - PageUp/PageDown keyboard navigation behavior with selection updates
+    - already-focused `onFocus` outside-target clearing behavior
   - Upstream `useSelectableCollection` component-level pointer/touch semantics remain pending full listbox/story parity harness migration.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -2657,3 +2659,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - blur leave behavior clearing collection focus state
   - scroll-container mousedown default-prevention behavior
 - Validation: `npm run check` passed, `npm test` passed (121 files, 447 tests).
+- Expanded `@vue-aria/selection/useSelectableCollection` keyboard/focus parity with adapted tests for:
+  - PageUp/PageDown navigation updates with select-on-focus behavior
+  - already-focused `onFocus` outside-target clearing path
+- Validation: `npm run check` passed, `npm test` passed (121 files, 449 tests).

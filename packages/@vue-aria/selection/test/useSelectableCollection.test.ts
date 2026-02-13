@@ -237,6 +237,40 @@ describe("useSelectableCollection", () => {
     }
   });
 
+  it("navigates and updates selection with PageDown and PageUp", () => {
+    const manager = createManager({
+      focusedKey: "a",
+    });
+    const ref = { current: document.createElement("div") };
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onKeydown = collectionProps.onKeydown as (event: KeyboardEvent) => void;
+      const pageDown = new KeyboardEvent("keydown", { key: "PageDown", bubbles: true, cancelable: true });
+      Object.defineProperty(pageDown, "target", { value: ref.current });
+      onKeydown(pageDown);
+
+      const pageUp = new KeyboardEvent("keydown", { key: "PageUp", bubbles: true, cancelable: true });
+      Object.defineProperty(pageUp, "target", { value: ref.current });
+      onKeydown(pageUp);
+
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("p", undefined);
+      expect(manager.setFocusedKey).toHaveBeenCalledWith("o", undefined);
+      expect(manager.replaceSelection).toHaveBeenCalledWith("p");
+      expect(manager.replaceSelection).toHaveBeenCalledWith("o");
+    } finally {
+      scope.stop();
+    }
+  });
+
   it("extends selection on shift+arrow in multiple mode", () => {
     const manager = createManager({
       focusedKey: "a",
@@ -346,6 +380,38 @@ describe("useSelectableCollection", () => {
       expect(manager.setFocusedKey).toHaveBeenCalledWith("a");
     } finally {
       scope.stop();
+    }
+  });
+
+  it("clears focused state when already focused and focus target is outside", () => {
+    const manager = createManager();
+    manager.setFocused(true);
+
+    const ref = { current: document.createElement("div") };
+    const outside = document.createElement("button");
+    document.body.append(ref.current, outside);
+
+    const scope = effectScope();
+    const { collectionProps } = scope.run(() =>
+      useSelectableCollection({
+        selectionManager: manager,
+        keyboardDelegate: delegate,
+        ref,
+      })
+    )!;
+
+    try {
+      const onFocus = collectionProps.onFocus as (event: FocusEvent) => void;
+      const focusEvent = new FocusEvent("focus", { relatedTarget: null });
+      Object.defineProperty(focusEvent, "currentTarget", { value: ref.current });
+      Object.defineProperty(focusEvent, "target", { value: outside });
+
+      onFocus(focusEvent);
+      expect(manager.setFocused).toHaveBeenCalledWith(false);
+    } finally {
+      scope.stop();
+      ref.current.remove();
+      outside.remove();
     }
   });
 
