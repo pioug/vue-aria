@@ -80,4 +80,42 @@ describe("useLink router integration", () => {
     expect(router.open).not.toHaveBeenCalled();
     scope.stop();
   });
+
+  it("does not route click when modifier keys are pressed", () => {
+    const anchor = document.createElement("a");
+    anchor.href = new URL("/next", window.location.href).href;
+
+    const scope = effectScope();
+    const { linkProps } = scope.run(() =>
+      useLink({
+        href: "/next",
+      })
+    )!;
+
+    const event = createMouseEvent(anchor);
+    Object.assign(event, { metaKey: true });
+    (linkProps.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
+
+    expect(router.open).not.toHaveBeenCalled();
+    scope.stop();
+  });
+
+  it("does not route click for cross-origin links", () => {
+    const anchor = document.createElement("a");
+    anchor.href = "https://example.com/next";
+    expect(anchor.origin).not.toBe(window.location.origin);
+
+    const scope = effectScope();
+    const { linkProps } = scope.run(() =>
+      useLink({
+        href: "/next",
+      })
+    )!;
+
+    const event = createMouseEvent(anchor);
+    (linkProps.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
+
+    expect(router.open).not.toHaveBeenCalled();
+    scope.stop();
+  });
 });

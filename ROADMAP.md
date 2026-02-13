@@ -925,6 +925,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted router-integration coverage for:
     - client navigation routing through non-native routers on link click
     - default-prevented click guard behavior (no client navigation dispatch)
+    - modified-key guard behavior (no client navigation dispatch when meta key is pressed)
+    - cross-origin guard behavior (no client navigation dispatch for external origins)
 - [x] All currently present upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -943,8 +945,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Harden remaining router/client-navigation edge-case parity (modified-key and cross-origin guards).
-2. Integrate and validate within downstream link/menu/breadcrumb components.
+1. Integrate and validate within downstream link/menu/breadcrumb components.
 
 ## 14) Package Record: @vue-aria/toggle
 - Upstream source path(s):
@@ -3280,3 +3281,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests validating non-native router client-navigation dispatch on click
   - added adapted default-prevented click guard coverage to ensure router navigation is skipped when the event is already handled
 - Validation: `npm run check` passed, `npm test` passed (127 files, 597 tests).
+- Expanded `@vue-aria/link` router guard parity:
+  - added adapted tests for modified-key click suppression and cross-origin click suppression
+- Validation: `npm run check` passed, `npm test` passed (127 files, 599 tests).
