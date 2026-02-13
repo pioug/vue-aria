@@ -2161,6 +2161,32 @@ describe("FocusScope behavior", () => {
     outside.remove();
   });
 
+  it("preserves focus on new target when blur relatedTarget is null (iframe-like transition)", () => {
+    const wrapper = mount(FocusScope, {
+      attachTo: document.body,
+      props: { contain: true },
+      slots: {
+        default: () => [
+          h("input", { id: "input1" }),
+          h("input", { id: "input2" }),
+        ],
+      },
+    });
+
+    const input1 = wrapper.get("#input1").element as HTMLInputElement;
+    const input2 = wrapper.get("#input2").element as HTMLInputElement;
+
+    input1.focus();
+    input1.dispatchEvent(new FocusEvent("focusin", { bubbles: true, relatedTarget: null }));
+    expect(document.activeElement).toBe(input1);
+
+    input2.focus();
+    input1.dispatchEvent(new FocusEvent("blur", { bubbles: true, relatedTarget: null }));
+    expect(document.activeElement).toBe(input2);
+
+    wrapper.unmount();
+  });
+
   it("does not lock focus in parent scope when child scope is teleported without contain", () => {
     const wrapper = mount(defineComponent({
       render() {

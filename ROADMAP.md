@@ -3042,3 +3042,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - moving focus to the element after a trigger when tabbing forward out of a restore-focus scope
   - moving focus to the element before a trigger when shift-tabbing out of a restore-focus scope
 - Validation: `npm run check` passed, `npm test` passed (125 files, 531 tests).
+- Expanded `@vue-aria/focus/FocusScope` iframe-like blur transition parity with adapted upstream coverage for:
+  - preserving the newly focused target when blur `relatedTarget` is null during contained focus transitions
+- Validation: `npm run check` passed, `npm test` passed (125 files, 532 tests).
