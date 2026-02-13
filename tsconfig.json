@@ -35,6 +35,7 @@
       "@vue-aria/searchfield-state": ["packages/@vue-aria/searchfield-state/src/index.ts"],
       "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
       "@vue-aria/form": ["packages/@vue-aria/form/src/index.ts"],
+      "@vue-aria/form-state": ["packages/@vue-aria/form-state/src/index.ts"],
       "@vue-aria/spinbutton": ["packages/@vue-aria/spinbutton/src/index.ts"],
       "@vue-aria/numberfield-state": ["packages/@vue-aria/numberfield-state/src/index.ts"],
       "@vue-aria/numberfield": ["packages/@vue-aria/numberfield/src/index.ts"],

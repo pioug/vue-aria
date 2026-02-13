@@ -1,4 +1,4 @@
-import { effectScope } from "vue";
+import { effectScope, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useNumberFieldState } from "../src";
 
@@ -128,6 +128,42 @@ describe("useNumberFieldState", () => {
 
     state.increment();
     expect(onChange).toHaveBeenCalledWith(0.11);
+    scope.stop();
+  });
+
+  it("queues validation updates for native behavior until commit", async () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 2,
+        validationBehavior: "native",
+      })
+    )!;
+
+    state.updateValidation({
+      isInvalid: true,
+      validationErrors: ["Invalid"],
+      validationDetails: {
+        badInput: false,
+        customError: true,
+        patternMismatch: false,
+        rangeOverflow: false,
+        rangeUnderflow: false,
+        stepMismatch: false,
+        tooLong: false,
+        tooShort: false,
+        typeMismatch: false,
+        valueMissing: false,
+        valid: false,
+      },
+    });
+    expect(state.displayValidation.isInvalid).toBe(false);
+
+    state.commitValidation();
+    await nextTick();
+
+    expect(state.displayValidation.isInvalid).toBe(true);
     scope.stop();
   });
 });

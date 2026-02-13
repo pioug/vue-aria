@@ -3,7 +3,18 @@ import { useLocalizedStringFormatter, useNumberFormatter } from "@vue-aria/i18n"
 import { useFocus, useFocusWithin } from "@vue-aria/interactions";
 import { useSpinButton } from "@vue-aria/spinbutton";
 import { useFormattedTextField } from "@vue-aria/textfield";
-import { chain, filterDOMProps, isAndroid, isIPhone, mergeProps, useFormReset, useId } from "@vue-aria/utils";
+import { useFormValidation } from "@vue-aria/form";
+import { privateValidationStateProp } from "@vue-aria/form-state";
+import {
+  chain,
+  filterDOMProps,
+  isAndroid,
+  isIOS,
+  isIPhone,
+  mergeProps,
+  useFormReset,
+  useId,
+} from "@vue-aria/utils";
 import { ref } from "vue";
 import type { NumberFieldState } from "@vue-aria/numberfield-state";
 
@@ -49,6 +60,9 @@ export interface AriaNumberFieldProps {
   onInput?: (event: InputEvent) => void;
   description?: string;
   errorMessage?: string;
+  name?: string;
+  form?: string;
+  validate?: (value: number) => boolean | string | string[] | null | undefined;
   validationBehavior?: "aria" | "native";
   isWheelDisabled?: boolean;
   placeholder?: string;
@@ -222,12 +236,17 @@ export function useNumberField(
     {
       ...otherProps,
       ...domProps,
+      name: undefined,
+      form: undefined,
       label,
       autoFocus,
       isDisabled,
       isReadOnly,
       isRequired,
+      validate: undefined,
+      [privateValidationStateProp]: state,
       value: inputValue,
+      defaultValue: "!",
       autoComplete: "off",
       "aria-label": props["aria-label"] || undefined,
       "aria-labelledby": props["aria-labelledby"] || undefined,
@@ -253,10 +272,25 @@ export function useNumberField(
     state.defaultNumberValue as any,
     (value: number) => state.setNumberValue?.(value)
   );
+  useFormValidation(
+    {
+      validationBehavior: props.validationBehavior,
+      focus: () => inputRef.current?.focus(),
+    },
+    state as any,
+    {
+      get value() {
+        return inputRef.current;
+      },
+      set value(value: HTMLInputElement | null) {
+        inputRef.current = value;
+      },
+    }
+  );
 
   const inputProps = mergeProps(spinButtonProps, focusProps, textFieldProps, {
     role: null,
-    "aria-roledescription": stringFormatter.format("numberField"),
+    "aria-roledescription": isIOS() ? null : stringFormatter.format("numberField"),
     "aria-valuemax": null,
     "aria-valuemin": null,
     "aria-valuenow": null,

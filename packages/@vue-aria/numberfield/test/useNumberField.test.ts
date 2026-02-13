@@ -186,4 +186,21 @@ describe("useNumberField hook", () => {
     scope.stop();
     group.remove();
   });
+
+  it("uses native required semantics when validationBehavior is native", () => {
+    const state = createState();
+    const ref = { current: document.createElement("input") as HTMLInputElement | null };
+    const scope = effectScope();
+    const result = scope.run(() =>
+      useNumberField(
+        { "aria-label": "Quantity", isRequired: true, validationBehavior: "native" },
+        state as any,
+        ref
+      )
+    )!;
+
+    expect(result.inputProps.required).toBe(true);
+    expect(result.inputProps["aria-required"]).toBeUndefined();
+    scope.stop();
+  });
 });

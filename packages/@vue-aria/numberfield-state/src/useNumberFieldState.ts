@@ -1,12 +1,7 @@
 import { NumberFormatter, NumberParser } from "@internationalized/number";
+import { useFormValidationState, type ValidationResult } from "@vue-aria/form-state";
 import { clamp, snapValueToStep, useControlledState } from "@vue-aria/utils-state";
 import { computed, ref, watch } from "vue";
-
-export interface ValidationResult {
-  isInvalid: boolean;
-  validationErrors: string[];
-  validationDetails: ValidityState | null;
-}
 
 export interface NumberFieldState {
   inputValue: string;
@@ -42,6 +37,11 @@ export interface NumberFieldStateOptions {
   locale: string;
   isDisabled?: boolean;
   isReadOnly?: boolean;
+  isInvalid?: boolean;
+  validationState?: "valid" | "invalid";
+  validationBehavior?: "aria" | "native";
+  name?: string | string[];
+  validate?: (value: number) => boolean | string | string[] | null | undefined;
 }
 
 function handleDecimalOperation(operator: "-" | "+", value1: number, value2: number): number {
@@ -108,6 +108,10 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
   );
   const intlOptions = computed(() => formatter.value.resolvedOptions());
   const format = (nextValue: number) => (Number.isNaN(nextValue) ? "" : formatter.value.format(nextValue));
+  const validation = useFormValidationState<number>({
+    ...props,
+    value: () => controlledValue.value,
+  });
 
   watch(
     () => controlledValue.value,
@@ -122,7 +126,6 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     clampStep = 0.01;
   }
 
-  const commitValidation = () => {};
   const commit = (overrideValue?: string) => {
     const newInputValue = overrideValue === undefined ? inputValueRef.value : overrideValue;
     let newParsedValue = parsedValue.value;
@@ -147,7 +150,7 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     clampedValue = numberParser.value.parse(format(clampedValue));
     setControlledValue(clampedValue);
     inputValueRef.value = format(value === undefined ? clampedValue : controlledValue.value);
-    commitValidation();
+    validation.commitValidation();
   };
 
   const safeNextStep = (operation: "+" | "-", minMax = 0) => {
@@ -174,27 +177,27 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     const newValue = safeNextStep("+", minValue);
     inputValueRef.value = format(newValue);
     setControlledValue(newValue);
-    commitValidation();
+    validation.commitValidation();
   };
 
   const decrement = () => {
     const newValue = safeNextStep("-", maxValue);
     inputValueRef.value = format(newValue);
     setControlledValue(newValue);
-    commitValidation();
+    validation.commitValidation();
   };
 
   const incrementToMax = () => {
     if (maxValue != null) {
       setControlledValue(snapValueToStep(maxValue, minValue, maxValue, clampStep));
-      commitValidation();
+      validation.commitValidation();
     }
   };
 
   const decrementToMin = () => {
     if (minValue != null) {
       setControlledValue(minValue);
-      commitValidation();
+      validation.commitValidation();
     }
   };
 
@@ -222,14 +225,6 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
 
   const validate = (nextValue: string) =>
     numberParser.value.isValidPartialNumber(nextValue, minValue, maxValue);
-
-  const updateValidation = () => {};
-  const resetValidation = () => {};
-  const validation = {
-    isInvalid: false,
-    validationErrors: [],
-    validationDetails: null,
-  };
 
   return {
     validate,
@@ -260,10 +255,14 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
       return inputValueRef.value;
     },
     commit,
-    displayValidation: validation,
-    realtimeValidation: validation,
-    updateValidation,
-    resetValidation,
-    commitValidation,
+    get displayValidation() {
+      return validation.displayValidation;
+    },
+    get realtimeValidation() {
+      return validation.realtimeValidation;
+    },
+    updateValidation: validation.updateValidation,
+    resetValidation: validation.resetValidation,
+    commitValidation: validation.commitValidation,
   };
 }

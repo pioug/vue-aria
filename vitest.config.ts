@@ -89,6 +89,9 @@ export default defineConfig({
       "@vue-aria/form": fileURLToPath(
         new URL("./packages/@vue-aria/form/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/form-state": fileURLToPath(
+        new URL("./packages/@vue-aria/form-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/spinbutton": fileURLToPath(
         new URL("./packages/@vue-aria/spinbutton/src/index.ts", import.meta.url)
       ),

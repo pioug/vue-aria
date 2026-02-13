@@ -30,6 +30,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/textfield](/packages/textfield)
 - [@vue-aria/searchfield](/packages/searchfield)
 - [@vue-aria/form](/packages/form)
+- [@vue-aria/form-state](/packages/form-state)
 - [@vue-aria/spinbutton](/packages/spinbutton)
 - [@vue-aria/numberfield](/packages/numberfield)
 - [@vue-aria/numberfield-state](/packages/numberfield-state)

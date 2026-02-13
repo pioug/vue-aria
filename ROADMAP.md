@@ -75,6 +75,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/checkbox-state`: In progress
 - `@vue-aria/radio-state`: In progress
 - `@vue-aria/searchfield-state`: In progress
+- `@vue-aria/form-state`: In progress
 - `@vue-aria/numberfield-state`: In progress
 - `@vue-aria/overlays-state`: In progress
 - `@vue-aria/tooltip-state`: In progress
@@ -1786,7 +1787,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Hook state typing is now wired to `@vue-aria/numberfield-state`; deeper form-validation-state parity is still pending.
+  - Hook state typing and form validation-state wiring are now aligned to `@vue-aria/numberfield-state` + `@vue-aria/form-state`; remaining parity is focused on additional interaction edge cases.
 
 ### Tests
 - Total upstream test files: 1 (`useNumberField.test.ts`)
@@ -1795,6 +1796,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for default input props, placeholder forwarding, merged input event handlers, stepper mouse press-start focus transfer, and wheel increment/decrement behavior when focus is within the field group.
   - Added integration coverage validating `@vue-aria/numberfield-state` interoperability with stepper press handlers.
+  - Added adapted native validation behavior coverage for required semantics (`required` + no `aria-required`) when `validationBehavior='native'`.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1813,7 +1815,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining numberfield interaction parity (touch press/cancel edge cases and commit/announce timing edge cases).
-2. Deepen `@vue-aria/numberfield-state` parity (full locale parser and form validation-state wiring) and replace current fallback behavior.
+2. Expand parity coverage for iOS roledescription behavior and native invalid/reset flows.
 
 ## 35) Package Record: @vue-aria/numberfield-state
 - Upstream source path(s):
@@ -1837,7 +1839,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Locale-aware parsing/validation is now wired through `@internationalized/number/NumberParser`; full form-validation-state internals are still pending.
+  - Locale-aware parsing/validation is wired through `@internationalized/number/NumberParser` and validation internals now route through `@vue-aria/form-state`; remaining work is edge-case test expansion.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder in upstream stately package
@@ -1847,6 +1849,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for default formatting, step increment/decrement math, and clamped commit behavior.
   - Added adapted coverage for live synchronization of `canIncrement`/`canDecrement` and `numberValue` after state transitions.
   - Added adapted coverage for locale-aware separator parsing (`fr-FR`), partial sign validation under bounds, and default percent step behavior (`0.01`).
+  - Added adapted native validation commit-queue coverage (`validationBehavior='native'` updates display state on `commitValidation`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -1864,10 +1867,64 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Integrate full form validation-state parity path and wire into `@vue-aria/numberfield`.
-2. Expand parser/validation edge-case tests against upstream `@internationalized/number` fixtures.
+1. Expand parser/validation edge-case tests against upstream `@internationalized/number` fixtures.
+2. Validate remaining server-error form-context parity paths through consuming packages.
+## 36) Package Record: @vue-aria/form-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/form/src`
+- Local package path:
+  - `packages/@vue-aria/form-state`
+- Status: In progress
+- Owner: Codex
 
-## 36) Session Log
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useFormValidationState`
+  - `FormValidationContext`
+  - `privateValidationStateProp`
+  - `VALID_VALIDITY_STATE`
+  - `DEFAULT_VALIDATION_RESULT`
+  - `mergeValidation`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useFormValidationState.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Injection-based server-error context support is wired, with fallback behavior when called outside a component setup context.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder in upstream stately package
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for aria realtime update behavior, native commit-queue behavior, and controlled invalid-state precedence.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/form-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- Not directly applicable for stately state package; validated through hook consumers.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Validate server error context parity in consumer integration scenarios.
+2. Reuse this state package in additional control-state ports (`checkbox-state`, `radio-state`, and future form controls).
+
+## 37) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -2365,3 +2422,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - min/max sign validation edge behavior
   - percent-format default step increment behavior
 - Validation: `npm run check` passed, `npm test` passed (115 files, 353 tests).
+- Expanded `@vue-aria/spinbutton` parity tests with repeated press cadence/stop behavior edge cases.
+- Validation: `npm run check` passed, `npm test` passed (115 files, 355 tests).
+- Started `@vue-aria/form-state` package:
+  - `useFormValidationState`
+  - `FormValidationContext`
+  - `privateValidationStateProp`
+  - validation result constants + `mergeValidation`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Integrated `@vue-aria/form-state/useFormValidationState` into `@vue-aria/numberfield-state/useNumberFieldState`.
+- Integrated `@vue-aria/form/useFormValidation` + `privateValidationStateProp` wiring into `@vue-aria/numberfield/useNumberField`.
+- Added adapted tests for form-state commit behavior and numberfield-state native validation commit queue.
+- Added VitePress docs page for `@vue-aria/form-state` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (116 files, 360 tests).
