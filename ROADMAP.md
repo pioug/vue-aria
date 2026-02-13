@@ -1619,7 +1619,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Large upstream framework-agnostic internals (`calculatePosition`, `usePreventScroll`, `ariaHideOutside`) are ported with temporary `@ts-nocheck` to prioritize behavioral progress under strict TS constraints.
+  - Remaining temporary `@ts-nocheck` debt is now isolated to `calculatePosition` and `ariaHideOutside`; `usePreventScroll` has been typed.
 
 ### Tests
 - Total upstream test files: 11
@@ -3083,4 +3083,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/button` API parity with adapted upstream coverage for:
   - `useToggleButtonGroup` group semantics (`toolbar`/`radiogroup` role mapping and keyboard focus traversal)
   - `useToggleButtonGroupItem` selection semantics and disabled inheritance
+- Validation: `npm run check` passed, `npm test` passed (126 files, 540 tests).
+- Improved `@vue-aria/overlays` typing parity:
+  - removed temporary `@ts-nocheck` from `usePreventScroll.ts`
+  - tightened restore/style typings while preserving existing behavior paths
 - Validation: `npm run check` passed, `npm test` passed (126 files, 540 tests).

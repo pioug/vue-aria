@@ -1,4 +1,3 @@
-// @ts-nocheck
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -22,7 +21,7 @@ const visualViewport = typeof document !== 'undefined' && window.visualViewport;
 
 // The number of active usePreventScroll calls. Used to determine whether to revert back to the original page style/scroll position
 let preventScrollCount = 0;
-let restore;
+let restore: (() => void) | null = null;
 
 /**
  * Prevents scrolling on the document body on mount, and
@@ -49,7 +48,8 @@ export function usePreventScroll(options: PreventScrollOptions = {}): void {
     return () => {
       preventScrollCount--;
       if (preventScrollCount === 0) {
-        restore();
+        restore?.();
+        restore = null;
       }
     };
   }, [() => isDisabled]);
@@ -59,13 +59,18 @@ export function usePreventScroll(options: PreventScrollOptions = {}): void {
 // add some padding to prevent the page from shifting when the scrollbar is hidden.
 function preventScrollStandard() {
   let scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  const restoreScrollbarStyle = scrollbarWidth > 0
+    ? (
+      "scrollbarGutter" in document.documentElement.style
+        ? setStyle(document.documentElement, "scrollbarGutter", "stable")
+        : setStyle(document.documentElement, "paddingRight", `${scrollbarWidth}px`)
+    )
+    : undefined;
+
   return chain(
-    scrollbarWidth > 0 &&
-      // Use scrollbar-gutter when supported because it also works for fixed positioned elements.
-      ('scrollbarGutter' in document.documentElement.style
-        ? setStyle(document.documentElement, 'scrollbarGutter', 'stable')
-        : setStyle(document.documentElement, 'paddingRight', `${scrollbarWidth}px`)),
-    setStyle(document.documentElement, 'overflow', 'hidden')
+    // Use scrollbar-gutter when supported because it also works for fixed positioned elements.
+    restoreScrollbarStyle,
+    setStyle(document.documentElement, "overflow", "hidden")
   );
 }
 
@@ -209,11 +214,12 @@ function preventScrollMobileSafari() {
 
 // Sets a CSS property on an element, and returns a function to revert it to the previous value.
 function setStyle(element: HTMLElement, style: string, value: string) {
-  let cur = element.style[style];
-  element.style[style] = value;
+  const styleMap = element.style as CSSStyleDeclaration & Record<string, string>;
+  let cur = styleMap[style];
+  styleMap[style] = value;
 
   return () => {
-    element.style[style] = cur;
+    styleMap[style] = cur;
   };
 }
 
