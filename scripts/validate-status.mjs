@@ -68,6 +68,9 @@ if (Array.isArray(status.packages)) {
     docsTotal: 0,
     docsComplete: 0
   };
+  const seenPackageNames = new Set();
+  const seenUpstreamNames = new Set();
+  const seenUpstreamPaths = new Set();
 
   for (const [index, entry] of status.packages.entries()) {
     assert(entry && typeof entry === 'object' && !Array.isArray(entry), `packages[${index}] must be an object`, errors);
@@ -77,6 +80,21 @@ if (Array.isArray(status.packages)) {
 
     for (const key of REQUIRED_PACKAGE_KEYS) {
       assert(Object.prototype.hasOwnProperty.call(entry, key), `packages[${index}] missing field: ${key}`, errors);
+    }
+
+    if (typeof entry.packageName === 'string') {
+      assert(!seenPackageNames.has(entry.packageName), `packages[${index}].packageName is duplicated: ${entry.packageName}`, errors);
+      seenPackageNames.add(entry.packageName);
+    }
+
+    if (typeof entry.upstreamPackageName === 'string') {
+      assert(!seenUpstreamNames.has(entry.upstreamPackageName), `packages[${index}].upstreamPackageName is duplicated: ${entry.upstreamPackageName}`, errors);
+      seenUpstreamNames.add(entry.upstreamPackageName);
+    }
+
+    if (typeof entry.upstreamPath === 'string') {
+      assert(!seenUpstreamPaths.has(entry.upstreamPath), `packages[${index}].upstreamPath is duplicated: ${entry.upstreamPath}`, errors);
+      seenUpstreamPaths.add(entry.upstreamPath);
     }
 
     if (Object.prototype.hasOwnProperty.call(entry, 'status')) {
