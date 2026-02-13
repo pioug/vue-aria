@@ -21,7 +21,8 @@
     "@internationalized/date": "^3.11.0",
     "@internationalized/message": "^3.1.8",
     "@internationalized/number": "^3.6.5",
-    "@internationalized/string": "^3.2.7"
+    "@internationalized/string": "^3.2.7",
+    "aria-hidden": "^1.2.6"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

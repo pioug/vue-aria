@@ -47,6 +47,9 @@ export default defineConfig({
       "@vue-aria/live-announcer": fileURLToPath(
         new URL("./packages/@vue-aria/live-announcer/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/aria-modal-polyfill": fileURLToPath(
+        new URL("./packages/@vue-aria/aria-modal-polyfill/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/visually-hidden": fileURLToPath(
         new URL("./packages/@vue-aria/visually-hidden/src/index.ts", import.meta.url)
       ),

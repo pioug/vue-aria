@@ -34,6 +34,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/interactions`: In progress
 - `@vue-aria/focus`: In progress
 - `@vue-aria/live-announcer`: In progress
+- `@vue-aria/aria-modal-polyfill`: In progress
 - `@vue-aria/overlays`: In progress
 - `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: In progress
@@ -2235,7 +2236,59 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Validate server error context parity in additional consumer integration scenarios.
 2. Reuse this state package in additional control-state ports (`checkbox-state`, `radio-state`, and future form controls).
 
-## 37) Session Log
+## 37) Package Record: @vue-aria/aria-modal-polyfill
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/aria-modal-polyfill/src`
+  - `references/react-spectrum/packages/@react-aria/aria-modal-polyfill/test`
+- Local package path:
+  - `packages/@vue-aria/aria-modal-polyfill`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `watchModals`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+
+### Tests
+- Total upstream test files: 1
+- Ported test files: 1 (adapted)
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted coverage for core modal watcher behavior:
+    - hiding non-modal siblings while a modal is mounted
+    - nested-modal stack behavior with previous modal restoration
+    - live announcer exclusion from `aria-hidden`
+    - no-op cleanup behavior for missing selector/missing document
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/aria-modal-polyfill.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate screen-reader navigation behavior in integrated overlay consumers.
+
+### Visual Parity
+- Not applicable for this utility package beyond modal accessibility semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Add integration coverage with overlay consumers (`useModal`/`OverlayProvider`) to mirror upstream menu/dialog/popover intent.
+2. Evaluate whether remaining upstream test intents require additional integration harnesses beyond utility-level DOM tests.
+
+## 38) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -3444,3 +3497,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/menu/useMenuTrigger` locale-provider integration parity:
   - added adapted coverage asserting `I18nProvider` locale selection (`fr-FR`) is forwarded into long-press accessibility descriptions.
 - Validation: `npm run check` passed, `npm test` passed (131 files, 643 tests).
+- Started `@vue-aria/aria-modal-polyfill` package parity slice:
+  - ported `watchModals` API from upstream with `aria-hidden` `hideOthers` integration and custom document support.
+  - added adapted test coverage for base hide/restore behavior, nested modal handling, live-announcer exclusions, and no-op cleanup branches.
+  - added VitePress docs page (`docs/packages/aria-modal-polyfill.md`) and wired docs index/nav/sidebar links.
+  - added package-level roadmap record and execution queue tracking entry.
+- Validation: `npm run check` passed, `npm test` passed (132 files, 647 tests).
