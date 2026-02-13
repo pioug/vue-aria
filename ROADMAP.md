@@ -1657,6 +1657,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted keyboard parity coverage for no-selection arrow-key paths, asserting first-key fallback and default scroll prevention semantics.
   - Added adapted `HiddenSelect` behavioral parity coverage for small-collection native select change handling (autofill path) and container dataset attributes (`data-a11y-ignore` and `data-react-aria-prevent-focus`).
   - Added adapted `useSelect` focus lifecycle guard-path coverage for already-focused focus no-op and open-menu blur no-op branches.
+  - Added adapted typeahead parity coverage for single-selection character-key selection behavior and multiple-selection typeahead suppression.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2561,3 +2562,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - ArrowLeft submenu close and trigger focus restoration in LTR flows
   - delayed hover open cancellation when hover leaves before configured delay
 - Validation: `npm run check` passed, `npm test` passed (118 files, 408 tests).
+- Expanded `@vue-aria/select/useSelect` typeahead parity with adapted tests for:
+  - character-key selection updates in single-selection mode
+  - typeahead suppression in multiple-selection mode
+- Fixed `useSelect` typeahead handler wiring parity (`onKeydownCapture` -> trigger `onKeyDown` mapping) to match `useTypeSelect` output casing.
+- Validation: `npm run check` passed, `npm test` passed (118 files, 410 tests).

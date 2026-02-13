@@ -135,8 +135,9 @@ export function useSelect(
 
   const id = useId();
   let typeaheadProps = { ...typeSelectProps } as Record<string, unknown>;
-  typeaheadProps.onKeyDown = typeaheadProps.onKeyDownCapture;
+  typeaheadProps.onKeyDown = typeaheadProps.onKeyDownCapture ?? typeaheadProps.onKeydownCapture;
   delete typeaheadProps.onKeyDownCapture;
+  delete typeaheadProps.onKeydownCapture;
   if (state.selectionManager.selectionMode === "multiple") {
     typeaheadProps = {};
   }
