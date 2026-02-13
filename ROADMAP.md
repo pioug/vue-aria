@@ -316,6 +316,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useFocusWithin`
   - `useInteractOutside`
   - `useHover`
+  - `useScrollWheel`
 - [x] Package scaffolding created and wired:
   - `package.json`
   - `src/index.ts`
@@ -327,8 +328,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: Pending full inventory
-- Ported test files: 7
-- Passing test files: 7
+- Ported test files: 8
+- Passing test files: 8
 - Test parity notes:
   - Added adapted tests for `focusSafely` behavior and modality getter/setter.
   - Added adapted tests for `useFocusVisible` infrastructure (listeners, visibility state, pointer/modality tracking, window setup/teardown).
@@ -337,6 +338,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `useFocusWithin` target/child focus behavior and outside-focus blur handling.
   - Added adapted tests for `useInteractOutside` outside detection, left-button gating, start/end callback flow, and disabled behavior.
   - Added adapted tests for `useHover` callback flow, disabled behavior, and touch/emulated hover suppression.
+  - Added adapted tests for `useScrollWheel` delta emission, ctrl+wheel suppression, and disabled behavior.
   - Full upstream test migration pending with broader API coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
@@ -582,3 +584,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useHover`
 - Added adapted tests for hover start/end/change callbacks, disabled handling, and touch suppression behavior.
 - Validation: `npm run check` passed, `npm test` passed (45 files, 124 tests).
+- Ported `@vue-aria/interactions` scroll-wheel utility slice:
+  - `useScrollWheel`
+- Added adapted tests for wheel delta callbacks, ctrl+wheel bypass, and disabled behavior.
+- Validation: `npm run check` passed, `npm test` passed (46 files, 127 tests).
