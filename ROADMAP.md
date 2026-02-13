@@ -1697,6 +1697,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
   - Added adapted coverage for listbox role/multiselect props, option aria metadata/id wiring (including virtualized metadata), section group/heading semantics, item id utility derivation, Safari VoiceOver aria mapping behavior, and hover-focus interaction gating.
+  - Added adapted option integration coverage for pointer-press selection delegation and Enter-key action delegation in replace-selection behavior.
 - [x] All relevant upstream tests migrated
 
 ### Docs
@@ -3197,3 +3198,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Refreshed `@vue-aria/interactions` package record parity metadata:
   - completed upstream test inventory (`13` upstream files) with mapped/adapted Vue test coverage
   - marked relevant upstream test migration gate complete and updated next actions to downstream integration/docs parity focus
+- Expanded `@vue-aria/listbox/useOption` integration parity coverage:
+  - added pointer-press delegation test asserting option props route selection updates through `useSelectableItem` in replace-selection mode
+  - added Enter-key action delegation test asserting option props route keyboard action behavior for actionable items
+- Validation: `npm run check` passed, `npm test` passed (126 files, 581 tests).

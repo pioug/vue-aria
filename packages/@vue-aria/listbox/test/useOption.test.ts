@@ -116,6 +116,147 @@ describe("useOption", () => {
     ref.current?.remove();
   });
 
+  it("delegates pointer press selection through option props", () => {
+    const replaceSelection = vi.fn();
+    const manager = createManager({
+      selectionBehavior: "replace",
+      replaceSelection,
+      isSelected: (key: string) => key === "a",
+    });
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    listData.set(state as ListState<unknown>, {
+      id: "list-id",
+      shouldFocusOnHover: false,
+      linkBehavior: "override",
+    });
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let optionProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ optionProps } = useOption({ key: "b" }, state, ref));
+    });
+
+    const onMousedown = optionProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+    onMousedown?.({
+      type: "mousedown",
+      button: 0,
+      currentTarget: ref.current,
+      target: ref.current,
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      clientX: 0,
+      clientY: 0,
+      stopPropagation: vi.fn(),
+      preventDefault: vi.fn(),
+    } as unknown as MouseEvent);
+    const onClick = optionProps.onClick as ((event: MouseEvent) => void) | undefined;
+    onClick?.({
+      type: "click",
+      button: 0,
+      currentTarget: ref.current,
+      target: ref.current,
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      clientX: 0,
+      clientY: 0,
+      stopPropagation: vi.fn(),
+      preventDefault: vi.fn(),
+    } as unknown as MouseEvent);
+
+    expect(replaceSelection).toHaveBeenCalledWith("b");
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
+  it("runs option action on Enter key in replace selection mode", () => {
+    const onAction = vi.fn();
+    const collection = {
+      ...createCollection(),
+      getItem(key: string) {
+        return {
+          key,
+          index: key === "a" ? 0 : 1,
+          props: key === "b" ? { onAction } : {},
+        } as any;
+      },
+    };
+
+    const manager = createManager({
+      selectionBehavior: "replace",
+      collection,
+      isSelected: (key: string) => key === "a",
+    });
+    const state: ListState<unknown> = {
+      collection: manager.collection,
+      disabledKeys: new Set(),
+      selectionManager: manager,
+    };
+
+    listData.set(state as ListState<unknown>, {
+      id: "list-id",
+      shouldFocusOnHover: false,
+      linkBehavior: "override",
+    });
+
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const scope = effectScope();
+    let optionProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ optionProps } = useOption({ key: "b" }, state, ref));
+    });
+
+    const onKeydown = optionProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
+    const onKeyup = optionProps.onKeyup as ((event: KeyboardEvent) => void) | undefined;
+    onKeydown?.({
+      type: "keydown",
+      key: "Enter",
+      code: "Enter",
+      repeat: false,
+      currentTarget: ref.current,
+      target: ref.current,
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      stopPropagation: vi.fn(),
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+    onKeyup?.({
+      type: "keyup",
+      key: "Enter",
+      code: "Enter",
+      repeat: false,
+      currentTarget: ref.current,
+      target: ref.current,
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      altKey: false,
+      stopPropagation: vi.fn(),
+      preventDefault: vi.fn(),
+    } as unknown as KeyboardEvent);
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+
+    scope.stop();
+    ref.current?.remove();
+  });
+
   it("focuses hovered option when pointer modality is active and hover focus is enabled", () => {
     const focusCalls: boolean[] = [];
     const focusedKeyCalls: string[] = [];
