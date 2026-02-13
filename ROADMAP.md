@@ -1712,6 +1712,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted coverage for change-event commit behavior, invalid-event short-circuit when display state is already invalid, and native validity snapshot propagation when realtime validation is valid.
   - Added adapted focus-order behavior coverage for first-invalid-only focus and custom `focus` callback invocation.
   - Added adapted integration coverage through `@vue-aria/select/useHiddenSelect` for native invalid-event trigger focus and hidden-select focus forwarding.
+  - Added adapted branch coverage for fallback native custom-validity messaging (`"Invalid value."`), disabled-input native validity sync short-circuit, and modality no-op when invalid events are already default-prevented.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2579,3 +2580,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/select/useSelect` typeahead guard parity with adapted tests for:
   - no-op selection behavior when the first typed typeahead character is Space
 - Validation: `npm run check` passed, `npm test` passed (118 files, 413 tests).
+- Expanded `@vue-aria/form` validation branch parity with adapted tests for:
+  - fallback native custom-validity message when invalid with no errors
+  - disabled-input short-circuit for native validity snapshot syncing
+  - no-op modality mutation when invalid events are already default-prevented
+- Validation: `npm run check` passed, `npm test` passed (118 files, 416 tests).

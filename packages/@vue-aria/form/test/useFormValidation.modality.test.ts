@@ -74,4 +74,32 @@ describe("useFormValidation modality behavior", () => {
     scope.stop();
     form.remove();
   });
+
+  it("does not set modality when invalid event is already defaultPrevented", () => {
+    const input = document.createElement("input");
+    input.required = true;
+    const form = document.createElement("form");
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
+      commitValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    (setInteractionModality as any).mockClear();
+    const event = new Event("invalid", { bubbles: true, cancelable: true });
+    event.preventDefault();
+    input.dispatchEvent(event);
+    expect(setInteractionModality).not.toHaveBeenCalled();
+
+    scope.stop();
+    form.remove();
+  });
 });

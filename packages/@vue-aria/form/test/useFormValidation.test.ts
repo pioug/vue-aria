@@ -24,6 +24,27 @@ describe("useFormValidation", () => {
     scope.stop();
   });
 
+  it("sets fallback custom validity message when invalid with no validation errors", () => {
+    const input = document.createElement("input");
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      realtimeValidation: {
+        isInvalid: true,
+        validationErrors: [],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    expect(input.validationMessage).toBe("Invalid value.");
+    scope.stop();
+  });
+
   it("commits validation on invalid event", () => {
     const input = document.createElement("input");
     const form = document.createElement("form");
@@ -115,6 +136,28 @@ describe("useFormValidation", () => {
     const [result] = state.updateValidation.mock.calls[0];
     expect(result.isInvalid).toBe(true);
     expect(result.validationDetails?.valueMissing).toBe(true);
+    scope.stop();
+  });
+
+  it("does not sync native validity when input is disabled", () => {
+    const input = document.createElement("input");
+    input.disabled = true;
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const state = {
+      realtimeValidation: {
+        isInvalid: false,
+        validationErrors: [],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation({ validationBehavior: "native" }, state as any, inputRef);
+    });
+
+    expect(state.updateValidation).not.toHaveBeenCalled();
     scope.stop();
   });
 
