@@ -2591,3 +2591,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `name` fallback from `selectData` in large-collection hidden-input rendering
   - `name` fallback from `selectData` in empty-collection initial `FormData` value propagation
 - Validation: `npm run check` passed, `npm test` passed (118 files, 418 tests).
+- Expanded `@vue-aria/menu/useSubmenuTrigger` keyboard propagation parity with adapted tests for:
+  - `continuePropagation` behavior on `ArrowLeft` when submenu is closed in LTR flows
+- Validation: `npm run check` passed, `npm test` passed (118 files, 419 tests).

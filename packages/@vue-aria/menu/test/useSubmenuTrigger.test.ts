@@ -62,6 +62,39 @@ describe("useSubmenuTrigger", () => {
     submenu.remove();
   });
 
+  it("continues propagation on ArrowLeft when closed in ltr", () => {
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const submenu = document.createElement("ul");
+    parent.appendChild(trigger);
+    document.body.append(parent, submenu);
+
+    const state = createState({ isOpen: false });
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    let submenuTriggerProps: any = null;
+    scope.run(() => {
+      ({ submenuTriggerProps } = useSubmenuTrigger(
+        { parentMenuRef, submenuRef },
+        state,
+        triggerRef
+      ));
+    });
+
+    const event = createKeyboardEvent("ArrowLeft", trigger, trigger);
+    submenuTriggerProps.onKeyDown(event);
+    expect((event.continuePropagation as any).mock.calls.length).toBe(1);
+    expect(state.close).not.toHaveBeenCalled();
+    expect(state.open).not.toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+  });
+
   it("opens on hover after delay and closes on outside interaction", () => {
     vi.useFakeTimers();
     const parent = document.createElement("ul");
