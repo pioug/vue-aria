@@ -2593,6 +2593,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for value/percent/label getters, step snapping, min/max constraints for multi-thumb state, and percent-to-value mapping.
   - Added adapted coverage for drag lifecycle change callbacks (`onChange` and `onChangeEnd`) and no-op unchanged-value updates.
+  - Added adapted coverage for single-value callback conversion (`number` instead of `number[]`) and disabled/non-editable thumb update guards.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3955,3 +3956,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated `docs/packages/slider.md` with upstream story-aligned variant coverage (single/range/multi-thumb, disabled-thumb patterns, and base style snippet parity).
   - updated `docs/packages/slider-state.md` with callback-shape examples for single vs range usage and additional lifecycle helper notes.
 - Validation: `npm run check` passed, `npm test` passed (142 files, 738 tests).
+- Expanded `@vue-aria/slider-state` edge-case parity:
+  - added adapted tests for single-value callback conversion behavior and disabled/non-editable thumb update guards.
+- Validation: `npm run check` passed, `npm test` passed (142 files, 740 tests).

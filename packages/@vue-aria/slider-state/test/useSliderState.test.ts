@@ -188,4 +188,48 @@ describe("useSliderState", () => {
 
     stop();
   });
+
+  it("converts single-value callbacks to numbers", () => {
+    const onChangeEnd = vi.fn();
+    const onChange = vi.fn();
+    const { state, stop } = setupSliderState({
+      defaultValue: 25,
+      onChangeEnd,
+      onChange,
+      numberFormatter,
+    });
+
+    state.setThumbDragging(0, true);
+    state.setThumbValue(0, 30);
+    state.setThumbDragging(0, false);
+
+    expect(onChange).toHaveBeenLastCalledWith(30);
+    expect(onChangeEnd).toHaveBeenLastCalledWith(30);
+
+    stop();
+  });
+
+  it("does not update disabled or non-editable thumbs", () => {
+    const disabled = setupSliderState({
+      defaultValue: [20],
+      isDisabled: true,
+      numberFormatter,
+    });
+    disabled.state.setThumbValue(0, 40);
+    expect(disabled.state.values).toEqual([20]);
+    disabled.stop();
+
+    const nonEditable = setupSliderState({
+      defaultValue: [20],
+      numberFormatter,
+    });
+    nonEditable.state.setThumbEditable(0, false);
+    nonEditable.state.setThumbValue(0, 40);
+    expect(nonEditable.state.values).toEqual([20]);
+
+    nonEditable.state.setThumbEditable(0, true);
+    nonEditable.state.setThumbValue(0, 40);
+    expect(nonEditable.state.values).toEqual([40]);
+    nonEditable.stop();
+  });
 });
