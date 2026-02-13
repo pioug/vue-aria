@@ -257,4 +257,51 @@ describe("useNumberFieldState", () => {
     expect(state.numberValue).toBe(1234);
     scope.stop();
   });
+
+  it("parses unicode minus for locales that use U+2212", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "fi-FI",
+        defaultValue: 0,
+        minValue: -100,
+      })
+    )!;
+
+    expect(state.validate("−")).toBe(true);
+    state.commit("−10");
+    expect(state.numberValue).toBe(-10);
+    scope.stop();
+  });
+
+  it("allows plus sign partial values when signDisplay is always", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+        formatOptions: {
+          signDisplay: "always",
+        },
+      })
+    )!;
+
+    expect(state.validate("+")).toBe(true);
+    expect(state.validate("+10")).toBe(true);
+    scope.stop();
+  });
+
+  it("parses arabic numbering input in an en-US locale context", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useNumberFieldState({
+        locale: "en-US",
+        defaultValue: 0,
+      })
+    )!;
+
+    state.commit("١٢٫٥");
+    expect(state.numberValue).toBe(12.5);
+    scope.stop();
+  });
 });

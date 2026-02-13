@@ -2111,6 +2111,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted native validation commit-queue coverage (`validationBehavior='native'` updates display state on `commitValidation`).
   - Added adapted parser edge-case coverage for decimal shorthand (`.5`/`-.5`), accounting-currency negatives (`($1.50)`), and unknown-currency rejection fallback behavior.
   - Added adapted locale-numbering-system/parser coverage for Swiss currency grouping separators (`de-CH`) and Arabic-Indic digit parsing (`ar-EG`).
+  - Added adapted parser parity coverage for:
+    - Unicode minus parsing/partial validation in locales that use U+2212 (`fi-FI`)
+    - `signDisplay: "always"` plus-sign partial validation behavior
+    - non-default numbering-system parsing in `en-US` using Arabic numerals/decimal separator
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2129,7 +2133,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Validate remaining server-error form-context parity paths through consuming packages.
-2. Expand locale-numbering-system parser edge-case coverage against upstream fixtures.
+2. Expand parser edge-case coverage against additional upstream NumberParser fixtures (units/percent + special numbering systems).
 ## 36) Package Record: @vue-aria/form-state
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-stately/form/src`
@@ -3284,3 +3288,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded `@vue-aria/link` router guard parity:
   - added adapted tests for modified-key click suppression and cross-origin click suppression
 - Validation: `npm run check` passed, `npm test` passed (127 files, 599 tests).
+- Expanded `@vue-aria/numberfield-state` parser parity coverage:
+  - added adapted tests for Unicode-minus parsing (`fi-FI`), `signDisplay: "always"` plus-partial validation, and Arabic numbering-system parsing in `en-US`
+- Validation: `npm run check` passed, `npm test` passed (127 files, 602 tests).
