@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 153 |
-| Passing tests | 153 |
+| Ported tests | 155 |
+| Passing tests | 155 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -126,7 +126,7 @@
 | @vue-spectrum/switch | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/switch | packages/@react-spectrum/switch |
 | @vue-spectrum/table | complete | 8 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/table | packages/@react-spectrum/table |
 | @vue-spectrum/tabs | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/tabs | packages/@react-spectrum/tabs |
-| @vue-spectrum/tag | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
+| @vue-spectrum/tag | complete | 2 | 2 | 2 | 0 | 0 | 0 | 0 | true | @react-spectrum/tag | packages/@react-spectrum/tag |
 | @vue-spectrum/test-utils | complete | 0 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/test-utils | packages/@react-spectrum/test-utils |
 | @vue-spectrum/text | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/text | packages/@react-spectrum/text |
 | @vue-spectrum/textfield | complete | 4 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/textfield | packages/@react-spectrum/textfield |
