@@ -2676,7 +2676,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation notes:
-  - Initial range-thumb labels are currently English (`Minimum`/`Maximum`); upstream localized dictionary parity remains open.
+  - Range-thumb label localization is now wired through copied upstream `intl/*.json` dictionaries via `useLocalizedStringFormatter`.
   - Styling currently uses Spectrum class names without imported Spectrum CSS variable files; docs/style parity will continue incrementally.
 
 ### Tests
@@ -2687,6 +2687,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `Slider` coverage for aria-label and visible-label output semantics.
   - Added adapted `Slider` coverage for default, controlled, and disabled behavior.
   - Added adapted `RangeSlider` coverage for label wiring, min/max thumb labeling, default/controlled behavior, and start/end form names.
+  - Added adapted locale coverage validating localized range-thumb `aria-label` output (`ar-AE` minimum/maximum strings).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2705,8 +2706,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port remaining upstream Slider/RangeSlider tests (keyboard, pointer, form lifecycle, locale/format options).
-2. Add localized range-thumb label dictionary parity (`intl/*.json` + formatter wiring).
-3. Align style classes/tokens with upstream docs stories and validate with wrapper harness.
+2. Align style classes/tokens with upstream docs stories and validate with wrapper harness.
 
 ## 44) Session Log
 ### 2026-02-13
@@ -4146,3 +4146,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added initial VitePress package page (`docs/packages/spectrum-slider.md`) and linked it in nav/sidebar/index docs lists.
   - added adapted initial test slice (`Slider.test.ts`, `RangeSlider.test.ts`) for labeling, default/controlled behavior, and form-name wiring.
 - Validation: `npm run check` passed, `npm test` passed (145 files, 782 tests).
+- Expanded `@vue-spectrum/slider` localization parity:
+  - copied upstream `intl/*.json` dictionaries into `src/intlMessages.ts`.
+  - wired `RangeSlider` minimum/maximum thumb label strings through `useLocalizedStringFormatter`.
+  - added adapted locale regression coverage for Arabic (`ar-AE`) range-thumb labels.
+- Validation: `npm run check` passed, `npm test` passed (145 files, 783 tests).

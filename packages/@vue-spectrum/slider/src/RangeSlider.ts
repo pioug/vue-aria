@@ -1,7 +1,8 @@
-import { useLocale } from "@vue-aria/i18n";
+import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { computed, defineComponent, h, type PropType } from "vue";
 import { SliderBase, type SliderBaseChildArguments } from "./SliderBase";
 import { SliderThumb } from "./SliderThumb";
+import { intlMessages } from "./intlMessages";
 import type { RangeValue, SpectrumRangeSliderProps } from "./types";
 
 export const RangeSlider = defineComponent({
@@ -30,6 +31,10 @@ export const RangeSlider = defineComponent({
   },
   setup(props, { attrs }) {
     const locale = useLocale();
+    const stringFormatter = useLocalizedStringFormatter(
+      intlMessages as any,
+      "@react-spectrum/slider"
+    );
     const value = computed(() =>
       props.value != null ? [props.value.start, props.value.end] : undefined
     );
@@ -96,7 +101,7 @@ export const RangeSlider = defineComponent({
               }),
               h(SliderThumb, {
                 index: 0,
-                "aria-label": "Minimum",
+                "aria-label": stringFormatter.format("minimum"),
                 isDisabled: props.isDisabled,
                 trackRef,
                 inputRef,
@@ -113,7 +118,7 @@ export const RangeSlider = defineComponent({
               }),
               h(SliderThumb, {
                 index: 1,
-                "aria-label": "Maximum",
+                "aria-label": stringFormatter.format("maximum"),
                 isDisabled: props.isDisabled,
                 trackRef,
                 state,

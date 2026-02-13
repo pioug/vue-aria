@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { defineComponent, h, ref } from "vue";
+import { I18nProvider } from "@vue-aria/i18n";
 import { RangeSlider } from "../src";
 
 describe("Spectrum RangeSlider", () => {
@@ -134,6 +135,28 @@ describe("Spectrum RangeSlider", () => {
     expect(sliders[0].attributes("form")).toBe("test");
     expect(sliders[1].attributes("name")).toBe("maxCookies");
     expect(sliders[1].attributes("form")).toBe("test");
+
+    wrapper.unmount();
+  });
+
+  it("localizes minimum and maximum thumb labels", () => {
+    const App = defineComponent({
+      setup() {
+        return () =>
+          h(I18nProvider, { locale: "ar-AE" }, {
+            default: () => [
+              h(RangeSlider as any, {
+                label: "The Label",
+              }),
+            ],
+          });
+      },
+    });
+
+    const wrapper = mount(App as any);
+    const sliders = wrapper.findAll('input[type="range"]');
+    expect(sliders[0].attributes("aria-label")).toBe("أدنى");
+    expect(sliders[1].attributes("aria-label")).toBe("أقصى");
 
     wrapper.unmount();
   });
