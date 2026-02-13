@@ -371,7 +371,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules for initial slice enumerated
-- [ ] Public API checklist complete (full package not yet ported)
+- [x] Public API checklist complete for current upstream module surface
 
 ### Implementation
 - [x] Initial collection navigation/typeahead slice ported:
@@ -391,8 +391,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Deepen `useSelectableCollection` and `useSelectableItem` parity for full press/long-press semantics and virtualization lifecycle nuances.
-  - Reconcile API/type parity against full upstream `index.ts` surface
+  - Deepen `useSelectableCollection` parity for virtualization/scroll lifecycle nuances.
+  - Reconcile remaining `useSelectableItem` press-responder edge semantics against upstream pointer/keyboard path details.
 
 ### Tests
 - Total upstream test files: 1
@@ -438,6 +438,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - touch long-press behavior for action+selection items switching selection behavior to `toggle`
     - drag-start suppression after touch interaction when long-press selection behavior is active
   - Remaining upstream `useSelectableCollection` pointer down/up integration harness details are tracked for full listbox/story parity migration.
+  - Remaining `useSelectableItem` parity focuses on full press-responder lifecycle alignment beyond current click/touch long-press behavior coverage.
 - [ ] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
@@ -462,9 +463,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Deepen `useSelectableItem` parity for press/long-press behavior and modality-specific edge cases.
-2. Deepen `useSelectableCollection` virtualization/scroll lifecycle parity paths.
-3. Migrate more upstream `useSelectableCollection` test intent into Vue harness with expanded DOM interaction coverage.
+1. Deepen `useSelectableCollection` virtualization/scroll lifecycle parity paths.
+2. Port remaining press-responder lifecycle edge paths in `useSelectableItem` (pointer/keyboard integration details).
+3. Migrate remaining upstream `useSelectableCollection` DOM interaction intent with expanded harness coverage.
 4. Expand docs from parity notes to runnable Vue examples for each upstream story variant.
 5. Mark completion only after all package gates pass.
 
