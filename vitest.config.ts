@@ -25,6 +25,9 @@ export default defineConfig({
       ),
       "@vue-aria/collections": fileURLToPath(
         new URL("./packages/@vue-aria/collections/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/toggle-state": fileURLToPath(
+        new URL("./packages/@vue-aria/toggle-state/src/index.ts", import.meta.url)
       )
     }
   }

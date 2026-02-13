@@ -66,7 +66,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### React Stately packages
 - `@vue-aria/utils-state`: Not started
-- `@vue-aria/toggle-state`: Not started
+- `@vue-aria/toggle-state`: In progress
 - `@vue-aria/list-state`: Not started
 - `@vue-aria/tree-state`: Not started
 - `@vue-aria/table-state`: Not started
@@ -258,3 +258,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added initial hideable/collection-builder compatibility layer (provisional APIs for downstream integration)
   - Added base collection tests
 - Validation: `npm run check` passed, `npm test` passed (25 files, 59 tests).
+- Started `@vue-aria/toggle-state` slice from upstream `@react-stately/toggle`:
+  - `useToggleState`
+  - `useToggleGroupState`
+  - Vue-controlled-state helper aligned to controlled/uncontrolled behavior
+- Added toggle-state tests for single/multiple selection and read-only handling.
+- Validation: `npm run check` passed, `npm test` passed (27 files, 63 tests).

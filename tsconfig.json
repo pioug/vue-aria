@@ -12,7 +12,8 @@
       "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"],
       "@vue-aria/flags": ["packages/@vue-aria/flags/src/index.ts"],
       "@vue-aria/i18n": ["packages/@vue-aria/i18n/src/index.ts"],
-      "@vue-aria/collections": ["packages/@vue-aria/collections/src/index.ts"]
+      "@vue-aria/collections": ["packages/@vue-aria/collections/src/index.ts"],
+      "@vue-aria/toggle-state": ["packages/@vue-aria/toggle-state/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
