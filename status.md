@@ -11,8 +11,8 @@
 | Metric | Value |
 | --- | ---: |
 | Upstream tests | 266 |
-| Ported tests | 155 |
-| Passing tests | 155 |
+| Ported tests | 156 |
+| Passing tests | 156 |
 | Snapshot total | 0 |
 | Snapshot passing | 0 |
 | Docs total | 0 |
@@ -89,7 +89,7 @@
 | @vue-spectrum/card | complete | 2 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/card | packages/@react-spectrum/card |
 | @vue-spectrum/checkbox | complete | 3 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/checkbox | packages/@react-spectrum/checkbox |
 | @vue-spectrum/color | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/color | packages/@react-spectrum/color |
-| @vue-spectrum/combobox | complete | 1 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/combobox | packages/@react-spectrum/combobox |
+| @vue-spectrum/combobox | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/combobox | packages/@react-spectrum/combobox |
 | @vue-spectrum/contextualhelp | complete | 1 | 1 | 1 | 0 | 0 | 0 | 0 | true | @react-spectrum/contextualhelp | packages/@react-spectrum/contextualhelp |
 | @vue-spectrum/datepicker | complete | 6 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/datepicker | packages/@react-spectrum/datepicker |
 | @vue-spectrum/dialog | complete | 5 | 0 | 0 | 0 | 0 | 0 | 0 | true | @react-spectrum/dialog | packages/@react-spectrum/dialog |
