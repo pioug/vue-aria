@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/radio`
+- Current focus package: `@vue-aria/switch`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -41,7 +41,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/toggle`: In progress
 - `@vue-aria/checkbox`: In progress
 - `@vue-aria/radio`: In progress
-- `@vue-aria/switch`: Not started
+- `@vue-aria/switch`: In progress
 - `@vue-aria/textfield`: Not started
 - `@vue-aria/searchfield`: Not started
 - `@vue-aria/numberfield`: Not started
@@ -871,7 +871,54 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port downstream Spectrum radio components for visual/interaction parity.
 2. Deepen validation semantics after form package ports.
 
-## 17) Session Log
+## 17) Package Record: @vue-aria/switch
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/switch/src`
+- Local package path:
+  - `packages/@vue-aria/switch`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useSwitch`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useSwitch.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: none in `@react-aria/switch` reference package
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for switch role, checked-state mapping, and disabled/read-only passthrough behavior from `useToggle`.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/switch.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full behavior parity in downstream Spectrum switch components
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port downstream Spectrum switch component implementations.
+2. Expand switch behavior coverage as consumers are integrated.
+
+## 18) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1109,3 +1156,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added VitePress docs page for `@vue-aria/radio` and wired docs navigation entries.
 - Hardened `useLocale` fallback for composable usage outside component setup to avoid inject warnings in parity tests.
 - Validation: `npm run check` passed, `npm test` passed (67 files, 203 tests).
+- Started `@vue-aria/switch` package:
+  - `useSwitch`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted switch tests for role/checked semantics and disabled/read-only passthrough behavior.
+- Added VitePress docs page for `@vue-aria/switch` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (68 files, 205 tests).

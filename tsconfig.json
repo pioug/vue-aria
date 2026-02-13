@@ -29,7 +29,8 @@
       "@vue-aria/checkbox-state": ["packages/@vue-aria/checkbox-state/src/index.ts"],
       "@vue-aria/checkbox": ["packages/@vue-aria/checkbox/src/index.ts"],
       "@vue-aria/radio-state": ["packages/@vue-aria/radio-state/src/index.ts"],
-      "@vue-aria/radio": ["packages/@vue-aria/radio/src/index.ts"]
+      "@vue-aria/radio": ["packages/@vue-aria/radio/src/index.ts"],
+      "@vue-aria/switch": ["packages/@vue-aria/switch/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
