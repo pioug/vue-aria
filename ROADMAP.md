@@ -1906,7 +1906,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 1 (adapted)
 - Passing test files: 1 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for aria realtime update behavior, native commit-queue behavior, and controlled invalid-state precedence.
+  - Added adapted coverage for aria realtime update behavior, native commit-queue behavior, controlled invalid-state precedence, and `mergeValidation` result semantics.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2459,3 +2459,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - announces normalized value after blur commit when text changes
   - does not announce when blur commit leaves text unchanged
 - Validation: `npm run check` passed, `npm test` passed (117 files, 369 tests).
+- Expanded `@vue-aria/form-state` test parity with adapted `mergeValidation` coverage:
+  - deduplicated error accumulation
+  - merged `ValidityState` flags and final `valid` resolution
+- Validation: `npm run check` passed, `npm test` passed (117 files, 370 tests).
