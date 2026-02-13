@@ -188,4 +188,38 @@ describe("useMenuTrigger", () => {
     expect(disabledState.open).not.toHaveBeenCalled();
     disabledScope.stop();
   });
+
+  it("toggles on touch press and ignores touch press when disabled", () => {
+    const state = createState();
+    const target = document.createElement("button");
+    const focusSpy = vi.spyOn(target, "focus");
+    const ref = { current: target as Element | null };
+
+    const scope = effectScope();
+    let menuTriggerProps: Record<string, unknown> = {};
+    scope.run(() => {
+      ({ menuTriggerProps } = useMenuTrigger({ type: "menu" }, state, ref));
+    });
+
+    (menuTriggerProps.onPress as ((event: any) => void))?.({
+      pointerType: "touch",
+      target,
+    });
+    expect(state.toggle).toHaveBeenCalledTimes(1);
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    scope.stop();
+
+    const disabledState = createState();
+    const disabledScope = effectScope();
+    let disabledProps: Record<string, unknown> = {};
+    disabledScope.run(() => {
+      ({ menuTriggerProps: disabledProps } = useMenuTrigger({ isDisabled: true }, disabledState, ref));
+    });
+    (disabledProps.onPress as ((event: any) => void))?.({
+      pointerType: "touch",
+      target,
+    });
+    expect(disabledState.toggle).not.toHaveBeenCalled();
+    disabledScope.stop();
+  });
 });

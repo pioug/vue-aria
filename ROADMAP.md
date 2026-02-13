@@ -1593,7 +1593,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Ported test files: 5 (adapted)
 - Passing test files: 5 (validated 2026-02-13)
 - Test parity notes:
-  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, keyboard-triggered item activation close semantics (Enter/Space behavior by selection mode), menu trigger keyboard/menu-prop wiring semantics, submenu trigger open/close interactions, submenu ArrowLeft close/focus behavior (LTR) and hover-delay cancellation behavior, safe-mouse hook lifecycle/reset behavior, safe-mouse touch/pen pointer-move ignore behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, non-touch onPressStart open behavior with disabled short-circuit, and virtualized menu item `aria-posinset`/`aria-setsize` metadata across full item sets.
+  - Added adapted coverage for menu role wiring, Escape key handling with virtual-focus exception, accessibility label warning behavior, section heading/group semantics, menu item role derivation by selection mode, close/action behavior, keyboard-triggered item activation close semantics (Enter/Space behavior by selection mode), menu trigger keyboard/menu-prop wiring semantics, menu trigger touch-press open behavior with disabled short-circuit, submenu trigger open/close interactions, submenu ArrowLeft close/focus behavior (LTR) and hover-delay cancellation behavior, safe-mouse hook lifecycle/reset behavior, safe-mouse touch/pen pointer-move ignore behavior, additional close/disabled/default-prevented keyboard-path semantics, submenu focusin/press-path behavior, menu-trigger open/closed aria-controls/expanded semantics, non-touch onPressStart open behavior with disabled short-circuit, and virtualized menu item `aria-posinset`/`aria-setsize` metadata across full item sets.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2567,3 +2567,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - typeahead suppression in multiple-selection mode
 - Fixed `useSelect` typeahead handler wiring parity (`onKeydownCapture` -> trigger `onKeyDown` mapping) to match `useTypeSelect` output casing.
 - Validation: `npm run check` passed, `npm test` passed (118 files, 410 tests).
+- Expanded `@vue-aria/menu/useMenuTrigger` press parity with adapted tests for:
+  - touch press opening behavior in enabled state
+  - touch press disabled short-circuit behavior
+- Validation: `npm run check` passed, `npm test` passed (118 files, 411 tests).
