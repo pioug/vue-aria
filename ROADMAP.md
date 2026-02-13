@@ -45,6 +45,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/textfield`: In progress
 - `@vue-aria/searchfield`: In progress
 - `@vue-aria/form`: In progress
+- `@vue-aria/spinbutton`: In progress
 - `@vue-aria/numberfield`: Not started
 - `@vue-aria/slider`: Not started
 - `@vue-aria/link`: In progress
@@ -1709,7 +1710,58 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Deepen native form reset parity behavior and React scheduling edge-case handling in `useFormValidation`.
 2. Expand integration tests through `@vue-aria/select` hidden select/native validation paths.
 
-## 33) Session Log
+## 33) Package Record: @vue-aria/spinbutton
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/spinbutton/src`
+  - `references/react-spectrum/packages/@react-aria/spinbutton/test/useSpinButton.test.js`
+- Local package path:
+  - `packages/@vue-aria/spinbutton`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useSpinButton`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useSpinButton.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Current locale string parity is en-US seeded while broader locale bundle parity remains pending.
+
+### Tests
+- Total upstream test files: 1 (`useSpinButton.test.js`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for spinbutton aria attributes, keyboard increment/decrement/page/home/end handlers, page-key fallback behavior, and minus-sign text normalization.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/spinbutton.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full long-press/touch repetition and live-announcement timing behavior parity against upstream edge cases
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port remaining upstream spinbutton interaction/timing edge-case coverage (touch pointer-cancel and repeated press cadence).
+2. Integrate spinbutton package into `@vue-aria/numberfield` port.
+
+## 34) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -2163,3 +2215,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added explicit test for no arrow-key selection mutation in multiple mode
   - added hidden-select change test that exercises `event.currentTarget` fallback handling
 - Validation: `npm run check` passed, `npm test` passed (111 files, 333 tests).
+- Started `@vue-aria/spinbutton` package:
+  - `useSpinButton`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted spinbutton tests for aria attributes, keyboard handlers, fallback behavior, and minus-sign normalization.
+- Added VitePress docs page for `@vue-aria/spinbutton` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (112 files, 338 tests).
