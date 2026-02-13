@@ -513,11 +513,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Remaining:
-  - Port remaining interaction helpers/context modules.
-  - Migrate upstream interaction tests module-by-module.
+  - No known runtime API gaps in current upstream module surface.
+  - Continue validating behavior parity through downstream consumer integration.
 
 ### Tests
-- Total upstream test files: Pending full inventory
+- Total upstream test files: 13
 - Ported test files: 14
 - Passing test files: 14
 - Test parity notes:
@@ -534,8 +534,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted tests for `useLongPress` timer threshold behavior, cancellation semantics, `usePress` composition, keyboard non-trigger behavior, and accessibility description handling.
   - Added adapted tests for `PressResponder` registration warning semantics and pressable-child registration path.
   - Added adapted tests for `useFocusable` tab order/default keyboard-focus wiring and `Pressable` focusability behavior.
-  - Full upstream test migration pending with broader API coverage.
-- [ ] All relevant upstream tests migrated
+  - Added adapted `useScrollWheel` coverage not present as a dedicated upstream file, preserving API intent in Vue harnesses.
+- [x] All relevant upstream tests migrated
 - [x] Current migrated tests passing
 
 ### Docs
@@ -558,10 +558,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - None in current runtime slice; full package parity pending.
 
 ### Next Actions
-1. Port `usePress` and `useLongPress` with Vue event adaptation.
-2. Port `useMove`, `useHover`, `useFocus`, `useFocusWithin`, `useKeyboard`, and `useInteractOutside`.
-3. Port/migrate upstream interaction tests incrementally after each module.
-4. Wire downstream consumers (`@vue-aria/selection`) once required interaction primitives are available.
+1. Validate interaction-modality behavior across downstream Spectrum components under pointer/keyboard/virtual navigation paths.
+2. Expand interactions docs examples toward upstream story parity depth.
+3. Close package completion gates after downstream integration and docs parity checks are satisfied.
 
 ## 8) Package Record: @vue-aria/focus
 - Upstream source path(s):
@@ -3195,3 +3194,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for focused-key-change scroll behavior
   - added adapted tests for focused-key-null collection-root focus fallback behavior
 - Validation: `npm run check` passed, `npm test` passed (126 files, 579 tests).
+- Refreshed `@vue-aria/interactions` package record parity metadata:
+  - completed upstream test inventory (`13` upstream files) with mapped/adapted Vue test coverage
+  - marked relevant upstream test migration gate complete and updated next actions to downstream integration/docs parity focus
