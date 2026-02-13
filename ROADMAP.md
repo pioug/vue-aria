@@ -3132,4 +3132,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - implemented default mouse-down selection path with click dedupe for replace-mode selectable rows
   - implemented `shouldSelectOnPressUp` click-phase selection semantics
   - implemented `allowsDifferentPressOrigin` mouse-up selection path when press-up selection is enabled
-- Validation: `npm run check` passed, `npm test` passed (126 files, 555 tests).
+- Expanded `@vue-aria/selection` docs parity:
+  - documented press-timing option usage (`shouldSelectOnPressUp`, `allowsDifferentPressOrigin`)
+  - documented virtual-focus interaction behavior for selectable items
+- Validation: `npm run check` passed, `npm test` passed (126 files, 558 tests).

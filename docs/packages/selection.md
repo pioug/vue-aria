@@ -46,6 +46,32 @@ const items = [
 
 `useSelectableItem` follows upstream behavior where touch/virtual interactions toggle selection in multi-select replace mode.
 
+### `useSelectableItem` press timing options
+
+```ts
+import { useSelectableItem } from "@vue-aria/selection";
+
+const itemRef = { current: null as HTMLDivElement | null };
+const { itemProps } = useSelectableItem({
+  key: "item-1",
+  ref: itemRef,
+  selectionManager,
+  shouldSelectOnPressUp: true,
+  allowsDifferentPressOrigin: true
+});
+```
+
+- `shouldSelectOnPressUp`: defers mouse selection from press start to press end.
+- `allowsDifferentPressOrigin`: allows selection to commit on mouse up when press start and end occur on different targets.
+
+### Virtual focus behavior
+
+When `shouldUseVirtualFocus` is enabled, `useSelectableItem` mirrors upstream behavior by:
+
+- routing focused-item updates through virtual focus handling
+- updating collection focus state/key during press interactions
+- preventing native mouse down focus transfer
+
 ## Styles
 
 This package mirrors upstream base list styles in:
