@@ -23,3 +23,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/label](/packages/label)
 - [@vue-aria/button](/packages/button)
 - [@vue-aria/link](/packages/link)
+- [@vue-aria/toggle](/packages/toggle)

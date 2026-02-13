@@ -14,6 +14,7 @@ export default defineConfig({
       { text: "Label", link: "/packages/label" },
       { text: "Button", link: "/packages/button" },
       { text: "Link", link: "/packages/link" },
+      { text: "Toggle", link: "/packages/toggle" },
     ],
     sidebar: [
       {
@@ -27,6 +28,7 @@ export default defineConfig({
           { text: "@vue-aria/label", link: "/packages/label" },
           { text: "@vue-aria/button", link: "/packages/button" },
           { text: "@vue-aria/link", link: "/packages/link" },
+          { text: "@vue-aria/toggle", link: "/packages/toggle" },
         ],
       },
     ],

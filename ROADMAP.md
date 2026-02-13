@@ -38,7 +38,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/visually-hidden`: In progress
 - `@vue-aria/label`: In progress
 - `@vue-aria/button`: In progress
-- `@vue-aria/toggle`: Not started
+- `@vue-aria/toggle`: In progress
 - `@vue-aria/checkbox`: Not started
 - `@vue-aria/radio`: Not started
 - `@vue-aria/switch`: Not started
@@ -714,7 +714,56 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Harden router/client-navigation edge-case parity.
 2. Integrate and validate within downstream link/menu/breadcrumb components.
 
-## 14) Session Log
+## 14) Package Record: @vue-aria/toggle
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/toggle/src`
+- Local package path: `packages/@vue-aria/toggle`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useToggle`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useToggle.ts`
+  - `tsconfig.json` path alias
+
+### Tests
+- Total upstream test files: none
+- Ported test files: 1
+- Passing test files: 1
+- Test parity notes:
+  - Added adapted tests for base return props, accessibility warning behavior, and change-driven selection updates.
+- [ ] All relevant upstream tests migrated
+- Current note:
+  - Upstream package has no dedicated test directory in the reference tree.
+- [x] Current migrated tests passing
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/toggle.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate full behavior parity through downstream checkbox/switch consumers
+
+### Visual Parity
+- Not applicable for this utility package beyond interaction semantics.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Integrate with downstream checkbox/switch packages and validate behavior.
+2. Expand tests as consumers are ported.
+
+## 15) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -930,3 +979,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Added adapted `@react-aria/link` test coverage for default/custom/disabled link behavior.
 - Added VitePress docs page for `@vue-aria/link` and wired docs navigation entries.
 - Validation: `npm run check` passed, `npm test` passed (61 files, 178 tests).
+- Started `@vue-aria/toggle` package:
+  - `useToggle`
+  - package scaffolding and tsconfig alias wiring
+- Added adapted toggle tests for base props, a11y warning behavior, and selection updates from change events.
+- Added VitePress docs page for `@vue-aria/toggle` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (62 files, 181 tests).
