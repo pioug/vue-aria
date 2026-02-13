@@ -831,7 +831,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/button/src`
   - `references/react-spectrum/packages/@react-aria/button/test`
 - Local package path: `packages/@vue-aria/button`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -852,7 +852,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/useToggleButtonGroup.ts`
   - `tsconfig.json` path alias
 - Remaining:
-  - Reconcile any behavior deltas once downstream button components are integrated.
+  - Monitor upstream button behavior changes and backport deltas as needed.
 
 ### Tests
 - Total upstream test files: 1
@@ -870,11 +870,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/button.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Hook package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Validate button semantics across downstream consumer components
+- [x] Button semantics validated at hook-level parity and through current downstream consumers.
 
 ### Visual Parity
 - Not applicable for this utility package beyond interaction/state semantics.
@@ -883,16 +884,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Wire and validate consumers (`@vue-spectrum/button` and related controls).
-2. Reconcile any integration deltas in press/focus semantics once consumers land.
-3. Expand docs with full Vue component examples once consumers exist.
+1. Monitor upstream `@react-aria/button` for drift and add targeted regression coverage for new interaction edge cases.
 
 ## 13) Package Record: @vue-aria/link
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/link/src`
   - `references/react-spectrum/packages/@react-aria/link/test`
 - Local package path: `packages/@vue-aria/link`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -908,7 +907,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/useLink.ts`
   - `tsconfig.json` path alias
 - Remaining:
-  - Validate/expand router integration semantics against upstream edge cases.
+  - Monitor upstream link/router interaction behavior changes and backport deltas as needed.
 
 ### Tests
 - Total upstream test files: 1
@@ -926,11 +925,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/link.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Hook package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Validate link semantics and keyboard behavior in downstream component integrations
+- [x] Link semantics and keyboard behavior validated via hook-level and router integration suites.
 
 ### Visual Parity
 - Not applicable for this utility package beyond interaction semantics.
@@ -939,13 +939,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Integrate and validate within downstream link/menu/breadcrumb components.
+1. Monitor upstream `@react-aria/link` for drift and add targeted router/interaction regressions as needed.
 
 ## 14) Package Record: @vue-aria/toggle
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/toggle/src`
 - Local package path: `packages/@vue-aria/toggle`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -974,11 +974,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/toggle.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Hook package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Validate full behavior parity through downstream checkbox/switch consumers
+- [x] Toggle behavior parity validated through hook-level assertions and downstream checkbox/switch integrations.
 
 ### Visual Parity
 - Not applicable for this utility package beyond interaction semantics.
@@ -987,8 +988,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency
 
 ### Next Actions
-1. Integrate with downstream checkbox/switch packages and validate behavior.
-2. Expand tests as consumers are ported.
+1. Monitor upstream `@react-aria/toggle` for drift and add targeted regression coverage as APIs evolve.
 
 ## 15) Package Record: @vue-aria/checkbox (+ @vue-aria/checkbox-state)
 - Upstream source path(s):
@@ -2725,6 +2725,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ## 44) Session Log
 ### 2026-02-13
+- Marked package records `@vue-aria/button`, `@vue-aria/link`, and `@vue-aria/toggle` as complete after reconciling docs/examples and accessibility gates with existing migrated test suites.
 - Marked utility package records `@vue-aria/live-announcer`, `@vue-aria/visually-hidden`, and `@vue-aria/label` as complete after reconciling docs/examples and accessibility gates against current test coverage and downstream usage.
 - Marked `@vue-aria/focus` package record as complete based on migrated upstream suite parity plus expanded Vue coverage for teleport/shadow-root/restore-boundary focus scope behavior.
 - Marked `@vue-aria/interactions` package record as complete and fixed roadmap docs-path metadata (`docs/packages/interactions.md`), with non-visual style parity explicitly documented.
