@@ -2005,6 +2005,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted touch press flow coverage for no-op press-end without press-up and increment-on-touch press-up + press-end sequence.
   - Added adapted live-announcer parity coverage for focused value/text updates (including minus-sign normalized text announcements) and blur no-op behavior.
   - Added adapted touch repetition edge coverage for pointer-cancel stop behavior and repeat-stop behavior after press up.
+  - Added adapted locale-provider integration coverage for localized `Empty` aria text (`fr-FR` -> `Vide`).
 - [x] All relevant upstream tests migrated
 
 ### Docs
@@ -2023,7 +2024,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Integrate spinbutton package into `@vue-aria/numberfield` consumer parity and verify end-to-end interaction timing semantics.
-2. Add integration coverage validating localized `Empty` announcements through locale-provider overrides.
+2. Expand docs/examples with localized spinbutton empty-state behavior and locale-provider usage.
 
 ## 34) Package Record: @vue-aria/numberfield
 - Upstream source path(s):
@@ -3360,3 +3361,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted `@vue-aria/searchfield` test coverage for translated clear-search labels under `I18nProvider` (`fr-FR`)
   - added adapted `@vue-aria/breadcrumbs` test coverage for translated default nav labels under `I18nProvider` (`fr-FR`)
 - Validation: `npm run check` passed, `npm test` passed (130 files, 622 tests).
+- Expanded `@vue-aria/spinbutton` locale-provider integration parity:
+  - added adapted test coverage for localized `Empty` spinbutton `aria-valuetext` under `I18nProvider` (`fr-FR`)
+- Validation: `npm run check` passed, `npm test` passed (130 files, 623 tests).

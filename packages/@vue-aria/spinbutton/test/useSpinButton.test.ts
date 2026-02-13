@@ -1,7 +1,10 @@
+import { mount } from "@vue/test-utils";
+import { I18nProvider } from "@vue-aria/i18n";
 import { effectScope, nextTick, reactive } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as liveAnnouncer from "@vue-aria/live-announcer";
 import { useSpinButton } from "../src";
+import { defineComponent, h } from "vue";
 
 describe("useSpinButton", () => {
   afterEach(() => {
@@ -257,5 +260,23 @@ describe("useSpinButton", () => {
 
     expect(onIncrement.mock.calls.length).toBe(countBeforeRelease);
     scope.stop();
+  });
+
+  it("uses localized Empty text in aria-valuetext when provided locale changes", () => {
+    const SpinbuttonProbe = defineComponent({
+      setup() {
+        const { spinButtonProps } = useSpinButton({ value: Number.NaN, textValue: "" });
+        return () => h("div", { ...spinButtonProps, "data-testid": "spinbutton", tabIndex: -1 });
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        return () => h(I18nProvider, { locale: "fr-FR" }, { default: () => h(SpinbuttonProbe) });
+      },
+    });
+
+    const wrapper = mount(App);
+    expect(wrapper.find('[data-testid="spinbutton"]').attributes("aria-valuetext")).toBe("Vide");
   });
 });
