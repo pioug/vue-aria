@@ -14,6 +14,13 @@ Returns validation state with parity-oriented commit behavior:
 - `commitValidation()`
 - `resetValidation()`
 
+### Key props
+
+- `validationBehavior`: `"aria"` (realtime display) or `"native"` (commit-based display).
+- `validate(value)`: custom validation callback returning string/string[]/undefined.
+- `isInvalid` / `validationState`: controlled-invalid compatibility path.
+- `name`: field name(s) used for server-error context lookups.
+
 ### Exports
 
 - `FormValidationContext`
@@ -37,4 +44,48 @@ const validation = useFormValidationState<number>({
 });
 
 validation.commitValidation();
+```
+
+## Upstream-aligned usage patterns
+
+### Native validation commit flow
+
+```ts
+const validation = useFormValidationState<string>({
+  value,
+  validationBehavior: "native",
+  validate: (nextValue) => (!nextValue ? "Required" : undefined),
+});
+
+// Queue display update after the next render.
+validation.commitValidation();
+```
+
+### Aria realtime flow
+
+```ts
+const validation = useFormValidationState<string>({
+  value,
+  validationBehavior: "aria",
+  validate: (nextValue) => (nextValue.length < 3 ? "Minimum length is 3" : undefined),
+});
+// displayValidation updates in realtime as value changes.
+```
+
+### Server-error context integration
+
+```ts
+import { FormValidationContext } from "@vue-aria/form-state";
+
+// Provider value example:
+// { email: ["Address already in use"] }
+// Hook usage reads matching errors by `name`.
+```
+
+### Merge multiple validation results
+
+```ts
+import { mergeValidation } from "@vue-aria/form-state";
+
+const merged = mergeValidation(clientValidation, nativeValidation);
 ```

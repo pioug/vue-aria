@@ -2223,8 +2223,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/form-state.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Expanded parity examples for native/aria validation behavior, server-error context, and `mergeValidation` usage.
+- [x] Examples parity complete
+- [x] Base styles parity complete (not applicable for state package)
 
 ### Accessibility
 - Not directly applicable for stately state package; validated through hook consumers.
@@ -3790,3 +3791,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted tests for `aria-modal` marker handling and no-op behavior for non-modal child-list mutations.
 - Expanded `@vue-aria/aria-modal-polyfill` docs parity:
   - added upstream-aligned usage notes and examples for modal marker shapes, custom-document usage, and watcher cleanup lifecycle.
+- Expanded `@vue-aria/form-state` docs parity:
+  - added upstream-aligned examples for native/aria validation behavior, server-error context wiring, and `mergeValidation` usage.
