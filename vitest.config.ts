@@ -104,6 +104,9 @@ export default defineConfig({
       "@vue-aria/overlays-state": fileURLToPath(
         new URL("./packages/@vue-aria/overlays-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/listbox": fileURLToPath(
+        new URL("./packages/@vue-aria/listbox/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/tooltip-state": fileURLToPath(
         new URL("./packages/@vue-aria/tooltip-state/src/index.ts", import.meta.url)
       ),

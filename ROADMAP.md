@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: Foundation bootstrap + first package
-- Current focus package: `@vue-aria/overlays`
+- Current focus package: `@vue-aria/listbox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress scaffold is now in place)
@@ -48,7 +48,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/slider`: Not started
 - `@vue-aria/link`: In progress
 - `@vue-aria/menu`: Not started
-- `@vue-aria/listbox`: Not started
+- `@vue-aria/listbox`: In progress
 - `@vue-aria/select`: Not started
 - `@vue-aria/combobox`: Not started
 - `@vue-aria/tabs`: Not started
@@ -1437,7 +1437,62 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port remaining upstream overlay tests (`useModal`, `useModalOverlay`, `useOverlayPosition`, `usePopover`, `DismissButton`, SSR).
 2. Remove temporary `@ts-nocheck` by tightening copied internal typings.
 
-## 28) Session Log
+## 28) Package Record: @vue-aria/listbox
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/listbox/src`
+  - `references/react-spectrum/packages/@react-aria/listbox/docs`
+- Local package path:
+  - `packages/@vue-aria/listbox`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [x] Public API checklist complete for current package surface
+
+### Implementation
+- [x] Ported upstream API:
+  - `useListBox`
+  - `useOption`
+  - `useListBoxSection`
+  - `getItemId`
+  - `listData`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - composable modules
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation note:
+  - Upstream package has no dedicated unit-test folder; adapted tests were added for hook intent/behavior parity.
+
+### Tests
+- Total upstream test files: 0 dedicated unit tests in package
+- Ported test files: 3 (adapted)
+- Passing test files: 3 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted coverage for listbox role/multiselect props, option aria metadata/id wiring (including virtualized metadata), and section group/heading semantics.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/listbox.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Validate listbox keyboard and selection interactions against downstream Spectrum listbox/select components
+
+### Visual Parity
+- Not applicable for hook package beyond downstream consumer validation.
+
+### React Dependency Check
+- [x] No React runtime dependency
+
+### Next Actions
+1. Port list-state package to remove temporary structural state typing in listbox hooks.
+2. Add more behavior parity tests for keyboard navigation and action/link interaction paths.
+
+## 29) Session Log
 ### 2026-02-13
 - Initialized roadmap from scratch.
 - Added global completion gates and queue.
@@ -1771,3 +1826,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check` passed, `npm test` passed (92 files, 280 tests).
 - Added `useModal.ssr` adapted test coverage for `OverlayContainer`/`OverlayProvider` server rendering path.
 - Validation: `npm run check` passed, `npm test` passed (93 files, 281 tests).
+- Started `@vue-aria/listbox` package:
+  - `useListBox`, `useOption`, `useListBoxSection`
+  - `getItemId`, `listData`
+  - package scaffolding and tsconfig/vitest alias wiring
+- Added adapted listbox tests for listbox role/multiselect behavior, option virtualized aria metadata/id wiring, and section semantics.
+- Added VitePress docs page for `@vue-aria/listbox` and wired docs navigation entries.
+- Validation: `npm run check` passed, `npm test` passed (96 files, 284 tests).

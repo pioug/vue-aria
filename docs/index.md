@@ -37,3 +37,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/tooltip](/packages/tooltip)
 - [@vue-aria/disclosure](/packages/disclosure)
 - [@vue-aria/overlays](/packages/overlays)
+- [@vue-aria/listbox](/packages/listbox)

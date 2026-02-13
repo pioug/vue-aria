@@ -28,6 +28,7 @@ export default defineConfig({
       { text: "Tooltip", link: "/packages/tooltip" },
       { text: "Disclosure", link: "/packages/disclosure" },
       { text: "Overlays", link: "/packages/overlays" },
+      { text: "ListBox", link: "/packages/listbox" },
     ],
     sidebar: [
       {
@@ -55,6 +56,7 @@ export default defineConfig({
           { text: "@vue-aria/tooltip", link: "/packages/tooltip" },
           { text: "@vue-aria/disclosure", link: "/packages/disclosure" },
           { text: "@vue-aria/overlays", link: "/packages/overlays" },
+          { text: "@vue-aria/listbox", link: "/packages/listbox" },
         ],
       },
     ],
