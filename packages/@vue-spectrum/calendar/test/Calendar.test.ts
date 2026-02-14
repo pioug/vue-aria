@@ -175,6 +175,25 @@ describe("Calendar", () => {
     expect(day5?.element.closest("td")?.getAttribute("aria-selected")).toBe("true");
   });
 
+  it("updates selected calendar cell when controlled value prop changes", async () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        value: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get('td[aria-selected="true"] .react-spectrum-Calendar-date').text()).toBe("5");
+
+    await wrapper.setProps({
+      value: new CalendarDate(2019, 6, 17),
+    });
+    await nextTick();
+
+    expect(wrapper.get('td[aria-selected="true"] .react-spectrum-Calendar-date').text()).toBe("17");
+  });
+
   it("navigates months with next button", async () => {
     const wrapper = mount(Calendar as any, {
       props: {
@@ -1077,6 +1096,36 @@ describe("Calendar", () => {
 
     expect(day17?.element.closest("td")?.getAttribute("aria-selected")).not.toBe("true");
     expect(day5?.element.closest("td")?.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("updates selected range cells when controlled value prop changes", async () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        value: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const initialSelected = wrapper.findAll('td[aria-selected="true"] .react-spectrum-Calendar-date').map((cell) => cell.text());
+    expect(initialSelected).toContain("5");
+    expect(initialSelected).toContain("8");
+
+    await wrapper.setProps({
+      value: {
+        start: new CalendarDate(2019, 6, 10),
+        end: new CalendarDate(2019, 6, 12),
+      },
+    });
+    await nextTick();
+
+    const updatedSelected = wrapper.findAll('td[aria-selected="true"] .react-spectrum-Calendar-date').map((cell) => cell.text());
+    expect(updatedSelected).toContain("10");
+    expect(updatedSelected).toContain("12");
+    expect(updatedSelected).not.toContain("5");
   });
 
   it("normalizes reverse-order range selection into start/end order", async () => {
