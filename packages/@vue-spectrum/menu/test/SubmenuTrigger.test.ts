@@ -840,7 +840,7 @@ describe("SubmenuTrigger", () => {
       .find((item) => item.textContent?.includes("More 2")) as HTMLElement | undefined;
     expect(secondTrigger).toBeTruthy();
     secondTrigger?.focus();
-    secondTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    secondTrigger?.click();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
@@ -854,6 +854,88 @@ describe("SubmenuTrigger", () => {
 
     expect(document.body.textContent).not.toContain("Deep item");
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("closes nested submenu stacks when hovering a root sibling from deepest submenu", async () => {
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more-1" }, { default: () => "More 1" }),
+                  h(Menu as any, { ariaLabel: "Submenu 1" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item 1" }),
+                      h(SubmenuTrigger as any, null, {
+                        default: () => [
+                          h(Item as any, { key: "more-2" }, { default: () => "More 2" }),
+                          h(Menu as any, { ariaLabel: "Submenu 2" }, {
+                            default: () => [
+                              h(Item as any, { key: "deep-1" }, { default: () => "Deep item" }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const firstTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More 1")) as HTMLElement | undefined;
+    expect(firstTrigger).toBeTruthy();
+    firstTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    const secondTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More 2")) as HTMLElement | undefined;
+    expect(secondTrigger).toBeTruthy();
+    secondTrigger?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.textContent).toContain("Deep item");
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(3);
+
+    const deepItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Deep item")) as HTMLElement | undefined;
+    const rootSibling = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+    expect(deepItem).toBeTruthy();
+    expect(rootSibling).toBeTruthy();
+
+    const hover = (element: HTMLElement) => {
+      if (typeof PointerEvent !== "undefined") {
+        element.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+        element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+        return;
+      }
+
+      element.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      element.dispatchEvent(new Event("pointerover", { bubbles: true }));
+    };
+
+    hover(deepItem as HTMLElement);
+    hover(rootSibling as HTMLElement);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+    expect(document.body.textContent).not.toContain("Deep item");
   });
 
   it("keeps nested submenus open when pressing Tab", async () => {
