@@ -2779,6 +2779,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useTree` coverage for treegrid-role override behavior.
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
   - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via keyboard expansion and arrow navigation focus movement).
+  - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5296,3 +5297,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - validated row child-navigation behavior in `keyboardNavigationBehavior="arrow"` mode using real DOM focus movement assertions.
   - updated package record `31j` test/accessibility notes and counts to reflect the new interaction coverage slice.
 - Validation: `npm test -- packages/@vue-aria/gridlist/test` passed (6 files, 14 tests).
+- Expanded `@vue-aria/tree` keyboard-navigation integration coverage:
+  - extended `useTree.keyboardNavigation.test.ts` with ArrowLeft collapse assertions for nested and root-expanded rows.
+  - validated keyboard collapse progression (`8 -> 6 -> 2` visible rows) after expansion flows.
+  - updated package record `31k` test parity notes to include collapse coverage.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree/test` passed (3 files, 4 tests).

@@ -205,6 +205,31 @@ describe("tree keyboard navigation parity", () => {
     await flush();
     expect(state.selectionManager.focusedKey).toBe("bear");
 
+    state.selectionManager.setFocusedKey("bear");
+    bearRow.focus();
+    bearRow.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true })
+    );
+    await flush();
+    expect(state.expandedKeys.has("bear")).toBe(false);
+    expect([...state.collection.getKeys()]).toEqual([
+      "animals",
+      "aardvark",
+      "bear",
+      "kangaroo",
+      "snake",
+      "fruits",
+    ]);
+
+    state.selectionManager.setFocusedKey("animals");
+    animalsRow.focus();
+    animalsRow.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true })
+    );
+    await flush();
+    expect(state.expandedKeys.has("animals")).toBe(false);
+    expect([...state.collection.getKeys()]).toEqual(["animals", "fruits"]);
+
     animalsRow.removeEventListener("keydown", animalsKeydownCapture as EventListener, true);
     bearRow.removeEventListener("keydown", bearKeydownCapture as EventListener, true);
     scope.stop();
