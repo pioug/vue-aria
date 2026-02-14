@@ -9268,3 +9268,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 57 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-selection selection-semantics parity update:
+  - expanded disabled-selection interaction coverage to assert disabled rows keep selection semantics unset (`aria-selected` omitted) across chevron, row-press, and Enter activation paths.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 57 tests).
+- Validation: `npm run check -- --pretty false` passed.

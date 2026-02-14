@@ -1105,6 +1105,7 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-disabled")).toBeUndefined();
     expect(projectsRow!.attributes("data-disabled")).toBeUndefined();
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
     expect(onExpandedChange).toHaveBeenCalledTimes(0);
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
 
@@ -1160,6 +1161,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
     expect(onExpandedChange).toHaveBeenCalledTimes(0);
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
   });
@@ -1182,6 +1184,7 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-disabled")).toBeUndefined();
     expect(projectsRow!.attributes("data-disabled")).toBeUndefined();
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
     expect(onExpandedChange).toHaveBeenCalledTimes(0);
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
 
@@ -1191,6 +1194,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
     expect(onExpandedChange).toHaveBeenCalledTimes(0);
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
   });
