@@ -9298,3 +9298,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 60 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` empty-tree root-focus lifecycle parity update:
+  - expanded empty-tree tabbability coverage to assert root focus-state annotations clear after blur (`data-focused`, `data-focus-visible`).
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 60 tests).
+- Validation: `npm run check -- --pretty false` passed.

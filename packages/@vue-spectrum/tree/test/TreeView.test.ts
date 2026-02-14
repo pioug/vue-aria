@@ -169,6 +169,11 @@ describe("TreeView", () => {
     await tree.trigger("keydown", { key: "Enter" });
     await nextTick();
     expect(tree.attributes("data-focus-visible")).toBe("true");
+
+    (tree.element as HTMLElement).blur();
+    await nextTick();
+    expect(tree.attributes("data-focused")).toBeUndefined();
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
   });
 
   it("supports DOM props on tree rows", async () => {
