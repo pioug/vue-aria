@@ -6595,6 +6595,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - strengthened SSR accessibility assertions to ensure multi-month `aria-label` output includes resolved month text and no unresolved `{startDate}`/`{endDate}` placeholders.
     - `packages/@vue-spectrum/calendar/test/Calendar.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 29 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - added regression coverage for selected-date `aria-label` text to ensure localized template placeholders (e.g. `{date}`) resolve in rendered calendar cells.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 30 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

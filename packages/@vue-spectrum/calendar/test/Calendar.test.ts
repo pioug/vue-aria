@@ -53,6 +53,24 @@ describe("Calendar", () => {
     expect(selectedCells[0]!.text()).toContain("5");
   });
 
+  it("renders selected-date aria labels without unresolved template placeholders", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const selectedCell = wrapper.get('td[aria-selected="true"]');
+    const selectedDateButton = selectedCell.get(".react-spectrum-Calendar-date");
+    const selectedAriaLabel = selectedDateButton.attributes("aria-label");
+
+    expect(selectedAriaLabel).toBeTruthy();
+    expect(selectedAriaLabel).toContain("selected");
+    expect(selectedAriaLabel).not.toContain("{date}");
+  });
+
   it("selects a date on click in uncontrolled mode", async () => {
     const onChange = vi.fn();
     const wrapper = mount(Calendar as any, {
