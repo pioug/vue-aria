@@ -4098,6 +4098,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `theme-light` variant package bootstrap export
   - `theme-dark` variant package bootstrap export
   - `theme-express` variant package bootstrap export
+  - Default dark-scheme mapping aligned to upstream `spectrum-darkest` token class
 - Open adaptation notes:
   - Current slice is a bootstrap class-map adaptation without upstream Spectrum CSS module imports.
   - Exact upstream Spectrum CSS variable/class fidelity is pending CSS-module integration.

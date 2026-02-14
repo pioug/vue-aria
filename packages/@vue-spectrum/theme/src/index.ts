@@ -9,7 +9,7 @@ export const theme: Theme = {
     "spectrum--light": "spectrum--light",
   },
   dark: {
-    "spectrum--dark": "spectrum--dark",
+    "spectrum--dark": "spectrum--darkest",
   },
   medium: {
     "spectrum--medium": "spectrum--medium",

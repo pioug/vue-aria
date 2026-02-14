@@ -9,6 +9,8 @@ import { Provider, useProviderProps } from "../src/Provider";
 import type { Theme } from "../src/types";
 
 const theme: Theme = defaultTheme;
+const defaultLightClass = Object.values(theme.light ?? {})[0] as string;
+const defaultDarkClass = Object.values(theme.dark ?? {})[0] as string;
 
 const mediaQueryLight = "(prefers-color-scheme: light)";
 const mediaQueryDark = "(prefers-color-scheme: dark)";
@@ -154,7 +156,7 @@ describe("Provider", () => {
 
     const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
     expect(provider).not.toBeNull();
-    expect(provider?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider?.classList.contains(defaultDarkClass)).toBe(true);
     expect(provider?.classList.contains("spectrum")).toBe(true);
     expect(provider?.style.isolation).toBe("isolate");
     unmount();
@@ -180,7 +182,7 @@ describe("Provider", () => {
     );
 
     const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
-    expect(provider?.classList.contains("spectrum--light")).toBe(true);
+    expect(provider?.classList.contains(defaultLightClass)).toBe(true);
     unmount();
   });
 
@@ -205,7 +207,7 @@ describe("Provider", () => {
     );
 
     const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
-    expect(provider?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider?.classList.contains(defaultDarkClass)).toBe(true);
     unmount();
   });
 
@@ -238,8 +240,8 @@ describe("Provider", () => {
 
     const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
     const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
-    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
-    expect(provider2?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider1?.classList.contains(defaultDarkClass)).toBe(true);
+    expect(provider2?.classList.contains(defaultDarkClass)).toBe(true);
     unmount();
   });
 
@@ -273,14 +275,14 @@ describe("Provider", () => {
 
     const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
     const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
-    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
-    expect(provider2?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider1?.classList.contains(defaultDarkClass)).toBe(true);
+    expect(provider2?.classList.contains(defaultDarkClass)).toBe(true);
 
     outerColorScheme.value = "light";
     await nextTick();
 
-    expect(provider1?.classList.contains("spectrum--light")).toBe(true);
-    expect(provider2?.classList.contains("spectrum--light")).toBe(true);
+    expect(provider1?.classList.contains(defaultLightClass)).toBe(true);
+    expect(provider2?.classList.contains(defaultLightClass)).toBe(true);
     unmount();
   });
 
@@ -314,8 +316,8 @@ describe("Provider", () => {
 
     const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
     const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
-    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
-    expect(provider2?.classList.contains("spectrum--light")).toBe(true);
+    expect(provider1?.classList.contains(defaultDarkClass)).toBe(true);
+    expect(provider2?.classList.contains(defaultLightClass)).toBe(true);
     unmount();
   });
 
@@ -354,7 +356,7 @@ describe("Provider", () => {
 
     const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
     const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
-    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider1?.classList.contains(defaultDarkClass)).toBe(true);
     expect(provider2?.classList.contains("spectrum--light")).toBe(true);
     unmount();
   });
@@ -843,14 +845,14 @@ describe("Provider", () => {
 
     const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
     const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
-    expect(provider1?.classList.contains("spectrum--light")).toBe(true);
-    expect(provider2?.classList.contains("spectrum--light")).toBe(true);
+    expect(provider1?.classList.contains(defaultLightClass)).toBe(true);
+    expect(provider2?.classList.contains(defaultLightClass)).toBe(true);
 
     matchMediaController.setActiveQueries(new Set([mediaQueryDark]));
     await nextTick();
 
-    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
-    expect(provider2?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider1?.classList.contains(defaultDarkClass)).toBe(true);
+    expect(provider2?.classList.contains(defaultDarkClass)).toBe(true);
     unmount();
   });
 });
