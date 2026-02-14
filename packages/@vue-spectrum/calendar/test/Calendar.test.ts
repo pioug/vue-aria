@@ -572,6 +572,26 @@ describe("Calendar", () => {
     expect(root.attributes("aria-describedby")).toContain("trip-planner-help");
   });
 
+  it("focuses the current range-calendar date when autoFocus is enabled", async () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        autoFocus: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    const focusedButton = wrapper.get(".react-spectrum-Calendar-date[tabindex='0']");
+    expect(document.activeElement).toBe(focusedButton.element);
+  });
+
   it("merges range-calendar ariaLabelledby with generated id when ariaLabel is present", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {

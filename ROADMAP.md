@@ -6678,6 +6678,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added `autoFocus` behavior coverage, asserting focused calendar cell DOM focus handoff.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 50 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - extended `autoFocus` focus-handoff coverage to `RangeCalendar`.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 51 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
