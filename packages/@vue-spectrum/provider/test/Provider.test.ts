@@ -1,5 +1,6 @@
 import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
+import { theme as defaultTheme } from "@vue-spectrum/theme";
 import { keepSpectrumClassNames, useBreakpoint, useStyleProps } from "@vue-spectrum/utils";
 import { createApp, defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -7,13 +8,7 @@ import { UNSAFE_resetSpectrumClassNames } from "../../utils/src/classNames";
 import { Provider, useProviderProps } from "../src/Provider";
 import type { Theme } from "../src/types";
 
-const theme: Theme = {
-  global: {},
-  light: { "spectrum--light": "spectrum--light" },
-  dark: { "spectrum--dark": "spectrum--dark" },
-  medium: { "spectrum--medium": "spectrum--medium" },
-  large: { "spectrum--large": "spectrum--large" },
-};
+const theme: Theme = defaultTheme;
 
 const mediaQueryLight = "(prefers-color-scheme: light)";
 const mediaQueryDark = "(prefers-color-scheme: dark)";
