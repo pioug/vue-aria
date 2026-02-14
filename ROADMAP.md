@@ -6644,6 +6644,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - extended locale-override weekday-ordering regression coverage to `RangeCalendar`.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 41 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - expanded shared key-prop documentation to include `locale` and `createCalendar`.
+    - `docs/packages/spectrum-calendar.md`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

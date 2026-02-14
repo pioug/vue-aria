@@ -233,7 +233,7 @@ import { RangeCalendar } from "@vue-spectrum/calendar";
 
 ## Key Props
 
-- Shared: `visibleMonths`, `firstDayOfWeek`, `pageBehavior`, `selectionAlignment`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`, `isDateUnavailable`.
+- Shared: `visibleMonths`, `firstDayOfWeek`, `pageBehavior`, `selectionAlignment`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`, `isDateUnavailable`, `locale`, `createCalendar`.
 - `Calendar`: `value` / `defaultValue`, `onChange`.
 - `RangeCalendar`: range `value` / `defaultValue`, `onChange`, `allowsNonContiguousRanges`.
 
