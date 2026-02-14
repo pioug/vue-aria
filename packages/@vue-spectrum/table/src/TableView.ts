@@ -113,6 +113,20 @@ function normalizeKey(value: unknown, fallback: TableKey): TableKey {
   return fallback;
 }
 
+function setsEqual(left: Set<TableKey>, right: Set<TableKey>): boolean {
+  if (left.size !== right.size) {
+    return false;
+  }
+
+  for (const value of left) {
+    if (!right.has(value)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridNode<NormalizedSpectrumTableRow>[] {
   return definition.columns.map((column, index) => ({
     type: "column",
@@ -950,6 +964,11 @@ export const TableView = defineComponent({
             }
 
             allKeys.add(row.key);
+          }
+
+          const currentSelectedKeys = new Set((props.selectedKeys ?? resolvedSelectedKeys.value) as Iterable<TableKey>);
+          if (!props.allowDuplicateSelectionEvents && setsEqual(allKeys, currentSelectedKeys)) {
+            return;
           }
 
           if (props.selectedKeys === undefined) {

@@ -2525,6 +2525,23 @@ export function tableTests() {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("does not emit select-all callbacks when table is disabled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("supports sorting callbacks and aria-sort updates", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });
