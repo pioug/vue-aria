@@ -1020,12 +1020,14 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
     expect(projectsRow!.attributes("aria-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
 
     await press(projectsRow!);
 
     projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
   });
 
@@ -1040,6 +1042,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
     expect(projectsRow!.attributes("aria-disabled")).toBeUndefined();
+    expect(projectsRow!.attributes("data-disabled")).toBeUndefined();
 
     await press(projectsRow!);
 
