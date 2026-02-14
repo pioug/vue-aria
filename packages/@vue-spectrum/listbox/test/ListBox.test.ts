@@ -138,4 +138,37 @@ describe("ListBox", () => {
     expect(wrapper.findAll('[role="option"]')).toHaveLength(5);
     expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
   });
+
+  it("renders correctly with falsy section and item keys", () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+      },
+      slots: {
+        default: () => [
+          h(Section as any, { key: 0, title: "Heading 1" }, {
+            default: () => [
+              h(Item as any, { key: 1 }, { default: () => "Foo" }),
+              h(Item as any, { key: 2 }, { default: () => "Bar" }),
+            ],
+          }),
+          h(Section as any, { key: "", title: "Heading 2" }, {
+            default: () => [
+              h(Item as any, { key: 3 }, { default: () => "Blah" }),
+              h(Item as any, { key: 4 }, { default: () => "Bleh" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.findAll('[role="group"]')).toHaveLength(2);
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(4);
+    expect(wrapper.text()).toContain("Foo");
+    expect(wrapper.text()).toContain("Bar");
+    expect(wrapper.text()).toContain("Blah");
+    expect(wrapper.text()).toContain("Bleh");
+  });
 });
