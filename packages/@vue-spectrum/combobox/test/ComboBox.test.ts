@@ -136,6 +136,46 @@ describe("ComboBox", () => {
     expect(input.attributes("form")).toBe("combobox-form");
   });
 
+  it("supports controlled open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderComboBox({
+      isOpen: true,
+      onOpenChange,
+    });
+
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).not.toHaveBeenCalled();
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("supports default open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderComboBox({
+      defaultOpen: true,
+      onOpenChange,
+    });
+
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).not.toHaveBeenCalled();
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it("supports slot-defined items and sections", async () => {
     const wrapper = mount(ComboBox as any, {
       props: {
