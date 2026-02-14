@@ -129,6 +129,45 @@ describe("ListBox", () => {
     expect(onSelectionChange).toHaveBeenCalledTimes(2);
   });
 
+  it("supports multiple default selected keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderListBox({
+      selectionMode: "multiple",
+      defaultSelectedKeys: ["Foo", "Bar"],
+      onSelectionChange,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options[0]?.attributes("aria-selected")).toBe("true");
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(2);
+
+    await options[4]?.trigger("click");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(options[4]?.attributes("aria-selected")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(3);
+  });
+
+  it("supports controlled selected keys in multiple mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderListBox({
+      selectionMode: "multiple",
+      selectedKeys: ["Foo", "Bar"],
+      onSelectionChange,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options[0]?.attributes("aria-selected")).toBe("true");
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+
+    await options[4]?.trigger("click");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(options[0]?.attributes("aria-selected")).toBe("true");
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+    expect(options[4]?.attributes("aria-selected")).toBe("false");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(2);
+  });
+
   it("respects disabled keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderListBox({
