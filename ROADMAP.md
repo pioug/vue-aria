@@ -7648,6 +7648,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 15 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` deferred-child chevron parity update:
+  - added `hasChildItems` support for `TreeViewItem` and dynamic item objects so rows can render expandable affordances before child rows are loaded.
+  - aligned treegrid `aria-expanded` semantics to stay unset for deferred child rows without loaded descendants.
+  - added migrated regression coverage for chevron rendering on deferred child rows.
+  - `packages/@vue-spectrum/tree/src/TreeView.ts`
+  - `packages/@vue-spectrum/tree/src/types.ts`
+  - `packages/@vue-aria/gridlist/src/useGridListItem.ts`
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test packages/@vue-aria/gridlist/test` passed (10 files, 34 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`

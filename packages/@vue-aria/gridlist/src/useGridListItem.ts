@@ -103,14 +103,15 @@ export function useGridListItem<T>(
       getItem: (key: Key) => CollectionNode<T> | null;
     };
 
-    const children = collection.getChildren?.(node.key);
-    hasChildRows = hasChildRows || [...(children ?? [])].length > 1;
+    const loadedChildRows = [...(collection.getChildren?.(node.key) ?? [])].filter((row) => row.type === "item");
+    const hasLoadedChildRows = loadedChildRows.length > 0;
+    hasChildRows = hasChildRows || hasLoadedChildRows;
 
     if (onAction == null && !hasLink && state.selectionManager.selectionMode === "none" && hasChildRows) {
       onAction = () => state.toggleKey(node.key);
     }
 
-    const isExpanded = hasChildRows ? state.expandedKeys.has(node.key) : undefined;
+    const isExpanded = hasLoadedChildRows ? state.expandedKeys.has(node.key) : undefined;
     let setSize = 1;
     let posInSet = 1;
     if (node.level > 0 && node.parentKey != null) {

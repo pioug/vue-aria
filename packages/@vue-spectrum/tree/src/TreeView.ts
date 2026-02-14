@@ -66,6 +66,7 @@ export interface SpectrumTreeViewItemProps {
   name?: string | undefined;
   isDisabled?: boolean | undefined;
   href?: string | undefined;
+  hasChildItems?: boolean | undefined;
 }
 
 export interface SpectrumTreeViewItemContentProps {
@@ -261,6 +262,10 @@ export const TreeViewItem = createStaticTreeComponent("TreeViewItem", {
   },
   href: {
     type: String as PropType<string | undefined>,
+    default: undefined,
+  },
+  hasChildItems: {
+    type: Boolean as PropType<boolean | undefined>,
     default: undefined,
   },
 });

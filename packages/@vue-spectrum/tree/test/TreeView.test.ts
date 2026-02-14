@@ -446,6 +446,31 @@ describe("TreeView", () => {
     expect(onSelectionChange).toHaveBeenCalledTimes(2);
   });
 
+  it("renders a chevron for rows marked with hasChildItems before children load", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Deferred tree",
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "deferred", textValue: "Deferred row", hasChildItems: true }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Deferred row",
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const row = wrapper.get('[role="row"]');
+    expect(row.attributes("aria-label")).toBe("Deferred row");
+    expect(row.attributes("aria-expanded")).toBeUndefined();
+    expect(row.find("button").exists()).toBe(true);
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 

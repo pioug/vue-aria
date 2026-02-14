@@ -12,6 +12,7 @@ export interface SpectrumTreeViewItemData {
   name?: string | undefined;
   isDisabled?: boolean | undefined;
   href?: string | undefined;
+  hasChildItems?: boolean | undefined;
   children?: SpectrumTreeViewItemData[] | undefined;
   childItems?: SpectrumTreeViewItemData[] | undefined;
   rendered?: VNodeChild | undefined;
@@ -26,6 +27,7 @@ export interface NormalizedTreeItem {
   href?: string | undefined;
   ariaLabel?: string | undefined;
   rowProps?: Record<string, unknown> | undefined;
+  hasChildItems?: boolean | undefined;
   value?: SpectrumTreeViewItemData | undefined;
   children: NormalizedTreeItem[];
 }
@@ -57,6 +59,18 @@ function normalizeAriaLabel(value: unknown): string | undefined {
   }
 
   return undefined;
+}
+
+function normalizeBooleanProp(value: unknown): boolean {
+  if (value === "" || value === true || value === "true") {
+    return true;
+  }
+
+  if (value === false || value == null || value === "false") {
+    return false;
+  }
+
+  return Boolean(value);
 }
 
 function extractTreeItemRowProps(source: Record<string, unknown>): Record<string, unknown> {
@@ -221,10 +235,11 @@ function parseTreeItemNode(node: VNode, index: number, parentPath: string): Norm
     key,
     textValue,
     rendered,
-    isDisabled: Boolean(props.isDisabled),
+    isDisabled: normalizeBooleanProp(props.isDisabled),
     href: toStringValue(props.href) || undefined,
     ariaLabel: normalizeAriaLabel(props["aria-label"] ?? props.ariaLabel),
     rowProps: extractTreeItemRowProps(props),
+    hasChildItems: normalizeBooleanProp(props.hasChildItems ?? props["has-child-items"]),
     children: itemNodes.map((child, childIndex) => parseTreeItemNode(child, childIndex, String(key))),
   };
 }
@@ -258,6 +273,7 @@ function normalizeDataItem(item: SpectrumTreeViewItemData, index: number, parent
     href: item.href,
     ariaLabel: normalizeAriaLabel(itemRecord["aria-label"] ?? itemRecord.ariaLabel),
     rowProps: extractTreeItemRowProps(itemRecord),
+    hasChildItems: Boolean(item.hasChildItems),
     value: item,
     children: childItems.map((child, childIndex) => normalizeDataItem(child, childIndex, String(key))),
   };
@@ -293,7 +309,7 @@ function toCollectionNode(
     key: item.key,
     value: item.value ?? null,
     level,
-    hasChildNodes: childNodes.length > 0,
+    hasChildNodes: childNodes.length > 0 || Boolean(item.hasChildItems),
     rendered: item.rendered,
     textValue: item.textValue,
     index,
@@ -307,6 +323,7 @@ function toCollectionNode(
       href: item.href,
       rowProps: item.rowProps,
       "aria-label": item.ariaLabel,
+      hasChildItems: item.hasChildItems,
     },
     colSpan: null,
     colIndex: null,
