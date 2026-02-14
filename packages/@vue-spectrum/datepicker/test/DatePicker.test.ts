@@ -175,6 +175,26 @@ describe("DatePicker", () => {
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
+
+  it("applies UNSAFE_className and UNSAFE_style to date picker root", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        UNSAFE_className: "custom-date-picker",
+        UNSAFE_style: {
+          borderWidth: "2px",
+          borderStyle: "solid",
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get(".react-spectrum-DatePicker.custom-date-picker");
+    const style = root.attributes("style");
+    expect(style).toContain("border-width: 2px");
+    expect(style).toContain("border-style: solid");
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -338,5 +358,28 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("applies UNSAFE_className and UNSAFE_style to range picker root", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        UNSAFE_className: "custom-range-picker",
+        UNSAFE_style: {
+          borderWidth: "3px",
+          borderStyle: "dashed",
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get(".react-spectrum-DateRangePicker.custom-range-picker");
+    const style = root.attributes("style");
+    expect(style).toContain("border-width: 3px");
+    expect(style).toContain("border-style: dashed");
   });
 });
