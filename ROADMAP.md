@@ -7987,6 +7987,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented static-slot `Cell colSpan` behavior and ARIA colspan output.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` data-driven colSpan parity update:
+  - updated `items[].cells` normalization to preserve explicit `colSpan` cell grouping and column indexing in prop-driven tables.
+  - added data-driven `colSpan` regression coverage for `columns` + `items` rendering.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 27 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` docs parity update:
+  - documented `items[].cells` `colSpan` usage for data-driven table composition.
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

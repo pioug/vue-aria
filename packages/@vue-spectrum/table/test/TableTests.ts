@@ -34,6 +34,24 @@ const itemsWithIdOnly: SpectrumTableRowData[] = [
   { id: "id-2", foo: "Foo B", bar: "Bar B", baz: "Baz B" },
 ];
 
+const columnsWithSpan: SpectrumTableColumnData[] = [
+  { key: "col-1", title: "Col 1", isRowHeader: true },
+  { key: "col-2", title: "Col 2" },
+  { key: "col-3", title: "Col 3" },
+  { key: "col-4", title: "Col 4" },
+];
+
+const itemsWithPropSpanCells: SpectrumTableRowData[] = [
+  {
+    key: "row-1",
+    cells: [
+      { value: "Cell 1" },
+      { value: "Span 2", colSpan: 2 },
+      { value: "Cell 4" },
+    ],
+  },
+];
+
 function renderTable(props: Record<string, unknown> = {}) {
   return mount(TableView as any, {
     props: {
@@ -203,6 +221,30 @@ export function tableTests() {
 
     const bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows).toHaveLength(2);
+
+    const firstRowCells = bodyRows[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(firstRowCells).toHaveLength(3);
+
+    const firstRowGridCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowGridCells).toHaveLength(2);
+    expect(firstRowGridCells[0]!.attributes("colspan")).toBe("2");
+    expect(firstRowGridCells[0]!.attributes("aria-colspan")).toBe("2");
+    expect(firstRowGridCells[0]!.attributes("aria-colindex")).toBe("2");
+    expect(firstRowGridCells[1]!.attributes("aria-colindex")).toBe("4");
+  });
+
+  it("supports data-driven table cells with colSpan", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Prop colSpan table",
+        columns: columnsWithSpan,
+        items: itemsWithPropSpanCells,
+      },
+      attachTo: document.body,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(1);
 
     const firstRowCells = bodyRows[0]!.findAll('[role="rowheader"], [role="gridcell"]');
     expect(firstRowCells).toHaveLength(3);

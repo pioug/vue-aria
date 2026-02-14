@@ -69,6 +69,7 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 - `sortDescriptor` / `defaultSortDescriptor` with `onSortChange`.
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
 - `columns` + `items` for data-driven rendering.
+  `items[].cells` supports `colSpan` for spanned body cells.
 
 ## Selection Callbacks
 
