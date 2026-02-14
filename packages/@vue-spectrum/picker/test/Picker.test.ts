@@ -274,6 +274,18 @@ describe("Picker", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("supports hidden select form attributes and default value", () => {
+    const wrapper = renderPicker({
+      name: "picker",
+      form: "picker-form",
+      defaultSelectedKey: "2",
+    });
+
+    const select = wrapper.get('select[name="picker"]');
+    expect(select.attributes("form")).toBe("picker-form");
+    expect((select.element as HTMLSelectElement).value).toBe("2");
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderPicker({
       isDisabled: true,

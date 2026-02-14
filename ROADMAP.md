@@ -7721,6 +7721,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented falsy-key support guidance for string/number keys.
   - `docs/packages/spectrum-picker.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` form-integration parity update:
+  - added picker coverage for hidden native select form wiring (`name`/`form`) and default selected value propagation.
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 13 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
