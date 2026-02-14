@@ -9854,3 +9854,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 75 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` complex-item ARIA parity update:
+  - added migrated `Menu` coverage asserting complex item label/description/keyboard wiring sets `aria-labelledby` and combined `aria-describedby`.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+  - stabilized menu item ARIA linkage by providing fallback ids for generated label/description/keyboard nodes and deriving `aria-labelledby`/`aria-describedby` from rendered content.
+    - `packages/@vue-spectrum/menu/src/MenuItem.ts`
+  - typed complex-item data surface (`description`, `keyboardShortcut`) for static items and data-driven collections.
+    - `packages/@vue-spectrum/menu/src/types.ts`
+    - `packages/@vue-spectrum/menu/src/Item.ts`
+    - `packages/@vue-spectrum/menu/src/collection.ts`
+  - documented complex item usage with description and keyboard shortcut content.
+    - `docs/packages/spectrum-menu.md`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 76 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -330,6 +330,38 @@ describe("Menu", () => {
     expect(itemAction).toHaveBeenCalledTimes(1);
   });
 
+  it("supports complex menu items with aria-labelledby and aria-describedby", async () => {
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+        selectionMode: "none",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, {
+            key: "paste",
+            description: "Description",
+            keyboardShortcut: "⌘V",
+          }, {
+            default: () => "Label",
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    await nextTick();
+
+    const menuItem = wrapper.get('[role="menuitem"]');
+    const label = wrapper.get(".spectrum-Menu-itemLabel");
+    const description = wrapper.get(".spectrum-Menu-description");
+    const keyboard = wrapper.get(".spectrum-Menu-keyboard");
+
+    expect(menuItem.attributes("aria-labelledby")).toBe(label.attributes("id"));
+    expect(menuItem.attributes("aria-describedby")).toBe(
+      `${description.attributes("id")} ${keyboard.attributes("id")}`
+    );
+  });
+
   it("supports aria-label on sections and items", () => {
     const wrapper = mount(Menu as any, {
       props: {

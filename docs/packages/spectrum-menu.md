@@ -39,6 +39,22 @@ import { Item, Menu, MenuTrigger } from "@vue-spectrum/menu";
 </template>
 ```
 
+## Complex Items
+
+```vue
+<template>
+  <Menu aria-label="Edit menu">
+    <Item
+      key="paste"
+      description="Paste clipboard contents"
+      keyboard-shortcut="⌘V"
+    >
+      Paste
+    </Item>
+  </Menu>
+</template>
+```
+
 ## ActionMenu
 
 ```vue

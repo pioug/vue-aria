@@ -183,6 +183,8 @@ function normalizeDataNodes(
           {
             "aria-label": item["aria-label"],
             ariaLabel: item["aria-label"],
+            description: item.description,
+            keyboardShortcut: item.keyboardShortcut,
             href: item.href,
             routerOptions: item.routerOptions,
             closeOnSelect: item.closeOnSelect,

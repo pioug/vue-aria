@@ -14,6 +14,8 @@ export interface SpectrumMenuNodeData {
   name?: string;
   title?: string;
   textValue?: string;
+  description?: string;
+  keyboardShortcut?: string;
   "aria-label"?: string;
   isDisabled?: boolean;
   href?: string;
@@ -89,6 +91,8 @@ export interface SpectrumActionMenuProps<T extends object> extends SpectrumMenuT
 
 export interface SpectrumMenuItemProps {
   textValue?: string;
+  description?: string;
+  keyboardShortcut?: string;
   href?: string;
   routerOptions?: unknown;
   closeOnSelect?: boolean;

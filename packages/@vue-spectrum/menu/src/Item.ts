@@ -11,6 +11,14 @@ export const Item = defineComponent({
       type: String as () => SpectrumMenuItemProps["textValue"],
       required: false,
     },
+    description: {
+      type: String as () => SpectrumMenuItemProps["description"],
+      required: false,
+    },
+    keyboardShortcut: {
+      type: String as () => SpectrumMenuItemProps["keyboardShortcut"],
+      required: false,
+    },
     href: {
       type: String as () => SpectrumMenuItemProps["href"],
       required: false,

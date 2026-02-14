@@ -1,6 +1,6 @@
 import { FocusRing } from "@vue-aria/focus";
 import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
-import { mergeProps } from "@vue-aria/utils";
+import { mergeProps, useId } from "@vue-aria/utils";
 import { useMenuItem } from "@vue-aria/menu";
 import { computed, defineComponent, h, ref, type PropType } from "vue";
 import { intlMessages } from "./intlMessages";
@@ -53,6 +53,7 @@ export const MenuItem = defineComponent({
   setup(props) {
     const stringFormatter = useLocalizedStringFormatter(intlMessages, "@vue-spectrum/menu");
     const locale = useLocale();
+    const fallbackId = useId();
     const itemRef = ref<HTMLElement | null>(null);
     const refObject = {
       get current() {
@@ -78,6 +79,43 @@ export const MenuItem = defineComponent({
       props.state as any,
       props.submenuTriggerRef ?? refObject
     );
+
+    const hasGeneratedLabel = computed(
+      () => typeof props.item.rendered === "string" || typeof props.item.rendered === "number"
+    );
+    const hasAriaLabel = computed(
+      () =>
+        props.item["aria-label"] != null
+        && props.item["aria-label"] !== ""
+    );
+    const description = computed(
+      () => (props.item.props as Record<string, unknown>).description as string | undefined
+    );
+    const keyboard = computed(
+      () => (props.item.props as Record<string, unknown>).keyboardShortcut as string | undefined
+    );
+    const labelId = computed(() => (menuItemAria.labelProps.id as string | undefined) ?? `${fallbackId}-label`);
+    const descriptionId = computed(
+      () => (menuItemAria.descriptionProps.id as string | undefined) ?? `${fallbackId}-description`
+    );
+    const keyboardId = computed(
+      () => (menuItemAria.keyboardShortcutProps.id as string | undefined) ?? `${fallbackId}-keyboard`
+    );
+    const ariaLabelledby = computed(() => {
+      if (hasAriaLabel.value || !hasGeneratedLabel.value) {
+        return undefined;
+      }
+
+      return labelId.value;
+    });
+    const ariaDescribedby = computed(() => {
+      const ids = [
+        description.value ? descriptionId.value : undefined,
+        keyboard.value ? keyboardId.value : undefined,
+      ].filter(Boolean);
+
+      return ids.length > 0 ? ids.join(" ") : undefined;
+    });
 
     const isSubmenuTrigger = computed(() => Boolean(props.submenuTriggerProps));
     const isDisabled = computed(
@@ -123,6 +161,7 @@ export const MenuItem = defineComponent({
             "span",
             {
               ...menuItemAria.labelProps,
+              id: labelId.value,
               class: "spectrum-Menu-itemLabel",
             },
             String(rendered)
@@ -134,30 +173,30 @@ export const MenuItem = defineComponent({
         nodes.push(rendered);
       }
 
-      const description = (props.item.props as Record<string, unknown>).description as string | undefined;
-      if (description) {
+      if (description.value) {
         nodes.push(
           h(
             "span",
             {
               ...menuItemAria.descriptionProps,
+              id: descriptionId.value,
               class: "spectrum-Menu-description",
             },
-            description
+            description.value
           )
         );
       }
 
-      const keyboard = (props.item.props as Record<string, unknown>).keyboardShortcut as string | undefined;
-      if (keyboard) {
+      if (keyboard.value) {
         nodes.push(
           h(
             "kbd",
             {
               ...menuItemAria.keyboardShortcutProps,
+              id: keyboardId.value,
               class: "spectrum-Menu-keyboard",
             },
-            keyboard
+            keyboard.value
           )
         );
       }
@@ -221,6 +260,8 @@ export const MenuItem = defineComponent({
         {
           role: role.value,
           "aria-checked": isSelectable.value ? isSelected.value : undefined,
+          "aria-labelledby": ariaLabelledby.value,
+          "aria-describedby": ariaDescribedby.value,
           "aria-expanded": submenuProps["aria-expanded"] as boolean | "true" | "false" | undefined,
           "aria-controls": submenuProps["aria-controls"] as string | undefined,
           "aria-haspopup": submenuProps["aria-haspopup"] as string | undefined,
