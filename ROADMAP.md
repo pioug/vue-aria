@@ -7616,6 +7616,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 16 tests).
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 16 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` MenuTrigger parity update:
+  - expanded trigger behavior coverage for:
+    - uncontrolled `defaultOpen` close semantics
+    - `closeOnSelect={false}` selection flow preserving menu open-state and trigger expansion state
+  - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
