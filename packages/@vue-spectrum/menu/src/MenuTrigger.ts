@@ -166,19 +166,27 @@ export const MenuTrigger = defineComponent({
       }
 
       const isDomTrigger = typeof trigger.type === "string";
+      const domTriggerProps = props.trigger === "press"
+        ? {
+            id: menuTriggerProps.id,
+            "aria-haspopup": menuTriggerProps["aria-haspopup"],
+            "aria-expanded": state.isOpen ? "true" : "false",
+            "aria-controls": state.isOpen ? (menuProps.id as string | undefined) : undefined,
+            onClick: () => state.toggle(),
+            onKeydown: menuTriggerProps.onKeydown as ((event: KeyboardEvent) => void) | undefined,
+            onKeyDown: menuTriggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined,
+            ref: setTriggerRef,
+          }
+        : {
+            ...(menuTriggerProps as Record<string, unknown>),
+            "aria-expanded": state.isOpen ? "true" : "false",
+            "aria-controls": state.isOpen ? (menuProps.id as string | undefined) : undefined,
+            ref: setTriggerRef,
+          };
       const triggerNode = cloneVNode(
         trigger,
         isDomTrigger
-          ? {
-              id: menuTriggerProps.id,
-              "aria-haspopup": menuTriggerProps["aria-haspopup"],
-              "aria-expanded": state.isOpen ? "true" : "false",
-              "aria-controls": state.isOpen ? (menuProps.id as string | undefined) : undefined,
-              onClick: props.trigger === "press" ? () => state.toggle() : undefined,
-              onKeydown: menuTriggerProps.onKeydown as ((event: KeyboardEvent) => void) | undefined,
-              onKeyDown: menuTriggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined,
-              ref: setTriggerRef,
-            }
+          ? domTriggerProps
           : {
               ...menuTriggerProps,
               "aria-expanded": state.isOpen ? "true" : "false",

@@ -131,4 +131,54 @@ describe("MenuTrigger", () => {
     await Promise.resolve();
     expect(document.activeElement).toBe(trigger.element);
   });
+
+  it("does not open menu on click when trigger is longPress", async () => {
+    const wrapper = renderMenuTrigger({
+      trigger: "longPress",
+    });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+    await trigger.trigger("click");
+
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+  });
+
+  it("opens menu on Alt+ArrowDown when trigger is longPress", async () => {
+    const wrapper = renderMenuTrigger({
+      trigger: "longPress",
+    });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: "ArrowDown", altKey: true });
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("opens menu on long press when trigger is longPress", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderMenuTrigger({
+        trigger: "longPress",
+      });
+      const trigger = wrapper.get('[data-testid="trigger"]');
+
+      expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+      trigger.element.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0, detail: 1 }));
+      await vi.advanceTimersByTimeAsync(600);
+      await wrapper.vm.$nextTick();
+
+      expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+      expect(trigger.attributes("aria-expanded")).toBe("true");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

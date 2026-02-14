@@ -9514,3 +9514,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/Menu.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 30 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` long-press trigger parity update:
+  - aligned DOM-trigger event wiring for `trigger="longPress"` so native button triggers receive full `menuTriggerProps` long-press handlers while preserving controlled `aria-expanded`/`aria-controls` state.
+  - added migrated `MenuTrigger` coverage for long-press mode click suppression, `Alt+ArrowDown` keyboard opening, and delayed long-press pointer opening.
+    - `packages/@vue-spectrum/menu/src/MenuTrigger.ts`
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 33 tests).
+- Validation: `npm run check -- --pretty false` passed.
