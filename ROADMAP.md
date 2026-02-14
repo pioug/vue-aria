@@ -3955,7 +3955,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/provider.md`)
-- [ ] Examples parity complete
+- [x] Examples/instructions mirrored from upstream provider docs with Vue-adapted snippets
 - [ ] Base styles parity complete
 
 ### Accessibility
@@ -3970,7 +3970,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Reconcile remaining `Provider.test.tsx` prop-forwarding scenarios tied to downstream Spectrum components as those component ports land.
 2. Finalize exact upstream page/typography class-stack parity as Spectrum CSS module strategy is introduced.
-3. Mirror upstream Provider docs/examples and base style/class composition.
+3. Finalize base style/class composition parity docs once upstream Spectrum CSS module strategy is wired.
 
 ## 45) Package Record: @vue-spectrum/utils
 - Upstream source path(s):
@@ -4021,8 +4021,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] All relevant upstream tests migrated
 
 ### Docs
-- [ ] VitePress docs page scaffold pending
-- [ ] Examples parity complete
+- [x] VitePress docs page scaffolded (`docs/packages/spectrum-utils.md`)
+- [x] Core examples documented for breakpoint/style-props/class-name utilities
 - [ ] Base styles parity complete
 
 ### Accessibility
