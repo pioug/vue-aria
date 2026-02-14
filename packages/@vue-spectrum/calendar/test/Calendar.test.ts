@@ -285,6 +285,23 @@ describe("Calendar", () => {
     expect(ariaLabel).toContain("June 2019");
   });
 
+  it("supports camel-case aria props on calendar root", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        ariaLabel: "Team calendar",
+        ariaLabelledby: "team-calendar-label",
+        ariaDescribedby: "team-calendar-help",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    expect(root.attributes("aria-label")).toContain("Team calendar");
+    expect(root.attributes("aria-labelledby")).toContain("team-calendar-label");
+    expect(root.attributes("aria-describedby")).toContain("team-calendar-help");
+  });
+
   it("renders a range calendar", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {
