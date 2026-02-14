@@ -305,6 +305,24 @@ export const DatePicker = defineComponent({
       });
     });
 
+    const errorText = computed(() => {
+      if (props.errorMessage) {
+        return props.errorMessage;
+      }
+
+      return state.displayValidation.validationErrors.join(", ");
+    });
+
+    const showError = computed(() =>
+      Boolean(errorText.value)
+      && Boolean(
+        props.isInvalid
+        || props.validationState === "invalid"
+        || state.isInvalid
+        || state.displayValidation.validationErrors.length > 0
+      )
+    );
+
     return () => {
       const calendarAriaLabel = props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
@@ -362,14 +380,14 @@ export const DatePicker = defineComponent({
               ),
             ]
           ),
-          state.displayValidation.validationErrors.length > 0
+          showError.value
             ? h(
               "div",
               {
                 ...pickerAria.errorMessageProps,
                 class: "react-spectrum-DatePicker-error",
               },
-              state.displayValidation.validationErrors.join(", ")
+              errorText.value
             )
             : null,
           h("div", {
@@ -661,6 +679,24 @@ export const DateRangePicker = defineComponent({
       return `${range.start} - ${range.end}`;
     });
 
+    const errorText = computed(() => {
+      if (props.errorMessage) {
+        return props.errorMessage;
+      }
+
+      return state.displayValidation.validationErrors.join(", ");
+    });
+
+    const showError = computed(() =>
+      Boolean(errorText.value)
+      && Boolean(
+        props.isInvalid
+        || props.validationState === "invalid"
+        || state.isInvalid
+        || state.displayValidation.validationErrors.length > 0
+      )
+    );
+
     return () => {
       const calendarAriaLabel = props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Range calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
@@ -718,14 +754,14 @@ export const DateRangePicker = defineComponent({
               ),
             ]
           ),
-          state.displayValidation.validationErrors.length > 0
+          showError.value
             ? h(
               "div",
               {
                 ...pickerAria.errorMessageProps,
                 class: "react-spectrum-DateRangePicker-error",
               },
-              state.displayValidation.validationErrors.join(", ")
+              errorText.value
             )
             : null,
           h("div", {

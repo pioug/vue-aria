@@ -233,6 +233,20 @@ describe("DatePicker", () => {
     expect(group.attributes("aria-label")).toContain("Team date picker");
     expect(group.attributes("aria-labelledby")).toContain("team-date-label");
   });
+
+  it("renders custom error messages when invalid", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        validationState: "invalid",
+        errorMessage: "Choose a valid date",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.text()).toContain("Choose a valid date");
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -467,5 +481,22 @@ describe("DateRangePicker", () => {
     const group = wrapper.get(".react-spectrum-DateRangePicker-group");
     expect(group.attributes("aria-label")).toContain("Team range picker");
     expect(group.attributes("aria-labelledby")).toContain("team-range-label");
+  });
+
+  it("renders custom range error messages when invalid", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        validationState: "invalid",
+        errorMessage: "Choose a valid range",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.text()).toContain("Choose a valid range");
   });
 });
