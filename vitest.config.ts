@@ -292,6 +292,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/table": fileURLToPath(
         new URL("./packages/@vue-spectrum/table/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/tree": fileURLToPath(
+        new URL("./packages/@vue-spectrum/tree/src/index.ts", import.meta.url)
       )
     }
   }

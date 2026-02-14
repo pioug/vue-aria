@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/table`
+- Current focus package: `@vue-spectrum/tree`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -116,7 +116,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/combobox`: In progress
 - `@vue-spectrum/tabs`: In progress
 - `@vue-spectrum/table`: In progress
-- `@vue-spectrum/tree`: Not started
+- `@vue-spectrum/tree`: In progress
 - `@vue-spectrum/calendar`: Not started
 - `@vue-spectrum/datepicker`: Not started
 - `@vue-spectrum/breadcrumbs`: In progress
@@ -6463,3 +6463,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 7 tests).
 - Note: Vue warns about invoking default slots outside render in static table-slot parsing paths; behavior/tests are currently passing and this remains a known follow-up parity refinement.
+- Started `@vue-spectrum/tree` foundational slice:
+  - scaffolded `@vue-spectrum/tree` package with upstream-aligned surface exports: `TreeView`, `TreeViewItem`, and `TreeViewItemContent`.
+  - implemented tree item normalization for both data-driven (`items`) and static-slot composition trees, backed by `@vue-aria/tree-state` and `@vue-aria/tree`.
+  - added row rendering with treegrid semantics, expand/collapse chevrons, selection wiring, and row action plumbing.
+  - added adapted test coverage:
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.ssr.test.ts`
+  - added docs page `docs/packages/spectrum-tree.md` and linked it in docs sidebar/index.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/tree`.
+  - updated execution queue status for `@vue-spectrum/tree` to `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 7 tests).
+- Note: Vue warns about slot invocation outside render for static tree-slot parsing paths in test/SSR harnesses; behavior/tests are passing and this remains a follow-up cleanup item.
