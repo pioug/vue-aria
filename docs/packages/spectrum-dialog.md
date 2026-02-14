@@ -110,6 +110,33 @@ Provide your own content structure inside the dialog body (heading, text, action
 </Dialog>
 ```
 
+### Composition Slots
+
+```vue
+<script setup lang="ts">
+import { ButtonGroup, Content, Dialog, Footer, Header, Heading } from "@vue-spectrum/dialog";
+</script>
+
+<template>
+  <Dialog>
+    <Header>
+      <Heading>Publish 3 pages</Heading>
+    </Header>
+
+    <Content>
+      <p>Confirm publish?</p>
+    </Content>
+
+    <Footer>
+      <ButtonGroup>
+        <button>Cancel</button>
+        <button>Publish</button>
+      </ButtonGroup>
+    </Footer>
+  </Dialog>
+</template>
+```
+
 ## AlertDialog Example
 
 ```vue
@@ -235,5 +262,6 @@ const onDismiss = () => {
 
 ## Related
 
+- `Heading`, `Header`, `Content`, `Footer`, and `ButtonGroup` composition components are available for Spectrum-aligned dialog structure.
 - `DialogContainer` and `AlertDialog` are also available in this package.
 - `Spectrum S2` remains out of scope unless explicitly requested.

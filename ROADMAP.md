@@ -7333,3 +7333,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 24 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` docs parity update:
+  - added composition-slot usage docs (`Heading`, `Header`, `Content`, `Footer`, `ButtonGroup`) and expanded related-package guidance.
+    - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 24 tests).
