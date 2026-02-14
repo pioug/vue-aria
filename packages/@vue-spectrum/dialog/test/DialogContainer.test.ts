@@ -47,6 +47,52 @@ describe("DialogContainer", () => {
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
   });
 
+  it("propagates container type to nested dialog sizing", () => {
+    const onDismiss = vi.fn();
+    const popover = mount(DialogContainer as any, {
+      props: {
+        type: "popover",
+        onDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    const fullscreen = mount(DialogContainer as any, {
+      props: {
+        type: "fullscreen",
+        onDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    expect(popover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--small");
+    expect(fullscreen.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreen");
+  });
+
+  it("propagates dismissable context to nested dialogs", async () => {
+    const onDismiss = vi.fn();
+    const wrapper = mount(DialogContainer as any, {
+      props: {
+        onDismiss,
+        isDismissable: true,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.find('[data-testid="dialog-close-button"]').exists()).toBe(true);
+    await wrapper.get('[data-testid="dialog-close-button"]').trigger("click");
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
   it("throws when multiple children are passed", () => {
     const onDismiss = vi.fn();
     expect(() =>

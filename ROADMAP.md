@@ -7360,3 +7360,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/Dialog.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 27 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded `DialogContainer` behavior coverage for:
+    - container `type` propagation to nested dialog size variants (`popover` -> small, `fullscreen` -> fullscreen)
+    - container `isDismissable` propagation to nested dialog close-button behavior
+    - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.
