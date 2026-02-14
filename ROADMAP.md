@@ -7183,3 +7183,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented `shouldCloseOnSelect` usage with a shared keep-open callback example and added it to the key-prop reference.
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 119 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - exposed `validate` callback props for both picker variants and forwarded them as reactive refs so form-state validation receives the validator function rather than invoking it as a getter.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added custom-validator regression coverage for date and range pickers, asserting error rendering and invalid-state classes from callback-returned errors.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 121 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -39,6 +39,7 @@ export interface SpectrumDatePickerProps {
   hourCycle?: 12 | 24 | undefined;
   shouldForceLeadingZeros?: boolean | undefined;
   validationBehavior?: "aria" | "native" | undefined;
+  validate?: ((value: DateValue | null) => boolean | string | string[] | null | undefined) | undefined;
   shouldCloseOnSelect?: boolean | (() => boolean) | undefined;
   placeholderValue?: DateValue | undefined;
   placeholder?: string | undefined;
@@ -55,10 +56,11 @@ export interface SpectrumDatePickerProps {
   UNSAFE_style?: Record<string, unknown> | undefined;
 }
 
-export interface SpectrumDateRangePickerProps extends Omit<SpectrumDatePickerProps, "value" | "defaultValue" | "onChange" | "name"> {
+export interface SpectrumDateRangePickerProps extends Omit<SpectrumDatePickerProps, "value" | "defaultValue" | "onChange" | "name" | "validate"> {
   value?: DateRangeValue | undefined;
   defaultValue?: DateRangeValue | undefined;
   onChange?: ((value: DateRangeValue) => void) | undefined;
+  validate?: ((value: DateRangeValue) => boolean | string | string[] | null | undefined) | undefined;
   startName?: string | undefined;
   endName?: string | undefined;
   allowsNonContiguousRanges?: boolean | undefined;
@@ -258,6 +260,10 @@ export const DatePicker = defineComponent({
       type: String as PropType<SpectrumDatePickerProps["validationBehavior"]>,
       default: undefined,
     },
+    validate: {
+      type: Function as PropType<SpectrumDatePickerProps["validate"]>,
+      default: undefined,
+    },
     shouldCloseOnSelect: {
       type: [Boolean, Function] as PropType<SpectrumDatePickerProps["shouldCloseOnSelect"]>,
       default: undefined,
@@ -386,6 +392,9 @@ export const DatePicker = defineComponent({
       get validationBehavior() {
         return merged.validationBehavior;
       },
+      validate: computed(
+        () => merged.validate as SpectrumDatePickerProps["validate"]
+      ),
       get shouldCloseOnSelect() {
         return merged.shouldCloseOnSelect;
       },
@@ -787,6 +796,10 @@ export const DateRangePicker = defineComponent({
       type: String as PropType<SpectrumDatePickerProps["validationBehavior"]>,
       default: undefined,
     },
+    validate: {
+      type: Function as PropType<SpectrumDateRangePickerProps["validate"]>,
+      default: undefined,
+    },
     shouldCloseOnSelect: {
       type: [Boolean, Function] as PropType<SpectrumDatePickerProps["shouldCloseOnSelect"]>,
       default: undefined,
@@ -923,6 +936,9 @@ export const DateRangePicker = defineComponent({
       get validationBehavior() {
         return merged.validationBehavior;
       },
+      validate: computed(
+        () => merged.validate as SpectrumDateRangePickerProps["validate"]
+      ),
       get shouldCloseOnSelect() {
         return merged.shouldCloseOnSelect;
       },

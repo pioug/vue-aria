@@ -1021,6 +1021,22 @@ describe("DatePicker", () => {
     expect(Array.isArray(payload?.validationErrors)).toBe(true);
   });
 
+  it("renders validation errors from a custom date validate callback", () => {
+    const validate = vi.fn(() => "Date failed custom validation");
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        validate,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.text()).toContain("Date failed custom validation");
+    expect(wrapper.get(".react-spectrum-DatePicker").classes()).toContain("is-invalid");
+    expect(validate).toHaveBeenCalled();
+  });
+
   it("renders description text when provided", () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -2307,6 +2323,25 @@ describe("DateRangePicker", () => {
     const callArgs = errorMessage.mock.calls as unknown[][];
     const payload = (callArgs.at(0)?.[0] ?? {}) as { validationErrors?: unknown[] };
     expect(Array.isArray(payload?.validationErrors)).toBe(true);
+  });
+
+  it("renders validation errors from a custom range validate callback", () => {
+    const validate = vi.fn(() => "Range failed custom validation");
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        validate,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.text()).toContain("Range failed custom validation");
+    expect(wrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-invalid");
+    expect(validate).toHaveBeenCalled();
   });
 
   it("renders range description text when provided", () => {
