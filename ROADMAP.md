@@ -9415,3 +9415,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 69 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` single-highlight keyboard-replace parity update:
+  - added keyboard single-highlight coverage to assert Enter activation on a second row replaces prior selection and updates `aria-selected`/`data-selected` row metadata.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 70 tests).
+- Validation: `npm run check -- --pretty false` passed.

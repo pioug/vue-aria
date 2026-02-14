@@ -1606,6 +1606,47 @@ describe("TreeView", () => {
     expect(betaRow!.attributes("data-selected")).toBeUndefined();
   });
 
+  it("replaces single highlight selection across rows from keyboard activation", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    let alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    let gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(alphaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+
+    await pressEnter(alphaRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("alpha")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    await pressEnter(gammaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.has("alpha")).toBe(false);
+    expect(selected?.size).toBe(1);
+
+    alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(alphaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+    expect(alphaRow!.attributes("aria-selected")).toBe("false");
+    expect(alphaRow!.attributes("data-selected")).toBeUndefined();
+    expect(gammaRow!.attributes("aria-selected")).toBe("true");
+    expect(gammaRow!.attributes("data-selected")).toBe("true");
+  });
+
   it("toggles and replaces highlight selection based on modifier keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTree({
