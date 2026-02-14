@@ -5,8 +5,8 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 
 ## 1) Program Status
 - Overall status: In progress
-- Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/table`
+- Current phase: React Spectrum bootstrap
+- Current focus package: `@vue-spectrum/provider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -60,7 +60,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tabs`: Complete
 - `@vue-aria/grid`: Complete
 - `@vue-aria/gridlist`: Complete
-- `@vue-aria/table`: In progress
+- `@vue-aria/table`: Complete
 - `@vue-aria/tree`: Complete
 - `@vue-aria/calendar`: Complete
 - `@vue-aria/datepicker`: Complete
@@ -2578,7 +2578,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation note:
-  - Full upstream integration-style table rendering tests are still being expanded in Vue-adapted form.
+  - Upstream integration-style table rendering tests are ported in Vue-adapted form for the current upstream test surface.
 
 ### Tests
 - Total upstream test files: 4 (`useTable.test.tsx`, `useTableBackwardCompat.test.tsx`, `ariaTableResizing.test.tsx`, `tableResizingTests.tsx`)
@@ -2598,27 +2598,26 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Expanded `tableResizingTests.ts` with adapted keyboard-delta `onResize` callback-map assertions.
   - Added integration-style table action coverage (`useTableActions.test.ts`) for replace-selection double-click row action and legacy row `onAction` behavior.
   - Updated table hook tests to run in Vue `effectScope` for lifecycle-aligned composable execution and clean test output.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/table.md`)
 - [x] Expanded docs examples for sorting, selection, and column resizing usage.
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
 
 ### Accessibility
 - [x] Basic aria role/id/label wiring covered in adapted tests.
-- [ ] Full interaction parity validation for upstream integration scenarios.
+- [x] Full interaction parity validation for upstream integration scenarios.
 
 ### Visual Parity
-- [ ] Pending upstream example-by-example comparison for table markup/states.
+- [x] Upstream example-by-example comparison completed for table markup/states.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port/adapt upstream resizing integration tests (`ariaTableResizing.test.tsx` + shared `tableResizingTests.tsx`) with Vue harness components.
-2. Expand VitePress docs examples to mirror upstream table docs variants and finalize visual/accessibility parity gates.
+1. Monitor upstream `@react-aria/table` test/docs/source drift and backport targeted parity deltas.
 
 ## 31i) Package Record: @vue-aria/tree-state
 - Upstream source path(s):
