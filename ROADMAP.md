@@ -6572,6 +6572,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 27 tests).
 - Additional `@vue-spectrum/calendar` docs parity update:
   - added `RangeCalendar` non-contiguous-range example in `docs/packages/spectrum-calendar.md`.
+- Additional `@vue-spectrum/calendar` parity update:
+  - expanded SSR coverage for:
+    - multi-month calendar markup rendering (`visibleMonths: 2`)
+    - ARIA label prefix rendering in SSR output
+    - `packages/@vue-spectrum/calendar/test/Calendar.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 28 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
