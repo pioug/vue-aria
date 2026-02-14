@@ -49,4 +49,33 @@ describe("useGridListSelectionCheckbox", () => {
     );
     expect(checkboxProps["aria-labelledby"]).toBe("checkbox-id list-id-row1");
   });
+
+  it("supports tree-state objects as consumers", () => {
+    const state = {
+      collection: {
+        size: 1,
+      },
+      selectionManager: {},
+      expandedKeys: new Set<string>(),
+      toggleKey: vi.fn(),
+      setExpandedKeys: vi.fn(),
+    };
+    listMap.set(state, {
+      id: "tree-id",
+      keyboardNavigationBehavior: "arrow",
+    });
+
+    const { checkboxProps } = useGridListSelectionCheckbox(
+      {
+        key: "branch 1",
+      },
+      state as any
+    );
+
+    expect(useGridSelectionCheckboxMock).toHaveBeenCalledWith(
+      { key: "branch 1" },
+      state
+    );
+    expect(checkboxProps["aria-labelledby"]).toBe("checkbox-id tree-id-branch1");
+  });
 });

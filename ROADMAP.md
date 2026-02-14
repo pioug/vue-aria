@@ -2721,6 +2721,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted item-level coverage for row id wiring, action chaining, virtualized row index behavior, and tree expansion-key keyboard branches.
   - Added adapted section and selection-checkbox helper coverage.
   - Added adapted interaction-harness coverage for ArrowLeft/ArrowRight child focus traversal in row `keyboardNavigationBehavior="arrow"` mode.
+  - Added selection-checkbox coverage for tree-state consumer wiring (shared row labeling against tree rows).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5317,3 +5318,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Expanded docs parity coverage for the tree stack:
   - extended `docs/packages/gridlist.md` with upstream-aligned feature notes, section-hook usage, richer row/description/action markup, and base style guidance.
   - extended `docs/packages/tree.md` with callback-builder state setup, tree row/expander markup, and keyboard interaction parity notes.
+- Expanded `@vue-aria/gridlist` tree-consumer typing parity:
+  - widened `useGridListSelectionCheckbox` input typing to support both list-state and tree-state consumers.
+  - added adapted selection-checkbox coverage for tree-state consumer row-label wiring.
+  - updated package record `31j` test parity notes with the tree-consumer selection-checkbox branch.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/gridlist/test` passed (6 files, 15 tests).
