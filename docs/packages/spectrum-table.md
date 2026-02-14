@@ -82,6 +82,7 @@ In static slot composition, each row's total cell span must match the declared c
 - `columns` + `items` for data-driven rendering.
   `items[].cells` supports `colSpan` for spanned body cells.
   `columns[].align` supports `"start" | "center" | "end"` alignment classes for matching header/body cells.
+  `columns[].hideHeader` and `columns[].showDivider` map to Spectrum header/divider class variants.
   Set `isRowHeader` on one or more columns to expose row-header semantics.
 
 ## Selection Callbacks

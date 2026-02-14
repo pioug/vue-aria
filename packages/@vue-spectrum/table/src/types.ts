@@ -18,6 +18,8 @@ export interface SpectrumTableColumnData {
   allowsSorting?: boolean | undefined;
   isRowHeader?: boolean | undefined;
   align?: SpectrumTableColumnAlign | undefined;
+  hideHeader?: boolean | undefined;
+  showDivider?: boolean | undefined;
   colSpan?: number | undefined;
 }
 
@@ -43,6 +45,8 @@ export interface ParsedSpectrumTableColumn {
   allowsSorting?: boolean | undefined;
   isRowHeader?: boolean | undefined;
   align?: SpectrumTableColumnAlign | undefined;
+  hideHeader?: boolean | undefined;
+  showDivider?: boolean | undefined;
   colSpan?: number | undefined;
   content?: VNodeChild;
 }
@@ -80,6 +84,8 @@ export interface NormalizedSpectrumTableColumn {
   allowsSorting?: boolean | undefined;
   isRowHeader?: boolean | undefined;
   align?: SpectrumTableColumnAlign | undefined;
+  hideHeader?: boolean | undefined;
+  showDivider?: boolean | undefined;
   colSpan?: number | undefined;
 }
 
@@ -255,6 +261,8 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     allowsSorting: Boolean(props.allowsSorting),
     isRowHeader: Boolean(props.isRowHeader),
     align: normalizeColumnAlign(props.align),
+    hideHeader: Boolean(props.hideHeader),
+    showDivider: Boolean(props.showDivider),
     colSpan: typeof props.colSpan === "number" && Number.isFinite(props.colSpan) ? props.colSpan : undefined,
     content,
   };
@@ -358,6 +366,8 @@ function normalizeColumnsFromSlot(
         allowsSorting: column.allowsSorting,
         isRowHeader: column.isRowHeader,
         align: column.align,
+        hideHeader: column.hideHeader,
+        showDivider: column.showDivider,
         colSpan: column.colSpan,
       };
     });
@@ -430,6 +440,8 @@ function normalizeColumnsFromProps(
         allowsSorting: column.allowsSorting,
         isRowHeader: column.isRowHeader,
         align: normalizeColumnAlign(column.align),
+        hideHeader: column.hideHeader,
+        showDivider: column.showDivider,
         colSpan: column.colSpan,
       };
     });

@@ -132,6 +132,8 @@ function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridN
       allowsSorting: column.allowsSorting,
       isRowHeader: column.isRowHeader,
       align: column.align,
+      hideHeader: column.hideHeader,
+      showDivider: column.showDivider,
       colSpan: column.colSpan,
     },
   }));
@@ -333,6 +335,7 @@ const TableHeaderCell = defineComponent({
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
+              "spectrum-Table-cell--hideHeader": Boolean((props.node.props as Record<string, unknown> | undefined)?.hideHeader),
             },
           ],
           "aria-colindex":
@@ -393,6 +396,9 @@ const TableBodyCell = defineComponent({
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
+              "spectrum-Table-cell--divider":
+                Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.showDivider)
+                && props.node.column?.nextKey != null,
             },
           ],
           colSpan: resolvedColSpan.value,

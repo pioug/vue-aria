@@ -31,6 +31,12 @@ const columnsWithAlignment: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", align: "end" },
 ];
 
+const columnsWithHeaderDisplayMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true },
+  { key: "bar", title: "Bar", hideHeader: true, showDivider: true },
+  { key: "baz", title: "Baz", showDivider: true },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -238,6 +244,22 @@ export function tableTests() {
     expect(firstRowCells).toHaveLength(2);
     expect(firstRowCells[0]!.classes()).toContain("react-spectrum-Table-cell--alignCenter");
     expect(firstRowCells[1]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
+  });
+
+  it("applies hide-header and divider column classes", () => {
+    const wrapper = renderTable({
+      columns: columnsWithHeaderDisplayMetadata,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(headers[1]!.classes()).toContain("spectrum-Table-cell--hideHeader");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowCells).toHaveLength(2);
+    expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
+    expect(firstRowCells[1]!.classes()).not.toContain("spectrum-Table-cell--divider");
   });
 
   it("supports static slot table syntax", async () => {
