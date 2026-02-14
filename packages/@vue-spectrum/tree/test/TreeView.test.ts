@@ -1070,6 +1070,33 @@ describe("TreeView", () => {
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(true);
   });
 
+  it('does not expand disabled rows from Enter when disabledBehavior is "all"', async () => {
+    const onExpandedChange = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "none",
+      disabledBehavior: "all",
+      disabledKeys: ["projects"],
+      onExpandedChange,
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("aria-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
+
+    await pressEnter(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
+    expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+  });
+
   it('expands disabled rows when disabledBehavior is "selection"', async () => {
     const wrapper = renderTree({
       selectionMode: "none",
