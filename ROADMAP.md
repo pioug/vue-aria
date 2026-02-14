@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/meter`
+- Current focus package: `@vue-spectrum/numberfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -123,7 +123,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/dialog`: Complete
 - `@vue-spectrum/tooltip`: Complete
 - `@vue-spectrum/progress`: Complete
-- `@vue-spectrum/meter`: In progress
+- `@vue-spectrum/meter`: Complete
 - `@vue-spectrum/toast`: Complete
 
 ## 4) Recommended Port Order
@@ -493,7 +493,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/meter/test`
   - `references/react-spectrum/packages/@react-spectrum/meter/docs`
 - Local package path: `packages/@vue-spectrum/meter`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -514,10 +514,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-meter`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/meter`.
+- Additional visual parity update:
+  - expanded class-level coverage for:
+    - variant state classes (`informative`, `positive`, `warning`, `critical`)
+    - size classes (`S`, `L`)
+    - label-position and value-label visibility states (`labelPosition="side"`, `showValueLabel={false}`)
+  - `packages/@vue-spectrum/meter/test/Meter.test.ts`
 
 ### Remaining for completion
-- Validate visual parity for variant and size styles against upstream docs.
-- Expand parity assertions for warning/critical/positive class application and label-position states.
+- None currently tracked in this slice.
 
 ## 4j) Active Package Slice: @vue-spectrum/numberfield
 - Upstream source path(s):
@@ -7538,6 +7543,20 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/progress` visual parity update:
+  - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
+  - expanded progress docs with explicit `overBackground` examples for both components.
+  - marked `@vue-spectrum/progress` slice complete and advanced focus to `@vue-spectrum/meter`.
+  - `packages/@vue-spectrum/progress/test/ProgressBar.test.ts`
+  - `packages/@vue-spectrum/progress/test/ProgressCircle.test.ts`
+  - `docs/packages/spectrum-progressbar.md`
+  - `docs/packages/spectrum-progresscircle.md`
+- Validation: `npm test -- packages/@vue-spectrum/progress/test` passed (4 files, 26 tests).
+- Additional `@vue-spectrum/meter` visual parity update:
+  - expanded class-level meter coverage for variant classes (`informative`, `positive`, `warning`, `critical`), size classes (`S`, `L`), and label/value display states (`labelPosition="side"`, `showValueLabel={false}`).
+  - marked `@vue-spectrum/meter` slice complete and advanced focus to `@vue-spectrum/numberfield`.
+  - `packages/@vue-spectrum/meter/test/Meter.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/meter/test` passed (2 files, 11 tests).
 - Additional `@vue-spectrum/link` interaction parity update:
   - added adapted tooltip-trigger composition coverage for focus open/close behavior.
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.

@@ -106,4 +106,73 @@ describe("Meter", () => {
     });
     expect(wrapper.find('[data-testid="test"]').exists()).toBe(true);
   });
+
+  it("supports variant classes", () => {
+    const informative = mount(Meter as any, {
+      props: {
+        label: "Meter",
+        value: 25,
+        variant: "informative",
+      },
+    });
+    const informativeMeter = informative.get('[role="meter progressbar"]');
+    expect(informativeMeter.classes()).not.toContain("is-positive");
+    expect(informativeMeter.classes()).not.toContain("is-warning");
+    expect(informativeMeter.classes()).not.toContain("is-critical");
+
+    const positive = mount(Meter as any, {
+      props: {
+        label: "Meter",
+        value: 25,
+        variant: "positive",
+      },
+    });
+    expect(positive.get('[role="meter progressbar"]').classes()).toContain("is-positive");
+
+    const warning = mount(Meter as any, {
+      props: {
+        label: "Meter",
+        value: 70,
+        variant: "warning",
+      },
+    });
+    expect(warning.get('[role="meter progressbar"]').classes()).toContain("is-warning");
+
+    const critical = mount(Meter as any, {
+      props: {
+        label: "Meter",
+        value: 90,
+        variant: "critical",
+      },
+    });
+    expect(critical.get('[role="meter progressbar"]').classes()).toContain("is-critical");
+  });
+
+  it("supports size and label-position visual states", () => {
+    const smallTop = mount(Meter as any, {
+      props: {
+        label: "Meter",
+        value: 25,
+        size: "S",
+      },
+    });
+    const smallMeter = smallTop.get('[role="meter progressbar"]');
+    expect(smallMeter.classes()).toContain("spectrum-BarLoader--small");
+    expect(smallMeter.classes()).not.toContain("spectrum-BarLoader--sideLabel");
+    expect(smallTop.find(".spectrum-BarLoader-percentage").exists()).toBe(true);
+
+    const largeSideHidden = mount(Meter as any, {
+      props: {
+        label: "Meter",
+        value: 25,
+        size: "L",
+        labelPosition: "side",
+        showValueLabel: false,
+      },
+    });
+    const largeMeter = largeSideHidden.get('[role="meter progressbar"]');
+    expect(largeMeter.classes()).toContain("spectrum-BarLoader--large");
+    expect(largeMeter.classes()).toContain("spectrum-BarLoader--sideLabel");
+    expect(largeSideHidden.find(".spectrum-BarLoader-percentage").exists()).toBe(false);
+  });
 });
