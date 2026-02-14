@@ -289,6 +289,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/tabs": fileURLToPath(
         new URL("./packages/@vue-spectrum/tabs/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/table": fileURLToPath(
+        new URL("./packages/@vue-spectrum/table/src/index.ts", import.meta.url)
       )
     }
   }

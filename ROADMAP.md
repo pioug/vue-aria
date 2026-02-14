@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/toast`
+- Current focus package: `@vue-spectrum/table`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -115,7 +115,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/picker`: In progress
 - `@vue-spectrum/combobox`: In progress
 - `@vue-spectrum/tabs`: In progress
-- `@vue-spectrum/table`: Not started
+- `@vue-spectrum/table`: In progress
 - `@vue-spectrum/tree`: Not started
 - `@vue-spectrum/calendar`: Not started
 - `@vue-spectrum/datepicker`: Not started
@@ -6450,3 +6450,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated execution queue status for `@vue-spectrum/tabs` to `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 7 tests).
+- Started `@vue-spectrum/table` foundational slice (fresh rebuild from upstream React references under `references/react-spectrum/packages/@react-spectrum/table`):
+  - scaffolded `@vue-spectrum/table` package with upstream-aligned surface exports: `TableView`, `Column`, `TableHeader`, `TableBody`, `Section`, `Row`, `Cell`, and `EditableCell`.
+  - implemented data-driven and static-slot table definition normalization, collection construction over `@vue-aria/table-state`, and Spectrum table rendering with `@vue-aria/table` semantics/hooks.
+  - added adapted upstream-style tests:
+    - `packages/@vue-spectrum/table/test/Table.test.ts`
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+    - `packages/@vue-spectrum/table/test/Table.ssr.test.ts`
+  - added docs page `docs/packages/spectrum-table.md` and linked it in docs sidebar/index.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/table`.
+  - updated execution queue status for `@vue-spectrum/table` to `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 7 tests).
+- Note: Vue warns about invoking default slots outside render in static table-slot parsing paths; behavior/tests are currently passing and this remains a known follow-up parity refinement.
