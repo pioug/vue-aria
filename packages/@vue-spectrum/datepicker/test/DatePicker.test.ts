@@ -262,6 +262,30 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("emits open request in controlled mode without opening until prop update", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isOpen: false,
+        onOpenChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+
+    await wrapper.setProps({ isOpen: true });
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
   it("applies UNSAFE_className and UNSAFE_style to date picker root", () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -753,6 +777,33 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("emits range open request in controlled mode without opening until prop update", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isOpen: false,
+        onOpenChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+
+    await wrapper.setProps({ isOpen: true });
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
   });
 
   it("applies UNSAFE_className and UNSAFE_style to range picker root", () => {
