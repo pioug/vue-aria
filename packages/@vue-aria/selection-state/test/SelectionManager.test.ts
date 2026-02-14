@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { BaseCollection, ItemNode } from "@vue-aria/collections";
 import { SelectionManager } from "../src/SelectionManager";
 import { useMultipleSelectionState } from "../src/useMultipleSelectionState";
+import { Selection } from "../src/Selection";
 
 function makeCollection() {
   const c = new BaseCollection<unknown>();
@@ -168,5 +169,26 @@ describe("SelectionManager", () => {
 
     manager.select("a", { pointerType: "mouse" });
     expect(manager.selectedKeys.size).toBe(0);
+  });
+
+  it("emits unchanged selection when disallow-empty blocks toggle and duplicate events are enabled", () => {
+    const onSelectionChange = vi.fn();
+    const state = useMultipleSelectionState({
+      selectionMode: "multiple",
+      disallowEmptySelection: true,
+      allowDuplicateSelectionEvents: true,
+      defaultSelectedKeys: new Selection(["a"]),
+      onSelectionChange,
+    });
+    const manager = new SelectionManager(makeCollection() as any, state);
+
+    manager.toggleSelection("a");
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    const selection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(selection).toBeInstanceOf(Selection);
+    expect(selection?.size).toBe(1);
+    expect(selection?.has("a")).toBe(true);
+    expect(manager.selectedKeys.has("a")).toBe(true);
   });
 });

@@ -286,6 +286,10 @@ export class SelectionManager implements MultipleSelectionManager {
     }
 
     if (this.disallowEmptySelection && keys.size === 0) {
+      const currentSelection = this.state.selectedKeys === "all"
+        ? new Selection(this.getSelectAllKeys())
+        : new Selection(this.state.selectedKeys as Set<Key>);
+      this.state.setSelectedKeys(currentSelection);
       return;
     }
 

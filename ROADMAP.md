@@ -8300,6 +8300,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 80 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/selection-state` + `@vue-spectrum/table` controlled checkbox duplicate-callback parity update:
+  - fixed `SelectionManager.toggleSelection` to route disallow-empty unchanged-selection attempts through `setSelectedKeys` so duplicate callbacks can emit when `allowDuplicateSelectionEvents` is enabled.
+  - added selection-manager regression coverage for disallow-empty unchanged toggles with duplicate events enabled.
+  - added table regression coverage to verify unchanged controlled checkbox selection emits callbacks for pointer and keyboard (`Space`) attempts when `allowDuplicateSelectionEvents` is true.
+  - `packages/@vue-aria/selection-state/src/SelectionManager.ts`
+  - `packages/@vue-aria/selection-state/test/SelectionManager.test.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-aria/selection-state/test packages/@vue-spectrum/table/test` passed (4 files, 98 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

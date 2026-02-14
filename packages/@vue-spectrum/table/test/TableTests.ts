@@ -1687,6 +1687,58 @@ export function tableTests() {
     expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("emits unchanged controlled checkbox callbacks when allowDuplicateSelectionEvents is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+      disallowEmptySelection: true,
+      allowDuplicateSelectionEvents: true,
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("emits unchanged controlled checkbox keyboard callbacks when allowDuplicateSelectionEvents is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+      disallowEmptySelection: true,
+      allowDuplicateSelectionEvents: true,
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    (bodyRows[0]!.element as HTMLElement).focus();
+    await bodyRows[0]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("emits controlled checkbox select-all changes without mutating rendered state", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
