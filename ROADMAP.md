@@ -2917,7 +2917,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted range-cell edge coverage for virtual-click range-start behavior, keyboard max-boundary fallback focus, and context-menu suppression.
   - Added adapted touch-hover gating coverage so pointer-enter highlight only applies for touch when dragging is active.
   - Added adapted calendar/grid labeling coverage for `aria-label` + `aria-labelledby` semantics and multi-month per-grid visible-range labeling.
-  - Expanded keyboard parity matrix with additional upstream day/week/two-week scenarios (`Arrow`/`Page`/`Home`/`End`, including shift-modified paging branches).
+  - Expanded keyboard parity matrix to cover full upstream day/week/two-week navigation scenarios (`Arrow`/`Page`/`Home`/`End`, including shift-modified paging branches).
   - Expanded first-day-of-week locale matrix to full upstream-style coverage (`en-US` and `fr-FR` across default and all weekday overrides).
   - Expanded pagination parity matrix to upstream counts for months/weeks/days in both `visible` and `single` page behaviors, including multi-step next/previous traversal branches.
   - Added adapted upstream-style interaction matrix coverage for calendar keyboard navigation and visible/single pagination behavior.
