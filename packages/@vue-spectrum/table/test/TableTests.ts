@@ -395,6 +395,30 @@ export function tableTests() {
     });
   });
 
+  it("emits row selection callbacks for data-driven colSpan rows", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Selectable prop colSpan table",
+        columns: sortableColumnsWithSpan,
+        items: unsortedSortableItemsWithPropSpanCells,
+        selectionMode: "single",
+        selectionStyle: "highlight",
+        onSelectionChange,
+      },
+      attachTo: document.body,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has("row-a")).toBe(true);
+  });
+
   it("supports keyboard row navigation", async () => {
     const wrapper = renderTable({
       selectionMode: "single",
