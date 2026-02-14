@@ -7027,3 +7027,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 81 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded keyboard-open regression coverage to include `Alt+ArrowUp` interaction for both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - updated keyboard behavior notes to reflect both `Alt+ArrowDown` and `Alt+ArrowUp` popover-open shortcuts.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 83 tests).
+- Validation: `npm run check -- --pretty false` passed.
