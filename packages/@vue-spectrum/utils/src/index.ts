@@ -5,6 +5,14 @@ export { useHasChild } from "./useHasChild";
 export { useIsMobileDevice } from "./useIsMobileDevice";
 export { useMediaQuery } from "./useMediaQuery";
 export {
+  createDOMRef,
+  createFocusableRef,
+  unwrapDOMRef,
+  useDOMRef,
+  useFocusableRef,
+  useUnwrapDOMRef,
+} from "./useDOMRef";
+export {
   baseStyleProps,
   convertStyleProps,
   dimensionValue,
@@ -16,3 +24,10 @@ export {
 
 export type { BreakpointContext, Breakpoints } from "./BreakpointProvider";
 export type { Breakpoint, Direction, Responsive, ResponsiveProp, StyleHandler, StyleHandlers } from "./styleProps";
+export type {
+  DOMRef,
+  DOMRefValue,
+  FocusableElement,
+  FocusableRef,
+  FocusableRefValue,
+} from "./useDOMRef";
