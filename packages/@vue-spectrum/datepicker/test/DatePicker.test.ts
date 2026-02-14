@@ -1,6 +1,6 @@
 import { CalendarDate, CalendarDateTime, parseZonedDateTime } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
@@ -273,6 +273,51 @@ describe("DatePicker", () => {
     await nextTick();
     expect(document.activeElement).not.toBe(trigger);
     expect(api.UNSAFE_getDOMNode()).toBe(wrapper.get(".react-spectrum-DatePicker").element);
+  });
+
+  it("supports focusing date picker via a component ref", async () => {
+    const datePickerRef = ref<{
+      focus: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    } | null>(null);
+    const Host = defineComponent({
+      components: {
+        DatePicker,
+      },
+      setup() {
+        return {
+          datePickerRef,
+        };
+      },
+      template: `
+        <DatePicker
+          ref="datePickerRef"
+          aria-label="Date picker"
+          :default-value="new CalendarDate(2019, 6, 5)"
+        />
+      `,
+    });
+
+    mount(Host as any, {
+      attachTo: document.body,
+      global: {
+        config: {
+          globalProperties: {
+            CalendarDate,
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    const api = datePickerRef.value;
+    expect(api).toBeTruthy();
+    api?.focus();
+    await nextTick();
+
+    const trigger = document.body.querySelector(".react-spectrum-DatePicker-button");
+    expect(document.activeElement).toBe(trigger);
+    expect(api?.UNSAFE_getDOMNode()).toBe(document.body.querySelector(".react-spectrum-DatePicker"));
   });
 
   it("opens a calendar popover and commits date selection", async () => {
@@ -1609,6 +1654,48 @@ describe("DateRangePicker", () => {
     await nextTick();
     expect(document.activeElement).not.toBe(trigger);
     expect(api.UNSAFE_getDOMNode()).toBe(wrapper.get(".react-spectrum-DateRangePicker").element);
+  });
+
+  it("supports focusing range picker via a component ref", async () => {
+    const rangePickerRef = ref<{
+      focus: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    } | null>(null);
+    const Host = defineComponent({
+      components: {
+        DateRangePicker,
+      },
+      setup() {
+        return {
+          rangePickerRef,
+          defaultValue: {
+            start: new CalendarDate(2019, 6, 5),
+            end: new CalendarDate(2019, 6, 8),
+          },
+        };
+      },
+      template: `
+        <DateRangePicker
+          ref="rangePickerRef"
+          aria-label="Date range picker"
+          :default-value="defaultValue"
+        />
+      `,
+    });
+
+    mount(Host as any, {
+      attachTo: document.body,
+    });
+    await nextTick();
+
+    const api = rangePickerRef.value;
+    expect(api).toBeTruthy();
+    api?.focus();
+    await nextTick();
+
+    const trigger = document.body.querySelector(".react-spectrum-DateRangePicker-button");
+    expect(document.activeElement).toBe(trigger);
+    expect(api?.UNSAFE_getDOMNode()).toBe(document.body.querySelector(".react-spectrum-DateRangePicker"));
   });
 
   it("opens range-calendar popover", async () => {
