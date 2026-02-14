@@ -228,6 +228,25 @@ const errorMessage = () => "Choose a valid date from callback";
 </template>
 ```
 
+## Time Granularity Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDateTime } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Meeting date and time"
+    :default-value="new CalendarDateTime(2019, 6, 5, 9, 30)"
+    granularity="minute"
+    :hour-cycle="24"
+    :should-force-leading-zeros="true"
+  />
+</template>
+```
+
 ## Help Text Example
 
 ```vue

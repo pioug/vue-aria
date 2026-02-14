@@ -7148,3 +7148,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 111 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added time-granularity usage example covering `granularity`, `hourCycle`, and `shouldForceLeadingZeros`.
+    - `docs/packages/spectrum-datepicker.md`
