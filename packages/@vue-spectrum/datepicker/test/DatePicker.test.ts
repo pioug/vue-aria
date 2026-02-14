@@ -350,6 +350,31 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
   });
 
+  it("inherits required state from Provider", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                isRequired: true,
+              },
+              () =>
+                h(DatePicker as any, {
+                  "aria-label": "Date picker",
+                  defaultValue: new CalendarDate(2019, 6, 5),
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get(".react-spectrum-DatePicker-group").attributes("aria-required")).toBe("true");
+  });
+
   it("prevents opening when date picker is read-only", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -367,6 +392,19 @@ describe("DatePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("sets aria-required on date picker group when required", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isRequired: true,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DatePicker-group").attributes("aria-required")).toBe("true");
   });
 
   it("emits onOpenChange for open and close transitions", async () => {
@@ -997,6 +1035,34 @@ describe("DateRangePicker", () => {
     expect(wrapper.get(".react-spectrum-DateRangePicker").classes()).not.toContain("is-invalid");
   });
 
+  it("inherits range required state from Provider", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                isRequired: true,
+              },
+              () =>
+                h(DateRangePicker as any, {
+                  "aria-label": "Date range picker",
+                  defaultValue: {
+                    start: new CalendarDate(2019, 6, 5),
+                    end: new CalendarDate(2019, 6, 8),
+                  },
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-group").attributes("aria-required")).toBe("true");
+  });
+
   it("prevents opening when range picker is read-only", async () => {
     const wrapper = mount(DateRangePicker as any, {
       props: {
@@ -1017,6 +1083,22 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("sets aria-required on range picker group when required", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isRequired: true,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-group").attributes("aria-required")).toBe("true");
   });
 
   it("updates rendered range in controlled mode", async () => {

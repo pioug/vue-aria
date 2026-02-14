@@ -6982,3 +6982,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 71 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - forwarded `isRequired` to picker group `aria-required` semantics for both picker variants.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added required-state regression coverage for local and provider-inherited required behavior in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 75 tests).
+- Validation: `npm run check -- --pretty false` passed.

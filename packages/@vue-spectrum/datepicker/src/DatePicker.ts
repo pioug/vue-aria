@@ -421,6 +421,7 @@ export const DatePicker = defineComponent({
               ...pickerAria.groupProps,
               ref: group.elementRef,
               class: "react-spectrum-DatePicker-group",
+              "aria-required": merged.isRequired ? "true" : undefined,
             },
             [
               h(
@@ -872,6 +873,7 @@ export const DateRangePicker = defineComponent({
               ...pickerAria.groupProps,
               ref: group.elementRef,
               class: "react-spectrum-DateRangePicker-group",
+              "aria-required": merged.isRequired ? "true" : undefined,
             },
             [
               h(
