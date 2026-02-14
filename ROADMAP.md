@@ -8178,6 +8178,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - clarified that both `disabledKeys` and item-level `isDisabled` rows are excluded from selection interactions and select-all key sets.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` controlled select-all parity update:
+  - added regression coverage to verify controlled checkbox-style select-all emits full key sets via `onSelectionChange` without mutating rendered controlled selection state.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 54 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
