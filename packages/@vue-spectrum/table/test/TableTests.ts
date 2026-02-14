@@ -342,4 +342,30 @@ export function tableTests() {
     expect(headers[0]!.attributes("aria-sort")).toBe("descending");
     expect(wrapper.findAll('tbody [role="row"]')[0]!.text()).toContain("Foo 2");
   });
+
+  it("updates sorting when controlled sortDescriptor changes", async () => {
+    const wrapper = renderTable({
+      sortDescriptor: {
+        column: "foo",
+        direction: "ascending",
+      },
+    });
+
+    let headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.attributes("aria-sort")).toBe("ascending");
+    expect(headers[1]!.attributes("aria-sort")).toBe("none");
+
+    await wrapper.setProps({
+      sortDescriptor: {
+        column: "bar",
+        direction: "descending",
+      },
+    });
+    await nextTick();
+
+    headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.attributes("aria-sort")).toBe("none");
+    expect(headers[1]!.attributes("aria-sort")).toBe("descending");
+    expect(wrapper.findAll('tbody [role="row"]')[0]!.text()).toContain("Foo 2");
+  });
 }

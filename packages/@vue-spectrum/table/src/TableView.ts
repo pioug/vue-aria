@@ -1,7 +1,7 @@
 import { useTable, useTableCell, useTableColumnHeader, useTableRow } from "@vue-aria/table";
 import { TableCollection, useTableState, type GridNode, type SortDescriptor, type TableState } from "@vue-aria/table-state";
 import { mergeProps } from "@vue-aria/utils";
-import { defineComponent, h, ref, computed, type PropType, type VNode, type VNodeChild } from "vue";
+import { defineComponent, h, ref, computed, watchEffect, type PropType, type VNode, type VNodeChild } from "vue";
 import type {
   NormalizedSpectrumTableCell,
   NormalizedSpectrumTableColumn,
@@ -690,6 +690,12 @@ export const TableView = defineComponent({
     const resolvedSortDescriptor = ref<SpectrumSortDescriptor | null>(
       props.sortDescriptor ?? props.defaultSortDescriptor ?? null
     );
+
+    watchEffect(() => {
+      if (props.sortDescriptor !== undefined) {
+        resolvedSortDescriptor.value = props.sortDescriptor ?? null;
+      }
+    });
 
     const slotDefinition = computed(() => parseTableSlotDefinition(slots.default?.() as VNode[] | undefined));
 
