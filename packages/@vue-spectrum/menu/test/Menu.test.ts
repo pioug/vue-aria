@@ -200,6 +200,29 @@ describe("Menu", () => {
     }
   });
 
+  it("prevents selection interactions when selectionMode is none", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderMenu({
+      selectionMode: "none",
+      onSelectionChange,
+    });
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(5);
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
+
+    await items[3]?.trigger("click");
+    await items[4]?.trigger("keydown", { key: " " });
+    await items[1]?.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    for (const item of items) {
+      expect(item.attributes("aria-checked")).toBeUndefined();
+    }
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
   it("supports multiple selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderMenu({
