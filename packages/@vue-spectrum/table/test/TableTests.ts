@@ -531,6 +531,50 @@ export function tableTests() {
     expect(lastSelection?.has("row-2")).toBe(true);
   });
 
+  it("supports single highlight selection via Space key on a row", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-2")).toBe(true);
+  });
+
+  it("supports single highlight selection via Enter key on a row", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-2")).toBe(true);
+  });
+
   it("defers row selection until press up when shouldSelectOnPressUp is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
