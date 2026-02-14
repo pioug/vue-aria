@@ -9095,3 +9095,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 32 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` collapsed-link expansion parity update:
+  - added migrated coverage to verify collapsed row links remain collapsed on row activation, dispatch synthetic link clicks, and do not emit expansion callbacks.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 33 tests).
+- Validation: `npm run check -- --pretty false` passed.

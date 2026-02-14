@@ -994,6 +994,65 @@ describe("TreeView", () => {
     expect(onExpandedChange).not.toHaveBeenCalled();
   });
 
+  it("does not expand collapsed rows when activating row links", async () => {
+    const onExpandedChange = vi.fn();
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Collapsed linked tree",
+        selectionMode: "none",
+        onExpandedChange,
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, {
+            id: "projects",
+            textValue: "Projects",
+            href: "https://example.com/projects",
+          }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-href")).toBe("https://example.com/projects");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+
+    const onClickDefault = mockClickDefault();
+    try {
+      await press(projectsRow!);
+    } finally {
+      onClickDefault.restore();
+      setInteractionModality("keyboard");
+    }
+
+    const linkClick = onClickDefault.onClick.mock.calls
+      .map((args) => args[0] as MouseEvent)
+      .find((event) => event.target instanceof HTMLAnchorElement);
+    expect(linkClick).toBeTruthy();
+    expect((linkClick!.target as HTMLAnchorElement).href).toBe("https://example.com/projects");
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(onExpandedChange).not.toHaveBeenCalled();
+    expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+  });
+
   it("supports static tree item composition", async () => {
     const wrapper = mount(TreeView as any, {
       props: {
