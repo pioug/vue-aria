@@ -318,6 +318,38 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("prefers local isDisabled over Provider default", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                isDisabled: true,
+              },
+              () =>
+                h(DatePicker as any, {
+                  "aria-label": "Date picker",
+                  defaultValue: new CalendarDate(2019, 6, 5),
+                  isDisabled: false,
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(trigger.attributes("disabled")).toBeUndefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
   it("prevents opening when date picker is read-only", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -934,6 +966,35 @@ describe("DateRangePicker", () => {
     );
 
     expect(wrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-invalid");
+  });
+
+  it("prefers local range validationState over Provider default", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                validationState: "invalid",
+              },
+              () =>
+                h(DateRangePicker as any, {
+                  "aria-label": "Date range picker",
+                  defaultValue: {
+                    start: new CalendarDate(2019, 6, 5),
+                    end: new CalendarDate(2019, 6, 8),
+                  },
+                  validationState: "valid",
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker").classes()).not.toContain("is-invalid");
   });
 
   it("prevents opening when range picker is read-only", async () => {
