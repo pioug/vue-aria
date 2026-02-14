@@ -721,6 +721,74 @@ describe("SubmenuTrigger", () => {
     expect(allMenus.length).toBeGreaterThanOrEqual(2);
   });
 
+  it("does not trigger root onOpenChange when submenus open and close", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        onOpenChange,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const triggerButton = document.body.querySelector('[data-testid="trigger"]') as HTMLElement | null;
+    expect(triggerButton).toBeTruthy();
+    triggerButton?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const siblingItem = rootItems.find((item) => item.textContent?.includes("Alpha"));
+    const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+    expect(siblingItem).toBeTruthy();
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+
+    const hover = (element: HTMLElement) => {
+      if (typeof PointerEvent !== "undefined") {
+        element.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+        element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+        return;
+      }
+
+      element.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      element.dispatchEvent(new Event("pointerover", { bubbles: true }));
+    };
+
+    hover(siblingItem as HTMLElement);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+  });
+
   it("closes only the deepest submenu on ArrowLeft when nested trigger has focus", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {
@@ -1196,7 +1264,7 @@ describe("SubmenuTrigger", () => {
     const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
       .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
     expect(submenuTriggerItem).toBeTruthy();
-    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    submenuTriggerItem?.click();
     await wrapper.vm.$nextTick();
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
 

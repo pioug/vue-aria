@@ -9747,3 +9747,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 62 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` root open-state callback isolation parity update:
+  - added migrated `SubmenuTrigger` coverage asserting opening and closing submenus does not trigger root `MenuTrigger` `onOpenChange` callbacks after the root menu is already open.
+  - stabilized submenu-open setup in root-focus-close parity assertions by opening submenu triggers via pointer click before sibling-focus close checks.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 25 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 63 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
