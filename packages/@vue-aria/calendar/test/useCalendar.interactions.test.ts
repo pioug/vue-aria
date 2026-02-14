@@ -436,10 +436,28 @@ describe("useCalendar upstream interaction parity", () => {
       expectedFirstDate: "2023-12-31",
     },
     {
+      name: "en-US sunday",
+      locale: "en-US",
+      firstDayOfWeek: "sun" as const,
+      expectedFirstDate: "2023-12-31",
+    },
+    {
       name: "en-US monday",
       locale: "en-US",
       firstDayOfWeek: "mon" as const,
       expectedFirstDate: "2024-01-01",
+    },
+    {
+      name: "en-US tuesday",
+      locale: "en-US",
+      firstDayOfWeek: "tue" as const,
+      expectedFirstDate: "2023-12-26",
+    },
+    {
+      name: "en-US wednesday",
+      locale: "en-US",
+      firstDayOfWeek: "wed" as const,
+      expectedFirstDate: "2023-12-27",
     },
     {
       name: "en-US thursday",
@@ -448,10 +466,64 @@ describe("useCalendar upstream interaction parity", () => {
       expectedFirstDate: "2023-12-28",
     },
     {
+      name: "en-US friday",
+      locale: "en-US",
+      firstDayOfWeek: "fri" as const,
+      expectedFirstDate: "2023-12-29",
+    },
+    {
+      name: "en-US saturday",
+      locale: "en-US",
+      firstDayOfWeek: "sat" as const,
+      expectedFirstDate: "2023-12-30",
+    },
+    {
       name: "fr-FR default",
       locale: "fr-FR",
       firstDayOfWeek: undefined,
       expectedFirstDate: "2024-01-01",
+    },
+    {
+      name: "fr-FR sunday",
+      locale: "fr-FR",
+      firstDayOfWeek: "sun" as const,
+      expectedFirstDate: "2023-12-31",
+    },
+    {
+      name: "fr-FR monday",
+      locale: "fr-FR",
+      firstDayOfWeek: "mon" as const,
+      expectedFirstDate: "2024-01-01",
+    },
+    {
+      name: "fr-FR tuesday",
+      locale: "fr-FR",
+      firstDayOfWeek: "tue" as const,
+      expectedFirstDate: "2023-12-26",
+    },
+    {
+      name: "fr-FR wednesday",
+      locale: "fr-FR",
+      firstDayOfWeek: "wed" as const,
+      expectedFirstDate: "2023-12-27",
+    },
+    {
+      name: "fr-FR thursday",
+      locale: "fr-FR",
+      firstDayOfWeek: "thu" as const,
+      expectedFirstDate: "2023-12-28",
+    },
+    {
+      name: "fr-FR friday",
+      locale: "fr-FR",
+      firstDayOfWeek: "fri" as const,
+      expectedFirstDate: "2023-12-29",
+    },
+    {
+      name: "fr-FR saturday",
+      locale: "fr-FR",
+      firstDayOfWeek: "sat" as const,
+      expectedFirstDate: "2023-12-30",
     },
   ])(
     "respects first-day-of-week matrix: $name",
