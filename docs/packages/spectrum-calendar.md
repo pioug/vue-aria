@@ -88,6 +88,59 @@ import { Calendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## Controlled Calendar Example
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+
+const value = ref(new CalendarDate(2019, 6, 5));
+const setValue = (nextValue: CalendarDate | null) => {
+  if (nextValue) {
+    value.value = nextValue;
+  }
+};
+</script>
+
+<template>
+  <Calendar
+    aria-label="Controlled date"
+    :value="value"
+    :on-change="setValue"
+  />
+</template>
+```
+
+## Controlled RangeCalendar Example
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { CalendarDate } from "@internationalized/date";
+import { RangeCalendar } from "@vue-spectrum/calendar";
+
+const range = ref({
+  start: new CalendarDate(2019, 6, 5),
+  end: new CalendarDate(2019, 6, 8),
+});
+const setRange = (nextRange: { start: CalendarDate; end: CalendarDate } | null) => {
+  if (nextRange) {
+    range.value = nextRange;
+  }
+};
+</script>
+
+<template>
+  <RangeCalendar
+    aria-label="Controlled trip dates"
+    :value="range"
+    :on-change="setRange"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `visibleMonths`, `firstDayOfWeek`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`.

@@ -6558,6 +6558,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added edge-case coverage for `visibleMonths` clamping behavior (zero/negative values render one month).
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 24 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - expanded `docs/packages/spectrum-calendar.md` with controlled `Calendar` and controlled `RangeCalendar` examples.
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
