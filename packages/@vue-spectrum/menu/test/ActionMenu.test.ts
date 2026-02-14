@@ -78,6 +78,33 @@ describe("ActionMenu", () => {
     expect(document.body.querySelectorAll(".spectrum-Menu-popover")).toHaveLength(1);
   });
 
+  it("renders menu popover in a provided portal container on small screens", async () => {
+    const screenWidthSpy = vi.spyOn(window.screen, "width", "get").mockImplementation(() => 700);
+    try {
+      const portalContainer = document.createElement("div");
+      document.body.appendChild(portalContainer);
+
+      const wrapper = mount(ActionMenu as any, {
+        props: {
+          portalContainer,
+        },
+        slots: {
+          default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+        },
+        attachTo: document.body,
+      });
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+
+      const popover = portalContainer.querySelector(".spectrum-Menu-popover");
+      expect(popover).toBeTruthy();
+      expect(document.body.querySelectorAll(".spectrum-Menu-popover")).toHaveLength(1);
+    } finally {
+      screenWidthSpy.mockRestore();
+    }
+  });
+
   it("is disabled", async () => {
     const onAction = vi.fn();
     const wrapper = mount(ActionMenu as any, {

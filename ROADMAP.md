@@ -9848,3 +9848,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 74 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` ActionMenu small-screen portal parity update:
+  - expanded migrated `ActionMenu` portal forwarding coverage to assert popover rendering in a provided portal container when `window.screen.width <= 700`.
+    - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 75 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.
