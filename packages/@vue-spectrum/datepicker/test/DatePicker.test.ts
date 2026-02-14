@@ -177,6 +177,21 @@ describe("DatePicker", () => {
     expect(value.day).toBe(17);
   });
 
+  it("opens date picker popover with Alt+ArrowDown on the group", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-group").trigger("keydown", { key: "ArrowDown", altKey: true });
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
   it("opens date picker popover by default when defaultOpen is true", async () => {
     mount(DatePicker as any, {
       props: {
@@ -973,6 +988,24 @@ describe("DateRangePicker", () => {
     });
 
     await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
+  it("opens range picker popover with Alt+ArrowDown on the group", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("keydown", { key: "ArrowDown", altKey: true });
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();

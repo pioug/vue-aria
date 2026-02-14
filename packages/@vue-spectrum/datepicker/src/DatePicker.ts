@@ -472,6 +472,8 @@ export const DatePicker = defineComponent({
               ref: group.elementRef,
               class: "react-spectrum-DatePicker-group",
               "aria-required": merged.isRequired ? "true" : undefined,
+              onKeydown: (pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined,
+              onKeyup: (pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined,
             },
             [
               h(
@@ -943,6 +945,8 @@ export const DateRangePicker = defineComponent({
               ref: group.elementRef,
               class: "react-spectrum-DateRangePicker-group",
               "aria-required": merged.isRequired ? "true" : undefined,
+              onKeydown: (pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined,
+              onKeyup: (pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined,
             },
             [
               h(
