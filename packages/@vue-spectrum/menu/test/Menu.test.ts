@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { h } from "vue";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { h, nextTick } from "vue";
 import { Item } from "../src/Item";
 import { Menu } from "../src/Menu";
 import { Section } from "../src/Section";
@@ -33,6 +33,16 @@ function renderMenu(props: Record<string, unknown> = {}) {
 }
 
 describe("Menu", () => {
+  const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+
+  beforeAll(() => {
+    HTMLElement.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterAll(() => {
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -85,6 +95,29 @@ describe("Menu", () => {
     expect(items[2]?.attributes("aria-disabled")).toBe("true");
     expect(items[2]?.attributes("aria-checked")).toBe("false");
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
+  it("wraps keyboard focus when shouldFocusWrap is enabled", async () => {
+    const wrapper = renderMenu({
+      shouldFocusWrap: true,
+    });
+    await nextTick();
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(5);
+    const menu = wrapper.get('[role="menu"]');
+    (menu.element as HTMLElement).focus();
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
+
+    (document.activeElement as HTMLElement | null)?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    await nextTick();
+    const focusedAfterUp = document.activeElement as HTMLElement | null;
+    expect(focusedAfterUp?.getAttribute("data-key")).toBe("Bleh");
+
+    focusedAfterUp?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
   });
 
   it("supports multiple selection", async () => {
