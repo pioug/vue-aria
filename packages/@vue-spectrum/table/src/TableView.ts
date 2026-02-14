@@ -867,9 +867,12 @@ export const TableView = defineComponent({
     });
 
     const slotDefinition = computed(() => parseTableSlotDefinition(slots.default?.() as VNode[] | undefined));
-    const disabledKeysVersion = computed(() =>
-      props.disabledKeys ? Array.from(props.disabledKeys).map((key) => String(key)).sort().join("|") : ""
-    );
+    const disabledKeysVersion = computed(() => {
+      const keySegment = props.disabledKeys
+        ? Array.from(props.disabledKeys).map((key) => String(key)).sort().join("|")
+        : "";
+      return `${props.isDisabled ? "__all__|" : ""}${keySegment}`;
+    });
 
     const normalizedDefinition = computed<NormalizedSpectrumTableDefinition>(() => {
       const normalized = normalizeTableDefinition({
@@ -881,6 +884,16 @@ export const TableView = defineComponent({
     });
 
     const collection = computed(() => createCollection(normalizedDefinition.value));
+    const resolvedDisabledKeys = computed(() => {
+      const disabledKeys = new Set((props.disabledKeys ?? []) as Iterable<TableKey>);
+      if (props.isDisabled) {
+        for (const row of normalizedDefinition.value.rows) {
+          disabledKeys.add(row.key);
+        }
+      }
+
+      return disabledKeys;
+    });
 
     const state = useTableState<NormalizedSpectrumTableRow>({
       get collection() {
@@ -902,10 +915,10 @@ export const TableView = defineComponent({
         return undefined;
       },
       get disabledKeys() {
-        return props.disabledKeys;
+        return resolvedDisabledKeys.value;
       },
       get disabledBehavior() {
-        return props.disabledBehavior;
+        return props.isDisabled ? "all" : props.disabledBehavior;
       },
       get disallowEmptySelection() {
         return props.disallowEmptySelection;
@@ -924,7 +937,12 @@ export const TableView = defineComponent({
       },
       onSelectionChange(keys) {
         if (keys === "all") {
-          const disabledKeys = new Set(props.disabledKeys as Iterable<TableKey> | undefined);
+          const disabledKeys = new Set((props.disabledKeys ?? []) as Iterable<TableKey>);
+          if (props.isDisabled) {
+            for (const row of normalizedDefinition.value.rows) {
+              disabledKeys.add(row.key);
+            }
+          }
           const allKeys = new Set<TableKey>();
           for (const row of normalizedDefinition.value.rows) {
             if (row.isDisabled || disabledKeys.has(row.key)) {

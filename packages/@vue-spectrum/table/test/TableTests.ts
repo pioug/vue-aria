@@ -2401,6 +2401,41 @@ export function tableTests() {
     expect(grid.classes()).toContain("is-hidden");
   });
 
+  it("suppresses row selection interactions when table is disabled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    await press(bodyRows[0]!);
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[0]!.classes()).toContain("is-disabled");
+    expect(bodyRows[1]!.classes()).toContain("is-disabled");
+  });
+
+  it("suppresses row actions when table is disabled", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      selectionMode: "none",
+      onAction,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    await press(bodyRows[0]!);
+
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
   it("preserves falsy numeric row keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
