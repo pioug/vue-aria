@@ -2564,6 +2564,24 @@ export function tableTests() {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("does not emit empty select-all callbacks when duplicate events are enabled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: [],
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      allowDuplicateSelectionEvents: true,
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("does not emit select-all callbacks when table is disabled", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
