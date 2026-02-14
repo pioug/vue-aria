@@ -1481,6 +1481,14 @@ describe("TreeView", () => {
     expect(onSelectionChange).toHaveBeenCalled();
     const selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string>;
     expect(selected.has("projects-1")).toBe(true);
+
+    await press(projectOneRow!);
+
+    const cleared = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string>;
+    expect(cleared.size).toBe(0);
+    const updatedProjectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
+    expect(updatedProjectOneRow).toBeTruthy();
+    expect(updatedProjectOneRow!.attributes("aria-selected")).toBe("false");
   });
 
   it("toggles and replaces highlight selection based on modifier keys", async () => {
