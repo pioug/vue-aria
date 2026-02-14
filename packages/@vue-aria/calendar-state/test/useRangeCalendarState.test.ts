@@ -1,5 +1,5 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
-import { effectScope } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useRangeCalendarState } from "../src/useRangeCalendarState";
 
@@ -176,6 +176,34 @@ describe("useRangeCalendarState", () => {
     }
     expect(emitted.start.toString()).toBe("2024-10-08");
     expect(emitted.end.toString()).toBe("2024-10-12");
+    scope.stop();
+  });
+
+  it("tracks controlled focusedValue updates", async () => {
+    const focusedValue = ref(new CalendarDate(2024, 11, 2));
+    const controlledRange = {
+      start: new CalendarDate(2024, 11, 1),
+      end: new CalendarDate(2024, 11, 3),
+    };
+
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        value: controlledRange,
+        get focusedValue() {
+          return focusedValue.value;
+        },
+      })
+    )!;
+
+    expect(state.focusedDate.toString()).toBe("2024-11-02");
+
+    focusedValue.value = new CalendarDate(2024, 11, 6);
+    await nextTick();
+
+    expect(state.focusedDate.toString()).toBe("2024-11-06");
     scope.stop();
   });
 });

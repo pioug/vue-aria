@@ -6705,6 +6705,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/calendar-state/src/useRangeCalendarState.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 58 tests).
 - Validation: `npm test -- packages/@vue-aria/calendar-state/test` passed (2 files, 16 tests).
+- Additional `@vue-aria/calendar-state` parity update:
+  - added regression coverage ensuring `useRangeCalendarState` reflects reactive controlled `focusedValue` updates.
+    - `packages/@vue-aria/calendar-state/test/useRangeCalendarState.test.ts`
+- Validation: `npm test -- packages/@vue-aria/calendar-state/test` passed (2 files, 17 tests).
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 58 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
