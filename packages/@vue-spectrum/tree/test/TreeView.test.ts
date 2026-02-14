@@ -1262,6 +1262,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(true);
+    expect(onExpandedChange).toHaveBeenCalledTimes(1);
     let expanded = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(expanded?.has("projects")).toBe(true);
 
@@ -1271,6 +1272,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+    expect(onExpandedChange).toHaveBeenCalledTimes(2);
     expanded = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(expanded?.has("projects")).toBe(false);
   });

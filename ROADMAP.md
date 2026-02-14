@@ -9325,6 +9325,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 62 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-selection expansion-callback count parity update:
+  - expanded disabled-selection expand/collapse coverage to assert `onExpandedChange` call counts across pointer expand and `Enter` collapse paths.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 62 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tree` single-highlight DOM deselection parity update:
   - expanded single-highlight deselection coverage to assert `data-selected` is removed when repeated row activation clears selection.
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
