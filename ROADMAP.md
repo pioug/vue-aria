@@ -6781,6 +6781,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 73 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded foundational behavior coverage for:
+    - disabled open-blocking in `DatePicker`
+    - range selection `onChange` commit behavior in `DateRangePicker`
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 10 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

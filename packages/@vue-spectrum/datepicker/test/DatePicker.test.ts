@@ -1,7 +1,7 @@
 import { CalendarDate } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { DatePicker, DateRangePicker } from "../src";
 
 function createPointerEvent(type: "pointerdown" | "pointerup"): PointerEvent {
@@ -29,6 +29,10 @@ function pressElement(element: Element) {
   element.dispatchEvent(createPointerEvent("pointerup"));
   element.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
 }
+
+afterEach(() => {
+  document.body.innerHTML = "";
+});
 
 describe("DatePicker", () => {
   it("renders with default value text", () => {
@@ -90,6 +94,25 @@ describe("DatePicker", () => {
     await nextTick();
 
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("17");
+  });
+
+  it("prevents opening when date picker is disabled", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDisabled: true,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 });
 
@@ -154,5 +177,34 @@ describe("DateRangePicker", () => {
     const text = wrapper.get(".react-spectrum-DateRangePicker-value").text();
     expect(text).toContain("10");
     expect(text).toContain("12");
+  });
+
+  it("commits a selected range through onChange", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 5),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const value = onChange.mock.calls[0]?.[0] as { start: CalendarDate; end: CalendarDate };
+    expect(value.start.day).toBe(10);
+    expect(value.end.day).toBe(12);
   });
 });
