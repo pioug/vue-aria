@@ -24,6 +24,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/table-state](/packages/table-state)
 - [@vue-aria/tree-state](/packages/tree-state)
 - [@vue-aria/calendar-state](/packages/calendar-state)
+- [@vue-aria/datepicker-state](/packages/datepicker-state)
 - [@vue-aria/tabs](/packages/tabs)
 - [@vue-aria/grid](/packages/grid)
 - [@vue-aria/gridlist](/packages/gridlist)

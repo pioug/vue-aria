@@ -60,6 +60,7 @@
       "@vue-aria/table-state": ["packages/@vue-aria/table-state/src/index.ts"],
       "@vue-aria/tree-state": ["packages/@vue-aria/tree-state/src/index.ts"],
       "@vue-aria/calendar-state": ["packages/@vue-aria/calendar-state/src/index.ts"],
+      "@vue-aria/datepicker-state": ["packages/@vue-aria/datepicker-state/src/index.ts"],
       "@vue-aria/calendar": ["packages/@vue-aria/calendar/src/index.ts"],
       "@vue-aria/table": ["packages/@vue-aria/table/src/index.ts"],
       "@vue-aria/gridlist": ["packages/@vue-aria/gridlist/src/index.ts"],

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/calendar`
+- Current focus package: `@vue-aria/datepicker-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -92,7 +92,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/tree-state`: In progress
 - `@vue-aria/table-state`: Complete
 - `@vue-aria/calendar-state`: In progress
-- `@vue-aria/datepicker-state`: Not started
+- `@vue-aria/datepicker-state`: In progress
 - `@vue-aria/combobox-state`: Complete
 - `@vue-aria/selection-state`: Complete
 
@@ -2932,6 +2932,67 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port additional upstream `useCalendar.test.js` scenarios (multi-duration keyboard flows, first-day-of-week matrix, and pagination matrix).
 2. Expand range-drag and live-announcement behavioral assertions to close accessibility parity gaps.
 3. Mirror upstream docs examples/styles more completely and close visual parity gates.
+
+## 31n) Package Record: @vue-aria/datepicker-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/datepicker/src`
+  - `references/react-spectrum/packages/@react-stately/datepicker/intl`
+  - `references/react-spectrum/packages/@react-stately/datepicker/docs`
+- Local package path:
+  - `packages/@vue-aria/datepicker-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useDatePickerState`
+  - `useDateRangePickerState`
+  - shared validation/formatting helpers from `utils.ts`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/types.ts`
+  - `src/utils.ts`
+  - `src/useDatePickerState.ts`
+  - `src/useDateRangePickerState.ts`
+  - `src/intlMessages.ts` (copied upstream locale bundle)
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Date field/time field state modules (`useDateFieldState`, `useTimeFieldState`) and related helpers (`IncompleteDate`, placeholder utilities) are still pending.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder in references
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted coverage for date picker commit/close behavior and staged date+time selection flow.
+  - Added adapted date range picker coverage for complete-range commits, staged time-range commits, and reversed-range invalid state.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/datepicker-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [ ] Partial validation complete via downstream picker consumers; full field/segment interaction matrix pending.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `useDateFieldState`, `useTimeFieldState`, and supporting `IncompleteDate`/placeholder utilities.
+2. Expand picker-state validation and formatting parity coverage against upstream edge cases.
+3. Integrate with upcoming `@vue-aria/datepicker` behavior hooks and close docs/accessibility gates.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):

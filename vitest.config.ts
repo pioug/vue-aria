@@ -164,6 +164,9 @@ export default defineConfig({
       "@vue-aria/calendar-state": fileURLToPath(
         new URL("./packages/@vue-aria/calendar-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/datepicker-state": fileURLToPath(
+        new URL("./packages/@vue-aria/datepicker-state/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/calendar": fileURLToPath(
         new URL("./packages/@vue-aria/calendar/src/index.ts", import.meta.url)
       ),
