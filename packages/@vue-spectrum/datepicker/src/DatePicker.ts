@@ -542,11 +542,20 @@ export const DatePicker = defineComponent({
             },
             {
               default: () => [
-                h(Calendar as any, {
-                  "aria-label": calendarAriaLabel,
-                  visibleMonths: merged.visibleMonths,
-                  ...(pickerAria.calendarProps as Record<string, unknown>),
-                }),
+                h(
+                  "div",
+                  {
+                    ...(pickerAria.dialogProps as Record<string, unknown>),
+                    class: "react-spectrum-DatePicker-dialog",
+                  },
+                  [
+                    h(Calendar as any, {
+                      "aria-label": calendarAriaLabel,
+                      visibleMonths: merged.visibleMonths,
+                      ...(pickerAria.calendarProps as Record<string, unknown>),
+                    }),
+                  ]
+                ),
               ],
             }
           ),
@@ -1026,11 +1035,20 @@ export const DateRangePicker = defineComponent({
             },
             {
               default: () => [
-                h(RangeCalendar as any, {
-                  "aria-label": calendarAriaLabel,
-                  visibleMonths: merged.visibleMonths,
-                  ...(pickerAria.calendarProps as Record<string, unknown>),
-                }),
+                h(
+                  "div",
+                  {
+                    ...(pickerAria.dialogProps as Record<string, unknown>),
+                    class: "react-spectrum-DateRangePicker-dialog",
+                  },
+                  [
+                    h(RangeCalendar as any, {
+                      "aria-label": calendarAriaLabel,
+                      visibleMonths: merged.visibleMonths,
+                      ...(pickerAria.calendarProps as Record<string, unknown>),
+                    }),
+                  ]
+                ),
               ],
             }
           ),

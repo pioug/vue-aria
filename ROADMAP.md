@@ -7104,3 +7104,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 101 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - rendered picker `dialogProps` wrappers around popover calendar content in both variants, restoring focus-within containment semantics for blur/focus-change callbacks.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added regression coverage ensuring `onBlur` is not emitted when focus moves from picker group into the open dialog.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 103 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -603,6 +603,33 @@ describe("DatePicker", () => {
     expect(onFocusChange).not.toHaveBeenCalled();
   });
 
+  it("does not emit onBlur when focus moves into date picker dialog", async () => {
+    const onBlur = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        onBlur,
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get(".react-spectrum-DatePicker-group");
+    await group.trigger("focusin");
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const calendar = document.body.querySelector(".react-spectrum-Calendar") as HTMLElement | null;
+    expect(calendar).toBeTruthy();
+
+    const focusOut = new FocusEvent("focusout", { bubbles: true });
+    Object.defineProperty(focusOut, "relatedTarget", { value: calendar });
+    group.element.dispatchEvent(focusOut);
+    await nextTick();
+
+    expect(onBlur).not.toHaveBeenCalled();
+  });
+
   it("forwards onKeyUp while closed and suppresses it while open", async () => {
     const onKeyUp = vi.fn();
     const wrapper = mount(DatePicker as any, {
@@ -1634,6 +1661,36 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(onFocusChange).not.toHaveBeenCalled();
+  });
+
+  it("does not emit range onBlur when focus moves into dialog", async () => {
+    const onBlur = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        onBlur,
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get(".react-spectrum-DateRangePicker-group");
+    await group.trigger("focusin");
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const calendar = document.body.querySelector(".react-spectrum-Calendar") as HTMLElement | null;
+    expect(calendar).toBeTruthy();
+
+    const focusOut = new FocusEvent("focusout", { bubbles: true });
+    Object.defineProperty(focusOut, "relatedTarget", { value: calendar });
+    group.element.dispatchEvent(focusOut);
+    await nextTick();
+
+    expect(onBlur).not.toHaveBeenCalled();
   });
 
   it("forwards range onKeyUp while closed and suppresses it while open", async () => {
