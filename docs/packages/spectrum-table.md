@@ -60,6 +60,8 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 </template>
 ```
 
+`Cell` supports `colSpan` in static slot composition, including correct column indexing and ARIA colspan output.
+
 ## Key Props
 
 - `selectionMode`: `"none" | "single" | "multiple"`.
