@@ -6992,3 +6992,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - added required-state usage examples for `DatePicker` and `DateRangePicker`.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded DatePicker provider-validation regression coverage for inherited invalid state and local override precedence.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 77 tests).
+- Validation: `npm run check -- --pretty false` passed.

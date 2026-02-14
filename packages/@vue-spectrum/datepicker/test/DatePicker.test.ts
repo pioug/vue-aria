@@ -375,6 +375,57 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker-group").attributes("aria-required")).toBe("true");
   });
 
+  it("inherits invalid state from Provider", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                validationState: "invalid",
+              },
+              () =>
+                h(DatePicker as any, {
+                  "aria-label": "Date picker",
+                  defaultValue: new CalendarDate(2019, 6, 5),
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get(".react-spectrum-DatePicker").classes()).toContain("is-invalid");
+  });
+
+  it("prefers local DatePicker validationState over Provider default", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                validationState: "invalid",
+              },
+              () =>
+                h(DatePicker as any, {
+                  "aria-label": "Date picker",
+                  defaultValue: new CalendarDate(2019, 6, 5),
+                  validationState: "valid",
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get(".react-spectrum-DatePicker").classes()).not.toContain("is-invalid");
+  });
+
   it("prevents opening when date picker is read-only", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
