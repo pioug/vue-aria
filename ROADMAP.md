@@ -2842,6 +2842,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted coverage for day navigation, page behavior (`visible` vs `single`), time-component preservation on emitted values, and week-row date generation.
   - Added adapted range-calendar coverage for anchor flow, contiguous-range constraints around unavailable dates, and hover/highlight focus behavior.
+  - Expanded adapted state coverage for week/month section navigation branches, selection guards (`isDateUnavailable`, `isReadOnly`, `isDisabled`), and visible-range boundary validity helpers.
+  - Expanded adapted range-state coverage for `allowsNonContiguousRanges`, read-only selection guards, highlight-with-anchor behavior, and dragging state toggles.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2860,7 +2862,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand state parity coverage against more upstream calendar/range pagination and edge-date scenarios.
+1. Audit remaining state edge branches (controlled props, min/max alignment interactions, and unavailable-date boundary behavior) for any uncovered parity gaps.
 2. Tighten exported type parity once the calendar/datepicker stack is fully integrated.
 3. Close docs/accessibility gates after downstream interaction matrix completion.
 
