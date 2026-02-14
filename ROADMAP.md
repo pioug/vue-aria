@@ -622,9 +622,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/toast-state`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-aria/toast-state`.
+- Additional parity coverage added:
+  - timer edge cases for:
+    - middle-visible timeout removal while preserving queue order in multi-visible mode
+    - pause/resume of multiple visible timers with partial remaining duration preservation
+  - `test/useToastState.test.ts`
+- Additional docs parity update:
+  - documented pause/resume timer behavior details for visible toasts.
+  - `docs/packages/toast-state.md`
 
 ### Remaining for completion
-- Expand timer edge-case coverage (pause/resume with multiple visible toasts and partial remaining durations).
 - Validate downstream integration in `@vue-spectrum/toast` container behavior.
 
 ## 4o) Active Package Slice: @vue-spectrum/toast
@@ -7413,6 +7420,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented absolute positioning and directional arrow alignment behavior.
     - `docs/packages/spectrum-tooltip.md`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test packages/@vue-aria/overlays/test` passed (15 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/toast-state` parity update:
+  - expanded timer edge-case coverage for:
+    - middle-visible timeout removal while maintaining visible queue order
+    - multi-visible pause/resume with preserved partial remaining timeout durations
+    - `packages/@vue-aria/toast-state/test/useToastState.test.ts`
+- Additional `@vue-aria/toast-state` docs parity update:
+  - documented pause/resume timer behavior for visible toasts.
+    - `docs/packages/toast-state.md`
+- Validation: `npm test -- packages/@vue-aria/toast-state/test` passed (1 file, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.

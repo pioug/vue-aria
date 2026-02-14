@@ -35,10 +35,13 @@ console.log(queue.visibleToasts[0].content); // "B"
 const state = useToastState<string>();
 state.add("Timed toast", { timeout: 3000 });
 state.resumeAll();
+state.pauseAll();
+state.resumeAll();
 ```
 
 ## Notes
 
 - Matches upstream add/close/queue ordering semantics.
+- `pauseAll()`/`resumeAll()` apply to visible toasts and preserve partial remaining timeout durations.
 - `wrapUpdate` is supported for transition wrappers.
 - `Spectrum S2` is ignored for this port.
