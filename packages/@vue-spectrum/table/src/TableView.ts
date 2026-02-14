@@ -33,6 +33,7 @@ export interface SpectrumTableViewProps {
   disabledKeys?: Iterable<TableKey> | undefined;
   disabledBehavior?: "all" | "selection" | undefined;
   disallowEmptySelection?: boolean | undefined;
+  allowDuplicateSelectionEvents?: boolean | undefined;
   disallowSelectAll?: boolean | undefined;
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   shouldSelectOnPressUp?: boolean | undefined;
@@ -608,6 +609,10 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    allowDuplicateSelectionEvents: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     disallowSelectAll: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -798,6 +803,9 @@ export const TableView = defineComponent({
       },
       get disallowEmptySelection() {
         return props.disallowEmptySelection;
+      },
+      get allowDuplicateSelectionEvents() {
+        return props.allowDuplicateSelectionEvents;
       },
       get sortDescriptor() {
         return resolvedSortDescriptor.value ?? undefined;
