@@ -665,6 +665,17 @@ export function tableTests() {
     expect(bodyRows[0]!.classes()).not.toContain("spectrum-Table-row--highlightSelection");
   });
 
+  it("applies first and last row classes", () => {
+    const wrapper = renderTable();
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.classes()).toContain("spectrum-Table-row--firstRow");
+    expect(bodyRows[0]!.classes()).not.toContain("spectrum-Table-row--lastRow");
+    expect(bodyRows[1]!.classes()).toContain("spectrum-Table-row--lastRow");
+    expect(bodyRows[1]!.classes()).not.toContain("spectrum-Table-row--firstRow");
+  });
+
   it("supports row selection callbacks", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

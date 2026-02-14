@@ -431,6 +431,10 @@ const TableBodyRow = defineComponent({
       type: Number,
       required: true,
     },
+    rowCount: {
+      type: Number,
+      required: true,
+    },
     onAction: {
       type: Function as PropType<((key: TableKey) => void) | undefined>,
       required: false,
@@ -476,6 +480,8 @@ const TableBodyRow = defineComponent({
             "spectrum-Table-row",
             {
               "spectrum-Table-row--highlightSelection": props.state.selectionManager.selectionBehavior === "replace",
+              "spectrum-Table-row--firstRow": props.rowIndex === 0,
+              "spectrum-Table-row--lastRow": props.rowIndex === props.rowCount - 1,
             },
           ],
           "aria-rowindex": props.rowOffset + props.rowIndex + 1,
@@ -1032,6 +1038,7 @@ export const TableView = defineComponent({
                   state,
                   rowIndex,
                   rowOffset,
+                  rowCount: bodyRows.length,
                   onAction: props.onAction,
                   selectedKeys: resolvedSelectedKeys.value,
                 })
