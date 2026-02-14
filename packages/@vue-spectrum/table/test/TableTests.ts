@@ -11,6 +11,7 @@ import {
   TableView,
   type SpectrumTableColumnData,
   type SpectrumTableRowData,
+  type TableKey,
 } from "../src";
 
 const columns: SpectrumTableColumnData[] = [
@@ -2540,6 +2541,27 @@ export function tableTests() {
     await nextTick();
 
     expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("emits disabled select-all callbacks when duplicate events are enabled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      allowDuplicateSelectionEvents: true,
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    const keys = onSelectionChange.mock.calls[0]?.[0] as Set<TableKey> | undefined;
+    expect(keys).toBeInstanceOf(Set);
+    expect(keys?.size).toBe(0);
   });
 
   it("supports sorting callbacks and aria-sort updates", async () => {
