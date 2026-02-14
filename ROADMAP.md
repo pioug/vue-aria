@@ -9905,3 +9905,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 83 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` contextual-help trigger parity update:
+  - added migrated `MenuTrigger` coverage for `ContextualHelpTrigger` branches:
+    - unavailable contextual-help items render submenu affordances and unavailable icon metadata
+    - available contextual-help items (`isUnavailable: false`) remain selectable and render selection checkmarks in single-selection mode
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 85 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

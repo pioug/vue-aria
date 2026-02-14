@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h } from "vue";
+import { ContextualHelpTrigger } from "../src/ContextualHelpTrigger";
 import { Item } from "../src/Item";
 import { Menu } from "../src/Menu";
 import { MenuTrigger } from "../src/MenuTrigger";
@@ -19,6 +20,34 @@ function renderMenuTrigger(
             h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
             h(Item as any, { key: "Bar" }, { default: () => "Bar" }),
             h(Item as any, { key: "Baz" }, { default: () => "Baz" }),
+          ],
+        }),
+      ],
+    },
+    attachTo: document.body,
+  });
+}
+
+function renderContextualHelpMenuTrigger(
+  menuProps: Record<string, unknown> = {},
+  contextualHelpProps: Record<string, unknown> = {}
+) {
+  return mount(MenuTrigger as any, {
+    props: {
+      defaultOpen: true,
+    },
+    slots: {
+      default: () => [
+        h("button", { "data-testid": "trigger" }, "Menu Button"),
+        h(Menu as any, { ariaLabel: "Menu", ...menuProps }, {
+          default: () => [
+            h(ContextualHelpTrigger as any, contextualHelpProps, {
+              default: () => [
+                h(Item as any, { key: "help" }, { default: () => "Help" }),
+                h("div", { role: "dialog" }, "Contextual help dialog"),
+              ],
+            }),
+            h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
           ],
         }),
       ],
@@ -159,6 +188,38 @@ describe("MenuTrigger", () => {
 
     expect(document.body.querySelectorAll('[role="menuitem"]')).toHaveLength(3);
     expect(document.body.querySelectorAll('[role="img"]')).toHaveLength(0);
+  });
+
+  it("renders contextual help submenu items with an unavailable icon", () => {
+    renderContextualHelpMenuTrigger();
+
+    const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(helpItem?.getAttribute("aria-haspopup")).toBe("dialog");
+    expect(helpItem?.querySelector(".spectrum-Menu-end")).toBeTruthy();
+  });
+
+  it("allows available contextual help items to participate in selection", () => {
+    renderContextualHelpMenuTrigger(
+      {
+        selectionMode: "single",
+        selectedKeys: ["help"],
+      },
+      {
+        isUnavailable: false,
+      }
+    );
+
+    const helpItem = Array.from(document.body.querySelectorAll('[role="menuitemradio"]'))
+      .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(helpItem?.getAttribute("aria-haspopup")).toBeNull();
+    expect(helpItem?.classList.contains("is-selected")).toBe(true);
+    expect(helpItem?.querySelector(".spectrum-Menu-checkmark")).toBeTruthy();
+    expect(helpItem?.querySelector(".spectrum-Menu-end")).toBeNull();
   });
 
   it("exposes trigger dom node and focus handle", async () => {
