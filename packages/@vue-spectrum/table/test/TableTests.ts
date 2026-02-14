@@ -211,4 +211,17 @@ export function tableTests() {
       direction: "ascending",
     });
   });
+
+  it("supports default sort descriptor initialization", () => {
+    const wrapper = renderTable({
+      defaultSortDescriptor: {
+        column: "foo",
+        direction: "descending",
+      },
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.attributes("aria-sort")).toBe("descending");
+    expect(wrapper.findAll('tbody [role="row"]')[0]!.text()).toContain("Foo 2");
+  });
 }
