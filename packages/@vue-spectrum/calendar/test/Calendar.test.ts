@@ -161,6 +161,34 @@ describe("Calendar", () => {
     expect(singleTitle).toContain("July");
   });
 
+  it("applies selectionAlignment to multi-month initial visible range", () => {
+    const startAligned = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+        selectionAlignment: "start",
+      },
+      attachTo: document.body,
+    });
+    const endAligned = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+        selectionAlignment: "end",
+      },
+      attachTo: document.body,
+    });
+
+    const startTitle = startAligned.get(".react-spectrum-Calendar-title").text();
+    const endTitle = endAligned.get(".react-spectrum-Calendar-title").text();
+
+    expect(startTitle).toContain("July");
+    expect(endTitle).toContain("May");
+    expect(startTitle).not.toBe(endTitle);
+  });
+
   it("renders multiple month grids when visibleMonths is set", () => {
     const wrapper = mount(Calendar as any, {
       props: {
