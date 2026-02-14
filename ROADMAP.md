@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/tree`
+- Current focus package: `@vue-aria/calendar-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -62,7 +62,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/gridlist`: In progress
 - `@vue-aria/table`: In progress
 - `@vue-aria/tree`: In progress
-- `@vue-aria/calendar`: Not started
+- `@vue-aria/calendar`: In progress
 - `@vue-aria/datepicker`: Not started
 - `@vue-aria/breadcrumbs`: Complete
 - `@vue-aria/dialog`: Complete
@@ -91,7 +91,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/grid-state`: Complete
 - `@vue-aria/tree-state`: In progress
 - `@vue-aria/table-state`: Complete
-- `@vue-aria/calendar-state`: Not started
+- `@vue-aria/calendar-state`: In progress
 - `@vue-aria/datepicker-state`: Not started
 - `@vue-aria/combobox-state`: Complete
 - `@vue-aria/selection-state`: Complete
@@ -2804,6 +2804,133 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) beyond the initial integrated harness test.
 2. Mirror upstream tree docs/examples and base styling patterns in VitePress.
 3. Close API checklist and coordinate remaining parity tasks with `@vue-aria/tree-state`.
+
+## 31l) Package Record: @vue-aria/calendar-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/calendar/src`
+  - `references/react-spectrum/packages/@react-stately/calendar/docs`
+- Local package path:
+  - `packages/@vue-aria/calendar-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useCalendarState`
+  - `useRangeCalendarState`
+  - shared utilities (`alignStart`, `alignCenter`, `alignEnd`, `constrain*`, `previousAvailableDate`)
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/types.ts`
+  - `src/utils.ts`
+  - `src/useCalendarState.ts`
+  - `src/useRangeCalendarState.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Current type surface intentionally follows existing repository loose typing patterns to avoid private-field type conflicts from `@internationalized/date` class internals.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder in references
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted coverage for day navigation, page behavior (`visible` vs `single`), time-component preservation on emitted values, and week-row date generation.
+  - Added adapted range-calendar coverage for anchor flow, contiguous-range constraints around unavailable dates, and hover/highlight focus behavior.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/calendar-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [ ] Partial validation complete via downstream `@vue-aria/calendar` interaction suites; full matrix pending.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Expand state parity coverage against more upstream calendar/range pagination and edge-date scenarios.
+2. Tighten exported type parity once the calendar/datepicker stack is fully integrated.
+3. Close docs/accessibility gates after downstream interaction matrix completion.
+
+## 31m) Package Record: @vue-aria/calendar
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/calendar/src`
+  - `references/react-spectrum/packages/@react-aria/calendar/intl`
+  - `references/react-spectrum/packages/@react-aria/calendar/test/useCalendar.test.js`
+  - `references/react-spectrum/packages/@react-aria/calendar/docs`
+- Local package path:
+  - `packages/@vue-aria/calendar`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useCalendar`
+  - `useRangeCalendar`
+  - `useCalendarGrid`
+  - `useCalendarCell`
+  - shared helpers (`hookData`, selected/visible range descriptions, era handling)
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useCalendar.ts`
+  - `src/useRangeCalendar.ts`
+  - `src/useCalendarBase.ts`
+  - `src/useCalendarGrid.ts`
+  - `src/useCalendarCell.ts`
+  - `src/utils.ts`
+  - `src/intlMessages.ts` (copied upstream locale bundle)
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Current tests run hook-level harnesses; full upstream React integration-story rendering parity remains in progress.
+
+### Tests
+- Total upstream test files: 1 (`useCalendar.test.js`)
+- Ported test files: 4 (adapted)
+- Passing test files: 4 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted keyboard mapping coverage for `useCalendarGrid`.
+  - Added adapted `useCalendar` base-aria/title navigation coverage.
+  - Added adapted `useRangeCalendar` blur-to-commit range-selection behavior coverage.
+  - Added adapted `useCalendarCell` selected/focused wiring and range hover-highlight coverage.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/calendar.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [x] Baseline aria role/gridcell/button wiring validated in adapted tests.
+- [ ] Full upstream interaction matrix (including expanded pointer/touch drag and announcement flows) pending.
+
+### Visual Parity
+- [ ] Pending upstream example-by-example comparison for calendar/range-calendar markup and styles.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port additional upstream `useCalendar.test.js` scenarios (multi-duration keyboard flows, first-day-of-week matrix, and pagination matrix).
+2. Expand range-drag and live-announcement behavioral assertions to close accessibility parity gaps.
+3. Mirror upstream docs examples/styles more completely and close visual parity gates.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):

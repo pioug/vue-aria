@@ -26,17 +26,6 @@ declare module "@internationalized/message" {
   }
 }
 
-declare module "@internationalized/date" {
-  export interface DateFormatterOptions extends Intl.DateTimeFormatOptions {
-    calendar?: string;
-  }
-
-  export class DateFormatter {
-    constructor(locale: string, options?: DateFormatterOptions);
-    format(value: Date): string;
-  }
-}
-
 declare module "@internationalized/number" {
   export interface NumberFormatOptions extends Intl.NumberFormatOptions {}
 

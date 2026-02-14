@@ -1,7 +1,9 @@
-import { DateFormatter, type DateFormatterOptions as IntlDateFormatterOptions } from "@internationalized/date";
+import { DateFormatter } from "@internationalized/date";
 import { useDeepMemo } from "@vue-aria/utils";
 import { useLocale } from "./context";
 import { createFormatterProxy } from "./formatterProxy";
+
+type IntlDateFormatterOptions = Intl.DateTimeFormatOptions;
 
 export interface DateFormatterOptions extends IntlDateFormatterOptions {
   calendar?: string;

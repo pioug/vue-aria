@@ -161,6 +161,12 @@ export default defineConfig({
       "@vue-aria/tree-state": fileURLToPath(
         new URL("./packages/@vue-aria/tree-state/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/calendar-state": fileURLToPath(
+        new URL("./packages/@vue-aria/calendar-state/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/calendar": fileURLToPath(
+        new URL("./packages/@vue-aria/calendar/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/table": fileURLToPath(
         new URL("./packages/@vue-aria/table/src/index.ts", import.meta.url)
       ),
