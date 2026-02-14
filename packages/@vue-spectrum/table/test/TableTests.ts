@@ -582,6 +582,28 @@ export function tableTests() {
     expect(getRows()[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("prevents clearing the last checkbox-style selection when disallowEmptySelection is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      disallowEmptySelection: true,
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+
+    onSelectionChange.mockClear();
+    await press(bodyRows[0]!);
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports checkbox-style multiple selection via Space key", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
