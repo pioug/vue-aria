@@ -518,6 +518,22 @@ describe("Menu", () => {
     externalLabel.remove();
   });
 
+  it("supports aria-label on the menu root", () => {
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu label",
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "One" }, { default: () => "One" })],
+      },
+      attachTo: document.body,
+    });
+
+    const menu = wrapper.get('[role="menu"]');
+    expect(menu.attributes("aria-label")).toBe("Menu label");
+    expect(menu.attributes("aria-labelledby")).toBeUndefined();
+  });
+
   it("warns if aria-label and aria-labelledby are missing", () => {
     const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
     mount(Menu as any, {
