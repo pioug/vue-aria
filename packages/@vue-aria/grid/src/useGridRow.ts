@@ -55,7 +55,8 @@ export function useGridRow<
         : undefined;
     },
     get "aria-disabled"() {
-      return states.isDisabled || undefined;
+      return (state.collection.size === 0 || state.selectionManager.isDisabled(node.key))
+        || undefined;
     },
   };
 

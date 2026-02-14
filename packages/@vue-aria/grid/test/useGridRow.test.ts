@@ -35,6 +35,7 @@ function createState(overrides: Record<string, unknown> = {}) {
     selectionManager: {
       selectionMode: "single",
       isSelected: vi.fn(() => true),
+      isDisabled: vi.fn(() => false),
     },
     ...overrides,
   };
@@ -113,6 +114,7 @@ describe("useGridRow", () => {
       selectionManager: {
         selectionMode: "none",
         isSelected: vi.fn(() => false),
+        isDisabled: vi.fn(() => false),
       },
     });
 
@@ -171,5 +173,32 @@ describe("useGridRow", () => {
 
     isSelected.mockReturnValue(true);
     expect(rowProps["aria-selected"]).toBe(true);
+  });
+
+  it("updates aria-disabled from the latest selection manager state", () => {
+    const isDisabled = vi.fn(() => false);
+    const state = createState({
+      selectionManager: {
+        selectionMode: "single",
+        isSelected: vi.fn(() => false),
+        isDisabled,
+      },
+    });
+
+    const { rowProps } = useGridRow(
+      {
+        node: {
+          key: "row-1",
+          index: 0,
+        } as any,
+      },
+      state as any,
+      { current: document.createElement("div") as HTMLElement | null }
+    );
+
+    expect(rowProps["aria-disabled"]).toBeUndefined();
+
+    isDisabled.mockReturnValue(true);
+    expect(rowProps["aria-disabled"]).toBe(true);
   });
 });

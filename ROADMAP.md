@@ -7953,6 +7953,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-aria/grid/test/useGridRow.test.ts`
 - Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 48 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/grid` + `@vue-spectrum/table` disabled-state parity update:
+  - updated `useGridRow` to compute `aria-disabled` from current collection/selection manager state instead of snapshot values.
+  - added regression coverage to verify `aria-disabled` reflects latest selection manager disabled-key changes.
+  - `packages/@vue-aria/grid/src/useGridRow.ts`
+  - `packages/@vue-aria/grid/test/useGridRow.test.ts`
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` id-fallback parity update:
   - added coverage to verify row `id` values are used as selection keys when `key` is omitted.
   - `packages/@vue-spectrum/table/test/TableTests.ts`
