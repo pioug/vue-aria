@@ -1,5 +1,6 @@
 export { BreakpointProvider, useMatchedBreakpoints, useBreakpoint } from "./BreakpointProvider";
 export { classNames, keepSpectrumClassNames, shouldKeepSpectrumClassNames } from "./classNames";
+export { ClearSlots, cssModuleToSlots, SlotProvider, useSlotProps } from "./Slots";
 export { useHasChild } from "./useHasChild";
 export { useIsMobileDevice } from "./useIsMobileDevice";
 export { useMediaQuery } from "./useMediaQuery";

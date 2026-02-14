@@ -4002,6 +4002,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useMediaQuery`
   - `useIsMobileDevice`
   - `useHasChild`
+  - `useSlotProps`
+  - `cssModuleToSlots`
+  - `SlotProvider`
+  - `ClearSlots`
   - `classNames`
   - `keepSpectrumClassNames`
   - `shouldKeepSpectrumClassNames`
@@ -4016,8 +4020,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 0 (breakpoint behavior is validated indirectly in upstream provider tests)
-- Ported test files: 6 (Vue adaptations)
-- Passing test files: 6 (validated 2026-02-14)
+- Ported test files: 7 (Vue adaptations)
+- Passing test files: 7 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted breakpoint coverage for min-width matching, resize updates, and no-op updates when resize remains in the same breakpoint range.
   - Added adapted context coverage for `useBreakpoint` provider consumption.
@@ -4026,6 +4030,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useMediaQuery` coverage for unsupported environments and live match-state updates.
   - Added adapted `useIsMobileDevice` coverage for screen-width threshold behavior.
   - Added adapted `useHasChild` coverage for descendant-query detection.
+  - Added adapted slot-context coverage for slot-prop merges, css-module slot mapping, and inherited-slot clearing.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
