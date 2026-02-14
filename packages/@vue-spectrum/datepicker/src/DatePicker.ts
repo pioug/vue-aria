@@ -347,7 +347,18 @@ export const DatePicker = defineComponent({
       return h(
         "div",
         {
-          class: ["react-spectrum-DatePicker", props.UNSAFE_className],
+          class: [
+            "react-spectrum-DatePicker",
+            {
+              "is-invalid": Boolean(
+                props.isInvalid
+                || props.validationState === "invalid"
+                || state.isInvalid
+              ),
+              "is-disabled": Boolean(props.isDisabled),
+            },
+            props.UNSAFE_className,
+          ],
           style: props.UNSAFE_style,
         },
         [
@@ -746,7 +757,18 @@ export const DateRangePicker = defineComponent({
       return h(
         "div",
         {
-          class: ["react-spectrum-DateRangePicker", props.UNSAFE_className],
+          class: [
+            "react-spectrum-DateRangePicker",
+            {
+              "is-invalid": Boolean(
+                props.isInvalid
+                || props.validationState === "invalid"
+                || state.isInvalid
+              ),
+              "is-disabled": Boolean(props.isDisabled),
+            },
+            props.UNSAFE_className,
+          ],
           style: props.UNSAFE_style,
         },
         [
