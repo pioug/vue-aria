@@ -6725,6 +6725,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 62 tests).
 - Validation: `npm test -- packages/@vue-aria/calendar/test` passed (6 files, 117 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/calendar` test-harness parity update:
+  - moved `useCalendarCell` prompt-description assertions into active `effectScope` execution in test harness, eliminating repeated `onScopeDispose()` warnings during suite execution.
+    - `packages/@vue-aria/calendar/test/useCalendarCell.test.ts`
+- Validation: `npm test -- packages/@vue-aria/calendar/test` passed (6 files, 117 tests).
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 62 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

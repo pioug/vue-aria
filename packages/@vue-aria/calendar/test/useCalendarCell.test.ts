@@ -214,6 +214,8 @@ describe("useCalendarCell", () => {
   it("adds start and finish range-selection prompts on the focused range cell", () => {
     const scope = effectScope();
     let state!: ReturnType<typeof useRangeCalendarState>;
+    let startCell!: ReturnType<typeof useCalendarCell>;
+    let finishCell!: ReturnType<typeof useCalendarCell>;
 
     const button = document.createElement("button");
     document.body.appendChild(button);
@@ -228,11 +230,13 @@ describe("useCalendarCell", () => {
     });
 
     const focusedDate = state.focusedDate;
-    const startCell = useCalendarCell(
-      { date: focusedDate },
-      state,
-      { current: button }
-    );
+    scope.run(() => {
+      startCell = useCalendarCell(
+        { date: focusedDate },
+        state,
+        { current: button }
+      );
+    });
 
     const startDescriptionId = (startCell.buttonProps["aria-describedby"] as string | undefined)?.split(" ")[0];
     expect(startDescriptionId).toBeDefined();
@@ -242,11 +246,13 @@ describe("useCalendarCell", () => {
 
     state.selectDate(focusedDate);
 
-    const finishCell = useCalendarCell(
-      { date: focusedDate },
-      state,
-      { current: button }
-    );
+    scope.run(() => {
+      finishCell = useCalendarCell(
+        { date: focusedDate },
+        state,
+        { current: button }
+      );
+    });
 
     const finishDescriptionId = (finishCell.buttonProps["aria-describedby"] as string | undefined)?.split(" ")[0];
     expect(finishDescriptionId).toBeDefined();
