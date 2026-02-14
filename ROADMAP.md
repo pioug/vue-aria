@@ -6942,3 +6942,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 61 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded SSR coverage for `description` rendering in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 63 tests).
+- Validation: `npm run check -- --pretty false` passed.

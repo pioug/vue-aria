@@ -60,6 +60,24 @@ describe("DatePicker SSR", () => {
     expect(html).toContain("June");
   });
 
+  it("renders DatePicker with description without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DatePickerSSRDescriptionApp",
+      setup() {
+        return () =>
+          h(DatePicker, {
+            "aria-label": "Date picker",
+            defaultValue: new CalendarDate(2019, 6, 5),
+            description: "Choose an event date",
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DatePicker-description");
+    expect(html).toContain("Choose an event date");
+  });
+
   it("renders DateRangePicker with visibleMonths without SSR errors", async () => {
     const App = defineComponent({
       name: "DateRangePickerSSRMultiMonthApp",
@@ -79,5 +97,26 @@ describe("DatePicker SSR", () => {
     const html = await renderToString(createSSRApp(App));
     expect(html).toContain("react-spectrum-DateRangePicker");
     expect(html).toContain("June");
+  });
+
+  it("renders DateRangePicker with description without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DateRangePickerSSRDescriptionApp",
+      setup() {
+        return () =>
+          h(DateRangePicker, {
+            "aria-label": "Date range picker",
+            defaultValue: {
+              start: new CalendarDate(2019, 6, 5),
+              end: new CalendarDate(2019, 6, 8),
+            },
+            description: "Choose travel dates",
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DateRangePicker-description");
+    expect(html).toContain("Choose travel dates");
   });
 });
