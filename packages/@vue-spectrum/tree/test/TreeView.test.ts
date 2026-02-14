@@ -769,4 +769,16 @@ describe("TreeView", () => {
     expect(rowTexts.some((text) => text.includes("Projects"))).toBe(true);
     expect(rowTexts.some((text) => text.includes("Project 1"))).toBe(true);
   });
+
+  it('supports focusing the first row with autoFocus="first"', async () => {
+    const wrapper = renderTree({
+      autoFocus: "first",
+    });
+
+    await nextTick();
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+    expect(document.activeElement).toBe(rows[0]!.element);
+  });
 });
