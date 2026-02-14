@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/button`
+- Current focus package: `@vue-spectrum/checkbox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -101,7 +101,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/provider`: In progress
 - `@vue-spectrum/theme`: In progress
 - `@vue-spectrum/button`: In progress
-- `@vue-spectrum/checkbox`: Not started
+- `@vue-spectrum/checkbox`: In progress
 - `@vue-spectrum/radio`: Not started
 - `@vue-spectrum/switch`: Not started
 - `@vue-spectrum/textfield`: Not started
@@ -172,6 +172,35 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Validate visual parity against upstream docs examples and add parity notes/screenshots.
 - Finalize package completion gate once all migrated tests pass and no React dependencies remain in package surface.
+
+## 4b) Active Package Slice: @vue-spectrum/checkbox
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/checkbox/src`
+  - `references/react-spectrum/packages/@react-spectrum/checkbox/test`
+  - `references/react-spectrum/packages/@react-spectrum/checkbox/docs`
+- Local package path: `packages/@vue-spectrum/checkbox`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - `src/index.ts`
+  - modules: `Checkbox`, `CheckboxGroup`, `context`, and public type definitions
+- Initial upstream test-intent migration:
+  - `test/Checkbox.test.ts`
+  - `test/CheckboxGroup.test.ts`
+  - `test/Checkbox.ssr.test.ts`
+- Documentation scaffold added:
+  - `docs/packages/spectrum-checkbox.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-checkbox`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/checkbox`.
+
+### Remaining for completion
+- Expand migrated validation coverage from upstream checkbox/group suites.
+- Validate visual parity against upstream docs examples for quiet/emphasized/invalid states.
+- Complete docs parity with dedicated per-component pages matching upstream structure.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

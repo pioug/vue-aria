@@ -82,7 +82,8 @@
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/provider": ["packages/@vue-spectrum/provider/src/index.ts"],
       "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"],
-      "@vue-spectrum/button": ["packages/@vue-spectrum/button/src/index.ts"]
+      "@vue-spectrum/button": ["packages/@vue-spectrum/button/src/index.ts"],
+      "@vue-spectrum/checkbox": ["packages/@vue-spectrum/checkbox/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

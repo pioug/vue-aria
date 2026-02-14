@@ -232,6 +232,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/button": fileURLToPath(
         new URL("./packages/@vue-spectrum/button/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/checkbox": fileURLToPath(
+        new URL("./packages/@vue-spectrum/checkbox/src/index.ts", import.meta.url)
       )
     }
   }
