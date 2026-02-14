@@ -242,6 +242,14 @@ export function tableTests() {
     expect(wrapper.get('[role="grid"]').attributes("class")).toContain("test-class");
   });
 
+  it("supports UNSAFE style passthrough", () => {
+    const wrapper = renderTable({
+      UNSAFE_style: { width: "320px" },
+    });
+
+    expect(wrapper.get('[role="grid"]').attributes("style")).toContain("width: 320px");
+  });
+
   it("preserves falsy numeric row keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
