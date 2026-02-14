@@ -122,6 +122,18 @@ describe("MenuTrigger", () => {
     expect(onOpenChange).toHaveBeenCalledTimes(1);
   });
 
+  it("does not show selection checkmarks when selectionMode is not defined", async () => {
+    const wrapper = renderMenuTrigger({}, {
+      selectedKeys: ["Foo"],
+    });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    await trigger.trigger("click");
+
+    expect(document.body.querySelectorAll('[role="menuitem"]')).toHaveLength(3);
+    expect(document.body.querySelectorAll('[role="img"]')).toHaveLength(0);
+  });
+
   it("exposes trigger dom node and focus handle", async () => {
     const wrapper = renderMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');
@@ -155,6 +167,21 @@ describe("MenuTrigger", () => {
     expect(document.body.querySelector('[role="menu"]')).toBeNull();
 
     await trigger.trigger("keydown", { key: "ArrowDown", altKey: true });
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("opens menu on Alt+ArrowUp when trigger is longPress", async () => {
+    const wrapper = renderMenuTrigger({
+      trigger: "longPress",
+    });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: "ArrowUp", altKey: true });
     await wrapper.vm.$nextTick();
 
     expect(document.body.querySelector('[role="menu"]')).toBeTruthy();

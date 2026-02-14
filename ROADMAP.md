@@ -9526,3 +9526,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 35 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` trigger keyboard/checkmark parity update:
+  - added `MenuTrigger` long-press coverage for `Alt+ArrowUp` opening behavior alongside existing `Alt+ArrowDown` coverage.
+  - added `MenuTrigger` coverage to assert no selection checkmarks render when `selectedKeys` is provided without `selectionMode`.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
