@@ -95,6 +95,8 @@ describe("SubmenuTrigger", () => {
     expect(submenuTriggerItem?.getAttribute("aria-disabled")).toBe("true");
 
     submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    submenuTriggerItem?.click();
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     await wrapper.vm.$nextTick();
 
     const allMenus = document.body.querySelectorAll('[role="menu"]');

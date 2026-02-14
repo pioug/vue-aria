@@ -9598,3 +9598,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 48 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` disabled-submenu activation parity update:
+  - expanded migrated `SubmenuTrigger` disabled-key coverage to assert submenu trigger rows do not open nested menus on pointer click or `Enter`, in addition to `ArrowRight`.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 48 tests).
+- Validation: `npm run check -- --pretty false` passed.
