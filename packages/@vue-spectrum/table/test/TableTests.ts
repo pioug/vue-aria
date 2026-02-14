@@ -882,6 +882,30 @@ export function tableTests() {
     expect(grid.element.contains(document.activeElement)).toBe(true);
   });
 
+  it("disables keyboard navigation when configured", async () => {
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      isKeyboardNavigationDisabled: true,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    const firstRow = bodyRows[0]!.element as HTMLElement;
+    firstRow.focus();
+    expect(document.activeElement).toBe(firstRow);
+
+    await grid.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    expect(document.activeElement).toBe(firstRow);
+
+    await grid.trigger("keydown", { key: "End" });
+    await nextTick();
+    expect(document.activeElement).toBe(firstRow);
+  });
+
   it("applies highlight selection row class in highlight mode", () => {
     const wrapper = renderTable({
       selectionMode: "single",

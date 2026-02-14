@@ -72,6 +72,7 @@ Numeric string values for `col-span` are normalized (for example `col-span="2"`)
 - `density`: `"compact" | "regular" | "spacious"` to control row/cell spacing class variants.
 - `overflowMode`: `"truncate" | "wrap"` to control wrapped-cell visual styling.
 - `isQuiet`: enables quiet table visual styling.
+- `isKeyboardNavigationDisabled`: disables table keyboard navigation handlers (`Arrow`, `Home`, `End`, etc.) while preserving focus/blur state wiring.
 - `disabledBehavior`: `"selection" | "all"` (defaults to `"selection"`) to control whether disabled rows remain actionable (`"selection"`) or become fully disabled (`"all"`).
 - `disallowSelectAll`: disables keyboard select-all (`Ctrl+A`) when `selectionMode` is `"multiple"`.
 - `disallowTypeAhead`: disables alphanumeric typeahead focus movement across rows.

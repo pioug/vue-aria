@@ -8499,6 +8499,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 107 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` keyboard-navigation disablement parity update:
+  - added `isKeyboardNavigationDisabled` support to `TableView`, wiring through table-state keyboard navigation disabling.
+  - added regression coverage to verify Arrow/Home/End-style table key handling remains inert when keyboard navigation is disabled.
+  - documented `isKeyboardNavigationDisabled` in package docs.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 108 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

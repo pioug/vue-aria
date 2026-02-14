@@ -42,6 +42,7 @@ export interface SpectrumTableViewProps {
   overflowMode?: "wrap" | "truncate" | undefined;
   isQuiet?: boolean | undefined;
   isDisabled?: boolean | undefined;
+  isKeyboardNavigationDisabled?: boolean | undefined;
   autoFocus?: true | "first" | "last" | undefined;
   sortDescriptor?: SpectrumSortDescriptor | null | undefined;
   defaultSortDescriptor?: SpectrumSortDescriptor | null | undefined;
@@ -730,6 +731,10 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    isKeyboardNavigationDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     autoFocus: {
       type: [Boolean, String] as PropType<true | "first" | "last" | undefined>,
       default: undefined,
@@ -943,6 +948,10 @@ export const TableView = defineComponent({
         }
         props.onSelectionChange?.(nextKeys);
       },
+    });
+
+    watchEffect(() => {
+      state.setKeyboardNavigationDisabled(Boolean(props.isKeyboardNavigationDisabled));
     });
 
     const tableAriaProps = {
