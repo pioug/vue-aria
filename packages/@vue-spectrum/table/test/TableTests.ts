@@ -2354,6 +2354,17 @@ export function tableTests() {
     expect(wrapper.get('[role="grid"]').attributes("style")).toContain("width: 320px");
   });
 
+  it("supports hidden and disabled root class toggles", () => {
+    const wrapper = renderTable({
+      isDisabled: true,
+      isHidden: true,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.classes()).toContain("is-disabled");
+    expect(grid.classes()).toContain("is-hidden");
+  });
+
   it("preserves falsy numeric row keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
