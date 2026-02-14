@@ -97,7 +97,8 @@
       "@vue-spectrum/dialog": ["packages/@vue-spectrum/dialog/src/index.ts"],
       "@vue-spectrum/tooltip": ["packages/@vue-spectrum/tooltip/src/index.ts"],
       "@vue-spectrum/toast": ["packages/@vue-spectrum/toast/src/index.ts"],
-      "@vue-spectrum/menu": ["packages/@vue-spectrum/menu/src/index.ts"]
+      "@vue-spectrum/menu": ["packages/@vue-spectrum/menu/src/index.ts"],
+      "@vue-spectrum/listbox": ["packages/@vue-spectrum/listbox/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

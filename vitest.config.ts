@@ -277,6 +277,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/menu": fileURLToPath(
         new URL("./packages/@vue-spectrum/menu/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/listbox": fileURLToPath(
+        new URL("./packages/@vue-spectrum/listbox/src/index.ts", import.meta.url)
       )
     }
   }

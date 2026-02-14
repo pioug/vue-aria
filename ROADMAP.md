@@ -111,7 +111,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: In progress
 - `@vue-spectrum/menu`: In progress
-- `@vue-spectrum/listbox`: Not started
+- `@vue-spectrum/listbox`: In progress
 - `@vue-spectrum/picker`: Not started
 - `@vue-spectrum/combobox`: Not started
 - `@vue-spectrum/tabs`: Not started
@@ -6401,3 +6401,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added package record `31l` and marked `@vue-spectrum/menu` execution queue status `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 10 tests).
+- Started `@vue-spectrum/listbox` foundational slice:
+  - scaffolded `@vue-spectrum/listbox` package with upstream-aligned surface exports: `ListBox`, `ListBoxBase`, `useListBoxLayout`, `Item`, and `Section`.
+  - ported initial non-virtualized Spectrum layer over existing `@vue-aria/listbox` hooks:
+    - collection normalization from slot/data items
+    - section + option rendering with Spectrum class/role parity
+    - single/multiple selection behaviors, checkmark rendering, and disabled option support
+  - added adapted tests for rendering, selection modes, disabled-key behavior, and SSR smoke path.
+  - added VitePress package page (`docs/packages/spectrum-listbox.md`) and docs nav/sidebar/index links.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/listbox`.
+  - added package record `31m` and marked `@vue-spectrum/listbox` execution queue status `In progress`.
