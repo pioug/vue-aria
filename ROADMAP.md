@@ -3046,12 +3046,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 1 (`useDatePicker.test.tsx`)
-- Ported test files: 2 (adapted)
-- Passing test files: 2 (validated 2026-02-14)
+- Ported test files: 3 (adapted)
+- Passing test files: 3 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted upstream scenario coverage for programmatic date-field value commits when initially empty.
   - Added adapted hook-level coverage for range picker field propagation, native hidden-input behavior, time-field input serialization, and literal segment a11y hiding.
   - Added adapted date-segment interaction coverage for placeholder backspace focus handoff and numeric-segment input-mode wiring.
+  - Added adapted date-picker-group interaction coverage for `Alt+ArrowDown` open behavior and arrow-key focus traversal/disable branches.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
