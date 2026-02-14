@@ -7238,3 +7238,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 9 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/breadcrumbs` docs parity update:
+  - clarified `onAction` key payload/disabled suppression semantics and added root customization (`id`, `UNSAFE_className`, `UNSAFE_style`) usage example.
+    - `docs/packages/spectrum-breadcrumbs.md`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 9 tests).

@@ -20,7 +20,7 @@ import { Breadcrumbs, Item } from "@vue-spectrum/breadcrumbs";
 
 ## Content
 
-`Breadcrumbs` accepts static `Item` children. Each item key is passed to `onAction`.
+`Breadcrumbs` accepts static `Item` children. Each item key is passed to `onAction` when activated (actions are suppressed when breadcrumbs are disabled).
 
 ```vue
 <script setup lang="ts">
@@ -53,6 +53,22 @@ Items can navigate by providing `href`.
   <Item href="#">Vue Spectrum</Item>
   <Item key="breadcrumbs">Breadcrumbs</Item>
 </Breadcrumbs>
+```
+
+## Root Customization
+
+```vue
+<template>
+  <Breadcrumbs
+    id="project-breadcrumbs"
+    UNSAFE_className="custom-breadcrumbs"
+    :UNSAFE_style="{ marginBottom: '12px' }"
+  >
+    <Item key="home">Home</Item>
+    <Item key="reports">Reports</Item>
+    <Item key="current">Current report</Item>
+  </Breadcrumbs>
+</template>
 ```
 
 ## Accessibility
