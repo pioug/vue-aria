@@ -106,6 +106,32 @@ describe("router utilities", () => {
     expect(resolvedHref).toBe("/app/reports");
   });
 
+  it("omits false download flags from mapped link props", () => {
+    let resolvedDownload: unknown;
+
+    const Child = defineComponent({
+      setup() {
+        const linkProps = useLinkProps({ href: "/reports", download: false });
+        resolvedDownload = linkProps.download;
+        return () => h("div");
+      },
+    });
+
+    const App = defineComponent({
+      setup() {
+        provideRouter({
+          navigate: vi.fn(),
+          useHref: (href) => `/app${href}`,
+        });
+
+        return () => h(Child);
+      },
+    });
+
+    mount(App);
+    expect(resolvedDownload).toBeUndefined();
+  });
+
   it("resolves synthetic link href through router useHref", () => {
     let dataHref: unknown;
 
@@ -145,7 +171,7 @@ describe("router utilities", () => {
     expect(props["data-href"]).toBe("/reports");
     expect(props["data-target"]).toBe("_blank");
     expect(props["data-rel"]).toBe("noopener");
-    expect(props["data-download"]).toBe(true);
+    expect(props["data-download"]).toBe("");
     expect(props["data-ping"]).toBe("/ping");
     expect(props["data-referrer-policy"]).toBe("origin");
   });

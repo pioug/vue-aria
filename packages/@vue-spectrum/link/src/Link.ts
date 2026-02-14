@@ -59,6 +59,7 @@ export const Link = defineComponent({
     download: {
       type: [String, Boolean] as PropType<string | boolean | undefined>,
       required: false,
+      default: undefined,
     },
     ping: {
       type: String,

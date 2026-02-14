@@ -204,11 +204,12 @@ export function useRouter(): Router {
 export function useLinkProps(props?: LinkDOMProps): LinkDOMProps {
   const router = useRouter();
   const href = props?.href;
+  const download = normalizeDownload(props?.download);
   return {
     href: href ? router.useHref(href) : undefined,
     target: props?.target,
     rel: props?.rel,
-    download: props?.download,
+    download,
     ping: props?.ping,
     referrerPolicy: props?.referrerPolicy,
   };
@@ -218,28 +219,42 @@ export function useSyntheticLinkProps(props?: LinkDOMProps): Record<string, unkn
   const router = useRouter();
   const href = props?.href;
   const resolvedHref = href ? router.useHref(href) : undefined;
+  const download = normalizeDownload(props?.download);
 
   return {
     "data-href": resolvedHref,
     "data-target": props?.target,
     "data-rel": props?.rel,
-    "data-download": props?.download,
+    "data-download": download,
     "data-ping": props?.ping,
     "data-referrer-policy": props?.referrerPolicy,
   };
 }
 
 export function getSyntheticLinkProps(props?: LinkDOMProps): Record<string, unknown> {
+  const download = normalizeDownload(props?.download);
   return {
     "data-href": props?.href,
     "data-target": props?.target,
     "data-rel": props?.rel,
-    "data-download": props?.download,
+    "data-download": download,
     "data-ping": props?.ping,
     "data-referrer-policy": props?.referrerPolicy,
   };
 }
 export const RouterProvider = provideRouter;
+
+function normalizeDownload(download: LinkDOMProps["download"]): string | undefined {
+  if (download === true) {
+    return "";
+  }
+
+  if (typeof download === "string") {
+    return download;
+  }
+
+  return undefined;
+}
 
 export function handleLinkClick(
   event: MouseEvent,

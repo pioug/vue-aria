@@ -312,6 +312,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - custom child wrapping path
   - `UNSAFE_className`, data-attribute, and autofocus behavior
   - router-provider navigation integration
+- Additional parity coverage update:
+  - added tooltip-trigger composition coverage for keyboard focus open/close behavior.
+  - tightened router-provider click coverage to assert `navigate` dispatch with `routerOptions`.
+  - fixed router/link download normalization so omitted boolean download does not render `download="false"` and block client navigation.
+  - `packages/@vue-spectrum/link/test/Link.test.ts`
+  - `packages/@vue-spectrum/link/src/Link.ts`
+  - `packages/@vue-aria/utils/src/router.ts`
+  - `packages/@vue-aria/utils/test/router.test.ts`
 - Documentation scaffold added:
   - `docs/packages/spectrum-link.md`
   - VitePress nav/sidebar entry for `/packages/spectrum-link`
@@ -320,7 +328,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Remaining for completion
 - Validate visual parity against upstream docs examples and variant states.
-- Expand parity coverage for additional upstream edge-cases (e.g., tooltip-trigger composition).
 
 ## 4f) Active Package Slice: @vue-spectrum/textfield
 - Upstream source path(s):
@@ -7481,6 +7488,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/link` interaction parity update:
+  - added adapted tooltip-trigger composition coverage for focus open/close behavior.
+  - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.
+  - fixed link/router download normalization so omitted boolean download does not render `download="false"` and suppress client navigation.
+  - `packages/@vue-spectrum/link/test/Link.test.ts`
+  - `packages/@vue-spectrum/link/src/Link.ts`
+  - `packages/@vue-aria/utils/src/router.ts`
+  - `packages/@vue-aria/utils/test/router.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/link/test packages/@vue-aria/utils/test/router.test.ts` passed (3 files, 21 tests).
 - Additional `@vue-spectrum/provider` forwarding parity update:
   - added real-component provider forwarding coverage for:
     - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`

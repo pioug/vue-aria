@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick } from "vue";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
+import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 import { Link } from "../src/Link";
 
 describe("Link", () => {
@@ -117,7 +118,7 @@ describe("Link", () => {
     expect(document.activeElement).toBe(link.element);
   });
 
-  it("supports RouterProvider", () => {
+  it("supports RouterProvider", async () => {
     const navigate = vi.fn();
     const useHref = (href: string) => `/base${href}`;
     const wrapper = mount(
@@ -147,6 +148,64 @@ describe("Link", () => {
 
     const link = wrapper.get('a[href="/base/foo"]');
     expect(link.attributes("href")).toBe("/base/foo");
+    expect(link.attributes("download")).toBeUndefined();
     expect(navigate).not.toHaveBeenCalled();
+
+    await link.trigger("click");
+    expect(navigate).toHaveBeenCalledWith("/foo", { foo: "bar" });
+  });
+
+  it("supports a wrapping tooltip trigger", async () => {
+    vi.useFakeTimers();
+    try {
+      const onOpenChange = vi.fn();
+      const wrapper = mount(
+        defineComponent({
+          setup() {
+            return () =>
+              h(
+                Provider as any,
+                {
+                  theme,
+                },
+                () =>
+                  h(
+                    TooltipTrigger as any,
+                    {
+                      delay: 0,
+                      onOpenChange,
+                    },
+                    {
+                      default: () => [
+                        h(Link as any, null, { default: () => "Click me" }),
+                        h(Tooltip as any, null, { default: () => "Helpful information." }),
+                      ],
+                    }
+                  )
+              );
+          },
+        }),
+        { attachTo: document.body }
+      );
+
+      expect(document.body.querySelector('[role="tooltip"]')).toBeNull();
+
+      const link = wrapper.get('[role="link"]');
+      await link.trigger("focus");
+      await nextTick();
+
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(document.body.querySelector('[role="tooltip"]')).toBeTruthy();
+
+      await link.trigger("blur");
+      await nextTick();
+      vi.runOnlyPendingTimers();
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(document.body.querySelector('[role="tooltip"]')).toBeNull();
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
   });
 });
