@@ -186,6 +186,38 @@ describe("Calendar", () => {
     expect(rangeValue.end.day).toBe(21);
   });
 
+  it("normalizes reverse-order range selection into start/end order", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 5),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const dateButtons = wrapper.findAll(".react-spectrum-Calendar-date");
+    const day17 = dateButtons.find((cell) => cell.text() === "17");
+    const day21 = dateButtons.find((cell) => cell.text() === "21");
+    expect(day17).toBeTruthy();
+    expect(day21).toBeTruthy();
+
+    await press(day21!);
+    expect(onChange).not.toHaveBeenCalled();
+    await press(day17!);
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const rangeValue = onChange.mock.calls[0]?.[0] as {
+      start: CalendarDate;
+      end: CalendarDate;
+    };
+    expect(rangeValue.start.month).toBe(6);
+    expect(rangeValue.start.day).toBe(17);
+    expect(rangeValue.end.month).toBe(6);
+    expect(rangeValue.end.day).toBe(21);
+  });
+
   it("commits a single-day range when selection is blurred before completion", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
