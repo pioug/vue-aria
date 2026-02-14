@@ -49,9 +49,31 @@ describe("DialogContainer", () => {
 
   it("propagates container type to nested dialog sizing", () => {
     const onDismiss = vi.fn();
+    const modal = mount(DialogContainer as any, {
+      props: {
+        type: "modal",
+        onDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
     const popover = mount(DialogContainer as any, {
       props: {
         type: "popover",
+        onDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    const tray = mount(DialogContainer as any, {
+      props: {
+        type: "tray",
         onDismiss,
       },
       slots: {
@@ -82,7 +104,9 @@ describe("DialogContainer", () => {
       attachTo: document.body,
     });
 
+    expect(modal.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--large");
     expect(popover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--small");
+    expect(tray.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--large");
     expect(fullscreen.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreen");
     expect(takeover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreenTakeover");
   });

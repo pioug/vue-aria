@@ -549,6 +549,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-dialog`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/dialog`.
+- Additional parity coverage added:
+  - expanded `DialogTrigger` and `DialogContainer` type-matrix assertions for:
+    - `tray` -> large dialog sizing
+    - `fullscreen` -> fullscreen dialog sizing
+    - modal/popover/fullscreenTakeover regressions
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
 
 ### Remaining for completion
 - Expand coverage for modal/popover/tray/fullscreen container behaviors and interaction semantics from upstream tests.
@@ -7466,6 +7473,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded transition/placement assertions for centered (`fadeOnly`) and non-centered placement variants.
     - `packages/@vue-spectrum/toast/test/ToastContainer.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/toast/test packages/@vue-aria/toast/test` passed (4 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded trigger/container type-matrix behavior coverage for:
+    - `tray` context defaults to large dialog sizing
+    - `fullscreen` context defaults to fullscreen dialog sizing
+    - modal/popover/fullscreenTakeover size regressions remain covered
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.

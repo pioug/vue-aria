@@ -130,6 +130,20 @@ describe("DialogTrigger", () => {
     await popover.get('[data-testid="popover-trigger"]').trigger("click");
     expect(popover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--small");
 
+    const tray = mount(DialogTrigger as any, {
+      props: {
+        type: "tray",
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "tray-size-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await tray.get('[data-testid="tray-size-trigger"]').trigger("click");
+    expect(tray.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--large");
+
     const modal = mount(DialogTrigger as any, {
       props: {
         type: "modal",
@@ -143,6 +157,20 @@ describe("DialogTrigger", () => {
 
     await modal.get('[data-testid="modal-trigger"]').trigger("click");
     expect(modal.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--large");
+
+    const fullscreen = mount(DialogTrigger as any, {
+      props: {
+        type: "fullscreen",
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "fullscreen-size-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await fullscreen.get('[data-testid="fullscreen-size-trigger"]').trigger("click");
+    expect(fullscreen.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreen");
 
     const takeover = mount(DialogTrigger as any, {
       props: {
