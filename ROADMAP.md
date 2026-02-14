@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/provider`
+- Current focus package: `@vue-spectrum/theme`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -4710,16 +4710,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added baseline shape checks for default/theme-light/theme-dark/theme-express provider-compatible class maps.
   - Theme-express bootstrap keys aligned to upstream `express.css` selector naming (`express`, `medium`, `large`).
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress docs page scaffolded (`docs/packages/spectrum-theme.md`)
 - [x] Variant docs pages scaffolded (`docs/packages/spectrum-theme-express.md`, `docs/packages/spectrum-theme-light.md`, `docs/packages/spectrum-theme-dark.md`)
-- [ ] Examples parity complete
+- [x] Examples parity complete
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Theme package has no direct interaction semantics; parity validated via downstream provider/components.
+- [x] Theme package has no direct interaction semantics; parity validated via downstream provider/components.
 
 ### Visual Parity
 - [ ] Full visual parity requires upstream Spectrum CSS module strategy and variant package ports.
@@ -7492,6 +7492,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - explicit local boolean overrides (`false`) over inherited provider values
   - `packages/@vue-spectrum/provider/test/Provider.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 44 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/theme` docs parity update:
+  - expanded default/variant theme package docs with provider-integrated Vue examples and runtime variant-switch guidance.
+  - clarified class-map-only behavior and consumer CSS-loading expectations for theme packages.
+  - `docs/packages/spectrum-theme.md`
+  - `docs/packages/spectrum-theme-light.md`
+  - `docs/packages/spectrum-theme-dark.md`
+  - `docs/packages/spectrum-theme-express.md`
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.

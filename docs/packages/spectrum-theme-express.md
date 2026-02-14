@@ -8,7 +8,17 @@
 
 ## Example
 
-```ts
+```vue
+<script setup lang="ts">
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme-express";
+</script>
+
+<template>
+  <Provider :theme="theme">
+    <button type="button">Express theme content</button>
+  </Provider>
+</template>
 ```
+
+Use this variant for express-specific class-map output while keeping the provider integration API unchanged.

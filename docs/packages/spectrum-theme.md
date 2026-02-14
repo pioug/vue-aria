@@ -21,8 +21,39 @@ import { theme } from "@vue-spectrum/theme";
 </template>
 ```
 
+## Variant Packages
+
+- `@vue-spectrum/theme` (`theme`): baseline default class-map for light/dark + scale keys.
+- `@vue-spectrum/theme-light` (`theme`): light-focused variant map.
+- `@vue-spectrum/theme-dark` (`theme`): dark-focused variant map.
+- `@vue-spectrum/theme-express` (`theme`): express variant map layered on Spectrum defaults.
+
+## Runtime Switching Example
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { Provider } from "@vue-spectrum/provider";
+import { theme as defaultTheme } from "@vue-spectrum/theme";
+import { theme as darkTheme } from "@vue-spectrum/theme-dark";
+
+const variant = ref<"default" | "dark">("default");
+const activeTheme = computed(() => (variant.value === "dark" ? darkTheme : defaultTheme));
+</script>
+
+<template>
+  <button type="button" @click="variant = variant === 'default' ? 'dark' : 'default'">
+    Toggle theme variant
+  </button>
+
+  <Provider :theme="activeTheme">
+    <button type="button">Provider themed content</button>
+  </Provider>
+</template>
+```
+
 ## Notes
 
 - Current slice is a bootstrap class-map adaptation of upstream theme-default behavior for provider parity.
-- Additional theme package variants (light/dark/express) are tracked as follow-up parity work.
+- Theme packages provide class maps only; Spectrum CSS tokens/styles still need to be loaded by consumers.
 - `Spectrum S2` is out of scope unless explicitly requested.
