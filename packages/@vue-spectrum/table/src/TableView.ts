@@ -468,7 +468,13 @@ const TableBodyRow = defineComponent({
         {
           ...rowProps,
           ref: refObject,
-          class: "react-spectrum-Table-row",
+          class: [
+            "react-spectrum-Table-row",
+            "spectrum-Table-row",
+            {
+              "spectrum-Table-row--highlightSelection": props.state.selectionManager.selectionBehavior === "replace",
+            },
+          ],
           "aria-rowindex": props.rowOffset + props.rowIndex + 1,
           "aria-selected":
             props.state.selectionManager.selectionMode !== "none"

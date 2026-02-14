@@ -626,6 +626,30 @@ export function tableTests() {
     expect(grid.element.contains(document.activeElement)).toBe(true);
   });
 
+  it("applies highlight selection row class in highlight mode", () => {
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.classes()).toContain("spectrum-Table-row");
+    expect(bodyRows[0]!.classes()).toContain("spectrum-Table-row--highlightSelection");
+  });
+
+  it("does not apply highlight selection row class in checkbox mode", () => {
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.classes()).toContain("spectrum-Table-row");
+    expect(bodyRows[0]!.classes()).not.toContain("spectrum-Table-row--highlightSelection");
+  });
+
   it("supports row selection callbacks", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
