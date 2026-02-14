@@ -7291,3 +7291,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented controlled `DialogTrigger` state wiring and tray/fullscreen trigger-type usage examples.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 18 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded `AlertDialog` parity coverage for:
+    - destructive variant confirm-button styling (`negative` variant)
+    - disabled primary/secondary action suppression
+    - `packages/@vue-spectrum/dialog/test/AlertDialog.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 20 tests).
+- Validation: `npm run check -- --pretty false` passed.

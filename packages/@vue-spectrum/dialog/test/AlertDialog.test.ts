@@ -48,4 +48,46 @@ describe("AlertDialog", () => {
     await wrapper.get('[data-testid="rsp-AlertDialog-secondaryButton"]').trigger("click");
     expect(onSecondaryAction).toHaveBeenCalledTimes(1);
   });
+
+  it("maps destructive variant to negative confirm button styling", () => {
+    const wrapper = mount(AlertDialog as any, {
+      props: {
+        variant: "destructive",
+        title: "Danger",
+        primaryActionLabel: "Delete",
+      },
+      slots: {
+        default: () => "This cannot be undone.",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get('[data-testid="rsp-AlertDialog-confirmButton"]').attributes("data-variant")).toBe("negative");
+  });
+
+  it("respects disabled primary and secondary action states", async () => {
+    const onPrimaryAction = vi.fn();
+    const onSecondaryAction = vi.fn();
+    const wrapper = mount(AlertDialog as any, {
+      props: {
+        variant: "confirmation",
+        title: "the title",
+        primaryActionLabel: "confirm",
+        secondaryActionLabel: "secondary",
+        isPrimaryActionDisabled: true,
+        isSecondaryActionDisabled: true,
+        onPrimaryAction,
+        onSecondaryAction,
+      },
+      slots: {
+        default: () => "Content body",
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get('[data-testid="rsp-AlertDialog-confirmButton"]').trigger("click");
+    await wrapper.get('[data-testid="rsp-AlertDialog-secondaryButton"]').trigger("click");
+    expect(onPrimaryAction).not.toHaveBeenCalled();
+    expect(onSecondaryAction).not.toHaveBeenCalled();
+  });
 });
