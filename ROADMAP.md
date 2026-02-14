@@ -3378,12 +3378,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/tree-state.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
   - State package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Partial validation complete through downstream `@vue-aria/tree` hook usage; full interaction matrix still pending.
+- [x] Accessibility parity validated through downstream `@vue-aria/tree` interaction suites (keyboard navigation, expansion/collapse semantics, and row ARIA metadata assertions).
 
 ### Visual Parity
 - Not applicable for state package.
@@ -3394,7 +3394,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Expand tree-state collection-builder parity beyond callback-based item sources to cover full children-driven story flows from upstream.
 2. Migrate additional upstream tree interaction assertions now that the `@vue-aria/tree` harness is in place.
-3. Close package-level docs/accessibility parity gates after tree integration matrix validation.
+3. Monitor upstream `@react-stately/tree` docs/source/test drift and backport targeted parity deltas.
 
 ## 31j) Package Record: @vue-aria/gridlist
 - Upstream source path(s):
