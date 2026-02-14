@@ -155,6 +155,41 @@ describe("NumberField", () => {
     }
   });
 
+  it("supports platform inputMode behavior on Android", () => {
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+
+    try {
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "Linux",
+      });
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "Android",
+      });
+
+      const numericMode = renderNumberField();
+      expect(numericMode.get('input[type="text"]').attributes("inputmode")).toBe("numeric");
+
+      const decimalMode = renderNumberField({ minValue: 0 });
+      expect(decimalMode.get('input[type="text"]').attributes("inputmode")).toBe("decimal");
+
+      const strictNumericMode = renderNumberField({
+        minValue: 0,
+        formatOptions: { maximumFractionDigits: 0 },
+      });
+      expect(strictNumericMode.get('input[type="text"]').attributes("inputmode")).toBe("numeric");
+    } finally {
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+    }
+  });
+
   it("supports wheel stepping only while focused", async () => {
     const onChange = vi.fn();
     const wrapper = renderNumberField({
@@ -272,5 +307,42 @@ describe("NumberField", () => {
       errorMessage: "Amount is invalid.",
     });
     expect(invalid.get(".spectrum-HelpText.is-invalid").text()).toContain("Amount is invalid.");
+  });
+
+  it("commits and formats percent values", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      defaultValue: 0.1,
+      onChange,
+      formatOptions: { style: "percent" },
+    });
+
+    const input = wrapper.get('input[type="text"]');
+    expect((input.element as HTMLInputElement).value).toBe("10%");
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("25");
+    (input.element as HTMLInputElement).blur();
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledWith(0.25);
+  });
+
+  it("commits and formats currency values", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      onChange,
+      formatOptions: { style: "currency", currency: "EUR" },
+    });
+
+    const input = wrapper.get('input[type="text"]');
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("12.83");
+    (input.element as HTMLInputElement).blur();
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledWith(12.83);
   });
 });

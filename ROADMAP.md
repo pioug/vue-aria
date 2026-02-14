@@ -566,9 +566,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added numberfield keyboard stepping coverage for `ArrowUp`/`ArrowDown` and `Home`/`End` key flows.
   - `packages/@vue-aria/spinbutton/src/useSpinButton.ts`
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Additional locale/commit parity update:
+  - expanded input-mode matrix coverage for Android (`numeric`/`decimal`) in addition to iPhone paths.
+  - added commit-flow coverage for percent and currency parsing (`onChange` numeric payloads on blur commit).
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 
 ### Remaining for completion
-- Expand test parity coverage for the remaining locale/inputMode matrix and advanced value-formatting/commit flows from upstream.
+- Expand test parity coverage for the remaining locale/inputMode matrix and advanced parsing/rounding flows from upstream.
 - Validate remaining visual parity for quiet/stepper and label/help-text combinations against upstream docs.
 
 ## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
@@ -7580,6 +7584,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-aria/spinbutton/src/useSpinButton.ts`
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test packages/@vue-aria/spinbutton/test` passed (3 files, 31 tests).
+- Additional `@vue-spectrum/numberfield` locale/commit parity update:
+  - expanded Android input-mode matrix coverage and added percent/currency commit parsing assertions (numeric `onChange` payloads on blur commit).
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test packages/@vue-aria/spinbutton/test` passed (3 files, 34 tests).
 - Additional `@vue-spectrum/link` interaction parity update:
   - added adapted tooltip-trigger composition coverage for focus open/close behavior.
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.
