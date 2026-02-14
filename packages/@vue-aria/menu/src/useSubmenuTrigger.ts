@@ -255,7 +255,18 @@ export function useSubmenuTrigger<T>(
       return;
     }
 
+    let hoveredMenuItem: HTMLElement | null = null;
+    if (event.target instanceof Element) {
+      hoveredMenuItem = event.target.closest(
+        '[role="menuitem"],[role="menuitemradio"],[role="menuitemcheckbox"]'
+      ) as HTMLElement | null;
+    }
+
     onSubmenuClose();
+
+    if (hoveredMenuItem && nodeContains(parentMenuRef.current, hoveredMenuItem)) {
+      focusWithoutScrolling(hoveredMenuItem);
+    }
   });
 
   const shouldCloseOnInteractOutside = (target: Element) => target !== ref.current;

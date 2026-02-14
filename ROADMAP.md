@@ -9961,3 +9961,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 93 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` contextual-help sibling-hover focus parity update:
+  - added migrated `MenuTrigger` coverage asserting that when contextual-help closes from sibling-item hover, focus moves to the hovered sibling item.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+  - updated `useSubmenuTrigger` parent-menu hover-close path to focus the hovered parent menu item after closing an open submenu/dialog.
+    - `packages/@vue-aria/menu/src/useSubmenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 94 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

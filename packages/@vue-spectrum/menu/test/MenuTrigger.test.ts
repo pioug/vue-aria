@@ -394,6 +394,35 @@ describe("MenuTrigger", () => {
     expect(document.body.querySelector('[role="dialog"]')).toBeNull();
   });
 
+  it("focuses the sibling item when contextual help closes via hover", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderContextualHelpMenuTrigger();
+
+      const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+      const siblingItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+
+      expect(helpItem).toBeTruthy();
+      expect(siblingItem).toBeTruthy();
+
+      hoverWithMouse(helpItem as HTMLElement);
+      await vi.advanceTimersByTimeAsync(250);
+      await wrapper.vm.$nextTick();
+      expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+
+      hoverWithMouse(siblingItem as HTMLElement);
+      await vi.advanceTimersByTimeAsync(250);
+      await wrapper.vm.$nextTick();
+
+      expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+      expect(document.activeElement).toBe(siblingItem);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("closes the root menu and contextual help dialog when clicking the underlay", async () => {
     const wrapper = renderContextualHelpMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');
