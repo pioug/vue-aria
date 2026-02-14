@@ -318,6 +318,26 @@ describe("Calendar", () => {
     expect(wrapper.findAll('[role="grid"]').length).toBeGreaterThan(0);
   });
 
+  it("supports camel-case aria props on range-calendar root", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        ariaLabel: "Trip planner",
+        ariaLabelledby: "trip-planner-label",
+        ariaDescribedby: "trip-planner-help",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    expect(root.attributes("aria-label")).toContain("Trip planner");
+    expect(root.attributes("aria-labelledby")).toContain("trip-planner-label");
+    expect(root.attributes("aria-describedby")).toContain("trip-planner-help");
+  });
+
   it("selects a date range after two date clicks", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
