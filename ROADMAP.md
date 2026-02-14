@@ -8049,6 +8049,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented that controlled sorting follows logical column indexes when earlier cells are spanned.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` multiple-rowheader parity update:
+  - added regression coverage to verify multiple `isRowHeader` columns render rowheader semantics with correct column indexing.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` docs parity update:
+  - documented that `isRowHeader` can be applied to multiple columns.
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

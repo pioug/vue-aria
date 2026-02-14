@@ -19,6 +19,12 @@ const columns: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithMultipleRowHeaders: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true },
+  { key: "bar", title: "Bar", isRowHeader: true },
+  { key: "baz", title: "Baz" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -162,6 +168,24 @@ export function tableTests() {
     expect(firstRowCells[1]!.attributes("aria-colindex")).toBe("3");
     expect(firstRowCells[0]!.text()).toContain("Bar 1");
     expect(firstRowCells[1]!.text()).toContain("Baz 1");
+  });
+
+  it("supports multiple row header columns", () => {
+    const wrapper = renderTable({
+      columns: columnsWithMultipleRowHeaders,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    const firstRowHeaders = bodyRows[0]!.findAll('[role="rowheader"]');
+    expect(firstRowHeaders).toHaveLength(2);
+    expect(firstRowHeaders[0]!.attributes("aria-colindex")).toBe("1");
+    expect(firstRowHeaders[1]!.attributes("aria-colindex")).toBe("2");
+
+    const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowCells).toHaveLength(1);
+    expect(firstRowCells[0]!.attributes("aria-colindex")).toBe("3");
   });
 
   it("supports static slot table syntax", async () => {
