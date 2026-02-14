@@ -132,27 +132,35 @@ function createRowCellNodes(
   rowIndex: number,
   columns: NormalizedSpectrumTableColumn[]
 ): GridNode<NormalizedSpectrumTableRow>[] {
-  return columns.map((column, columnIndex) => {
-    const cell: NormalizedSpectrumTableCell = row.cells[columnIndex] ?? {
+  const normalizedRowCells: NormalizedSpectrumTableCell[] = row.cells.length > 0
+    ? row.cells
+    : columns.map((column) => ({
       key: column.key,
       textValue: "",
       value: "",
-    };
-    const key = normalizeKey(cell.key, `${String(row.key)}-${String(column.key)}`);
+    }));
+  const cells: GridNode<NormalizedSpectrumTableRow>[] = [];
+  let columnCursor = 0;
+
+  for (let cellIndex = 0; cellIndex < normalizedRowCells.length; cellIndex += 1) {
+    const cell = normalizedRowCells[cellIndex]!;
+    const column = columns[Math.min(columnCursor, Math.max(columns.length - 1, 0))];
+    const fallbackColumnKey = column?.key ?? `column-${columnCursor}`;
+    const key = normalizeKey(cell.key, `${String(row.key)}-${String(fallbackColumnKey)}`);
     const rendered = cell.value ?? cell.textValue;
 
-    return {
+    cells.push({
       type: "cell",
       key,
       value: row,
       rendered,
       textValue: cell.textValue ?? "",
       level: 2,
-      index: columnIndex,
+      index: cellIndex,
       hasChildNodes: false,
       childNodes: [],
       parentKey: row.key,
-      prevKey: columnIndex > 0 ? normalizeKey(row.cells[columnIndex - 1]?.key, `${String(row.key)}-${String(columns[columnIndex - 1]?.key)}`) : null,
+      prevKey: cellIndex > 0 ? cells[cellIndex - 1]?.key ?? null : null,
       nextKey: null,
       firstChildKey: null,
       lastChildKey: null,
@@ -160,9 +168,16 @@ function createRowCellNodes(
         colSpan: cell.colSpan,
       },
       colSpan: cell.colSpan ?? null,
-      colIndex: columnIndex,
-    };
-  });
+      colIndex: columnCursor,
+    });
+    columnCursor += Math.max(1, cell.colSpan ?? 1);
+  }
+
+  for (let cellIndex = 0; cellIndex < cells.length - 1; cellIndex += 1) {
+    cells[cellIndex]!.nextKey = cells[cellIndex + 1]!.key;
+  }
+
+  return cells;
 }
 
 function createCollection(definition: NormalizedSpectrumTableDefinition): TableCollection<NormalizedSpectrumTableRow> {
@@ -336,6 +351,10 @@ const TableBodyCell = defineComponent({
       domRef
     );
 
+    const resolvedColSpan = computed(() =>
+      props.node.colSpan != null && props.node.colSpan > 1 ? props.node.colSpan : undefined
+    );
+
     return () =>
       h(
         "td",
@@ -343,6 +362,8 @@ const TableBodyCell = defineComponent({
           ...gridCellProps,
           ref: refObject,
           class: "react-spectrum-Table-cell",
+          colSpan: resolvedColSpan.value,
+          "aria-colspan": resolvedColSpan.value,
         },
         props.node.rendered as any
       );

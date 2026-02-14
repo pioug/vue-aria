@@ -366,24 +366,31 @@ function normalizeRowsFromSlot(
   columns: NormalizedSpectrumTableColumn[]
 ): NormalizedSpectrumTableRow[] {
   return rows.map((row, rowIndex) => {
-    const normalizedCells = columns.map((column, columnIndex) => {
-      const cell = row.cells[columnIndex];
-      if (!cell) {
-        return {
-          key: column.key,
-          textValue: "",
-          value: "",
-        };
-      }
+    const normalizedCells: NormalizedSpectrumTableCell[] = [];
+    let columnCursor = 0;
 
+    for (const cell of row.cells) {
+      const column = columns[Math.min(columnCursor, Math.max(columns.length - 1, 0))];
+      const fallbackKey = column?.key ?? `column-${columnCursor}`;
       const textValue = cell.textValue ?? extractTextContent(cell.content);
-      return {
-        key: normalizeKey(cell.key, column.key),
+      normalizedCells.push({
+        key: normalizeKey(cell.key, fallbackKey),
         textValue,
         value: cell.content,
         colSpan: cell.colSpan,
-      };
-    });
+      });
+      columnCursor += Math.max(1, cell.colSpan ?? 1);
+    }
+
+    while (columnCursor < columns.length) {
+      const column = columns[columnCursor]!;
+      normalizedCells.push({
+        key: column.key,
+        textValue: "",
+        value: "",
+      });
+      columnCursor += 1;
+    }
 
     const textValue =
       row.textValue

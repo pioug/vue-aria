@@ -7974,6 +7974,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-aria/table-state/test/useTableState.test.ts`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-spectrum/table/test` passed (8 files, 56 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` colSpan parity update:
+  - updated static-slot row normalization/cell-node construction to preserve explicit colSpan cells and correct column indexing.
+  - updated body cell rendering to output `colspan` and `aria-colspan` for spanned cells.
+  - added static slot colSpan regression coverage.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 26 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

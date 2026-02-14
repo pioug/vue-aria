@@ -162,6 +162,59 @@ export function tableTests() {
     expect(onAction).toHaveBeenCalledWith("row-2");
   });
 
+  it("supports static slot table cells with colSpan", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "ColSpan table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "col-1", isRowHeader: true }, () => "Col 1"),
+              h(Column as any, { id: "col-2" }, () => "Col 2"),
+              h(Column as any, { id: "col-3" }, () => "Col 3"),
+              h(Column as any, { id: "col-4" }, () => "Col 4"),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Cell"),
+                  h(Cell as any, { colSpan: 2 }, () => "Span 2"),
+                  h(Cell as any, () => "Cell"),
+                ],
+              }),
+              h(Row as any, { id: "row-2" }, {
+                default: () => [
+                  h(Cell as any, () => "Cell"),
+                  h(Cell as any, () => "Cell"),
+                  h(Cell as any, () => "Cell"),
+                  h(Cell as any, () => "Cell"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    const firstRowCells = bodyRows[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(firstRowCells).toHaveLength(3);
+
+    const firstRowGridCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowGridCells).toHaveLength(2);
+    expect(firstRowGridCells[0]!.attributes("colspan")).toBe("2");
+    expect(firstRowGridCells[0]!.attributes("aria-colspan")).toBe("2");
+    expect(firstRowGridCells[0]!.attributes("aria-colindex")).toBe("2");
+    expect(firstRowGridCells[1]!.attributes("aria-colindex")).toBe("4");
+  });
+
   it("supports keyboard row navigation", async () => {
     const wrapper = renderTable({
       selectionMode: "single",
