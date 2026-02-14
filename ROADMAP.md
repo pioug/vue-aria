@@ -2921,6 +2921,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] VitePress package page scaffolded (`docs/packages/calendar.md`)
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
+- Notes:
+  - Expanded package docs with upstream-aligned API/features/anatomy sections, composable usage examples for calendar/range/calendar-grid/calendar-cell, and base-style parity snippet plus styled-example references.
 
 ### Accessibility
 - [x] Baseline aria role/gridcell/button wiring validated in adapted tests.
