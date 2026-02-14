@@ -7094,3 +7094,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 97 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded controlled keyboard-open request coverage to include `Alt+ArrowUp` behavior in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 99 tests).
+- Validation: `npm run check -- --pretty false` passed.
