@@ -10036,3 +10036,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` textfield data-attribute parity update:
+  - added migrated coverage asserting `data-*` attributes passed to `NumberField` are forwarded onto the text input element.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.

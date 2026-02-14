@@ -177,6 +177,19 @@ describe("NumberField", () => {
     expect(wrapper.find('[data-testid="test"]').exists()).toBe(true);
   });
 
+  it("adds data attributes to the text field input", () => {
+    const wrapper = renderNumberField(
+      {},
+      {
+        "aria-label": "labelled",
+        "data-testid": "numberfield-input",
+      }
+    );
+
+    const textField = wrapper.get('input[type="text"]');
+    expect(textField.attributes("data-testid")).toBe("numberfield-input");
+  });
+
   it("renders hidden form input when name is provided", () => {
     const wrapper = renderNumberField({
       name: "amount",
