@@ -8275,6 +8275,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 76 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/grid` + `@vue-spectrum/table` press-up forwarding parity update:
+  - added direct `useGrid` regression coverage to verify `shouldSelectOnPressUp` is forwarded into shared grid data wiring used by row interactions.
+  - `packages/@vue-aria/grid/test/useGrid.test.ts`
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 103 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

@@ -167,4 +167,23 @@ describe("useGrid", () => {
     expect(selectableCall.escapeKeyBehavior).toBe("none");
     ref.current?.remove();
   });
+
+  it("forwards shouldSelectOnPressUp to shared grid data", () => {
+    const state = createState();
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    useGrid(
+      {
+        "aria-label": "Grid",
+        shouldSelectOnPressUp: true,
+      },
+      state as any,
+      ref
+    );
+
+    const shared = gridMap.get(state as any);
+    expect(shared?.shouldSelectOnPressUp).toBe(true);
+    ref.current?.remove();
+  });
 });
