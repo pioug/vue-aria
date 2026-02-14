@@ -1567,6 +1567,30 @@ export function tableTests() {
     expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("suppresses unchanged controlled selection keyboard callbacks by default", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      selectedKeys: new Set(["row-1"]),
+      disallowEmptySelection: true,
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    (bodyRows[0]!.element as HTMLElement).focus();
+    await bodyRows[0]!.trigger("keydown", { key: " " });
+    await nextTick();
+    await bodyRows[0]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("emits unchanged controlled selection callbacks when allowDuplicateSelectionEvents is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
