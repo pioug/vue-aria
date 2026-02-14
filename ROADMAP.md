@@ -9064,3 +9064,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-link parity update:
+  - added migrated coverage to verify row links in `selectionMode="none"` expose `data-href` and keep selection semantics unset (`aria-selected` omitted).
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 26 tests).
+- Validation: `npm run check -- --pretty false` passed.

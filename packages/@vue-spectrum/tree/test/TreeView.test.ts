@@ -773,6 +773,35 @@ describe("TreeView", () => {
     expect(onAction).toHaveBeenCalledWith("projects");
   });
 
+  it('supports row links when selectionMode="none"', async () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Link tree",
+        selectionMode: "none",
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, {
+            id: "docs",
+            textValue: "Docs",
+            href: "https://example.com/docs",
+          }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Docs",
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const row = wrapper.get('[role="row"]');
+    expect(row.attributes("data-href")).toBe("https://example.com/docs");
+    expect(row.attributes("aria-selected")).toBeUndefined();
+  });
+
   it("supports static tree item composition", async () => {
     const wrapper = mount(TreeView as any, {
       props: {
