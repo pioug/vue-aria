@@ -148,4 +148,70 @@ describe("useTreeItem integration", () => {
     expect(state.expandedKeys.has("animals")).toBe(false);
     scope.stop();
   });
+
+  it("returns tree row structural aria metadata for root and child nodes", () => {
+    const treeEl = document.createElement("div");
+    const rootRowEl = document.createElement("div");
+    const childRowEl = document.createElement("div");
+
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useTreeState({
+        collection: createTreeData(),
+        selectionMode: "single",
+      })
+    )!;
+
+    scope.run(() =>
+      useTree(
+        {
+          "aria-label": "Integration tree",
+        },
+        state,
+        { current: treeEl as HTMLElement | null }
+      )
+    );
+
+    const animalsNode = state.collection.getItem("animals");
+    if (!animalsNode) {
+      throw new Error("Expected animals node");
+    }
+
+    const rootAria = scope.run(() =>
+      useTreeItem(
+        {
+          node: animalsNode,
+        },
+        state,
+        { current: rootRowEl as HTMLElement | null }
+      )
+    )!;
+
+    expect(rootAria.rowProps["aria-expanded"]).toBe(false);
+    expect(rootAria.rowProps["aria-level"]).toBe(1);
+    expect(rootAria.rowProps["aria-posinset"]).toBe(1);
+    expect(rootAria.rowProps["aria-setsize"]).toBe(2);
+
+    state.toggleKey("animals");
+
+    const bearNode = state.collection.getItem("bear");
+    if (!bearNode) {
+      throw new Error("Expected bear node after expanding animals");
+    }
+
+    const childAria = scope.run(() =>
+      useTreeItem(
+        {
+          node: bearNode,
+        },
+        state,
+        { current: childRowEl as HTMLElement | null }
+      )
+    )!;
+
+    expect(childAria.rowProps["aria-level"]).toBe(2);
+    expect(childAria.rowProps["aria-posinset"]).toBe(3);
+    expect(childAria.rowProps["aria-setsize"]).toBe(2);
+    scope.stop();
+  });
 });

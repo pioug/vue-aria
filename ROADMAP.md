@@ -2781,6 +2781,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useTree` coverage for treegrid-role override behavior.
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
   - Added real integration coverage for `expandButtonProps` to assert expansion + focus updates and disabled-row no-op behavior.
+  - Added integration assertions for structural row aria metadata (`aria-expanded`, `aria-level`, `aria-posinset`, `aria-setsize`) on root and child nodes.
   - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via Enter-key row expansion and arrow navigation focus movement).
   - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
   - Added integrated directional-key branch coverage for ArrowRight expand and ArrowLeft collapse on focused parent rows.
