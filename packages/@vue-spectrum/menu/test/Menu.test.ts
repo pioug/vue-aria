@@ -161,6 +161,53 @@ describe("Menu", () => {
     expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
   });
 
+  it("supports links across selection modes", async () => {
+    const modes: Array<"none" | "single" | "multiple"> = ["none", "single", "multiple"];
+
+    for (const selectionMode of modes) {
+      const onAction = vi.fn();
+      const onSelectionChange = vi.fn();
+      const wrapper = mount(Menu as any, {
+        props: {
+          ariaLabel: "Menu",
+          selectionMode,
+          onAction,
+          onSelectionChange,
+        },
+        slots: {
+          default: () => [
+            h(Item as any, { key: "One", href: "https://google.com" }, { default: () => "One" }),
+            h(Item as any, { key: "Two", href: "https://adobe.com" }, { default: () => "Two" }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const role =
+        selectionMode === "none"
+          ? "menuitem"
+          : selectionMode === "single"
+            ? "menuitemradio"
+            : "menuitemcheckbox";
+      const items = wrapper.findAll(`[role="${role}"]`);
+
+      expect(items).toHaveLength(2);
+      expect(items[0]?.element.tagName).toBe("A");
+      expect(items[0]?.attributes("href")).toBe("https://google.com");
+      expect(items[1]?.element.tagName).toBe("A");
+      expect(items[1]?.attributes("href")).toBe("https://adobe.com");
+
+      items[1]?.element.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      await items[1]?.trigger("click");
+
+      expect(onAction).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+      wrapper.unmount();
+      document.body.innerHTML = "";
+    }
+  });
+
   it("supports onAction with a static list", async () => {
     const onAction = vi.fn();
     const onSelectionChange = vi.fn();

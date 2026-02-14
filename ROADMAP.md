@@ -9532,3 +9532,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` link-selection parity update:
+  - added migrated `Menu` coverage to assert link items render as anchors and preserve action-only semantics across `selectionMode` values (`none`, `single`, `multiple`) without firing selection callbacks.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 38 tests).
+- Validation: `npm run check -- --pretty false` passed.
