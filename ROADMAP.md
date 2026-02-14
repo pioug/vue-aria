@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-aria/toast-state`
+- Current focus package: `@vue-spectrum/toast`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -124,7 +124,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/tooltip`: In progress
 - `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: In progress
-- `@vue-spectrum/toast`: Not started
+- `@vue-spectrum/toast`: In progress
 
 ## 4) Recommended Port Order
 1. Foundations: `utils`, `i18n`, `ssr`, `interactions`, `focus`, `collections`, `selection`.
@@ -618,6 +618,40 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand timer edge-case coverage (pause/resume with multiple visible toasts and partial remaining durations).
 - Validate downstream integration in `@vue-spectrum/toast` container behavior.
+
+## 4o) Active Package Slice: @vue-spectrum/toast
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/toast/src`
+  - `references/react-spectrum/packages/@react-spectrum/toast/test`
+  - `references/react-spectrum/packages/@react-spectrum/toast/docs`
+- Local package path: `packages/@vue-spectrum/toast`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Toast`, `Toaster`, `ToastContainer`, message dictionary, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/ToastContainer.test.ts`
+  - `test/ToastContainer.ssr.test.ts`
+- Initial parity coverage added:
+  - queue-triggered toast rendering and close-button dismissal
+  - toast data-testid passthrough and action/close button testids
+  - semantic variant icon labeling and title/aria wiring
+  - timeout dismissal, action handler behavior, and action-triggered close behavior
+  - programmatic dismissal via returned close function
+  - custom `react-spectrum-toast` event interception and custom region `aria-label`
+- Documentation scaffold added:
+  - `docs/packages/spectrum-toast.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-toast`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/toast`.
+
+### Remaining for completion
+- Expand focus-restore and multi-toast navigation parity coverage from upstream (`F6` and sequential close flows).
+- Align visual styling parity with upstream CSS transitions and placement-specific animation details.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
