@@ -54,6 +54,19 @@ describe("Calendar", () => {
     expect(selectedCells[0]!.text()).toContain("5");
   });
 
+  it("uses defaultFocusedValue to determine initial calendar focus and month", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultFocusedValue: new CalendarDate(2019, 8, 15),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-Calendar-title").text()).toContain("August 2019");
+    expect(wrapper.get(".react-spectrum-Calendar-date[tabindex='0']").text()).toBe("15");
+  });
+
   it("focuses the current calendar date when autoFocus is enabled", async () => {
     const wrapper = mount(Calendar as any, {
       props: {
@@ -654,6 +667,19 @@ describe("Calendar", () => {
 
     wrapper.get('[role="application"]');
     expect(wrapper.findAll('[role="grid"]').length).toBeGreaterThan(0);
+  });
+
+  it("uses defaultFocusedValue to determine initial range-calendar focus and month", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 8, 15),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-Calendar-title").text()).toContain("August 2019");
+    expect(wrapper.get(".react-spectrum-Calendar-date[tabindex='0']").text()).toBe("15");
   });
 
   it("supports camel-case aria props on range-calendar root", () => {

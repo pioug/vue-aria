@@ -6737,6 +6737,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - extended paging-boundary disabled-state coverage to `RangeCalendar` nav controls, asserting runtime disable transitions after paging into min/max constrained months.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 64 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - added initial-focus parity coverage for `defaultFocusedValue` in both `Calendar` and `RangeCalendar`, asserting starting month title and roving-tabindex target.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 66 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
