@@ -154,6 +154,7 @@ export function useFocusable<Target extends Element = Element>(
 
 export const FocusableProvider = defineComponent({
   name: "FocusableProvider",
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const providerRef = ref<Element | null>(null);
     provide(FocusableContext, {

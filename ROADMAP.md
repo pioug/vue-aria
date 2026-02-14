@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/dialog`
+- Current focus package: `@vue-spectrum/tooltip`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7376,4 +7376,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
     - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tooltip` parity update:
+  - expanded trigger-composition coverage for:
+    - `@vue-spectrum/button` trigger children
+    - wrapped trigger components that forward attrs and exposed DOM handles
+    - `packages/@vue-spectrum/tooltip/test/TooltipTrigger.test.ts`
+- Additional `@vue-aria/interactions` parity update:
+  - set `FocusableProvider` `inheritAttrs: false` to avoid extraneous-attrs warnings while forwarding focusable props through context.
+    - `packages/@vue-aria/interactions/src/useFocusable.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
+- Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
