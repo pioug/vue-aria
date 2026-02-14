@@ -556,10 +556,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - modal/popover/fullscreenTakeover regressions
   - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
   - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+- Additional composition-class parity update:
+  - `ButtonGroup` now adds `spectrum-Dialog-buttonGroup--noFooter` when rendered outside `Footer`, matching upstream slot-class behavior.
+  - `packages/@vue-spectrum/dialog/src/ButtonGroup.ts`
+  - `packages/@vue-spectrum/dialog/src/Footer.ts`
+  - `packages/@vue-spectrum/dialog/src/context.ts`
+  - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
 
 ### Remaining for completion
 - Expand coverage for modal/popover/tray/fullscreen container behaviors and interaction semantics from upstream tests.
-- Align dialog composition slots (`Heading`, `Header`, `Content`, `Footer`, `ButtonGroup`) and style-class parity with upstream Spectrum structure.
+- Continue aligning dialog composition slot conditional class variants (`Heading`/`Header` no-header/no-icon states) with upstream Spectrum structure.
 
 ## 4m) Active Package Slice: @vue-spectrum/tooltip
 - Upstream source path(s):
@@ -7482,6 +7488,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
   - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` composition parity update:
+  - added footer-context-aware `ButtonGroup` class behavior (`spectrum-Dialog-buttonGroup--noFooter`) and regression coverage for in-footer vs out-of-footer rendering.
+  - `packages/@vue-spectrum/dialog/src/context.ts`
+  - `packages/@vue-spectrum/dialog/src/Footer.ts`
+  - `packages/@vue-spectrum/dialog/src/ButtonGroup.ts`
+  - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 30 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.

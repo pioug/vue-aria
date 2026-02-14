@@ -224,5 +224,25 @@ describe("Dialog", () => {
     expect(wrapper.find(".spectrum-Dialog-content").exists()).toBe(true);
     expect(wrapper.find(".spectrum-Dialog-footer").exists()).toBe(true);
     expect(wrapper.find(".spectrum-Dialog-buttonGroup").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-buttonGroup--noFooter").exists()).toBe(false);
+  });
+
+  it("applies noFooter button-group class when outside Footer", () => {
+    const wrapper = mount(
+      {
+        components: { Dialog, ButtonGroup },
+        template: `
+          <Dialog>
+            <ButtonGroup>
+              <button>Confirm</button>
+            </ButtonGroup>
+          </Dialog>
+        `,
+      },
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.find(".spectrum-Dialog-buttonGroup").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-buttonGroup--noFooter").exists()).toBe(true);
   });
 });
