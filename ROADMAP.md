@@ -6584,6 +6584,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 29 tests).
 - Additional `@vue-spectrum/calendar` docs parity update:
   - added multi-month `pageBehavior="single"` navigation example in `docs/packages/spectrum-calendar.md`.
+- Additional i18n parity update triggered by calendar SSR/accessibility verification:
+  - implemented named-variable interpolation fallback in `useLocalizedStringFormatter` so template placeholders (e.g. `{date}`, `{startDate}`, `{endDate}`) resolve in runtime output.
+  - added dedicated regression suite for interpolation behavior and missing-variable fallback handling.
+    - `packages/@vue-aria/i18n/src/useLocalizedStringFormatter.ts`
+    - `packages/@vue-aria/i18n/test/useLocalizedStringFormatter.test.ts`
+- Validation: `npm test -- packages/@vue-aria/i18n/test` passed (4 files, 7 tests).
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 29 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
