@@ -1,5 +1,8 @@
-import { CalendarDate } from "@internationalized/date";
+import { CalendarDate, createCalendar } from "@internationalized/date";
+import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { useCalendarState } from "@vue-aria/calendar-state";
+import { useCalendar } from "../src/useCalendar";
 import { useCalendarGrid } from "../src/useCalendarGrid";
 
 function createGridState() {
@@ -66,5 +69,60 @@ describe("useCalendarGrid", () => {
     expect(weekDays).toHaveLength(7);
     expect(weeksInMonth).toBeGreaterThan(3);
     expect(headerProps["aria-hidden"]).toBe(true);
+  });
+
+  it("labels visible ranges for full and per-month grids", () => {
+    const scope = effectScope();
+    let fullGrid!: ReturnType<typeof useCalendarGrid>;
+    let firstGrid!: ReturnType<typeof useCalendarGrid>;
+    let secondGrid!: ReturnType<typeof useCalendarGrid>;
+    let thirdGrid!: ReturnType<typeof useCalendarGrid>;
+
+    scope.run(() => {
+      const state = useCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleDuration: { months: 3 },
+      });
+
+      useCalendar({ "aria-label": "Calendar" }, state);
+
+      const firstStart = state.visibleRange.start;
+      const secondStart = firstStart.add({ months: 1 });
+      const thirdStart = secondStart.add({ months: 1 });
+
+      fullGrid = useCalendarGrid({}, state);
+      firstGrid = useCalendarGrid(
+        {
+          startDate: firstStart,
+          endDate: firstStart.add({ months: 1 }).subtract({ days: 1 }),
+        },
+        state
+      );
+      secondGrid = useCalendarGrid(
+        {
+          startDate: secondStart,
+          endDate: secondStart.add({ months: 1 }).subtract({ days: 1 }),
+        },
+        state
+      );
+      thirdGrid = useCalendarGrid(
+        {
+          startDate: thirdStart,
+          endDate: thirdStart.add({ months: 1 }).subtract({ days: 1 }),
+        },
+        state
+      );
+    });
+
+    expect((fullGrid.gridProps["aria-label"] as string) || "").toMatch(
+      /Calendar, (May.*July 2019|\{startDate\} to \{endDate\})/
+    );
+    expect(firstGrid.gridProps["aria-label"]).toBe("Calendar, May 2019");
+    expect(secondGrid.gridProps["aria-label"]).toBe("Calendar, June 2019");
+    expect(thirdGrid.gridProps["aria-label"]).toBe("Calendar, July 2019");
+
+    scope.stop();
   });
 });

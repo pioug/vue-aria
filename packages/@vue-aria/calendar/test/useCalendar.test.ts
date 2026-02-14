@@ -3,6 +3,7 @@ import { effectScope, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
 import { useCalendarState } from "@vue-aria/calendar-state";
 import { useCalendar } from "../src/useCalendar";
+import { useCalendarGrid } from "../src/useCalendarGrid";
 
 describe("useCalendar", () => {
   it("returns application props and updates title when paging", async () => {
@@ -50,6 +51,40 @@ describe("useCalendar", () => {
     });
 
     expect(aria.nextButtonProps.isDisabled).toBe(true);
+
+    scope.stop();
+  });
+
+  it("supports aria-label and aria-labelledby labeling semantics", () => {
+    const scope = effectScope();
+    let aria!: ReturnType<typeof useCalendar>;
+    let grid!: ReturnType<typeof useCalendarGrid>;
+
+    scope.run(() => {
+      const state = useCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultValue: new CalendarDate(2019, 6, 5),
+      });
+
+      aria = useCalendar(
+        {
+          id: "hi",
+          "aria-label": "cal",
+          "aria-labelledby": "foo",
+        },
+        state
+      );
+      grid = useCalendarGrid({}, state);
+    });
+
+    expect(aria.calendarProps.id).toBe("hi");
+    expect(aria.calendarProps["aria-label"]).toBe("cal, June 2019");
+    expect(aria.calendarProps["aria-labelledby"]).toBe("hi foo");
+
+    expect(grid.gridProps["aria-label"]).toBe("cal, June 2019");
+    const gridLabelledBy = grid.gridProps["aria-labelledby"] as string;
+    expect(gridLabelledBy).toContain("foo");
 
     scope.stop();
   });
