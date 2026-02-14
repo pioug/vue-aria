@@ -5314,3 +5314,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31k` test counts/notes to include intl bundle verification.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree/test` passed (4 files, 6 tests).
+- Expanded docs parity coverage for the tree stack:
+  - extended `docs/packages/gridlist.md` with upstream-aligned feature notes, section-hook usage, richer row/description/action markup, and base style guidance.
+  - extended `docs/packages/tree.md` with callback-builder state setup, tree row/expander markup, and keyboard interaction parity notes.
