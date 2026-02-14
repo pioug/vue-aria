@@ -297,6 +297,28 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("updates controlled selectedKeys with numeric row keys", async () => {
+    const wrapper = renderTable({
+      items: itemsWithFalsyRowKey,
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      selectedKeys: new Set([0]),
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+
+    await wrapper.setProps({
+      selectedKeys: new Set([1]),
+    });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("emits controlled selection changes without mutating rendered state", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
