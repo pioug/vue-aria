@@ -42,6 +42,15 @@ describe("MenuTrigger", () => {
     document.body.innerHTML = "";
   });
 
+  const getMenuItems = (selectionMode?: "single" | "multiple") => {
+    const role = selectionMode === "single"
+      ? "menuitemradio"
+      : selectionMode === "multiple"
+        ? "menuitemcheckbox"
+        : "menuitem";
+    return Array.from(document.body.querySelectorAll(`[role="${role}"]`)) as HTMLElement[];
+  };
+
   it("opens and closes menu on trigger click", async () => {
     const wrapper = renderMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');
@@ -263,5 +272,54 @@ describe("MenuTrigger", () => {
     await wrapper.vm.$nextTick();
     expect(document.body.querySelector('[role="menu"]')).toBeNull();
     expect(trigger.attributes("aria-expanded")).toBe("false");
+  });
+
+  it("focuses the selected item when opening with Alt+Arrow keys in longPress mode", async () => {
+    const wrapper = renderMenuTrigger(
+      { trigger: "longPress" },
+      { selectionMode: "single", selectedKeys: ["Bar"] }
+    );
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    await trigger.trigger("keydown", { key: "ArrowUp", altKey: true });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Bar");
+
+    const menu = document.body.querySelector('[role="menu"]') as HTMLElement | null;
+    menu?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: "ArrowDown", altKey: true });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Bar");
+    expect(getMenuItems("single")).toHaveLength(3);
+  });
+
+  it("focuses first/last menu items from Alt+ArrowDown/Alt+ArrowUp in longPress mode", async () => {
+    const upWrapper = renderMenuTrigger({ trigger: "longPress" });
+    const upTrigger = upWrapper.get('[data-testid="trigger"]');
+
+    await upTrigger.trigger("keydown", { key: "ArrowUp", altKey: true });
+    await upWrapper.vm.$nextTick();
+    await upWrapper.vm.$nextTick();
+    expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Baz");
+
+    const upMenu = document.body.querySelector('[role="menu"]') as HTMLElement | null;
+    upMenu?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await upWrapper.vm.$nextTick();
+
+    document.body.innerHTML = "";
+
+    const downWrapper = renderMenuTrigger({ trigger: "longPress" });
+    const downTrigger = downWrapper.get('[data-testid="trigger"]');
+
+    await downTrigger.trigger("keydown", { key: "ArrowDown", altKey: true });
+    await downWrapper.vm.$nextTick();
+    await downWrapper.vm.$nextTick();
+    expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Foo");
+    expect(getMenuItems()).toHaveLength(3);
   });
 });
