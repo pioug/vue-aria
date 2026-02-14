@@ -786,6 +786,76 @@ describe("SubmenuTrigger", () => {
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
   });
 
+  it("closes only the deepest submenu on ArrowRight when nested trigger has focus in rtl", async () => {
+    const wrapper = mountTracked(I18nProvider as any, {
+      props: {
+        locale: "ar-AE",
+      },
+      slots: {
+        default: () =>
+          h(MenuTrigger as any, { defaultOpen: true }, {
+            default: () => [
+              h("button", { "data-testid": "trigger" }, "Menu Button"),
+              h(Menu as any, { ariaLabel: "Menu" }, {
+                default: () => [
+                  h(SubmenuTrigger as any, null, {
+                    default: () => [
+                      h(Item as any, { key: "more-1" }, { default: () => "More 1" }),
+                      h(Menu as any, { ariaLabel: "Submenu 1" }, {
+                        default: () => [
+                          h(Item as any, { key: "sub-1" }, { default: () => "Sub item 1" }),
+                          h(SubmenuTrigger as any, null, {
+                            default: () => [
+                              h(Item as any, { key: "more-2" }, { default: () => "More 2" }),
+                              h(Menu as any, { ariaLabel: "Submenu 2" }, {
+                                default: () => [
+                                  h(Item as any, { key: "deep-1" }, { default: () => "Deep item" }),
+                                ],
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+                ],
+              }),
+            ],
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    const firstTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More 1")) as HTMLElement | undefined;
+    expect(firstTrigger).toBeTruthy();
+    firstTrigger?.focus();
+    firstTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    const secondTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More 2")) as HTMLElement | undefined;
+    expect(secondTrigger).toBeTruthy();
+    secondTrigger?.focus();
+    secondTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.textContent).toContain("Deep item");
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(3);
+
+    secondTrigger?.focus();
+    secondTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.textContent).not.toContain("Deep item");
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+  });
+
   it("keeps nested submenus open when pressing Tab", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {
