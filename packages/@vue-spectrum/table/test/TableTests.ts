@@ -262,6 +262,24 @@ export function tableTests() {
     });
   });
 
+  it("resets sort direction when switching to a different column", async () => {
+    const onSortChange = vi.fn();
+    const wrapper = renderTable({ onSortChange });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    await press(headers[0]!);
+    await press(headers[1]!);
+
+    expect(onSortChange).toHaveBeenNthCalledWith(1, {
+      column: "foo",
+      direction: "ascending",
+    });
+    expect(onSortChange).toHaveBeenNthCalledWith(2, {
+      column: "bar",
+      direction: "ascending",
+    });
+  });
+
   it("supports default sort descriptor initialization", () => {
     const wrapper = renderTable({
       defaultSortDescriptor: {
