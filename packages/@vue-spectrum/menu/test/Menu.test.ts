@@ -493,6 +493,31 @@ describe("Menu", () => {
     expect(menuItem.attributes("aria-describedby")).toBeUndefined();
   });
 
+  it("supports aria-labelledby on the menu root", () => {
+    const labelId = "menu-label";
+    const externalLabel = document.createElement("span");
+    externalLabel.id = labelId;
+    externalLabel.textContent = "Menu label";
+    document.body.appendChild(externalLabel);
+
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabelledby: labelId,
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "One" }, { default: () => "One" })],
+      },
+      attachTo: document.body,
+    });
+
+    const menu = wrapper.get('[role="menu"]');
+    expect(menu.attributes("aria-labelledby")).toBe(labelId);
+    expect(menu.attributes("aria-label")).toBeUndefined();
+
+    wrapper.unmount();
+    externalLabel.remove();
+  });
+
   it("warns if aria-label and aria-labelledby are missing", () => {
     const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
     mount(Menu as any, {
