@@ -121,6 +121,76 @@ describe("TreeView", () => {
     expect(row.attributes("aria-label")).toBe("Custom row label");
   });
 
+  it("applies expected hierarchy attributes to visible rows", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Hierarchy tree",
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+              h(TreeViewItem as any, { id: "projects-2", textValue: "Project 2" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 2",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(4);
+
+    const photosRow = rows.find((row) => row.text().includes("Photos"));
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    const projectOneRow = rows.find((row) => row.text().includes("Project 1"));
+
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("aria-level")).toBe("1");
+    expect(photosRow!.attributes("data-level")).toBe("1");
+    expect(photosRow!.attributes("aria-posinset")).toBe("1");
+    expect(photosRow!.attributes("aria-setsize")).toBe("2");
+    expect(photosRow!.attributes("aria-expanded")).toBeUndefined();
+
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-level")).toBe("1");
+    expect(projectsRow!.attributes("data-level")).toBe("1");
+    expect(projectsRow!.attributes("aria-posinset")).toBe("2");
+    expect(projectsRow!.attributes("aria-setsize")).toBe("2");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+
+    expect(projectOneRow).toBeTruthy();
+    expect(projectOneRow!.attributes("aria-level")).toBe("2");
+    expect(projectOneRow!.attributes("data-level")).toBe("2");
+    expect(projectOneRow!.attributes("aria-posinset")).toBe("1");
+    expect(projectOneRow!.attributes("aria-setsize")).toBe("2");
+    expect(projectOneRow!.attributes("aria-expanded")).toBeUndefined();
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 

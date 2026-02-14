@@ -7615,6 +7615,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test packages/@vue-aria/gridlist/test` passed (10 files, 27 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` hierarchy-attribute parity update:
+  - added migrated hierarchy assertions for visible rows (`aria-level`, `aria-posinset`, `aria-setsize`, `aria-expanded`) in static tree composition.
+  - fixed tree row `aria-posinset` computation in `useGridListItem` to use sibling-relative ordering instead of global collection index values.
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+  - `packages/@vue-aria/gridlist/src/useGridListItem.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test packages/@vue-aria/gridlist/test` passed (10 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`

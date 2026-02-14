@@ -112,20 +112,26 @@ export function useGridListItem<T>(
 
     const isExpanded = hasChildRows ? state.expandedKeys.has(node.key) : undefined;
     let setSize = 1;
+    let posInSet = 1;
     if (node.level > 0 && node.parentKey != null) {
       const parent = collection.getItem(node.parentKey);
       if (parent) {
-        const siblings = collection.getChildren?.(parent.key);
-        setSize = [...(siblings ?? [])].filter((row) => row.type === "item").length;
+        const siblings = [...(collection.getChildren?.(parent.key) ?? [])].filter((row) => row.type === "item");
+        setSize = siblings.length;
+        const siblingIndex = siblings.findIndex((row) => row.key === node.key);
+        posInSet = siblingIndex >= 0 ? siblingIndex + 1 : 1;
       }
     } else {
-      setSize = [...collection].filter((row) => row.level === 0 && row.type === "item").length;
+      const rootItems = [...collection].filter((row) => row.level === 0 && row.type === "item");
+      setSize = rootItems.length;
+      const rootIndex = rootItems.findIndex((row) => row.key === node.key);
+      posInSet = rootIndex >= 0 ? rootIndex + 1 : 1;
     }
 
     treeGridRowProps = {
       "aria-expanded": isExpanded,
       "aria-level": node.level + 1,
-      "aria-posinset": node.index + 1,
+      "aria-posinset": posInSet,
       "aria-setsize": setSize,
     };
   }
