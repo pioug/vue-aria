@@ -1,6 +1,6 @@
 import { CalendarDate, Time, createCalendar } from "@internationalized/date";
 import { effectScope, ref } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   useDateFieldState,
   useDatePickerState,
@@ -31,6 +31,73 @@ describe("useDatePicker", () => {
     expect((aria.fieldProps as any).value).toBeNull();
     (aria.fieldProps as any).onChange(new CalendarDate(2020, 1, 20));
     expect(pickerState.value?.toString()).toBe("2020-01-20");
+    scope.stop();
+  });
+
+  it("ignores blur callbacks when focus moves into the dialog", () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const onFocusChange = vi.fn();
+    const scope = effectScope();
+    let aria!: ReturnType<typeof useDatePicker>;
+
+    const group = document.createElement("div");
+    const segment = document.createElement("button");
+    group.append(segment);
+    document.body.append(group);
+
+    scope.run(() => {
+      const pickerState = useDatePickerState({});
+      aria = useDatePicker(
+        {
+          "aria-label": "Date",
+          onFocus,
+          onBlur,
+          onFocusChange,
+        },
+        pickerState,
+        { current: group }
+      );
+    });
+
+    const dialog = document.createElement("div");
+    dialog.id = aria.dialogProps.id as string;
+    const dialogTarget = document.createElement("button");
+    dialog.append(dialogTarget);
+    document.body.append(dialog);
+
+    (aria.groupProps as any).onFocus({
+      currentTarget: group,
+      target: segment,
+      relatedTarget: null,
+    });
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(onFocusChange).toHaveBeenCalledWith(true);
+
+    (aria.groupProps as any).onBlur({
+      currentTarget: group,
+      target: segment,
+      relatedTarget: dialogTarget,
+    });
+    expect(onBlur).not.toHaveBeenCalled();
+    expect(onFocusChange).not.toHaveBeenCalledWith(false);
+
+    (aria.groupProps as any).onFocus({
+      currentTarget: group,
+      target: segment,
+      relatedTarget: dialogTarget,
+    });
+
+    (aria.groupProps as any).onBlur({
+      currentTarget: group,
+      target: segment,
+      relatedTarget: document.body,
+    });
+    expect(onBlur).toHaveBeenCalledTimes(1);
+    expect(onFocusChange).toHaveBeenCalledWith(false);
+
+    dialog.remove();
+    group.remove();
     scope.stop();
   });
 });
