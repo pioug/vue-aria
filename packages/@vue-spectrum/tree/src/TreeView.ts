@@ -661,8 +661,19 @@ export const TreeView = defineComponent({
           rootFocused.value = false;
           rootFocusVisible.value = false;
         },
+        onFocusin: (event: FocusEvent) => {
+          rootFocused.value = true;
+          rootFocusVisible.value = isFocusVisible();
+        },
+        onFocusout: (event: FocusEvent) => {
+          const relatedTarget = event.relatedTarget as Element | null;
+          if (!relatedTarget || !treeElementRef.value?.contains(relatedTarget)) {
+            rootFocused.value = false;
+            rootFocusVisible.value = false;
+          }
+        },
         onKeydown: (event: KeyboardEvent) => {
-          if (document.activeElement === treeElementRef.value) {
+          if (treeElementRef.value?.contains(document.activeElement)) {
             rootFocusVisible.value = true;
           }
         },

@@ -659,6 +659,38 @@ describe("TreeView", () => {
     expect(photosRow!.attributes("data-focus-visible")).toBeUndefined();
   });
 
+  it("tracks root focus state for populated trees across modality changes", async () => {
+    setInteractionModality("pointer");
+    const wrapper = renderTree({
+      autoFocus: "first",
+      selectionMode: "multiple",
+    });
+
+    await nextTick();
+
+    const tree = wrapper.get('[role="treegrid"]');
+    let photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(document.activeElement).toBe(photosRow!.element);
+    expect(tree.attributes("data-focused")).toBe("true");
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
+
+    setInteractionModality("keyboard");
+    await tree.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    expect(tree.attributes("data-focus-visible")).toBe("true");
+
+    await tree.trigger("mousedown", { button: 0 });
+    await nextTick();
+    expect(tree.attributes("data-focused")).toBe("true");
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
+
+    (document.activeElement as HTMLElement | null)?.blur();
+    await nextTick();
+    expect(tree.attributes("data-focused")).toBeUndefined();
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
+  });
+
   it("wires row checkbox aria attributes in single-selection mode", () => {
     const wrapper = mount(TreeView as any, {
       props: {
