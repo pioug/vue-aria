@@ -7287,3 +7287,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 18 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` docs parity update:
+  - documented controlled `DialogTrigger` state wiring and tray/fullscreen trigger-type usage examples.
+    - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 18 tests).
