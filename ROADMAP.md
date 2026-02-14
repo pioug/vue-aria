@@ -9233,3 +9233,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-expanded row guard parity update:
+  - added migrated coverage to verify expanded disabled rows remain expanded under `disabledBehavior="all"`, preserving `aria-expanded`, `data-expanded`, and `data-disabled` metadata after row presses.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 54 tests).
+- Validation: `npm run check -- --pretty false` passed.
