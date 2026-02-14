@@ -1,5 +1,6 @@
 import { CalendarDate, createCalendar as createIntlCalendar, type CalendarIdentifier } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { Calendar, RangeCalendar } from "../src";
 
@@ -51,6 +52,23 @@ describe("Calendar", () => {
     const selectedCells = wrapper.findAll('td[aria-selected="true"]');
     expect(selectedCells.length).toBeGreaterThan(0);
     expect(selectedCells[0]!.text()).toContain("5");
+  });
+
+  it("focuses the current calendar date when autoFocus is enabled", async () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        autoFocus: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    const focusedButton = wrapper.get(".react-spectrum-Calendar-date[tabindex='0']");
+    expect(document.activeElement).toBe(focusedButton.element);
   });
 
   it("renders selected-date aria labels without unresolved template placeholders", () => {
