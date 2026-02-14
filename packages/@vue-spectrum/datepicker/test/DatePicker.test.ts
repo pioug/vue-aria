@@ -48,6 +48,20 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("2019");
   });
 
+  it("serializes hidden form input value when name is provided", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        name: "eventDate",
+      },
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get('input[type="hidden"][name="eventDate"]');
+    expect(input.element.getAttribute("value")).toBe("2019-06-05");
+  });
+
   it("focuses date picker trigger when autoFocus is enabled", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -368,6 +382,26 @@ describe("DateRangePicker", () => {
     const text = wrapper.get(".react-spectrum-DateRangePicker-value").text();
     expect(text).toContain("June");
     expect(text).toContain("2019");
+  });
+
+  it("serializes hidden range form inputs when names are provided", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        startName: "rangeStart",
+        endName: "rangeEnd",
+      },
+      attachTo: document.body,
+    });
+
+    const startInput = wrapper.get('input[type="hidden"][name="rangeStart"]');
+    const endInput = wrapper.get('input[type="hidden"][name="rangeEnd"]');
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-05");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
   });
 
   it("focuses range picker trigger when autoFocus is enabled", async () => {

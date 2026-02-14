@@ -6860,6 +6860,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded SSR coverage for `visibleMonths` prop wiring in both picker variants (closed-overlay SSR path).
     - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 35 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added hidden-input serialization for form integration (`name` / `startName` / `endName`) and regression coverage for serialized values.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

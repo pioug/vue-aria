@@ -351,6 +351,14 @@ export const DatePicker = defineComponent({
           style: props.UNSAFE_style,
         },
         [
+          props.name
+            ? h("input", {
+              type: "hidden",
+              name: props.name,
+              form: props.form,
+              value: state.value ? state.value.toString() : "",
+            })
+            : null,
           props.label
             ? h(
               "span",
@@ -742,6 +750,22 @@ export const DateRangePicker = defineComponent({
           style: props.UNSAFE_style,
         },
         [
+          props.startName
+            ? h("input", {
+              type: "hidden",
+              name: props.startName,
+              form: props.form,
+              value: state.value.start ? state.value.start.toString() : "",
+            })
+            : null,
+          props.endName
+            ? h("input", {
+              type: "hidden",
+              name: props.endName,
+              form: props.form,
+              value: state.value.end ? state.value.end.toString() : "",
+            })
+            : null,
           props.label
             ? h(
               "span",
