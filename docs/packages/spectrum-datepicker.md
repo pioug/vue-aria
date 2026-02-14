@@ -88,8 +88,32 @@ const setRange = (nextRange: { start: CalendarDate; end: CalendarDate } | null) 
 </template>
 ```
 
+## Controlled Open State Example
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+
+const isOpen = ref(false);
+const onOpenChange = (nextOpen: boolean) => {
+  isOpen.value = nextOpen;
+};
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Meeting date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :is-open="isOpen"
+    :on-open-change="onOpenChange"
+  />
+</template>
+```
+
 ## Key Props
 
-- Shared: `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `placeholderValue`, `autoFocus`.
+- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `placeholderValue`, `autoFocus`.
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.

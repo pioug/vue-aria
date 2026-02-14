@@ -6801,6 +6801,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `DateRangePicker` `isDisabled`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 16 tests).
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added controlled-open usage example and expanded key-prop reference for `isOpen` / `defaultOpen` / `onOpenChange`.
+    - `docs/packages/spectrum-datepicker.md`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
