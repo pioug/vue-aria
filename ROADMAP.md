@@ -113,7 +113,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/menu`: In progress
 - `@vue-spectrum/listbox`: In progress
 - `@vue-spectrum/picker`: In progress
-- `@vue-spectrum/combobox`: Not started
+- `@vue-spectrum/combobox`: In progress
 - `@vue-spectrum/tabs`: Not started
 - `@vue-spectrum/table`: Not started
 - `@vue-spectrum/tree`: Not started
@@ -6424,3 +6424,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated execution queue status for `@vue-spectrum/picker` to `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 6 tests).
+- Started `@vue-spectrum/combobox` foundational slice:
+  - scaffolded `@vue-spectrum/combobox` package with upstream-aligned surface exports: `ComboBox`, `ComboBoxItem`, `ComboBoxSection`, `Item`, and `Section`.
+  - ported initial combobox composition over existing primitives:
+    - `@vue-aria/combobox-state` state management for input/open/selection behavior
+    - `@vue-aria/combobox` aria prop wiring for input/button/listbox coordination
+    - `@vue-spectrum/listbox` base list rendering for popup options
+  - added collection normalization for both data-driven items and slot-defined item/section nodes.
+  - added adapted tests for render/open/select behavior, controlled selected key updates, disabled behavior, slot collection parsing, and SSR rendering.
+  - added VitePress package page (`docs/packages/spectrum-combobox.md`) and docs nav/sidebar/index links.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/combobox`.
+  - updated execution queue status for `@vue-spectrum/combobox` to `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 6 tests).

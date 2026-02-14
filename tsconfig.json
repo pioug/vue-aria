@@ -99,7 +99,8 @@
       "@vue-spectrum/toast": ["packages/@vue-spectrum/toast/src/index.ts"],
       "@vue-spectrum/menu": ["packages/@vue-spectrum/menu/src/index.ts"],
       "@vue-spectrum/listbox": ["packages/@vue-spectrum/listbox/src/index.ts"],
-      "@vue-spectrum/picker": ["packages/@vue-spectrum/picker/src/index.ts"]
+      "@vue-spectrum/picker": ["packages/@vue-spectrum/picker/src/index.ts"],
+      "@vue-spectrum/combobox": ["packages/@vue-spectrum/combobox/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

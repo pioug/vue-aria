@@ -283,6 +283,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/picker": fileURLToPath(
         new URL("./packages/@vue-spectrum/picker/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/combobox": fileURLToPath(
+        new URL("./packages/@vue-spectrum/combobox/src/index.ts", import.meta.url)
       )
     }
   }
