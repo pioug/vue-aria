@@ -87,7 +87,7 @@ export function useSubmenuTrigger<T>(
   }, []);
 
   const submenuKeyDown = (event: KeyboardEvent) => {
-    if (!nodeContains(event.currentTarget as Node | null, document.activeElement)) {
+    if (!nodeContains(event.currentTarget as Node | null, event.target as Node | null)) {
       return;
     }
 

@@ -104,6 +104,57 @@ describe("SubmenuTrigger", () => {
     expect(document.body.textContent).not.toContain("Sub item");
   });
 
+  it("skips disabled submenu triggers during keyboard navigation", async () => {
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu", disabledKeys: ["more"] }, {
+            default: () => [
+              h(Item as any, { key: "first" }, { default: () => "First" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "last" }, { default: () => "Last" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const firstItem = rootItems.find((item) => item.textContent?.includes("First"));
+    const disabledSubmenuTrigger = rootItems.find((item) => item.textContent?.includes("More"));
+    const lastItem = rootItems.find((item) => item.textContent?.includes("Last"));
+
+    expect(firstItem).toBeTruthy();
+    expect(disabledSubmenuTrigger).toBeTruthy();
+    expect(lastItem).toBeTruthy();
+    expect(disabledSubmenuTrigger?.getAttribute("aria-disabled")).toBe("true");
+
+    firstItem?.focus();
+    firstItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    expect(document.activeElement).toBe(lastItem);
+
+    lastItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    expect(document.activeElement).toBe(firstItem);
+  });
+
   it("only keeps one sibling submenu open at a time", async () => {
     const wrapper = mount(MenuTrigger as any, {
       props: {

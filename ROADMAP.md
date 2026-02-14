@@ -9603,3 +9603,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 48 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` disabled-keyboard navigation parity update:
+  - added migrated `SubmenuTrigger` coverage to assert keyboard roving focus skips disabled submenu trigger rows in both `ArrowDown` and `ArrowUp` navigation paths.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Additional `@vue-aria/menu` submenu Escape-target parity fix:
+  - updated `useSubmenuTrigger` submenu keydown guard to validate containment against `event.target` rather than `document.activeElement`, stabilizing Escape-close handling in composed keyboard flows.
+    - `packages/@vue-aria/menu/src/useSubmenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.
