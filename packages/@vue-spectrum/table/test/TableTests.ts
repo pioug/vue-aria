@@ -149,10 +149,13 @@ export function tableTests() {
 
     const rowGroups = wrapper.findAll('[role="rowgroup"]');
     expect(rowGroups).toHaveLength(2);
+    expect(rowGroups[0]!.classes()).toContain("spectrum-Table-head");
+    expect(rowGroups[1]!.classes()).toContain("spectrum-Table-body");
 
     const headerRows = rowGroups[0]!.findAll('[role="row"]');
     expect(headerRows).toHaveLength(1);
     expect(headerRows[0]!.attributes("aria-rowindex")).toBe("1");
+    expect(headerRows[0]!.classes()).toContain("spectrum-Table-headRow");
 
     const headers = rowGroups[0]!.findAll('[role="columnheader"]');
     expect(headers).toHaveLength(3);
@@ -2184,7 +2187,9 @@ export function tableTests() {
 
     const emptyCell = wrapper.get("tbody .react-spectrum-Table-empty");
     expect(emptyCell.text()).toContain("No rows");
-    expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(1);
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.classes()).toContain("spectrum-Table-row");
   });
 
   it("supports sorting callbacks and aria-sort updates", async () => {

@@ -1005,6 +1005,7 @@ export const TableView = defineComponent({
             "thead",
             {
               role: "rowgroup",
+              class: "spectrum-Table-head",
             },
             headerRows.map((headerRow, headerRowIndex) =>
               h(
@@ -1012,7 +1013,7 @@ export const TableView = defineComponent({
                 {
                   key: String(headerRow.key),
                   role: "row",
-                  class: "react-spectrum-Table-headRow",
+                  class: "spectrum-Table-headRow react-spectrum-Table-headRow",
                   "aria-rowindex": headerRowIndex + 1,
                 },
                 Array.from(headerRow.childNodes).map((headerCellNode) =>
@@ -1029,6 +1030,7 @@ export const TableView = defineComponent({
             "tbody",
             {
               role: "rowgroup",
+              class: "spectrum-Table-body",
             },
             bodyRows.length > 0
               ? bodyRows.map((rowNode, rowIndex) =>
@@ -1048,7 +1050,7 @@ export const TableView = defineComponent({
                   "tr",
                   {
                     role: "row",
-                    class: "react-spectrum-Table-row",
+                    class: "spectrum-Table-row react-spectrum-Table-row",
                     "aria-rowindex": rowOffset + 1,
                   },
                   [
