@@ -7084,3 +7084,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - added callback-based validation-message example for `errorMessage` function usage.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added focus-within regression coverage ensuring `onFocusChange(false)` is not emitted when focus moves from picker group into the open dialog for both variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 95 tests).
+- Validation: `npm run check -- --pretty false` passed.
