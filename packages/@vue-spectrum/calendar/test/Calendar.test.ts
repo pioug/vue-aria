@@ -559,6 +559,40 @@ describe("Calendar", () => {
     expect(negativeWrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(1);
   });
 
+  it("supports pageBehavior differences for multi-month range-calendar navigation", async () => {
+    const defaultWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+    const singleWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+        pageBehavior: "single",
+      },
+      attachTo: document.body,
+    });
+
+    await press(defaultWrapper.findAll(".react-spectrum-Calendar-navButton")[1]!);
+    await press(singleWrapper.findAll(".react-spectrum-Calendar-navButton")[1]!);
+
+    const defaultTitle = defaultWrapper.get(".react-spectrum-Calendar-title").text();
+    const singleTitle = singleWrapper.get(".react-spectrum-Calendar-title").text();
+    expect(defaultTitle).toContain("August");
+    expect(singleTitle).toContain("July");
+  });
+
   it("selects a date range after two date clicks", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
