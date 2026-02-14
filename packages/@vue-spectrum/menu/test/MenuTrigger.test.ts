@@ -243,6 +243,52 @@ describe("MenuTrigger", () => {
     expect(document.body.querySelectorAll('[role="img"]')).toHaveLength(0);
   });
 
+  it("supports dragging and releasing link items", async () => {
+    const onAction = vi.fn();
+    const wrapper = mount(MenuTrigger as any, {
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu", onAction }, {
+            default: () => [
+              h(Item as any, { key: "One", href: "https://google.com" }, { default: () => "One" }),
+              h(Item as any, { key: "Two", href: "https://adobe.com" }, { default: () => "Two" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get('[data-testid="trigger"]').element as HTMLElement;
+    if (typeof PointerEvent !== "undefined") {
+      trigger.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, button: 0, pointerType: "mouse" }));
+    } else {
+      trigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    }
+    await wrapper.vm.$nextTick();
+
+    const items = getMenuItems();
+    expect(items).toHaveLength(2);
+
+    let clickCount = 0;
+    const onWindowClick = (event: MouseEvent) => {
+      clickCount += 1;
+      event.preventDefault();
+    };
+    window.addEventListener("click", onWindowClick, true);
+
+    try {
+      items[0]?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
+      await wrapper.vm.$nextTick();
+
+      expect(onAction).toHaveBeenCalledTimes(1);
+      expect(clickCount).toBe(1);
+    } finally {
+      window.removeEventListener("click", onWindowClick, true);
+    }
+  });
+
   it("renders contextual help submenu items with an unavailable icon", () => {
     renderContextualHelpMenuTrigger();
 

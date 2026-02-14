@@ -10019,3 +10019,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` drag-release parity update:
+  - added migrated `MenuTrigger` coverage asserting pointer press-start on trigger followed by release-click on a link item triggers exactly one action callback.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+  - tracked click capture behavior in the migrated test to ensure release-click is observed once while suppressing JSDOM navigation side effects.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+  - updated DOM-trigger press semantics to open on primary press-start and avoid immediate click re-toggle when the menu was just opened from press-start.
+    - `packages/@vue-spectrum/menu/src/MenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 101 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

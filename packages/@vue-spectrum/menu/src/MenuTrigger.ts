@@ -100,6 +100,7 @@ export const MenuTrigger = defineComponent({
   setup(props, { slots, expose }) {
     const triggerRef = ref<HTMLElement | null>(null);
     const menuRef = ref<HTMLElement | null>(null);
+    const openedFromPressStart = ref(false);
     const triggerRefObject = {
       get current() {
         return triggerRef.value;
@@ -171,13 +172,43 @@ export const MenuTrigger = defineComponent({
       }
 
       const isDomTrigger = typeof trigger.type === "string";
+      const handlePressStart = (event: MouseEvent | PointerEvent) => {
+        if (props.trigger !== "press") {
+          return;
+        }
+
+        if ("button" in event && event.button !== 0) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        if (state.isOpen) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        openedFromPressStart.value = true;
+        state.open(null);
+      };
+      const handleTriggerClick = () => {
+        if (openedFromPressStart.value) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        state.toggle();
+      };
       const domTriggerProps = props.trigger === "press"
         ? {
             id: menuTriggerProps.id,
             "aria-haspopup": menuTriggerProps["aria-haspopup"],
             "aria-expanded": state.isOpen ? "true" : "false",
             "aria-controls": state.isOpen ? (menuProps.id as string | undefined) : undefined,
-            onClick: () => state.toggle(),
+            onPointerdown: handlePressStart,
+            onPointerDown: handlePressStart,
+            onMousedown: handlePressStart,
+            onMouseDown: handlePressStart,
+            onClick: handleTriggerClick,
             onKeydown: menuTriggerProps.onKeydown as ((event: KeyboardEvent) => void) | undefined,
             onKeyDown: menuTriggerProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined,
             ref: setTriggerRef,
