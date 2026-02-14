@@ -3476,7 +3476,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -3495,8 +3495,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 5 (adapted)
-- Passing test files: 5 (validated 2026-02-14)
+- Ported test files: 6 (adapted)
+- Passing test files: 6 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `useTree` coverage for treegrid-role override behavior.
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
@@ -3506,6 +3506,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
   - Added integrated directional-key branch coverage for ArrowRight expand and ArrowLeft collapse on focused parent rows.
   - Added intl-bundle regression coverage to assert copied upstream locale entries and locale-count floor.
+  - Added index export coverage to assert `src/index.ts` re-exports both tree hooks.
 - [x] All relevant upstream tests migrated
 
 ### Docs
