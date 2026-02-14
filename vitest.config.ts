@@ -280,6 +280,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/listbox": fileURLToPath(
         new URL("./packages/@vue-spectrum/listbox/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/picker": fileURLToPath(
+        new URL("./packages/@vue-spectrum/picker/src/index.ts", import.meta.url)
       )
     }
   }

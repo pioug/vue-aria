@@ -112,7 +112,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/link`: In progress
 - `@vue-spectrum/menu`: In progress
 - `@vue-spectrum/listbox`: In progress
-- `@vue-spectrum/picker`: Not started
+- `@vue-spectrum/picker`: In progress
 - `@vue-spectrum/combobox`: Not started
 - `@vue-spectrum/tabs`: Not started
 - `@vue-spectrum/table`: Not started
@@ -6411,3 +6411,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added VitePress package page (`docs/packages/spectrum-listbox.md`) and docs nav/sidebar/index links.
   - added TypeScript/Vitest alias wiring for `@vue-spectrum/listbox`.
   - added package record `31m` and marked `@vue-spectrum/listbox` execution queue status `In progress`.
+- Started `@vue-spectrum/picker` foundational slice:
+  - scaffolded `@vue-spectrum/picker` package with upstream-aligned surface exports: `Picker`, `PickerItem`, `PickerSection`, `Item`, and `Section`.
+  - ported initial picker composition over existing primitives:
+    - `@vue-aria/select` (`useSelect`, `HiddenSelect`) trigger/hidden native select wiring
+    - `@vue-aria/list-state` single-select state adapter with open/focus/validation bridge
+    - `@vue-spectrum/listbox` + `@vue-spectrum/menu` popup listbox presentation
+  - added collection normalization for both data-driven items and slot-defined item/section nodes.
+  - added adapted tests for open/select flow, controlled selected key updates, disabled behavior, slot collection parsing, and SSR rendering.
+  - added VitePress package page (`docs/packages/spectrum-picker.md`) and docs nav/sidebar/index links.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/picker`.
+  - updated execution queue status for `@vue-spectrum/picker` to `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 6 tests).
