@@ -9612,3 +9612,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 35 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu DOM-ref parity fix:
+  - normalized `SubmenuTrigger` submenu ref resolution to pass a real submenu `HTMLElement` (rather than component instances) into `useSubmenuTrigger`, ensuring submenu Escape-close containment logic is stable across mounted component refs.
+    - `packages/@vue-spectrum/menu/src/SubmenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.

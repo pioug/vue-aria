@@ -8,6 +8,26 @@ function isRenderableNode(node: VNode): boolean {
   return typeof node.type !== "symbol";
 }
 
+function resolveMenuElement(value: unknown): HTMLElement | null {
+  if (value instanceof HTMLElement) {
+    return value;
+  }
+
+  if (value && typeof value === "object") {
+    const maybeComponent = value as { $el?: unknown; UNSAFE_getDOMNode?: () => unknown };
+    if (maybeComponent.$el instanceof HTMLElement) {
+      return maybeComponent.$el;
+    }
+
+    const domNode = maybeComponent.UNSAFE_getDOMNode?.();
+    if (domNode instanceof HTMLElement) {
+      return domNode;
+    }
+  }
+
+  return null;
+}
+
 /**
  * SubmenuTrigger wraps a MenuItem trigger and a nested Menu/Dialog overlay.
  */
@@ -34,7 +54,7 @@ export const SubmenuTrigger = defineComponent({
   setup(props, { slots }) {
     const context = useMenuStateContext();
     const triggerRef = ref<HTMLElement | null>(null);
-    const submenuMenuRef = ref<HTMLElement | null>(null);
+    const submenuMenuRef = ref<unknown>(null);
 
     const triggerRefObject = {
       get current() {
@@ -56,7 +76,7 @@ export const SubmenuTrigger = defineComponent({
     };
     const submenuRefObject = {
       get current() {
-        return submenuMenuRef.value;
+        return resolveMenuElement(submenuMenuRef.value);
       },
       set current(value: HTMLElement | null) {
         submenuMenuRef.value = value;
