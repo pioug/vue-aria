@@ -625,6 +625,52 @@ export function tableTests() {
     expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("preserves single highlight selection via Space key when disallowEmptySelection is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      disallowEmptySelection: true,
+      defaultSelectedKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("preserves single highlight selection via Enter key when disallowEmptySelection is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      disallowEmptySelection: true,
+      defaultSelectedKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("defers row selection until press up when shouldSelectOnPressUp is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
