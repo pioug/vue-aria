@@ -9696,3 +9696,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 55 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu hover-open parity update:
+  - added migrated `SubmenuTrigger` coverage asserting pointer hover on a submenu trigger item opens the submenu after the hover delay, with trigger `aria-expanded` updated and submenu content rendered.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 18 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 56 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.

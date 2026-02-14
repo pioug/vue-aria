@@ -218,6 +218,62 @@ describe("SubmenuTrigger", () => {
     expect(document.body.textContent).not.toContain("Sub item");
   });
 
+  it("opens submenu when hovering a submenu trigger item", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = mountTracked(MenuTrigger as any, {
+        props: {
+          defaultOpen: true,
+        },
+        slots: {
+          default: () => [
+            h("button", { "data-testid": "trigger" }, "Menu Button"),
+            h(Menu as any, { ariaLabel: "Menu" }, {
+              default: () => [
+                h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+                h(SubmenuTrigger as any, null, {
+                  default: () => [
+                    h(Item as any, { key: "more" }, { default: () => "More" }),
+                    h(Menu as any, { ariaLabel: "Submenu" }, {
+                      default: () => [
+                        h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+      expect(submenuTriggerItem).toBeTruthy();
+
+      if (typeof PointerEvent !== "undefined") {
+        submenuTriggerItem?.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+        submenuTriggerItem?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+      } else {
+        submenuTriggerItem?.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+        submenuTriggerItem?.dispatchEvent(new Event("pointerover", { bubbles: true }));
+      }
+
+      vi.runAllTimers();
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      const openedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+      expect(openedTrigger?.getAttribute("aria-expanded")).toBe("true");
+      expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+      expect(document.body.textContent).toContain("Sub item");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("keeps submenu open when pointer moves from submenu content back to its trigger", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {
