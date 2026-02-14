@@ -16,6 +16,11 @@ export interface SpectrumDatePickerProps {
   isOpen?: boolean | undefined;
   defaultOpen?: boolean | undefined;
   onOpenChange?: ((isOpen: boolean) => void) | undefined;
+  onFocus?: ((event: FocusEvent) => void) | undefined;
+  onBlur?: ((event: FocusEvent) => void) | undefined;
+  onFocusChange?: ((isFocused: boolean) => void) | undefined;
+  onKeyDown?: ((event: KeyboardEvent) => void) | undefined;
+  onKeyUp?: ((event: KeyboardEvent) => void) | undefined;
   isDisabled?: boolean | undefined;
   isReadOnly?: boolean | undefined;
   isRequired?: boolean | undefined;
@@ -119,6 +124,26 @@ export const DatePicker = defineComponent({
     },
     onOpenChange: {
       type: Function as PropType<((isOpen: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onFocus: {
+      type: Function as PropType<((event: FocusEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onBlur: {
+      type: Function as PropType<((event: FocusEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onFocusChange: {
+      type: Function as PropType<((isFocused: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onKeyDown: {
+      type: Function as PropType<((event: KeyboardEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onKeyUp: {
+      type: Function as PropType<((event: KeyboardEvent) => void) | undefined>,
       default: undefined,
     },
     isDisabled: {
@@ -338,6 +363,21 @@ export const DatePicker = defineComponent({
         get form() {
           return merged.form;
         },
+        get onFocus() {
+          return merged.onFocus;
+        },
+        get onBlur() {
+          return merged.onBlur;
+        },
+        get onFocusChange() {
+          return merged.onFocusChange;
+        },
+        get onKeyDown() {
+          return merged.onKeyDown;
+        },
+        get onKeyUp() {
+          return merged.onKeyUp;
+        },
       } as any,
       state as any,
       group.refObject as any
@@ -528,6 +568,26 @@ export const DateRangePicker = defineComponent({
     },
     onOpenChange: {
       type: Function as PropType<((isOpen: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onFocus: {
+      type: Function as PropType<((event: FocusEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onBlur: {
+      type: Function as PropType<((event: FocusEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onFocusChange: {
+      type: Function as PropType<((isFocused: boolean) => void) | undefined>,
+      default: undefined,
+    },
+    onKeyDown: {
+      type: Function as PropType<((event: KeyboardEvent) => void) | undefined>,
+      default: undefined,
+    },
+    onKeyUp: {
+      type: Function as PropType<((event: KeyboardEvent) => void) | undefined>,
       default: undefined,
     },
     isDisabled: {
@@ -763,6 +823,21 @@ export const DateRangePicker = defineComponent({
         },
         get allowsNonContiguousRanges() {
           return merged.allowsNonContiguousRanges;
+        },
+        get onFocus() {
+          return merged.onFocus;
+        },
+        get onBlur() {
+          return merged.onBlur;
+        },
+        get onFocusChange() {
+          return merged.onFocusChange;
+        },
+        get onKeyDown() {
+          return merged.onKeyDown;
+        },
+        get onKeyUp() {
+          return merged.onKeyUp;
         },
       } as any,
       state as any,

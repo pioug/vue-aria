@@ -7002,3 +7002,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 77 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added focus/keyboard callback prop plumbing (`onFocus`, `onBlur`, `onFocusChange`, `onKeyDown`, `onKeyUp`) through both picker variants into aria hook props.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added focus-transition callback regression coverage for DatePicker and DateRangePicker `onFocusChange`.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - expanded shared key-prop reference with supported focus/keyboard callback props.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 79 tests).
+- Validation: `npm run check -- --pretty false` passed.

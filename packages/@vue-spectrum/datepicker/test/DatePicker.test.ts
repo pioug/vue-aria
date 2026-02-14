@@ -481,6 +481,26 @@ describe("DatePicker", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("forwards onFocusChange for date picker group focus transitions", async () => {
+    const onFocusChange = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        onFocusChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-group").trigger("focusin");
+    await nextTick();
+    expect(onFocusChange).toHaveBeenCalledWith(true);
+
+    await wrapper.get(".react-spectrum-DatePicker-group").trigger("focusout", { relatedTarget: null });
+    await nextTick();
+    expect(onFocusChange).toHaveBeenCalledWith(false);
+  });
+
   it("respects controlled isOpen updates", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -1263,6 +1283,29 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("forwards range onFocusChange for group focus transitions", async () => {
+    const onFocusChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        onFocusChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("focusin");
+    await nextTick();
+    expect(onFocusChange).toHaveBeenCalledWith(true);
+
+    await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("focusout", { relatedTarget: null });
+    await nextTick();
+    expect(onFocusChange).toHaveBeenCalledWith(false);
   });
 
   it("respects controlled range isOpen updates", async () => {
