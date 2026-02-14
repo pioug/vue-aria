@@ -9969,3 +9969,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 94 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` trigger-ref merge parity update:
+  - added migrated `MenuTrigger` coverage asserting refs on both the trigger element and `MenuTrigger` component are supported simultaneously.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+  - updated `MenuTrigger` trigger vnode cloning to merge refs so user-provided trigger refs are preserved while internal trigger wiring remains intact.
+    - `packages/@vue-spectrum/menu/src/MenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/MenuTrigger.test.ts` passed (1 file, 31 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 95 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

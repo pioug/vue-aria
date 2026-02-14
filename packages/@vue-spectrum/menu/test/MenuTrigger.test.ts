@@ -495,6 +495,47 @@ describe("MenuTrigger", () => {
     }
   });
 
+  it("supports refs on both the trigger element and MenuTrigger", async () => {
+    let buttonRef: HTMLElement | null = null;
+    let triggerRef: any = null;
+
+    mount({
+      render() {
+        return h(MenuTrigger as any, {
+          ref: (value: unknown) => {
+            triggerRef = value;
+          },
+        }, {
+          default: () => [
+            h("button", {
+              "data-testid": "dual-ref-trigger",
+              ref: (value: unknown) => {
+                buttonRef = value as HTMLElement | null;
+              },
+            }, "Menu Button"),
+            h(Menu as any, { ariaLabel: "Menu" }, {
+              default: () => [
+                h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+              ],
+            }),
+          ],
+        });
+      },
+    }, {
+      attachTo: document.body,
+    });
+
+    await Promise.resolve();
+
+    expect(buttonRef).toBeTruthy();
+    expect(triggerRef).toBeTruthy();
+    expect(triggerRef.UNSAFE_getDOMNode()).toBe(buttonRef);
+
+    triggerRef.focus();
+    await Promise.resolve();
+    expect(document.activeElement).toBe(buttonRef);
+  });
+
   it("exposes trigger dom node and focus handle", async () => {
     const wrapper = renderMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');

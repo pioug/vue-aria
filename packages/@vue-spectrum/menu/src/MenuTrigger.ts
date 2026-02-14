@@ -202,7 +202,8 @@ export const MenuTrigger = defineComponent({
                   : (menuTriggerProps as Record<string, unknown>).onClick,
               isPressed: state.isOpen,
               ref: setTriggerRef,
-            }
+            },
+        true
       );
 
       const initialPlacement = getInitialPlacement(props.direction, props.align);
