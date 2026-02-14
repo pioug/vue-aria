@@ -157,6 +157,32 @@ const onFocusChange = (nextFocused: boolean) => {
 </template>
 ```
 
+## Keyboard Callback Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+
+const onKeyDown = (event: KeyboardEvent) => {
+  console.log("keydown", event.key);
+};
+
+const onKeyUp = (event: KeyboardEvent) => {
+  console.log("keyup", event.key);
+};
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Meeting date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :on-key-down="onKeyDown"
+    :on-key-up="onKeyUp"
+  />
+</template>
+```
+
 ## Validation Message Example
 
 ```vue
