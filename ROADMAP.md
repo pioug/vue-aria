@@ -7788,6 +7788,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` wrap-navigation parity update:
+  - added horizontal ArrowLeft wrap coverage from first tab to last tab, including focus and selection assertions.
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 9 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

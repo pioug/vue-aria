@@ -94,6 +94,22 @@ describe("Tabs", () => {
     expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
   });
 
+  it("wraps horizontal keyboard navigation from first to last tab", async () => {
+    const wrapper = renderTabs({
+      defaultSelectedKey: "tab-1",
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[0]?.element as HTMLElement).focus();
+
+    await tabs[0]?.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+
+    const updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[2]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[2]?.element);
+  });
+
   it("respects disabledKeys", async () => {
     const wrapper = renderTabs({
       disabledKeys: ["tab-2"],
