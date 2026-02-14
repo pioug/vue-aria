@@ -125,6 +125,27 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("One");
   });
 
+  it("updates uncontrolled defaultSelectedKey value on selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "1",
+      onSelectionChange,
+    });
+
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[1]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
+  });
+
   it("propagates name and form attributes to the input", () => {
     const wrapper = renderComboBox({
       name: "combobox-name",
