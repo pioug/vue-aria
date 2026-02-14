@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/checkbox`
+- Current focus package: `@vue-spectrum/radio`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -102,7 +102,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/theme`: In progress
 - `@vue-spectrum/button`: In progress
 - `@vue-spectrum/checkbox`: In progress
-- `@vue-spectrum/radio`: Not started
+- `@vue-spectrum/radio`: In progress
 - `@vue-spectrum/switch`: Not started
 - `@vue-spectrum/textfield`: Not started
 - `@vue-spectrum/searchfield`: Not started
@@ -205,6 +205,42 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Remaining for completion
 - Validate visual parity against upstream docs examples for quiet/emphasized/invalid states.
+
+## 4c) Active Package Slice: @vue-spectrum/radio
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/radio/src`
+  - `references/react-spectrum/packages/@react-spectrum/radio/test`
+  - `references/react-spectrum/packages/@react-spectrum/radio/docs`
+- Local package path: `packages/@vue-spectrum/radio`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Radio`, `RadioGroup`, `context`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/Radio.test.ts`
+  - `test/Radio.ssr.test.ts`
+- Initial parity coverage added:
+  - uncontrolled and controlled value flows
+  - disabled/readOnly handling (group and item-level)
+  - group and item labeling/ARIA/custom-prop passthrough
+  - orientation, invalid/required semantics, help text, and error message rendering
+  - form reset behavior
+  - roving tab index and arrow-key navigation wrapping
+  - native required validation behavior
+  - quiet vs emphasized visual class assertions
+- Documentation scaffold added:
+  - `docs/packages/spectrum-radio.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-radio`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/radio`.
+
+### Remaining for completion
+- Expand migrated validation coverage to include upstream server/custom validation scenarios.
+- Validate visual parity against upstream docs examples for orientation/help-text/disabled/readOnly/emphasized states.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

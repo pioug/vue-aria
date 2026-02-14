@@ -105,7 +105,7 @@ export function useRadioGroupState(props: RadioGroupProps = {}): RadioGroupState
     setSelectedValue(value) {
       if (!props.isReadOnly && !props.isDisabled) {
         setSelectedValueRef(value);
-        this.commitValidation();
+        validation.commitValidation();
       }
     },
     get lastFocusedValue() {

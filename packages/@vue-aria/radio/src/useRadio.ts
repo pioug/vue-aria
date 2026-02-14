@@ -55,7 +55,31 @@ export function useRadio(
   const checked = state.selectedValue === value;
   const onChange = (event: Event) => {
     event.stopPropagation();
+    const input = event.currentTarget as HTMLInputElement | null;
     state.setSelectedValue(value);
+    if (!input) {
+      return;
+    }
+
+    const container =
+      input.closest("[role='radiogroup']")
+      ?? input.form
+      ?? input.ownerDocument;
+    const radios = container?.querySelectorAll?.("input[type='radio']");
+    if (!radios || radios.length === 0) {
+      const shouldBeChecked = state.selectedValue === value;
+      if (input.checked !== shouldBeChecked) {
+        input.checked = shouldBeChecked;
+      }
+      return;
+    }
+
+    radios.forEach((radio) => {
+      const next = radio as HTMLInputElement;
+      if (next.name === input.name) {
+        next.checked = next.value === state.selectedValue;
+      }
+    });
   };
 
   const { pressProps, isPressed } = usePress({
