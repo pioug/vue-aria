@@ -7768,6 +7768,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 10 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` docs parity update:
+  - expanded combobox docs with controlled selection behavior, open-state control guidance, and form integration notes.
+  - `docs/packages/spectrum-combobox.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
