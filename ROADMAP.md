@@ -7711,6 +7711,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 11 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` trigger-close parity update:
+  - added picker coverage for closing the popup by pressing the trigger while open, including `onOpenChange(false)` and `aria-controls` teardown assertions.
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 12 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

@@ -138,6 +138,33 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Zero");
   });
 
+  it("closes when trigger is pressed while open", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      onOpenChange,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(listbox?.id);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(trigger.attributes("aria-controls")).toBeUndefined();
+    expect(onOpenChange).toHaveBeenCalledTimes(2);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
   it("supports controlled selectedKey updates", async () => {
     const wrapper = renderPicker({
       selectedKey: "1",
