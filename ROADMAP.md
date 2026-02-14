@@ -7665,6 +7665,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `ROADMAP.md`
 - Validation: `npm test -- packages/@vue-spectrum/checkbox/test` passed (3 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` ActionMenu parity update:
+  - expanded ActionMenu coverage for disabled behavior, autofocus behavior, controlled open-state callback behavior, and uncontrolled `defaultOpen` behavior.
+  - aligned `MenuTrigger` component-trigger behavior to request close toggles when already open, matching controlled/default-open ActionMenu semantics.
+  - `packages/@vue-spectrum/menu/src/MenuTrigger.ts`
+  - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/progress` visual parity update:
   - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
   - expanded progress docs with explicit `overBackground` examples for both components.

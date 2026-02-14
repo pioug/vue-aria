@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { h } from "vue";
+import { h, nextTick } from "vue";
 import { ActionMenu } from "../src/ActionMenu";
 import { Item } from "../src/Item";
 
@@ -51,5 +51,74 @@ describe("ActionMenu", () => {
     });
 
     expect(wrapper.get("button").attributes("aria-label")).toBe("Custom Aria Label");
+  });
+
+  it("is disabled", async () => {
+    const onAction = vi.fn();
+    const wrapper = mount(ActionMenu as any, {
+      props: {
+        isDisabled: true,
+        onAction,
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+      },
+      attachTo: document.body,
+    });
+
+    const button = wrapper.get("button");
+    expect(button.attributes("disabled")).toBeDefined();
+
+    await button.trigger("click");
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
+  it("supports autofocus", async () => {
+    const wrapper = mount(ActionMenu as any, {
+      props: {
+        autoFocus: true,
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    expect(document.activeElement).toBe(wrapper.get("button").element);
+  });
+
+  it("supports a controlled open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(ActionMenu as any, {
+      props: {
+        isOpen: true,
+        onOpenChange,
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+      },
+      attachTo: document.body,
+    });
+
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+    await wrapper.get("button").trigger("click");
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+  });
+
+  it("supports an uncontrolled default open state", () => {
+    mount(ActionMenu as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+      },
+      attachTo: document.body,
+    });
+
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
   });
 });

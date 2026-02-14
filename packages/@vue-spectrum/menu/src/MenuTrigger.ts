@@ -157,6 +157,10 @@ export const MenuTrigger = defineComponent({
               ...menuTriggerProps,
               "aria-expanded": state.isOpen ? "true" : "false",
               "aria-controls": state.isOpen ? (menuProps.id as string | undefined) : undefined,
+              onClick:
+                state.isOpen
+                  ? () => state.toggle()
+                  : (menuTriggerProps as Record<string, unknown>).onClick,
               isPressed: state.isOpen,
               ref: setTriggerRef,
             }
