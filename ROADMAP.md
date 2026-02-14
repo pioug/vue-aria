@@ -8280,6 +8280,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-aria/grid/test/useGrid.test.ts`
 - Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 103 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` single-pointer disallow-empty parity update:
+  - added regression coverage to verify `disallowEmptySelection` preserves the selected row on pointer press in single highlight mode.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 77 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
