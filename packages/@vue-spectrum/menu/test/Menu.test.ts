@@ -151,4 +151,13 @@ describe("Menu", () => {
     expect(items[1]?.attributes("aria-checked")).toBe("true");
     expect(wrapper.findAll('[role="img"]')).toHaveLength(2);
   });
+
+  it("does not render selection checkmarks when selectionMode is not set", () => {
+    const wrapper = renderMenu({
+      selectedKeys: ["Foo"],
+    });
+
+    expect(wrapper.findAll('[role="menuitem"]')).toHaveLength(5);
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
+  });
 });
