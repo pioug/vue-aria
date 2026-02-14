@@ -62,6 +62,8 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 
 `Cell` supports `colSpan` in static slot composition, including correct column indexing and ARIA colspan output.
 In static slot composition, each row's total cell span must match the declared column count.
+When using template syntax, static metadata props are supported in kebab-case (for example: `is-row-header`, `allows-sorting`, `hide-header`, `show-divider`, `text-value`, `col-span`, `is-disabled`).
+Numeric string values for `col-span` are normalized (for example `col-span="2"`).
 
 ## Key Props
 
