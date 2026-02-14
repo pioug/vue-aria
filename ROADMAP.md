@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/meter`
+- Current focus package: `@vue-spectrum/numberfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -106,7 +106,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/switch`: In progress
 - `@vue-spectrum/textfield`: In progress
 - `@vue-spectrum/searchfield`: In progress
-- `@vue-spectrum/numberfield`: Not started
+- `@vue-spectrum/numberfield`: In progress
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: In progress
 - `@vue-spectrum/menu`: Not started
@@ -448,6 +448,41 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Validate visual parity for variant and size styles against upstream docs.
 - Expand parity assertions for warning/critical/positive class application and label-position states.
+
+## 4j) Active Package Slice: @vue-spectrum/numberfield
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/numberfield/src`
+  - `references/react-spectrum/packages/@react-spectrum/numberfield/test`
+  - `references/react-spectrum/packages/@react-spectrum/numberfield/docs`
+- Local package path: `packages/@vue-spectrum/numberfield`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `NumberField`, `StepButton`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/NumberField.test.ts`
+  - `test/NumberField.ssr.test.ts`
+- Initial parity coverage added:
+  - group/textbox/stepper-button ARIA structure and baseline props
+  - value commit flow via blur and `onChange`
+  - increment/decrement behavior via stepper buttons
+  - hideStepper behavior
+  - quiet/disabled/readonly/invalid visual classes
+  - custom DOM prop passthrough and hidden form input behavior
+  - inputMode behavior for integer non-negative configuration
+- Documentation scaffold added:
+  - `docs/packages/spectrum-numberfield.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-numberfield`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/numberfield`.
+
+### Remaining for completion
+- Expand test parity coverage for locale/inputMode matrix, keyboard stepping, wheel behavior, and validation flows from upstream.
+- Validate visual parity for quiet/stepper/label/help-text states against upstream docs.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

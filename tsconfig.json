@@ -90,7 +90,8 @@
       "@vue-spectrum/textfield": ["packages/@vue-spectrum/textfield/src/index.ts"],
       "@vue-spectrum/searchfield": ["packages/@vue-spectrum/searchfield/src/index.ts"],
       "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
-      "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"]
+      "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],
+      "@vue-spectrum/numberfield": ["packages/@vue-spectrum/numberfield/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
