@@ -580,9 +580,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
   - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
   - `docs/packages/spectrum-dialog.md`
+- Additional portal parity update:
+  - `DialogTrigger` and `DialogContainer` now support rendering overlays into custom portal roots via `portalContainer` and `UNSAFE_PortalProvider` context.
+  - added trigger/container tests asserting dialog rendering in custom portal containers.
+  - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+  - `packages/@vue-spectrum/dialog/src/DialogContainer.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+  - `docs/packages/spectrum-dialog.md`
 
 ### Remaining for completion
-- Add targeted parity coverage for portal-container rendering and nested focus-restore interaction flows from upstream dialog tests.
+- Add targeted parity coverage for nested focus-restore interaction flows from upstream dialog tests.
 
 ## 4m) Active Package Slice: @vue-spectrum/tooltip
 - Upstream source path(s):
@@ -7447,6 +7455,31 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/interactions/src/useFocusable.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` interaction parity update:
+  - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.
+  - expanded trigger/container tests for:
+    - modal outside-interaction dismissal opt-in (`isDismissable`)
+    - popover outside-interaction dismissal defaults
+    - Escape-key disablement semantics
+  - `packages/@vue-spectrum/dialog/src/Dialog.ts`
+  - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+  - `packages/@vue-spectrum/dialog/src/DialogContainer.ts`
+  - `packages/@vue-spectrum/dialog/src/context.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+  - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` portal parity update:
+  - added `portalContainer` + `UNSAFE_PortalProvider` support for trigger/container dialog rendering.
+  - expanded trigger/container portal-container coverage.
+  - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+  - `packages/@vue-spectrum/dialog/src/DialogContainer.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+  - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` composition parity update:
   - aligned `Header`/`Heading` conditional slot classes with upstream Spectrum states for missing heading/type icon context.

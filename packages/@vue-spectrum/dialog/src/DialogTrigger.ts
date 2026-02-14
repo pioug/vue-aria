@@ -1,6 +1,6 @@
-import { useOverlayTrigger } from "@vue-aria/overlays";
+import { useOverlayTrigger, useUNSAFE_PortalContext } from "@vue-aria/overlays";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
-import { cloneVNode, computed, defineComponent, provide, ref, type PropType } from "vue";
+import { Teleport, cloneVNode, computed, defineComponent, h, provide, ref, type PropType } from "vue";
 import { DialogContext } from "./context";
 import type { DialogContextValue } from "./context";
 
@@ -40,8 +40,15 @@ export const DialogTrigger = defineComponent({
       type: Function as PropType<((isOpen: boolean) => void) | undefined>,
       required: false,
     },
+    portalContainer: {
+      type: Object as PropType<Element | null | undefined>,
+      required: false,
+      default: undefined,
+    },
   },
   setup(props, { slots }) {
+    const { getContainer } = useUNSAFE_PortalContext();
+    const resolvedPortalContainer = computed(() => props.portalContainer ?? getContainer?.() ?? null);
     const triggerRef = ref<HTMLElement | null>(null);
     const state = useOverlayTriggerState({
       get isOpen() {
@@ -92,12 +99,17 @@ export const DialogTrigger = defineComponent({
         onPress: () => state.toggle(),
         ref: triggerRef,
       });
+      const dialogContent =
+        state.isOpen && contentNodes[0]
+          ? cloneVNode(contentNodes[0], { "data-testid": props.type ?? "modal" })
+          : null;
+      const renderedDialog = resolvedPortalContainer.value && dialogContent
+        ? h(Teleport, { to: resolvedPortalContainer.value }, [dialogContent])
+        : dialogContent;
 
       return [
         triggerWithPress,
-        state.isOpen && contentNodes[0]
-          ? cloneVNode(contentNodes[0], { "data-testid": props.type ?? "modal" })
-          : null,
+        renderedDialog,
       ];
     };
   },

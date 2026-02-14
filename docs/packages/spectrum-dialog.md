@@ -105,6 +105,7 @@ const onOpenChange = (next: boolean) => {
 - outside-interaction dismiss defaults to enabled for `popover` and `tray`.
 - for `modal`, outside-interaction dismiss requires `is-dismissable`.
 - `is-keyboard-dismiss-disabled` prevents Escape-key dismissal.
+- dialog overlays can render into custom portal roots via `portal-container` or `UNSAFE_PortalProvider`.
 
 ### Uncontrolled initial open state
 
@@ -213,6 +214,7 @@ const onDismiss = () => {
 - `is-dismissable` enables the nested dialog dismiss button.
 - outside-interaction dismiss follows trigger semantics (`popover`/`tray` dismiss by default; `modal` requires `is-dismissable`).
 - `is-keyboard-dismiss-disabled` disables Escape-key dismissal for the nested dialog.
+- `portal-container`/`UNSAFE_PortalProvider` control where container dialogs are rendered.
 
 ## Labeling
 

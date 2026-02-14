@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import { describe, expect, it, vi } from "vitest";
 import { defineComponent, h, ref } from "vue";
 import { Dialog } from "../src/Dialog";
@@ -51,6 +52,29 @@ describe("DialogContainer", () => {
     await wrapper.get('[data-testid="confirm"]').trigger("click");
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
+
+  it("renders dialog content inside portal provider containers", () => {
+    const portalContainer = document.createElement("div");
+    portalContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(portalContainer);
+
+    const wrapper = mount(UNSAFE_PortalProvider as any, {
+      props: {
+        getContainer: () => portalContainer,
+      },
+      slots: {
+        default: () =>
+          h(DialogContainer as any, { onDismiss: vi.fn() }, {
+            default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    expect(portalContainer.querySelector('[role="dialog"]')).toBeTruthy();
+    wrapper.unmount();
+    portalContainer.remove();
   });
 
   it("supports outside-interaction dismissal semantics by container type", () => {

@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { UNSAFE_PortalProvider } from "@vue-aria/overlays";
 import { describe, expect, it, vi } from "vitest";
 import { h } from "vue";
 import { Dialog } from "../src/Dialog";
@@ -33,6 +34,31 @@ describe("DialogTrigger", () => {
 
     await wrapper.get('[data-testid="close"]').trigger("click");
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
+
+  it("renders dialog content inside portal provider containers", async () => {
+    const portalContainer = document.createElement("div");
+    portalContainer.setAttribute("data-testid", "custom-container");
+    document.body.appendChild(portalContainer);
+
+    const wrapper = mount(UNSAFE_PortalProvider as any, {
+      props: {
+        getContainer: () => portalContainer,
+      },
+      slots: {
+        default: () =>
+          h(DialogTrigger as any, null, {
+            trigger: () => h("button", { "data-testid": "trigger" }, "Trigger"),
+            default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get('[data-testid="trigger"]').trigger("click");
+    expect(portalContainer.querySelector('[role="dialog"]')).toBeTruthy();
+    wrapper.unmount();
+    portalContainer.remove();
   });
 
   it("supports outside-interaction dismissal semantics by type", async () => {

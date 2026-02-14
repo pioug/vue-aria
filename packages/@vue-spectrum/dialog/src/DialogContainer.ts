@@ -1,4 +1,5 @@
-import { computed, defineComponent, provide, type PropType } from "vue";
+import { useUNSAFE_PortalContext } from "@vue-aria/overlays";
+import { Teleport, computed, defineComponent, h, provide, type PropType } from "vue";
 import { DialogContext } from "./context";
 import type { DialogContextValue } from "./context";
 
@@ -28,8 +29,15 @@ export const DialogContainer = defineComponent({
       required: false,
       default: undefined,
     },
+    portalContainer: {
+      type: Object as PropType<Element | null | undefined>,
+      required: false,
+      default: undefined,
+    },
   },
   setup(props, { slots }) {
+    const { getContainer } = useUNSAFE_PortalContext();
+    const resolvedPortalContainer = computed(() => props.portalContainer ?? getContainer?.() ?? null);
     const context = computed<DialogContextValue>(() => ({
       type: props.type,
       onClose: props.onDismiss,
@@ -44,7 +52,14 @@ export const DialogContainer = defineComponent({
         throw new Error("Only a single child can be passed to DialogContainer.");
       }
 
-      return children[0] ?? null;
+      const content = children[0] ?? null;
+      if (!content) {
+        return null;
+      }
+
+      return resolvedPortalContainer.value
+        ? h(Teleport, { to: resolvedPortalContainer.value }, [content])
+        : content;
     };
   },
 });
