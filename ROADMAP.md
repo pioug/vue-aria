@@ -7641,6 +7641,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 14 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` escape-key behavior parity update:
+  - added `escapeKeyBehavior` prop support and forwarded it through `useTree` so selection clearing can be disabled.
+  - added migrated regression coverage to verify `Escape` does not clear multi-selection when `escapeKeyBehavior="none"`.
+  - `packages/@vue-spectrum/tree/src/TreeView.ts`
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 15 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`

@@ -392,6 +392,60 @@ describe("TreeView", () => {
     }
   });
 
+  it('prevents Escape from clearing selection when escapeKeyBehavior is "none"', async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Escape tree",
+        selectionMode: "multiple",
+        escapeKeyBehavior: "none",
+        onSelectionChange,
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    const projectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectOneRow).toBeTruthy();
+
+    await projectsRow!.get('input[type="checkbox"]').setValue(true);
+    await projectOneRow!.get('input[type="checkbox"]').setValue(true);
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+
+    const tree = wrapper.get('[role="treegrid"]');
+    await tree.trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 

@@ -33,6 +33,7 @@ export interface SpectrumTreeViewProps {
   selectedKeys?: Iterable<TreeKey> | undefined;
   defaultSelectedKeys?: Iterable<TreeKey> | undefined;
   disabledKeys?: Iterable<TreeKey> | undefined;
+  escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   disallowEmptySelection?: boolean | undefined;
   isDisabled?: boolean | undefined;
   expandedKeys?: Iterable<TreeKey> | undefined;
@@ -300,6 +301,10 @@ export const TreeView = defineComponent({
       type: [Object, Array, Set] as PropType<Iterable<TreeKey> | undefined>,
       default: undefined,
     },
+    escapeKeyBehavior: {
+      type: String as PropType<"clearSelection" | "none" | undefined>,
+      default: undefined,
+    },
     disallowEmptySelection: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -482,6 +487,9 @@ export const TreeView = defineComponent({
       },
       get shouldSelectOnPressUp() {
         return props.shouldSelectOnPressUp;
+      },
+      get escapeKeyBehavior() {
+        return props.escapeKeyBehavior;
       },
     };
 
