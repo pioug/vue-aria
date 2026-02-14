@@ -2508,6 +2508,23 @@ export function tableTests() {
     expect(rows[0]!.classes()).toContain("spectrum-Table-row--lastRow");
   });
 
+  it("does not emit select-all callbacks for an empty checkbox table", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: [],
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("supports sorting callbacks and aria-sort updates", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });
