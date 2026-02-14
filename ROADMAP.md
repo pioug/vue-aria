@@ -7666,6 +7666,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` docs parity update:
+  - expanded listbox docs with:
+    - single-select default selection example
+    - keyboard wrap guidance (`shouldFocusWrap`)
+    - selection-indicator behavior note and key-shape compatibility note
+  - `docs/packages/spectrum-listbox.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

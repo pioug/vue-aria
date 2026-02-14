@@ -28,6 +28,43 @@ import { Item, ListBox, Section } from "@vue-spectrum/listbox";
 - `selectionMode="multiple"`
 - `disabledKeys`
 
+```vue
+<template>
+  <ListBox
+    aria-label="Status filter"
+    selection-mode="single"
+    :default-selected-keys="['active']"
+  >
+    <Item key="all">All</Item>
+    <Item key="active">Active</Item>
+    <Item key="archived">Archived</Item>
+  </ListBox>
+</template>
+```
+
+Selection checkmarks render only when `selectionMode` is set.
+
+## Keyboard Navigation
+
+```vue
+<template>
+  <ListBox
+    aria-label="Wrapped navigation"
+    :should-focus-wrap="true"
+  >
+    <Item key="a">Alpha</Item>
+    <Item key="b">Beta</Item>
+    <Item key="c">Gamma</Item>
+  </ListBox>
+</template>
+```
+
+With `shouldFocusWrap`, arrow-key navigation wraps between first and last options.
+
+## Key Handling
+
+`ListBox` supports section/item keys that are numeric or empty-string values in addition to typical string keys.
+
 ## Accessibility
 
 - Root uses `role="listbox"`.
