@@ -17,6 +17,26 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   await target.trigger("click", { button: 0 });
 }
 
+function createPointerEvent(type: "pointerdown" | "pointerup"): PointerEvent {
+  if (typeof PointerEvent !== "undefined") {
+    return new PointerEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      pointerType: "mouse",
+      width: 1,
+      height: 1,
+    });
+  }
+
+  const event = new Event(type, { bubbles: true, cancelable: true }) as PointerEvent;
+  Object.defineProperties(event, {
+    pointerType: { value: "mouse" },
+    width: { value: 1 },
+    height: { value: 1 },
+  });
+  return event;
+}
+
 describe("Calendar", () => {
   it("renders a calendar with a default value", () => {
     const wrapper = mount(Calendar as any, {
@@ -86,5 +106,71 @@ describe("Calendar", () => {
 
     wrapper.get('[role="application"]');
     expect(wrapper.findAll('[role="grid"]').length).toBeGreaterThan(0);
+  });
+
+  it("commits a single-day range when selection is blurred before completion", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 5),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const dateButtons = wrapper.findAll(".react-spectrum-Calendar-date");
+    const day17 = dateButtons.find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+    await press(day17!);
+
+    expect(onChange).not.toHaveBeenCalled();
+    await wrapper.get('[role="application"]').trigger("blur", { relatedTarget: null });
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const rangeValue = onChange.mock.calls[0]?.[0] as {
+      start: CalendarDate;
+      end: CalendarDate;
+    };
+    expect(rangeValue.start.month).toBe(6);
+    expect(rangeValue.start.day).toBe(17);
+    expect(rangeValue.end.month).toBe(6);
+    expect(rangeValue.end.day).toBe(17);
+  });
+
+  it("commits a single-day range when pointerup happens outside the calendar", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 5),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const dateButtons = wrapper.findAll(".react-spectrum-Calendar-date");
+    const day17 = dateButtons.find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+    await press(day17!);
+    expect(onChange).not.toHaveBeenCalled();
+
+    const outside = document.createElement("div");
+    document.body.appendChild(outside);
+    (day17!.element as HTMLElement).focus();
+    outside.dispatchEvent(createPointerEvent("pointerdown"));
+    outside.dispatchEvent(createPointerEvent("pointerup"));
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const rangeValue = onChange.mock.calls[0]?.[0] as {
+      start: CalendarDate;
+      end: CalendarDate;
+    };
+    expect(rangeValue.start.month).toBe(6);
+    expect(rangeValue.start.day).toBe(17);
+    expect(rangeValue.end.month).toBe(6);
+    expect(rangeValue.end.day).toBe(17);
+
+    outside.remove();
   });
 });

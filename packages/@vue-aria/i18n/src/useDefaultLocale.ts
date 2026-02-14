@@ -1,4 +1,4 @@
-import { computed, onScopeDispose, ref } from "vue";
+import { computed, getCurrentScope, onScopeDispose, ref } from "vue";
 import { isRTL } from "./utils";
 import { useIsSSR } from "@vue-aria/ssr";
 import type { ReadonlyRef } from "@vue-aria/types";
@@ -42,8 +42,9 @@ function updateLocale() {
 export function useDefaultLocale(): ReadonlyRef<Locale> {
   const isSSR = useIsSSR();
   const defaultLocale = ref(currentLocale);
+  const hasScope = Boolean(getCurrentScope());
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && hasScope) {
     if (listeners.size === 0) {
       window.addEventListener("languagechange", updateLocale);
     }

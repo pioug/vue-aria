@@ -6491,4 +6491,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated execution queue status for `@vue-spectrum/calendar` to `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 6 tests).
-- Note: current calendar tests/SSR emit repeated `onScopeDispose()` warnings from lower-level composables; behavior/tests are passing, and lifecycle cleanup parity remains a follow-up task.
+- Additional `@vue-spectrum/calendar` parity update:
+  - wired `RangeCalendar` root DOM ref through `CalendarBaseView` so `useRangeCalendar` can commit anchor selections on blur and outside-pointer completion paths.
+  - added regression coverage for blur-driven single-day range commit:
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 7 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - added regression coverage for outside-pointer range commit, asserting selection finalization on `pointerup` events occurring outside calendar controls.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 8 tests).
+- Lifecycle cleanup parity update:
+  - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
+- Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

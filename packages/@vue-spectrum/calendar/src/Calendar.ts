@@ -3,7 +3,7 @@ import { useButton } from "@vue-aria/button";
 import { useCalendar, useCalendarCell, useCalendarGrid, useRangeCalendar } from "@vue-aria/calendar";
 import { useCalendarState, useRangeCalendarState, type CalendarState, type RangeCalendarState } from "@vue-aria/calendar-state";
 import { useLocale } from "@vue-aria/i18n";
-import { defineComponent, h, computed, ref, type PropType } from "vue";
+import { defineComponent, h, computed, ref, type PropType, type Ref } from "vue";
 
 type DateValue = any;
 type DateRangeValue = { start: DateValue; end: DateValue } | null;
@@ -273,6 +273,11 @@ const CalendarBaseView = defineComponent({
       required: false,
       default: undefined,
     },
+    rootElementRef: {
+      type: Object as PropType<Ref<HTMLElement | null> | undefined>,
+      required: false,
+      default: undefined,
+    },
     style: {
       type: Object as PropType<Record<string, unknown> | undefined>,
       required: false,
@@ -289,6 +294,7 @@ const CalendarBaseView = defineComponent({
         {
           ...props.calendarProps,
           class: ["react-spectrum-Calendar", props.className],
+          ref: props.rootElementRef as any,
           style: props.style,
         },
         [
@@ -661,6 +667,15 @@ export const RangeCalendar = defineComponent({
   setup(props) {
     const locale = useLocale();
     const visibleMonths = computed(() => Math.max(props.visibleMonths ?? 1, 1));
+    const calendarElementRef = ref<HTMLElement | null>(null);
+    const calendarDomRef = {
+      get current() {
+        return calendarElementRef.value;
+      },
+      set current(value: HTMLElement | null) {
+        calendarElementRef.value = value;
+      },
+    };
 
     const state = useRangeCalendarState({
       get value() {
@@ -732,7 +747,7 @@ export const RangeCalendar = defineComponent({
         errorMessage: props.errorMessage,
       },
       state as any,
-      { current: null }
+      calendarDomRef
     );
 
     return () =>
@@ -747,6 +762,7 @@ export const RangeCalendar = defineComponent({
         state,
         errorMessage: props.errorMessage,
         className: props.UNSAFE_className,
+        rootElementRef: calendarElementRef,
         style: props.UNSAFE_style,
       });
   },
