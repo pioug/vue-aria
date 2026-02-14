@@ -157,8 +157,12 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   // With checkbox selection, action becomes primary. With highlight selection, action is secondary.
   const isLinkOverride = manager.isLink(key) && linkBehavior === "override";
   const isActionOverride = onAction && options.UNSTABLE_itemBehavior === "action";
-  const hasLinkAction = manager.isLink(key) && linkBehavior !== "selection" && linkBehavior !== "none";
   const allowsSelection = !isDisabled && manager.canSelectItem(key) && !isLinkOverride && !isActionOverride;
+  const hasLinkAction =
+    manager.isLink(key) &&
+    linkBehavior !== "selection" &&
+    linkBehavior !== "none" &&
+    !(manager.selectionBehavior === "replace" && allowsSelection);
   const allowsActions = (onAction || hasLinkAction) && !isDisabled;
   const hasPrimaryAction =
     allowsActions &&

@@ -9115,3 +9115,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 38 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` highlight-link parity update:
+  - added migrated coverage to verify highlight-style link rows remain selectable without dispatching synthetic link clicks.
+  - aligned shared selectable-item behavior so link rows with replace-selection semantics remain selection-driven, while preserving link action behavior for checkbox and non-selectable modes.
+  - preserved synthetic link dataset attributes on link rows regardless actionability so row link metadata stays consistent across selection styles.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+    - `packages/@vue-aria/selection/src/useSelectableItem.ts`
+    - `packages/@vue-aria/gridlist/src/useGridListItem.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 40 tests).
+- Validation: `npm test -- packages/@vue-aria/selection/test/useSelectableItem.test.ts packages/@vue-aria/gridlist/test` passed (9 files, 45 tests).
+- Validation: `npm run check -- --pretty false` passed.

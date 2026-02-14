@@ -42,6 +42,13 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   await nextTick();
 }
 
+async function mousePress(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+  await target.trigger("mousedown", { button: 0 });
+  await target.trigger("mouseup", { button: 0 });
+  await target.trigger("click", { button: 0 });
+  await nextTick();
+}
+
 async function pressEnter(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown>, element: Element }) {
   (target.element as HTMLElement).focus();
   await target.trigger("keydown", { key: "Enter" });
@@ -1024,7 +1031,7 @@ describe("TreeView", () => {
 
       const onClickDefault = mockClickDefault();
       try {
-        await press(rows[0]!);
+        await mousePress(rows[0]!);
       } finally {
         onClickDefault.restore();
         setInteractionModality("keyboard");
@@ -1042,6 +1049,68 @@ describe("TreeView", () => {
       await rows[0]!.get('input[type="checkbox"]').setValue(true);
       await nextTick();
 
+      rows = wrapper.findAll('[role="row"]');
+      expect(rows[0]!.attributes("aria-selected")).toBe("true");
+    }
+  );
+
+  it.each(["single", "multiple"] as const)(
+    'supports row links with highlight selection mode "%s"',
+    async (selectionMode) => {
+      const wrapper = mount(TreeView as any, {
+        props: {
+          "aria-label": "Highlight link tree",
+          selectionMode,
+          selectionStyle: "highlight",
+        },
+        slots: {
+          default: () => [
+            h(TreeViewItem as any, {
+              id: "docs",
+              textValue: "Docs",
+              href: "https://example.com/docs",
+            }, {
+              default: () => [
+                h(TreeViewItemContent as any, null, {
+                  default: () => "Docs",
+                }),
+              ],
+            }),
+            h(TreeViewItem as any, {
+              id: "guides",
+              textValue: "Guides",
+              href: "https://example.com/guides",
+            }, {
+              default: () => [
+                h(TreeViewItemContent as any, null, {
+                  default: () => "Guides",
+                }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      let rows = wrapper.findAll('[role="row"]');
+      expect(rows).toHaveLength(2);
+      expect(rows[0]!.attributes("data-href")).toBe("https://example.com/docs");
+      expect(rows[1]!.attributes("data-href")).toBe("https://example.com/guides");
+      expect(rows[0]!.find('input[type="checkbox"]').exists()).toBe(false);
+      expect(rows[1]!.find('input[type="checkbox"]').exists()).toBe(false);
+
+      const onClickDefault = mockClickDefault();
+      try {
+        await press(rows[0]!);
+      } finally {
+        onClickDefault.restore();
+        setInteractionModality("keyboard");
+      }
+
+      const linkClick = onClickDefault.onClick.mock.calls
+        .map((args) => args[0] as MouseEvent)
+        .find((event) => event.target instanceof HTMLAnchorElement);
+      expect(linkClick).toBeUndefined();
       rows = wrapper.findAll('[role="row"]');
       expect(rows[0]!.attributes("aria-selected")).toBe("true");
     }

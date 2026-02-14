@@ -290,7 +290,7 @@ export function useGridListItem<T>(
   };
 
   const syntheticLinkProps = useSyntheticLinkProps(node.props);
-  const linkProps = itemStates.hasAction ? syntheticLinkProps : {};
+  const linkProps = state.selectionManager.isLink(node.key) ? syntheticLinkProps : {};
   const customRowProps = getNodeRowProps(node);
   const nodeAriaLabel = getNodeAriaLabel(node);
   const rowProps = mergeProps(itemProps, linkProps, customRowProps, {
