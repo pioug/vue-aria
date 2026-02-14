@@ -63,7 +63,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/table`: In progress
 - `@vue-aria/tree`: In progress
 - `@vue-aria/calendar`: In progress
-- `@vue-aria/datepicker`: Not started
+- `@vue-aria/datepicker`: In progress
 - `@vue-aria/breadcrumbs`: Complete
 - `@vue-aria/dialog`: Complete
 - `@vue-aria/separator`: Complete
@@ -3003,6 +3003,75 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Start `@vue-aria/datepicker` and wire aria behavior hooks onto the completed stately datepicker-state surface.
 2. Backfill additional edge-case regressions discovered while porting `@vue-aria/datepicker` consumers.
+
+## 31o) Package Record: @vue-aria/datepicker
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/datepicker/src`
+  - `references/react-spectrum/packages/@react-aria/datepicker/intl`
+  - `references/react-spectrum/packages/@react-aria/datepicker/test`
+  - `references/react-spectrum/packages/@react-aria/datepicker/docs`
+- Local package path:
+  - `packages/@vue-aria/datepicker`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useDatePicker`
+  - `useDateRangePicker`
+  - `useDateField`
+  - `useTimeField`
+  - `useDateSegment`
+  - `useDatePickerGroup`
+  - `useDisplayNames`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/types.ts`
+  - `src/intlMessages.ts` (copied upstream locale bundle)
+  - `src/useDatePicker.ts`
+  - `src/useDateRangePicker.ts`
+  - `src/useDateField.ts`
+  - `src/useDateSegment.ts`
+  - `src/useDatePickerGroup.ts`
+  - `src/useDisplayNames.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Core hook surface is in place; integration-level interaction matrix parity against upstream component stories is still pending.
+
+### Tests
+- Total upstream test files: 1 (`useDatePicker.test.tsx`)
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted upstream scenario coverage for programmatic date-field value commits when initially empty.
+  - Added adapted hook-level coverage for range picker field propagation, native hidden-input behavior, time-field input serialization, and literal segment a11y hiding.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/datepicker.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+  - Hook package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [ ] Initial role/label/segment wiring validated in adapted tests; expanded keyboard and focus interaction matrix pending.
+
+### Visual Parity
+- Not applicable for behavior hook package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Expand `useDateSegment` keyboard/composition and directionality matrix coverage against upstream behavior branches.
+2. Add integration-style tests for picker/group focus handoff with popover-open and blur-to-dialog transitions.
+3. Mirror upstream docs examples and base markup more completely.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):

@@ -31,6 +31,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/table](/packages/table)
 - [@vue-aria/tree](/packages/tree)
 - [@vue-aria/calendar](/packages/calendar)
+- [@vue-aria/datepicker](/packages/datepicker)
 - [@vue-aria/selection](/packages/selection)
 - [@vue-aria/selection-state](/packages/selection-state)
 - [@vue-aria/i18n](/packages/i18n)
