@@ -799,6 +799,10 @@ describe("SubmenuTrigger", () => {
     await wrapper.vm.$nextTick();
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
     await wrapper.vm.$nextTick();
+    const expandedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(expandedTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(expandedTrigger?.getAttribute("aria-controls")).toBeTruthy();
 
     const submenuPopover = Array.from(document.body.querySelectorAll(".spectrum-Menu-popover"))
       .find((popover) => popover.textContent?.includes("Sub item")) as HTMLElement | undefined;
@@ -809,6 +813,10 @@ describe("SubmenuTrigger", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
+    const collapsedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(collapsedTrigger?.getAttribute("aria-expanded")).toBe("false");
+    expect(collapsedTrigger?.getAttribute("aria-controls")).toBeNull();
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
     expect(document.body.textContent).not.toContain("Sub item");
     expect(onRootClose).toHaveBeenCalledTimes(0);

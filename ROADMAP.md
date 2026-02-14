@@ -9680,3 +9680,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 54 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu Escape ARIA reset parity update:
+  - expanded migrated `SubmenuTrigger` Escape-close coverage to assert trigger `aria-expanded` transitions from `"true"` to `"false"` and clears `aria-controls` when the submenu closes.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 16 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 54 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
