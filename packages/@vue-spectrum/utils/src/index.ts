@@ -1,5 +1,6 @@
 export { BreakpointProvider, useMatchedBreakpoints, useBreakpoint } from "./BreakpointProvider";
 export { classNames, keepSpectrumClassNames, shouldKeepSpectrumClassNames } from "./classNames";
+export { useMediaQuery } from "./useMediaQuery";
 export {
   baseStyleProps,
   convertStyleProps,
