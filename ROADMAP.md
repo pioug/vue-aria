@@ -7698,6 +7698,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `ROADMAP.md`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` selection-control parity update:
+  - added controlled/uncontrolled selection behavior coverage for `selectedKey` and `defaultSelectedKey` during user-triggered option changes.
+  - stabilized picker keyboard-focus harness by mocking `scrollIntoView` in picker tests.
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 10 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

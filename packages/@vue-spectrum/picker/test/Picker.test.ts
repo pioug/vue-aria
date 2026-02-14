@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h, nextTick } from "vue";
 import { Item } from "../src/Item";
 import { Picker } from "../src/Picker";
@@ -22,7 +22,37 @@ function renderPicker(props: Record<string, unknown> = {}) {
   });
 }
 
+let restoreScrollIntoView: (() => void) | null = null;
+
 describe("Picker", () => {
+  beforeAll(() => {
+    const prototype = window.HTMLElement.prototype as HTMLElement & { scrollIntoView?: (arg?: unknown) => void };
+    const original = prototype.scrollIntoView;
+
+    Object.defineProperty(prototype, "scrollIntoView", {
+      configurable: true,
+      writable: true,
+      value: vi.fn(),
+    });
+
+    restoreScrollIntoView = () => {
+      if (original) {
+        Object.defineProperty(prototype, "scrollIntoView", {
+          configurable: true,
+          writable: true,
+          value: original,
+        });
+        return;
+      }
+
+      delete (prototype as unknown as { scrollIntoView?: unknown }).scrollIntoView;
+    };
+  });
+
+  afterAll(() => {
+    restoreScrollIntoView?.();
+  });
+
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -79,6 +109,48 @@ describe("Picker", () => {
     await nextTick();
 
     expect(wrapper.text()).toContain("Three");
+  });
+
+  it("keeps controlled selectedKey value on selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      selectedKey: "1",
+      onSelectionChange,
+    });
+
+    expect(wrapper.text()).toContain("One");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const select = wrapper.get("select");
+    (select.element as HTMLSelectElement).value = "2";
+    await select.trigger("change");
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect(wrapper.text()).toContain("One");
+  });
+
+  it("updates uncontrolled defaultSelectedKey value on selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      defaultSelectedKey: "1",
+      onSelectionChange,
+    });
+
+    expect(wrapper.text()).toContain("One");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const select = wrapper.get("select");
+    (select.element as HTMLSelectElement).value = "2";
+    await select.trigger("change");
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect(wrapper.text()).toContain("Two");
   });
 
   it("supports controlled open state", async () => {
