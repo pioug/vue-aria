@@ -92,6 +92,52 @@ describe("Calendar", () => {
     expect(updatedTitle).not.toBe(initialTitle);
   });
 
+  it("renders multiple month grids when visibleMonths is set", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(2);
+  });
+
+  it("applies UNSAFE_className and UNSAFE_style to the calendar root", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        UNSAFE_className: "custom-calendar",
+        UNSAFE_style: {
+          borderWidth: "2px",
+          borderStyle: "solid",
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get(".react-spectrum-Calendar.custom-calendar");
+    const style = root.attributes("style");
+    expect(style).toContain("border-width: 2px");
+    expect(style).toContain("border-style: solid");
+  });
+
+  it("renders an error message when provided", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        errorMessage: "Please choose a valid date",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please choose a valid date");
+  });
+
   it("renders a range calendar", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {
