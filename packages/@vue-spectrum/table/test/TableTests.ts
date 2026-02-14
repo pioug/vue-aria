@@ -710,6 +710,27 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("does not select all rows via Ctrl+A when disallowSelectAll is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      disallowSelectAll: true,
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("does not select disabled rows when using Ctrl+A in checkbox-style multiple selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

@@ -20,6 +20,7 @@ export interface GridProps {
   onRowAction?: (key: Key) => void;
   onCellAction?: (key: Key) => void;
   escapeKeyBehavior?: "clearSelection" | "none";
+  disallowSelectAll?: boolean;
   shouldSelectOnPressUp?: boolean;
   "aria-label"?: string;
   "aria-labelledby"?: string;
@@ -45,6 +46,7 @@ export function useGrid<T, C extends GridCollectionType<T>>(
     onRowAction,
     onCellAction,
     escapeKeyBehavior = "clearSelection",
+    disallowSelectAll,
     shouldSelectOnPressUp,
   } = props;
   const manager = state.selectionManager;
@@ -75,6 +77,7 @@ export function useGrid<T, C extends GridCollectionType<T>>(
     isVirtualized,
     scrollRef,
     disallowTypeAhead,
+    disallowSelectAll,
     escapeKeyBehavior,
   });
 

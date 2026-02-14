@@ -8146,6 +8146,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` select-all opt-out parity update:
+  - added `disallowSelectAll` prop support to `TableView` and passed it through grid selection handling.
+  - updated `@vue-aria/grid/useGrid` to support forwarding `disallowSelectAll` into selectable collection keyboard behavior.
+  - added regression coverage to verify `Ctrl+A` is a no-op when `disallowSelectAll` is true.
+  - documented `disallowSelectAll` in package docs.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - `packages/@vue-aria/grid/src/useGrid.ts`
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 76 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
