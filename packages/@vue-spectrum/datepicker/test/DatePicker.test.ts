@@ -482,11 +482,15 @@ describe("DatePicker", () => {
   });
 
   it("forwards onFocusChange for date picker group focus transitions", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
     const onFocusChange = vi.fn();
     const wrapper = mount(DatePicker as any, {
       props: {
         "aria-label": "Date picker",
         defaultValue: new CalendarDate(2019, 6, 5),
+        onFocus,
+        onBlur,
         onFocusChange,
       },
       attachTo: document.body,
@@ -494,10 +498,12 @@ describe("DatePicker", () => {
 
     await wrapper.get(".react-spectrum-DatePicker-group").trigger("focusin");
     await nextTick();
+    expect(onFocus).toHaveBeenCalledTimes(1);
     expect(onFocusChange).toHaveBeenCalledWith(true);
 
     await wrapper.get(".react-spectrum-DatePicker-group").trigger("focusout", { relatedTarget: null });
     await nextTick();
+    expect(onBlur).toHaveBeenCalledTimes(1);
     expect(onFocusChange).toHaveBeenCalledWith(false);
   });
 
@@ -1286,6 +1292,8 @@ describe("DateRangePicker", () => {
   });
 
   it("forwards range onFocusChange for group focus transitions", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
     const onFocusChange = vi.fn();
     const wrapper = mount(DateRangePicker as any, {
       props: {
@@ -1294,6 +1302,8 @@ describe("DateRangePicker", () => {
           start: new CalendarDate(2019, 6, 5),
           end: new CalendarDate(2019, 6, 8),
         },
+        onFocus,
+        onBlur,
         onFocusChange,
       },
       attachTo: document.body,
@@ -1301,10 +1311,12 @@ describe("DateRangePicker", () => {
 
     await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("focusin");
     await nextTick();
+    expect(onFocus).toHaveBeenCalledTimes(1);
     expect(onFocusChange).toHaveBeenCalledWith(true);
 
     await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("focusout", { relatedTarget: null });
     await nextTick();
+    expect(onBlur).toHaveBeenCalledTimes(1);
     expect(onFocusChange).toHaveBeenCalledWith(false);
   });
 
