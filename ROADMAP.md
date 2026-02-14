@@ -2714,12 +2714,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 5 (adapted)
-- Passing test files: 5 (validated 2026-02-14)
+- Ported test files: 6 (adapted)
+- Passing test files: 6 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted coverage for root grid semantics, shared list metadata wiring, and virtualized row/column count behavior.
   - Added adapted item-level coverage for row id wiring, action chaining, virtualized row index behavior, and tree expansion-key keyboard branches.
   - Added adapted section and selection-checkbox helper coverage.
+  - Added adapted interaction-harness coverage for ArrowLeft/ArrowRight child focus traversal in row `keyboardNavigationBehavior="arrow"` mode.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2729,7 +2730,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [x] Baseline ARIA role/row/gridcell semantics validated in adapted tests.
-- [ ] Full keyboard navigation parity validation pending through downstream integration scenarios.
+- [ ] Keyboard navigation parity is now partially covered via interaction harness tests; downstream consumer matrix is still pending.
 
 ### Visual Parity
 - [ ] Pending upstream example-by-example comparison for grid list layout/states.
@@ -2738,7 +2739,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand integration-style interaction parity coverage from upstream consumers (`tree`, `tag`, list-view patterns).
+1. Expand integration-style interaction parity coverage from upstream consumers (`tree`, `tag`, list-view patterns) beyond the initial row-child navigation harness.
 2. Mirror additional upstream docs examples, including section and tabbable-child navigation variants.
 3. Close API checklist and visual/accessibility parity gates.
 
@@ -5290,3 +5291,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31i` implementation/test notes and next-action wording to reflect completed callback-builder slice.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree-state/test packages/@vue-aria/tree/test` passed (4 files, 9 tests).
+- Expanded `@vue-aria/gridlist` interaction parity:
+  - added `packages/@vue-aria/gridlist/test/useGridList.interactions.test.ts` with integrated `useListState` + `useGridList` + `useGridListItem` harness coverage for ArrowLeft/ArrowRight child focus traversal.
+  - validated row child-navigation behavior in `keyboardNavigationBehavior="arrow"` mode using real DOM focus movement assertions.
+  - updated package record `31j` test/accessibility notes and counts to reflect the new interaction coverage slice.
+- Validation: `npm test -- packages/@vue-aria/gridlist/test` passed (6 files, 14 tests).
