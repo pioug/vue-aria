@@ -406,6 +406,45 @@ describe("Calendar", () => {
     expect(root.attributes("aria-describedby")).toContain("trip-planner-help");
   });
 
+  it("applies UNSAFE_className and UNSAFE_style to the range-calendar root", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        UNSAFE_className: "custom-range-calendar",
+        UNSAFE_style: {
+          borderWidth: "3px",
+          borderStyle: "dashed",
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get(".react-spectrum-Calendar.custom-range-calendar");
+    const style = root.attributes("style");
+    expect(style).toContain("border-width: 3px");
+    expect(style).toContain("border-style: dashed");
+  });
+
+  it("renders range-calendar error messages when provided", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        errorMessage: "Please pick a valid range",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please pick a valid range");
+  });
+
   it("renders selected range cell aria labels without unresolved placeholders", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {
