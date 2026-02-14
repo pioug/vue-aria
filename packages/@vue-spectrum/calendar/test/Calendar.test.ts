@@ -290,6 +290,24 @@ describe("Calendar", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it("prevents selection changes when calendar is read-only", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isReadOnly: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+    await press(day17!);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("disables next navigation when maxValue blocks the next visible range", () => {
     const wrapper = mount(Calendar as any, {
       props: {
@@ -743,6 +761,28 @@ describe("Calendar", () => {
     expect(rangeValue.start.day).toBe(17);
     expect(rangeValue.end.month).toBe(6);
     expect(rangeValue.end.day).toBe(21);
+  });
+
+  it("prevents range selection changes when range-calendar is read-only", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 5),
+        isReadOnly: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day10 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "10");
+    const day12 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+
+    await press(day10!);
+    await press(day12!);
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("keeps visual range stable in controlled range-calendar mode", async () => {
