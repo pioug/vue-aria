@@ -9571,3 +9571,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 44 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` onClose-composition parity update:
+  - normalized `Menu` `onClose` handling to support composed callback arrays emitted by vnode prop merges, and forwarded a callable handler into `useMenu` and child `MenuItem`/`MenuSection` wiring.
+  - added `MenuTrigger` coverage asserting user-provided `Menu` `onClose` runs when selecting an item while preserving trigger/menu close behavior.
+  - tightened submenu `Escape` parity assertions to ensure neither root nor submenu user `onClose` callbacks fire when only the submenu closes.
+    - `packages/@vue-spectrum/menu/src/Menu.ts`
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 45 tests).
+- Validation: `npm run check -- --pretty false` passed.

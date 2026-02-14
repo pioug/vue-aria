@@ -122,6 +122,24 @@ describe("MenuTrigger", () => {
     expect(onOpenChange).toHaveBeenCalledTimes(1);
   });
 
+  it("calls user menu onClose when selecting an item", async () => {
+    const onClose = vi.fn();
+    const wrapper = renderMenuTrigger({}, { onClose });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    await trigger.trigger("click");
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+
+    const firstItem = document.body.querySelector('[role="menuitem"]') as HTMLElement | null;
+    firstItem?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+  });
+
   it("does not show selection checkmarks when selectionMode is not defined", async () => {
     const wrapper = renderMenuTrigger({}, {
       selectedKeys: ["Foo"],

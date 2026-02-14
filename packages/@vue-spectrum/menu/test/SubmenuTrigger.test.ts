@@ -246,6 +246,8 @@ describe("SubmenuTrigger", () => {
   });
 
   it("closes submenu on Escape without closing root menu", async () => {
+    const onRootClose = vi.fn();
+    const onSubmenuClose = vi.fn();
     const wrapper = mount(MenuTrigger as any, {
       props: {
         defaultOpen: true,
@@ -253,12 +255,12 @@ describe("SubmenuTrigger", () => {
       slots: {
         default: () => [
           h("button", { "data-testid": "trigger" }, "Menu Button"),
-          h(Menu as any, { ariaLabel: "Menu" }, {
+          h(Menu as any, { ariaLabel: "Menu", onClose: onRootClose }, {
             default: () => [
               h(SubmenuTrigger as any, null, {
                 default: () => [
                   h(Item as any, { key: "more" }, { default: () => "More" }),
-                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                  h(Menu as any, { ariaLabel: "Submenu", onClose: onSubmenuClose }, {
                     default: () => [
                       h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
                     ],
@@ -291,6 +293,8 @@ describe("SubmenuTrigger", () => {
 
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
     expect(document.body.textContent).not.toContain("Sub item");
+    expect(onRootClose).toHaveBeenCalledTimes(0);
+    expect(onSubmenuClose).toHaveBeenCalledTimes(0);
   });
 
   it("does not select submenu triggers even when selectedKeys includes the trigger key", async () => {

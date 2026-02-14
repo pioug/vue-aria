@@ -7,8 +7,29 @@ import { MenuItem } from "./MenuItem";
 import { MenuSection } from "./MenuSection";
 import type { MenuCollectionNode, SpectrumMenuNodeData, SpectrumMenuProps } from "./types";
 
+type OnCloseHandler = NonNullable<SpectrumMenuProps<object>["onClose"]>;
+type OnCloseValue = OnCloseHandler | OnCloseHandler[] | undefined;
+
 function isRenderableNode(node: VNode): boolean {
   return typeof node.type !== "symbol";
+}
+
+function createOnCloseHandler(value: OnCloseValue): OnCloseHandler | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  if (typeof value === "function") {
+    return value;
+  }
+
+  return () => {
+    for (const handler of value) {
+      if (typeof handler === "function") {
+        handler();
+      }
+    }
+  };
 }
 
 /**
@@ -94,7 +115,7 @@ export const Menu = defineComponent({
       required: false,
     },
     onClose: {
-      type: Function as PropType<SpectrumMenuProps<object>["onClose"]>,
+      type: [Function, Array] as PropType<OnCloseValue>,
       required: false,
     },
     onKeyDown: {
@@ -125,6 +146,7 @@ export const Menu = defineComponent({
     },
   },
   setup(props, { attrs, slots, expose }) {
+    const onClose = createOnCloseHandler(props.onClose as OnCloseValue);
     const menuRef = ref<HTMLElement | null>(null);
     const submenuRef = ref<HTMLElement | null>(null);
     const menuRefObject = {
@@ -157,7 +179,7 @@ export const Menu = defineComponent({
         shouldFocusWrap: props.shouldFocusWrap,
         shouldUseVirtualFocus: props.shouldUseVirtualFocus,
         isVirtualized: props.isVirtualized,
-        onClose: props.onClose,
+        onClose,
         onAction: props.onAction,
         autoFocus: props.autoFocus,
         onKeyDown: props.onKeyDown,
@@ -222,7 +244,7 @@ export const Menu = defineComponent({
                       item: item as MenuCollectionNode,
                       state,
                       closeOnSelect: props.closeOnSelect,
-                      onClose: props.onClose,
+                      onClose,
                       isVirtualized: props.isVirtualized,
                     });
                   }
@@ -232,7 +254,7 @@ export const Menu = defineComponent({
                     item: item as MenuCollectionNode,
                     state,
                     closeOnSelect: props.closeOnSelect,
-                    onClose: props.onClose,
+                    onClose,
                     isVirtualized: props.isVirtualized,
                   });
 
