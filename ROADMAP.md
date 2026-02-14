@@ -9542,3 +9542,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` sibling-submenu parity update:
+  - added migrated `SubmenuTrigger` coverage to assert opening a sibling submenu closes the previously opened sibling submenu, preserving single-open submenu behavior.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.

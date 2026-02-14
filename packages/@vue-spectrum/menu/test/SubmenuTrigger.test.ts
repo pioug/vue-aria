@@ -101,4 +101,61 @@ describe("SubmenuTrigger", () => {
     expect(allMenus).toHaveLength(1);
     expect(document.body.textContent).not.toContain("Sub item");
   });
+
+  it("only keeps one sibling submenu open at a time", async () => {
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more-a" }, { default: () => "More A" }),
+                  h(Menu as any, { ariaLabel: "Submenu A" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-a-1" }, { default: () => "Sub item A" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more-b" }, { default: () => "More B" }),
+                  h(Menu as any, { ariaLabel: "Submenu B" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-b-1" }, { default: () => "Sub item B" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const firstTrigger = rootItems.find((item) => item.textContent?.includes("More A"));
+    const secondTrigger = rootItems.find((item) => item.textContent?.includes("More B"));
+    expect(firstTrigger).toBeTruthy();
+    expect(secondTrigger).toBeTruthy();
+
+    firstTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.textContent).toContain("Sub item A");
+    expect(document.body.textContent).not.toContain("Sub item B");
+
+    secondTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.textContent).toContain("Sub item B");
+    expect(document.body.textContent).not.toContain("Sub item A");
+
+    const allMenus = document.body.querySelectorAll('[role="menu"]');
+    expect(allMenus.length).toBeGreaterThanOrEqual(2);
+  });
 });
