@@ -189,6 +189,29 @@ describe("MenuTrigger", () => {
     expect(document.body.querySelectorAll(".spectrum-Menu-popover")).toHaveLength(1);
   });
 
+  it("renders menu popover in a provided portal container on small screens", async () => {
+    const screenWidthSpy = vi.spyOn(window.screen, "width", "get").mockImplementation(() => 700);
+    try {
+      const portalContainer = document.createElement("div");
+      portalContainer.setAttribute("data-testid", "tray-portal-container");
+      document.body.appendChild(portalContainer);
+
+      const wrapper = renderMenuTrigger({
+        portalContainer,
+      });
+      const trigger = wrapper.get('[data-testid="trigger"]');
+
+      await trigger.trigger("click");
+      await wrapper.vm.$nextTick();
+
+      const popover = portalContainer.querySelector(".spectrum-Menu-popover");
+      expect(popover).toBeTruthy();
+      expect(document.body.querySelectorAll(".spectrum-Menu-popover")).toHaveLength(1);
+    } finally {
+      screenWidthSpy.mockRestore();
+    }
+  });
+
   it("does not open menu on click when trigger is longPress", async () => {
     const wrapper = renderMenuTrigger({
       trigger: "longPress",
