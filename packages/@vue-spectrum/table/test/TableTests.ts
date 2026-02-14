@@ -856,6 +856,36 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("updates checkbox-style multiple selection when controlled selectedKeys changes", async () => {
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+
+    await wrapper.setProps({
+      selectedKeys: new Set(["row-1", "row-2"]),
+    });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+
+    await wrapper.setProps({
+      selectedKeys: new Set(["row-2"]),
+    });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("updates controlled selectedKeys with numeric row keys", async () => {
     const wrapper = renderTable({
       items: itemsWithFalsyRowKey,
