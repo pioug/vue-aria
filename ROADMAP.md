@@ -7351,3 +7351,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 26 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` docs parity update:
+  - clarified `DialogTrigger` type-driven nested dialog sizing defaults in type-variant guidance.
+    - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 26 tests).

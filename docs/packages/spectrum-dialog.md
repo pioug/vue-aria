@@ -99,6 +99,10 @@ const onOpenChange = (next: boolean) => {
 </template>
 ```
 
+`DialogTrigger` type influences nested `Dialog` defaults:
+- `popover` defaults to small sizing.
+- `modal`, `tray`, and fullscreen variants default to large/fullscreen sizing as applicable.
+
 ### Uncontrolled initial open state
 
 ```vue
