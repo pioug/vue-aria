@@ -7600,6 +7600,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` keyboard-disable event-target parity update:
+  - tightened disabled keyboard-navigation coverage by dispatching arrow-key input from the focused row element (matching runtime event-target semantics) rather than the root grid element.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 116 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`

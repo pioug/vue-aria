@@ -898,7 +898,7 @@ export function tableTests() {
     firstRow.focus();
     expect(document.activeElement).toBe(firstRow);
 
-    await grid.trigger("keydown", { key: "ArrowDown" });
+    await bodyRows[0]!.trigger("keydown", { key: "ArrowDown" });
     await nextTick();
     expect(document.activeElement).toBe(firstRow);
 
