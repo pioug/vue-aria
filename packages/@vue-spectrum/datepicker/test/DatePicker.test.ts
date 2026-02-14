@@ -137,6 +137,25 @@ describe("DatePicker", () => {
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
+
+  it("respects controlled isOpen updates", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isOpen: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+
+    await wrapper.setProps({ isOpen: false });
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -256,5 +275,27 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("respects controlled range isOpen updates", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isOpen: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+
+    await wrapper.setProps({ isOpen: false });
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 });

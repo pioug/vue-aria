@@ -6791,6 +6791,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added open-state callback parity coverage (`onOpenChange`) for open/close transitions in both `DatePicker` and `DateRangePicker`.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 12 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added controlled-open regression coverage for `isOpen` prop behavior in `DatePicker` and `DateRangePicker`.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 14 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
