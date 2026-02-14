@@ -10046,6 +10046,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
   - updated hidden input value resolution to derive controlled form values from reactive component props, ensuring null-clearing behavior is reflected in the hidden form field.
     - `packages/@vue-spectrum/numberfield/src/NumberField.ts`
+  - wired reactive `value`/`defaultValue`/`onChange` getters into numberfield state initialization so controlled updates propagate through `useNumberFieldState`.
+    - `packages/@vue-spectrum/numberfield/src/NumberField.ts`
   - normalized controlled-value parsing in `useNumberFieldState` using reactive `props.value` normalization (`null` -> `NaN`) so controlled state updates stay aligned with current props.
     - `packages/@vue-aria/numberfield-state/src/useNumberFieldState.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 41 tests).

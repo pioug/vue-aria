@@ -31,8 +31,8 @@ export interface NumberFieldStateOptions {
   maxValue?: number;
   step?: number;
   formatOptions?: Intl.NumberFormatOptions;
-  value?: number;
-  defaultValue?: number;
+  value?: number | null;
+  defaultValue?: number | null;
   onChange?: (value: number) => void;
   locale: string;
   isDisabled?: boolean;

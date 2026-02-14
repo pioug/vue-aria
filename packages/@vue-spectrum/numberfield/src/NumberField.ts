@@ -202,6 +202,15 @@ export const NumberField = defineComponent({
     const state = useNumberFieldState({
       ...merged,
       locale: locale.value.locale,
+      get value() {
+        return props.value as number | null | undefined;
+      },
+      get defaultValue() {
+        return props.defaultValue as number | null | undefined;
+      },
+      get onChange() {
+        return props.onChange;
+      },
     });
     const result = useNumberField(merged, state, {
       get current() {
