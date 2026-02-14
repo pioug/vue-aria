@@ -527,16 +527,22 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Completed in current slice
 - Package scaffold aligned:
   - `package.json`
-  - modules: `Dialog`, `context`, and public type definitions
+  - modules: `Dialog`, `DialogTrigger`, `DialogContainer`, `AlertDialog`, `useDialogContainer`, `context`, and public type definitions
   - package export surface wired via `src/index.ts`
 - Initial upstream test-intent migration:
   - `test/Dialog.test.ts`
   - `test/Dialog.ssr.test.ts`
+  - `test/DialogTrigger.test.ts`
+  - `test/DialogContainer.test.ts`
+  - `test/AlertDialog.test.ts`
 - Initial parity coverage added:
   - dialog role/focus behavior
   - `aria-label` / `aria-labelledby` precedence checks
   - custom DOM prop passthrough
   - dismissable close-button render and dismiss callback behavior
+  - trigger-driven open/close behavior
+  - container-driven dismissal flow
+  - alert-dialog primary/secondary/cancel action paths
 - Documentation scaffold added:
   - `docs/packages/spectrum-dialog.md`
   - VitePress nav/sidebar entry for `/packages/spectrum-dialog`
@@ -544,8 +550,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/dialog`.
 
 ### Remaining for completion
-- Port `DialogTrigger`, `DialogContainer`, `AlertDialog`, and `useDialogContainer` modules from upstream.
 - Expand coverage for modal/popover/tray/fullscreen container behaviors and interaction semantics from upstream tests.
+- Align dialog composition slots (`Heading`, `Header`, `Content`, `Footer`, `ButtonGroup`) and style-class parity with upstream Spectrum structure.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

@@ -17,6 +17,30 @@ import { Dialog } from "@vue-spectrum/dialog";
 </template>
 ```
 
+## DialogTrigger
+
+Use `DialogTrigger` to connect trigger interactions with dialog visibility.
+
+```vue
+<script setup lang="ts">
+import { Dialog, DialogTrigger } from "@vue-spectrum/dialog";
+</script>
+
+<template>
+  <DialogTrigger>
+    <template #trigger>
+      <button>Open dialog</button>
+    </template>
+    <template #default="{ close }">
+      <Dialog>
+        <h2>Preferences</h2>
+        <button @click="close">Close</button>
+      </Dialog>
+    </template>
+  </DialogTrigger>
+</template>
+```
+
 ## Content
 
 Provide your own content structure inside the dialog body (heading, text, actions, and form content).
@@ -74,5 +98,5 @@ const onDismiss = () => {
 
 ## Related
 
-- `DialogTrigger`, `DialogContainer`, and `AlertDialog` are tracked as remaining parity work for this package.
+- `DialogContainer` and `AlertDialog` are also available in this package.
 - `Spectrum S2` remains out of scope unless explicitly requested.
