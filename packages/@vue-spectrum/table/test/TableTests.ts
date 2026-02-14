@@ -204,6 +204,22 @@ export function tableTests() {
     expect(lastSelection?.has("row-2")).toBe(true);
   });
 
+  it("updates aria-selected on uncontrolled pointer selection", async () => {
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("supports default selected keys initialization", () => {
     const wrapper = renderTable({
       selectionMode: "single",
