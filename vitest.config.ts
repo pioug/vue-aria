@@ -250,6 +250,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/searchfield": fileURLToPath(
         new URL("./packages/@vue-spectrum/searchfield/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/progress": fileURLToPath(
+        new URL("./packages/@vue-spectrum/progress/src/index.ts", import.meta.url)
       )
     }
   }

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/searchfield`
+- Current focus package: `@vue-spectrum/progress`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -121,7 +121,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/breadcrumbs`: Not started
 - `@vue-spectrum/dialog`: Not started
 - `@vue-spectrum/tooltip`: Not started
-- `@vue-spectrum/progress`: Not started
+- `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: Not started
 - `@vue-spectrum/toast`: Not started
 
@@ -380,6 +380,42 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand parity coverage for controlled clearing and advanced validation scenarios.
 - Validate visual parity for search icon, clear button, and quiet/invalid/valid variants.
+
+## 4h) Active Package Slice: @vue-spectrum/progress
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/progress/src`
+  - `references/react-spectrum/packages/@react-spectrum/progress/test`
+  - `references/react-spectrum/packages/@react-spectrum/progress/docs`
+- Local package path: `packages/@vue-spectrum/progress`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `ProgressBar`, `ProgressCircle`, `ProgressBarBase`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Upstream test-intent migration:
+  - `test/ProgressBar.test.ts`
+  - `test/ProgressCircle.test.ts`
+  - `test/ProgressBar.ssr.test.ts`
+  - `test/ProgressCircle.ssr.test.ts`
+- Initial parity coverage added:
+  - default/min/max/value ARIA semantics for both bar and circle
+  - indeterminate behavior and `aria-valuenow` omission
+  - clamping behavior at bounds and negative-range handling
+  - visual fill-mask rotation assertions for circle at 0/25/50/75/100
+  - `UNSAFE_className`, warning behavior, and custom DOM prop passthrough
+- Documentation scaffold added:
+  - `docs/packages/spectrum-progressbar.md`
+  - `docs/packages/spectrum-progresscircle.md`
+  - VitePress nav/sidebar entries for `/packages/spectrum-progressbar` and `/packages/spectrum-progresscircle`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/progress`.
+
+### Remaining for completion
+- Validate visual parity against upstream docs examples for staticColor and size variants.
+- Expand parity validation for `variant="overBackground"` in both components.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
