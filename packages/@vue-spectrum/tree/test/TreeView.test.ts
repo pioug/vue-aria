@@ -931,6 +931,7 @@ describe("TreeView", () => {
     let row = wrapper.get('[role="row"]');
     let chevron = row.get("button");
     expect(chevron.attributes("tabindex")).toBe("-1");
+    expect((chevron.element as HTMLButtonElement).hasAttribute("disabled")).toBe(false);
 
     await wrapper.setProps({
       disabledKeys: ["test"],
@@ -941,6 +942,7 @@ describe("TreeView", () => {
     row = wrapper.get('[role="row"]');
     chevron = row.get("button");
     expect(chevron.attributes("tabindex")).toBe("-1");
+    expect((chevron.element as HTMLButtonElement).hasAttribute("disabled")).toBe(false);
 
     await wrapper.setProps({
       disabledKeys: ["test"],
@@ -951,6 +953,7 @@ describe("TreeView", () => {
     row = wrapper.get('[role="row"]');
     chevron = row.get("button");
     expect(chevron.attributes("tabindex")).toBeUndefined();
+    expect((chevron.element as HTMLButtonElement).hasAttribute("disabled")).toBe(true);
   });
 
   it("supports expanding child rows", async () => {
