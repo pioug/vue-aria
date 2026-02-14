@@ -1104,6 +1104,30 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("prevents selecting disabled rows via keyboard in checkbox-style multiple selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      disabledKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: " " });
+    await nextTick();
+    await bodyRows[1]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("allows disabled-row actions when disabledBehavior is selection", async () => {
     const onAction = vi.fn();
     const wrapper = renderTable({
