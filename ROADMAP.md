@@ -7726,6 +7726,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 13 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` focus parity update:
+  - added `autoFocus` coverage to verify trigger focus on mount.
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

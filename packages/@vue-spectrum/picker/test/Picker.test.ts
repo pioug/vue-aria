@@ -286,6 +286,17 @@ describe("Picker", () => {
     expect((select.element as HTMLSelectElement).value).toBe("2");
   });
 
+  it("focuses the trigger when autoFocus is true", async () => {
+    const wrapper = renderPicker({
+      autoFocus: true,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    expect(document.activeElement).toBe(wrapper.get("button").element);
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderPicker({
       isDisabled: true,
