@@ -1535,6 +1535,7 @@ describe("TreeView", () => {
     await nextTick();
 
     selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
     expect(selected?.has("photos")).toBe(true);
     expect(selected?.has("projects")).toBe(true);
     expect(selected?.size).toBe(2);
