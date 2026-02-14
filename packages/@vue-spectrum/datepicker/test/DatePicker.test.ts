@@ -383,6 +383,24 @@ describe("DatePicker", () => {
     expect(defaultTitle).toContain("August");
     expect(singleTitle).toContain("July");
   });
+
+  it("passes isDateUnavailable through to calendar overlay", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDateUnavailable: (date: { day: number }) => date.day === 17,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17") as HTMLElement | undefined;
+    expect(day17).toBeTruthy();
+    expect(day17?.getAttribute("aria-disabled")).toBe("true");
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -820,5 +838,26 @@ describe("DateRangePicker", () => {
 
     expect(defaultTitle).toContain("August");
     expect(singleTitle).toContain("July");
+  });
+
+  it("passes isDateUnavailable through to range-calendar overlay", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isDateUnavailable: (date: { day: number }) => date.day === 17,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17") as HTMLElement | undefined;
+    expect(day17).toBeTruthy();
+    expect(day17?.getAttribute("aria-disabled")).toBe("true");
   });
 });
