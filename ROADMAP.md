@@ -1,12 +1,12 @@
 # Vue Aria / Vue Spectrum Roadmap
 
-Last updated: 2026-02-13
+Last updated: 2026-02-14
 Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/tree-state`
+- Current focus package: `@vue-aria/tree`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -59,8 +59,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/combobox`: Complete
 - `@vue-aria/tabs`: Complete
 - `@vue-aria/grid`: Complete
+- `@vue-aria/gridlist`: In progress
 - `@vue-aria/table`: In progress
-- `@vue-aria/tree`: Not started
+- `@vue-aria/tree`: In progress
 - `@vue-aria/calendar`: Not started
 - `@vue-aria/datepicker`: Not started
 - `@vue-aria/breadcrumbs`: Complete
@@ -2645,7 +2646,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `vitest.config.ts` alias
 - Open adaptation notes:
   - Current tree-state slice supports iterable node collections and expanded-key + selection state parity paths.
-  - Full component-builder parity for children/story composition will be expanded with `@vue-aria/tree` integration.
+  - `@vue-aria/tree` hook integration is now wired through `@vue-aria/gridlist`; collection-builder parity expansion is still pending.
 
 ### Tests
 - Total upstream test files: 1 (`useTreeState.test.js`)
@@ -2664,7 +2665,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - State package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Pending keyboard-navigation/accessibility validation through downstream `@vue-aria/tree` integration.
+- [ ] Partial validation complete through downstream `@vue-aria/tree` hook usage; full interaction matrix still pending.
 
 ### Visual Parity
 - Not applicable for state package.
@@ -2673,9 +2674,129 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port `@vue-aria/tree` hooks (`useTree`, `useTreeItem`) and integrate with `@vue-aria/tree-state`.
-2. Expand tree-state collection-builder parity to cover children-driven story/test flows from upstream.
-3. Migrate additional upstream tree interaction assertions once the `@vue-aria/tree` harness is in place.
+1. Expand tree-state collection-builder parity to cover children-driven story/test flows from upstream.
+2. Migrate additional upstream tree interaction assertions now that the `@vue-aria/tree` harness is in place.
+3. Close package-level docs/accessibility parity gates after tree integration matrix validation.
+
+## 31j) Package Record: @vue-aria/gridlist
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/gridlist/src`
+  - `references/react-spectrum/packages/@react-aria/gridlist/docs/useGridList.mdx`
+- Local package path:
+  - `packages/@vue-aria/gridlist`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useGridList`
+  - `useGridListItem`
+  - `useGridListSection`
+  - `useGridListSelectionCheckbox`
+  - shared helpers: `listMap`, `getRowId`, `normalizeKey`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useGridList.ts`
+  - `src/useGridListItem.ts`
+  - `src/useGridListSection.ts`
+  - `src/useGridListSelectionCheckbox.ts`
+  - `src/utils.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Upstream package has no dedicated package-local test folder in references; behavior parity is currently covered via adapted hook tests and downstream tree wiring.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder
+- Ported test files: 5 (adapted)
+- Passing test files: 5 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted coverage for root grid semantics, shared list metadata wiring, and virtualized row/column count behavior.
+  - Added adapted item-level coverage for row id wiring, action chaining, virtualized row index behavior, and tree expansion-key keyboard branches.
+  - Added adapted section and selection-checkbox helper coverage.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/gridlist.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [x] Baseline ARIA role/row/gridcell semantics validated in adapted tests.
+- [ ] Full keyboard navigation parity validation pending through downstream integration scenarios.
+
+### Visual Parity
+- [ ] Pending upstream example-by-example comparison for grid list layout/states.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Expand integration-style interaction parity coverage from upstream consumers (`tree`, `tag`, list-view patterns).
+2. Mirror additional upstream docs examples, including section and tabbable-child navigation variants.
+3. Close API checklist and visual/accessibility parity gates.
+
+## 31k) Package Record: @vue-aria/tree
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-aria/tree/src`
+  - `references/react-spectrum/packages/@react-aria/tree/intl`
+- Local package path:
+  - `packages/@vue-aria/tree`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `useTree`
+  - `useTreeItem`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/useTree.ts`
+  - `src/useTreeItem.ts`
+  - `src/intlMessages.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Current intl slice includes upstream `expand`/`collapse` strings and labels expand-button controls via `useLabels`.
+
+### Tests
+- Total upstream test files: no dedicated package-local unit test folder
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted `useTree` coverage for treegrid-role override behavior.
+  - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/tree.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [x] Baseline treegrid role + expand button labeling semantics covered in adapted tests.
+- [ ] Full keyboard interaction parity validation pending through integrated tree harness scenarios.
+
+### Visual Parity
+- [ ] Pending upstream example-by-example comparison for tree row and disclosure markup.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) with integrated harness tests.
+2. Mirror upstream tree docs/examples and base styling patterns in VitePress.
+3. Close API checklist and coordinate remaining parity tasks with `@vue-aria/tree-state`.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
@@ -5142,3 +5263,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added package record `31i` and marked `@vue-aria/tree-state` execution queue status `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree-state/test` passed (1 file, 3 tests).
+- Started `@vue-aria/gridlist` foundational slice:
+  - scaffolded `@vue-aria/gridlist` with upstream-aligned hooks (`useGridList`, `useGridListItem`, `useGridListSection`, `useGridListSelectionCheckbox`) and shared utils.
+  - added TypeScript/Vitest alias wiring and VitePress package page (`docs/packages/gridlist.md`) with docs nav/sidebar/index links.
+  - added adapted hook tests for root semantics, item behaviors, section semantics, selection checkbox labeling, and shared id normalization utilities.
+  - added package record `31j` and marked `@vue-aria/gridlist` execution queue status `In progress`.
+- Started `@vue-aria/tree` foundational slice:
+  - scaffolded `@vue-aria/tree` with upstream-aligned hooks (`useTree`, `useTreeItem`) and initial intl message wiring.
+  - integrated tree hooks with `@vue-aria/gridlist` + `@vue-aria/tree-state`.
+  - added adapted tests for treegrid-role override and expand-button labeling/toggle-focus behavior.
+  - added package record `31k`, updated `@vue-aria/tree` execution queue status to `In progress`, and advanced `@vue-aria/tree-state` next actions to post-integration steps.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/gridlist/test packages/@vue-aria/tree/test` passed (7 files, 16 tests).

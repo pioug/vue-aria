@@ -60,6 +60,8 @@
       "@vue-aria/table-state": ["packages/@vue-aria/table-state/src/index.ts"],
       "@vue-aria/tree-state": ["packages/@vue-aria/tree-state/src/index.ts"],
       "@vue-aria/table": ["packages/@vue-aria/table/src/index.ts"],
+      "@vue-aria/gridlist": ["packages/@vue-aria/gridlist/src/index.ts"],
+      "@vue-aria/tree": ["packages/@vue-aria/tree/src/index.ts"],
       "@vue-aria/grid": ["packages/@vue-aria/grid/src/index.ts"],
       "@vue-aria/tabs-state": ["packages/@vue-aria/tabs-state/src/index.ts"],
       "@vue-aria/tabs": ["packages/@vue-aria/tabs/src/index.ts"],
