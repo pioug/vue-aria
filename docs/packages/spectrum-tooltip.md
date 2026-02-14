@@ -86,6 +86,8 @@ import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 </TooltipTrigger>
 ```
 
+Tooltip overlays are positioned absolutely and include directional arrow alignment with Spectrum spacing defaults.
+
 ## Visual options
 
 ```vue

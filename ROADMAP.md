@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/tooltip`
+- Current focus package: `@vue-aria/toast-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -121,7 +121,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/datepicker`: In progress
 - `@vue-spectrum/breadcrumbs`: In progress
 - `@vue-spectrum/dialog`: In progress
-- `@vue-spectrum/tooltip`: In progress
+- `@vue-spectrum/tooltip`: Complete
 - `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: In progress
 - `@vue-spectrum/toast`: In progress
@@ -560,7 +560,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/tooltip/test`
   - `references/react-spectrum/packages/@react-spectrum/tooltip/docs`
 - Local package path: `packages/@vue-spectrum/tooltip`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -583,10 +583,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-tooltip`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/tooltip`.
+- Additional parity alignment completed:
+  - trigger/overlay positioning wiring now mirrors upstream shape with `useOverlayPosition` context, including arrow props/ref and border-radius-aware arrow boundary offset.
+  - tooltip overlay/arrow positioning hooks now support reactive getter inputs and dynamic placement/style reads.
+  - coverage added for tooltip arrow semantics and positioning style application.
+    - `packages/@vue-spectrum/tooltip/src/TooltipTrigger.ts`
+    - `packages/@vue-spectrum/tooltip/src/Tooltip.ts`
+    - `packages/@vue-spectrum/tooltip/test/TooltipTrigger.test.ts`
+    - `packages/@vue-aria/overlays/src/useOverlayPosition.ts`
+    - `packages/@vue-aria/overlays/src/useCloseOnScroll.ts`
 
 ### Remaining for completion
-- Expand parity coverage for trigger compositions that rely on `@vue-spectrum/button` and collection-builder wrapper behavior.
-- Align tooltip visual details (semantic icon implementation and CSS-variable spacing/arrow behavior) with upstream Spectrum rendering.
+- None currently tracked in this slice.
 
 ## 4n) Active Package Slice: @vue-aria/toast-state
 - Upstream source path(s):
@@ -7387,6 +7395,24 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/interactions/src/useFocusable.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tooltip` parity update:
+  - aligned trigger overlay/arrow positioning wiring with upstream structure by:
+    - forwarding overlay/arrow refs through `TooltipContext`
+    - wiring `useOverlayPosition` for `offset`/`crossOffset` and arrow placement behavior
+    - syncing measured tooltip border radius into `arrowBoundaryOffset`
+    - `packages/@vue-spectrum/tooltip/src/TooltipTrigger.ts`
+    - `packages/@vue-spectrum/tooltip/src/Tooltip.ts`
+  - expanded tooltip trigger assertions for positioning style and arrow semantics.
+    - `packages/@vue-spectrum/tooltip/test/TooltipTrigger.test.ts`
+- Additional `@vue-aria/overlays` parity update:
+  - updated `useOverlayPosition` and `useCloseOnScroll` to support reactive getter-based inputs and dynamic output reads (`overlayProps.style`, `arrowProps.style`, `placement`, `triggerAnchorPoint`).
+    - `packages/@vue-aria/overlays/src/useOverlayPosition.ts`
+    - `packages/@vue-aria/overlays/src/useCloseOnScroll.ts`
+- Additional `@vue-spectrum/tooltip` docs parity update:
+  - documented absolute positioning and directional arrow alignment behavior.
+    - `docs/packages/spectrum-tooltip.md`
+- Validation: `npm test -- packages/@vue-spectrum/tooltip/test packages/@vue-aria/overlays/test` passed (15 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.

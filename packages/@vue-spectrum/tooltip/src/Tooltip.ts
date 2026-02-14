@@ -64,6 +64,9 @@ export const Tooltip = defineComponent({
 
     const setOverlayRef = (value: Element | null) => {
       domRef.value = value as HTMLElement | null;
+      if (context.value?.ref && context.value.ref.current !== value) {
+        context.value.ref.current = value as HTMLElement | null;
+      }
     };
 
     const setArrowRef = (value: Element | null) => {

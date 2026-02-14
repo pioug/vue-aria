@@ -1,7 +1,20 @@
 import { FocusableProvider } from "@vue-aria/focus";
+import { useOverlayPosition } from "@vue-aria/overlays";
 import { useTooltipTrigger } from "@vue-aria/tooltip";
 import { useTooltipTriggerState } from "@vue-aria/tooltip-state";
-import { cloneVNode, computed, defineComponent, h, provide, ref, type PropType, type Ref, type VNode } from "vue";
+import {
+  cloneVNode,
+  computed,
+  defineComponent,
+  h,
+  nextTick,
+  provide,
+  ref,
+  watch,
+  type PropType,
+  type Ref,
+  type VNode,
+} from "vue";
 import { TooltipContext } from "./context";
 import type { TooltipContextValue } from "./context";
 import type { SpectrumTooltipTriggerProps } from "./types";
@@ -130,6 +143,11 @@ export const TooltipTrigger = defineComponent({
     });
     const tooltipTriggerRef = ref<HTMLElement | null>(null);
     const tooltipTriggerRefObject = createRefObject(tooltipTriggerRef);
+    const tooltipOverlayRef = ref<HTMLElement | null>(null);
+    const tooltipOverlayRefObject = createRefObject(tooltipOverlayRef);
+    const tooltipArrowRef = ref<Element | null>(null);
+    const tooltipArrowRefObject = createRefObject(tooltipArrowRef);
+    const tooltipBorderRadius = ref(0);
     const triggerType = props.trigger === "focus" ? "focus" : undefined;
     const { triggerProps, tooltipProps } = useTooltipTrigger(
       {
@@ -140,6 +158,32 @@ export const TooltipTrigger = defineComponent({
       state,
       tooltipTriggerRefObject
     );
+    const { overlayProps, arrowProps, placement: positionedPlacement, updatePosition } = useOverlayPosition({
+      get placement() {
+        return props.placement ?? "top";
+      },
+      targetRef: tooltipTriggerRefObject,
+      overlayRef: tooltipOverlayRefObject,
+      arrowRef: tooltipArrowRefObject,
+      get offset() {
+        return props.offset ?? DEFAULT_OFFSET;
+      },
+      get crossOffset() {
+        return props.crossOffset ?? DEFAULT_CROSS_OFFSET;
+      },
+      get shouldFlip() {
+        return props.shouldFlip;
+      },
+      get containerPadding() {
+        return props.containerPadding;
+      },
+      get isOpen() {
+        return state.isOpen;
+      },
+      get arrowBoundaryOffset() {
+        return tooltipBorderRadius.value;
+      },
+    });
 
     const resolvedTriggerProps = computed(() => ({
       ...triggerProps,
@@ -147,10 +191,34 @@ export const TooltipTrigger = defineComponent({
     }));
     const context = computed<TooltipContextValue>(() => ({
       state,
-      placement: ((props.placement ?? "top").split(" ")[0] as TooltipContextValue["placement"]) ?? null,
+      ref: tooltipOverlayRefObject,
+      placement:
+        (positionedPlacement as TooltipContextValue["placement"] | null)
+        ?? ((props.placement ?? "top").split(" ")[0] as TooltipContextValue["placement"]),
       tooltipProps,
+      arrowProps,
+      arrowRef: tooltipArrowRefObject,
+      UNSAFE_style: overlayProps.style as Record<string, unknown> | undefined,
     }));
     provide(TooltipContext, context as any);
+
+    watch(
+      () => state.isOpen,
+      async (isOpen) => {
+        if (!isOpen || typeof window === "undefined") {
+          return;
+        }
+
+        await nextTick();
+        if (!tooltipOverlayRef.value) {
+          return;
+        }
+
+        const spectrumBorderRadius = window.getComputedStyle(tooltipOverlayRef.value).borderRadius;
+        tooltipBorderRadius.value = spectrumBorderRadius ? parseInt(spectrumBorderRadius, 10) || 0 : 0;
+        updatePosition();
+      }
+    );
 
     const setTriggerRef = (value: unknown) => {
       tooltipTriggerRef.value = resolveElement(value);

@@ -103,6 +103,23 @@ describe("TooltipTrigger", () => {
     expect(getTooltip()).toBeTruthy();
   });
 
+  it("applies positioning styles and arrow semantics when open", async () => {
+    const wrapper = createWrapper({ delay: 0 });
+    const button = wrapper.get('[data-testid="trigger"]');
+
+    await button.trigger("focus");
+    await nextTick();
+
+    const tooltip = getTooltip() as HTMLElement;
+    expect(tooltip.style.zIndex).toBe("100000");
+    expect(["absolute", "fixed"]).toContain(tooltip.style.position);
+
+    const arrow = tooltip.querySelector(".spectrum-Tooltip-tip") as HTMLElement;
+    expect(arrow.getAttribute("aria-hidden")).toBe("true");
+    expect(arrow.getAttribute("role")).toBe("presentation");
+    expect(arrow.style.left !== "" || arrow.style.top !== "").toBe(true);
+  });
+
   it("supports Spectrum Button as a trigger composition child", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mount(TooltipTrigger as any, {
