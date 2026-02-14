@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/tree`
+- Current focus package: `@vue-spectrum/menu`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -116,7 +116,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/combobox`: In progress
 - `@vue-spectrum/tabs`: In progress
 - `@vue-spectrum/table`: In progress
-- `@vue-spectrum/tree`: In progress
+- `@vue-spectrum/tree`: Complete
 - `@vue-spectrum/calendar`: In progress
 - `@vue-spectrum/datepicker`: In progress
 - `@vue-spectrum/breadcrumbs`: Complete
@@ -9498,3 +9498,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/tree/test/useTreeItem.integration.test.ts`
 - Validation: `npm test -- packages/@vue-aria/tree/test packages/@vue-aria/tree-state/test packages/@vue-spectrum/tree/test` passed (9 files, 96 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional roadmap execution-queue update:
+  - marked `@vue-spectrum/tree` as `Complete` in the execution queue after tree package and related aria/stately suites stabilized.
+  - advanced current focus package to `@vue-spectrum/menu` for the next implementation slice.
