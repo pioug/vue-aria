@@ -191,6 +191,68 @@ describe("TreeView", () => {
     expect(projectOneRow!.attributes("aria-expanded")).toBeUndefined();
   });
 
+  it("supports dynamic nested data trees", () => {
+    const dynamicItems: SpectrumTreeViewItemData[] = [
+      {
+        id: "projects",
+        name: "Projects",
+        "data-testid": "row-projects",
+        children: [
+          { id: "project-1", name: "Project 1" },
+          {
+            id: "project-2",
+            name: "Project 2",
+            children: [
+              { id: "project-2a", name: "Project 2A" },
+              { id: "project-2b", name: "Project 2B" },
+            ],
+          },
+        ],
+      },
+      {
+        id: "reports",
+        name: "Reports",
+        children: [{ id: "report-1", name: "Report 1" }],
+      },
+    ];
+
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Dynamic tree",
+        items: dynamicItems,
+        defaultExpandedKeys: ["projects", "project-2", "reports"],
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(7);
+
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    const projectTwoRow = rows.find((row) => row.text().includes("Project 2"));
+    const projectTwoARow = rows.find((row) => row.text().includes("Project 2A"));
+    const reportsRow = rows.find((row) => row.text().includes("Reports"));
+
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-testid")).toBe("row-projects");
+    expect(projectsRow!.attributes("aria-level")).toBe("1");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-setsize")).toBe("2");
+
+    expect(projectTwoRow).toBeTruthy();
+    expect(projectTwoRow!.attributes("aria-level")).toBe("2");
+    expect(projectTwoRow!.attributes("aria-expanded")).toBe("true");
+
+    expect(projectTwoARow).toBeTruthy();
+    expect(projectTwoARow!.attributes("aria-level")).toBe("3");
+    expect(projectTwoARow!.attributes("aria-setsize")).toBe("2");
+
+    expect(reportsRow).toBeTruthy();
+    expect(reportsRow!.attributes("aria-level")).toBe("1");
+    expect(reportsRow!.attributes("aria-expanded")).toBe("true");
+    expect(reportsRow!.attributes("aria-posinset")).toBe("2");
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 
