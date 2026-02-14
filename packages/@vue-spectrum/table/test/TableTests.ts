@@ -1487,6 +1487,26 @@ export function tableTests() {
     expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("suppresses unchanged controlled checkbox callbacks by default", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+      disallowEmptySelection: true,
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("emits controlled checkbox select-all changes without mutating rendered state", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
