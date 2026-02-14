@@ -1618,6 +1618,53 @@ describe("TreeView", () => {
     expect(selected?.size).toBe(1);
   });
 
+  it("replaces highlight selection from keyboard activation in multiple mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      selectionMode: "multiple",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    let alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    let gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(alphaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+
+    await pressEnter(alphaRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("alpha")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    await pressEnter(gammaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.has("alpha")).toBe(false);
+    expect(selected?.size).toBe(1);
+
+    gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(gammaRow).toBeTruthy();
+    await pressEnter(gammaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(alphaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+    expect(alphaRow!.attributes("aria-selected")).toBe("false");
+    expect(gammaRow!.attributes("aria-selected")).toBe("true");
+  });
+
   it("applies highlight selection data attributes on rows", async () => {
     const wrapper = renderTree({
       selectionMode: "single",
