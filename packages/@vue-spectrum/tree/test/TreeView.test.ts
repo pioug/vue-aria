@@ -349,6 +349,88 @@ describe("TreeView", () => {
     expect(projectOneRow!.attributes("aria-selected")).toBe("true");
   });
 
+  it("wires row checkbox aria attributes in single-selection mode", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Single checkbox tree",
+        selectionMode: "single",
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const tree = wrapper.get('[role="treegrid"]');
+    expect(tree.attributes("aria-multiselectable")).toBeUndefined();
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      const checkbox = row.get('input[type="checkbox"]');
+      expect(checkbox.attributes("aria-label")).toBe("Select");
+      const rowId = row.attributes("id");
+      const labelledBy = checkbox.attributes("aria-labelledby");
+      expect(labelledBy).toContain(rowId);
+      expect(row.attributes("aria-selected")).toBe("false");
+    }
+  });
+
+  it("sets aria-multiselectable in multiple selection mode", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Multiple checkbox tree",
+        selectionMode: "multiple",
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const tree = wrapper.get('[role="treegrid"]');
+    expect(tree.attributes("aria-multiselectable")).toBe("true");
+  });
+
   it("does not render selection checkboxes in highlight selection mode", () => {
     const wrapper = mount(TreeView as any, {
       props: {
