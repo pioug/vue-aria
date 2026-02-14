@@ -1665,6 +1665,44 @@ describe("TreeView", () => {
     expect(gammaRow!.attributes("aria-selected")).toBe("true");
   });
 
+  it("replaces highlight selection while moving focus with ArrowDown", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      autoFocus: "first",
+      selectionMode: "multiple",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    await nextTick();
+
+    setInteractionModality("keyboard");
+    let alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    expect(alphaRow).toBeTruthy();
+    expect(document.activeElement).toBe(alphaRow!.element);
+
+    await alphaRow!.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+
+    const betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    expect(betaRow).toBeTruthy();
+    expect(alphaRow).toBeTruthy();
+    expect(document.activeElement).toBe(betaRow!.element);
+    expect(onSelectionChange).toHaveBeenCalled();
+    const selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(selected?.has("beta")).toBe(true);
+    expect(selected?.has("alpha")).toBe(false);
+    expect(selected?.size).toBe(1);
+    expect(betaRow!.attributes("aria-selected")).toBe("true");
+    expect(alphaRow!.attributes("aria-selected")).toBe("false");
+  });
+
   it("applies highlight selection data attributes on rows", async () => {
     const wrapper = renderTree({
       selectionMode: "single",
