@@ -162,6 +162,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - non-submit vs submit keyboard default-prevent behavior covered in migrated tests.
 - Documentation scaffold added:
   - `docs/packages/spectrum-button.md`
+  - `docs/packages/spectrum-action-button.md`
+  - `docs/packages/spectrum-logic-button.md`
+  - `docs/packages/spectrum-toggle-button.md`
   - VitePress nav/sidebar entries for `/packages/spectrum-button`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/button`.
