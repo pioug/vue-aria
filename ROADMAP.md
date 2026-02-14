@@ -7803,6 +7803,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 11 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` manual-activation parity update:
+  - added `Space`-key selection commit coverage for `keyboardActivation=\"manual\"` (complements Enter-key manual commit path).
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 12 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tabs` docs parity update:
   - expanded tabs keyboard docs to include `Home`/`End` behavior and disabled-tab skipping during keyboard traversal.
   - `docs/packages/spectrum-tabs.md`

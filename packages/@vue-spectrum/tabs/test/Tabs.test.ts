@@ -94,6 +94,32 @@ describe("Tabs", () => {
     expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
   });
 
+  it("supports manual keyboard activation with space key", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTabs({
+      keyboardActivation: "manual",
+      defaultSelectedKey: "tab-1",
+      onSelectionChange,
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[0]?.element as HTMLElement).focus();
+
+    await tabs[0]?.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+
+    let updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[0]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[1]?.element);
+
+    await updatedTabs[1]?.trigger("keydown", { key: " " });
+    await nextTick();
+
+    updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[1]?.attributes("aria-selected")).toBe("true");
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
+  });
+
   it("wraps horizontal keyboard navigation from first to last tab", async () => {
     const wrapper = renderTabs({
       defaultSelectedKey: "tab-1",
