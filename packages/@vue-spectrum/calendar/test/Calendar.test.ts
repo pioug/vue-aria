@@ -164,6 +164,56 @@ describe("Calendar", () => {
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
+  it("marks unavailable dates and prevents selecting them", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDateUnavailable: (date: { day: number }) => date.day === 17,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+
+    const day17Cell = day17?.element.closest("td");
+    expect(day17Cell?.classList.contains("is-unavailable")).toBe(true);
+    expect(day17?.attributes("aria-disabled")).toBe("true");
+
+    await press(day17!);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("enforces min/max date boundaries for interaction", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 15),
+        minValue: new CalendarDate(2019, 6, 10),
+        maxValue: new CalendarDate(2019, 6, 20),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day9 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "9");
+    const day10 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "10");
+    expect(day9).toBeTruthy();
+    expect(day10).toBeTruthy();
+
+    expect(day9?.attributes("aria-disabled")).toBe("true");
+    expect(day10?.attributes("aria-disabled")).toBeUndefined();
+
+    await press(day9!);
+    expect(onChange).not.toHaveBeenCalled();
+    await press(day10!);
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   it("applies UNSAFE_className and UNSAFE_style to the calendar root", () => {
     const wrapper = mount(Calendar as any, {
       props: {

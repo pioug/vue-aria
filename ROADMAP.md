@@ -6526,6 +6526,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - next-navigation disabling when `maxValue` prevents paging
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 16 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - expanded date-availability constraint coverage for:
+    - `isDateUnavailable` disabled styling/interaction behavior
+    - `minValue`/`maxValue` boundary interaction enforcement
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 18 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
