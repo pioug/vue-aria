@@ -192,6 +192,23 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
   });
 
+  it("renders date picker dialog wrapper with id when open", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const dialog = document.body.querySelector(".react-spectrum-DatePicker-dialog") as HTMLElement | null;
+    expect(dialog).toBeTruthy();
+    expect(dialog?.getAttribute("id")).toBeTruthy();
+  });
+
   it("opens date picker popover with Alt+ArrowUp on the group", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -1226,6 +1243,26 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
+  it("renders range picker dialog wrapper with id when open", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const dialog = document.body.querySelector(".react-spectrum-DateRangePicker-dialog") as HTMLElement | null;
+    expect(dialog).toBeTruthy();
+    expect(dialog?.getAttribute("id")).toBeTruthy();
   });
 
   it("opens range picker popover with Alt+ArrowUp on the group", async () => {
