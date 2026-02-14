@@ -97,4 +97,23 @@ describe("TreeView SSR", () => {
     expect(html).toContain('role="gridcell"');
     expect(html).toContain("No rows");
   });
+
+  it("renders no empty row markup when renderEmptyState is omitted", async () => {
+    const App = defineComponent({
+      name: "TreeViewSSREmptyNoRendererApp",
+      setup() {
+        return () =>
+          h(TreeView, {
+            "aria-label": "Empty SSR tree",
+            items: [],
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-TreeView");
+    expect(html).toContain('data-empty="true"');
+    expect(html).not.toContain('role="row"');
+    expect(html).not.toContain('role="gridcell"');
+  });
 });

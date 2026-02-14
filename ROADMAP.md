@@ -9488,3 +9488,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 79 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` empty-state SSR no-renderer parity update:
+  - added SSR coverage for empty-tree rendering without `renderEmptyState`, asserting no fallback row/cell semantic markup is emitted.
+    - `packages/@vue-spectrum/tree/test/TreeView.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 80 tests).
+- Validation: `npm run check -- --pretty false` passed.
