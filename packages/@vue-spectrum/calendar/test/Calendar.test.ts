@@ -255,6 +255,23 @@ describe("Calendar", () => {
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
+  it("disables previous navigation when minValue blocks the previous visible range", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2020, 1, 15),
+        minValue: new CalendarDate(2020, 1, 1),
+      },
+      attachTo: document.body,
+    });
+
+    const prevButton = wrapper.findAll(".react-spectrum-Calendar-navButton")[0];
+    expect(prevButton).toBeTruthy();
+    const disabledAttr = prevButton?.attributes("disabled");
+    const ariaDisabled = prevButton?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
   it("marks unavailable dates and prevents selecting them", async () => {
     const onChange = vi.fn();
     const wrapper = mount(Calendar as any, {
@@ -443,6 +460,26 @@ describe("Calendar", () => {
     });
 
     expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please pick a valid range");
+  });
+
+  it("disables range-calendar previous navigation when minValue blocks paging", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2020, 1, 10),
+          end: new CalendarDate(2020, 1, 12),
+        },
+        minValue: new CalendarDate(2020, 1, 1),
+      },
+      attachTo: document.body,
+    });
+
+    const prevButton = wrapper.findAll(".react-spectrum-Calendar-navButton")[0];
+    expect(prevButton).toBeTruthy();
+    const disabledAttr = prevButton?.attributes("disabled");
+    const ariaDisabled = prevButton?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
   it("renders selected range cell aria labels without unresolved placeholders", () => {
