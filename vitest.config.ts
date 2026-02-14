@@ -224,8 +224,14 @@ export default defineConfig({
       "@vue-spectrum/utils": fileURLToPath(
         new URL("./packages/@vue-spectrum/utils/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/provider": fileURLToPath(
+        new URL("./packages/@vue-spectrum/provider/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/slider": fileURLToPath(
         new URL("./packages/@vue-spectrum/slider/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/button": fileURLToPath(
+        new URL("./packages/@vue-spectrum/button/src/index.ts", import.meta.url)
       )
     }
   }

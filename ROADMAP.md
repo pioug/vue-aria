@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/theme`
+- Current focus package: `@vue-spectrum/button`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -100,7 +100,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/utils`: Complete
 - `@vue-spectrum/provider`: In progress
 - `@vue-spectrum/theme`: In progress
-- `@vue-spectrum/button`: Not started
+- `@vue-spectrum/button`: In progress
 - `@vue-spectrum/checkbox`: Not started
 - `@vue-spectrum/radio`: Not started
 - `@vue-spectrum/switch`: Not started
@@ -132,6 +132,40 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 4. Data/navigation: `tabs`, `grid`, `table`, `tree`, `breadcrumbs`.
 5. Date/time stack: `calendar`, `calendar-state`, `datepicker`, `datepicker-state`.
 6. Spectrum visual layer and docs parity.
+
+## 4a) Active Package Slice: @vue-spectrum/button
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/button/src`
+  - `references/react-spectrum/packages/@react-spectrum/button/test`
+  - `references/react-spectrum/packages/@react-spectrum/button/docs`
+- Local package path: `packages/@vue-spectrum/button`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - `src/index.ts`
+  - component modules: `ActionButton`, `Button`, `ClearButton`, `FieldButton`, `LogicButton`, `ToggleButton`
+  - message dictionary: `src/intlMessages.ts`
+  - shared type/model helpers: `src/types.ts`, `src/utils.ts`
+- Initial upstream test-intent migration:
+  - `test/Button.test.ts`
+  - `test/ActionButton.test.ts`
+  - `test/ClearButton.test.ts`
+  - `test/ToggleButton.test.ts`
+  - `test/Button.ssr.test.ts`
+- Documentation scaffold added:
+  - `docs/packages/spectrum-button.md`
+  - VitePress nav/sidebar entries for `/packages/spectrum-button`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/button`.
+
+### Remaining for completion
+- Close behavior gaps against upstream `Button` pending-state edge cases and keyboard-event parity.
+- Expand migrated tests to cover remaining upstream `Button.test.js` cases not yet adapted.
+- Validate visual parity against upstream docs examples and add parity notes/screenshots.
+- Finalize package completion gate once all migrated tests pass and no React dependencies remain in package surface.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
