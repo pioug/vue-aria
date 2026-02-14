@@ -298,6 +298,27 @@ describe("MenuTrigger", () => {
     expect(getMenuItems("single")).toHaveLength(3);
   });
 
+  it("focuses the selected item when opening from a long press", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderMenuTrigger(
+        { trigger: "longPress" },
+        { selectionMode: "single", selectedKeys: ["Bar"] }
+      );
+      const trigger = wrapper.get('[data-testid="trigger"]');
+
+      trigger.element.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0, detail: 1 }));
+      await vi.advanceTimersByTimeAsync(600);
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Bar");
+      expect(getMenuItems("single")).toHaveLength(3);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("focuses first/last menu items from Alt+ArrowDown/Alt+ArrowUp in longPress mode", async () => {
     const upWrapper = renderMenuTrigger({ trigger: "longPress" });
     const upTrigger = upWrapper.get('[data-testid="trigger"]');
