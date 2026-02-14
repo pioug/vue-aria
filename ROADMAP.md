@@ -8007,6 +8007,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - clarified that empty-string row IDs remain valid row keys.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` colSpan sort parity update:
+  - fixed sort-value lookup to resolve cells by logical column index across `colSpan` ranges instead of raw array index.
+  - added regression coverage for sorting by trailing columns in data-driven rows with spanned cells.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` docs parity update:
+  - documented that controlled sorting follows logical column indexes when earlier cells are spanned.
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

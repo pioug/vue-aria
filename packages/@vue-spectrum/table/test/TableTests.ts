@@ -46,6 +46,13 @@ const columnsWithSpan: SpectrumTableColumnData[] = [
   { key: "col-4", title: "Col 4" },
 ];
 
+const sortableColumnsWithSpan: SpectrumTableColumnData[] = [
+  { key: "col-1", title: "Col 1", isRowHeader: true, allowsSorting: true },
+  { key: "col-2", title: "Col 2", allowsSorting: true },
+  { key: "col-3", title: "Col 3", allowsSorting: true },
+  { key: "col-4", title: "Col 4", allowsSorting: true },
+];
+
 const itemsWithPropSpanCells: SpectrumTableRowData[] = [
   {
     key: "row-1",
@@ -53,6 +60,25 @@ const itemsWithPropSpanCells: SpectrumTableRowData[] = [
       { value: "Cell 1" },
       { value: "Span 2", colSpan: 2 },
       { value: "Cell 4" },
+    ],
+  },
+];
+
+const sortableItemsWithPropSpanCells: SpectrumTableRowData[] = [
+  {
+    key: "row-a",
+    cells: [
+      { value: "Alpha" },
+      { value: "Span A", colSpan: 2 },
+      { value: "A" },
+    ],
+  },
+  {
+    key: "row-z",
+    cells: [
+      { value: "Zulu" },
+      { value: "Span Z", colSpan: 2 },
+      { value: "Z" },
     ],
   },
 ];
@@ -260,6 +286,26 @@ export function tableTests() {
     expect(firstRowGridCells[0]!.attributes("aria-colspan")).toBe("2");
     expect(firstRowGridCells[0]!.attributes("aria-colindex")).toBe("2");
     expect(firstRowGridCells[1]!.attributes("aria-colindex")).toBe("4");
+  });
+
+  it("sorts data-driven colSpan rows by trailing columns", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Sortable prop colSpan table",
+        columns: sortableColumnsWithSpan,
+        items: sortableItemsWithPropSpanCells,
+        defaultSortDescriptor: {
+          column: "col-4",
+          direction: "descending",
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.text()).toContain("Zulu");
+    expect(bodyRows[1]!.text()).toContain("Alpha");
   });
 
   it("supports keyboard row navigation", async () => {

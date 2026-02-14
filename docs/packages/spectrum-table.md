@@ -93,6 +93,7 @@ Use `defaultSortDescriptor` to apply initial row ordering and header sort state 
 ## Controlled Sorting
 
 Use `sortDescriptor` with `onSortChange` for controlled sort state. Updating `sortDescriptor` from the parent updates both row ordering and the active header `aria-sort` value.
+Sorting follows logical column indexes even when earlier cells use `colSpan`.
 
 ## Empty State Rendering
 

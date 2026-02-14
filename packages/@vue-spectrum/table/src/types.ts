@@ -545,7 +545,17 @@ export function normalizeTableDefinition(
 }
 
 export function getSortCellValue(row: NormalizedSpectrumTableRow, columnIndex: number): unknown {
-  const cell = row.cells[columnIndex];
+  let cursor = 0;
+  let cell: NormalizedSpectrumTableCell | undefined;
+  for (const entry of row.cells) {
+    const span = Math.max(1, entry.colSpan ?? 1);
+    if (columnIndex >= cursor && columnIndex < cursor + span) {
+      cell = entry;
+      break;
+    }
+    cursor += span;
+  }
+
   if (!cell) {
     return "";
   }
