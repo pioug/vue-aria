@@ -85,6 +85,17 @@ Use `minValue`, `maxValue`, and `step` to constrain and snap values.
 
 Use `isRequired`, `validationState`, `isInvalid`, `description`, and `errorMessage`.
 
+```vue
+<template>
+  <NumberField label="Amount" description="Enter amount in dollars." />
+  <NumberField label="Amount" validationState="invalid" errorMessage="Amount is invalid." />
+</template>
+```
+
+## Label and help text
+
+`NumberField` wires `label` to the input via `aria-labelledby` and uses `aria-describedby` for description/error help text.
+
 ## Visual options
 
 ### Quiet
@@ -98,6 +109,8 @@ Use `isRequired`, `validationState`, `isInvalid`, `description`, and `errorMessa
 ```vue
 <NumberField label="Cookies" hideStepper :minValue="0" />
 ```
+
+Stepper buttons are shown by default and can be hidden with `hideStepper` for text-only entry flows.
 
 ### Disabled
 

@@ -85,6 +85,31 @@ describe("NumberField", () => {
     expect(group.classes()).toContain("is-invalid");
   });
 
+  it("supports label and help-text rendering", () => {
+    const wrapper = renderNumberField({
+      label: "Amount",
+      description: "Enter amount in dollars.",
+    });
+    const input = wrapper.get('input[type="text"]');
+    const label = wrapper.get(".spectrum-FieldLabel");
+    expect(label.text()).toContain("Amount");
+    expect(input.attributes("aria-labelledby")).toContain(label.attributes("id") ?? "");
+
+    const helpText = wrapper.get(".spectrum-HelpText");
+    expect(helpText.text()).toContain("Enter amount in dollars.");
+  });
+
+  it("uses invalid help-text state when validation is invalid", () => {
+    const wrapper = renderNumberField({
+      label: "Amount",
+      validationState: "invalid",
+      errorMessage: "Amount is invalid.",
+    });
+    const error = wrapper.get(".spectrum-HelpText.is-invalid");
+    expect(error.text()).toContain("Amount is invalid.");
+    expect(wrapper.get('[role="group"]').attributes("aria-invalid")).toBe("true");
+  });
+
   it("supports custom DOM props", () => {
     const wrapper = renderNumberField(
       { label: "Width" },

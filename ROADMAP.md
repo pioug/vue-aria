@@ -570,10 +570,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded input-mode matrix coverage for Android (`numeric`/`decimal`) in addition to iPhone paths.
   - added commit-flow coverage for percent and currency parsing (`onChange` numeric payloads on blur commit).
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Additional visual-state parity update:
+  - expanded numberfield visual/help-text coverage for label rendering, description help text, invalid help-text state, and group invalid-state signaling.
+  - expanded docs with validation + help-text examples and stepper visibility guidance.
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - `docs/packages/spectrum-numberfield.md`
 
 ### Remaining for completion
 - Expand test parity coverage for the remaining locale/inputMode matrix and advanced parsing/rounding flows from upstream.
-- Validate remaining visual parity for quiet/stepper and label/help-text combinations against upstream docs.
 
 ## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
 - Upstream source path(s):
@@ -7588,6 +7592,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded Android input-mode matrix coverage and added percent/currency commit parsing assertions (numeric `onChange` payloads on blur commit).
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test packages/@vue-aria/spinbutton/test` passed (3 files, 34 tests).
+- Additional `@vue-spectrum/numberfield` visual-state parity update:
+  - expanded label/help-text coverage (label rendering, description help text, invalid help-text state, and group invalid-state signaling).
+  - expanded numberfield docs with validation/help-text and stepper visibility guidance.
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - `docs/packages/spectrum-numberfield.md`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 22 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/link` interaction parity update:
   - added adapted tooltip-trigger composition coverage for focus open/close behavior.
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.
