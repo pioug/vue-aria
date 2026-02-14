@@ -1,5 +1,6 @@
 import type { Key, Node } from "@vue-aria/collections";
-import { h, type VNode } from "vue";
+import { DialogTrigger } from "@vue-spectrum/dialog";
+import { cloneVNode, h, type VNode } from "vue";
 import { ContextualHelpTrigger } from "./ContextualHelpTrigger";
 import { Item } from "./Item";
 import { Section } from "./Section";
@@ -57,6 +58,16 @@ function resolveRendered(vnode: VNode): unknown {
   }
 
   return null;
+}
+
+function isDialogTriggerComponent(component: unknown): boolean {
+  return component === DialogTrigger
+    || (
+      typeof component === "object"
+      && component != null
+      && "name" in component
+      && (component as { name?: unknown }).name === "SpectrumDialogTrigger"
+    );
 }
 
 function resolveTextValue({
@@ -318,6 +329,32 @@ function normalizeChildren(
           },
           {
             default: () => [itemNode, contentVNode],
+          }
+        );
+      nodes.push(triggerNode);
+      index += 1;
+      continue;
+    }
+
+    if (isDialogTriggerComponent(component)) {
+      const dialogChildren = resolveVNodeChildren(vnode);
+      const [triggerVNode, contentVNode] = dialogChildren;
+      if (!triggerVNode || !contentVNode) {
+        index += 1;
+        continue;
+      }
+
+      const triggerNode = createItemFromVNode(triggerVNode, fallbackKey);
+      const props = ((vnode.props ?? {}) as Record<string, unknown>) ?? {};
+      triggerNode.wrapper = (itemNode: VNode) =>
+        h(
+          DialogTrigger as any,
+          {
+            ...props,
+          },
+          {
+            trigger: () => [itemNode],
+            default: () => [cloneVNode(contentVNode)],
           }
         );
       nodes.push(triggerNode);

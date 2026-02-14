@@ -10008,3 +10008,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 99 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` DialogTrigger-wrapper parity update:
+  - added migrated `Menu` coverage asserting `DialogTrigger` can wrap menu items and open/close dialog content via click and `Escape`.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+  - updated menu collection normalization to recognize `DialogTrigger` wrappers and preserve wrapped item rendering with dialog content wiring.
+    - `packages/@vue-spectrum/menu/src/collection.ts`
+  - hardened `DialogTrigger` component-trigger support by resolving component refs to DOM nodes and applying trigger click/ARIA sync to resolved elements.
+    - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 100 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

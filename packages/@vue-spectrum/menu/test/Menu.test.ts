@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { Dialog, DialogTrigger } from "@vue-spectrum/dialog";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h, nextTick } from "vue";
 import { Item } from "../src/Item";
@@ -198,6 +199,45 @@ describe("Menu", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("supports DialogTrigger as a wrapper around items", async () => {
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+        selectionMode: "none",
+      },
+      slots: {
+        default: () => [
+          h(Section as any, { title: "Test" }, {
+            default: () => [
+              h(DialogTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "Hi" }, { default: () => "Hi" }),
+                  h(Dialog as any, null, {
+                    default: () => "I'm a dialog",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const menuItem = wrapper.get('[role="menuitem"]');
+    await menuItem.trigger("click");
+    await nextTick();
+
+    const dialog = wrapper.get('[role="dialog"]');
+    expect(dialog.isVisible()).toBe(true);
+
+    await dialog.trigger("keydown", { key: "Escape" });
+    await dialog.trigger("keyup", { key: "Escape" });
+    await nextTick();
+
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
   });
 
   it("prevents selection interactions when selectionMode is none", async () => {
