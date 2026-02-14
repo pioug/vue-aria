@@ -9,7 +9,18 @@ import {
   useMatchedBreakpoints,
   useStyleProps,
 } from "@vue-spectrum/utils";
-import { computed, defineComponent, h, inject, onMounted, provide, ref, type PropType, type VNodeChild } from "vue";
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  inject,
+  onMounted,
+  provide,
+  ref,
+  type PropType,
+  type VNodeChild,
+} from "vue";
 import { ProviderContextSymbol } from "./context";
 import { useColorScheme, useScale } from "./mediaQueries";
 import type { ProviderContext, ProviderProps } from "./types";
@@ -181,6 +192,12 @@ export const Provider = defineComponent({
   setup(props, { slots, attrs }) {
     const parentContext = inject<ReadonlyRef<ProviderContext> | null>(ProviderContextSymbol, null);
     const currentLocale = useLocale();
+    const instance = getCurrentInstance();
+    const providedProps = computed(
+      () => ((instance?.vnode.props ?? {}) as Record<string, unknown>)
+    );
+    const hasProvidedProp = (key: string) =>
+      Object.prototype.hasOwnProperty.call(providedProps.value, key);
     if (props.router) {
       RouterProvider(props.router);
     }
@@ -214,11 +231,11 @@ export const Provider = defineComponent({
         breakpoints: props.breakpoints ?? parent?.breakpoints ?? DEFAULT_BREAKPOINTS,
         colorScheme: colorScheme.value,
         scale: scale.value,
-        isQuiet: props.isQuiet ?? parent?.isQuiet,
-        isEmphasized: props.isEmphasized ?? parent?.isEmphasized,
-        isDisabled: props.isDisabled ?? parent?.isDisabled,
-        isRequired: props.isRequired ?? parent?.isRequired,
-        isReadOnly: props.isReadOnly ?? parent?.isReadOnly,
+        isQuiet: hasProvidedProp("isQuiet") ? props.isQuiet : parent?.isQuiet,
+        isEmphasized: hasProvidedProp("isEmphasized") ? props.isEmphasized : parent?.isEmphasized,
+        isDisabled: hasProvidedProp("isDisabled") ? props.isDisabled : parent?.isDisabled,
+        isRequired: hasProvidedProp("isRequired") ? props.isRequired : parent?.isRequired,
+        isReadOnly: hasProvidedProp("isReadOnly") ? props.isReadOnly : parent?.isReadOnly,
         validationState: props.validationState ?? parent?.validationState,
       };
     });

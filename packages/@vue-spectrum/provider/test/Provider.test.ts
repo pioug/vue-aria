@@ -399,6 +399,122 @@ describe("Provider", () => {
     unmount();
   });
 
+  it("passes read-only provider props to child controls", () => {
+    const onChangeSpy = vi.fn();
+    const ToggleProbe = defineComponent({
+      name: "ToggleProbe",
+      props: {
+        testid: {
+          type: String,
+          required: true,
+        },
+      },
+      setup(props) {
+        const merged = useProviderProps({});
+        return () =>
+          h(
+            "button",
+            {
+              "data-testid": props.testid,
+              "aria-readonly": String((merged as { isReadOnly?: boolean }).isReadOnly ?? false),
+              onClick: () => {
+                if (!(merged as { isReadOnly?: boolean }).isReadOnly) {
+                  onChangeSpy();
+                }
+              },
+            },
+            "toggle"
+          );
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isReadOnly: true,
+              },
+              () => [
+                h(ToggleProbe, { testid: "checkbox-probe" }),
+                h(ToggleProbe, { testid: "switch-probe" }),
+              ]
+            );
+        },
+      })
+    );
+
+    const checkboxProbe = container.querySelector('[data-testid="checkbox-probe"]') as HTMLButtonElement | null;
+    const switchProbe = container.querySelector('[data-testid="switch-probe"]') as HTMLButtonElement | null;
+
+    expect(checkboxProbe?.getAttribute("aria-readonly")).toBe("true");
+    expect(switchProbe?.getAttribute("aria-readonly")).toBe("true");
+
+    checkboxProbe?.click();
+    switchProbe?.click();
+    expect(onChangeSpy).not.toHaveBeenCalled();
+    unmount();
+  });
+
+  it("nested providers merge shared props for descendants", () => {
+    const onPressSpy = vi.fn();
+    const ActionProbe = defineComponent({
+      name: "ActionProbe",
+      setup() {
+        const merged = useProviderProps({});
+        return () =>
+          h(
+            "button",
+            {
+              "data-testid": "action-probe",
+              "data-quiet": String((merged as { isQuiet?: boolean }).isQuiet ?? false),
+              "aria-disabled": String((merged as { isDisabled?: boolean }).isDisabled ?? false),
+              onClick: () => {
+                if (!(merged as { isDisabled?: boolean }).isDisabled) {
+                  onPressSpy();
+                }
+              },
+            },
+            "action"
+          );
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isDisabled: true,
+              },
+              () =>
+                h(
+                  Provider,
+                  {
+                    isQuiet: true,
+                  },
+                  () => h(ActionProbe)
+                )
+            );
+        },
+      })
+    );
+
+    const actionProbe = container.querySelector('[data-testid="action-probe"]') as HTMLButtonElement | null;
+    expect(actionProbe?.dataset.quiet).toBe("true");
+    expect(actionProbe?.getAttribute("aria-disabled")).toBe("true");
+
+    actionProbe?.click();
+    expect(onPressSpy).not.toHaveBeenCalled();
+    unmount();
+  });
+
   it("provides router context to descendants when router is set", () => {
     const Probe = defineComponent({
       name: "RouterProbe",

@@ -3926,6 +3926,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `router` prop wiring via `RouterProvider`
   - Upstream nested direction warning behavior
   - Conditional wrapper rendering when provider-level styles/attrs or effective context differ
+  - Fixed Vue boolean-prop coercion drift by honoring only explicitly provided provider boolean props during context merge
 - [x] Responsive breakpoint-context slice ported:
   - Integrated `BreakpointProvider` + `useMatchedBreakpoints` to publish responsive context
   - Wrapped provider subtree with breakpoint context between i18n and modal wrappers
@@ -3946,6 +3947,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
   - Added adapted `Provider` coverage for OS color-scheme class application (dark/light defaults), explicit color-scheme override, and nested-provider inheritance/override behavior.
   - Added adapted `Provider` coverage for inherited prop wiring through `useProviderProps`, missing-theme guard behavior, theme compatibility fallback, and auto theme updates when OS preference changes.
+  - Added adapted `Provider` coverage for read-only/disabled property-group propagation to descendant control probes and nested provider merge behavior.
   - Added adapted `Provider` coverage for router-context provisioning, modal wrapper aria propagation, and nested-direction warning behavior.
   - Added adapted `Provider` breakpoint-context coverage for range-change-only updates (`useBreakpoint` observer parity).
   - Added adapted provider responsive style-props coverage for default/custom breakpoint width matrices and omitted-size fallback behavior.
