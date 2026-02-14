@@ -1,10 +1,11 @@
 import {
+  DateFormatter,
   type CalendarDate,
   getWeeksInMonth,
   startOfWeek,
   today,
 } from "@internationalized/date";
-import { useDateFormatter, useLocale } from "@vue-aria/i18n";
+import { isRTL, useDateFormatter, useLocale } from "@vue-aria/i18n";
 import { mergeProps, useLabels } from "@vue-aria/utils";
 import type {
   CalendarState,
@@ -18,6 +19,7 @@ export interface AriaCalendarGridProps {
   endDate?: CalendarDate;
   weekdayStyle?: "narrow" | "short" | "long";
   firstDayOfWeek?: FirstDayOfWeek;
+  locale?: string;
 }
 
 export interface CalendarGridAria {
@@ -38,9 +40,14 @@ export function useCalendarGrid(
     startDate = state.visibleRange.start,
     endDate = state.visibleRange.end,
     firstDayOfWeek,
+    locale: localeOverride,
   } = props;
 
-  const { direction, locale } = useLocale().value;
+  const localeInfo = useLocale().value;
+  const locale = localeOverride ?? localeInfo.locale;
+  const direction = localeOverride
+    ? (isRTL(locale) ? "rtl" : "ltr")
+    : localeInfo.direction;
 
   const onKeydown = (event: KeyboardEvent) => {
     switch (event.key) {
@@ -122,10 +129,15 @@ export function useCalendarGrid(
     "aria-labelledby": data?.ariaLabelledBy,
   });
 
-  const dayFormatter = useDateFormatter({
-    weekday: props.weekdayStyle || "narrow",
-    timeZone: state.timeZone,
-  });
+  const dayFormatter = localeOverride
+    ? new DateFormatter(locale, {
+      weekday: props.weekdayStyle || "narrow",
+      timeZone: state.timeZone,
+    })
+    : useDateFormatter({
+      weekday: props.weekdayStyle || "narrow",
+      timeZone: state.timeZone,
+    });
 
   const weekStart = startOfWeek(today(state.timeZone), locale, firstDayOfWeek);
   const weekDays = [...new Array(7).keys()].map((index) => {

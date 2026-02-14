@@ -248,6 +248,30 @@ describe("Calendar", () => {
     expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
   });
 
+  it("applies locale overrides to default weekday ordering", () => {
+    const enWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        locale: "en-US",
+      },
+      attachTo: document.body,
+    });
+    const frWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        locale: "fr-FR",
+      },
+      attachTo: document.body,
+    });
+
+    const enFirstDay = enWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+    const frFirstDay = frWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+
+    expect(frFirstDay).not.toBe(enFirstDay);
+  });
+
   it("prevents selection changes when calendar is disabled", async () => {
     const onChange = vi.fn();
     const wrapper = mount(Calendar as any, {

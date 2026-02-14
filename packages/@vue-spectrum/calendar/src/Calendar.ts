@@ -148,6 +148,11 @@ const CalendarMonthView = defineComponent({
       required: false,
       default: undefined,
     },
+    locale: {
+      type: String as PropType<string | undefined>,
+      required: false,
+      default: undefined,
+    },
     state: {
       type: Object as PropType<CalendarState | RangeCalendarState>,
       required: true,
@@ -161,6 +166,9 @@ const CalendarMonthView = defineComponent({
         },
         get firstDayOfWeek() {
           return props.firstDayOfWeek;
+        },
+        get locale() {
+          return props.locale;
         },
       },
       props.state
@@ -239,6 +247,11 @@ const CalendarBaseView = defineComponent({
     },
     firstDayOfWeek: {
       type: String as PropType<SpectrumCalendarProps["firstDayOfWeek"]>,
+      required: false,
+      default: undefined,
+    },
+    locale: {
+      type: String as PropType<string | undefined>,
       required: false,
       default: undefined,
     },
@@ -338,6 +351,7 @@ const CalendarBaseView = defineComponent({
                 key: String(props.state.visibleRange.start.add({ months: index })),
                 monthStart: props.state.visibleRange.start.add({ months: index }),
                 firstDayOfWeek: props.firstDayOfWeek,
+                locale: props.locale,
                 state: props.state,
               })
             )
@@ -555,6 +569,7 @@ export const Calendar = defineComponent({
       h(CalendarBaseView, {
         visibleMonths: visibleMonths.value,
         firstDayOfWeek: props.firstDayOfWeek,
+        locale: props.locale ?? locale.value.locale,
         title: calendarAria.title,
         calendarProps: calendarAria.calendarProps,
         prevButtonProps: calendarAria.prevButtonProps as any,
@@ -783,6 +798,7 @@ export const RangeCalendar = defineComponent({
       h(CalendarBaseView, {
         visibleMonths: visibleMonths.value,
         firstDayOfWeek: props.firstDayOfWeek,
+        locale: props.locale ?? locale.value.locale,
         title: calendarAria.title,
         calendarProps: calendarAria.calendarProps,
         prevButtonProps: calendarAria.prevButtonProps as any,
