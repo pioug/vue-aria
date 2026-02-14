@@ -2462,6 +2462,20 @@ export function tableTests() {
     });
   });
 
+  it("disables sortable header press interactions when table is disabled", async () => {
+    const onSortChange = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      onSortChange,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    await press(headers[0]!);
+
+    expect(onSortChange).not.toHaveBeenCalled();
+    expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("none");
+  });
+
   it("adds sort direction info to aria-describedby on Android", async () => {
     const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
     const hadOwnUserAgent = Object.prototype.hasOwnProperty.call(window.navigator, "userAgent");

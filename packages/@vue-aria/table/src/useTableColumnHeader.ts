@@ -11,6 +11,7 @@ import { getColumnHeaderId } from "./utils";
 export interface AriaTableColumnHeaderProps<T> {
   node: GridNode<T>;
   isVirtualized?: boolean;
+  isDisabled?: boolean;
 }
 
 export interface TableColumnHeaderAria {
@@ -40,7 +41,7 @@ export function useTableColumnHeader<T>(
     && state.selectionManager.selectionMode === "single";
 
   const { pressProps, isPressed } = usePress({
-    isDisabled: !allowsSorting || isSelectionCellDisabled,
+    isDisabled: !!props.isDisabled || !allowsSorting || isSelectionCellDisabled,
     onPress() {
       state.sort(node.key);
     },

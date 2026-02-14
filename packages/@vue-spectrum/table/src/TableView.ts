@@ -300,6 +300,11 @@ const TableHeaderCell = defineComponent({
       type: Object as PropType<TableState<NormalizedSpectrumTableRow>>,
       required: true,
     },
+    isDisabled: {
+      type: Boolean as PropType<boolean | undefined>,
+      required: false,
+      default: undefined,
+    },
   },
   setup(props) {
     const refObject = ref<HTMLElement | null>(null);
@@ -316,6 +321,9 @@ const TableHeaderCell = defineComponent({
       {
         get node() {
           return props.node;
+        },
+        get isDisabled() {
+          return props.isDisabled;
         },
       } as any,
       props.state,
@@ -1050,6 +1058,7 @@ export const TableView = defineComponent({
                     key: String(headerCellNode.key),
                     node: headerCellNode as GridNode<NormalizedSpectrumTableRow>,
                     state,
+                    isDisabled: props.isDisabled,
                   })
                 )
               )

@@ -8485,6 +8485,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 105 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/table` + `@vue-spectrum/table` disabled-header sorting parity update:
+  - added `isDisabled` support to `useTableColumnHeader` press handling so sortable header interactions are disabled when the table is disabled.
+  - wired disabled-table header state through `TableView` header-cell composition.
+  - added regression coverage to verify disabled tables suppress sortable-header press sorting callbacks and keep unsorted header state.
+  - `packages/@vue-aria/table/src/useTableColumnHeader.ts`
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 106 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
