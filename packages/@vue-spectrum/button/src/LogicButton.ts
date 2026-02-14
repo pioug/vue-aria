@@ -6,7 +6,7 @@ import { useProviderProps } from "@vue-spectrum/provider";
 import { useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h, onMounted, ref } from "vue";
 import type { SpectrumLogicButtonProps } from "./types";
-import { createRefObject } from "./utils";
+import { createRefObject, mapReactEventProps } from "./utils";
 
 /**
  * A LogicButton displays an operator within a boolean logic sequence.
@@ -64,6 +64,14 @@ export const LogicButton = defineComponent({
       type: Function,
       required: false,
     },
+    onKeyDown: {
+      type: Function,
+      required: false,
+    },
+    onKeyUp: {
+      type: Function,
+      required: false,
+    },
   },
   setup(props, { slots, attrs, expose }) {
     const domRef = ref<HTMLElement | null>(null);
@@ -105,7 +113,7 @@ export const LogicButton = defineComponent({
               "button",
               {
                 ...styleProps.value,
-                ...mergeProps(buttonProps, hoverProps),
+                ...mergeProps(buttonProps, hoverProps, mapReactEventProps(merged as Record<string, unknown>)),
                 ref: domRef,
                 class: [
                   "spectrum-LogicButton",

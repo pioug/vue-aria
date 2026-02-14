@@ -149,12 +149,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - component modules: `ActionButton`, `Button`, `ClearButton`, `FieldButton`, `LogicButton`, `ToggleButton`
   - message dictionary: `src/intlMessages.ts`
   - shared type/model helpers: `src/types.ts`, `src/utils.ts`
-- Initial upstream test-intent migration:
+- Upstream test-intent migration (all upstream button test files mirrored in Vue test harness):
   - `test/Button.test.ts`
   - `test/ActionButton.test.ts`
   - `test/ClearButton.test.ts`
   - `test/ToggleButton.test.ts`
   - `test/Button.ssr.test.ts`
+- Additional parity updates after first commit:
+  - `Button` pending-state behavior now blocks interactions while pending and removes `href` in pending anchor mode.
+  - `Button` pending spinner uses delayed visibility and exposes `progressbar` role for parity assertions.
+  - keyboard-event passthrough and keydown/keyup behavior aligned for `ActionButton`, `Button`, and `LogicButton`.
+  - non-submit vs submit keyboard default-prevent behavior covered in migrated tests.
 - Documentation scaffold added:
   - `docs/packages/spectrum-button.md`
   - VitePress nav/sidebar entries for `/packages/spectrum-button`
@@ -162,8 +167,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/button`.
 
 ### Remaining for completion
-- Close behavior gaps against upstream `Button` pending-state edge cases and keyboard-event parity.
-- Expand migrated tests to cover remaining upstream `Button.test.js` cases not yet adapted.
 - Validate visual parity against upstream docs examples and add parity notes/screenshots.
 - Finalize package completion gate once all migrated tests pass and no React dependencies remain in package surface.
 

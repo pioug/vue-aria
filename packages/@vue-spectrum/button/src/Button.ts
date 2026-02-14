@@ -233,6 +233,15 @@ export const Button = defineComponent({
         : {
             onClick: () => {},
           };
+      const interactiveProps = isPending
+        ? mergeProps(pendingProps, mapReactEventProps(merged as Record<string, unknown>))
+        : mergeProps(
+            buttonProps,
+            hoverProps,
+            focusProps,
+            pendingProps,
+            mapReactEventProps(merged as Record<string, unknown>)
+          );
 
       return h(
         FocusRing,
@@ -246,13 +255,7 @@ export const Button = defineComponent({
               Element,
               {
                 ...styleProps.value,
-                ...mergeProps(
-                  buttonProps,
-                  hoverProps,
-                  focusProps,
-                  pendingProps,
-                  mapReactEventProps(merged as Record<string, unknown>)
-                ),
+                ...interactiveProps,
                 id: buttonId.value,
                 ref: domRef,
                 "data-variant": variant.value,
@@ -307,7 +310,7 @@ export const Button = defineComponent({
                       [
                         h("div", {
                           class: "spectrum-ProgressCircle",
-                          role: "img",
+                          role: "progressbar",
                           "aria-label": pendingAriaLabel.value,
                         }),
                       ]

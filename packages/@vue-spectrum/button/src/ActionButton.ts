@@ -6,7 +6,7 @@ import { useProviderProps } from "@vue-spectrum/provider";
 import { ClearSlots, SlotProvider, useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h, onMounted, ref } from "vue";
 import type { SpectrumActionButtonProps } from "./types";
-import { createRefObject, isTextOnlyNodes } from "./utils";
+import { createRefObject, isTextOnlyNodes, mapReactEventProps } from "./utils";
 
 /**
  * ActionButtons allow users to perform an action.
@@ -77,6 +77,14 @@ export const ActionButton = defineComponent({
       type: Function,
       required: false,
     },
+    onKeyDown: {
+      type: Function,
+      required: false,
+    },
+    onKeyUp: {
+      type: Function,
+      required: false,
+    },
   },
   setup(props, { attrs, slots, expose }) {
     const domRef = ref<HTMLElement | null>(null);
@@ -127,7 +135,7 @@ export const ActionButton = defineComponent({
               "button",
               {
                 ...styleProps.value,
-                ...mergeProps(buttonProps, hoverProps),
+                ...mergeProps(buttonProps, hoverProps, mapReactEventProps(merged as Record<string, unknown>)),
                 ref: domRef,
                 class: [
                   "spectrum-ActionButton",
