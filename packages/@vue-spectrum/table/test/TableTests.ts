@@ -87,6 +87,17 @@ const itemsWithPropSpanCells: SpectrumTableRowData[] = [
   },
 ];
 
+const itemsWithStringPropSpanCells: SpectrumTableRowData[] = [
+  {
+    key: "row-1",
+    cells: [
+      { value: "Cell 1" },
+      { value: "Span 2", colSpan: "2" as any },
+      { value: "Cell 4" },
+    ],
+  },
+];
+
 const sortableItemsWithPropSpanCells: SpectrumTableRowData[] = [
   {
     key: "row-a",
@@ -616,6 +627,50 @@ export function tableTests() {
     expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("supports kebab-case static slot allows-sorting metadata", async () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab sortable table">
+          <TableHeader>
+            <Column id="foo" is-row-header allows-sorting>Foo</Column>
+            <Column id="bar">Bar</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-2">
+              <Cell>Foo 2</Cell>
+              <Cell>Bar 2</Cell>
+            </Row>
+            <Row id="row-1">
+              <Cell>Foo 1</Cell>
+              <Cell>Bar 1</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.classes()).toContain("is-sortable");
+
+    await press(headers[0]!);
+
+    const sortedRows = wrapper.findAll('tbody [role="row"]');
+    expect(sortedRows[0]!.text()).toContain("Foo 1");
+    expect(sortedRows[1]!.text()).toContain("Foo 2");
+    expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("ascending");
+  });
+
   it("supports data-driven table cells with colSpan", () => {
     const wrapper = mount(TableView as any, {
       props: {
@@ -631,6 +686,27 @@ export function tableTests() {
 
     const firstRowCells = bodyRows[0]!.findAll('[role="rowheader"], [role="gridcell"]');
     expect(firstRowCells).toHaveLength(3);
+
+    const firstRowGridCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowGridCells).toHaveLength(2);
+    expect(firstRowGridCells[0]!.attributes("colspan")).toBe("2");
+    expect(firstRowGridCells[0]!.attributes("aria-colspan")).toBe("2");
+    expect(firstRowGridCells[0]!.attributes("aria-colindex")).toBe("2");
+    expect(firstRowGridCells[1]!.attributes("aria-colindex")).toBe("4");
+  });
+
+  it("supports data-driven table cells with string colSpan values", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Prop string colSpan table",
+        columns: columnsWithSpan,
+        items: itemsWithStringPropSpanCells,
+      },
+      attachTo: document.body,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(1);
 
     const firstRowGridCells = bodyRows[0]!.findAll('[role="gridcell"]');
     expect(firstRowGridCells).toHaveLength(2);
