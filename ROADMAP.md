@@ -9155,3 +9155,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 48 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-hover state parity update:
+  - added migrated hover-state coverage to verify interactive rows apply `data-hovered` during hover while inert rows keep hover state unset (including disabled expandable rows under `disabledBehavior="all"`).
+  - fixed row hover-state rendering by tracking interactive mouse hover lifecycle in `TreeView` row rendering and exposing it through `data-hovered`.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.

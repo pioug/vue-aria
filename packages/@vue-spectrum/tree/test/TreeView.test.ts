@@ -52,6 +52,16 @@ async function pointerUp(target: { trigger: (event: string, options?: Record<str
   await nextTick();
 }
 
+async function hover(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+  await target.trigger("mouseenter");
+  await nextTick();
+}
+
+async function unhover(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+  await target.trigger("mouseleave");
+  await nextTick();
+}
+
 async function mousePress(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
   await target.trigger("mousedown", { button: 0 });
   await target.trigger("mouseup", { button: 0 });
@@ -484,6 +494,74 @@ describe("TreeView", () => {
     await pointerDown(projectsRow!);
     expect(projectsRow!.attributes("data-pressed")).toBeUndefined();
     await pointerUp(projectsRow!);
+  });
+
+  it("supports hover state on selectable and actionable rows", async () => {
+    const selectableWrapper = renderTree({
+      selectionMode: "multiple",
+    });
+
+    let photosRow = selectableWrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-hovered")).toBeUndefined();
+
+    await hover(photosRow!);
+    expect(photosRow!.attributes("data-hovered")).toBe("true");
+
+    await unhover(photosRow!);
+    expect(photosRow!.attributes("data-hovered")).toBeUndefined();
+
+    const actionWrapper = renderTree({
+      selectionMode: "none",
+      onAction: vi.fn(),
+    });
+
+    photosRow = actionWrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-hovered")).toBeUndefined();
+
+    await hover(photosRow!);
+    expect(photosRow!.attributes("data-hovered")).toBe("true");
+
+    await unhover(photosRow!);
+    expect(photosRow!.attributes("data-hovered")).toBeUndefined();
+  });
+
+  it("does not set hover state on non-interactive rows", async () => {
+    const inertWrapper = renderTree({
+      selectionMode: "none",
+    });
+
+    let photosRow = inertWrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-hovered")).toBeUndefined();
+
+    await hover(photosRow!);
+    expect(photosRow!.attributes("data-hovered")).toBeUndefined();
+
+    let projectsRow = inertWrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-hovered")).toBeUndefined();
+
+    await hover(projectsRow!);
+    expect(projectsRow!.attributes("data-hovered")).toBe("true");
+
+    await unhover(projectsRow!);
+    expect(projectsRow!.attributes("data-hovered")).toBeUndefined();
+
+    const disabledWrapper = renderTree({
+      selectionMode: "none",
+      disabledBehavior: "all",
+      disabledKeys: ["projects"],
+    });
+
+    projectsRow = disabledWrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-hovered")).toBeUndefined();
+
+    await hover(projectsRow!);
+    expect(projectsRow!.attributes("data-hovered")).toBeUndefined();
   });
 
   it("wires row checkbox aria attributes in single-selection mode", () => {

@@ -104,6 +104,7 @@ const TreeRow = defineComponent({
   setup(props) {
     const rowElementRef = ref<HTMLElement | null>(null);
     const pointerPressed = ref(false);
+    const isHovered = ref(false);
     const rowRef = {
       get current() {
         return rowElementRef.value;
@@ -159,8 +160,10 @@ const TreeRow = defineComponent({
       const rowProps = rowAria.rowProps as Record<string, unknown>;
       const onRowPointerDown = rowProps.onPointerdown as ((event: PointerEvent) => void) | undefined;
       const onRowPointerUp = rowProps.onPointerup as ((event: PointerEvent) => void) | undefined;
+      const onRowPointerEnter = rowProps.onPointerenter as ((event: PointerEvent) => void) | undefined;
       const onRowPointerLeave = rowProps.onPointerleave as ((event: PointerEvent) => void) | undefined;
       const onRowMouseDown = rowProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+      const onRowMouseEnter = rowProps.onMouseenter as ((event: MouseEvent) => void) | undefined;
       const onRowMouseUp = rowProps.onMouseup as ((event: MouseEvent) => void) | undefined;
       const onRowMouseLeave = rowProps.onMouseleave as ((event: MouseEvent) => void) | undefined;
       const canSelectItem = props.state.selectionManager.canSelectItem(props.node.key);
@@ -196,6 +199,7 @@ const TreeRow = defineComponent({
           "data-disabled": isDisabled ? "true" : undefined,
           "data-expanded": isExpanded ? "true" : undefined,
           "data-focused": rowAria.isFocused ? "true" : undefined,
+          "data-hovered": isHovered.value ? "true" : undefined,
           "data-pressed": rowAria.isPressed || pointerPressed.value ? "true" : undefined,
           "data-selected": isSelected ? "true" : undefined,
           "data-selection-mode": selectionMode === "none" ? undefined : selectionMode,
@@ -209,8 +213,15 @@ const TreeRow = defineComponent({
             onRowPointerUp?.(event);
             pointerPressed.value = false;
           },
+          onPointerenter: (event: PointerEvent) => {
+            onRowPointerEnter?.(event);
+            if (!event.defaultPrevented && event.pointerType === "mouse" && isRowInteractive) {
+              isHovered.value = true;
+            }
+          },
           onPointerleave: (event: PointerEvent) => {
             onRowPointerLeave?.(event);
+            isHovered.value = false;
             pointerPressed.value = false;
           },
           onMousedown: (event: MouseEvent) => {
@@ -219,12 +230,19 @@ const TreeRow = defineComponent({
               pointerPressed.value = true;
             }
           },
+          onMouseenter: (event: MouseEvent) => {
+            onRowMouseEnter?.(event);
+            if (!event.defaultPrevented && isRowInteractive) {
+              isHovered.value = true;
+            }
+          },
           onMouseup: (event: MouseEvent) => {
             onRowMouseUp?.(event);
             pointerPressed.value = false;
           },
           onMouseleave: (event: MouseEvent) => {
             onRowMouseLeave?.(event);
+            isHovered.value = false;
             pointerPressed.value = false;
           },
         },
