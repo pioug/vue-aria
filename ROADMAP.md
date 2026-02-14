@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/calendar`
+- Current focus package: `@vue-spectrum/datepicker`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -118,7 +118,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/table`: In progress
 - `@vue-spectrum/tree`: In progress
 - `@vue-spectrum/calendar`: In progress
-- `@vue-spectrum/datepicker`: Not started
+- `@vue-spectrum/datepicker`: In progress
 - `@vue-spectrum/breadcrumbs`: In progress
 - `@vue-spectrum/dialog`: In progress
 - `@vue-spectrum/tooltip`: In progress
@@ -6760,6 +6760,27 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/calendar` docs parity update:
   - added initial-focus usage example for `defaultFocusedValue` (with boundary constraints) covering both `Calendar` and `RangeCalendar`.
     - `docs/packages/spectrum-calendar.md`
+- Started `@vue-spectrum/datepicker` foundational slice:
+  - scaffolded `@vue-spectrum/datepicker` package with initial Spectrum-aligned exports:
+    - `DatePicker`
+    - `DateRangePicker`
+  - implemented foundational wrappers on top of `@vue-aria/datepicker` + `@vue-aria/datepicker-state`, with popover calendar integration via:
+    - `@vue-spectrum/calendar`
+    - `@vue-spectrum/menu` `Popover`
+  - added initial migrated test coverage:
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
+  - added docs page and docs index/nav/sidebar links:
+    - `docs/packages/spectrum-datepicker.md`
+    - `docs/index.md`
+    - `docs/.vitepress/config.mts`
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/datepicker`:
+    - `tsconfig.json`
+    - `vitest.config.ts`
+  - updated execution queue status for `@vue-spectrum/datepicker` to `In progress` and switched current focus to the package.
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 8 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 73 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

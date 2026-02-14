@@ -298,6 +298,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/calendar": fileURLToPath(
         new URL("./packages/@vue-spectrum/calendar/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/datepicker": fileURLToPath(
+        new URL("./packages/@vue-spectrum/datepicker/src/index.ts", import.meta.url)
       )
     }
   }
