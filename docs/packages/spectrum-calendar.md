@@ -51,6 +51,24 @@ import { Calendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## Single-Page Multi-Month Navigation
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <Calendar
+    aria-label="Roadmap timeline"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :visible-months="2"
+    page-behavior="single"
+  />
+</template>
+```
+
 ## Validation Message Example
 
 ```vue

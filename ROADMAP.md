@@ -6582,6 +6582,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added multi-month navigation coverage for `pageBehavior` differences (`visible` vs `single` paging increments).
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 29 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - added multi-month `pageBehavior="single"` navigation example in `docs/packages/spectrum-calendar.md`.
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
