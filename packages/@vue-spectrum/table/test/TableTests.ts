@@ -735,6 +735,26 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("does not select all rows via Ctrl+A in checkbox-style single selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("clears checkbox-style multiple selection via Escape", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
