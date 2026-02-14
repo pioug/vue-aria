@@ -360,6 +360,34 @@ describe("Calendar", () => {
     expect(root.attributes("aria-describedby")).toContain("trip-planner-help");
   });
 
+  it("clamps range-calendar visibleMonths to one month for zero or negative values", () => {
+    const zeroWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 0,
+      },
+      attachTo: document.body,
+    });
+    const negativeWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: -2,
+      },
+      attachTo: document.body,
+    });
+
+    expect(zeroWrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(1);
+    expect(negativeWrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(1);
+  });
+
   it("selects a date range after two date clicks", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
