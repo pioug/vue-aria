@@ -2,6 +2,8 @@ import { CalendarDate } from "@internationalized/date";
 import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { describe, expect, it } from "vitest";
+import { Provider } from "@vue-spectrum/provider";
+import { theme } from "@vue-spectrum/theme";
 import { DatePicker, DateRangePicker } from "../src";
 
 describe("DatePicker SSR", () => {
@@ -118,5 +120,58 @@ describe("DatePicker SSR", () => {
     const html = await renderToString(createSSRApp(App));
     expect(html).toContain("react-spectrum-DateRangePicker-description");
     expect(html).toContain("Choose travel dates");
+  });
+
+  it("renders DatePicker inside Provider without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DatePickerSSRProviderApp",
+      setup() {
+        return () =>
+          h(
+            Provider as any,
+            {
+              theme,
+              isDisabled: true,
+              isQuiet: true,
+            },
+            () =>
+              h(DatePicker, {
+                "aria-label": "Date picker",
+                defaultValue: new CalendarDate(2019, 6, 5),
+              })
+          );
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DatePicker");
+  });
+
+  it("renders DateRangePicker inside Provider without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DateRangePickerSSRProviderApp",
+      setup() {
+        return () =>
+          h(
+            Provider as any,
+            {
+              theme,
+              isDisabled: true,
+              isQuiet: true,
+            },
+            () =>
+              h(DateRangePicker, {
+                "aria-label": "Date range picker",
+                defaultValue: {
+                  start: new CalendarDate(2019, 6, 5),
+                  end: new CalendarDate(2019, 6, 8),
+                },
+              })
+          );
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DateRangePicker");
   });
 });
