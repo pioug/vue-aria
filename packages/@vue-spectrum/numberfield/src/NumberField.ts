@@ -191,6 +191,7 @@ export const NumberField = defineComponent({
     },
   },
   setup(props, { attrs, expose }) {
+    const domRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const mergedProvider = useProviderProps({
       ...props,
@@ -255,13 +256,14 @@ export const NumberField = defineComponent({
 
     expose({
       focus: () => inputRef.value?.focus(),
-      UNSAFE_getDOMNode: () => inputRef.value?.closest(".spectrum-Stepper"),
+      UNSAFE_getDOMNode: () => domRef.value,
     });
 
     return () =>
       h(
         "div",
         {
+          ref: domRef,
           class: [
             "spectrum-Stepper-container",
           ],

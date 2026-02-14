@@ -30,6 +30,61 @@ describe("NumberField", () => {
     expect(buttons[1].attributes("tabindex")).toBe("-1");
   });
 
+  it("attaches a user provided ref handle to the outer wrapper", async () => {
+    const fieldRef = ref<any>(null);
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(NumberField as any, {
+              ref: fieldRef,
+              "aria-label": "labelled",
+            });
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    await nextTick();
+    const group = wrapper.get('[role="group"]').element as HTMLElement;
+    const textField = wrapper.get('input[type="text"]').element as HTMLInputElement;
+
+    expect(fieldRef.value.UNSAFE_getDOMNode()).toBe(group.parentElement);
+    fieldRef.value.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(textField);
+  });
+
+  it("attaches a user provided ref handle when rendered with a label", async () => {
+    const fieldRef = ref<any>(null);
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(NumberField as any, {
+              ref: fieldRef,
+              "aria-label": "labelled",
+              label: "Visually labelled",
+            });
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    await nextTick();
+    const group = wrapper.get('[role="group"]').element as HTMLElement;
+    const textField = wrapper.get('input[type="text"]').element as HTMLInputElement;
+
+    expect(fieldRef.value.UNSAFE_getDOMNode()).toBe(group.parentElement);
+    fieldRef.value.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(textField);
+  });
+
   it("handles input change and onChange", async () => {
     const onChange = vi.fn();
     const wrapper = renderNumberField({ onChange });

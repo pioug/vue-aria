@@ -10029,3 +10029,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 101 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` ref-handle parity update:
+  - aligned `NumberField` imperative handle DOM node exposure to return the outer wrapper element via `UNSAFE_getDOMNode`.
+    - `packages/@vue-spectrum/numberfield/src/NumberField.ts`
+  - added migrated upstream coverage asserting user-provided component refs expose `UNSAFE_getDOMNode` and `focus()` behavior both with and without a visible label.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.
