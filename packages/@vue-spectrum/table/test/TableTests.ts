@@ -149,6 +149,18 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   await nextTick();
 }
 
+function readDescriptionText(ids: string | undefined): string {
+  if (!ids) {
+    return "";
+  }
+
+  return ids
+    .split(/\s+/)
+    .map((id) => document.getElementById(id)?.textContent ?? "")
+    .join(" ")
+    .trim();
+}
+
 export function tableTests() {
   it("renders a static table from columns and items", () => {
     const wrapper = renderTable({ "data-testid": "test" });
@@ -2448,6 +2460,45 @@ export function tableTests() {
       column: "foo",
       direction: "ascending",
     });
+  });
+
+  it("adds sort direction info to aria-describedby on Android", async () => {
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+    const hadOwnUserAgent = Object.prototype.hasOwnProperty.call(window.navigator, "userAgent");
+    let wrapper: ReturnType<typeof renderTable> | null = null;
+    try {
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "Android",
+      });
+
+      wrapper = renderTable();
+      let headers = wrapper.findAll('[role="columnheader"]');
+
+      expect(headers[0]!.attributes("aria-sort")).toBeUndefined();
+      expect(readDescriptionText(headers[0]!.attributes("aria-describedby"))).toContain("sortable column");
+      expect(readDescriptionText(headers[0]!.attributes("aria-describedby"))).not.toContain("ascending");
+      expect(readDescriptionText(headers[0]!.attributes("aria-describedby"))).not.toContain("descending");
+
+      await press(headers[0]!);
+
+      headers = wrapper.findAll('[role="columnheader"]');
+      expect(headers[0]!.attributes("aria-sort")).toBeUndefined();
+      expect(readDescriptionText(headers[0]!.attributes("aria-describedby"))).toContain("ascending");
+
+      await press(headers[0]!);
+
+      headers = wrapper.findAll('[role="columnheader"]');
+      expect(headers[0]!.attributes("aria-sort")).toBeUndefined();
+      expect(readDescriptionText(headers[0]!.attributes("aria-describedby"))).toContain("descending");
+    } finally {
+      wrapper?.unmount();
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      } else if (!hadOwnUserAgent) {
+        delete (window.navigator as { userAgent?: string }).userAgent;
+      }
+    }
   });
 
   it("uses kebab-case static slot cell text-value metadata for sorting", async () => {

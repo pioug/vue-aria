@@ -89,9 +89,9 @@ export function useTableColumnHeader<T>(
     focusableProps,
     gridCellProps,
     pressProps,
-    descriptionProps.value,
     shouldDisableFocus.value ? { tabIndex: -1 } : undefined
   ) as Record<string, unknown>;
+  const baseDescribedBy = mergedProps["aria-describedby"];
 
   return {
     columnHeaderProps: {
@@ -99,6 +99,12 @@ export function useTableColumnHeader<T>(
       role: "columnheader",
       id: getColumnHeaderId(state, node.key),
       "aria-colspan": node.colSpan && node.colSpan > 1 ? node.colSpan : undefined,
+      get "aria-describedby"() {
+        const describedBy = [baseDescribedBy, descriptionProps.value["aria-describedby"]]
+          .filter((value): value is string => typeof value === "string" && value.length > 0)
+          .join(" ");
+        return describedBy || undefined;
+      },
       get "aria-sort"() {
         return ariaSort.value;
       },

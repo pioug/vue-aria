@@ -8478,6 +8478,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 104 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/table` + `@vue-spectrum/table` Android sort-description parity update:
+  - fixed `useTableColumnHeader` `aria-describedby` wiring so sort-description ids update reactively as sort direction changes.
+  - added regression coverage to verify Android user-agent sorting keeps `aria-sort` unset while updating header `aria-describedby` text with ascending/descending sort direction details.
+  - `packages/@vue-aria/table/src/useTableColumnHeader.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 105 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
