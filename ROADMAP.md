@@ -6808,6 +6808,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added root-style passthrough coverage for `UNSAFE_className` / `UNSAFE_style` in both `DatePicker` and `DateRangePicker`.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 18 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added camel-case ARIA prop coverage (`ariaLabel` / `ariaLabelledby`) for date picker and range picker group semantics.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 20 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

@@ -195,6 +195,21 @@ describe("DatePicker", () => {
     expect(style).toContain("border-width: 2px");
     expect(style).toContain("border-style: solid");
   });
+
+  it("supports camel-case aria props on date picker group", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        ariaLabel: "Team date picker",
+        ariaLabelledby: "team-date-label",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get(".react-spectrum-DatePicker-group");
+    expect(group.attributes("aria-label")).toContain("Team date picker");
+    expect(group.attributes("aria-labelledby")).toContain("team-date-label");
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -381,5 +396,23 @@ describe("DateRangePicker", () => {
     const style = root.attributes("style");
     expect(style).toContain("border-width: 3px");
     expect(style).toContain("border-style: dashed");
+  });
+
+  it("supports camel-case aria props on range picker group", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        ariaLabel: "Team range picker",
+        ariaLabelledby: "team-range-label",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get(".react-spectrum-DateRangePicker-group");
+    expect(group.attributes("aria-label")).toContain("Team range picker");
+    expect(group.attributes("aria-labelledby")).toContain("team-range-label");
   });
 });
