@@ -9148,3 +9148,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 46 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-press state parity update:
+  - added migrated press-state coverage to verify interactive rows apply `data-pressed` during pointer/mouse press, while inert rows keep press state unset.
+  - fixed row press-state rendering by tracking interactive pointer/mouse press lifecycle in `TreeView` row rendering and exposing it through `data-pressed`.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 48 tests).
+- Validation: `npm run check -- --pretty false` passed.

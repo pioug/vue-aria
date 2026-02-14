@@ -103,6 +103,7 @@ const TreeRow = defineComponent({
   },
   setup(props) {
     const rowElementRef = ref<HTMLElement | null>(null);
+    const pointerPressed = ref(false);
     const rowRef = {
       get current() {
         return rowElementRef.value;
@@ -156,9 +157,16 @@ const TreeRow = defineComponent({
 
     return () => {
       const rowProps = rowAria.rowProps as Record<string, unknown>;
+      const onRowPointerDown = rowProps.onPointerdown as ((event: PointerEvent) => void) | undefined;
+      const onRowPointerUp = rowProps.onPointerup as ((event: PointerEvent) => void) | undefined;
+      const onRowPointerLeave = rowProps.onPointerleave as ((event: PointerEvent) => void) | undefined;
+      const onRowMouseDown = rowProps.onMousedown as ((event: MouseEvent) => void) | undefined;
+      const onRowMouseUp = rowProps.onMouseup as ((event: MouseEvent) => void) | undefined;
+      const onRowMouseLeave = rowProps.onMouseleave as ((event: MouseEvent) => void) | undefined;
       const canSelectItem = props.state.selectionManager.canSelectItem(props.node.key);
       const isSelected = canSelectItem && props.state.selectionManager.isSelected(props.node.key);
       const isDisabled = props.state.selectionManager.isDisabled(props.node.key);
+      const isRowInteractive = rowAria.allowsSelection || rowAria.hasAction;
       const selectionMode = props.state.selectionManager.selectionMode;
       const loadedChildRows = [...props.state.collection.getChildren(props.node.key)].filter((node) => node.type === "item");
       const hasLoadedChildRows = loadedChildRows.length > 0;
@@ -188,9 +196,37 @@ const TreeRow = defineComponent({
           "data-disabled": isDisabled ? "true" : undefined,
           "data-expanded": isExpanded ? "true" : undefined,
           "data-focused": rowAria.isFocused ? "true" : undefined,
-          "data-pressed": rowAria.isPressed ? "true" : undefined,
+          "data-pressed": rowAria.isPressed || pointerPressed.value ? "true" : undefined,
           "data-selected": isSelected ? "true" : undefined,
           "data-selection-mode": selectionMode === "none" ? undefined : selectionMode,
+          onPointerdown: (event: PointerEvent) => {
+            onRowPointerDown?.(event);
+            if (!event.defaultPrevented && event.button === 0 && isRowInteractive) {
+              pointerPressed.value = true;
+            }
+          },
+          onPointerup: (event: PointerEvent) => {
+            onRowPointerUp?.(event);
+            pointerPressed.value = false;
+          },
+          onPointerleave: (event: PointerEvent) => {
+            onRowPointerLeave?.(event);
+            pointerPressed.value = false;
+          },
+          onMousedown: (event: MouseEvent) => {
+            onRowMouseDown?.(event);
+            if (!event.defaultPrevented && event.button === 0 && isRowInteractive) {
+              pointerPressed.value = true;
+            }
+          },
+          onMouseup: (event: MouseEvent) => {
+            onRowMouseUp?.(event);
+            pointerPressed.value = false;
+          },
+          onMouseleave: (event: MouseEvent) => {
+            onRowMouseLeave?.(event);
+            pointerPressed.value = false;
+          },
         },
         [
           h(

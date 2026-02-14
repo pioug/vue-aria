@@ -42,6 +42,16 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   await nextTick();
 }
 
+async function pointerDown(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+  await target.trigger("mousedown", { button: 0 });
+  await nextTick();
+}
+
+async function pointerUp(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+  await target.trigger("mouseup", { button: 0 });
+  await nextTick();
+}
+
 async function mousePress(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
   await target.trigger("mousedown", { button: 0 });
   await target.trigger("mouseup", { button: 0 });
@@ -405,6 +415,75 @@ describe("TreeView", () => {
     const selectedKeys = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(selectedKeys?.has("projects-1")).toBe(true);
     expect(projectOneRow!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("supports press state on selectable and actionable rows", async () => {
+    const selectableWrapper = renderTree({
+      selectionMode: "multiple",
+    });
+
+    let photosRow = selectableWrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-pressed")).toBeUndefined();
+
+    await pointerDown(photosRow!);
+    expect(photosRow!.attributes("data-pressed")).toBe("true");
+
+    await pointerUp(photosRow!);
+    expect(photosRow!.attributes("data-pressed")).toBeUndefined();
+
+    const actionWrapper = renderTree({
+      selectionMode: "none",
+      onAction: vi.fn(),
+    });
+
+    photosRow = actionWrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-pressed")).toBeUndefined();
+
+    await pointerDown(photosRow!);
+    expect(photosRow!.attributes("data-pressed")).toBe("true");
+
+    await pointerUp(photosRow!);
+    expect(photosRow!.attributes("data-pressed")).toBeUndefined();
+  });
+
+  it("does not set press state on non-interactive rows", async () => {
+    const inertWrapper = renderTree({
+      selectionMode: "none",
+    });
+
+    let photosRow = inertWrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-pressed")).toBeUndefined();
+
+    await pointerDown(photosRow!);
+    expect(photosRow!.attributes("data-pressed")).toBeUndefined();
+    await pointerUp(photosRow!);
+
+    let projectsRow = inertWrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-pressed")).toBeUndefined();
+
+    await pointerDown(projectsRow!);
+    expect(projectsRow!.attributes("data-pressed")).toBe("true");
+    await pointerUp(projectsRow!);
+    expect(projectsRow!.attributes("data-pressed")).toBeUndefined();
+
+    const disabledWrapper = renderTree({
+      selectionMode: "none",
+      disabledBehavior: "all",
+      disabledKeys: ["projects"],
+    });
+
+    projectsRow = disabledWrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-pressed")).toBeUndefined();
+
+    await pointerDown(projectsRow!);
+    expect(projectsRow!.attributes("data-pressed")).toBeUndefined();
+    await pointerUp(projectsRow!);
   });
 
   it("wires row checkbox aria attributes in single-selection mode", () => {
