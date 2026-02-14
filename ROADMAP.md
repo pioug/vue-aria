@@ -9795,3 +9795,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 67 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` tray hover-close parity update:
+  - added migrated `SubmenuTrigger` coverage asserting hover over sibling root items does not collapse already open submenus in small-screen tray mode (`window.screen.width <= 700`).
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Additional `@vue-aria/menu` tray hover-close guard update:
+  - updated `useSubmenuTrigger` parent-menu `pointerover` close path to no-op in small-screen tray mode while preserving desktop sibling-hover close behavior.
+    - `packages/@vue-aria/menu/src/useSubmenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 68 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

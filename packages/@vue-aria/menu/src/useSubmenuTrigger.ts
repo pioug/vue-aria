@@ -237,6 +237,10 @@ export function useSubmenuTrigger<T>(
   });
 
   useEvent(parentMenuRefObject as any, "pointerover", (event: Event) => {
+    if (isSmallScreenTrayMode()) {
+      return;
+    }
+
     if (!state.isOpen) {
       return;
     }

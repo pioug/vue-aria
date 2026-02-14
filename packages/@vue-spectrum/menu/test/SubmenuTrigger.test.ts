@@ -511,6 +511,71 @@ describe("SubmenuTrigger", () => {
     }
   });
 
+  it("does not close an open submenu on hover in small-screen tray mode", async () => {
+    const screenWidthSpy = vi.spyOn(window.screen, "width", "get").mockImplementation(() => 700);
+    vi.useFakeTimers();
+    try {
+      const wrapper = mountTracked(MenuTrigger as any, {
+        props: {
+          defaultOpen: true,
+        },
+        slots: {
+          default: () => [
+            h("button", { "data-testid": "trigger" }, "Menu Button"),
+            h(Menu as any, { ariaLabel: "Menu" }, {
+              default: () => [
+                h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+                h(SubmenuTrigger as any, null, {
+                  default: () => [
+                    h(Item as any, { key: "more" }, { default: () => "More" }),
+                    h(Menu as any, { ariaLabel: "Submenu" }, {
+                      default: () => [
+                        h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+      const siblingItem = rootItems.find((item) => item.textContent?.includes("Alpha"));
+      const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+      expect(siblingItem).toBeTruthy();
+      expect(submenuTriggerItem).toBeTruthy();
+
+      submenuTriggerItem?.click();
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+      expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+      if (typeof PointerEvent !== "undefined") {
+        siblingItem?.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+        siblingItem?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+      } else {
+        siblingItem?.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+        siblingItem?.dispatchEvent(new Event("pointerover", { bubbles: true }));
+      }
+
+      vi.runAllTimers();
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      const triggerAfterHover = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+      expect(triggerAfterHover?.getAttribute("aria-expanded")).toBe("true");
+      expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+      expect(document.body.textContent).toContain("Sub item");
+    } finally {
+      screenWidthSpy.mockRestore();
+      vi.useRealTimers();
+    }
+  });
+
   it("opens submenu when pressing a submenu trigger item with pointer click", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {
