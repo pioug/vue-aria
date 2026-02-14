@@ -9586,3 +9586,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 46 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-callback parity update:
+  - added migrated `SubmenuTrigger` coverage asserting submenu item activation calls submenu-level `onAction`/`onClose` while suppressing root menu `onAction`/`onClose`.
+  - validated submenu item selection closes all open menu layers by default without invoking root `onClose` callbacks.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 47 tests).
+- Validation: `npm run check -- --pretty false` passed.

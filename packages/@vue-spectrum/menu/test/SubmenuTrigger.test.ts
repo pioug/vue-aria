@@ -311,6 +311,62 @@ describe("SubmenuTrigger", () => {
     expect(onRootSelectionChange).toHaveBeenCalledTimes(1);
   });
 
+  it("calls submenu onAction/onClose without triggering root callbacks", async () => {
+    const onRootAction = vi.fn();
+    const onRootClose = vi.fn();
+    const onSubmenuAction = vi.fn();
+    const onSubmenuClose = vi.fn();
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu", onAction: onRootAction, onClose: onRootClose }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, {
+                    ariaLabel: "Submenu",
+                    onAction: onSubmenuAction,
+                    onClose: onSubmenuClose,
+                  }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item 1" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    const submenuItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Sub item 1")) as HTMLElement | undefined;
+    expect(submenuItem).toBeTruthy();
+    submenuItem?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(onSubmenuAction).toHaveBeenCalledTimes(1);
+    expect(onSubmenuAction).toHaveBeenLastCalledWith("sub-1");
+    expect(onSubmenuClose).toHaveBeenCalledTimes(1);
+    expect(onRootAction).toHaveBeenCalledTimes(0);
+    expect(onRootClose).toHaveBeenCalledTimes(0);
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(0);
+  });
+
   it("closes submenu on Escape without closing root menu", async () => {
     const onRootClose = vi.fn();
     const onSubmenuClose = vi.fn();
