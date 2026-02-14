@@ -202,6 +202,11 @@ const onDismiss = () => {
 </template>
 ```
 
+`DialogContainer` context affects nested dialogs:
+- `type="popover"` makes nested `Dialog` default to small sizing.
+- `type="fullscreen"` uses fullscreen dialog sizing.
+- `is-dismissable` enables the nested dialog dismiss button.
+
 ## Labeling
 
 - If no visible title is associated, pass `aria-label`.
