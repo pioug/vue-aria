@@ -9203,3 +9203,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` chevron aria-expanded parity update:
+  - expanded migrated chevron coverage to assert button-level `aria-expanded` stays synchronized with row `aria-expanded` through expand/collapse transitions.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
+- Validation: `npm run check -- --pretty false` passed.

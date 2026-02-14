@@ -854,6 +854,7 @@ describe("TreeView", () => {
     let chevron = projectsRow!.get("button");
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(chevron.attributes("aria-label")).toBe("Collapse");
+    expect(chevron.attributes("aria-expanded")).toBe("true");
 
     await press(chevron);
 
@@ -862,6 +863,7 @@ describe("TreeView", () => {
     chevron = updatedProjectsRow!.get("button");
     expect(updatedProjectsRow!.attributes("aria-expanded")).toBe("false");
     expect(chevron.attributes("aria-label")).toBe("Expand");
+    expect(chevron.attributes("aria-expanded")).toBe("false");
   });
 
   it("updates chevron labels when rows toggle expansion", async () => {
