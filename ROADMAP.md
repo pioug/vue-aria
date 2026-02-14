@@ -7256,3 +7256,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 13 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/breadcrumbs` parity update:
+  - added action-edge regression coverage ensuring current breadcrumb items do not emit `onAction` even when rendered as links.
+    - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.

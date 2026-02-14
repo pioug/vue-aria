@@ -136,6 +136,21 @@ describe("Breadcrumbs", () => {
     expect(onAction).toHaveBeenCalledWith("folder-1");
   });
 
+  it("does not fire onAction for the current breadcrumb item", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderBreadcrumbs(
+      { onAction },
+      [
+        { key: "folder-1", label: "Folder 1", href: "#" },
+        { key: "folder-2", label: "Folder 2", href: "#" },
+      ]
+    );
+
+    const links = wrapper.findAll("a");
+    await links[1].trigger("click");
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
   it("does not fire onAction when disabled", async () => {
     const onAction = vi.fn();
     const wrapper = renderBreadcrumbs(
