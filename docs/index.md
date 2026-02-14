@@ -22,6 +22,7 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/tabs-state](/packages/tabs-state)
 - [@vue-aria/grid-state](/packages/grid-state)
 - [@vue-aria/table-state](/packages/table-state)
+- [@vue-aria/tree-state](/packages/tree-state)
 - [@vue-aria/tabs](/packages/tabs)
 - [@vue-aria/grid](/packages/grid)
 - [@vue-aria/table](/packages/table)

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/table`
+- Current focus package: `@vue-aria/tree-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -88,7 +88,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/list-state`: Complete
 - `@vue-aria/tabs-state`: Complete
 - `@vue-aria/grid-state`: Complete
-- `@vue-aria/tree-state`: Not started
+- `@vue-aria/tree-state`: In progress
 - `@vue-aria/table-state`: Complete
 - `@vue-aria/calendar-state`: Not started
 - `@vue-aria/datepicker-state`: Not started
@@ -2619,6 +2619,64 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 1. Port/adapt upstream resizing integration tests (`ariaTableResizing.test.tsx` + shared `tableResizingTests.tsx`) with Vue harness components.
 2. Expand VitePress docs examples to mirror upstream table docs variants and finalize visual/accessibility parity gates.
 
+## 31i) Package Record: @vue-aria/tree-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/tree/src`
+  - `references/react-spectrum/packages/@react-stately/tree/test/useTreeState.test.js`
+- Local package path:
+  - `packages/@vue-aria/tree-state`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Ported upstream API slice:
+  - `TreeCollection`
+  - `useTreeState`
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/TreeCollection.ts`
+  - `src/useTreeState.ts`
+  - `tsconfig.json` path alias
+  - `vitest.config.ts` alias
+- Open adaptation notes:
+  - Current tree-state slice supports iterable node collections and expanded-key + selection state parity paths.
+  - Full component-builder parity for children/story composition will be expanded with `@vue-aria/tree` integration.
+
+### Tests
+- Total upstream test files: 1 (`useTreeState.test.js`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-13)
+- Test parity notes:
+  - Added adapted `TreeCollection` flattening coverage for collapsed vs expanded key visibility.
+  - Added adapted `useTreeState` coverage for expanded-key toggling and selection-manager exposure.
+  - Added adapted focused-key reset coverage when a focused node is removed from the reactive collection.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/tree-state.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+  - State package is non-visual; no dedicated base style assets are required.
+
+### Accessibility
+- [ ] Pending keyboard-navigation/accessibility validation through downstream `@vue-aria/tree` integration.
+
+### Visual Parity
+- Not applicable for state package.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `@vue-aria/tree` hooks (`useTree`, `useTreeItem`) and integrate with `@vue-aria/tree-state`.
+2. Expand tree-state collection-builder parity to cover children-driven story/test flows from upstream.
+3. Migrate additional upstream tree interaction assertions once the `@vue-aria/tree` harness is in place.
+
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
   - `references/react-spectrum/packages/@react-aria/form/src`
@@ -5077,3 +5135,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added adapted keyboard-delta `onResize` callback-map assertions in `tableResizingTests.ts`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/table/test` passed (8 files, 25 tests).
+- Started `@vue-aria/tree-state` foundational slice:
+  - scaffolded `@vue-aria/tree-state` with `TreeCollection` and `useTreeState`.
+  - added TypeScript/Vitest alias wiring and VitePress package page (`docs/packages/tree-state.md`) with docs nav/sidebar/index links.
+  - added adapted tree-state tests for expanded flattening, expanded-key toggling, and focused-key reset after node removal.
+  - added package record `31i` and marked `@vue-aria/tree-state` execution queue status `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree-state/test` passed (1 file, 3 tests).

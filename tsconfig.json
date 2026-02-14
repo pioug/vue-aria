@@ -58,6 +58,7 @@
       "@vue-aria/combobox": ["packages/@vue-aria/combobox/src/index.ts"],
       "@vue-aria/grid-state": ["packages/@vue-aria/grid-state/src/index.ts"],
       "@vue-aria/table-state": ["packages/@vue-aria/table-state/src/index.ts"],
+      "@vue-aria/tree-state": ["packages/@vue-aria/tree-state/src/index.ts"],
       "@vue-aria/table": ["packages/@vue-aria/table/src/index.ts"],
       "@vue-aria/grid": ["packages/@vue-aria/grid/src/index.ts"],
       "@vue-aria/tabs-state": ["packages/@vue-aria/tabs-state/src/index.ts"],
