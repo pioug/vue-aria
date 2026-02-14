@@ -177,6 +177,24 @@ import { RangeCalendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## Range Validation Message Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { RangeCalendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <RangeCalendar
+    aria-label="Vacation range"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+    error-message="Please choose a valid date range."
+    validation-state="invalid"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `visibleMonths`, `firstDayOfWeek`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`.
