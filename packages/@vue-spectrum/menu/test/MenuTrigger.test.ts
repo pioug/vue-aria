@@ -121,4 +121,14 @@ describe("MenuTrigger", () => {
     expect(trigger.attributes("aria-expanded")).toBe("true");
     expect(onOpenChange).toHaveBeenCalledTimes(1);
   });
+
+  it("exposes trigger dom node and focus handle", async () => {
+    const wrapper = renderMenuTrigger();
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    expect((wrapper.vm as any).UNSAFE_getDOMNode()).toBe(trigger.element);
+    (wrapper.vm as any).focus();
+    await Promise.resolve();
+    expect(document.activeElement).toBe(trigger.element);
+  });
 });

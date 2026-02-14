@@ -7630,6 +7630,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/menu/test/Menu.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 20 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` trigger-ref parity update:
+  - added `MenuTrigger` ref-handle coverage asserting exposed `UNSAFE_getDOMNode()` and `focus()` behavior on the trigger element.
+  - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 21 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
