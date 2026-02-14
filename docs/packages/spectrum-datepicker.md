@@ -291,6 +291,39 @@ import { DatePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Custom Validate Callback Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+
+const validateDate = (value: CalendarDate | null) => {
+  if (value?.day === 13) {
+    return "The 13th is unavailable";
+  }
+
+  return true;
+};
+
+const validateRange = () => "Range failed custom validation";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Booking date"
+    :default-value="new CalendarDate(2019, 6, 13)"
+    :validate="validateDate"
+  />
+
+  <DateRangePicker
+    aria-label="Booking range"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+    :validate="validateRange"
+  />
+</template>
+```
+
 ## Help Text Example
 
 ```vue
@@ -460,7 +493,7 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 
 ## Key Props
 
-- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `onFocus`, `onBlur`, `onFocusChange`, `onKeyDown`, `onKeyUp`, `isDisabled`, `isReadOnly`, `isRequired`, `isQuiet`, `isInvalid`, `validationState`, `validationBehavior`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `granularity`, `hideTimeZone`, `hourCycle`, `shouldForceLeadingZeros`, `shouldCloseOnSelect`, `placeholderValue`, `autoFocus`.
+- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `onFocus`, `onBlur`, `onFocusChange`, `onKeyDown`, `onKeyUp`, `isDisabled`, `isReadOnly`, `isRequired`, `isQuiet`, `isInvalid`, `validationState`, `validationBehavior`, `validate`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `granularity`, `hideTimeZone`, `hourCycle`, `shouldForceLeadingZeros`, `shouldCloseOnSelect`, `placeholderValue`, `autoFocus`.
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.
 - Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants (shortcuts are ignored when disabled or read-only).
