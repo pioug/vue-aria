@@ -190,6 +190,24 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Non-Contiguous Range Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DateRangePicker
+    aria-label="Travel range"
+    :placeholder-value="new CalendarDate(2019, 6, 10)"
+    :is-date-unavailable="(date) => date.day === 12"
+    :allows-non-contiguous-ranges="true"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.

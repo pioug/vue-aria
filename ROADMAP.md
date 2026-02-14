@@ -6889,6 +6889,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added `allowsNonContiguousRanges` passthrough coverage in `DateRangePicker`, including default contiguous clamping and explicit non-contiguous enablement paths.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 45 tests).
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added `DateRangePicker` non-contiguous range example with unavailable-date gaps and `allowsNonContiguousRanges`.
+    - `docs/packages/spectrum-datepicker.md`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
