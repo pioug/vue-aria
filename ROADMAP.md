@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/breadcrumbs`
+- Current focus package: `@vue-spectrum/dialog`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7260,4 +7260,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added action-edge regression coverage ensuring current breadcrumb items do not emit `onAction` even when rendered as links.
     - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded variant-class parity coverage for `Dialog` type/size mappings, including modal/popover defaults and fullscreen/fullscreen-takeover classes.
+    - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 13 tests).
 - Validation: `npm run check -- --pretty false` passed.

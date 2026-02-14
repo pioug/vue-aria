@@ -81,4 +81,53 @@ describe("Dialog", () => {
     await closeButton.trigger("click");
     expect(onDismiss).toHaveBeenCalled();
   });
+
+  it("applies large class for modal dialogs by default", () => {
+    const wrapper = mount(Dialog as any, {
+      props: {
+        type: "modal",
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    expect(wrapper.get("section").classes()).toContain("spectrum-Dialog--large");
+  });
+
+  it("applies small class for popover dialogs by default", () => {
+    const wrapper = mount(Dialog as any, {
+      props: {
+        type: "popover",
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    expect(wrapper.get("section").classes()).toContain("spectrum-Dialog--small");
+  });
+
+  it("applies fullscreen class variants", () => {
+    const fullscreen = mount(Dialog as any, {
+      props: {
+        type: "fullscreen",
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    const takeover = mount(Dialog as any, {
+      props: {
+        type: "fullscreenTakeover",
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    expect(fullscreen.get("section").classes()).toContain("spectrum-Dialog--fullscreen");
+    expect(takeover.get("section").classes()).toContain("spectrum-Dialog--fullscreenTakeover");
+  });
 });
