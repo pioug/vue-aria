@@ -1385,6 +1385,88 @@ describe("TreeView", () => {
     expect(rowTexts.some((text) => text.includes("Project 1"))).toBe(true);
   });
 
+  it("navigates visible rows with ArrowUp and ArrowDown", async () => {
+    const wrapper = renderTree({
+      defaultExpandedKeys: ["projects"],
+      autoFocus: "first",
+    });
+
+    await nextTick();
+
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(4);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    const tree = wrapper.get('[role="treegrid"]');
+    await tree.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[1]!.element);
+
+    await tree.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[2]!.element);
+
+    await tree.trigger("keydown", { key: "ArrowUp" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[1]!.element);
+  });
+
+  it("navigates visible rows with Home and End", async () => {
+    const wrapper = renderTree({
+      defaultExpandedKeys: ["projects"],
+      autoFocus: "first",
+    });
+
+    await nextTick();
+
+    const tree = wrapper.get('[role="treegrid"]');
+    await tree.trigger("keydown", { key: "End" });
+    await nextTick();
+
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(4);
+    expect(document.activeElement).toBe(rows[3]!.element);
+
+    await tree.trigger("keydown", { key: "Home" });
+    await nextTick();
+
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[0]!.element);
+  });
+
+  it("supports typeahead focus navigation", async () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Typeahead tree",
+        items: [
+          { id: "alpha", name: "Alpha" },
+          { id: "beta", name: "Beta" },
+          { id: "gamma", name: "Gamma" },
+        ],
+        autoFocus: "first",
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(3);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    const tree = wrapper.get('[role="treegrid"]');
+    await tree.trigger("keydown", { key: "g" });
+    await nextTick();
+
+    rows = wrapper.findAll('[role="row"]');
+    const gammaRow = rows.find((row) => row.text().includes("Gamma"));
+    expect(gammaRow).toBeTruthy();
+    expect(document.activeElement).toBe(gammaRow!.element);
+  });
+
   it('supports focusing the first row with autoFocus="first"', async () => {
     const wrapper = renderTree({
       autoFocus: "first",
