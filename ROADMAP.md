@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/tabs`
+- Current focus package: `@vue-spectrum/table`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7826,6 +7826,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/tabs` docs parity update:
   - expanded tabs keyboard docs to include `Home`/`End` behavior and disabled-tab skipping during keyboard traversal.
   - `docs/packages/spectrum-tabs.md`
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` selection parity update:
+  - added row-selection callback coverage to verify `onSelectionChange` receives selected row keys on pointer selection.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.

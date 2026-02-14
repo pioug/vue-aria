@@ -180,6 +180,25 @@ export function tableTests() {
     expect(grid.element.contains(document.activeElement)).toBe(true);
   });
 
+  it("supports row selection callbacks", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has("row-2")).toBe(true);
+  });
+
   it("supports sorting callbacks and aria-sort updates", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });
