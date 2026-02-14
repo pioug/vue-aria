@@ -141,6 +141,24 @@ const setRange = (nextRange: { start: CalendarDate; end: CalendarDate } | null) 
 </template>
 ```
 
+## Non-Contiguous Range Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { RangeCalendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <RangeCalendar
+    aria-label="Travel dates"
+    :default-focused-value="new CalendarDate(2019, 6, 10)"
+    :is-date-unavailable="(date) => date.day === 12"
+    :allows-non-contiguous-ranges="true"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `visibleMonths`, `firstDayOfWeek`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`.
