@@ -8265,6 +8265,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 73 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` disabled-keys behavior parity update:
+  - added regression coverage to verify `disabledBehavior` action gating semantics also apply when rows are disabled via `disabledKeys` (actionable in `"selection"`, non-actionable with `aria-disabled` in `"all"`).
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 75 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
