@@ -2242,6 +2242,8 @@ export function tableTests() {
     const rows = wrapper.findAll('tbody [role="row"]');
     expect(rows).toHaveLength(1);
     expect(rows[0]!.classes()).toContain("spectrum-Table-row");
+    expect(rows[0]!.classes()).toContain("spectrum-Table-row--firstRow");
+    expect(rows[0]!.classes()).toContain("spectrum-Table-row--lastRow");
   });
 
   it("supports sorting callbacks and aria-sort updates", async () => {

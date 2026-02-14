@@ -8427,6 +8427,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 97 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` empty-row position-class parity update:
+  - aligned empty-state fallback row classes to include both first/last row markers (`spectrum-Table-row--firstRow` and `spectrum-Table-row--lastRow`).
+  - expanded empty-state regression coverage to assert empty-row first/last class output.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 97 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

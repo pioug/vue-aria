@@ -1071,7 +1071,7 @@ export const TableView = defineComponent({
                   "tr",
                   {
                     role: "row",
-                    class: "spectrum-Table-row react-spectrum-Table-row",
+                    class: "spectrum-Table-row spectrum-Table-row--firstRow spectrum-Table-row--lastRow react-spectrum-Table-row",
                     "aria-rowindex": rowOffset + 1,
                   },
                   [
