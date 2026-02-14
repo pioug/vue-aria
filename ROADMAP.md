@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/datepicker`
+- Current focus package: `@vue-aria/calendar`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -63,7 +63,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/table`: In progress
 - `@vue-aria/tree`: In progress
 - `@vue-aria/calendar`: In progress
-- `@vue-aria/datepicker`: In progress
+- `@vue-aria/datepicker`: Complete
 - `@vue-aria/breadcrumbs`: Complete
 - `@vue-aria/dialog`: Complete
 - `@vue-aria/separator`: Complete
@@ -3012,12 +3012,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/datepicker/docs`
 - Local package path:
   - `packages/@vue-aria/datepicker`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -3042,7 +3042,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation notes:
-  - Core hook surface is in place; integration-level interaction matrix parity against upstream component stories is still pending.
+  - Core hook surface is complete for current upstream package-local scope; continue monitoring upstream for drift.
 
 ### Tests
 - Total upstream test files: 1 (`useDatePicker.test.tsx`)
@@ -3054,16 +3054,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted date-segment interaction coverage for placeholder backspace focus handoff, numeric-segment input-mode wiring, and RTL embed styling in an `ar-EG` locale context.
   - Added adapted date-picker-group interaction coverage for `Alt+ArrowDown` open behavior and arrow-key focus traversal/disable branches.
   - Added adapted date-picker focus-transition coverage for blur suppression when focus moves into dialog content and blur dispatch when focus leaves the picker group.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/datepicker.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
   - Hook package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Initial role/label/segment wiring validated in adapted tests; expanded keyboard and focus interaction matrix pending.
+- [x] Segment editing, picker-group keyboard traversal, popover-open shortcuts, and blur/focus transition behaviors validated in adapted tests.
 
 ### Visual Parity
 - Not applicable for behavior hook package.
@@ -3072,9 +3072,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand `useDateSegment` keyboard/composition and directionality matrix coverage against upstream behavior branches.
-2. Add integration-style tests for picker/group focus handoff with popover-open and blur-to-dialog transitions.
-3. Mirror upstream docs examples and base markup more completely.
+1. Monitor upstream `@react-aria/datepicker` for behavior drift and backport deltas.
+2. Reuse this completed hook surface in downstream `@vue-spectrum/datepicker` component work.
 
 ## 32) Package Record: @vue-aria/form
 - Upstream source path(s):
