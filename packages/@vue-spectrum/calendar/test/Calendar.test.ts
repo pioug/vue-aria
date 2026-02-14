@@ -453,6 +453,22 @@ describe("Calendar", () => {
     expect(root.attributes("aria-describedby")).toContain("team-calendar-help");
   });
 
+  it("merges ariaLabelledby with generated id when ariaLabel is present", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        ariaLabel: "Team calendar",
+        ariaLabelledby: "external-calendar-label",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    const labelledBy = root.attributes("aria-labelledby");
+    expect(labelledBy).toContain("external-calendar-label");
+    expect(labelledBy).toContain(root.attributes("id"));
+  });
+
   it("renders a range calendar", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {

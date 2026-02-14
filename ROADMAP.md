@@ -6647,6 +6647,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/calendar` docs parity update:
   - expanded shared key-prop documentation to include `locale` and `createCalendar`.
     - `docs/packages/spectrum-calendar.md`
+- Additional `@vue-spectrum/calendar` parity update:
+  - added root-labeling regression coverage for `ariaLabelledby` merge semantics with generated calendar ids.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 42 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
