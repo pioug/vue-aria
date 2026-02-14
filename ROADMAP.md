@@ -8407,7 +8407,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/table` static-column prop-normalization parity update:
   - expanded static `Column` prop declarations to include `align`, `hideHeader`, and `showDivider`.
   - improved slot parser normalization to accept kebab-case metadata keys and template-style boolean attributes (`""`) for table column/row metadata.
-  - added regression coverage for template/kebab-case static-slot column metadata wiring.
+  - added regression coverage for template/kebab-case static-slot column metadata wiring, including row-header semantics from `is-row-header`.
   - `packages/@vue-spectrum/table/src/TableView.ts`
   - `packages/@vue-spectrum/table/src/types.ts`
   - `packages/@vue-spectrum/table/test/TableTests.ts`

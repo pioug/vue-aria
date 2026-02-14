@@ -413,6 +413,10 @@ export function tableTests() {
     const headers = wrapper.findAll('[role="columnheader"]');
     expect(headers[1]!.classes()).toContain("spectrum-Table-cell--hideHeader");
 
+    const rowHeaderCells = wrapper.findAll('tbody [role="rowheader"]');
+    expect(rowHeaderCells).toHaveLength(1);
+    expect(rowHeaderCells[0]!.text()).toContain("Alpha");
+
     const firstRowCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="gridcell"]');
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--hideHeader");
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
