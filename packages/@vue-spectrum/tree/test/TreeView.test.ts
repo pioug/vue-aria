@@ -294,6 +294,104 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-selected")).toBe("false");
   });
 
+  it("renders selection checkboxes when selection is enabled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Checkbox tree",
+        selectionMode: "single",
+        onSelectionChange,
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      expect(row.find('input[type="checkbox"]').exists()).toBe(true);
+    }
+
+    const projectOneRow = rows.find((row) => row.text().includes("Project 1"));
+    expect(projectOneRow).toBeTruthy();
+
+    await projectOneRow!.get('input[type="checkbox"]').setValue(true);
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    const selectedKeys = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(selectedKeys?.has("projects-1")).toBe(true);
+    expect(projectOneRow!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("does not render selection checkboxes in highlight selection mode", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Highlight tree",
+        selectionMode: "multiple",
+        selectionStyle: "highlight",
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      expect(row.find('input[type="checkbox"]').exists()).toBe(false);
+    }
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 

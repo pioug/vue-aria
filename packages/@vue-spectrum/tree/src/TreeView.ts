@@ -1,4 +1,5 @@
 import { useButton } from "@vue-aria/button";
+import { useGridListSelectionCheckbox } from "@vue-aria/gridlist";
 import { useTree, useTreeItem } from "@vue-aria/tree";
 import { useTreeState, type TreeState } from "@vue-aria/tree-state";
 import type { Key, Node } from "@vue-aria/collections";
@@ -91,6 +92,11 @@ const TreeRow = defineComponent({
       type: Object as PropType<TreeState<SpectrumTreeViewItemData>>,
       required: true,
     },
+    showSelectionCheckboxes: {
+      type: Boolean as PropType<boolean | undefined>,
+      required: false,
+      default: false,
+    },
   },
   setup(props) {
     const rowElementRef = ref<HTMLElement | null>(null);
@@ -133,9 +139,22 @@ const TreeRow = defineComponent({
       },
       expandButtonRef as any
     );
+    const { checkboxProps } = useGridListSelectionCheckbox(
+      {
+        get key() {
+          return props.node.key;
+        },
+      } as any,
+      props.state
+    );
+    const checkboxSelected = computed(() => props.state.selectionManager.isSelected(props.node.key));
+    const checkboxDisabled = computed(() => !props.state.selectionManager.canSelectItem(props.node.key));
 
     return () => {
       const rowProps = rowAria.rowProps as Record<string, unknown>;
+      const canSelectItem = props.state.selectionManager.canSelectItem(props.node.key);
+      const isSelected = canSelectItem && props.state.selectionManager.isSelected(props.node.key);
+      const isDisabled = props.state.selectionManager.isDisabled(props.node.key);
       return h(
         "div",
         {
@@ -145,11 +164,13 @@ const TreeRow = defineComponent({
             rowProps.class,
             "react-spectrum-TreeView-row",
             {
-              "is-disabled": rowAria.isDisabled,
-              "is-selected": rowAria.isSelected,
+              "is-disabled": isDisabled,
+              "is-selected": isSelected,
               "is-focused": rowAria.isFocused,
             },
           ],
+          "aria-selected": canSelectItem ? (isSelected ? "true" : "false") : undefined,
+          "aria-disabled": isDisabled ? "true" : undefined,
           "data-level": String(props.node.level + 1),
         },
         [
@@ -187,6 +208,20 @@ const TreeRow = defineComponent({
                   class: "react-spectrum-TreeView-item",
                 },
                 [
+                  props.showSelectionCheckboxes
+                    ? h("input", {
+                      type: "checkbox",
+                      class: "react-spectrum-TreeView-selectionCheckbox",
+                      "aria-label": checkboxProps["aria-label"] as string | undefined,
+                      "aria-labelledby": checkboxProps["aria-labelledby"] as string | undefined,
+                      checked: checkboxSelected.value,
+                      disabled: checkboxDisabled.value,
+                      onClick: (event: MouseEvent) => {
+                        event.stopPropagation();
+                      },
+                      onChange: checkboxProps.onChange as ((event: Event) => void) | undefined,
+                    })
+                    : null,
                   props.node.rendered as any,
                   h(
                     "span",
@@ -469,6 +504,8 @@ export const TreeView = defineComponent({
       const visibleRows = [...state.collection.getKeys()]
         .map((key) => state.collection.getItem(key))
         .filter((node): node is Node<SpectrumTreeViewItemData> => Boolean(node && node.type === "item"));
+      const showSelectionCheckboxes =
+        (props.selectionMode ?? "none") !== "none" && (props.selectionStyle ?? "checkbox") !== "highlight";
 
       const rootProps = mergeProps(gridProps, attrsWithoutClassStyle, {
         class: [
@@ -496,6 +533,7 @@ export const TreeView = defineComponent({
               key: String(node.key),
               node,
               state,
+              showSelectionCheckboxes,
             })
           )
           : props.renderEmptyState

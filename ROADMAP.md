@@ -7633,6 +7633,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 12 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` checkbox-selection parity update:
+  - rendered row selection checkboxes when tree selection is enabled (default checkbox-style selection) and suppressed checkbox rendering for `selectionStyle="highlight"`.
+  - fixed tree row `aria-selected`/selection-class updates to derive from live selection-manager state so selection semantics stay reactive after checkbox toggles.
+  - added migrated checkbox-selection coverage for single-selection toggles and highlight-mode no-checkbox behavior.
+  - `packages/@vue-spectrum/tree/src/TreeView.ts`
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
