@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/menu`
+- Current focus package: `@vue-spectrum/listbox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7652,6 +7652,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `closeOnSelect={false}` selection behavior guidance
     - `TooltipTrigger` composition example for `ActionMenu`
   - `docs/packages/spectrum-menu.md`
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` keyboard/selection parity update:
+  - expanded listbox coverage for:
+    - keyboard focus wrapping with `shouldFocusWrap`
+    - no-checkmark rendering when `selectionMode` is omitted (even when `selectedKeys` is provided)
+  - stabilized listbox keyboard test harness with `scrollIntoView` mocking.
+  - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 7 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.

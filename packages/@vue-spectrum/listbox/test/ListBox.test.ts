@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { h } from "vue";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { h, nextTick } from "vue";
 import { Item } from "../src/Item";
 import { ListBox } from "../src/ListBox";
 import { Section } from "../src/Section";
@@ -33,6 +33,16 @@ function renderListBox(props: Record<string, unknown> = {}) {
 }
 
 describe("ListBox", () => {
+  const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+
+  beforeAll(() => {
+    HTMLElement.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterAll(() => {
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -95,5 +105,37 @@ describe("ListBox", () => {
     expect(options[2]?.attributes("aria-disabled")).toBe("true");
     expect(options[2]?.attributes("aria-selected")).toBe("false");
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
+  it("wraps keyboard focus when shouldFocusWrap is enabled", async () => {
+    const wrapper = renderListBox({
+      shouldFocusWrap: true,
+    });
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(5);
+    const listbox = wrapper.get('[role="listbox"]');
+    (listbox.element as HTMLElement).focus();
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
+
+    (document.activeElement as HTMLElement | null)?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    await nextTick();
+    const focusedAfterUp = document.activeElement as HTMLElement | null;
+    expect(focusedAfterUp?.getAttribute("data-key")).toBe("Bleh");
+
+    focusedAfterUp?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
+  });
+
+  it("does not render selection checkmarks when selectionMode is not set", () => {
+    const wrapper = renderListBox({
+      selectedKeys: ["Foo"],
+    });
+
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(5);
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
   });
 });
