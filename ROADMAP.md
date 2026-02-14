@@ -9213,3 +9213,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` selectable-row action-metadata parity update:
+  - expanded migrated selection-mode coverage to assert expandable rows omit `data-has-action` while remaining selectable (`aria-selected`) and expandable (`data-has-child-items`).
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
+- Validation: `npm run check -- --pretty false` passed.

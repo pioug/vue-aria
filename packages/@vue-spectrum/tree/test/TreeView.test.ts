@@ -415,6 +415,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-label")).toBe("Projects");
     expect(projectsRow!.attributes("data-has-child-items")).toBe("true");
+    expect(projectsRow!.attributes("data-has-action")).toBeUndefined();
     expect(projectsRow!.attributes("aria-selected")).toBe("false");
   });
 
