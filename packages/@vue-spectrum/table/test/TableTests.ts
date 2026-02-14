@@ -231,6 +231,17 @@ export function tableTests() {
     expect(lastSelection?.has(0)).toBe(true);
   });
 
+  it("renders empty state content when no rows are present", () => {
+    const wrapper = renderTable({
+      items: [],
+      renderEmptyState: () => "No rows",
+    });
+
+    const emptyCell = wrapper.get("tbody .react-spectrum-Table-empty");
+    expect(emptyCell.text()).toContain("No rows");
+    expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(1);
+  });
+
   it("supports sorting callbacks and aria-sort updates", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });
