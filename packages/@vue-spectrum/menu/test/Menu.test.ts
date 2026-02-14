@@ -86,4 +86,36 @@ describe("Menu", () => {
     expect(items[2]?.attributes("aria-checked")).toBe("false");
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
   });
+
+  it("supports multiple selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderMenu({
+      selectionMode: "multiple",
+      onSelectionChange,
+    });
+
+    const items = wrapper.findAll('[role="menuitemcheckbox"]');
+    expect(items).toHaveLength(5);
+
+    await items[3]?.trigger("click");
+    await items[1]?.trigger("click");
+
+    expect(items[3]?.attributes("aria-checked")).toBe("true");
+    expect(items[1]?.attributes("aria-checked")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(2);
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+  });
+
+  it("supports multiple default selected keys", () => {
+    const wrapper = renderMenu({
+      selectionMode: "multiple",
+      defaultSelectedKeys: ["Foo", "Bar"],
+    });
+
+    const items = wrapper.findAll('[role="menuitemcheckbox"]');
+    expect(items).toHaveLength(5);
+    expect(items[0]?.attributes("aria-checked")).toBe("true");
+    expect(items[1]?.attributes("aria-checked")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(2);
+  });
 });
