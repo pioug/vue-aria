@@ -79,3 +79,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-spectrum/listbox](/packages/spectrum-listbox)
 - [@vue-spectrum/picker](/packages/spectrum-picker)
 - [@vue-spectrum/combobox](/packages/spectrum-combobox)
+- [@vue-spectrum/tabs](/packages/spectrum-tabs)

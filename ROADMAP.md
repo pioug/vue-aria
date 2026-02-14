@@ -114,7 +114,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/listbox`: In progress
 - `@vue-spectrum/picker`: In progress
 - `@vue-spectrum/combobox`: In progress
-- `@vue-spectrum/tabs`: Not started
+- `@vue-spectrum/tabs`: In progress
 - `@vue-spectrum/table`: Not started
 - `@vue-spectrum/tree`: Not started
 - `@vue-spectrum/calendar`: Not started
@@ -6437,3 +6437,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated execution queue status for `@vue-spectrum/combobox` to `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 6 tests).
+- Started `@vue-spectrum/tabs` foundational slice:
+  - scaffolded `@vue-spectrum/tabs` package with upstream-aligned surface exports: `Tabs`, `TabList`, `TabPanels`, and `Item`.
+  - ported initial Spectrum tabs composition with:
+    - data-driven tab/panel rendering from `items`
+    - static `Item` composition support inside `TabList` + `TabPanels`
+    - horizontal/vertical keyboard navigation and click selection behavior
+    - controlled/uncontrolled selected key handling and disabled tab support
+  - added adapted tests for render/selection/keyboard/disabled/controlled/static-composition flows plus SSR rendering.
+  - added VitePress package page (`docs/packages/spectrum-tabs.md`) and docs nav/sidebar/index links.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/tabs`.
+  - updated execution queue status for `@vue-spectrum/tabs` to `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 7 tests).

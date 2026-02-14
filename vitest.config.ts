@@ -286,6 +286,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/combobox": fileURLToPath(
         new URL("./packages/@vue-spectrum/combobox/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/tabs": fileURLToPath(
+        new URL("./packages/@vue-spectrum/tabs/src/index.ts", import.meta.url)
       )
     }
   }
