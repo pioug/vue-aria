@@ -7249,3 +7249,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 11 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/breadcrumbs` parity update:
+  - expanded SSR coverage for:
+    - `isMultiline`/`showRoot` class rendering
+    - `id` and `UNSAFE_className` rendering
+    - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 13 tests).
+- Validation: `npm run check -- --pretty false` passed.
