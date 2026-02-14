@@ -83,6 +83,11 @@ const sortableItemsWithPropSpanCells: SpectrumTableRowData[] = [
   },
 ];
 
+const unsortedSortableItemsWithPropSpanCells: SpectrumTableRowData[] = [
+  sortableItemsWithPropSpanCells[1]!,
+  sortableItemsWithPropSpanCells[0]!,
+];
+
 function renderTable(props: Record<string, unknown> = {}) {
   return mount(TableView as any, {
     props: {
@@ -335,6 +340,30 @@ export function tableTests() {
     });
     await nextTick();
 
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.text()).toContain("Zulu");
+    expect(bodyRows[1]!.text()).toContain("Alpha");
+  });
+
+  it("toggles interactive sorting for data-driven colSpan rows", async () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Interactive sortable prop colSpan table",
+        columns: sortableColumnsWithSpan,
+        items: unsortedSortableItemsWithPropSpanCells,
+      },
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(4);
+
+    await press(headers[3]!);
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.text()).toContain("Alpha");
+    expect(bodyRows[1]!.text()).toContain("Zulu");
+
+    await press(headers[3]!);
     bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.text()).toContain("Zulu");
     expect(bodyRows[1]!.text()).toContain("Alpha");
