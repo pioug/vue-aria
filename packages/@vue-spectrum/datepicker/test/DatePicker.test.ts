@@ -483,6 +483,55 @@ describe("DatePicker", () => {
     expect(day9?.getAttribute("aria-disabled")).toBe("true");
     expect(day10?.getAttribute("aria-disabled")).toBeNull();
   });
+
+  it("does not emit onChange when selecting an unavailable date", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDateUnavailable: (date: { day: number }) => date.day === 17,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+
+    pressElement(day17!);
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("does not emit onChange when selecting a min/max out-of-bounds date", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 15),
+        minValue: new CalendarDate(2019, 6, 10),
+        maxValue: new CalendarDate(2019, 6, 20),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day9 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "9");
+    expect(day9).toBeTruthy();
+
+    pressElement(day9!);
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
 });
 
 describe("DateRangePicker", () => {

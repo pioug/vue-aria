@@ -6909,3 +6909,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added integration coverage ensuring unavailable and min/max out-of-bounds day selections do not emit `onChange` in controlled overlay interactions.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 53 tests).
+- Validation: `npm run check -- --pretty false` passed.
