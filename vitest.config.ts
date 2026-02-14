@@ -209,6 +209,9 @@ export default defineConfig({
       "@vue-aria/overlays": fileURLToPath(
         new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/theme-express": fileURLToPath(
+        new URL("./packages/@vue-spectrum/theme-express/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/theme-dark": fileURLToPath(
         new URL("./packages/@vue-spectrum/theme-dark/src/index.ts", import.meta.url)
       ),
