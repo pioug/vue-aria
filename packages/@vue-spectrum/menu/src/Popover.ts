@@ -84,6 +84,15 @@ export const Popover = defineComponent({
   },
   setup(props, { slots }) {
     const container = computed(() => props.portalContainer ?? (typeof document !== "undefined" ? document.body : null));
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) {
+        return;
+      }
+
+      event.stopPropagation();
+      event.preventDefault();
+      props.state.close();
+    };
 
     return () => {
       if (!props.state.isOpen || !container.value) {
@@ -112,6 +121,8 @@ export const Popover = defineComponent({
                 ...(props.UNSAFE_style ?? {}),
               },
               "data-placement": props.placement,
+              onKeydown: onEscape,
+              onKeyDown: onEscape,
             },
             [
               !props.hideArrow

@@ -301,6 +301,29 @@ describe("Picker", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("closes default open state on escape", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      defaultOpen: true,
+      onOpenChange,
+    });
+
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    expect(listbox).toBeTruthy();
+
+    listbox?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    listbox?.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(wrapper.get("button").attributes("aria-expanded")).toBe("false");
+    expect(wrapper.get("button").attributes("aria-controls")).toBeUndefined();
+  });
+
   it("supports hidden select form attributes and default value", () => {
     const wrapper = renderPicker({
       name: "picker",

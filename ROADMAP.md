@@ -7743,6 +7743,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 16 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` escape-dismiss parity update:
+  - added `defaultOpen` escape-key coverage to ensure picker popovers close and clear trigger open-state ARIA wiring.
+  - added Escape-key dismissal handling in shared Spectrum menu popovers so keyboard escape closes open popovers.
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - `packages/@vue-spectrum/menu/src/Popover.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test packages/@vue-spectrum/menu/test` passed (8 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
