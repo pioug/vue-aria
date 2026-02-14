@@ -247,6 +247,36 @@ describe("DatePicker", () => {
 
     expect(wrapper.text()).toContain("Choose a valid date");
   });
+
+  it("passes firstDayOfWeek through to calendar overlay", async () => {
+    const defaultWrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+    await defaultWrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+    const defaultFirstDay = document.body.querySelector(".react-spectrum-Calendar-weekday")?.textContent ?? "";
+    defaultWrapper.unmount();
+    document.body.innerHTML = "";
+
+    const mondayWrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        firstDayOfWeek: "mon",
+      },
+      attachTo: document.body,
+    });
+    await mondayWrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+    const mondayFirstDay = document.body.querySelector(".react-spectrum-Calendar-weekday")?.textContent ?? "";
+
+    expect(defaultFirstDay).not.toBe(mondayFirstDay);
+    expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -498,5 +528,41 @@ describe("DateRangePicker", () => {
     });
 
     expect(wrapper.text()).toContain("Choose a valid range");
+  });
+
+  it("passes firstDayOfWeek through to range-calendar overlay", async () => {
+    const defaultWrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+    await defaultWrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+    const defaultFirstDay = document.body.querySelector(".react-spectrum-Calendar-weekday")?.textContent ?? "";
+    defaultWrapper.unmount();
+    document.body.innerHTML = "";
+
+    const mondayWrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        firstDayOfWeek: "mon",
+      },
+      attachTo: document.body,
+    });
+    await mondayWrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+    const mondayFirstDay = document.body.querySelector(".react-spectrum-Calendar-weekday")?.textContent ?? "";
+
+    expect(defaultFirstDay).not.toBe(mondayFirstDay);
+    expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
   });
 });
