@@ -48,6 +48,7 @@ export interface SpectrumDatePickerProps {
   description?: string | undefined;
   name?: string | undefined;
   form?: string | undefined;
+  id?: string | undefined;
   "aria-label"?: string | undefined;
   "aria-labelledby"?: string | undefined;
   ariaLabel?: string | undefined;
@@ -296,6 +297,10 @@ export const DatePicker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    id: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     "aria-label": {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -468,6 +473,9 @@ export const DatePicker = defineComponent({
         },
         get form() {
           return merged.form;
+        },
+        get id() {
+          return merged.id;
         },
         get onFocus() {
           return merged.onFocus;
@@ -836,6 +844,10 @@ export const DateRangePicker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    id: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     allowsNonContiguousRanges: {
       type: Boolean,
       default: undefined,
@@ -1018,6 +1030,9 @@ export const DateRangePicker = defineComponent({
         },
         get form() {
           return merged.form;
+        },
+        get id() {
+          return merged.id;
         },
         get allowsNonContiguousRanges() {
           return merged.allowsNonContiguousRanges;

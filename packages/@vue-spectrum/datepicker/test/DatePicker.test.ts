@@ -957,6 +957,19 @@ describe("DatePicker", () => {
     expect(group.attributes("aria-labelledby")).toContain("team-date-label");
   });
 
+  it("forwards custom id to date picker group", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        id: "meeting-date-field",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DatePicker-group").attributes("id")).toBe("meeting-date-field");
+  });
+
   it("applies invalid, disabled, and quiet classes to date picker root", () => {
     const invalidWrapper = mount(DatePicker as any, {
       props: {
@@ -2267,6 +2280,22 @@ describe("DateRangePicker", () => {
     const group = wrapper.get(".react-spectrum-DateRangePicker-group");
     expect(group.attributes("aria-label")).toContain("Team range picker");
     expect(group.attributes("aria-labelledby")).toContain("team-range-label");
+  });
+
+  it("forwards custom id to range picker group", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        id: "trip-range-field",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-group").attributes("id")).toBe("trip-range-field");
   });
 
   it("applies invalid, disabled, and quiet classes to range picker root", () => {

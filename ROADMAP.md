@@ -7208,3 +7208,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 125 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - exposed and forwarded `id` for both picker variants so external consumers can provide deterministic field/group ids.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added regression coverage asserting custom ids are applied to rendered picker groups.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 127 tests).
+- Validation: `npm run check -- --pretty false` passed.
