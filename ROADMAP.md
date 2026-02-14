@@ -7298,3 +7298,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/AlertDialog.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 20 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` docs parity update:
+  - added `AlertDialog` usage example covering destructive variant and primary/secondary disabled-action props.
+    - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 20 tests).

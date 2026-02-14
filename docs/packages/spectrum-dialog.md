@@ -110,6 +110,28 @@ Provide your own content structure inside the dialog body (heading, text, action
 </Dialog>
 ```
 
+## AlertDialog Example
+
+```vue
+<script setup lang="ts">
+import { AlertDialog } from "@vue-spectrum/dialog";
+</script>
+
+<template>
+  <AlertDialog
+    variant="destructive"
+    title="Delete project"
+    primary-action-label="Delete"
+    secondary-action-label="Archive"
+    cancel-label="Cancel"
+    :is-primary-action-disabled="false"
+    :is-secondary-action-disabled="false"
+  >
+    This action cannot be undone.
+  </AlertDialog>
+</template>
+```
+
 ## Labeling
 
 - If no visible title is associated, pass `aria-label`.
