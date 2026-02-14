@@ -1170,6 +1170,29 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("emits controlled checkbox escape-clear changes without mutating rendered state", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(0);
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("does not emit controlled checkbox select-all changes when disallowSelectAll is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
