@@ -204,6 +204,23 @@ describe("useCalendar upstream interaction parity", () => {
       expectedRangeEnd: "2019-01-19",
     },
     {
+      name: "3-week visible previous",
+      visibleDuration: { weeks: 3 },
+      direction: "previous",
+      count: 1,
+      expectedRangeStart: "2018-12-02",
+      expectedRangeEnd: "2018-12-22",
+    },
+    {
+      name: "3-week single previous",
+      visibleDuration: { weeks: 3 },
+      pageBehavior: "single",
+      direction: "previous",
+      count: 1,
+      expectedRangeStart: "2018-12-16",
+      expectedRangeEnd: "2019-01-05",
+    },
+    {
       name: "5-day visible next",
       visibleDuration: { days: 5 },
       direction: "next",
@@ -219,6 +236,23 @@ describe("useCalendar upstream interaction parity", () => {
       count: 1,
       expectedRangeStart: "2018-12-31",
       expectedRangeEnd: "2019-01-04",
+    },
+    {
+      name: "5-day visible previous",
+      visibleDuration: { days: 5 },
+      direction: "previous",
+      count: 1,
+      expectedRangeStart: "2018-12-25",
+      expectedRangeEnd: "2018-12-29",
+    },
+    {
+      name: "5-day single previous",
+      visibleDuration: { days: 5 },
+      pageBehavior: "single",
+      direction: "previous",
+      count: 1,
+      expectedRangeStart: "2018-12-29",
+      expectedRangeEnd: "2019-01-02",
     },
   ];
 
