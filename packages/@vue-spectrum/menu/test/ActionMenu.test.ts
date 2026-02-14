@@ -108,10 +108,12 @@ describe("ActionMenu", () => {
     expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
   });
 
-  it("supports an uncontrolled default open state", () => {
-    mount(ActionMenu as any, {
+  it("supports an uncontrolled default open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(ActionMenu as any, {
       props: {
         defaultOpen: true,
+        onOpenChange,
       },
       slots: {
         default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
@@ -120,5 +122,14 @@ describe("ActionMenu", () => {
     });
 
     expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledTimes(0);
+
+    const triggerButton = wrapper.get("button");
+    await triggerButton.trigger("click");
+
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    await nextTick();
+    expect(triggerButton.attributes("aria-expanded")).toBe("false");
   });
 });

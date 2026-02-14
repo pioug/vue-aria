@@ -1,5 +1,5 @@
 import { useMenuTrigger } from "@vue-aria/menu";
-import { cloneVNode, defineComponent, h, ref, type PropType, type VNode } from "vue";
+import { cloneVNode, defineComponent, h, ref, watchEffect, type PropType, type VNode } from "vue";
 import { Popover } from "./Popover";
 import { useRootMenuTriggerState } from "./state";
 import type { SpectrumMenuTriggerProps } from "./types";
@@ -120,6 +120,32 @@ export const MenuTrigger = defineComponent({
       state as any,
       triggerRefObject
     );
+
+    watchEffect(() => {
+      const triggerElement = triggerRef.value;
+      if (!triggerElement) {
+        return;
+      }
+
+      const triggerId = menuTriggerProps.id as string | undefined;
+      if (triggerId) {
+        triggerElement.id = triggerId;
+      }
+
+      const hasPopup = menuTriggerProps["aria-haspopup"];
+      if (hasPopup === undefined || hasPopup === null || hasPopup === false) {
+        triggerElement.removeAttribute("aria-haspopup");
+      } else {
+        triggerElement.setAttribute("aria-haspopup", String(hasPopup));
+      }
+
+      triggerElement.setAttribute("aria-expanded", state.isOpen ? "true" : "false");
+      if (state.isOpen) {
+        triggerElement.setAttribute("aria-controls", menuProps.id as string);
+      } else {
+        triggerElement.removeAttribute("aria-controls");
+      }
+    });
 
     expose({
       focus: () => triggerRef.value?.focus(),

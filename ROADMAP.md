@@ -7599,6 +7599,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` trigger-aria parity update:
+  - synchronized trigger ARIA attributes (`id`, `aria-haspopup`, `aria-expanded`, `aria-controls`) directly onto resolved trigger DOM nodes so component triggers stay accurate across open-state transitions.
+  - tightened `ActionMenu` uncontrolled-open coverage to assert trigger `aria-expanded` updates after close.
+  - `packages/@vue-spectrum/menu/src/MenuTrigger.ts`
+  - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
