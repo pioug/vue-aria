@@ -348,4 +348,21 @@ describe("CheckboxGroup", () => {
       expect((input.element as HTMLInputElement).validity.valid).toBe(true);
     }
   });
+
+  it("propagates emphasized style from group to children", () => {
+    const wrapper = mount(GroupFixture as any, {
+      props: {
+        label: "Favorite Pet",
+      },
+      attrs: {
+        isEmphasized: true,
+      },
+    });
+
+    const labels = wrapper.findAll("label.spectrum-Checkbox");
+    expect(labels.length).toBe(3);
+    for (const label of labels) {
+      expect(label.classes()).not.toContain("spectrum-Checkbox--quiet");
+    }
+  });
 });

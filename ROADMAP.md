@@ -195,6 +195,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Checkbox: controlled/uncontrolled value flows, indeterminate state, read-only behavior, and form reset.
   - CheckboxGroup: read-only propagation, unsupported-child-prop warnings, help text/error-message rendering, and form reset.
   - Validation slice: native required behavior and group/individual invalid-state propagation coverage.
+  - Visual-state slice: quiet/emphasized class behavior and group emphasis propagation coverage.
 - Documentation scaffold added:
   - `docs/packages/spectrum-checkbox.md`
   - `docs/packages/spectrum-checkbox-group.md`
@@ -204,7 +205,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Remaining for completion
 - Validate visual parity against upstream docs examples for quiet/emphasized/invalid states.
-- Complete docs parity with dedicated per-component pages matching upstream structure.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

@@ -310,4 +310,23 @@ describe("Checkbox", () => {
     await wrapper.get('input[type="checkbox"]').setValue(true);
     expect(checkbox.validity.valid).toBe(true);
   });
+
+  it("uses quiet style by default and emphasized when requested", () => {
+    const quiet = mount(Checkbox as any, {
+      slots: {
+        default: () => "Quiet",
+      },
+    });
+    expect(quiet.get("label").classes()).toContain("spectrum-Checkbox--quiet");
+
+    const emphasized = mount(Checkbox as any, {
+      props: {
+        isEmphasized: true,
+      },
+      slots: {
+        default: () => "Emphasized",
+      },
+    });
+    expect(emphasized.get("label").classes()).not.toContain("spectrum-Checkbox--quiet");
+  });
 });
