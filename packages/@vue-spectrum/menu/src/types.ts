@@ -68,6 +68,7 @@ export interface SpectrumMenuTriggerProps {
   align?: MenuAlign;
   shouldFlip?: boolean;
   direction?: MenuDirection;
+  portalContainer?: Element | null;
   closeOnSelect?: boolean;
   trigger?: MenuTriggerType;
   isOpen?: boolean;

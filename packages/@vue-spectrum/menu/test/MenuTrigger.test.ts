@@ -171,6 +171,24 @@ describe("MenuTrigger", () => {
     expect(document.activeElement).toBe(trigger.element);
   });
 
+  it("renders menu popover in a provided portal container", async () => {
+    const portalContainer = document.createElement("div");
+    portalContainer.setAttribute("data-testid", "portal-container");
+    document.body.appendChild(portalContainer);
+
+    const wrapper = renderMenuTrigger({
+      portalContainer,
+    });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    await trigger.trigger("click");
+    await wrapper.vm.$nextTick();
+
+    const popover = portalContainer.querySelector(".spectrum-Menu-popover");
+    expect(popover).toBeTruthy();
+    expect(document.body.querySelectorAll(".spectrum-Menu-popover")).toHaveLength(1);
+  });
+
   it("does not open menu on click when trigger is longPress", async () => {
     const wrapper = renderMenuTrigger({
       trigger: "longPress",

@@ -9826,3 +9826,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 71 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` portal-container parity update:
+  - added `portalContainer` trigger prop wiring so root menu overlays can render into a caller-provided container.
+    - `packages/@vue-spectrum/menu/src/types.ts`
+    - `packages/@vue-spectrum/menu/src/MenuTrigger.ts`
+    - `packages/@vue-spectrum/menu/src/ActionMenu.ts`
+  - added migrated `MenuTrigger` coverage asserting menu popovers mount inside the provided portal container.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 72 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

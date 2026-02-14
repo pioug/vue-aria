@@ -67,6 +67,11 @@ export const MenuTrigger = defineComponent({
       required: false,
       default: "bottom",
     },
+    portalContainer: {
+      type: Object as PropType<Element | null | undefined>,
+      required: false,
+      default: undefined,
+    },
     closeOnSelect: {
       type: Boolean as () => boolean | undefined,
       required: false,
@@ -224,6 +229,7 @@ export const MenuTrigger = defineComponent({
             shouldFlip: props.shouldFlip,
             hideArrow: true,
             shouldContainFocus: true,
+            portalContainer: props.portalContainer,
             UNSAFE_style: {
               clipPath: "unset",
               overflow: "visible",

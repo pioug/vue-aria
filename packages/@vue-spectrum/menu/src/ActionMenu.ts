@@ -43,6 +43,11 @@ export const ActionMenu = defineComponent({
       required: false,
       default: undefined,
     },
+    portalContainer: {
+      type: Object as PropType<Element | null | undefined>,
+      required: false,
+      default: undefined,
+    },
     trigger: {
       type: String as () => SpectrumActionMenuProps<object>["trigger"],
       required: false,
@@ -126,6 +131,7 @@ export const ActionMenu = defineComponent({
           align: props.align,
           direction: props.direction,
           shouldFlip: props.shouldFlip,
+          portalContainer: props.portalContainer,
           trigger: props.trigger,
           closeOnSelect: props.closeOnSelect,
         },
