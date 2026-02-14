@@ -341,4 +341,40 @@ describe("useSubmenuTrigger", () => {
     submenu.remove();
     vi.useRealTimers();
   });
+
+  it("updates aria-expanded/aria-controls from live open state", () => {
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const submenu = document.createElement("ul");
+    parent.appendChild(trigger);
+    document.body.append(parent, submenu);
+
+    const state = createState({ isOpen: false });
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    let submenuTriggerProps: any = null;
+    scope.run(() => {
+      ({ submenuTriggerProps } = useSubmenuTrigger(
+        { parentMenuRef, submenuRef },
+        state,
+        triggerRef
+      ));
+    });
+
+    expect(submenuTriggerProps["aria-expanded"]).toBe("false");
+    expect(submenuTriggerProps["aria-controls"]).toBeUndefined();
+    expect(submenuTriggerProps.isOpen).toBe(false);
+
+    state.isOpen = true;
+    expect(submenuTriggerProps["aria-expanded"]).toBe("true");
+    expect(submenuTriggerProps["aria-controls"]).toBeTruthy();
+    expect(submenuTriggerProps.isOpen).toBe(true);
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+  });
 });

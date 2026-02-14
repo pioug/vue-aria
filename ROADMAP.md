@@ -9660,3 +9660,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 52 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu ARIA-controls parity update:
+  - added migrated `SubmenuTrigger` coverage asserting opening a submenu updates trigger `aria-expanded`/`aria-controls` and wires submenu `aria-labelledby` to the owning trigger id.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Additional `@vue-aria/menu` live submenu ARIA-state parity fix:
+  - updated `useSubmenuTrigger` to expose `submenuTriggerProps.aria-expanded`, `submenuTriggerProps.aria-controls`, and `submenuTriggerProps.isOpen` via live getters so ARIA state tracks submenu open/closed transitions.
+    - `packages/@vue-aria/menu/src/useSubmenuTrigger.ts`
+  - added adapted hook coverage asserting submenu trigger ARIA props update when `state.isOpen` toggles.
+    - `packages/@vue-aria/menu/test/useSubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 15 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test/useSubmenuTrigger.test.ts` passed (1 file, 10 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 53 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -70,6 +70,54 @@ describe("SubmenuTrigger", () => {
     expect(document.body.textContent).toContain("Sub item");
   });
 
+  it("links submenu trigger aria-controls and submenu aria-labelledby when opened", async () => {
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    expect(submenuTriggerItem?.getAttribute("aria-haspopup")).toBe("menu");
+    expect(submenuTriggerItem?.getAttribute("aria-expanded")).toBe("false");
+    expect(submenuTriggerItem?.getAttribute("aria-controls")).toBeNull();
+
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    const menus = Array.from(document.body.querySelectorAll('[role="menu"]')) as HTMLElement[];
+    const submenu = menus.find((menu) => menu.textContent?.includes("Sub item"));
+    const openedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenu).toBeTruthy();
+    expect(openedTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(openedTrigger?.getAttribute("aria-controls")).toBe(submenu?.id ?? null);
+    expect(submenu?.getAttribute("aria-labelledby")).toBe(openedTrigger?.id ?? null);
+  });
+
   it("disables submenu triggers when their key is in disabledKeys", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {

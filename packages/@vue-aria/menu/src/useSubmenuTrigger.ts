@@ -252,14 +252,20 @@ export function useSubmenuTrigger<T>(
   return {
     submenuTriggerProps: {
       id: submenuTriggerId,
-      "aria-controls": state.isOpen ? overlayId : undefined,
+      get "aria-controls"() {
+        return state.isOpen ? overlayId : undefined;
+      },
       "aria-haspopup": type,
-      "aria-expanded": state.isOpen ? "true" : "false",
+      get "aria-expanded"() {
+        return state.isOpen ? "true" : "false";
+      },
       onPressStart,
       onPress,
       onHoverChange,
       onKeyDown: submenuTriggerKeyDown,
-      isOpen: state.isOpen,
+      get isOpen() {
+        return state.isOpen;
+      },
     },
     submenuProps,
     popoverProps: {
