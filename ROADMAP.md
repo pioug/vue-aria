@@ -191,6 +191,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `test/Checkbox.test.ts`
   - `test/CheckboxGroup.test.ts`
   - `test/Checkbox.ssr.test.ts`
+- Additional parity coverage after initial scaffold:
+  - Checkbox: controlled/uncontrolled value flows, indeterminate state, read-only behavior, and form reset.
+  - CheckboxGroup: read-only propagation, unsupported-child-prop warnings, help text/error-message rendering, and form reset.
 - Documentation scaffold added:
   - `docs/packages/spectrum-checkbox.md`
   - `docs/packages/spectrum-checkbox-group.md`

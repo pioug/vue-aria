@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, type PropType } from "vue";
+import { defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { Checkbox } from "../src/Checkbox";
 import { CheckboxGroup } from "../src/CheckboxGroup";
 
@@ -185,5 +185,103 @@ describe("CheckboxGroup", () => {
     expect(checkboxes[0]!.attributes("aria-readonly")).toBe("true");
     expect(checkboxes[1]!.attributes("aria-readonly")).toBe("true");
     expect(checkboxes[2]!.attributes("aria-readonly")).toBe("true");
+  });
+
+  it.each(["isSelected", "defaultSelected", "isEmphasized"] as const)(
+    "warns if %s is passed to an individual checkbox",
+    (prop) => {
+      const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      mount(
+        defineComponent({
+          setup() {
+            return () =>
+              h(CheckboxGroup as any, { label: "Favorite Pet" }, {
+                default: () => [
+                  h(Checkbox as any, { value: "dogs" }, { default: () => "Dogs" }),
+                  h(Checkbox as any, { value: "cats", [prop]: true }, { default: () => "Cats" }),
+                  h(Checkbox as any, { value: "dragons" }, { default: () => "Dragons" }),
+                ],
+              });
+          },
+        })
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        `${prop} is unsupported on individual <Checkbox> elements within a <CheckboxGroup>. ` +
+          "Apply these props on the group instead."
+      );
+      spy.mockRestore();
+    }
+  );
+
+  it("supports help text description", async () => {
+    const wrapper = mount(GroupFixture as any, {
+      props: {
+        label: "Favorite Pet",
+      },
+      attrs: {
+        description: "Help text",
+      },
+    });
+
+    await nextTick();
+    const description = wrapper.get(".spectrum-HelpText");
+    expect(description.text()).toContain("Help text");
+  });
+
+  it("supports error message", async () => {
+    const wrapper = mount(GroupFixture as any, {
+      props: {
+        label: "Favorite Pet",
+      },
+      attrs: {
+        errorMessage: "Error message",
+        isInvalid: true,
+      },
+    });
+
+    await nextTick();
+    const description = wrapper.get(".spectrum-HelpText.is-invalid");
+    expect(description.text()).toContain("Error message");
+  });
+
+  it("supports form reset", async () => {
+    const Test = defineComponent({
+      setup() {
+        const value = ref(["dogs"]);
+        const setValue = (next: string[]) => {
+          value.value = next;
+        };
+        return () =>
+          h("form", null, [
+            h(CheckboxGroup as any, { name: "pets", label: "Pets", value: value.value, onChange: setValue }, {
+              default: () => [
+                h(Checkbox as any, { value: "dogs" }, { default: () => "Dogs" }),
+                h(Checkbox as any, { value: "cats" }, { default: () => "Cats" }),
+                h(Checkbox as any, { value: "dragons" }, { default: () => "Dragons" }),
+              ],
+            }),
+            h("input", { type: "reset", "data-testid": "reset" }),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Test, { attachTo: document.body });
+    const checkboxes = wrapper.findAll('input[type="checkbox"]');
+    const reset = wrapper.get('[data-testid="reset"]');
+
+    expect((checkboxes[0]!.element as HTMLInputElement).checked).toBe(true);
+    expect((checkboxes[1]!.element as HTMLInputElement).checked).toBe(false);
+    expect((checkboxes[2]!.element as HTMLInputElement).checked).toBe(false);
+
+    await checkboxes[1]!.setValue(true);
+    expect((checkboxes[0]!.element as HTMLInputElement).checked).toBe(true);
+    expect((checkboxes[1]!.element as HTMLInputElement).checked).toBe(true);
+
+    await reset.trigger("click");
+    await nextTick();
+    expect((checkboxes[0]!.element as HTMLInputElement).checked).toBe(true);
+    expect((checkboxes[1]!.element as HTMLInputElement).checked).toBe(false);
+    expect((checkboxes[2]!.element as HTMLInputElement).checked).toBe(false);
   });
 });

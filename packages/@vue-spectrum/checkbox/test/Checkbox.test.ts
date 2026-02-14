@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { Checkbox } from "../src/Checkbox";
 
 describe("Checkbox", () => {
@@ -251,5 +251,42 @@ describe("Checkbox", () => {
     await checkbox.setValue(false);
     expect(onChange).not.toHaveBeenCalled();
     expect((checkbox.element as HTMLInputElement).checked).toBe(true);
+  });
+
+  it("supports form reset", async () => {
+    const Test = defineComponent({
+      setup() {
+        const isSelected = ref(false);
+        const setSelected = (next: boolean) => {
+          isSelected.value = next;
+        };
+        return () =>
+          h("form", null, [
+            h(
+              Checkbox as any,
+              {
+                "data-testid": "checkbox",
+                isSelected: isSelected.value,
+                onChange: setSelected,
+              },
+              { default: () => "Checkbox" }
+            ),
+            h("input", { type: "reset", "data-testid": "reset" }),
+          ]);
+      },
+    });
+
+    const wrapper = mount(Test, { attachTo: document.body });
+    const checkbox = wrapper.get('[data-testid="checkbox"] input[type="checkbox"]');
+    const reset = wrapper.get('[data-testid="reset"]');
+
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false);
+    await checkbox.setValue(true);
+    await nextTick();
+    expect((checkbox.element as HTMLInputElement).checked).toBe(true);
+
+    await reset.trigger("click");
+    await nextTick();
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false);
   });
 });
