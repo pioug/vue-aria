@@ -574,6 +574,27 @@ describe("DatePicker", () => {
     expect(onKeyUp).toHaveBeenCalledTimes(1);
   });
 
+  it("forwards onKeyDown while closed and suppresses it while open", async () => {
+    const onKeyDown = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        onKeyDown,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-group").trigger("keydown", { key: "a" });
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+    await wrapper.get(".react-spectrum-DatePicker-group").trigger("keydown", { key: "a" });
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+  });
+
   it("respects controlled isOpen updates", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -1464,6 +1485,30 @@ describe("DateRangePicker", () => {
     await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("keyup", { key: "a" });
 
     expect(onKeyUp).toHaveBeenCalledTimes(1);
+  });
+
+  it("forwards range onKeyDown while closed and suppresses it while open", async () => {
+    const onKeyDown = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        onKeyDown,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("keydown", { key: "a" });
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+    await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("keydown", { key: "a" });
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it("respects controlled range isOpen updates", async () => {

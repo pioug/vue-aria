@@ -7053,3 +7053,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - added focus-callback usage example demonstrating `onFocusChange` wiring in consumer code.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added keyboard callback regression coverage for `onKeyDown` forwarding and open-state suppression in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 89 tests).
+- Validation: `npm run check -- --pretty false` passed.
