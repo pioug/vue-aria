@@ -7797,6 +7797,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded tabs docs with manual-vs-automatic keyboard activation guidance and boundary wrap behavior notes.
   - `docs/packages/spectrum-tabs.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` keyboard-navigation parity update:
+  - added `Home`/`End` key coverage for first/last tab navigation.
+  - added keyboard-navigation coverage to ensure disabled tabs are skipped during arrow traversal.
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 11 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

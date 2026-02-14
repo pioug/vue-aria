@@ -110,6 +110,47 @@ describe("Tabs", () => {
     expect(document.activeElement).toBe(updatedTabs[2]?.element);
   });
 
+  it("supports home and end keyboard navigation", async () => {
+    const wrapper = renderTabs({
+      defaultSelectedKey: "tab-2",
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[1]?.element as HTMLElement).focus();
+
+    await tabs[1]?.trigger("keydown", { key: "End" });
+    await nextTick();
+
+    let updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[2]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[2]?.element);
+
+    await updatedTabs[2]?.trigger("keydown", { key: "Home" });
+    await nextTick();
+
+    updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[0]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[0]?.element);
+  });
+
+  it("skips disabled tabs during keyboard navigation", async () => {
+    const wrapper = renderTabs({
+      defaultSelectedKey: "tab-1",
+      disabledKeys: ["tab-2"],
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[0]?.element as HTMLElement).focus();
+
+    await tabs[0]?.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+
+    const updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[1]?.attributes("aria-selected")).toBe("false");
+    expect(updatedTabs[2]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[2]?.element);
+  });
+
   it("respects disabledKeys", async () => {
     const wrapper = renderTabs({
       disabledKeys: ["tab-2"],
