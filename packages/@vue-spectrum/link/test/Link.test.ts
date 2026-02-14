@@ -118,6 +118,57 @@ describe("Link", () => {
     expect(document.activeElement).toBe(link.element);
   });
 
+  it("applies variant and quiet visual classes", () => {
+    const wrapper = mount(Link as any, {
+      props: {
+        variant: "secondary",
+        isQuiet: true,
+      },
+      slots: {
+        default: () => "Click me",
+      },
+    });
+
+    const link = wrapper.get('[role="link"]');
+    expect(link.classes()).toContain("spectrum-Link--secondary");
+    expect(link.classes()).toContain("spectrum-Link--quiet");
+  });
+
+  it("supports overBackground variant styling", () => {
+    const wrapper = mount(Link as any, {
+      props: {
+        variant: "overBackground",
+      },
+      slots: {
+        default: () => "Click me",
+      },
+    });
+
+    const link = wrapper.get('[role="link"]');
+    expect(link.classes()).toContain("spectrum-Link--overBackground");
+  });
+
+  it("supports disabled state", async () => {
+    const onPress = vi.fn();
+    const wrapper = mount(Link as any, {
+      props: {
+        isDisabled: true,
+        onPress,
+      },
+      slots: {
+        default: () => "Click me",
+      },
+      attachTo: document.body,
+    });
+
+    const link = wrapper.get('[role="link"]');
+    expect(link.attributes("aria-disabled")).toBe("true");
+    expect(link.attributes("tabindex")).toBeUndefined();
+
+    await link.trigger("click");
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
   it("supports RouterProvider", async () => {
     const navigate = vi.fn();
     const useHref = (href: string) => `/base${href}`;

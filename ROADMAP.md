@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/link`
+- Current focus package: `@vue-spectrum/textfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -109,7 +109,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/searchfield`: In progress
 - `@vue-spectrum/numberfield`: In progress
 - `@vue-spectrum/slider`: Complete
-- `@vue-spectrum/link`: In progress
+- `@vue-spectrum/link`: Complete
 - `@vue-spectrum/menu`: In progress
 - `@vue-spectrum/listbox`: In progress
 - `@vue-spectrum/picker`: In progress
@@ -295,7 +295,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/link/test`
   - `references/react-spectrum/packages/@react-spectrum/link/docs`
 - Local package path: `packages/@vue-spectrum/link`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -325,9 +325,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-link`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/link`.
+- Additional visual/state parity update:
+  - added variant/quiet class coverage and disabled interaction assertions for `Link`.
+  - expanded docs guidance with quiet-style usage constraints and disabled-state example.
+  - `packages/@vue-spectrum/link/test/Link.test.ts`
+  - `docs/packages/spectrum-link.md`
 
 ### Remaining for completion
-- Validate visual parity against upstream docs examples and variant states.
+- None currently tracked in this slice.
 
 ## 4f) Active Package Slice: @vue-spectrum/textfield
 - Upstream source path(s):
@@ -7493,10 +7498,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.
   - fixed link/router download normalization so omitted boolean download does not render `download="false"` and suppress client navigation.
   - `packages/@vue-spectrum/link/test/Link.test.ts`
-  - `packages/@vue-spectrum/link/src/Link.ts`
-  - `packages/@vue-aria/utils/src/router.ts`
-  - `packages/@vue-aria/utils/test/router.test.ts`
+- `packages/@vue-spectrum/link/src/Link.ts`
+- `packages/@vue-aria/utils/src/router.ts`
+- `packages/@vue-aria/utils/test/router.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/link/test packages/@vue-aria/utils/test/router.test.ts` passed (3 files, 21 tests).
+- Additional `@vue-spectrum/link` visual/state parity update:
+  - added variant-state class coverage (`secondary`, `overBackground`, `isQuiet`) and disabled interaction assertions.
+  - expanded link docs guidance for quiet-style usage constraints and disabled-state examples.
+  - marked `@vue-spectrum/link` slice complete and advanced focus to `@vue-spectrum/textfield`.
+  - `packages/@vue-spectrum/link/test/Link.test.ts`
+  - `docs/packages/spectrum-link.md`
+- Validation: `npm test -- packages/@vue-spectrum/link/test` passed (2 files, 13 tests).
 - Additional `@vue-spectrum/provider` forwarding parity update:
   - added real-component provider forwarding coverage for:
     - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`

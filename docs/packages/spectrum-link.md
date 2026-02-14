@@ -79,6 +79,16 @@ When no `href` is provided, `Link` exposes role `"link"` for assistive technolog
 <p>Would you like to <Link isQuiet>learn more</Link> about this component?</p>
 ```
 
+The quiet style should only be used when the link context is already explicit (for example, not inside dense paragraph text where an underline is needed).
+
+## States
+
+### Disabled
+
+```vue
+<Link isDisabled :onPress="() => console.log('not called')">Disabled link</Link>
+```
+
 ## Related
 
 - `Spectrum S2` remains out of scope unless explicitly requested.
