@@ -9786,3 +9786,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 66 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` tray hover-guard parity update:
+  - added migrated `SubmenuTrigger` coverage asserting submenu hover does not open nested overlays in small-screen tray mode (`window.screen.width <= 700`).
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Additional `@vue-aria/menu` small-screen hover modality parity update:
+  - updated `useSubmenuTrigger` hover-open scheduling to no-op in small-screen tray mode while preserving desktop hover behavior.
+    - `packages/@vue-aria/menu/src/useSubmenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 67 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

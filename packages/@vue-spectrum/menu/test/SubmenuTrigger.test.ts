@@ -453,6 +453,64 @@ describe("SubmenuTrigger", () => {
     }
   });
 
+  it("does not open submenu on hover in small-screen tray mode", async () => {
+    const screenWidthSpy = vi.spyOn(window.screen, "width", "get").mockImplementation(() => 700);
+    vi.useFakeTimers();
+    try {
+      const wrapper = mountTracked(MenuTrigger as any, {
+        props: {
+          defaultOpen: true,
+        },
+        slots: {
+          default: () => [
+            h("button", { "data-testid": "trigger" }, "Menu Button"),
+            h(Menu as any, { ariaLabel: "Menu" }, {
+              default: () => [
+                h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+                h(SubmenuTrigger as any, null, {
+                  default: () => [
+                    h(Item as any, { key: "more" }, { default: () => "More" }),
+                    h(Menu as any, { ariaLabel: "Submenu" }, {
+                      default: () => [
+                        h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+      expect(submenuTriggerItem).toBeTruthy();
+
+      if (typeof PointerEvent !== "undefined") {
+        submenuTriggerItem?.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+        submenuTriggerItem?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+      } else {
+        submenuTriggerItem?.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+        submenuTriggerItem?.dispatchEvent(new Event("pointerover", { bubbles: true }));
+      }
+
+      vi.runAllTimers();
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      const triggerAfterHover = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+      expect(triggerAfterHover?.getAttribute("aria-expanded")).toBe("false");
+      expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+      expect(document.body.textContent).not.toContain("Sub item");
+    } finally {
+      screenWidthSpy.mockRestore();
+      vi.useRealTimers();
+    }
+  });
+
   it("opens submenu when pressing a submenu trigger item with pointer click", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {

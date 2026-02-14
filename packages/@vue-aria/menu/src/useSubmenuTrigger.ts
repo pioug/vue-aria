@@ -80,6 +80,15 @@ export function useSubmenuTrigger<T>(
     state.close();
   };
 
+  const isSmallScreenTrayMode = () => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    const width = window.screen?.width;
+    return typeof width === "number" && width > 0 && width <= 700;
+  };
+
   useLayoutEffect(() => {
     return () => {
       cancelOpenTimeout();
@@ -195,6 +204,11 @@ export function useSubmenuTrigger<T>(
 
   const onHoverChange = (isHovered: boolean) => {
     if (!isDisabled) {
+      if (isSmallScreenTrayMode()) {
+        cancelOpenTimeout();
+        return;
+      }
+
       if (isHovered && !state.isOpen) {
         if (!openTimeout) {
           openTimeout = setTimeout(() => {
