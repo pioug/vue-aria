@@ -271,6 +271,27 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("emits controlled selection changes without mutating rendered state", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      selectedKeys: new Set(["row-1"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[1]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has("row-2")).toBe(true);
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports UNSAFE className passthrough", () => {
     const wrapper = renderTable({
       UNSAFE_className: "test-class",
