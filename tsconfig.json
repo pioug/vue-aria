@@ -92,7 +92,8 @@
       "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
       "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],
       "@vue-spectrum/numberfield": ["packages/@vue-spectrum/numberfield/src/index.ts"],
-      "@vue-spectrum/breadcrumbs": ["packages/@vue-spectrum/breadcrumbs/src/index.ts"]
+      "@vue-spectrum/breadcrumbs": ["packages/@vue-spectrum/breadcrumbs/src/index.ts"],
+      "@vue-spectrum/dialog": ["packages/@vue-spectrum/dialog/src/index.ts"]
     },
     "strict": true,
     "declaration": true,

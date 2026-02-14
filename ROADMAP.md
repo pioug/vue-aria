@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/breadcrumbs`
+- Current focus package: `@vue-spectrum/dialog`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -119,7 +119,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/calendar`: Not started
 - `@vue-spectrum/datepicker`: Not started
 - `@vue-spectrum/breadcrumbs`: In progress
-- `@vue-spectrum/dialog`: Not started
+- `@vue-spectrum/dialog`: In progress
 - `@vue-spectrum/tooltip`: Not started
 - `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: In progress
@@ -514,6 +514,38 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Port overflow/menu-collapse behavior and associated tests once `@vue-spectrum/menu` is available.
 - Expand parity coverage for root-overflow, multiline truncation, and menu-action edge cases from upstream.
+
+## 4l) Active Package Slice: @vue-spectrum/dialog
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/dialog/src`
+  - `references/react-spectrum/packages/@react-spectrum/dialog/test`
+  - `references/react-spectrum/packages/@react-spectrum/dialog/docs`
+- Local package path: `packages/@vue-spectrum/dialog`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Dialog`, `context`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/Dialog.test.ts`
+  - `test/Dialog.ssr.test.ts`
+- Initial parity coverage added:
+  - dialog role/focus behavior
+  - `aria-label` / `aria-labelledby` precedence checks
+  - custom DOM prop passthrough
+  - dismissable close-button render and dismiss callback behavior
+- Documentation scaffold added:
+  - `docs/packages/spectrum-dialog.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-dialog`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/dialog`.
+
+### Remaining for completion
+- Port `DialogTrigger`, `DialogContainer`, `AlertDialog`, and `useDialogContainer` modules from upstream.
+- Expand coverage for modal/popover/tray/fullscreen container behaviors and interaction semantics from upstream tests.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

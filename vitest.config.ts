@@ -262,6 +262,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/breadcrumbs": fileURLToPath(
         new URL("./packages/@vue-spectrum/breadcrumbs/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/dialog": fileURLToPath(
+        new URL("./packages/@vue-spectrum/dialog/src/index.ts", import.meta.url)
       )
     }
   }
