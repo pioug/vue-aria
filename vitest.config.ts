@@ -265,6 +265,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/dialog": fileURLToPath(
         new URL("./packages/@vue-spectrum/dialog/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/tooltip": fileURLToPath(
+        new URL("./packages/@vue-spectrum/tooltip/src/index.ts", import.meta.url)
       )
     }
   }

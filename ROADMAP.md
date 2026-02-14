@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/dialog`
+- Current focus package: `@vue-spectrum/tooltip`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -120,7 +120,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/datepicker`: Not started
 - `@vue-spectrum/breadcrumbs`: In progress
 - `@vue-spectrum/dialog`: In progress
-- `@vue-spectrum/tooltip`: Not started
+- `@vue-spectrum/tooltip`: In progress
 - `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: In progress
 - `@vue-spectrum/toast`: Not started
@@ -552,6 +552,40 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand coverage for modal/popover/tray/fullscreen container behaviors and interaction semantics from upstream tests.
 - Align dialog composition slots (`Heading`, `Header`, `Content`, `Footer`, `ButtonGroup`) and style-class parity with upstream Spectrum structure.
+
+## 4m) Active Package Slice: @vue-spectrum/tooltip
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/tooltip/src`
+  - `references/react-spectrum/packages/@react-spectrum/tooltip/test`
+  - `references/react-spectrum/packages/@react-spectrum/tooltip/docs`
+- Local package path: `packages/@vue-spectrum/tooltip`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Tooltip`, `TooltipTrigger`, `context`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/Tooltip.test.ts`
+  - `test/TooltipTrigger.test.ts`
+  - `test/Tooltip.ssr.test.ts`
+  - `test/TooltipTrigger.ssr.test.ts`
+- Initial parity coverage added:
+  - tooltip role/labeling/ref exposure behavior
+  - tooltip trigger focus open/close behavior and controlled open-state rendering
+  - trigger press close semantics and `shouldCloseOnPress` override
+  - escape-key close behavior
+- Documentation scaffold added:
+  - `docs/packages/spectrum-tooltip.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-tooltip`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/tooltip`.
+
+### Remaining for completion
+- Expand parity coverage for trigger compositions that rely on `@vue-spectrum/button` and collection-builder wrapper behavior.
+- Align tooltip visual details (semantic icon implementation and CSS-variable spacing/arrow behavior) with upstream Spectrum rendering.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
