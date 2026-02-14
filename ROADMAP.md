@@ -8058,6 +8058,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented that `isRowHeader` can be applied to multiple columns.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` checkbox-selection parity update:
+  - added regression coverage to verify `selectionMode: "multiple"` with `selectionStyle: "checkbox"` reports aggregated selected row keys through `onSelectionChange`.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 36 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
