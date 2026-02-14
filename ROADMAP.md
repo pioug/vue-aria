@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/switch`
+- Current focus package: `@vue-spectrum/link`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -108,7 +108,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/searchfield`: Not started
 - `@vue-spectrum/numberfield`: Not started
 - `@vue-spectrum/slider`: Complete
-- `@vue-spectrum/link`: Not started
+- `@vue-spectrum/link`: In progress
 - `@vue-spectrum/menu`: Not started
 - `@vue-spectrum/listbox`: Not started
 - `@vue-spectrum/picker`: Not started
@@ -275,6 +275,39 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Validate visual parity against upstream docs examples and states.
 - Expand coverage for any upstream parity deltas discovered during full-suite execution.
+
+## 4e) Active Package Slice: @vue-spectrum/link
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/link/src`
+  - `references/react-spectrum/packages/@react-spectrum/link/test`
+  - `references/react-spectrum/packages/@react-spectrum/link/docs`
+- Local package path: `packages/@vue-spectrum/link`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Link` and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/Link.test.ts`
+  - `test/Link.ssr.test.ts`
+- Initial parity coverage added:
+  - default press behavior
+  - href and no-href rendering modes
+  - custom child wrapping path
+  - `UNSAFE_className`, data-attribute, and autofocus behavior
+  - router-provider navigation integration
+- Documentation scaffold added:
+  - `docs/packages/spectrum-link.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-link`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/link`.
+
+### Remaining for completion
+- Validate visual parity against upstream docs examples and variant states.
+- Expand parity coverage for additional upstream edge-cases (e.g., tooltip-trigger composition).
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
