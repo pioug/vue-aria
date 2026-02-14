@@ -53,6 +53,15 @@ describe("Breadcrumbs", () => {
     expect(wrapper.get("ul").classes()).toContain("test-class");
   });
 
+  it("handles UNSAFE_style on nav root", () => {
+    const wrapper = renderBreadcrumbs({
+      UNSAFE_style: {
+        marginTop: "4px",
+      },
+    });
+    expect(wrapper.get("nav").attributes("style")).toContain("margin-top: 4px");
+  });
+
   it("handles multiple items", () => {
     const wrapper = renderBreadcrumbs(
       {},
@@ -65,6 +74,19 @@ describe("Breadcrumbs", () => {
 
     const current = wrapper.get('[aria-current="page"]');
     expect(current.text()).toContain("Folder 3");
+  });
+
+  it("supports autoFocusCurrent for the current breadcrumb item", () => {
+    const wrapper = renderBreadcrumbs(
+      { autoFocusCurrent: true },
+      [
+        { key: "folder-1", label: "Folder 1", href: "#" },
+        { key: "folder-2", label: "Folder 2", href: "#" },
+      ]
+    );
+
+    const current = wrapper.get('[aria-current="page"]');
+    expect(current.attributes("tabindex")).toBe("-1");
   });
 
   it("handles size variants", () => {

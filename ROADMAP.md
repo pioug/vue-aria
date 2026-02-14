@@ -7242,3 +7242,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - clarified `onAction` key payload/disabled suppression semantics and added root customization (`id`, `UNSAFE_className`, `UNSAFE_style`) usage example.
     - `docs/packages/spectrum-breadcrumbs.md`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 9 tests).
+- Additional `@vue-spectrum/breadcrumbs` parity update:
+  - expanded adapted test coverage for:
+    - root `UNSAFE_style` passthrough on `<nav>`
+    - current-item `autoFocusCurrent` tab-index behavior
+    - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 11 tests).
+- Validation: `npm run check -- --pretty false` passed.
