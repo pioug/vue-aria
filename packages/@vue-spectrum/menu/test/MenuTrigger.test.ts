@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { I18nProvider } from "@vue-aria/i18n";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h } from "vue";
 import { ContextualHelpTrigger } from "../src/ContextualHelpTrigger";
@@ -48,6 +49,41 @@ function renderContextualHelpMenuTrigger(
               ],
             }),
             h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+          ],
+        }),
+      ],
+    },
+    attachTo: document.body,
+  });
+}
+
+function renderContextualHelpMenuTriggerWithLocale(
+  locale: string,
+  menuProps: Record<string, unknown> = {},
+  contextualHelpProps: Record<string, unknown> = {}
+) {
+  return mount(I18nProvider as any, {
+    props: {
+      locale,
+    },
+    slots: {
+      default: () => [
+        h(MenuTrigger as any, {
+          defaultOpen: true,
+        }, {
+          default: () => [
+            h("button", { "data-testid": "trigger" }, "Menu Button"),
+            h(Menu as any, { ariaLabel: "Menu", ...menuProps }, {
+              default: () => [
+                h(ContextualHelpTrigger as any, contextualHelpProps, {
+                  default: () => [
+                    h(Item as any, { key: "help" }, { default: () => "Help" }),
+                    h("div", { role: "dialog" }, "Contextual help dialog"),
+                  ],
+                }),
+                h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+              ],
+            }),
           ],
         }),
       ],
@@ -305,6 +341,25 @@ describe("MenuTrigger", () => {
     helpItem?.focus();
     helpItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
     helpItem?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+    expect(document.body.textContent).toContain("Contextual help dialog");
+  });
+
+  it("opens unavailable contextual help dialogs with ArrowLeft navigation in rtl", async () => {
+    const wrapper = renderContextualHelpMenuTriggerWithLocale("ar-AE");
+
+    const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+    helpItem?.focus();
+    helpItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    helpItem?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowLeft", bubbles: true }));
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
