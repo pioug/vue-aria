@@ -69,6 +69,24 @@ import { Calendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## Single-Page Range Navigation
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { RangeCalendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <RangeCalendar
+    aria-label="Quarter planning"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+    :visible-months="2"
+    page-behavior="single"
+  />
+</template>
+```
+
 ## End-Aligned Multi-Month Selection
 
 ```vue
