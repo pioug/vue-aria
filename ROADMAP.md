@@ -2903,8 +2903,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 1 (`useCalendar.test.js`)
-- Ported test files: 5 (adapted)
-- Passing test files: 5 (validated 2026-02-14)
+- Ported test files: 6 (adapted)
+- Passing test files: 6 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted keyboard mapping coverage for `useCalendarGrid`.
   - Added adapted `useCalendar` base-aria/title navigation coverage.
@@ -2912,6 +2912,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useCalendarCell` selected/focused wiring and range hover-highlight coverage.
   - Added adapted upstream-style interaction matrix coverage for calendar keyboard navigation and visible/single pagination behavior.
   - Added adapted week/day pagination matrix coverage for visible vs single page behavior in both directions (`weeks:3`, `days:5`) and first-day-of-week locale matrix assertions (`en-US`, `fr-FR`).
+  - Added upstream custom 4-5-4 calendar visible-range description cases for single-month and multi-month formatting branches.
+  - Added announcement parity coverage for visible-range updates (focus-gated) and polite selected-range announcements.
+  - Added range-drag behavior coverage for pointerup commit, virtual-click guard, and touchmove scroll suppression while dragging.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2930,9 +2933,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining upstream `useCalendar.test.js` scenarios (custom-calendar visible-range descriptions and any uncovered pagination edge branches).
-2. Expand range-drag and live-announcement behavioral assertions to close accessibility parity gaps.
-3. Mirror upstream docs examples/styles more completely and close visual parity gates.
+1. Audit remaining `@react-spectrum/calendar` interaction scenarios for any uncovered hook-level parity gaps.
+2. Mirror upstream docs examples/styles more completely and close visual parity gates.
+3. Finalize public API checklist and mark package complete once docs/tests gates are closed.
 
 ## 31n) Package Record: @vue-aria/datepicker-state
 - Upstream source path(s):

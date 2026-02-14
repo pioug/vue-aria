@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { useCalendarState } from "@vue-aria/calendar-state";
 import { useCalendar } from "../src/useCalendar";
 import { useCalendarGrid } from "../src/useCalendarGrid";
+import { Custom454Calendar } from "./Custom454Calendar";
 
 interface KeyboardCase {
   name: string;
@@ -341,4 +342,81 @@ describe("useCalendar upstream interaction parity", () => {
       scope.stop();
     }
   );
+
+  describe("custom calendar visible range description", () => {
+    const customCalendar = new Custom454Calendar();
+
+    const singleMonthCases = [
+      { name: "1st month", date: new CalendarDate(customCalendar, 2023, 1, 14), expected: "February 2023" },
+      { name: "2nd month", date: new CalendarDate(customCalendar, 2023, 2, 14), expected: "March 2023" },
+      { name: "3rd month", date: new CalendarDate(customCalendar, 2023, 3, 14), expected: "April 2023" },
+      { name: "4th month", date: new CalendarDate(customCalendar, 2023, 4, 14), expected: "May 2023" },
+      { name: "5th month", date: new CalendarDate(customCalendar, 2023, 5, 14), expected: "June 2023" },
+      { name: "6th month", date: new CalendarDate(customCalendar, 2023, 6, 14), expected: "July 2023" },
+      { name: "7th month", date: new CalendarDate(customCalendar, 2023, 7, 14), expected: "August 2023" },
+      { name: "8th month", date: new CalendarDate(customCalendar, 2023, 8, 14), expected: "September 2023" },
+      { name: "9th month", date: new CalendarDate(customCalendar, 2023, 9, 14), expected: "October 2023" },
+      { name: "10th month", date: new CalendarDate(customCalendar, 2023, 10, 14), expected: "November 2023" },
+      { name: "11th month", date: new CalendarDate(customCalendar, 2023, 11, 14), expected: "December 2023" },
+      { name: "12th month", date: new CalendarDate(customCalendar, 2023, 12, 14), expected: "January 2024" },
+    ];
+
+    it.each(singleMonthCases)(
+      "formats $name as $expected for single-month visibility",
+      ({ date, expected }) => {
+        const scope = effectScope();
+        let state!: ReturnType<typeof useCalendarState>;
+        let calendar!: ReturnType<typeof useCalendar>;
+
+        scope.run(() => {
+          state = useCalendarState({
+            locale: "en-US",
+            createCalendar: () => customCalendar,
+            focusedValue: date,
+            visibleDuration: { months: 1 },
+          });
+          calendar = useCalendar({ "aria-label": "Calendar" }, state);
+        });
+
+        expect(calendar.title).toBe(expected);
+        scope.stop();
+      }
+    );
+
+    it.each([
+      {
+        name: "multiple months in same year",
+        visibleDuration: { months: 3 },
+        date: new CalendarDate(customCalendar, 2023, 7, 14),
+        expected: /August.*October 2023/,
+      },
+      {
+        name: "multiple months across years",
+        visibleDuration: { months: 3 },
+        date: new CalendarDate(customCalendar, 2023, 10, 14),
+        expected: /November 2023.*January 2024/,
+      },
+    ])(
+      "formats visible range for $name",
+      ({ visibleDuration, date, expected }) => {
+        const scope = effectScope();
+        let state!: ReturnType<typeof useCalendarState>;
+        let calendar!: ReturnType<typeof useCalendar>;
+
+        scope.run(() => {
+          state = useCalendarState({
+            locale: "en-US",
+            createCalendar: () => customCalendar,
+            focusedValue: date,
+            visibleDuration,
+            selectionAlignment: "start",
+          });
+          calendar = useCalendar({ "aria-label": "Calendar" }, state);
+        });
+
+        expect(calendar.title).toMatch(expected);
+        scope.stop();
+      }
+    );
+  });
 });
