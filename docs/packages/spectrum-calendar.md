@@ -167,6 +167,39 @@ const setValue = (nextValue: CalendarDate | null) => {
 </template>
 ```
 
+## Controlled Focus Example
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+
+const value = ref(new CalendarDate(2019, 6, 5));
+const focusedValue = ref(new CalendarDate(2019, 6, 5));
+
+const onChange = (nextValue: CalendarDate | null) => {
+  if (nextValue) {
+    value.value = nextValue;
+  }
+};
+
+const onFocusChange = (nextFocused: CalendarDate) => {
+  focusedValue.value = nextFocused;
+};
+</script>
+
+<template>
+  <Calendar
+    aria-label="Focused planning date"
+    :value="value"
+    :focused-value="focusedValue"
+    :on-change="onChange"
+    :on-focus-change="onFocusChange"
+  />
+</template>
+```
+
 ## Controlled RangeCalendar Example
 
 ```vue
@@ -233,7 +266,7 @@ import { RangeCalendar } from "@vue-spectrum/calendar";
 
 ## Key Props
 
-- Shared: `visibleMonths`, `firstDayOfWeek`, `pageBehavior`, `selectionAlignment`, `isDisabled`, `isReadOnly`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `locale`, `createCalendar`.
+- Shared: `focusedValue` / `defaultFocusedValue`, `onFocusChange`, `autoFocus`, `visibleMonths`, `firstDayOfWeek`, `pageBehavior`, `selectionAlignment`, `isDisabled`, `isReadOnly`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `locale`, `createCalendar`.
 - `Calendar`: `value` / `defaultValue`, `onChange`.
 - `RangeCalendar`: range `value` / `defaultValue`, `onChange`, `allowsNonContiguousRanges`.
 

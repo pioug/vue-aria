@@ -6730,6 +6730,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/calendar/test/useCalendarCell.test.ts`
 - Validation: `npm test -- packages/@vue-aria/calendar/test` passed (6 files, 117 tests).
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 62 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - added controlled focus example (`focusedValue` + `onFocusChange`) and expanded key-prop reference to include focus-control/`autoFocus` inputs.
+    - `docs/packages/spectrum-calendar.md`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
