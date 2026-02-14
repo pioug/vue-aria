@@ -401,6 +401,28 @@ describe("DatePicker", () => {
     expect(day17).toBeTruthy();
     expect(day17?.getAttribute("aria-disabled")).toBe("true");
   });
+
+  it("passes minValue and maxValue through to calendar overlay", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 15),
+        minValue: new CalendarDate(2019, 6, 10),
+        maxValue: new CalendarDate(2019, 6, 20),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day9 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "9") as HTMLElement | undefined;
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10") as HTMLElement | undefined;
+    expect(day9).toBeTruthy();
+    expect(day10).toBeTruthy();
+    expect(day9?.getAttribute("aria-disabled")).toBe("true");
+    expect(day10?.getAttribute("aria-disabled")).toBeNull();
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -859,5 +881,30 @@ describe("DateRangePicker", () => {
     const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17") as HTMLElement | undefined;
     expect(day17).toBeTruthy();
     expect(day17?.getAttribute("aria-disabled")).toBe("true");
+  });
+
+  it("passes minValue and maxValue through to range-calendar overlay", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 15),
+          end: new CalendarDate(2019, 6, 18),
+        },
+        minValue: new CalendarDate(2019, 6, 10),
+        maxValue: new CalendarDate(2019, 6, 20),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day9 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "9") as HTMLElement | undefined;
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10") as HTMLElement | undefined;
+    expect(day9).toBeTruthy();
+    expect(day10).toBeTruthy();
+    expect(day9?.getAttribute("aria-disabled")).toBe("true");
+    expect(day10?.getAttribute("aria-disabled")).toBeNull();
   });
 });

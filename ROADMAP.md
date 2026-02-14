@@ -6881,6 +6881,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added integration coverage for `isDateUnavailable` passthrough in both datepicker overlay calendar variants.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 41 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added integration coverage for `minValue` / `maxValue` boundary passthrough in both datepicker overlay calendar variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 43 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
