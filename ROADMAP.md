@@ -2769,7 +2769,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation notes:
-  - Current intl slice includes upstream `expand`/`collapse` strings and labels expand-button controls via `useLabels`.
+  - Current intl slice mirrors upstream `@react-aria/tree/intl` locale bundle and labels expand-button controls via `useLabels`.
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
@@ -5301,5 +5301,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - extended `useTree.keyboardNavigation.test.ts` with ArrowLeft collapse assertions for nested and root-expanded rows.
   - validated keyboard collapse progression (`8 -> 6 -> 2` visible rows) after expansion flows.
   - updated package record `31k` test parity notes to include collapse coverage.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree/test` passed (3 files, 4 tests).
+- Expanded `@vue-aria/tree` intl parity:
+  - replaced the `en-US` intl stub in `packages/@vue-aria/tree/src/intlMessages.ts` with the full upstream locale bundle from `@react-aria/tree/intl`.
+  - updated package record `31k` implementation notes to reflect locale-bundle parity.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree/test` passed (3 files, 4 tests).
