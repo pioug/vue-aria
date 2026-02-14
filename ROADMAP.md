@@ -4800,7 +4800,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Scope
 - [x] Upstream theme package variants enumerated (`theme-default`, `theme-light`, `theme-dark`)
 - [x] Upstream theme package variants enumerated (`theme-default`, `theme-light`, `theme-dark`, `theme-express`)
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Package scaffolding created and wired:
@@ -4829,12 +4829,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added baseline shape checks for default/theme-light/theme-dark/theme-express provider-compatible class maps.
   - Theme-express bootstrap keys aligned to upstream `express.css` selector naming (`express`, `medium`, `large`).
+  - Added export-surface parity checks ensuring each theme variant package exposes only `theme` and preserving full provider shape across all variants.
 - [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress docs page scaffolded (`docs/packages/spectrum-theme.md`)
 - [x] Variant docs pages scaffolded (`docs/packages/spectrum-theme-express.md`, `docs/packages/spectrum-theme-light.md`, `docs/packages/spectrum-theme-dark.md`)
 - [x] Examples parity complete
+- [x] Class-map matrix documentation added for default/light/dark/express bootstrap variants.
 - [ ] Base styles parity complete
 
 ### Accessibility
@@ -7615,6 +7617,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `ROADMAP.md`
 - Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 46 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/theme` API-parity update:
+  - expanded variant tests to assert module export surface (`theme` only) and full provider-shape key coverage across default/light/dark/express theme packages.
+  - expanded theme docs with a cross-variant class-map matrix for current bootstrap mappings.
+  - `packages/@vue-spectrum/theme/test/theme.test.ts`
+  - `packages/@vue-spectrum/theme-light/test/theme-light.test.ts`
+  - `packages/@vue-spectrum/theme-dark/test/theme-dark.test.ts`
+  - `packages/@vue-spectrum/theme-express/test/theme-express.test.ts`
+  - `docs/packages/spectrum-theme.md`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/theme/test packages/@vue-spectrum/theme-light/test packages/@vue-spectrum/theme-dark/test packages/@vue-spectrum/theme-express/test` passed (4 files, 8 tests).
 - Additional `@vue-spectrum/progress` visual parity update:
   - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
   - expanded progress docs with explicit `overBackground` examples for both components.

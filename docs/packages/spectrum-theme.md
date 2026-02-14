@@ -28,6 +28,25 @@ import { theme } from "@vue-spectrum/theme";
 - `@vue-spectrum/theme-dark` (`theme`): dark-focused variant map.
 - `@vue-spectrum/theme-express` (`theme`): express variant map layered on Spectrum defaults.
 
+## Class Map Matrix
+
+All variants export the same provider-compatible shape:
+
+- `theme.global`
+- `theme.light`
+- `theme.dark`
+- `theme.medium`
+- `theme.large`
+
+Current bootstrap class-map values:
+
+| Package | `light["spectrum--light"]` | `dark["spectrum--dark"]` | Extra keys |
+| --- | --- | --- | --- |
+| `@vue-spectrum/theme` | `spectrum--light` | `spectrum--darkest` | none |
+| `@vue-spectrum/theme-light` | `spectrum--lightest` | `spectrum--darkest` | none |
+| `@vue-spectrum/theme-dark` | `spectrum--dark` | `spectrum--darkest` | none |
+| `@vue-spectrum/theme-express` | `spectrum--light` | `spectrum--darkest` | `global.express`, `medium.express`, `large.express` |
+
 ## Runtime Switching Example
 
 ```vue
