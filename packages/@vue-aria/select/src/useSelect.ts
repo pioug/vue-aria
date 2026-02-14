@@ -101,7 +101,7 @@ export function useSelect(
       case "ArrowLeft": {
         event.preventDefault();
         const key = state.selectedKey != null ? delegate.getKeyAbove?.(state.selectedKey) : delegate.getFirstKey?.();
-        if (key) {
+        if (key != null) {
           state.setSelectedKey(key);
         }
         break;
@@ -109,7 +109,7 @@ export function useSelect(
       case "ArrowRight": {
         event.preventDefault();
         const key = state.selectedKey != null ? delegate.getKeyBelow?.(state.selectedKey) : delegate.getFirstKey?.();
-        if (key) {
+        if (key != null) {
           state.setSelectedKey(key);
         }
         break;

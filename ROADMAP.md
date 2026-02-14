@@ -7731,6 +7731,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 14 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` falsy-key keyboard parity update:
+  - added closed-state Arrow-key coverage to ensure selection can move to falsy keys (for example `key=\"\"`).
+  - fixed closed Arrow-left/Arrow-right key handling in `@vue-aria/select` to treat falsy keys as valid (`key != null` checks).
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - `packages/@vue-aria/select/src/useSelect.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test packages/@vue-aria/select/test` passed (5 files, 57 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

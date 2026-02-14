@@ -138,6 +138,33 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Zero");
   });
 
+  it("supports closed arrow-key navigation to falsy keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+        items: [
+          { key: "1", label: "One" },
+          { key: "", label: "Empty" },
+          { key: "3", label: "Three" },
+        ],
+        defaultSelectedKey: "1",
+        onSelectionChange,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get("button");
+    expect(wrapper.text()).toContain("One");
+
+    await trigger.trigger("keydown", { key: "ArrowRight" });
+    await trigger.trigger("keyup", { key: "ArrowRight" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("");
+    expect(wrapper.text()).toContain("Empty");
+  });
+
   it("closes when trigger is pressed while open", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderPicker({
