@@ -75,3 +75,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-aria/menu](/packages/menu)
 - [@vue-aria/combobox-state](/packages/combobox-state)
 - [@vue-aria/combobox](/packages/combobox)
+- [@vue-spectrum/menu](/packages/spectrum-menu)

@@ -110,7 +110,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/numberfield`: In progress
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: In progress
-- `@vue-spectrum/menu`: Not started
+- `@vue-spectrum/menu`: In progress
 - `@vue-spectrum/listbox`: Not started
 - `@vue-spectrum/picker`: Not started
 - `@vue-spectrum/combobox`: Not started
@@ -6387,3 +6387,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/tree/test` passed (4 files, 6 tests).
 - Closed upstream-test migration gates for current tree stack package records:
   - marked `31i` (`@vue-aria/tree-state`), `31j` (`@vue-aria/gridlist`), and `31k` (`@vue-aria/tree`) as having all relevant upstream tests migrated for the current referenced upstream test surface.
+- Started `@vue-spectrum/menu` foundational slice:
+  - scaffolded `@vue-spectrum/menu` package with upstream-aligned public component surface: `Menu`, `MenuTrigger`, `ActionMenu`, `SubmenuTrigger`, `ContextualHelpTrigger`, `Item`, and `Section`.
+  - ported core menu composition layers (`Menu`, `MenuItem`, `MenuSection`) and trigger overlays (`MenuTrigger`, lightweight `Popover`, `SubmenuTrigger`) using existing `@vue-aria/menu` + `@vue-aria/list-state` primitives.
+  - added initial i18n message bundle and shared trigger-state/context helpers for expanded submenu stack behavior.
+  - added adapted package tests covering:
+    - root menu rendering/sections/selection and disabled-key behavior
+    - trigger open/close + controlled open-state behavior
+    - action-menu default/custom aria labeling and action callback handling
+    - submenu keyboard open path (`ArrowRight`) and SSR smoke coverage
+  - added VitePress package doc page (`docs/packages/spectrum-menu.md`) and docs nav/sidebar/index links.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/menu`.
+  - added package record `31l` and marked `@vue-spectrum/menu` execution queue status `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 10 tests).

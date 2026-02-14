@@ -1,0 +1,63 @@
+import { mount } from "@vue/test-utils";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { h } from "vue";
+import { Item } from "../src/Item";
+import { Menu } from "../src/Menu";
+import { MenuTrigger } from "../src/MenuTrigger";
+import { SubmenuTrigger } from "../src/SubmenuTrigger";
+
+describe("SubmenuTrigger", () => {
+  const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+
+  beforeAll(() => {
+    HTMLElement.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterAll(() => {
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("opens a nested submenu with keyboard ArrowRight", async () => {
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    const allMenus = document.body.querySelectorAll('[role=\"menu\"]');
+    expect(allMenus.length).toBeGreaterThanOrEqual(2);
+    expect(document.body.textContent).toContain("Sub item");
+  });
+});

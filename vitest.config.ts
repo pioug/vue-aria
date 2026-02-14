@@ -274,6 +274,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/toast": fileURLToPath(
         new URL("./packages/@vue-spectrum/toast/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/menu": fileURLToPath(
+        new URL("./packages/@vue-spectrum/menu/src/index.ts", import.meta.url)
       )
     }
   }

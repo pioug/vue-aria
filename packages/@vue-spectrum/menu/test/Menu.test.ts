@@ -1,0 +1,89 @@
+import { mount } from "@vue/test-utils";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { h } from "vue";
+import { Item } from "../src/Item";
+import { Menu } from "../src/Menu";
+import { Section } from "../src/Section";
+
+function renderMenu(props: Record<string, unknown> = {}) {
+  return mount(Menu as any, {
+    props: {
+      ariaLabel: "Menu",
+      ...props,
+    },
+    slots: {
+      default: () => [
+        h(Section as any, { title: "Heading 1" }, {
+          default: () => [
+            h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+            h(Item as any, { key: "Bar" }, { default: () => "Bar" }),
+            h(Item as any, { key: "Baz" }, { default: () => "Baz" }),
+          ],
+        }),
+        h(Section as any, { title: "Heading 2" }, {
+          default: () => [
+            h(Item as any, { key: "Blah" }, { default: () => "Blah" }),
+            h(Item as any, { key: "Bleh" }, { default: () => "Bleh" }),
+          ],
+        }),
+      ],
+    },
+    attachTo: document.body,
+  });
+}
+
+describe("Menu", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("renders sections and menu items", () => {
+    const wrapper = renderMenu();
+    const menu = wrapper.get('[role="menu"]');
+
+    expect(menu.attributes("aria-label")).toBe("Menu");
+    expect(wrapper.findAll('[role="group"]')).toHaveLength(2);
+    expect(wrapper.findAll('[role="separator"]')).toHaveLength(1);
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(5);
+    expect(wrapper.text()).toContain("Foo");
+    expect(wrapper.text()).toContain("Bar");
+    expect(wrapper.text()).toContain("Baz");
+    expect(wrapper.text()).toContain("Blah");
+    expect(wrapper.text()).toContain("Bleh");
+  });
+
+  it("supports single selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderMenu({
+      selectionMode: "single",
+      onSelectionChange,
+    });
+
+    const items = wrapper.findAll('[role="menuitemradio"]');
+    expect(items).toHaveLength(5);
+
+    await items[4]?.trigger("click");
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(items[4]?.attributes("aria-checked")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(1);
+  });
+
+  it("respects disabled keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderMenu({
+      selectionMode: "single",
+      disabledKeys: ["Baz"],
+      onSelectionChange,
+    });
+
+    const items = wrapper.findAll('[role="menuitemradio"]');
+    await items[2]?.trigger("click");
+
+    expect(items[2]?.attributes("aria-disabled")).toBe("true");
+    expect(items[2]?.attributes("aria-checked")).toBe("false");
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+});
