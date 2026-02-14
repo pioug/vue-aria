@@ -7346,3 +7346,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented `DialogTrigger` uncontrolled `defaultOpen` behavior with an initially-open dialog example.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 25 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded `DialogTrigger` container-behavior coverage to assert trigger `type` context drives nested dialog size variants (`popover` -> small, `modal` -> large).
+    - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 26 tests).
+- Validation: `npm run check -- --pretty false` passed.

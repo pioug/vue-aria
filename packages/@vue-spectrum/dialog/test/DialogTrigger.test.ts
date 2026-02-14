@@ -114,4 +114,34 @@ describe("DialogTrigger", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
   });
+
+  it("propagates trigger type to nested dialog sizing", async () => {
+    const popover = mount(DialogTrigger as any, {
+      props: {
+        type: "popover",
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "popover-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await popover.get('[data-testid="popover-trigger"]').trigger("click");
+    expect(popover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--small");
+
+    const modal = mount(DialogTrigger as any, {
+      props: {
+        type: "modal",
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "modal-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await modal.get('[data-testid="modal-trigger"]').trigger("click");
+    expect(modal.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--large");
+  });
 });
