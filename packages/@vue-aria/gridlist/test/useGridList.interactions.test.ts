@@ -192,6 +192,19 @@ describe("useGridList interaction parity", () => {
 
     expect(parentKeydown).not.toHaveBeenCalled();
 
+    secondButton.focus();
+    secondButton.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Tab", shiftKey: true, bubbles: true, cancelable: true })
+    );
+    await flush();
+    expect(parentKeydown).not.toHaveBeenCalled();
+
+    secondButton.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true })
+    );
+    await flush();
+    expect(parentKeydown).toHaveBeenCalledTimes(1);
+
     scope.stop();
     parent.remove();
   });
