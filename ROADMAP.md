@@ -7203,3 +7203,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented native `validationBehavior` + `validate` callback usage and clarified deferred error timing for native-mode validation.
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 123 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded SSR coverage for callback-based `validate` and `shouldCloseOnSelect` props in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 125 tests).
+- Validation: `npm run check -- --pretty false` passed.

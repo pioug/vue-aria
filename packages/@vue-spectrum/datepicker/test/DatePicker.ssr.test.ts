@@ -214,6 +214,47 @@ describe("DatePicker SSR", () => {
     expect(html).toContain("Range callback error");
   });
 
+  it("renders DatePicker with validate and shouldCloseOnSelect callbacks without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DatePickerSSRValidateCallbackApp",
+      setup() {
+        return () =>
+          h(DatePicker, {
+            "aria-label": "Date picker",
+            defaultValue: new CalendarDate(2019, 6, 5),
+            shouldCloseOnSelect: () => false,
+            validate: () => "Date SSR validate error",
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DatePicker");
+    expect(html).toContain("Date SSR validate error");
+  });
+
+  it("renders DateRangePicker with validate and shouldCloseOnSelect callbacks without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DateRangePickerSSRValidateCallbackApp",
+      setup() {
+        return () =>
+          h(DateRangePicker, {
+            "aria-label": "Date range picker",
+            defaultValue: {
+              start: new CalendarDate(2019, 6, 5),
+              end: new CalendarDate(2019, 6, 8),
+            },
+            shouldCloseOnSelect: () => false,
+            validate: () => "Range SSR validate error",
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DateRangePicker");
+    expect(html).toContain("Range SSR validate error");
+  });
+
   it("renders DatePicker with CalendarDateTime granularity without SSR errors", async () => {
     const App = defineComponent({
       name: "DatePickerSSRTimeGranularityApp",
