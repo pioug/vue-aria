@@ -715,6 +715,19 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("supports default selected keys in checkbox-style multiple selection", () => {
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      defaultSelectedKeys: new Set(["row-1", "row-2"]),
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("prevents selecting disabled rows via pointer", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
