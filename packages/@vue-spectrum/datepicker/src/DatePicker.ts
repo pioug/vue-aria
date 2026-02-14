@@ -39,6 +39,7 @@ export interface SpectrumDatePickerProps {
   hourCycle?: 12 | 24 | undefined;
   shouldForceLeadingZeros?: boolean | undefined;
   validationBehavior?: "aria" | "native" | undefined;
+  shouldCloseOnSelect?: boolean | (() => boolean) | undefined;
   placeholderValue?: DateValue | undefined;
   placeholder?: string | undefined;
   autoFocus?: boolean | undefined;
@@ -257,6 +258,10 @@ export const DatePicker = defineComponent({
       type: String as PropType<SpectrumDatePickerProps["validationBehavior"]>,
       default: undefined,
     },
+    shouldCloseOnSelect: {
+      type: [Boolean, Function] as PropType<SpectrumDatePickerProps["shouldCloseOnSelect"]>,
+      default: undefined,
+    },
     placeholderValue: {
       type: Object as PropType<DateValue | undefined>,
       default: undefined,
@@ -380,6 +385,9 @@ export const DatePicker = defineComponent({
       },
       get validationBehavior() {
         return merged.validationBehavior;
+      },
+      get shouldCloseOnSelect() {
+        return merged.shouldCloseOnSelect;
       },
     } as any);
 
@@ -779,6 +787,10 @@ export const DateRangePicker = defineComponent({
       type: String as PropType<SpectrumDatePickerProps["validationBehavior"]>,
       default: undefined,
     },
+    shouldCloseOnSelect: {
+      type: [Boolean, Function] as PropType<SpectrumDatePickerProps["shouldCloseOnSelect"]>,
+      default: undefined,
+    },
     placeholderValue: {
       type: Object as PropType<DateValue | undefined>,
       default: undefined,
@@ -910,6 +922,9 @@ export const DateRangePicker = defineComponent({
       },
       get validationBehavior() {
         return merged.validationBehavior;
+      },
+      get shouldCloseOnSelect() {
+        return merged.shouldCloseOnSelect;
       },
       get allowsNonContiguousRanges() {
         return merged.allowsNonContiguousRanges;

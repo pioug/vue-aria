@@ -7172,3 +7172,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 117 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - exposed and forwarded `shouldCloseOnSelect` for `DatePicker` and `DateRangePicker`.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added selection-close behavior coverage ensuring popovers stay open when `shouldCloseOnSelect` is disabled/callback-controlled.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 119 tests).
+- Validation: `npm run check -- --pretty false` passed.
