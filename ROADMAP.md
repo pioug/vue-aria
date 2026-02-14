@@ -554,10 +554,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-numberfield`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/numberfield`.
+- Additional parity update:
+  - expanded numberfield behavior coverage for:
+    - iPhone `inputMode` selection paths (`text`/`decimal`/`numeric`)
+    - wheel-step gating (focus required, ctrl+wheel zoom ignored, `isWheelDisabled`)
+    - aria `validate` callback invalid state, server-validation invalid state (`FormValidationContext`), and native required semantics
+    - description/error help-text rendering states
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 
 ### Remaining for completion
-- Expand test parity coverage for locale/inputMode matrix, keyboard stepping, wheel behavior, and validation flows from upstream.
-- Validate visual parity for quiet/stepper/label/help-text states against upstream docs.
+- Expand test parity coverage for the remaining locale/inputMode matrix and keyboard stepping flows from upstream.
+- Validate remaining visual parity for quiet/stepper and label/help-text combinations against upstream docs.
 
 ## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
 - Upstream source path(s):
@@ -7557,6 +7564,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - marked `@vue-spectrum/meter` slice complete and advanced focus to `@vue-spectrum/numberfield`.
   - `packages/@vue-spectrum/meter/test/Meter.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/meter/test` passed (2 files, 11 tests).
+- Additional `@vue-spectrum/numberfield` parity update:
+  - expanded behavior coverage for iPhone input-mode paths, wheel-step gating (focus/zoom/disabled), aria validate callback invalid state, aria server-validation invalid state, native required semantics, and description/error help-text rendering.
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 16 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/link` interaction parity update:
   - added adapted tooltip-trigger composition coverage for focus open/close behavior.
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.

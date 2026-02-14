@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick, provide, ref } from "vue";
+import { FormValidationContext } from "@vue-aria/form-state";
 import { NumberField } from "../src/NumberField";
 
 function renderNumberField(
@@ -117,5 +118,136 @@ describe("NumberField", () => {
     });
 
     expect(wrapper.get('input[type="text"]').attributes("inputmode")).toBe("numeric");
+  });
+
+  it("supports platform inputMode behavior on iPhone", () => {
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+
+    try {
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "iPhone",
+      });
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "AppleWebKit",
+      });
+
+      const textMode = renderNumberField();
+      expect(textMode.get('input[type="text"]').attributes("inputmode")).toBe("text");
+
+      const decimalMode = renderNumberField({ minValue: 0 });
+      expect(decimalMode.get('input[type="text"]').attributes("inputmode")).toBe("decimal");
+
+      const numericMode = renderNumberField({
+        minValue: 0,
+        formatOptions: { maximumFractionDigits: 0 },
+      });
+      expect(numericMode.get('input[type="text"]').attributes("inputmode")).toBe("numeric");
+    } finally {
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+    }
+  });
+
+  it("supports wheel stepping only while focused", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      defaultValue: 0,
+      onChange,
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    input.element.dispatchEvent(new WheelEvent("wheel", { deltaY: 10, bubbles: true, cancelable: true }));
+    expect(onChange).not.toHaveBeenCalled();
+
+    input.element.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    input.element.dispatchEvent(new WheelEvent("wheel", { deltaY: 10, bubbles: true, cancelable: true }));
+    expect(onChange).toHaveBeenLastCalledWith(1);
+
+    input.element.dispatchEvent(new WheelEvent("wheel", { deltaY: -10, bubbles: true, cancelable: true }));
+    expect(onChange).toHaveBeenLastCalledWith(0);
+  });
+
+  it("does not step on wheel for ctrlKey zoom gestures or when wheel stepping is disabled", () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      defaultValue: 0,
+      onChange,
+      isWheelDisabled: true,
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    input.element.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    input.element.dispatchEvent(new WheelEvent("wheel", {
+      deltaY: 10,
+      ctrlKey: true,
+      bubbles: true,
+      cancelable: true,
+    }));
+    input.element.dispatchEvent(new WheelEvent("wheel", { deltaY: 10, bubbles: true, cancelable: true }));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("supports aria validate callback behavior", () => {
+    const wrapper = renderNumberField({
+      defaultValue: 13,
+      validate: (value: number) => (value === 13 ? "Unlucky value" : null),
+    });
+    const group = wrapper.get('[role="group"]');
+    expect(group.attributes("aria-invalid")).toBe("true");
+  });
+
+  it("supports server validation in aria mode", () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      amount: "Amount is required.",
+    });
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(NumberField as any, {
+              label: "Amount",
+              name: "amount",
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get('[role="group"]').attributes("aria-invalid")).toBe("true");
+  });
+
+  it("supports native required validation semantics", () => {
+    const wrapper = renderNumberField({
+      label: "Amount",
+      isRequired: true,
+      validationBehavior: "native",
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    expect(input.attributes("required")).toBeDefined();
+    expect(input.attributes("aria-required")).toBeUndefined();
+  });
+
+  it("renders description and invalid help text states", () => {
+    const description = renderNumberField({
+      label: "Amount",
+      description: "Enter amount in dollars.",
+    });
+    expect(description.get(".spectrum-HelpText").text()).toContain("Enter amount in dollars.");
+
+    const invalid = renderNumberField({
+      label: "Amount",
+      validationState: "invalid",
+      errorMessage: "Amount is invalid.",
+    });
+    expect(invalid.get(".spectrum-HelpText.is-invalid").text()).toContain("Amount is invalid.");
   });
 });
