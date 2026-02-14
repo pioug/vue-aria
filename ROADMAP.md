@@ -6667,6 +6667,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added invalid-state rendering coverage for both `Calendar` and `RangeCalendar`, asserting `is-invalid` class and `aria-invalid` behavior on selected cells.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 47 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - expanded invalid-state coverage to include direct `isInvalid` prop behavior for both `Calendar` and `RangeCalendar`.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 49 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
