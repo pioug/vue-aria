@@ -9243,3 +9243,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 55 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-row press parity update:
+  - added migrated coverage to verify disabled rows do not toggle expansion or emit selection callbacks on row press when `selectionMode="multiple"` and `disabledBehavior="selection"`.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 56 tests).
+- Validation: `npm run check -- --pretty false` passed.
