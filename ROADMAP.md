@@ -2657,7 +2657,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useTreeState` coverage for expanded-key toggling and selection-manager exposure.
   - Added adapted focused-key reset coverage when a focused node is removed from the reactive collection.
   - Added adapted collection-builder callback coverage for nested item-data sources and fallback nested key generation.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/tree-state.md`)
@@ -2723,7 +2723,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted interaction-harness coverage for ArrowLeft/ArrowRight child focus traversal in row `keyboardNavigationBehavior="arrow"` mode.
   - Added selection-checkbox coverage for tree-state consumer wiring (shared row labeling against tree rows).
   - Added interaction-harness coverage for `keyboardNavigationBehavior="tab"` Tab-key containment within row children.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/gridlist.md`)
@@ -2783,7 +2783,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via Enter-key row expansion and arrow navigation focus movement).
   - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
   - Added intl-bundle regression coverage to assert copied upstream locale entries and locale-count floor.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/tree.md`)
@@ -5335,3 +5335,5 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31k` keyboard parity note to explicitly track Enter-key expansion behavior.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree/test` passed (4 files, 6 tests).
+- Closed upstream-test migration gates for current tree stack package records:
+  - marked `31i` (`@vue-aria/tree-state`), `31j` (`@vue-aria/gridlist`), and `31k` (`@vue-aria/tree`) as having all relevant upstream tests migrated for the current referenced upstream test surface.
