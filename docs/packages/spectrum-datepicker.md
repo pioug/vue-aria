@@ -291,6 +291,26 @@ import { DatePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Native Validation Behavior Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+
+const validateDate = () => "Date failed native validation";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Booking date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    validation-behavior="native"
+    :validate="validateDate"
+  />
+</template>
+```
+
 ## Custom Validate Callback Example
 
 ```vue
@@ -498,4 +518,5 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.
 - Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants (shortcuts are ignored when disabled or read-only).
 - Validation note: `errorMessage` accepts either a static string or a callback function.
+- Validation behavior note: in `validationBehavior="native"` mode, custom `validate` errors display after commit/select interactions.
 - Callback note: keyboard callbacks and keyboard-open shortcuts are suppressed while pickers are disabled or read-only.
