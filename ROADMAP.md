@@ -2925,7 +2925,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added upstream custom 4-5-4 calendar visible-range description cases for single-month and multi-month formatting branches.
   - Added announcement parity coverage for visible-range updates (focus-gated) and polite selected-range announcements.
   - Added range-drag behavior coverage for pointerup commit, virtual-click guard, and touchmove scroll suppression while dragging.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/calendar.md`)
@@ -2937,7 +2937,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [x] Baseline aria role/gridcell/button wiring validated in adapted tests.
-- [ ] Full upstream interaction matrix (including expanded pointer/touch drag and announcement flows) pending.
+- [x] Full upstream interaction matrix (including expanded pointer/touch drag and announcement flows) validated in adapted tests.
 
 ### Visual Parity
 - [ ] Pending upstream example-by-example comparison for calendar/range-calendar markup and styles.
@@ -2946,9 +2946,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Audit remaining `@react-spectrum/calendar` interaction scenarios for any uncovered hook-level parity gaps (especially touch-drag edge cases).
-2. Complete example-by-example visual parity verification against upstream calendar/range-calendar markup.
-3. Finalize public API checklist and mark package complete once interaction/visual gates are closed.
+1. Complete example-by-example visual parity verification against upstream calendar/range-calendar markup.
+2. Finalize public API checklist and mark package complete once visual/API gates are closed.
+3. Monitor upstream calendar interactions for drift and backport parity regressions as needed.
 
 ## 31n) Package Record: @vue-aria/datepicker-state
 - Upstream source path(s):
