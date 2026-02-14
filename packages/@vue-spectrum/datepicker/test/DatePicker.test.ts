@@ -115,6 +115,25 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("prevents opening when date picker is read-only", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isReadOnly: true,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
   it("emits onOpenChange for open and close transitions", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mount(DatePicker as any, {
@@ -192,6 +211,28 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
+  it("prevents opening when range picker is disabled", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isDisabled: true,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get(".react-spectrum-DateRangePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
   it("updates rendered range in controlled mode", async () => {
