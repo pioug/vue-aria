@@ -48,6 +48,22 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("2019");
   });
 
+  it("focuses date picker trigger when autoFocus is enabled", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        autoFocus: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    expect(document.activeElement).toBe(wrapper.get(".react-spectrum-DatePicker-button").element);
+  });
+
   it("opens a calendar popover and commits date selection", async () => {
     const onChange = vi.fn();
     const wrapper = mount(DatePicker as any, {
@@ -352,6 +368,25 @@ describe("DateRangePicker", () => {
     const text = wrapper.get(".react-spectrum-DateRangePicker-value").text();
     expect(text).toContain("June");
     expect(text).toContain("2019");
+  });
+
+  it("focuses range picker trigger when autoFocus is enabled", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        autoFocus: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    expect(document.activeElement).toBe(wrapper.get(".react-spectrum-DateRangePicker-button").element);
   });
 
   it("opens range-calendar popover", async () => {

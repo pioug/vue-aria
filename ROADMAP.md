@@ -6846,6 +6846,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - added multi-month overlay examples (`visibleMonths` + `pageBehavior`) for both picker variants.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - implemented trigger `autoFocus` behavior and added focus-handoff coverage for both picker variants.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 32 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

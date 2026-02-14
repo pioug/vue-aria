@@ -1,7 +1,7 @@
 import { useDatePicker, useDateRangePicker } from "@vue-aria/datepicker";
 import { useDatePickerState, useDateRangePickerState } from "@vue-aria/datepicker-state";
 import { useLocale } from "@vue-aria/i18n";
-import { defineComponent, h, computed, ref, useAttrs, type PropType } from "vue";
+import { defineComponent, h, computed, ref, useAttrs, onMounted, nextTick, type PropType } from "vue";
 import { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
 import { Popover } from "@vue-spectrum/menu";
 
@@ -193,6 +193,7 @@ export const DatePicker = defineComponent({
     const attrs = useAttrs();
     const locale = useLocale();
     const group = createDomRef<HTMLElement>();
+    const triggerRef = ref<HTMLElement | null>(null);
 
     const state = useDatePickerState({
       get value() {
@@ -328,6 +329,16 @@ export const DatePicker = defineComponent({
       )
     );
 
+    onMounted(() => {
+      if (!props.autoFocus || props.isDisabled || props.isReadOnly) {
+        return;
+      }
+
+      void nextTick(() => {
+        triggerRef.value?.focus();
+      });
+    });
+
     return () => {
       const calendarAriaLabel = props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
@@ -371,6 +382,7 @@ export const DatePicker = defineComponent({
                   id: buttonProps.id as string | undefined,
                   type: "button",
                   class: "react-spectrum-DatePicker-button",
+                  ref: triggerRef,
                   disabled: isButtonDisabled || undefined,
                   "aria-haspopup": buttonProps["aria-haspopup"] as string | undefined,
                   "aria-label": buttonProps["aria-label"] as string | undefined,
@@ -561,6 +573,7 @@ export const DateRangePicker = defineComponent({
     const attrs = useAttrs();
     const locale = useLocale();
     const group = createDomRef<HTMLElement>();
+    const triggerRef = ref<HTMLElement | null>(null);
 
     const state = useDateRangePickerState({
       get value() {
@@ -707,6 +720,16 @@ export const DateRangePicker = defineComponent({
       )
     );
 
+    onMounted(() => {
+      if (!props.autoFocus || props.isDisabled || props.isReadOnly) {
+        return;
+      }
+
+      void nextTick(() => {
+        triggerRef.value?.focus();
+      });
+    });
+
     return () => {
       const calendarAriaLabel = props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Range calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
@@ -750,6 +773,7 @@ export const DateRangePicker = defineComponent({
                   id: buttonProps.id as string | undefined,
                   type: "button",
                   class: "react-spectrum-DateRangePicker-button",
+                  ref: triggerRef,
                   disabled: isButtonDisabled || undefined,
                   "aria-haspopup": buttonProps["aria-haspopup"] as string | undefined,
                   "aria-label": buttonProps["aria-label"] as string | undefined,
