@@ -2722,6 +2722,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted section and selection-checkbox helper coverage.
   - Added adapted interaction-harness coverage for ArrowLeft/ArrowRight child focus traversal in row `keyboardNavigationBehavior="arrow"` mode.
   - Added selection-checkbox coverage for tree-state consumer wiring (shared row labeling against tree rows).
+  - Added interaction-harness coverage for `keyboardNavigationBehavior="tab"` Tab-key containment within row children.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5324,3 +5325,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31j` test parity notes with the tree-consumer selection-checkbox branch.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/gridlist/test` passed (6 files, 15 tests).
+- Expanded `@vue-aria/gridlist` tab-navigation interaction parity:
+  - extended `useGridList.interactions.test.ts` with `keyboardNavigationBehavior=\"tab\"` coverage asserting Tab-key containment within row children.
+  - updated package record `31j` test parity notes with tab-navigation harness coverage.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/gridlist/test` passed (6 files, 16 tests).

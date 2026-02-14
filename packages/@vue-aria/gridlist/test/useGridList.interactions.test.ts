@@ -1,5 +1,5 @@
 import { effectScope, nextTick } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { useListState } from "@vue-aria/list-state";
 import { useGridList } from "../src/useGridList";
 import { useGridListItem } from "../src/useGridListItem";
@@ -120,5 +120,79 @@ describe("useGridList interaction parity", () => {
 
     scope.stop();
     grid.remove();
+  });
+
+  it("keeps Tab navigation within row children in tab navigation mode", async () => {
+    const parent = document.createElement("div");
+    const grid = document.createElement("div");
+    const row = document.createElement("div");
+    const cell = document.createElement("div");
+    const firstButton = document.createElement("button");
+    firstButton.textContent = "First";
+    const secondButton = document.createElement("button");
+    secondButton.textContent = "Second";
+    cell.append(firstButton, secondButton);
+    row.appendChild(cell);
+    grid.appendChild(row);
+    parent.appendChild(grid);
+    document.body.appendChild(parent);
+
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useListState({
+        selectionMode: "single",
+        items: [{ id: "row-1", label: "Row 1" }],
+        getKey: (item) => item.id,
+        getTextValue: (item) => item.label,
+      })
+    )!;
+
+    scope.run(() =>
+      useGridList(
+        {
+          "aria-label": "Grid list",
+          keyboardNavigationBehavior: "tab",
+        },
+        state,
+        { current: grid as HTMLElement | null }
+      )
+    );
+
+    state.selectionManager.setFocused(true);
+    state.selectionManager.setFocusedKey("row-1");
+    await flush();
+
+    const node = state.collection.getItem("row-1");
+    if (!node) {
+      throw new Error("Expected row node");
+    }
+
+    const itemAria = scope.run(() =>
+      useGridListItem(
+        {
+          node,
+        },
+        state as any,
+        { current: row as HTMLElement | null }
+      )
+    )!;
+
+    const onRowKeydown = itemAria.rowProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
+    if (onRowKeydown) {
+      row.addEventListener("keydown", (event) => onRowKeydown(event as KeyboardEvent));
+    }
+
+    const parentKeydown = vi.fn();
+    parent.addEventListener("keydown", parentKeydown);
+    firstButton.focus();
+    firstButton.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true })
+    );
+    await flush();
+
+    expect(parentKeydown).not.toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
   });
 });
