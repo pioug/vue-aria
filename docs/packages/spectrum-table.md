@@ -71,6 +71,7 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 ## Selection Callbacks
 
 `onSelectionChange` receives a `Set` of selected row keys in the current table collection.
+Selection keys preserve row key types (for example, numeric keys such as `0` remain numbers).
 
 ## Selection Initialization and Disabled Keys
 
