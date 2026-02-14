@@ -174,6 +174,29 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenLastCalledWith(0);
   });
 
+  it("supports keyboard stepping for Arrow/Home/End keys", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      defaultValue: 5,
+      minValue: 0,
+      maxValue: 10,
+      onChange,
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    await input.trigger("keydown", { key: "ArrowUp" });
+    expect(onChange).toHaveBeenLastCalledWith(6);
+
+    await input.trigger("keydown", { key: "ArrowDown" });
+    expect(onChange).toHaveBeenLastCalledWith(5);
+
+    await input.trigger("keydown", { key: "Home" });
+    expect(onChange).toHaveBeenLastCalledWith(0);
+
+    await input.trigger("keydown", { key: "End" });
+    expect(onChange).toHaveBeenLastCalledWith(10);
+  });
+
   it("does not step on wheel for ctrlKey zoom gestures or when wheel stepping is disabled", () => {
     const onChange = vi.fn();
     const wrapper = renderNumberField({

@@ -210,6 +210,7 @@ export function useSpinButton(props: SpinButtonProps): SpinbuttonAria {
       "aria-disabled": props.isDisabled || undefined,
       "aria-readonly": props.isReadOnly || undefined,
       "aria-required": props.isRequired || undefined,
+      onKeydown: onKeyDown,
       onKeyDown,
       onFocus,
       onBlur,

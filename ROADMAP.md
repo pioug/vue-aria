@@ -561,9 +561,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - aria `validate` callback invalid state, server-validation invalid state (`FormValidationContext`), and native required semantics
     - description/error help-text rendering states
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Additional keyboard parity update:
+  - fixed Vue keydown listener aliasing in `useSpinButton` (`onKeydown` + `onKeyDown`) so spinbutton keyboard stepping handlers attach reliably.
+  - added numberfield keyboard stepping coverage for `ArrowUp`/`ArrowDown` and `Home`/`End` key flows.
+  - `packages/@vue-aria/spinbutton/src/useSpinButton.ts`
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 
 ### Remaining for completion
-- Expand test parity coverage for the remaining locale/inputMode matrix and keyboard stepping flows from upstream.
+- Expand test parity coverage for the remaining locale/inputMode matrix and advanced value-formatting/commit flows from upstream.
 - Validate remaining visual parity for quiet/stepper and label/help-text combinations against upstream docs.
 
 ## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
@@ -7569,6 +7574,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 16 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` keyboard parity update:
+  - fixed `useSpinButton` keydown listener aliasing (`onKeydown` + `onKeyDown`) to ensure Vue keydown events trigger spinbutton keyboard handlers.
+  - added keyboard-step coverage for `ArrowUp`/`ArrowDown` and `Home`/`End` key behavior.
+  - `packages/@vue-aria/spinbutton/src/useSpinButton.ts`
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test packages/@vue-aria/spinbutton/test` passed (3 files, 31 tests).
 - Additional `@vue-spectrum/link` interaction parity update:
   - added adapted tooltip-trigger composition coverage for focus open/close behavior.
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.
