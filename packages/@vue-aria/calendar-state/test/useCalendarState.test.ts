@@ -247,4 +247,44 @@ describe("useCalendarState", () => {
     expect(unboundedState.isNextVisibleRangeInvalid()).toBe(false);
     unboundedScope.stop();
   });
+
+  it("constrains focused date to min and max boundaries", () => {
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultFocusedValue: new CalendarDate(2024, 1, 1),
+        minValue: new CalendarDate(2024, 1, 5),
+        maxValue: new CalendarDate(2024, 1, 20),
+      })
+    )!;
+
+    expect(toIso(state.focusedDate)).toBe("2024-01-05");
+    state.setFocusedDate(new CalendarDate(2024, 1, 25));
+    expect(toIso(state.focusedDate)).toBe("2024-01-20");
+    scope.stop();
+  });
+
+  it("emits controlled changes without mutating controlled value", () => {
+    let emitted: CalendarDate | null = null;
+    const controlledValue = new CalendarDate(2024, 2, 10);
+
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useCalendarState({
+        locale: "en-US",
+        createCalendar,
+        value: controlledValue,
+        onChange: (next) => {
+          emitted = next as CalendarDate | null;
+        },
+      })
+    )!;
+
+    state.selectDate(new CalendarDate(2024, 2, 14));
+    expect(toIso(state.value!)).toBe("2024-02-10");
+    expect(toIso(emitted!)).toBe("2024-02-14");
+    scope.stop();
+  });
 });

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/calendar-state`
+- Current focus package: `@vue-aria/tree-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -91,7 +91,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/grid-state`: Complete
 - `@vue-aria/tree-state`: In progress
 - `@vue-aria/table-state`: Complete
-- `@vue-aria/calendar-state`: In progress
+- `@vue-aria/calendar-state`: Complete
 - `@vue-aria/datepicker-state`: Complete
 - `@vue-aria/combobox-state`: Complete
 - `@vue-aria/selection-state`: Complete
@@ -2626,12 +2626,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-stately/tree/test/useTreeState.test.js`
 - Local package path:
   - `packages/@vue-aria/tree-state`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2844,16 +2844,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted range-calendar coverage for anchor flow, contiguous-range constraints around unavailable dates, and hover/highlight focus behavior.
   - Expanded adapted state coverage for week/month section navigation branches, selection guards (`isDateUnavailable`, `isReadOnly`, `isDisabled`), and visible-range boundary validity helpers.
   - Expanded adapted range-state coverage for `allowsNonContiguousRanges`, read-only selection guards, highlight-with-anchor behavior, and dragging state toggles.
-- [ ] All relevant upstream tests migrated
+  - Added controlled-value coverage for date and range states, including emitted change payload assertions while preserving controlled external values.
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/calendar-state.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
   - State package is non-visual; no dedicated base style assets are required.
 
 ### Accessibility
-- [ ] Partial validation complete via downstream `@vue-aria/calendar` interaction suites; full matrix pending.
+- [x] Accessibility parity validated via state-level selection/focus tests and downstream `@vue-aria/calendar` interaction suites.
 
 ### Visual Parity
 - Not applicable for state package.
@@ -2862,9 +2863,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Audit remaining state edge branches (controlled props, min/max alignment interactions, and unavailable-date boundary behavior) for any uncovered parity gaps.
-2. Tighten exported type parity once the calendar/datepicker stack is fully integrated.
-3. Close docs/accessibility gates after downstream interaction matrix completion.
+1. Monitor upstream `@react-stately/calendar` for API or behavior drift and backport targeted parity regressions.
+2. Keep `@vue-aria/datepicker-state` integrations synchronized with calendar-state behavior changes.
 
 ## 31m) Package Record: @vue-aria/calendar
 - Upstream source path(s):

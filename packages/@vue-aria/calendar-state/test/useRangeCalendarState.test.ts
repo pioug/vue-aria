@@ -1,6 +1,6 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
 import { effectScope } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { useRangeCalendarState } from "../src/useRangeCalendarState";
 
 describe("useRangeCalendarState", () => {
@@ -140,6 +140,42 @@ describe("useRangeCalendarState", () => {
     expect(state.focusedDate.toString()).toBe("2024-09-03");
     expect(state.highlightedRange?.start.toString()).toBe("2024-09-01");
     expect(state.highlightedRange?.end.toString()).toBe("2024-09-03");
+    scope.stop();
+  });
+
+  it("emits controlled range changes without mutating controlled value", () => {
+    const onChange = vi.fn();
+    const controlledRange = {
+      start: new CalendarDate(2024, 10, 1),
+      end: new CalendarDate(2024, 10, 3),
+    };
+
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        value: controlledRange,
+        onChange,
+      })
+    )!;
+
+    state.selectDate(new CalendarDate(2024, 10, 8));
+    state.selectDate(new CalendarDate(2024, 10, 12));
+
+    expect(state.value?.start.toString()).toBe("2024-10-01");
+    expect(state.value?.end.toString()).toBe("2024-10-03");
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    const emitted = onChange.mock.calls[0]?.[0] as
+      | { start: CalendarDate; end: CalendarDate }
+      | undefined;
+    expect(emitted).toBeDefined();
+    if (!emitted) {
+      throw new Error("Expected controlled onChange payload");
+    }
+    expect(emitted.start.toString()).toBe("2024-10-08");
+    expect(emitted.end.toString()).toBe("2024-10-12");
     scope.stop();
   });
 });
