@@ -1189,6 +1189,48 @@ describe("TreeView", () => {
     expect(onAction).toHaveBeenCalledWith("projects");
   });
 
+  it('supports row actions while suppressing disabled rows in disabledBehavior="all"', async () => {
+    const onAction = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "multiple",
+      disabledBehavior: "all",
+      disabledKeys: ["projects"],
+      defaultExpandedKeys: ["projects"],
+      onAction,
+      onSelectionChange,
+    });
+
+    let photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    let projectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
+    expect(photosRow).toBeTruthy();
+    expect(projectsRow).toBeTruthy();
+    expect(projectOneRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
+
+    await press(photosRow!);
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenLastCalledWith("photos");
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    await press(projectsRow!);
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    await press(projectOneRow!);
+    expect(onAction).toHaveBeenCalledTimes(2);
+    expect(onAction).toHaveBeenLastCalledWith("projects-1");
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    projectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
+    expect(projectOneRow).toBeTruthy();
+    await pressEnter(projectOneRow!);
+    expect(onAction).toHaveBeenCalledTimes(3);
+    expect(onAction).toHaveBeenLastCalledWith("projects-1");
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
   it('supports row links when selectionMode="none"', async () => {
     const wrapper = mount(TreeView as any, {
       props: {

@@ -9169,3 +9169,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 51 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-action disabled-behavior parity update:
+  - added migrated action coverage to verify row actions fire for enabled rows, remain suppressed for disabled rows in `disabledBehavior="all"`, and stay selection-independent in both pointer and keyboard activation paths.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 52 tests).
+- Validation: `npm run check -- --pretty false` passed.
