@@ -6633,6 +6633,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 39 tests).
 - Additional `@vue-spectrum/calendar` parity update:
+  - tightened `createCalendar` override test typing to `CalendarIdentifier` for strict TypeScript parity.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/calendar` parity update:
   - fixed locale-override behavior in month-grid rendering by plumbing effective locale into `useCalendarGrid`.
   - added locale-override regression coverage for weekday ordering.
     - `packages/@vue-spectrum/calendar/src/Calendar.ts`

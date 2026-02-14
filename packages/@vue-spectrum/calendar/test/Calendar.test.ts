@@ -1,4 +1,4 @@
-import { CalendarDate, createCalendar as createIntlCalendar } from "@internationalized/date";
+import { CalendarDate, createCalendar as createIntlCalendar, type CalendarIdentifier } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { Calendar, RangeCalendar } from "../src";
@@ -408,7 +408,7 @@ describe("Calendar", () => {
   });
 
   it("uses a custom createCalendar implementation when provided", () => {
-    const createCalendar = vi.fn((name: string) => createIntlCalendar(name));
+    const createCalendar = vi.fn((name: CalendarIdentifier) => createIntlCalendar(name));
     mount(Calendar as any, {
       props: {
         "aria-label": "Calendar",
@@ -564,7 +564,7 @@ describe("Calendar", () => {
   });
 
   it("uses a custom createCalendar implementation in range-calendar mode", () => {
-    const createCalendar = vi.fn((name: string) => createIntlCalendar(name));
+    const createCalendar = vi.fn((name: CalendarIdentifier) => createIntlCalendar(name));
     mount(RangeCalendar as any, {
       props: {
         "aria-label": "Range calendar",
