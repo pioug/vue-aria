@@ -2799,6 +2799,57 @@ describe("TreeView", () => {
     expect(document.activeElement).toBe(rows[0]!.element);
   });
 
+  it("navigates visible rows with Home and End after collapsing a parent row", async () => {
+    const wrapper = renderTree({
+      items: [
+        {
+          id: "projects",
+          name: "Projects",
+          children: [{ id: "projects-1", name: "Project 1" }],
+        },
+        { id: "reports", name: "Reports" },
+      ],
+      defaultExpandedKeys: ["projects"],
+      autoFocus: "first",
+    });
+
+    await nextTick();
+
+    const tree = wrapper.get('[role="treegrid"]');
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(3);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    await tree.trigger("keydown", { key: "End" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[2]!.element);
+
+    await tree.trigger("keydown", { key: "Home" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    await projectsRow!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+
+    rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(2);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    await tree.trigger("keydown", { key: "End" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[1]!.element);
+
+    await tree.trigger("keydown", { key: "Home" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[0]!.element);
+  });
+
   it("supports typeahead focus navigation", async () => {
     const wrapper = mount(TreeView as any, {
       props: {

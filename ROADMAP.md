@@ -9450,3 +9450,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 75 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` collapsed-row Home/End parity update:
+  - added keyboard navigation coverage to assert Home/End target first/last visible rows before and after collapsing a parent row.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 76 tests).
+- Validation: `npm run check -- --pretty false` passed.
