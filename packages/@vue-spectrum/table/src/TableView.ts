@@ -528,6 +528,18 @@ export const Column = createStaticTableComponent("Column", {
     type: Boolean as PropType<boolean | undefined>,
     default: undefined,
   },
+  align: {
+    type: String as PropType<"start" | "center" | "end" | undefined>,
+    default: undefined,
+  },
+  hideHeader: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  showDivider: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
   colSpan: {
     type: Number as PropType<number | undefined>,
     default: undefined,

@@ -117,6 +117,18 @@ function normalizeColumnAlign(value: unknown): SpectrumTableColumnAlign | undefi
   return value === "start" || value === "center" || value === "end" ? value : undefined;
 }
 
+function normalizeBooleanProp(value: unknown): boolean {
+  if (value === "" || value === true || value === "true") {
+    return true;
+  }
+
+  if (value === false || value == null || value === "false") {
+    return false;
+  }
+
+  return Boolean(value);
+}
+
 function normalizeKey(value: unknown, fallback: TableKey): TableKey {
   return isTableKey(value) ? value : fallback;
 }
@@ -252,18 +264,24 @@ function isCellNodeType(nodeType: string | undefined): boolean {
 function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const content = getSlotContent(node);
+  const allowsSorting = props.allowsSorting ?? props["allows-sorting"];
+  const isRowHeader = props.isRowHeader ?? props["is-row-header"];
+  const align = props.align;
+  const hideHeader = props.hideHeader ?? props["hide-header"];
+  const showDivider = props.showDivider ?? props["show-divider"];
+  const colSpan = props.colSpan ?? props["col-span"];
   const textValue =
     toStringValue(props.textValue ?? props.title ?? props.name) || extractTextContent(content);
 
   return {
     key: normalizeKey(node.key ?? props.id ?? props.key, `column-${index}`),
     textValue,
-    allowsSorting: Boolean(props.allowsSorting),
-    isRowHeader: Boolean(props.isRowHeader),
-    align: normalizeColumnAlign(props.align),
-    hideHeader: Boolean(props.hideHeader),
-    showDivider: Boolean(props.showDivider),
-    colSpan: typeof props.colSpan === "number" && Number.isFinite(props.colSpan) ? props.colSpan : undefined,
+    allowsSorting: normalizeBooleanProp(allowsSorting),
+    isRowHeader: normalizeBooleanProp(isRowHeader),
+    align: normalizeColumnAlign(align),
+    hideHeader: normalizeBooleanProp(hideHeader),
+    showDivider: normalizeBooleanProp(showDivider),
+    colSpan: typeof colSpan === "number" && Number.isFinite(colSpan) ? colSpan : undefined,
     content,
   };
 }
@@ -271,12 +289,13 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
 function parseCellNode(node: VNode, index: number): ParsedSpectrumTableCell {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const content = getSlotContent(node);
-  const textValue = toStringValue(props.textValue) || extractTextContent(content);
+  const textValue = toStringValue(props.textValue ?? props["text-value"]) || extractTextContent(content);
+  const colSpan = props.colSpan ?? props["col-span"];
 
   return {
     key: normalizeKey(node.key ?? props.id ?? props.key, `cell-${index}`),
     textValue,
-    colSpan: typeof props.colSpan === "number" && Number.isFinite(props.colSpan) ? props.colSpan : undefined,
+    colSpan: typeof colSpan === "number" && Number.isFinite(colSpan) ? colSpan : undefined,
     content,
   };
 }
@@ -290,8 +309,8 @@ function parseRowNode(node: VNode, index: number): ParsedSpectrumTableRow {
 
   return {
     key: normalizeKey(node.key ?? props.id ?? props.key, `row-${index}`),
-    textValue: toStringValue(props.textValue),
-    isDisabled: Boolean(props.isDisabled),
+    textValue: toStringValue(props.textValue ?? props["text-value"]),
+    isDisabled: normalizeBooleanProp(props.isDisabled ?? props["is-disabled"]),
     cells,
   };
 }

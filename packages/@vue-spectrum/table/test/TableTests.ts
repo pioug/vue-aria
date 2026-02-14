@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import { expect, it, vi } from "vitest";
 import {
   Cell,
@@ -377,6 +377,45 @@ export function tableTests() {
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
     expect(firstRowCells[1]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
     expect(firstRowCells[1]!.classes()).not.toContain("spectrum-Table-cell--divider");
+  });
+
+  it("supports kebab-case column metadata props in static slot syntax", () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab metadata table">
+          <TableHeader>
+            <Column id="foo" is-row-header>Foo</Column>
+            <Column id="bar" align="center" hide-header show-divider>Bar</Column>
+            <Column id="baz" align="end" show-divider>Baz</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell>Alpha</Cell>
+              <Cell>Beta</Cell>
+              <Cell>Gamma</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[1]!.classes()).toContain("spectrum-Table-cell--hideHeader");
+
+    const firstRowCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--hideHeader");
+    expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
   });
 
   it("throws when static slot row cells do not match column count", () => {
