@@ -202,6 +202,23 @@ describe("Tabs", () => {
     expect(document.activeElement).toBe(updatedTabs[0]?.element);
   });
 
+  it("navigates to first enabled tab on home when first tab is disabled", async () => {
+    const wrapper = renderTabs({
+      defaultSelectedKey: "tab-3",
+      disabledKeys: ["tab-1"],
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[2]?.element as HTMLElement).focus();
+
+    await tabs[2]?.trigger("keydown", { key: "Home" });
+    await nextTick();
+
+    const updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[1]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[1]?.element);
+  });
+
   it("skips disabled tabs during keyboard navigation", async () => {
     const wrapper = renderTabs({
       defaultSelectedKey: "tab-1",

@@ -7818,6 +7818,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 14 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` disabled-home parity update:
+  - added `Home`-key coverage to ensure navigation resolves to the first enabled tab when the first tab is disabled.
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 15 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tabs` docs parity update:
   - expanded tabs keyboard docs to include `Home`/`End` behavior and disabled-tab skipping during keyboard traversal.
   - `docs/packages/spectrum-tabs.md`
