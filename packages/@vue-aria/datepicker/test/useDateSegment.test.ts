@@ -1,6 +1,8 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
-import { effectScope } from "vue";
+import { mount } from "@vue/test-utils";
+import { effectScope, defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { I18nProvider } from "@vue-aria/i18n";
 import { useDateFieldState } from "@vue-aria/datepicker-state";
 import { hookData, useDateField } from "../src/useDateField";
 import { useDateSegment } from "../src/useDateSegment";
@@ -104,5 +106,47 @@ describe("useDateSegment", () => {
     expect(segmentProps.segmentProps.inputMode).toBe("numeric");
     expect(style.caretColor).toBe("transparent");
     scope.stop();
+  });
+
+  it("applies RTL embed styles in an RTL locale context", () => {
+    let segmentProps!: ReturnType<typeof useDateSegment>;
+
+    const Host = defineComponent({
+      setup() {
+        const state = useDateFieldState({
+          locale: "ar-EG",
+          createCalendar,
+          defaultValue: new CalendarDate(2024, 6, 15),
+        });
+
+        hookData.set(state, {
+          focusManager: {
+            focusNext: vi.fn(),
+            focusPrevious: vi.fn(),
+            focusFirst: vi.fn(),
+            focusLast: vi.fn(),
+          },
+        });
+
+        const year = state.segments.find((segment) => segment.type === "year")!;
+        segmentProps = useDateSegment(year, state, {
+          current: document.createElement("div"),
+        });
+
+        return () => h("div");
+      },
+    });
+
+    const wrapper = mount(I18nProvider, {
+      props: { locale: "ar-EG" },
+      slots: {
+        default: () => h(Host),
+      },
+    });
+
+    const style = (segmentProps.segmentProps.style ?? {}) as Record<string, string>;
+    expect(style.unicodeBidi).toBe("embed");
+    expect(style.direction).toBe("ltr");
+    wrapper.unmount();
   });
 });

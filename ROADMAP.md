@@ -3051,7 +3051,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted upstream scenario coverage for programmatic date-field value commits when initially empty.
   - Added adapted hook-level coverage for range picker field propagation, native hidden-input behavior, time-field input serialization, and literal segment a11y hiding.
-  - Added adapted date-segment interaction coverage for placeholder backspace focus handoff and numeric-segment input-mode wiring.
+  - Added adapted date-segment interaction coverage for placeholder backspace focus handoff, numeric-segment input-mode wiring, and RTL embed styling in an `ar-EG` locale context.
   - Added adapted date-picker-group interaction coverage for `Alt+ArrowDown` open behavior and arrow-key focus traversal/disable branches.
   - Added adapted date-picker focus-transition coverage for blur suppression when focus moves into dialog content and blur dispatch when focus leaves the picker group.
 - [ ] All relevant upstream tests migrated
