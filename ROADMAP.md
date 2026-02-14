@@ -9288,3 +9288,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 58 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-all expanded keyboard parity update:
+  - added migrated coverage to verify `Enter` on pre-expanded disabled rows does not collapse expansion, preserving `aria-expanded`/`data-expanded` and suppressing expansion callbacks under `disabledBehavior="all"`.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 59 tests).
+- Validation: `npm run check -- --pretty false` passed.
