@@ -162,6 +162,34 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Form Integration Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <form id="booking-form">
+    <DatePicker
+      aria-label="Check-in date"
+      :default-value="new CalendarDate(2019, 6, 5)"
+      name="checkIn"
+      form="booking-form"
+    />
+
+    <DateRangePicker
+      aria-label="Trip range"
+      :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+      start-name="tripStart"
+      end-name="tripEnd"
+      form="booking-form"
+    />
+  </form>
+</template>
+```
+
 ## Key Props
 
 - Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
