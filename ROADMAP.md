@@ -7151,3 +7151,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - added time-granularity usage example covering `granularity`, `hourCycle`, and `shouldForceLeadingZeros`.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added positive-path time-granularity coverage for `CalendarDateTime` values/ranges with minute granularity and hour-cycle options.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 113 tests).
+- Validation: `npm run check -- --pretty false` passed.

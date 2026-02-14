@@ -1,4 +1,4 @@
-import { CalendarDate } from "@internationalized/date";
+import { CalendarDate, CalendarDateTime } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -66,6 +66,22 @@ describe("DatePicker", () => {
     } finally {
       warnSpy.mockRestore();
     }
+  });
+
+  it("accepts CalendarDateTime values when minute granularity is provided", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDateTime(2019, 6, 5, 9, 30),
+        granularity: "minute",
+        hourCycle: 24,
+        shouldForceLeadingZeros: true,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DatePicker-value").classes()).not.toContain("is-placeholder");
+    expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("2019");
   });
 
   it("renders custom placeholder text until a date is selected", async () => {
@@ -1174,6 +1190,24 @@ describe("DateRangePicker", () => {
     } finally {
       warnSpy.mockRestore();
     }
+  });
+
+  it("accepts CalendarDateTime range values when minute granularity is provided", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDateTime(2019, 6, 5, 9, 30),
+          end: new CalendarDateTime(2019, 6, 8, 11, 0),
+        },
+        granularity: "minute",
+        hourCycle: 24,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-value").classes()).not.toContain("is-placeholder");
+    expect(wrapper.get(".react-spectrum-DateRangePicker-value").text()).toContain("2019");
   });
 
   it("renders custom range placeholder text until a range is selected", async () => {
