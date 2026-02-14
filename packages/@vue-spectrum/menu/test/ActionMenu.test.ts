@@ -56,6 +56,28 @@ describe("ActionMenu", () => {
     expect(wrapper.get("button").attributes("aria-label")).toBe("Custom Aria Label");
   });
 
+  it("renders menu popover in a provided portal container", async () => {
+    const portalContainer = document.createElement("div");
+    document.body.appendChild(portalContainer);
+
+    const wrapper = mount(ActionMenu as any, {
+      props: {
+        portalContainer,
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const popover = portalContainer.querySelector(".spectrum-Menu-popover");
+    expect(popover).toBeTruthy();
+    expect(document.body.querySelectorAll(".spectrum-Menu-popover")).toHaveLength(1);
+  });
+
   it("is disabled", async () => {
     const onAction = vi.fn();
     const wrapper = mount(ActionMenu as any, {
