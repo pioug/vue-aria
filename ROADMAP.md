@@ -9315,3 +9315,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 61 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` root row-navigation focus parity update:
+  - expanded populated-tree root-focus coverage to assert ArrowDown row navigation keeps root focus-within metadata (`data-focused`, `data-focus-visible`) and updates active row focus.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 61 tests).
+- Validation: `npm run check -- --pretty false` passed.

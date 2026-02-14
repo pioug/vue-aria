@@ -680,6 +680,14 @@ describe("TreeView", () => {
     await nextTick();
     expect(tree.attributes("data-focus-visible")).toBe("true");
 
+    await photosRow!.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(document.activeElement).toBe(projectsRow!.element);
+    expect(tree.attributes("data-focused")).toBe("true");
+    expect(tree.attributes("data-focus-visible")).toBe("true");
+
     await tree.trigger("mousedown", { button: 0 });
     await nextTick();
     expect(tree.attributes("data-focused")).toBe("true");
