@@ -1951,6 +1951,56 @@ describe("TreeView", () => {
     expect(alphaRow!.attributes("data-selected")).toBeUndefined();
   });
 
+  it("replaces highlight selection while moving focus with ArrowUp", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      autoFocus: "first",
+      selectionMode: "multiple",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    await nextTick();
+
+    setInteractionModality("keyboard");
+    let alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    expect(alphaRow).toBeTruthy();
+    expect(document.activeElement).toBe(alphaRow!.element);
+
+    await alphaRow!.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+
+    let betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    expect(betaRow).toBeTruthy();
+    expect(alphaRow).toBeTruthy();
+    expect(document.activeElement).toBe(betaRow!.element);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+
+    await betaRow!.trigger("keydown", { key: "ArrowUp" });
+    await nextTick();
+
+    betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    expect(betaRow).toBeTruthy();
+    expect(alphaRow).toBeTruthy();
+    expect(document.activeElement).toBe(alphaRow!.element);
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    const selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(selected?.has("alpha")).toBe(true);
+    expect(selected?.has("beta")).toBe(false);
+    expect(selected?.size).toBe(1);
+    expect(alphaRow!.attributes("aria-selected")).toBe("true");
+    expect(betaRow!.attributes("aria-selected")).toBe("false");
+    expect(alphaRow!.attributes("data-selected")).toBe("true");
+    expect(betaRow!.attributes("data-selected")).toBeUndefined();
+  });
+
   it("toggles highlight selection with keyboard modifiers in multiple mode", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTree({
