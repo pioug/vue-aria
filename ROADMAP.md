@@ -3924,10 +3924,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
-- Ported test files: 1 (adapted)
-- Passing test files: 1 (validated 2026-02-14)
+- Ported test files: 2 (adapted)
+- Passing test files: 2 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
+  - Added adapted `Provider` coverage for OS color-scheme class application, explicit color-scheme override, and nested-provider inheritance/override behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -3946,7 +3947,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Port provider wrapper behavior from upstream (`ProviderWrapper`, context merge precedence, locale/direction warnings, and inherited prop plumbing).
-2. Migrate `Provider.test.tsx` and `Provider.ssr.test.js` with Vue harness adaptations.
+2. Continue migrating remaining `Provider.test.tsx` scenarios (prop forwarding/inherited props/responsive behavior) and add `Provider.ssr.test.js` Vue SSR adaptation.
 3. Mirror upstream Provider docs/examples and base style/class composition.
 
 ## 45) Session Log
