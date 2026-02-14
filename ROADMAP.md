@@ -6967,3 +6967,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 65 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded provider inheritance regression coverage to include read-only trigger gating (`DatePicker`) and inherited invalid visual state (`DateRangePicker`).
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 67 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -287,6 +287,37 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("inherits read-only state from Provider", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                isReadOnly: true,
+              },
+              () =>
+                h(DatePicker as any, {
+                  "aria-label": "Date picker",
+                  defaultValue: new CalendarDate(2019, 6, 5),
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
   it("prevents opening when date picker is read-only", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -875,6 +906,34 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("inherits range invalid state from Provider", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                validationState: "invalid",
+              },
+              () =>
+                h(DateRangePicker as any, {
+                  "aria-label": "Date range picker",
+                  defaultValue: {
+                    start: new CalendarDate(2019, 6, 5),
+                    end: new CalendarDate(2019, 6, 8),
+                  },
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-invalid");
   });
 
   it("prevents opening when range picker is read-only", async () => {
