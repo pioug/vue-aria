@@ -80,6 +80,10 @@ Use `defaultSelectedKeys` to seed initial row selection. Use `disabledKeys` to p
 
 Use `defaultSortDescriptor` to apply initial row ordering and header sort state before user interaction.
 
+## Controlled Sorting
+
+Use `sortDescriptor` with `onSortChange` for controlled sort state. Updating `sortDescriptor` from the parent updates both row ordering and the active header `aria-sort` value.
+
 ## Empty State Rendering
 
 Pass `renderEmptyState` to render custom body content when the collection has no rows.
