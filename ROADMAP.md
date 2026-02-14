@@ -7962,6 +7962,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented row key fallback behavior (`id` is used when `key` is omitted).
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/table-state` + `@vue-spectrum/table` controlled-selection parity update:
+  - added `useTableState` regression coverage to verify controlled `selectedKeys` getter updates propagate into selection manager reads.
+  - `packages/@vue-aria/table-state/test/useTableState.test.ts`
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-spectrum/table/test` passed (8 files, 56 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { GridNode } from "@vue-aria/grid-state";
+import { nextTick, ref } from "vue";
 import {
   TableCollection,
   UNSTABLE_useFilteredTableState,
@@ -189,5 +190,25 @@ describe("useTableState", () => {
       "row-1",
     ]);
     expect(filtered.selectionManager).not.toBe(state.selectionManager);
+  });
+
+  it("reacts to controlled selectedKeys getter updates", async () => {
+    const selectedKeys = ref<Set<string> | undefined>(new Set(["row-1"]));
+    const state = useTableState({
+      collection: createCollectionWithRows(),
+      selectionMode: "single",
+      get selectedKeys() {
+        return selectedKeys.value;
+      },
+    });
+
+    expect(state.selectionManager.isSelected("row-1")).toBe(true);
+    expect(state.selectionManager.isSelected("row-2")).toBe(false);
+
+    selectedKeys.value = new Set(["row-2"]);
+    await nextTick();
+
+    expect(state.selectionManager.isSelected("row-1")).toBe(false);
+    expect(state.selectionManager.isSelected("row-2")).toBe(true);
   });
 });
