@@ -96,7 +96,9 @@ export function useSelectableCollection(
           element instanceof HTMLElement &&
           (getInteractionModality() === "keyboard" || didAutoFocus)
         ) {
-          element.scrollIntoView({ block: "nearest" });
+          if (typeof element.scrollIntoView === "function") {
+            element.scrollIntoView({ block: "nearest" });
+          }
         }
       }
 
@@ -420,7 +422,9 @@ export function useSelectableCollection(
         }
 
         if (getInteractionModality() === "keyboard") {
-          element.scrollIntoView({ block: "nearest" });
+          if (typeof element.scrollIntoView === "function") {
+            element.scrollIntoView({ block: "nearest" });
+          }
         }
       }
     }

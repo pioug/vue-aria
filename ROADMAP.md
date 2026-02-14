@@ -8108,6 +8108,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 45 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` escape-clear parity update:
+  - added regression coverage to verify `Escape` clears checkbox-style multiple selection and emits an empty selected-key set.
+  - hardened `useSelectableCollection` to guard `scrollIntoView` calls when unavailable, preventing keyboard clear-selection focus-watch crashes in non-browser-like environments.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - `packages/@vue-aria/selection/src/useSelectableCollection.ts`
+- Validation: `npm test -- packages/@vue-aria/selection/test/useSelectableCollection.test.ts packages/@vue-spectrum/table/test` passed (3 files, 86 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
