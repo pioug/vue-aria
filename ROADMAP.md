@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/radio`
+- Current focus package: `@vue-spectrum/switch`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -103,7 +103,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/button`: In progress
 - `@vue-spectrum/checkbox`: In progress
 - `@vue-spectrum/radio`: In progress
-- `@vue-spectrum/switch`: Not started
+- `@vue-spectrum/switch`: In progress
 - `@vue-spectrum/textfield`: Not started
 - `@vue-spectrum/searchfield`: Not started
 - `@vue-spectrum/numberfield`: Not started
@@ -241,6 +241,40 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand migrated validation coverage to include upstream server/custom validation scenarios.
 - Validate visual parity against upstream docs examples for orientation/help-text/disabled/readOnly/emphasized states.
+
+## 4d) Active Package Slice: @vue-spectrum/switch
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/switch/src`
+  - `references/react-spectrum/packages/@react-spectrum/switch/test`
+  - `references/react-spectrum/packages/@react-spectrum/switch/docs`
+- Local package path: `packages/@vue-spectrum/switch`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Switch` and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/Switch.test.ts`
+  - `test/Switch.ssr.test.ts`
+- Initial parity coverage added:
+  - uncontrolled and controlled selection flows
+  - disabled/readOnly handling
+  - non-visible labeling plus `aria-labelledby`/`aria-describedby`
+  - additional-prop passthrough and `excludeFromTabOrder`
+  - form reset behavior
+  - quiet vs emphasized visual class assertions
+- Documentation scaffold added:
+  - `docs/packages/spectrum-switch.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-switch`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/switch`.
+
+### Remaining for completion
+- Validate visual parity against upstream docs examples and states.
+- Expand coverage for any upstream parity deltas discovered during full-suite execution.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
