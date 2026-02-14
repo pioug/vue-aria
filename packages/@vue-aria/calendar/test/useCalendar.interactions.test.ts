@@ -17,6 +17,16 @@ interface KeyboardCase {
   shiftKey?: boolean;
 }
 
+interface PaginationCase {
+  name: string;
+  visibleDuration: { days?: number; weeks?: number; months?: number };
+  pageBehavior?: "visible" | "single";
+  direction: "next" | "previous";
+  count: number;
+  expectedRangeStart: string;
+  expectedRangeEnd: string;
+}
+
 function triggerKey(
   handler: ((event: KeyboardEvent) => void) | undefined,
   key: string,
@@ -174,4 +184,127 @@ describe("useCalendar upstream interaction parity", () => {
 
     singleScope.stop();
   });
+
+  const paginationCases: PaginationCase[] = [
+    {
+      name: "3-week visible next",
+      visibleDuration: { weeks: 3 },
+      direction: "next",
+      count: 1,
+      expectedRangeStart: "2019-01-13",
+      expectedRangeEnd: "2019-02-02",
+    },
+    {
+      name: "3-week single next",
+      visibleDuration: { weeks: 3 },
+      pageBehavior: "single",
+      direction: "next",
+      count: 1,
+      expectedRangeStart: "2018-12-30",
+      expectedRangeEnd: "2019-01-19",
+    },
+    {
+      name: "5-day visible next",
+      visibleDuration: { days: 5 },
+      direction: "next",
+      count: 1,
+      expectedRangeStart: "2019-01-04",
+      expectedRangeEnd: "2019-01-08",
+    },
+    {
+      name: "5-day single next",
+      visibleDuration: { days: 5 },
+      pageBehavior: "single",
+      direction: "next",
+      count: 1,
+      expectedRangeStart: "2018-12-31",
+      expectedRangeEnd: "2019-01-04",
+    },
+  ];
+
+  it.each(paginationCases)(
+    "$name",
+    async ({
+      visibleDuration,
+      pageBehavior,
+      direction,
+      count,
+      expectedRangeStart,
+      expectedRangeEnd,
+    }) => {
+      const scope = effectScope();
+      let state!: ReturnType<typeof useCalendarState>;
+      let calendar!: ReturnType<typeof useCalendar>;
+
+      scope.run(() => {
+        state = useCalendarState({
+          locale: "en-US",
+          createCalendar,
+          defaultValue: new CalendarDate(2019, 1, 1),
+          visibleDuration,
+          pageBehavior,
+        });
+        calendar = useCalendar({ "aria-label": "Calendar" }, state);
+      });
+
+      for (let i = 0; i < count; i++) {
+        if (direction === "next") {
+          calendar.nextButtonProps.onPress?.();
+        } else {
+          calendar.prevButtonProps.onPress?.();
+        }
+        await flush();
+      }
+
+      expect(state.visibleRange.start.toString()).toBe(expectedRangeStart);
+      expect(state.visibleRange.end.toString()).toBe(expectedRangeEnd);
+      scope.stop();
+    }
+  );
+
+  it.each([
+    {
+      name: "en-US default",
+      locale: "en-US",
+      firstDayOfWeek: undefined,
+      expectedFirstDate: "2023-12-31",
+    },
+    {
+      name: "en-US monday",
+      locale: "en-US",
+      firstDayOfWeek: "mon" as const,
+      expectedFirstDate: "2024-01-01",
+    },
+    {
+      name: "en-US thursday",
+      locale: "en-US",
+      firstDayOfWeek: "thu" as const,
+      expectedFirstDate: "2023-12-28",
+    },
+    {
+      name: "fr-FR default",
+      locale: "fr-FR",
+      firstDayOfWeek: undefined,
+      expectedFirstDate: "2024-01-01",
+    },
+  ])(
+    "respects first-day-of-week matrix: $name",
+    ({ locale, firstDayOfWeek, expectedFirstDate }) => {
+      const scope = effectScope();
+      let state!: ReturnType<typeof useCalendarState>;
+
+      scope.run(() => {
+        state = useCalendarState({
+          locale,
+          createCalendar,
+          defaultValue: new CalendarDate(2024, 1, 1),
+          firstDayOfWeek,
+        });
+      });
+
+      const firstWeek = state.getDatesInWeek(0);
+      expect(firstWeek[0]?.toString()).toBe(expectedFirstDate);
+      scope.stop();
+    }
+  );
 });
