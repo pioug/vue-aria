@@ -9303,3 +9303,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 60 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` root pointer-modality parity update:
+  - expanded empty-tree root-focus coverage to assert pointer interaction clears root `data-focus-visible` while retaining focus state (`data-focused`) until blur.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 60 tests).
+- Validation: `npm run check -- --pretty false` passed.

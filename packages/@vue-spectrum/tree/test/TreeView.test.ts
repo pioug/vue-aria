@@ -170,6 +170,11 @@ describe("TreeView", () => {
     await nextTick();
     expect(tree.attributes("data-focus-visible")).toBe("true");
 
+    await tree.trigger("mousedown", { button: 0 });
+    await nextTick();
+    expect(tree.attributes("data-focused")).toBe("true");
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
+
     (tree.element as HTMLElement).blur();
     await nextTick();
     expect(tree.attributes("data-focused")).toBeUndefined();
