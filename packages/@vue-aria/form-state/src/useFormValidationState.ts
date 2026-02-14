@@ -97,7 +97,7 @@ export function useFormValidationState<T>(props: FormValidationProps<T>): FormVa
   );
 
   const clientError = computed<ValidationResult | null>(() => {
-    const validator = toValue(props.validate);
+    const validator = resolveValidationFunction(props.validate);
     const value = toValue(props.value);
     if (!validator || value == null) {
       return null;
@@ -227,6 +227,24 @@ function runValidate<T>(validate: ValidationFunction<T>, value: T): string[] {
   }
 
   return [];
+}
+
+function resolveValidationFunction<T>(
+  validate: MaybeRefOrGetter<ValidationFunction<T> | undefined> | undefined
+): ValidationFunction<T> | undefined {
+  if (validate == null) {
+    return undefined;
+  }
+
+  if (typeof validate !== "function") {
+    return toValue(validate);
+  }
+
+  if (validate.length > 0) {
+    return validate as ValidationFunction<T>;
+  }
+
+  return (validate as () => ValidationFunction<T> | undefined)();
 }
 
 function getValidationResult(errors: string[]): ValidationResult | null {

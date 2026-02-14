@@ -2,7 +2,7 @@ import { useRadioGroup } from "@vue-aria/radio";
 import { useRadioGroupState } from "@vue-aria/radio-state";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { useStyleProps } from "@vue-spectrum/utils";
-import { defineComponent, h, provide, ref, type PropType } from "vue";
+import { computed, defineComponent, h, provide, ref, type PropType } from "vue";
 import { RadioGroupContextSymbol } from "./context";
 import type { SpectrumRadioGroupProps } from "./types";
 
@@ -115,8 +115,10 @@ export const RadioGroup = defineComponent({
       ...attrs,
     } as Record<string, unknown>)) as SpectrumRadioGroupProps & Record<string, unknown>;
     const state = useRadioGroupState(provided);
-    const { radioGroupProps, labelProps, descriptionProps, errorMessageProps, isInvalid, validationErrors } =
+    const { radioGroupProps, labelProps, descriptionProps, errorMessageProps } =
       useRadioGroup(provided, state);
+    const isInvalid = computed(() => state.displayValidation.isInvalid);
+    const validationErrors = computed(() => state.displayValidation.validationErrors);
     const { styleProps } = useStyleProps(provided);
 
     provide(RadioGroupContextSymbol, {
@@ -152,6 +154,7 @@ export const RadioGroup = defineComponent({
             "div",
             {
               ...radioGroupProps,
+              "aria-invalid": isInvalid.value || undefined,
               class: [
                 "spectrum-FieldGroup-group",
                 {
@@ -171,14 +174,14 @@ export const RadioGroup = defineComponent({
                 provided.description
               )
             : null,
-          isInvalid && (provided.errorMessage || validationErrors.length > 0)
+          isInvalid.value && (provided.errorMessage || validationErrors.value.length > 0)
             ? h(
                 "div",
                 {
                   ...errorMessageProps,
                   class: "spectrum-HelpText is-invalid",
                 },
-                provided.errorMessage ?? validationErrors.join(", ")
+                provided.errorMessage ?? validationErrors.value.join(", ")
               )
             : null,
         ]

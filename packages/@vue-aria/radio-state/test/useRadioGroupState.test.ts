@@ -32,6 +32,19 @@ describe("useRadioGroupState", () => {
     expect(state.isInvalid).toBe(false);
   });
 
+  it("supports validate function in aria mode", () => {
+    const state = useRadioGroupState({
+      defaultValue: "dragons",
+      validate: (value: string | null) => (value === "dragons" ? "Too scary" : null),
+    } as any);
+
+    expect(state.displayValidation.isInvalid).toBe(true);
+    expect(state.displayValidation.validationErrors).toContain("Too scary");
+
+    state.setSelectedValue("dogs");
+    expect(state.displayValidation.isInvalid).toBe(false);
+  });
+
   it("queues native validation updates until commit", async () => {
     const state = useRadioGroupState({ validationBehavior: "native" });
 

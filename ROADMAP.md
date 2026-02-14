@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/provider`
+- Current focus package: `@vue-spectrum/radio`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -238,9 +238,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-radio`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/radio`.
+- Additional validation parity update:
+  - expanded validation coverage for custom and server-driven error scenarios in `validationBehavior="aria"` mode.
+  - fixed `useFormValidationState` validate-callback resolution so validator functions are not treated as getter refs.
+  - made `RadioGroup` invalid-state rendering react to live validation updates.
+  - `packages/@vue-spectrum/radio/test/Radio.test.ts`
+  - `packages/@vue-spectrum/radio/src/RadioGroup.ts`
+  - `packages/@vue-aria/radio-state/test/useRadioGroupState.test.ts`
+  - `packages/@vue-aria/form-state/src/useFormValidationState.ts`
 
 ### Remaining for completion
-- Expand migrated validation coverage to include upstream server/custom validation scenarios.
 - Validate visual parity against upstream docs examples for orientation/help-text/disabled/readOnly/emphasized states.
 
 ## 4d) Active Package Slice: @vue-spectrum/switch
@@ -7505,6 +7512,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/provider` docs parity update:
   - expanded provider docs with wrapper class-stack behavior, compatibility-mode class guidance, and `useProviderProps` undefined-vs-explicit override semantics.
   - `docs/packages/provider.md`
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/radio` validation parity update:
+  - added `RadioGroup` coverage for:
+    - `validate` function error handling in `validationBehavior="aria"` mode
+    - server validation errors via `FormValidationContext` in `validationBehavior="aria"` mode
+  - fixed `useFormValidationState` validate-function resolution for direct validator callbacks.
+  - updated `RadioGroup` invalid-state rendering to react to live validation state changes.
+  - `packages/@vue-spectrum/radio/test/Radio.test.ts`
+  - `packages/@vue-spectrum/radio/src/RadioGroup.ts`
+  - `packages/@vue-aria/radio-state/test/useRadioGroupState.test.ts`
+  - `packages/@vue-aria/form-state/src/useFormValidationState.ts`
+- Validation: `npm test -- packages/@vue-aria/form-state/test packages/@vue-aria/radio-state/test packages/@vue-spectrum/radio/test` passed (4 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.

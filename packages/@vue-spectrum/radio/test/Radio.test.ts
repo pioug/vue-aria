@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
+import { FormValidationContext } from "@vue-aria/form-state";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import { Radio } from "../src/Radio";
@@ -385,6 +386,55 @@ describe("RadioGroup + Radio", () => {
     for (const radio of radios) {
       expect((radio.element as HTMLInputElement).validity.valid).toBe(true);
     }
+  });
+
+  it("supports validate function in aria mode", async () => {
+    const wrapper = mountRadioGroup({
+      defaultValue: "dragons",
+      validate: (value: string | null) => (value === "dragons" ? "Too scary" : null),
+    });
+    const group = wrapper.get('[role="radiogroup"]');
+
+    expect(group.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Too scary");
+
+    const radios = wrapper.findAll('input[type="radio"]');
+    await radios[0]!.setValue(true);
+    await nextTick();
+
+    expect(wrapper.get('[role="radiogroup"]').attributes("aria-invalid")).toBeUndefined();
+    expect(wrapper.find(".spectrum-HelpText.is-invalid").exists()).toBe(false);
+  });
+
+  it("supports server validation in aria mode", async () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      pet: "You must choose a pet.",
+    });
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(RadioGroup as any, { "aria-label": "favorite pet", name: "pet" }, () => [
+              h(Radio as any, { value: "dogs" }, { default: () => "Dogs" }),
+              h(Radio as any, { value: "cats" }, { default: () => "Cats" }),
+              h(Radio as any, { value: "dragons" }, { default: () => "Dragons" }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const group = wrapper.get('[role="radiogroup"]');
+    expect(group.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("You must choose a pet.");
+
+    const radios = wrapper.findAll('input[type="radio"]');
+    await radios[0]!.setValue(true);
+    await nextTick();
+
+    expect(wrapper.get('[role="radiogroup"]').attributes("aria-invalid")).toBeUndefined();
+    expect(wrapper.find(".spectrum-HelpText.is-invalid").exists()).toBe(false);
   });
 
   it("uses quiet style by default and emphasized when requested", () => {
