@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/tree`
+- Current focus package: `@vue-aria/gridlist`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -61,7 +61,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/grid`: Complete
 - `@vue-aria/gridlist`: In progress
 - `@vue-aria/table`: In progress
-- `@vue-aria/tree`: In progress
+- `@vue-aria/tree`: Complete
 - `@vue-aria/calendar`: Complete
 - `@vue-aria/datepicker`: Complete
 - `@vue-aria/breadcrumbs`: Complete
@@ -2751,7 +2751,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/tree/intl`
 - Local package path:
   - `packages/@vue-aria/tree`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -2796,18 +2796,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [x] Baseline treegrid role + expand button labeling semantics covered in adapted tests.
-- [ ] Keyboard interaction parity is now partially covered via integrated harness tests; full matrix validation is still pending.
+- [x] Keyboard interaction parity validated through integrated harness tests (Enter/Arrow navigation, directional expand/collapse, focus propagation, and row-aria metadata assertions).
 
 ### Visual Parity
-- [ ] Pending upstream example-by-example comparison for tree row and disclosure markup.
+- [x] Visual and markup parity validated against upstream source/story tree row and disclosure patterns.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) beyond the current integrated harness tests.
-2. Complete remaining visual/accessibility parity validation for tree row/disclosure states.
-3. Monitor upstream `@react-aria/tree` and shared consumer stories for behavior drift.
+1. Monitor upstream `@react-aria/tree` and shared consumer stories for API/interaction drift.
+2. Add targeted regressions when downstream tree consumers surface new parity gaps.
 
 ## 31l) Package Record: @vue-aria/calendar-state
 - Upstream source path(s):
