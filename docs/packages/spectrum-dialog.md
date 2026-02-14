@@ -157,6 +157,8 @@ import { ButtonGroup, Content, Dialog, Footer, Header, Heading } from "@vue-spec
 </template>
 ```
 
+`Heading`, `Header`, and `ButtonGroup` include Spectrum conditional classes automatically (`--noHeader`, `--noHeading`, `--noTypeIcon`, `--noFooter`) based on composition.
+
 ## AlertDialog Example
 
 ```vue

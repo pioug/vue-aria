@@ -562,10 +562,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/dialog/src/Footer.ts`
   - `packages/@vue-spectrum/dialog/src/context.ts`
   - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+- Additional composition-class parity update:
+  - `Header` and `Heading` now add upstream slot-state classes for missing heading/type icon context (`spectrum-Dialog-header--noHeading`, `spectrum-Dialog-header--noTypeIcon`, `spectrum-Dialog-heading--noHeader`, `spectrum-Dialog-heading--noTypeIcon`).
+  - `packages/@vue-spectrum/dialog/src/Header.ts`
+  - `packages/@vue-spectrum/dialog/src/Heading.ts`
+  - `packages/@vue-spectrum/dialog/src/context.ts`
+  - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+  - `docs/packages/spectrum-dialog.md`
 
 ### Remaining for completion
 - Expand coverage for modal/popover/tray/fullscreen container behaviors and interaction semantics from upstream tests.
-- Continue aligning dialog composition slot conditional class variants (`Heading`/`Header` no-header/no-icon states) with upstream Spectrum structure.
 
 ## 4m) Active Package Slice: @vue-spectrum/tooltip
 - Upstream source path(s):
@@ -7430,6 +7436,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/interactions/src/useFocusable.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` composition parity update:
+  - aligned `Header`/`Heading` conditional slot classes with upstream Spectrum states for missing heading and missing type icon context.
+  - `packages/@vue-spectrum/dialog/src/context.ts`
+  - `packages/@vue-spectrum/dialog/src/Header.ts`
+  - `packages/@vue-spectrum/dialog/src/Heading.ts`
+  - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+  - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 33 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - aligned trigger overlay/arrow positioning wiring with upstream structure by:

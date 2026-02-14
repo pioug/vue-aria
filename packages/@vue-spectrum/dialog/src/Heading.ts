@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, inject } from "vue";
-import { DialogTitlePropsContext } from "./context";
+import { DialogHeaderContext, DialogTitlePropsContext } from "./context";
 
 /**
  * Dialog heading slot component that wires label ids for aria-labelledby.
@@ -17,6 +17,10 @@ export const Heading = defineComponent({
   setup(props, { attrs, slots }) {
     const titlePropsRef = inject(DialogTitlePropsContext, null);
     const titleProps = computed(() => titlePropsRef?.value ?? {});
+    const headerContextRef = inject(DialogHeaderContext, null);
+    const headerContext = computed(() => headerContextRef?.value ?? null);
+    const isInHeader = computed(() => Boolean(headerContext.value?.inHeader));
+    const hasTypeIcon = computed(() => Boolean(headerContext.value?.hasTypeIcon));
 
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
@@ -27,7 +31,14 @@ export const Heading = defineComponent({
         {
           ...titleProps.value,
           ...attrsRecord,
-          class: ["spectrum-Dialog-heading", attrsRecord.class],
+          class: [
+            "spectrum-Dialog-heading",
+            {
+              "spectrum-Dialog-heading--noHeader": !isInHeader.value,
+              "spectrum-Dialog-heading--noTypeIcon": !hasTypeIcon.value,
+            },
+            attrsRecord.class,
+          ],
         },
         slots.default?.()
       );

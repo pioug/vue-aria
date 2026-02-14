@@ -199,6 +199,8 @@ describe("Dialog", () => {
     const heading = wrapper.get(".spectrum-Dialog-heading");
     expect(heading.attributes("id")).toBeTruthy();
     expect(dialog.attributes("aria-labelledby")).toBe(heading.attributes("id"));
+    expect(heading.classes()).toContain("spectrum-Dialog-heading--noHeader");
+    expect(heading.classes()).toContain("spectrum-Dialog-heading--noTypeIcon");
   });
 
   it("renders composition slot class wrappers", () => {
@@ -221,6 +223,8 @@ describe("Dialog", () => {
     );
 
     expect(wrapper.find(".spectrum-Dialog-header").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-header--noHeading").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-header--noTypeIcon").exists()).toBe(true);
     expect(wrapper.find(".spectrum-Dialog-content").exists()).toBe(true);
     expect(wrapper.find(".spectrum-Dialog-footer").exists()).toBe(true);
     expect(wrapper.find(".spectrum-Dialog-buttonGroup").exists()).toBe(true);
@@ -244,5 +248,62 @@ describe("Dialog", () => {
 
     expect(wrapper.find(".spectrum-Dialog-buttonGroup").exists()).toBe(true);
     expect(wrapper.find(".spectrum-Dialog-buttonGroup--noFooter").exists()).toBe(true);
+  });
+
+  it("applies header noHeading class when no heading is present", () => {
+    const wrapper = mount(
+      {
+        components: { Dialog, Header },
+        template: `
+          <Dialog>
+            <Header>Header only</Header>
+          </Dialog>
+        `,
+      },
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.find(".spectrum-Dialog-header--noHeading").exists()).toBe(true);
+  });
+
+  it("removes noHeader class for Heading inside Header", () => {
+    const wrapper = mount(
+      {
+        components: { Dialog, Header, Heading },
+        template: `
+          <Dialog>
+            <Header>
+              <Heading>Dialog title</Heading>
+            </Header>
+          </Dialog>
+        `,
+      },
+      { attachTo: document.body }
+    );
+
+    const heading = wrapper.get(".spectrum-Dialog-heading");
+    expect(heading.classes()).not.toContain("spectrum-Dialog-heading--noHeader");
+  });
+
+  it("removes noTypeIcon classes when type icon is present in Header", () => {
+    const wrapper = mount(
+      {
+        components: { Dialog, Header, Heading },
+        template: `
+          <Dialog>
+            <Header>
+              <span class="spectrum-Dialog-typeIcon">i</span>
+              <Heading>Dialog title</Heading>
+            </Header>
+          </Dialog>
+        `,
+      },
+      { attachTo: document.body }
+    );
+
+    const header = wrapper.get(".spectrum-Dialog-header");
+    const heading = wrapper.get(".spectrum-Dialog-heading");
+    expect(header.classes()).not.toContain("spectrum-Dialog-header--noTypeIcon");
+    expect(heading.classes()).not.toContain("spectrum-Dialog-heading--noTypeIcon");
   });
 });

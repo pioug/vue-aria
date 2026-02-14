@@ -14,3 +14,10 @@ export const DialogContext: InjectionKey<Ref<DialogContextValue | null>> = Symbo
 export const DialogTitlePropsContext: InjectionKey<Ref<Record<string, unknown> | null>> = Symbol("SpectrumDialogTitlePropsContext");
 
 export const DialogFooterContext: InjectionKey<Ref<boolean>> = Symbol("SpectrumDialogFooterContext");
+
+export interface DialogHeaderContextValue {
+  inHeader: boolean;
+  hasTypeIcon: boolean;
+}
+
+export const DialogHeaderContext: InjectionKey<Ref<DialogHeaderContextValue | null>> = Symbol("SpectrumDialogHeaderContext");
