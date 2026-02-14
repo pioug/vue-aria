@@ -7772,6 +7772,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded combobox docs with controlled selection behavior, open-state control guidance, and form integration notes.
   - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` focus/disabled parity update:
+  - added `autoFocus` coverage to verify combobox input focus on mount.
+  - added disabled keyboard-interaction coverage to ensure Space-key presses on the trigger do not open popovers.
+  - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 12 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

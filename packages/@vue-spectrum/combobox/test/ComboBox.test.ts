@@ -176,6 +176,16 @@ describe("ComboBox", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("focuses input when autoFocus is true", async () => {
+    const wrapper = renderComboBox({
+      autoFocus: true,
+    });
+
+    await nextTick();
+
+    expect(document.activeElement).toBe(wrapper.get('input[role="combobox"]').element);
+  });
+
   it("supports slot-defined items and sections", async () => {
     const wrapper = mount(ComboBox as any, {
       props: {
@@ -213,6 +223,19 @@ describe("ComboBox", () => {
     expect(button.attributes("disabled")).toBeDefined();
 
     await button.trigger("click");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it("does not open on space key when disabled", async () => {
+    const wrapper = renderComboBox({
+      isDisabled: true,
+    });
+
+    const button = wrapper.get("button");
+    await button.trigger("keydown", { key: " " });
+    await button.trigger("keyup", { key: " " });
     await nextTick();
 
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
