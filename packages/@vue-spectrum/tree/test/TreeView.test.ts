@@ -1385,6 +1385,107 @@ describe("TreeView", () => {
     expect(rowTexts.some((text) => text.includes("Project 1"))).toBe(true);
   });
 
+  it("navigates between interactive row elements with ArrowLeft and ArrowRight", async () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Interactive navigation tree",
+        selectionMode: "multiple",
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => [
+                  h("span", "Projects"),
+                  h("button", {
+                    type: "button",
+                    "data-testid": "projects-action-1",
+                  }, "Open"),
+                  h("button", {
+                    type: "button",
+                    "data-testid": "projects-action-2",
+                  }, "More"),
+                ],
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "reports", textValue: "Reports" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Reports",
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+
+    const getProjectsRow = () => wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    const projectsRow = getProjectsRow();
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+
+    const checkbox = projectsRow!.get('input[type="checkbox"]');
+    const actionOne = projectsRow!.get('[data-testid="projects-action-1"]');
+    const actionTwo = projectsRow!.get('[data-testid="projects-action-2"]');
+
+    (projectsRow!.element as HTMLElement).focus();
+    await nextTick();
+    expect(document.activeElement).toBe(projectsRow!.element);
+
+    await projectsRow!.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    expect(document.activeElement).toBe(checkbox.element);
+
+    await projectsRow!.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    expect(document.activeElement).toBe(actionOne.element);
+
+    await projectsRow!.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    expect(document.activeElement).toBe(actionTwo.element);
+
+    await projectsRow!.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    expect(document.activeElement).toBe(projectsRow!.element);
+
+    await projectsRow!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    expect(getProjectsRow()!.attributes("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(getProjectsRow()!.element);
+
+    await getProjectsRow()!.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    expect(getProjectsRow()!.attributes("aria-expanded")).toBe("true");
+    expect(document.activeElement).toBe(getProjectsRow()!.element);
+
+    await getProjectsRow()!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    await getProjectsRow()!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    expect(document.activeElement).toBe(actionTwo.element);
+
+    await getProjectsRow()!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    expect(document.activeElement).toBe(actionOne.element);
+
+    await getProjectsRow()!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    expect(document.activeElement).toBe(checkbox.element);
+  });
+
   it("navigates visible rows with ArrowUp and ArrowDown", async () => {
     const wrapper = renderTree({
       defaultExpandedKeys: ["projects"],

@@ -9143,3 +9143,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 45 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-interactive arrow-key parity update:
+  - added migrated keyboard coverage to verify `ArrowLeft`/`ArrowRight` traversal between row-interactive elements (row, checkbox, inline controls) while preserving row-focused collapse/expand semantics.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 46 tests).
+- Validation: `npm run check -- --pretty false` passed.
