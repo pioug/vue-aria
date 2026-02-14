@@ -208,6 +208,56 @@ import { DateRangePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Placeholder Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Publish date"
+    placeholder="Pick a day"
+    :placeholder-value="new CalendarDate(2019, 6, 5)"
+  />
+
+  <DateRangePicker
+    aria-label="Promotion window"
+    placeholder="Pick a range"
+    :placeholder-value="new CalendarDate(2019, 6, 10)"
+  />
+</template>
+```
+
+## Availability and Bounds Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Delivery date"
+    :default-value="new CalendarDate(2019, 6, 15)"
+    :min-value="new CalendarDate(2019, 6, 10)"
+    :max-value="new CalendarDate(2019, 6, 20)"
+    :is-date-unavailable="(date) => date.day === 17"
+  />
+
+  <DateRangePicker
+    aria-label="Travel range"
+    :placeholder-value="new CalendarDate(2019, 6, 10)"
+    :min-value="new CalendarDate(2019, 6, 10)"
+    :max-value="new CalendarDate(2019, 6, 20)"
+    :is-date-unavailable="(date) => date.day === 12"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
