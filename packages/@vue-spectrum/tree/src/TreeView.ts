@@ -200,6 +200,7 @@ const TreeRow = defineComponent({
           "aria-selected": canSelectItem ? (isSelected ? "true" : "false") : undefined,
           "aria-disabled": isDisabled ? "true" : undefined,
           "aria-expanded": isExpanded == null ? undefined : (isExpanded ? "true" : "false"),
+          "data-has-child-items": props.node.hasChildNodes ? "true" : undefined,
           "data-level": String(props.node.level + 1),
           "data-disabled": isDisabled ? "true" : undefined,
           "data-expanded": isExpanded ? "true" : undefined,

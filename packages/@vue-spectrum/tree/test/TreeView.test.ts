@@ -799,6 +799,7 @@ describe("TreeView", () => {
     const row = wrapper.get('[role="row"]');
     expect(row.attributes("aria-label")).toBe("Deferred row");
     expect(row.attributes("aria-expanded")).toBeUndefined();
+    expect(row.attributes("data-has-child-items")).toBe("true");
     expect(row.find("button").exists()).toBe(true);
   });
 

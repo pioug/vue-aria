@@ -9180,3 +9180,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 52 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` deferred-child row metadata parity update:
+  - added row-level `data-has-child-items` annotation for expandable rows and expanded deferred-child chevron coverage to assert the attribute on `hasChildItems` rows before children load.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 52 tests).
+- Validation: `npm run check -- --pretty false` passed.
