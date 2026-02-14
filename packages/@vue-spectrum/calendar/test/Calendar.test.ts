@@ -270,6 +270,21 @@ describe("Calendar", () => {
     expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please choose a valid date");
   });
 
+  it("applies a computed aria-label including visible range context", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    const ariaLabel = root.attributes("aria-label");
+    expect(ariaLabel).toContain("Calendar");
+    expect(ariaLabel).toContain("June 2019");
+  });
+
   it("renders a range calendar", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {

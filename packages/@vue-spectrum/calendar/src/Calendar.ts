@@ -3,7 +3,7 @@ import { useButton } from "@vue-aria/button";
 import { useCalendar, useCalendarCell, useCalendarGrid, useRangeCalendar } from "@vue-aria/calendar";
 import { useCalendarState, useRangeCalendarState, type CalendarState, type RangeCalendarState } from "@vue-aria/calendar-state";
 import { useLocale } from "@vue-aria/i18n";
-import { defineComponent, h, computed, ref, type PropType, type Ref } from "vue";
+import { defineComponent, h, computed, ref, useAttrs, type PropType, type Ref } from "vue";
 
 type DateValue = any;
 type DateRangeValue = { start: DateValue; end: DateValue } | null;
@@ -33,6 +33,9 @@ export interface SpectrumCalendarProps {
   "aria-label"?: string | undefined;
   "aria-labelledby"?: string | undefined;
   "aria-describedby"?: string | undefined;
+  ariaLabel?: string | undefined;
+  ariaLabelledby?: string | undefined;
+  ariaDescribedby?: string | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, unknown> | undefined;
 }
@@ -461,8 +464,21 @@ export const Calendar = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    ariaLabel: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaLabelledby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaDescribedby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
   },
   setup(props) {
+    const attrs = useAttrs();
     const locale = useLocale();
     const visibleMonths = computed(() => Math.max(props.visibleMonths ?? 1, 1));
 
@@ -522,13 +538,13 @@ export const Calendar = defineComponent({
     const calendarAria = useCalendar(
       {
         get "aria-label"() {
-          return props["aria-label"];
+          return props["aria-label"] ?? props.ariaLabel ?? (attrs["aria-label"] as string | undefined);
         },
         get "aria-labelledby"() {
-          return props["aria-labelledby"];
+          return props["aria-labelledby"] ?? props.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
         },
         get "aria-describedby"() {
-          return props["aria-describedby"];
+          return props["aria-describedby"] ?? props.ariaDescribedby ?? (attrs["aria-describedby"] as string | undefined);
         },
         errorMessage: props.errorMessage,
       },
@@ -663,8 +679,21 @@ export const RangeCalendar = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    ariaLabel: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaLabelledby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaDescribedby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
   },
   setup(props) {
+    const attrs = useAttrs();
     const locale = useLocale();
     const visibleMonths = computed(() => Math.max(props.visibleMonths ?? 1, 1));
     const calendarElementRef = ref<HTMLElement | null>(null);
@@ -736,13 +765,13 @@ export const RangeCalendar = defineComponent({
     const calendarAria = useRangeCalendar(
       {
         get "aria-label"() {
-          return props["aria-label"];
+          return props["aria-label"] ?? props.ariaLabel ?? (attrs["aria-label"] as string | undefined);
         },
         get "aria-labelledby"() {
-          return props["aria-labelledby"];
+          return props["aria-labelledby"] ?? props.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
         },
         get "aria-describedby"() {
-          return props["aria-describedby"];
+          return props["aria-describedby"] ?? props.ariaDescribedby ?? (attrs["aria-describedby"] as string | undefined);
         },
         errorMessage: props.errorMessage,
       },

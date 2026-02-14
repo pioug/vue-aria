@@ -6540,6 +6540,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - controlled `RangeCalendar` range remaining stable until prop update
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 20 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - aligned ARIA prop ingestion for both camel-case and hyphenated forms (`ariaLabel`/`aria-label`, `ariaLabelledby`/`aria-labelledby`, `ariaDescribedby`/`aria-describedby`) in `Calendar` and `RangeCalendar`.
+  - added accessibility regression coverage for computed root `aria-label` content.
+    - `packages/@vue-spectrum/calendar/src/Calendar.ts`
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 21 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
