@@ -717,6 +717,53 @@ export function tableTests() {
     expect(lastSelection?.has("row-2")).toBe(true);
   });
 
+  it("defers checkbox-style row selection until press up when shouldSelectOnPressUp is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      shouldSelectOnPressUp: true,
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    const hasPointerEvent = typeof PointerEvent !== "undefined";
+    await bodyRows[1]!.trigger(
+      hasPointerEvent ? "pointerdown" : "mousedown",
+      hasPointerEvent
+        ? {
+            button: 0,
+            pointerId: 1,
+            pointerType: "mouse",
+          }
+        : { button: 0 }
+    );
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    await bodyRows[1]!.trigger(
+      hasPointerEvent ? "pointerup" : "mouseup",
+      hasPointerEvent
+        ? {
+            button: 0,
+            pointerId: 1,
+            pointerType: "mouse",
+          }
+        : { button: 0 }
+    );
+    await bodyRows[1]!.trigger("click", { button: 0 });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-2")).toBe(true);
+  });
+
   it("supports multiple checkbox-style selection callbacks", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
