@@ -5,6 +5,7 @@ export { getWrappedElement } from "./getWrappedElement";
 export { useHasChild } from "./useHasChild";
 export { useIsMobileDevice } from "./useIsMobileDevice";
 export { useMediaQuery } from "./useMediaQuery";
+export { useResizeObserver, useValueEffect } from "@vue-aria/utils";
 export {
   createDOMRef,
   createFocusableRef,
@@ -20,6 +21,7 @@ export {
   getResponsiveProp,
   passthroughStyle,
   responsiveDimensionValue,
+  viewStyleProps,
   useStyleProps,
 } from "./styleProps";
 

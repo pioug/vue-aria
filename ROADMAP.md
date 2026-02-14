@@ -4017,11 +4017,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `keepSpectrumClassNames`
   - `shouldKeepSpectrumClassNames`
   - `baseStyleProps`
+  - `viewStyleProps`
   - `dimensionValue`
   - `responsiveDimensionValue`
   - `convertStyleProps`
   - `useStyleProps`
   - `getResponsiveProp`
+  - `useValueEffect` (re-export from `@vue-aria/utils`)
+  - `useResizeObserver` (re-export from `@vue-aria/utils`)
 - Open adaptation notes:
   - Remaining upstream utils modules (class names, slots, DOM refs, media-query helper, etc.) are not yet ported.
 
@@ -4040,6 +4043,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted slot-context coverage for slot-prop merges, css-module slot mapping, and inherited-slot clearing.
   - Added adapted DOM-ref coverage for forwarded DOM/focusable wrappers and unwrap helpers.
   - Added adapted `getWrappedElement` coverage for string wrapping, single-vnode pass-through, and multi-child guard behavior.
+  - Expanded style-props coverage to include `viewStyleProps` border/background conversion behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs

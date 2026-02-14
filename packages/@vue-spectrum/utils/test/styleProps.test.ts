@@ -1,7 +1,7 @@
 import { createApp, defineComponent, h } from "vue";
 import { afterEach, describe, expect, it } from "vitest";
 import { BreakpointProvider } from "../src/BreakpointProvider";
-import { dimensionValue, getResponsiveProp, useStyleProps } from "../src/styleProps";
+import { dimensionValue, getResponsiveProp, useStyleProps, viewStyleProps } from "../src/styleProps";
 
 function mount(component: unknown) {
   const container = document.createElement("div");
@@ -70,6 +70,38 @@ describe("styleProps", () => {
 
     const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
     expect(probe?.style.width).toBe("200px");
+    unmount();
+  });
+
+  it("applies extended view style props", () => {
+    const Probe = defineComponent({
+      name: "ViewStylePropsProbe",
+      setup() {
+        const { styleProps } = useStyleProps(
+          {
+            backgroundColor: "gray-50",
+            borderWidth: "thin",
+            borderColor: "default",
+            borderRadius: "regular",
+          },
+          viewStyleProps
+        );
+        return () =>
+          h("div", {
+            "data-testid": "probe",
+            ...styleProps.value,
+          });
+      },
+    });
+
+    const { container, unmount } = mount(Probe);
+    const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
+    expect(probe?.style.backgroundColor).toContain("var(--spectrum-alias-background-color-gray-50");
+    expect(probe?.style.borderWidth).toBe("var(--spectrum-alias-border-size-thin)");
+    expect(probe?.style.borderStyle).toBe("solid");
+    expect(probe?.style.boxSizing).toBe("border-box");
+    expect(probe?.style.borderColor).toBe("var(--spectrum-alias-border-color)");
+    expect(probe?.style.borderRadius).toBe("var(--spectrum-alias-border-radius-regular)");
     unmount();
   });
 });

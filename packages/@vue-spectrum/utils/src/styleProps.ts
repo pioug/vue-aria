@@ -53,6 +53,48 @@ export const baseStyleProps: StyleHandlers = {
   gridRowStart: ["gridRowStart", passthroughStyle],
 };
 
+export const viewStyleProps: StyleHandlers = {
+  ...baseStyleProps,
+  backgroundColor: ["backgroundColor", backgroundColorValue],
+  borderWidth: ["borderWidth", borderSizeValue],
+  borderStartWidth: [rtl("borderLeftWidth", "borderRightWidth"), borderSizeValue],
+  borderEndWidth: [rtl("borderRightWidth", "borderLeftWidth"), borderSizeValue],
+  borderLeftWidth: ["borderLeftWidth", borderSizeValue],
+  borderRightWidth: ["borderRightWidth", borderSizeValue],
+  borderTopWidth: ["borderTopWidth", borderSizeValue],
+  borderBottomWidth: ["borderBottomWidth", borderSizeValue],
+  borderXWidth: [["borderLeftWidth", "borderRightWidth"], borderSizeValue],
+  borderYWidth: [["borderTopWidth", "borderBottomWidth"], borderSizeValue],
+  borderColor: ["borderColor", borderColorValue],
+  borderStartColor: [rtl("borderLeftColor", "borderRightColor"), borderColorValue],
+  borderEndColor: [rtl("borderRightColor", "borderLeftColor"), borderColorValue],
+  borderLeftColor: ["borderLeftColor", borderColorValue],
+  borderRightColor: ["borderRightColor", borderColorValue],
+  borderTopColor: ["borderTopColor", borderColorValue],
+  borderBottomColor: ["borderBottomColor", borderColorValue],
+  borderXColor: [["borderLeftColor", "borderRightColor"], borderColorValue],
+  borderYColor: [["borderTopColor", "borderBottomColor"], borderColorValue],
+  borderRadius: ["borderRadius", borderRadiusValue],
+  borderTopStartRadius: [rtl("borderTopLeftRadius", "borderTopRightRadius"), borderRadiusValue],
+  borderTopEndRadius: [rtl("borderTopRightRadius", "borderTopLeftRadius"), borderRadiusValue],
+  borderBottomStartRadius: [rtl("borderBottomLeftRadius", "borderBottomRightRadius"), borderRadiusValue],
+  borderBottomEndRadius: [rtl("borderBottomRightRadius", "borderBottomLeftRadius"), borderRadiusValue],
+  borderTopLeftRadius: ["borderTopLeftRadius", borderRadiusValue],
+  borderTopRightRadius: ["borderTopRightRadius", borderRadiusValue],
+  borderBottomLeftRadius: ["borderBottomLeftRadius", borderRadiusValue],
+  borderBottomRightRadius: ["borderBottomRightRadius", borderRadiusValue],
+  padding: ["padding", dimensionValue],
+  paddingStart: [rtl("paddingLeft", "paddingRight"), dimensionValue],
+  paddingEnd: [rtl("paddingRight", "paddingLeft"), dimensionValue],
+  paddingLeft: ["paddingLeft", dimensionValue],
+  paddingRight: ["paddingRight", dimensionValue],
+  paddingTop: ["paddingTop", dimensionValue],
+  paddingBottom: ["paddingBottom", dimensionValue],
+  paddingX: [["paddingLeft", "paddingRight"], dimensionValue],
+  paddingY: [["paddingTop", "paddingBottom"], dimensionValue],
+  overflow: ["overflow", passthroughStyle],
+};
+
 const borderStyleProps = {
   borderWidth: "borderStyle",
   borderLeftWidth: "borderLeftStyle",
@@ -101,6 +143,50 @@ export function responsiveDimensionValue(
 
 function hiddenValue(value: unknown): string | undefined {
   return value === true ? "none" : undefined;
+}
+
+function colorValue(value: string, type: "default" | "background" | "border" | "icon" | "status" = "default", version = 5) {
+  if (version > 5) {
+    return `var(--spectrum-${value}, var(--spectrum-semantic-${value}-color-${type}))`;
+  }
+
+  return `var(--spectrum-legacy-color-${value}, var(--spectrum-global-color-${value}, var(--spectrum-semantic-${value}-color-${type})))`;
+}
+
+function backgroundColorValue(value: unknown, version = 5): string | undefined {
+  if (!value || typeof value !== "string") {
+    return undefined;
+  }
+
+  return `var(--spectrum-alias-background-color-${value}, ${colorValue(value, "background", version)})`;
+}
+
+function borderColorValue(value: unknown, version = 5): string | undefined {
+  if (!value || typeof value !== "string") {
+    return undefined;
+  }
+
+  if (value === "default") {
+    return "var(--spectrum-alias-border-color)";
+  }
+
+  return `var(--spectrum-alias-border-color-${value}, ${colorValue(value, "border", version)})`;
+}
+
+function borderSizeValue(value?: unknown): string {
+  if (value && value !== "none") {
+    return `var(--spectrum-alias-border-size-${value})`;
+  }
+
+  return "0";
+}
+
+function borderRadiusValue(value: unknown): string | undefined {
+  if (!value || typeof value !== "string") {
+    return undefined;
+  }
+
+  return `var(--spectrum-alias-border-radius-${value})`;
 }
 
 function anyValue<T>(value: T): T {
