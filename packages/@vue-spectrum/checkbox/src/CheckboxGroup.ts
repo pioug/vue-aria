@@ -118,6 +118,7 @@ export const CheckboxGroup = defineComponent({
     provide(CheckboxGroupContextSymbol, {
       state,
       isEmphasized: provided.isEmphasized,
+      isInvalidFromGroupProps: Boolean(provided.isInvalid || provided.validationState === "invalid"),
     });
 
     expose({

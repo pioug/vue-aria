@@ -194,6 +194,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional parity coverage after initial scaffold:
   - Checkbox: controlled/uncontrolled value flows, indeterminate state, read-only behavior, and form reset.
   - CheckboxGroup: read-only propagation, unsupported-child-prop warnings, help text/error-message rendering, and form reset.
+  - Validation slice: native required behavior and group/individual invalid-state propagation coverage.
 - Documentation scaffold added:
   - `docs/packages/spectrum-checkbox.md`
   - `docs/packages/spectrum-checkbox-group.md`
@@ -202,7 +203,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/checkbox`.
 
 ### Remaining for completion
-- Expand migrated validation coverage from upstream checkbox/group suites.
 - Validate visual parity against upstream docs examples for quiet/emphasized/invalid states.
 - Complete docs parity with dedicated per-component pages matching upstream structure.
 

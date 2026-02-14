@@ -289,4 +289,25 @@ describe("Checkbox", () => {
     await nextTick();
     expect((checkbox.element as HTMLInputElement).checked).toBe(false);
   });
+
+  it("supports native required validation", async () => {
+    const wrapper = mount(Checkbox as any, {
+      props: {
+        isRequired: true,
+        validationBehavior: "native",
+      },
+      slots: {
+        default: () => "Terms and conditions",
+      },
+      attachTo: document.body,
+    });
+
+    const checkbox = wrapper.get('input[type="checkbox"]').element as HTMLInputElement;
+    expect(checkbox.hasAttribute("required")).toBe(true);
+    expect(checkbox.hasAttribute("aria-required")).toBe(false);
+    expect(checkbox.validity.valid).toBe(false);
+
+    await wrapper.get('input[type="checkbox"]').setValue(true);
+    expect(checkbox.validity.valid).toBe(true);
+  });
 });

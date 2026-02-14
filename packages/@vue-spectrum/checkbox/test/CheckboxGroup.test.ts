@@ -284,4 +284,68 @@ describe("CheckboxGroup", () => {
     expect((checkboxes[1]!.element as HTMLInputElement).checked).toBe(false);
     expect((checkboxes[2]!.element as HTMLInputElement).checked).toBe(false);
   });
+
+  it("adds aria-invalid to all checkboxes when group is invalid", () => {
+    const wrapper = mount(GroupFixture as any, {
+      props: {
+        label: "Favorite Pet",
+      },
+      attrs: {
+        isInvalid: true,
+      },
+    });
+
+    const checkboxes = wrapper.findAll('input[type="checkbox"]');
+    expect(checkboxes[0]!.attributes("aria-invalid")).toBe("true");
+    expect(checkboxes[1]!.attributes("aria-invalid")).toBe("true");
+    expect(checkboxes[2]!.attributes("aria-invalid")).toBe("true");
+  });
+
+  it("supports invalid state on individual checkboxes", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(CheckboxGroup as any, { label: "Agree to the following" }, {
+              default: () => [
+                h(Checkbox as any, { value: "terms", isInvalid: true }, { default: () => "Terms and conditions" }),
+                h(Checkbox as any, { value: "cookies", isInvalid: true }, { default: () => "Cookies" }),
+                h(Checkbox as any, { value: "privacy" }, { default: () => "Privacy policy" }),
+              ],
+            });
+        },
+      })
+    );
+
+    const checkboxes = wrapper.findAll('input[type="checkbox"]');
+    expect(checkboxes[0]!.attributes("aria-invalid")).toBe("true");
+    expect(checkboxes[1]!.attributes("aria-invalid")).toBe("true");
+    expect(checkboxes[2]!.attributes("aria-invalid")).toBeUndefined();
+  });
+
+  it("supports group-level native required validation", async () => {
+    const wrapper = mount(GroupFixture as any, {
+      props: {
+        label: "Agree to the following",
+      },
+      attrs: {
+        isRequired: true,
+        validationBehavior: "native",
+      },
+      attachTo: document.body,
+    });
+
+    const checkboxes = wrapper.findAll('input[type="checkbox"]');
+    for (const input of checkboxes) {
+      expect(input.attributes("required")).toBeDefined();
+      expect(input.attributes("aria-required")).toBeUndefined();
+      expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    }
+
+    await checkboxes[0]!.setValue(true);
+    for (const input of checkboxes) {
+      expect(input.attributes("required")).toBeUndefined();
+      expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+    }
+  });
 });

@@ -254,13 +254,23 @@ export const Checkbox = defineComponent({
             FocusRing,
             { focusRingClass: "focus-ring", autoFocus: props.autoFocus },
             {
-              default: () =>
-                h("input", {
+              default: () => {
+                const required =
+                  state && aria.inputProps.required !== undefined
+                    ? provided.isRequired ?? state.isRequired
+                    : aria.inputProps.required;
+                const ariaInvalid = (aria.inputProps["aria-invalid"] as string | undefined)
+                  ?? (groupContext?.isInvalidFromGroupProps ? "true" : undefined);
+
+                return h("input", {
                   ...aria.inputProps,
                   ref: inputRef,
                   class: "spectrum-Checkbox-input",
                   checked: isSelected.value,
-                }),
+                  required,
+                  "aria-invalid": ariaInvalid,
+                });
+              },
             }
           ),
           h(
