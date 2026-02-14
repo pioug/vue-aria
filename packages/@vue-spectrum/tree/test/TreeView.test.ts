@@ -1252,8 +1252,10 @@ describe("TreeView", () => {
       onExpandedChange,
     });
 
-    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
 
     await press(projectsRow!.get("button"));
     expect(onExpandedChange).toHaveBeenCalled();
@@ -1267,6 +1269,11 @@ describe("TreeView", () => {
       expandedKeys: ["projects"],
     });
     await nextTick();
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
 
     rowTexts = wrapper.findAll('[role="row"]').map((row) => row.text());
     expect(rowTexts.some((text) => text.includes("Project 1"))).toBe(true);

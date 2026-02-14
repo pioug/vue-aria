@@ -9278,3 +9278,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 57 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` controlled-expansion data-attribute parity update:
+  - expanded controlled-expansion coverage to assert row `data-expanded` mirrors `expandedKeys` state before and after controlled prop updates.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 57 tests).
+- Validation: `npm run check -- --pretty false` passed.
