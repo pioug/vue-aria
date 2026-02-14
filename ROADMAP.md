@@ -6852,6 +6852,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 32 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added `DateRangePicker` read-only trigger-gating coverage to ensure popover opening is blocked when `isReadOnly` is set.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 33 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

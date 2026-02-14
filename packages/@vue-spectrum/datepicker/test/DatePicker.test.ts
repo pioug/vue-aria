@@ -429,6 +429,28 @@ describe("DateRangePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("prevents opening when range picker is read-only", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isReadOnly: true,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get(".react-spectrum-DateRangePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
   it("updates rendered range in controlled mode", async () => {
     const wrapper = mount(DateRangePicker as any, {
       props: {
