@@ -1395,5 +1395,6 @@ describe("TreeView", () => {
     const rows = wrapper.findAll('[role="row"]');
     expect(rows.length).toBeGreaterThan(0);
     expect(document.activeElement).toBe(rows[0]!.element);
+    expect(rows[0]!.attributes("data-focused")).toBe("true");
   });
 });
