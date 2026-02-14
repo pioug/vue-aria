@@ -91,6 +91,9 @@ export const ToastContainer = defineComponent({
               },
               state.visibleToasts.map((toast, index) => {
                 const shouldFade = placementMeta.value.isCentered && index !== 0;
+                const transitionClass = ["toast", placementMeta.value.placement, shouldFade ? "fadeOnly" : null]
+                  .filter(Boolean)
+                  .join(" ");
                 return h(
                   "li",
                   {
@@ -98,11 +101,7 @@ export const ToastContainer = defineComponent({
                     class: "spectrum-ToastContainer-listitem",
                     style: {
                       viewTransitionName: String(toast.key),
-                      viewTransitionClass: [
-                        "toast",
-                        placementMeta.value.placement,
-                        { fadeOnly: shouldFade },
-                      ],
+                      viewTransitionClass: transitionClass,
                     },
                   },
                   [h(Toast as any, { toast, state })]

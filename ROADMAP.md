@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/toast`
+- Current focus package: `@vue-spectrum/dialog`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -124,7 +124,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/tooltip`: Complete
 - `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: In progress
-- `@vue-spectrum/toast`: In progress
+- `@vue-spectrum/toast`: Complete
 
 ## 4) Recommended Port Order
 1. Foundations: `utils`, `i18n`, `ssr`, `interactions`, `focus`, `collections`, `selection`.
@@ -643,7 +643,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/toast/test`
   - `references/react-spectrum/packages/@react-spectrum/toast/docs`
 - Local package path: `packages/@vue-spectrum/toast`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -674,9 +674,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Supporting integration fix:
   - `useToastRegion` now tracks focused toast via bubbling `focusin`/`focusout` in addition to `focus`/`blur` handlers.
   - `packages/@vue-aria/toast/src/useToastRegion.ts`
+- Additional visual parity alignment:
+  - `viewTransitionClass` strings now match upstream placement/fade semantics (`toast <placement> [fadeOnly]`).
+  - added transition/placement assertions for centered and non-centered toast placements.
+  - `packages/@vue-spectrum/toast/src/ToastContainer.ts`
+  - `packages/@vue-spectrum/toast/test/ToastContainer.test.ts`
 
 ### Remaining for completion
-- Align visual styling parity with upstream CSS transitions and placement-specific animation details.
+- None currently tracked in this slice.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
@@ -7454,6 +7459,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented `F6` keyboard entry into the toast region for action/close navigation.
     - `docs/packages/spectrum-toast.md`
 - Validation: `npm test -- packages/@vue-spectrum/toast/test packages/@vue-aria/toast/test` passed (4 files, 26 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/toast` visual parity update:
+  - aligned list-item transition classes with upstream placement/fade behavior by emitting deterministic `viewTransitionClass` strings.
+    - `packages/@vue-spectrum/toast/src/ToastContainer.ts`
+  - expanded transition/placement assertions for centered (`fadeOnly`) and non-centered placement variants.
+    - `packages/@vue-spectrum/toast/test/ToastContainer.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/toast/test packages/@vue-aria/toast/test` passed (4 files, 28 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.

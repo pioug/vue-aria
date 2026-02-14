@@ -284,6 +284,61 @@ describe("ToastContainer", () => {
     expect(region?.getAttribute("aria-label")).toBe("Toasts");
   });
 
+  it("applies centered transition classes with fadeOnly for stacked toasts", async () => {
+    const wrapper = renderComponent();
+    await nextTick();
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await nextTick();
+
+    const region = document.body.querySelector('[role="region"]') as HTMLElement;
+    expect(region.getAttribute("data-position")).toBe("bottom");
+    expect(region.getAttribute("data-placement")).toBe("center");
+
+    const items = Array.from(document.body.querySelectorAll(".spectrum-ToastContainer-listitem")) as HTMLElement[];
+    expect(items).toHaveLength(2);
+
+    const firstStyle = items[0].getAttribute("style") ?? "";
+    const secondStyle = items[1].getAttribute("style") ?? "";
+    expect(firstStyle).toContain("view-transition-class: toast bottom");
+    expect(firstStyle).not.toContain("fadeOnly");
+    expect(secondStyle).toContain("view-transition-class: toast bottom fadeOnly");
+  });
+
+  it("applies placement-specific transition classes for non-centered placements", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", [
+              h(ToastContainer as any, { placement: "top end" }),
+              h(RenderToastButton as any),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+    mountedWrappers.push(wrapper);
+    await nextTick();
+
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await nextTick();
+
+    const region = document.body.querySelector('[role="region"]') as HTMLElement;
+    expect(region.getAttribute("data-position")).toBe("top");
+    expect(region.getAttribute("data-placement")).toBe("end");
+
+    const items = Array.from(document.body.querySelectorAll(".spectrum-ToastContainer-listitem")) as HTMLElement[];
+    expect(items).toHaveLength(2);
+
+    const firstStyle = items[0].getAttribute("style") ?? "";
+    const secondStyle = items[1].getAttribute("style") ?? "";
+    expect(firstStyle).toContain("view-transition-class: toast end");
+    expect(secondStyle).toContain("view-transition-class: toast end");
+    expect(secondStyle).not.toContain("fadeOnly");
+  });
+
   it("focuses the toast region on F6", async () => {
     const wrapper = renderComponent(h(RenderToastButton as any, { timeout: 5000 }));
     await nextTick();
