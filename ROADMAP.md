@@ -6947,3 +6947,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 63 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added `isQuiet` prop support to datepicker/range-picker root visual-state classes.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - expanded visual-state regression coverage to include `is-quiet` root class behavior in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - updated shared key-prop reference to include `isQuiet`.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 63 tests).
+- Validation: `npm run check -- --pretty false` passed.

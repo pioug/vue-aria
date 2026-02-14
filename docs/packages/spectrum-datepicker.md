@@ -283,6 +283,6 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 
 ## Key Props
 
-- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
+- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isQuiet`, `isInvalid`, `validationState`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.

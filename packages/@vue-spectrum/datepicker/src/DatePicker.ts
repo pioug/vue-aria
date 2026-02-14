@@ -18,6 +18,7 @@ export interface SpectrumDatePickerProps {
   isDisabled?: boolean | undefined;
   isReadOnly?: boolean | undefined;
   isRequired?: boolean | undefined;
+  isQuiet?: boolean | undefined;
   isInvalid?: boolean | undefined;
   validationState?: "valid" | "invalid" | null | undefined;
   errorMessage?: string | undefined;
@@ -102,6 +103,10 @@ export const DatePicker = defineComponent({
       default: undefined,
     },
     isRequired: {
+      type: Boolean,
+      default: undefined,
+    },
+    isQuiet: {
       type: Boolean,
       default: undefined,
     },
@@ -364,6 +369,7 @@ export const DatePicker = defineComponent({
                 || state.isInvalid
               ),
               "is-disabled": Boolean(props.isDisabled),
+              "is-quiet": Boolean(props.isQuiet),
             },
             props.UNSAFE_className,
           ],
@@ -501,6 +507,10 @@ export const DateRangePicker = defineComponent({
       default: undefined,
     },
     isRequired: {
+      type: Boolean,
+      default: undefined,
+    },
+    isQuiet: {
       type: Boolean,
       default: undefined,
     },
@@ -782,6 +792,7 @@ export const DateRangePicker = defineComponent({
                 || state.isInvalid
               ),
               "is-disabled": Boolean(props.isDisabled),
+              "is-quiet": Boolean(props.isQuiet),
             },
             props.UNSAFE_className,
           ],

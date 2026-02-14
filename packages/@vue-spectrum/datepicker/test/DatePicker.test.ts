@@ -370,7 +370,7 @@ describe("DatePicker", () => {
     expect(group.attributes("aria-labelledby")).toContain("team-date-label");
   });
 
-  it("applies invalid and disabled classes to date picker root", () => {
+  it("applies invalid, disabled, and quiet classes to date picker root", () => {
     const invalidWrapper = mount(DatePicker as any, {
       props: {
         "aria-label": "Date picker",
@@ -387,9 +387,18 @@ describe("DatePicker", () => {
       },
       attachTo: document.body,
     });
+    const quietWrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isQuiet: true,
+      },
+      attachTo: document.body,
+    });
 
     expect(invalidWrapper.get(".react-spectrum-DatePicker").classes()).toContain("is-invalid");
     expect(disabledWrapper.get(".react-spectrum-DatePicker").classes()).toContain("is-disabled");
+    expect(quietWrapper.get(".react-spectrum-DatePicker").classes()).toContain("is-quiet");
   });
 
   it("renders custom error messages when invalid", () => {
@@ -1018,7 +1027,7 @@ describe("DateRangePicker", () => {
     expect(group.attributes("aria-labelledby")).toContain("team-range-label");
   });
 
-  it("applies invalid and disabled classes to range picker root", () => {
+  it("applies invalid, disabled, and quiet classes to range picker root", () => {
     const invalidWrapper = mount(DateRangePicker as any, {
       props: {
         "aria-label": "Date range picker",
@@ -1041,9 +1050,21 @@ describe("DateRangePicker", () => {
       },
       attachTo: document.body,
     });
+    const quietWrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isQuiet: true,
+      },
+      attachTo: document.body,
+    });
 
     expect(invalidWrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-invalid");
     expect(disabledWrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-disabled");
+    expect(quietWrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-quiet");
   });
 
   it("renders custom range error messages when invalid", () => {
