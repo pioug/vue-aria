@@ -1,0 +1,73 @@
+import { describe, expect, it, vi } from "vitest";
+import { useToastState } from "../src";
+
+describe("useToastState", () => {
+  it("adds a toast via add", () => {
+    const state = useToastState<string>();
+    expect(state.visibleToasts).toStrictEqual([]);
+
+    state.add("Toast Message", { timeout: 0 });
+    expect(state.visibleToasts).toHaveLength(1);
+    expect(state.visibleToasts[0].content).toBe("Toast Message");
+    expect(state.visibleToasts[0].timeout).toBe(0);
+    expect(state.visibleToasts[0].timer).toBeUndefined();
+    expect(state.visibleToasts[0]).toHaveProperty("key");
+  });
+
+  it("adds a toast with a timer", () => {
+    const state = useToastState<string>();
+    expect(state.visibleToasts).toStrictEqual([]);
+
+    state.add("Test", { timeout: 5000 });
+    expect(state.visibleToasts).toHaveLength(1);
+    expect(state.visibleToasts[0].content).toBe("Test");
+    expect(state.visibleToasts[0].timeout).toBe(5000);
+    expect(state.visibleToasts[0].timer).toBeDefined();
+  });
+
+  it("supports multiple visible toasts when configured", () => {
+    const state = useToastState<string>({ maxVisibleToasts: 2 });
+    state.add("First", { timeout: 0 });
+    state.add("Second", { timeout: 0 });
+
+    expect(state.visibleToasts).toHaveLength(2);
+    expect(state.visibleToasts[0].content).toBe("Second");
+    expect(state.visibleToasts[1].content).toBe("First");
+  });
+
+  it("queues toasts when maxVisibleToasts is 1", () => {
+    const state = useToastState<string>();
+    state.add("First", { timeout: 0 });
+    state.add("Second", { timeout: 0 });
+
+    expect(state.visibleToasts).toHaveLength(1);
+    expect(state.visibleToasts[0].content).toBe("Second");
+
+    state.close(state.visibleToasts[0].key);
+    expect(state.visibleToasts).toHaveLength(1);
+    expect(state.visibleToasts[0].content).toBe("First");
+  });
+
+  it("uses timeout timers when resumed", () => {
+    vi.useFakeTimers();
+    const state = useToastState<string>();
+    state.add("Timed", { timeout: 1000 });
+
+    state.resumeAll();
+    expect(state.visibleToasts).toHaveLength(1);
+
+    vi.advanceTimersByTime(1000);
+    expect(state.visibleToasts).toHaveLength(0);
+    vi.useRealTimers();
+  });
+
+  it("uses wrapUpdate on add and close", () => {
+    const wrapUpdate = vi.fn((fn: () => void) => fn());
+    const state = useToastState<string>({ wrapUpdate });
+    state.add("Toast A", { timeout: 0 });
+    state.add("Toast B", { timeout: 0 });
+    state.close(state.visibleToasts[0].key);
+
+    expect(wrapUpdate).toHaveBeenCalledTimes(3);
+  });
+});

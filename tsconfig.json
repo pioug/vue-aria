@@ -70,6 +70,7 @@
       "@vue-aria/tabs-state": ["packages/@vue-aria/tabs-state/src/index.ts"],
       "@vue-aria/tabs": ["packages/@vue-aria/tabs/src/index.ts"],
       "@vue-aria/toast": ["packages/@vue-aria/toast/src/index.ts"],
+      "@vue-aria/toast-state": ["packages/@vue-aria/toast-state/src/index.ts"],
       "@vue-aria/tooltip-state": ["packages/@vue-aria/tooltip-state/src/index.ts"],
       "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
       "@vue-aria/disclosure-state": ["packages/@vue-aria/disclosure-state/src/index.ts"],

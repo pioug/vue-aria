@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/tooltip`
+- Current focus package: `@vue-aria/toast-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -84,6 +84,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/numberfield-state`: Complete
 - `@vue-aria/slider-state`: Complete
 - `@vue-aria/overlays-state`: Complete
+- `@vue-aria/toast-state`: In progress
 - `@vue-aria/tooltip-state`: Complete
 - `@vue-aria/disclosure-state`: Complete
 - `@vue-aria/list-state`: Complete
@@ -586,6 +587,37 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand parity coverage for trigger compositions that rely on `@vue-spectrum/button` and collection-builder wrapper behavior.
 - Align tooltip visual details (semantic icon implementation and CSS-variable spacing/arrow behavior) with upstream Spectrum rendering.
+
+## 4n) Active Package Slice: @vue-aria/toast-state
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-stately/toast/src`
+  - `references/react-spectrum/packages/@react-stately/toast/test`
+  - `references/react-spectrum/packages/@react-stately/toast/docs`
+- Local package path: `packages/@vue-aria/toast-state`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `useToastState`, `useToastQueue`, `ToastQueue`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/useToastState.test.ts`
+- Initial parity coverage added:
+  - add/close queue operations and visible ordering
+  - max-visible queueing behavior
+  - timer-based auto-close with pause/resume lifecycle
+  - `wrapUpdate` callback usage
+- Documentation scaffold added:
+  - `docs/packages/toast-state.md`
+  - VitePress nav/sidebar entry for `/packages/toast-state`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-aria/toast-state`.
+
+### Remaining for completion
+- Expand timer edge-case coverage (pause/resume with multiple visible toasts and partial remaining durations).
+- Validate downstream integration in `@vue-spectrum/toast` container behavior.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
