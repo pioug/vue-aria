@@ -217,6 +217,23 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("prevents selecting disabled rows via pointer", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      disabledKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("supports UNSAFE className passthrough", () => {
     const wrapper = renderTable({
       UNSAFE_className: "test-class",
