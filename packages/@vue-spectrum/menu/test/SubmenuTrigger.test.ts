@@ -70,6 +70,62 @@ describe("SubmenuTrigger", () => {
     expect(document.body.textContent).toContain("Sub item");
   });
 
+  it("opens a nested submenu with keyboard Enter and closes on Escape", async () => {
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    submenuTriggerItem?.focus();
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const openedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(openedTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(openedTrigger?.getAttribute("aria-controls")).toBeTruthy();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    const submenuPopover = Array.from(document.body.querySelectorAll(".spectrum-Menu-popover"))
+      .find((popover) => popover.textContent?.includes("Sub item")) as HTMLElement | undefined;
+    expect(submenuPopover).toBeTruthy();
+    submenuPopover?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const collapsedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(collapsedTrigger?.getAttribute("aria-expanded")).toBe("false");
+    expect(collapsedTrigger?.getAttribute("aria-controls")).toBeNull();
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+  });
+
   it("links submenu trigger aria-controls and submenu aria-labelledby when opened", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {

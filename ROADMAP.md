@@ -9687,3 +9687,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 54 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu Enter-key parity fix:
+  - forwarded full `submenuTriggerProps` through `useMenuItem` in `MenuItem`, restoring submenu trigger interaction handlers (`onPressStart`, `onPress`, `onHoverChange`, keyboard handlers) while preserving live ARIA override wiring.
+    - `packages/@vue-spectrum/menu/src/MenuItem.ts`
+  - added migrated `SubmenuTrigger` coverage asserting `Enter` opens a submenu trigger item and `Escape` collapses it back to `aria-expanded="false"` with `aria-controls` cleared.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 17 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 55 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.

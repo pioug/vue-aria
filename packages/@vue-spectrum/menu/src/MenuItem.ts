@@ -71,11 +71,9 @@ export const MenuItem = defineComponent({
           || props.state.disabledKeys.has(props.item.key),
         isVirtualized: props.isVirtualized,
         "aria-label": props.item["aria-label"],
-        "aria-haspopup": props.submenuTriggerProps?.["aria-haspopup"] as "menu" | "dialog" | undefined,
-        "aria-expanded": props.submenuTriggerProps?.["aria-expanded"] as boolean | "true" | "false" | undefined,
-        "aria-controls": props.submenuTriggerProps?.["aria-controls"] as string | undefined,
         closeOnSelect: props.closeOnSelect,
         onClose: props.onClose,
+        ...(props.submenuTriggerProps ?? {}),
       },
       props.state as any,
       props.submenuTriggerRef ?? refObject
@@ -211,7 +209,6 @@ export const MenuItem = defineComponent({
     return () => {
       const ElementType = ((props.item.props as Record<string, unknown>).href ? "a" : "div") as "a" | "div";
       const submenuProps = props.submenuTriggerProps ?? {};
-      const submenuKeyDown = submenuProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined;
       const setItemRef = (value: HTMLElement | null) => {
         itemRef.value = value;
         if (props.submenuTriggerRef) {
@@ -221,13 +218,6 @@ export const MenuItem = defineComponent({
 
       const mergedProps = mergeProps(
         menuItemAria.menuItemProps,
-        submenuProps,
-        submenuKeyDown
-          ? {
-              onKeydown: submenuKeyDown,
-              onKeyDown: submenuKeyDown,
-            }
-          : undefined,
         {
           role: role.value,
           "aria-checked": isSelectable.value ? isSelected.value : undefined,
