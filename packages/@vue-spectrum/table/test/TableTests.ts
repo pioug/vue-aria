@@ -1192,6 +1192,26 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("does not emit controlled checkbox deselection when disallowEmptySelection is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+      disallowEmptySelection: true,
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports UNSAFE className passthrough", () => {
     const wrapper = renderTable({
       UNSAFE_className: "test-class",
