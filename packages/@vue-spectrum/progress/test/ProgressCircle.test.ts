@@ -209,4 +209,36 @@ describe("ProgressCircle", () => {
     });
     expect(wrapper.find('[data-testid="test"]').exists()).toBe(true);
   });
+
+  it("supports visual classes for size, staticColor, and overBackground variant", () => {
+    const smallWhiteOverBackground = mount(ProgressCircle as any, {
+      props: {
+        value: 25,
+        size: "S",
+        staticColor: "white",
+        variant: "overBackground",
+      },
+      attrs: {
+        "aria-label": "Progress",
+      },
+    });
+    const smallCircle = smallWhiteOverBackground.get('[role="progressbar"]');
+    expect(smallCircle.classes()).toContain("spectrum-CircleLoader--small");
+    expect(smallCircle.classes()).toContain("spectrum-CircleLoader--staticWhite");
+    expect(smallCircle.classes()).toContain("spectrum-CircleLoader--overBackground");
+
+    const largeBlack = mount(ProgressCircle as any, {
+      props: {
+        value: 25,
+        size: "L",
+        staticColor: "black",
+      },
+      attrs: {
+        "aria-label": "Progress",
+      },
+    });
+    const largeCircle = largeBlack.get('[role="progressbar"]');
+    expect(largeCircle.classes()).toContain("spectrum-CircleLoader--large");
+    expect(largeCircle.classes()).toContain("spectrum-CircleLoader--staticBlack");
+  });
 });

@@ -58,6 +58,16 @@ import { ProgressCircle } from "@vue-spectrum/progress";
 </template>
 ```
 
+### Over background variant
+
+```vue
+<template>
+  <div style="background: #095aba; padding: 12px; display: inline-block;">
+    <ProgressCircle aria-label="Loading..." variant="overBackground" :value="45" />
+  </div>
+</template>
+```
+
 ### Size
 
 ```vue

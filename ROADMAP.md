@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/progress`
+- Current focus package: `@vue-spectrum/meter`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -122,7 +122,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/breadcrumbs`: In progress
 - `@vue-spectrum/dialog`: Complete
 - `@vue-spectrum/tooltip`: Complete
-- `@vue-spectrum/progress`: In progress
+- `@vue-spectrum/progress`: Complete
 - `@vue-spectrum/meter`: In progress
 - `@vue-spectrum/toast`: Complete
 
@@ -448,7 +448,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/progress/test`
   - `references/react-spectrum/packages/@react-spectrum/progress/docs`
 - Local package path: `packages/@vue-spectrum/progress`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -473,10 +473,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entries for `/packages/spectrum-progressbar` and `/packages/spectrum-progresscircle`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/progress`.
+- Additional visual parity update:
+  - expanded class-level coverage for both components:
+    - `size` variants
+    - `staticColor` variants (`white`/`black`)
+    - `variant="overBackground"` behavior
+  - expanded docs with explicit `overBackground` examples for bar and circle.
+  - `packages/@vue-spectrum/progress/test/ProgressBar.test.ts`
+  - `packages/@vue-spectrum/progress/test/ProgressCircle.test.ts`
+  - `docs/packages/spectrum-progressbar.md`
+  - `docs/packages/spectrum-progresscircle.md`
 
 ### Remaining for completion
-- Validate visual parity against upstream docs examples for staticColor and size variants.
-- Expand parity validation for `variant="overBackground"` in both components.
+- None currently tracked in this slice.
 
 ## 4i) Active Package Slice: @vue-spectrum/meter
 - Upstream source path(s):
@@ -7574,10 +7583,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - marked `@vue-spectrum/searchfield` slice complete and advanced focus to `@vue-spectrum/progress`.
   - `packages/@vue-spectrum/searchfield/test/SearchField.test.ts`
   - `packages/@vue-spectrum/searchfield/src/SearchField.ts`
-  - `packages/@vue-aria/searchfield/src/useSearchField.ts`
-  - `docs/packages/spectrum-searchfield.md`
+- `packages/@vue-aria/searchfield/src/useSearchField.ts`
+- `docs/packages/spectrum-searchfield.md`
 - Validation: `npm test -- packages/@vue-spectrum/searchfield/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/progress` visual parity update:
+  - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
+  - expanded progress docs with explicit `overBackground` examples for both components.
+  - marked `@vue-spectrum/progress` slice complete and advanced focus to `@vue-spectrum/meter`.
+  - `packages/@vue-spectrum/progress/test/ProgressBar.test.ts`
+  - `packages/@vue-spectrum/progress/test/ProgressCircle.test.ts`
+  - `docs/packages/spectrum-progressbar.md`
+  - `docs/packages/spectrum-progresscircle.md`
+- Validation: `npm test -- packages/@vue-spectrum/progress/test` passed (4 files, 26 tests).
 - Additional `@vue-spectrum/provider` forwarding parity update:
   - added real-component provider forwarding coverage for:
     - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`

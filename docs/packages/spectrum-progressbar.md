@@ -74,6 +74,16 @@ Use `labelPosition="side"` to move labels to the side, and `showValueLabel={fals
 </template>
 ```
 
+### Over background variant
+
+```vue
+<template>
+  <div style="background: #095aba; padding: 12px;">
+    <ProgressBar label="Loading..." variant="overBackground" :value="45" />
+  </div>
+</template>
+```
+
 ### Size
 
 ```vue

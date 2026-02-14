@@ -101,4 +101,30 @@ describe("ProgressBar", () => {
 
     expect(wrapper.find('[data-testid="test"]').exists()).toBe(true);
   });
+
+  it("supports visual classes for size, staticColor, and overBackground variant", () => {
+    const smallWhiteOverBackground = mount(ProgressBar as any, {
+      props: {
+        label: "Progress Bar",
+        size: "S",
+        staticColor: "white",
+        variant: "overBackground",
+      },
+    });
+    const smallBar = smallWhiteOverBackground.get('[role="progressbar"]');
+    expect(smallBar.classes()).toContain("spectrum-BarLoader--small");
+    expect(smallBar.classes()).toContain("spectrum-BarLoader--staticWhite");
+    expect(smallBar.classes()).toContain("spectrum-BarLoader--overBackground");
+
+    const largeBlack = mount(ProgressBar as any, {
+      props: {
+        label: "Progress Bar",
+        size: "L",
+        staticColor: "black",
+      },
+    });
+    const largeBar = largeBlack.get('[role="progressbar"]');
+    expect(largeBar.classes()).toContain("spectrum-BarLoader--large");
+    expect(largeBar.classes()).toContain("spectrum-BarLoader--staticBlack");
+  });
 });
