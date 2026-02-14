@@ -9085,3 +9085,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 29 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-expansion parity update:
+  - added migrated coverage for disabled expandable rows to verify `disabledBehavior="all"` blocks row-driven expansion while `disabledBehavior="selection"` preserves expansion behavior.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 31 tests).
+- Validation: `npm run check -- --pretty false` passed.
