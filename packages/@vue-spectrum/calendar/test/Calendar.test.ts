@@ -723,6 +723,26 @@ describe("Calendar", () => {
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
+  it("disables range-calendar next navigation when maxValue blocks paging", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2020, 1, 10),
+          end: new CalendarDate(2020, 1, 12),
+        },
+        maxValue: new CalendarDate(2020, 1, 31),
+      },
+      attachTo: document.body,
+    });
+
+    const nextButton = wrapper.findAll(".react-spectrum-Calendar-navButton")[1];
+    expect(nextButton).toBeTruthy();
+    const disabledAttr = nextButton?.attributes("disabled");
+    const ariaDisabled = nextButton?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
   it("renders selected range cell aria labels without unresolved placeholders", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {
@@ -804,6 +824,40 @@ describe("Calendar", () => {
     const singleTitle = singleWrapper.get(".react-spectrum-Calendar-title").text();
     expect(defaultTitle).toContain("August");
     expect(singleTitle).toContain("July");
+  });
+
+  it("applies selectionAlignment to multi-month range-calendar initial visible range", () => {
+    const startAligned = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+        selectionAlignment: "start",
+      },
+      attachTo: document.body,
+    });
+    const endAligned = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+        selectionAlignment: "end",
+      },
+      attachTo: document.body,
+    });
+
+    const startTitle = startAligned.get(".react-spectrum-Calendar-title").text();
+    const endTitle = endAligned.get(".react-spectrum-Calendar-title").text();
+
+    expect(startTitle).toContain("July");
+    expect(endTitle).toContain("May");
+    expect(startTitle).not.toBe(endTitle);
   });
 
   it("applies locale overrides to range-calendar default weekday ordering", () => {
