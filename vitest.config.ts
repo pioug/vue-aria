@@ -244,6 +244,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/link": fileURLToPath(
         new URL("./packages/@vue-spectrum/link/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/textfield": fileURLToPath(
+        new URL("./packages/@vue-spectrum/textfield/src/index.ts", import.meta.url)
       )
     }
   }

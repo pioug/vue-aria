@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/link`
+- Current focus package: `@vue-spectrum/textfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -104,7 +104,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/checkbox`: In progress
 - `@vue-spectrum/radio`: In progress
 - `@vue-spectrum/switch`: In progress
-- `@vue-spectrum/textfield`: Not started
+- `@vue-spectrum/textfield`: In progress
 - `@vue-spectrum/searchfield`: Not started
 - `@vue-spectrum/numberfield`: Not started
 - `@vue-spectrum/slider`: Complete
@@ -308,6 +308,43 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Validate visual parity against upstream docs examples and variant states.
 - Expand parity coverage for additional upstream edge-cases (e.g., tooltip-trigger composition).
+
+## 4f) Active Package Slice: @vue-spectrum/textfield
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/textfield/src`
+  - `references/react-spectrum/packages/@react-spectrum/textfield/test`
+  - `references/react-spectrum/packages/@react-spectrum/textfield/docs`
+- Local package path: `packages/@vue-spectrum/textfield`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `TextField`, `TextArea`, `TextFieldBase`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/TextField.test.ts`
+  - `test/TextArea.test.ts`
+  - `test/TextField.ssr.test.ts`
+  - `test/TextArea.ssr.test.ts`
+- Initial parity coverage added:
+  - default input behavior and type/tag parity for text vs textarea
+  - controlled/uncontrolled value handling
+  - placeholder warning behavior and form-reset behavior
+  - label/description/error rendering and ARIA passthrough behavior
+  - required/readonly/disabled/invalid/valid state assertions
+  - textarea autosize behavior for quiet/default and fixed-height cases
+- Documentation scaffold added:
+  - `docs/packages/spectrum-textfield.md`
+  - `docs/packages/spectrum-textarea.md`
+  - VitePress nav/sidebar entries for `/packages/spectrum-textfield` and `/packages/spectrum-textarea`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/textfield`.
+
+### Remaining for completion
+- Expand parity coverage for native/aria validation behavior and server-validation scenarios from upstream.
+- Validate visual parity for icon/validation-indicator and quiet/standard field variants against upstream docs.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
