@@ -9460,3 +9460,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 77 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` empty-state row-semantics parity update:
+  - aligned empty-state rendering to emit tree row/cell semantics (`role="row"` + `role="gridcell"`) with level metadata when no collection rows are visible.
+  - added coverage to assert empty-state rows omit hierarchy position attributes while exposing empty-state content in the grid cell.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 78 tests).
+- Validation: `npm run check -- --pretty false` passed.

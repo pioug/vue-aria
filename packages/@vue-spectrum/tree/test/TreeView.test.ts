@@ -225,6 +225,27 @@ describe("TreeView", () => {
     expect(tree.attributes("data-focus-visible")).toBeUndefined();
   });
 
+  it("renders empty-state rows without hierarchy position attributes", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Empty tree",
+        items: [],
+        renderEmptyState: () => "No rows",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.attributes("aria-level")).toBe("1");
+    expect(rows[0]!.attributes("aria-posinset")).toBeUndefined();
+    expect(rows[0]!.attributes("aria-setsize")).toBeUndefined();
+
+    const cells = rows[0]!.findAll('[role="gridcell"]');
+    expect(cells).toHaveLength(1);
+    expect(cells[0]!.text()).toContain("No rows");
+  });
+
   it("supports DOM props on tree rows", async () => {
     const wrapper = mount(TreeView as any, {
       props: {

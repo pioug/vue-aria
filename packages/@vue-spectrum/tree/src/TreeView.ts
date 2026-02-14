@@ -701,7 +701,27 @@ export const TreeView = defineComponent({
             })
           )
           : props.renderEmptyState
-            ? [h("div", { class: "react-spectrum-TreeView-empty" }, props.renderEmptyState() as any)]
+            ? [
+              h(
+                "div",
+                {
+                  role: "row",
+                  "aria-level": "1",
+                  "data-level": "1",
+                  class: "react-spectrum-TreeView-row",
+                },
+                [
+                  h(
+                    "div",
+                    {
+                      role: "gridcell",
+                      class: "react-spectrum-TreeView-empty",
+                    },
+                    props.renderEmptyState() as any
+                  ),
+                ]
+              ),
+            ]
             : []
       );
     };
