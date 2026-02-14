@@ -216,6 +216,42 @@ export function tableTests() {
     expect(onAction).toHaveBeenCalledWith("row-2");
   });
 
+  it("throws when static slot row cells do not match column count", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(() =>
+        mount(TableView as any, {
+          props: {
+            "aria-label": "Invalid slot table",
+          },
+          slots: {
+            default: () => [
+              h(TableHeader as any, null, {
+                default: () => [
+                  h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+                  h(Column as any, { id: "bar" }, () => "Bar"),
+                  h(Column as any, { id: "baz" }, () => "Baz"),
+                ],
+              }),
+              h(TableBody as any, null, {
+                default: () => [
+                  h(Row as any, { id: "row-1" }, {
+                    default: () => [
+                      h(Cell as any, () => "Foo 1"),
+                      h(Cell as any, () => "Bar 1"),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          },
+        })
+      ).toThrow(/column count/i);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("supports static slot table cells with colSpan", () => {
     const wrapper = mount(TableView as any, {
       props: {

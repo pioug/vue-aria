@@ -366,6 +366,7 @@ function normalizeRowsFromSlot(
   columns: NormalizedSpectrumTableColumn[]
 ): NormalizedSpectrumTableRow[] {
   return rows.map((row, rowIndex) => {
+    const rowKey = normalizeKey(row.key, rowIndex);
     const normalizedCells: NormalizedSpectrumTableCell[] = [];
     let columnCursor = 0;
 
@@ -382,14 +383,10 @@ function normalizeRowsFromSlot(
       columnCursor += Math.max(1, cell.colSpan ?? 1);
     }
 
-    while (columnCursor < columns.length) {
-      const column = columns[columnCursor]!;
-      normalizedCells.push({
-        key: column.key,
-        textValue: "",
-        value: "",
-      });
-      columnCursor += 1;
+    if (columnCursor !== columns.length) {
+      throw new Error(
+        `Table row "${String(rowKey)}" cell span count (${columnCursor}) does not match column count (${columns.length}).`
+      );
     }
 
     const textValue =
@@ -400,7 +397,7 @@ function normalizeRowsFromSlot(
         .join(" ");
 
     return {
-      key: normalizeKey(row.key, rowIndex),
+      key: rowKey,
       textValue,
       isDisabled: row.isDisabled,
       cells: normalizedCells,
