@@ -67,6 +67,9 @@ In static slot composition, each row's total cell span must match the declared c
 
 - `selectionMode`: `"none" | "single" | "multiple"`.
 - `selectionStyle`: `"highlight" | "checkbox"`.
+- `density`: `"compact" | "regular" | "spacious"` to control row/cell spacing class variants.
+- `overflowMode`: `"truncate" | "wrap"` to control wrapped-cell visual styling.
+- `isQuiet`: enables quiet table visual styling.
 - `disabledBehavior`: `"selection" | "all"` (defaults to `"selection"`) to control whether disabled rows remain actionable (`"selection"`) or become fully disabled (`"all"`).
 - `disallowSelectAll`: disables keyboard select-all (`Ctrl+A`) when `selectionMode` is `"multiple"`.
 - `disallowTypeAhead`: disables alphanumeric typeahead focus movement across rows.

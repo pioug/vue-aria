@@ -38,6 +38,9 @@ export interface SpectrumTableViewProps {
   disallowTypeAhead?: boolean | undefined;
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   shouldSelectOnPressUp?: boolean | undefined;
+  density?: "compact" | "regular" | "spacious" | undefined;
+  overflowMode?: "wrap" | "truncate" | undefined;
+  isQuiet?: boolean | undefined;
   isDisabled?: boolean | undefined;
   autoFocus?: true | "first" | "last" | undefined;
   sortDescriptor?: SpectrumSortDescriptor | null | undefined;
@@ -630,6 +633,18 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    density: {
+      type: String as PropType<"compact" | "regular" | "spacious" | undefined>,
+      default: undefined,
+    },
+    overflowMode: {
+      type: String as PropType<"wrap" | "truncate" | undefined>,
+      default: undefined,
+    },
+    isQuiet: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     isDisabled: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -920,8 +935,12 @@ export const TableView = defineComponent({
         "aria-rowcount": state.collection.size + headerRows.length,
         class: [
           attrsClass,
+          "spectrum-Table",
+          `spectrum-Table--${props.density ?? "regular"}`,
           "react-spectrum-TableView",
           {
+            "spectrum-Table--quiet": props.isQuiet,
+            "spectrum-Table--wrap": (props.overflowMode ?? "truncate") === "wrap",
             "is-disabled": props.isDisabled,
             "is-hidden": props.isHidden,
           },

@@ -175,6 +175,30 @@ export function tableTests() {
     expect(firstRowCells[1]!.text()).toContain("Baz 1");
   });
 
+  it("applies default visual classes", () => {
+    const wrapper = renderTable();
+    const grid = wrapper.get('[role="grid"]');
+
+    expect(grid.classes()).toContain("spectrum-Table");
+    expect(grid.classes()).toContain("spectrum-Table--regular");
+    expect(grid.classes()).not.toContain("spectrum-Table--quiet");
+    expect(grid.classes()).not.toContain("spectrum-Table--wrap");
+  });
+
+  it("applies quiet/density/overflow visual classes", () => {
+    const wrapper = renderTable({
+      isQuiet: true,
+      density: "compact",
+      overflowMode: "wrap",
+    });
+    const grid = wrapper.get('[role="grid"]');
+
+    expect(grid.classes()).toContain("spectrum-Table");
+    expect(grid.classes()).toContain("spectrum-Table--compact");
+    expect(grid.classes()).toContain("spectrum-Table--quiet");
+    expect(grid.classes()).toContain("spectrum-Table--wrap");
+  });
+
   it("supports multiple row header columns", () => {
     const wrapper = renderTable({
       columns: columnsWithMultipleRowHeaders,

@@ -8332,6 +8332,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 87 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` visual-prop class parity update:
+  - added `density` (`"compact" | "regular" | "spacious"`), `overflowMode` (`"truncate" | "wrap"`), and `isQuiet` props to `TableView`, wiring Spectrum root classes for default and custom visual variants.
+  - added regression coverage for default classes (`spectrum-Table--regular`) and explicit quiet/compact/wrap class application.
+  - documented visual props in package docs.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 89 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
