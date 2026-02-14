@@ -31,7 +31,8 @@ function renderMenuTrigger(
 
 function renderContextualHelpMenuTrigger(
   menuProps: Record<string, unknown> = {},
-  contextualHelpProps: Record<string, unknown> = {}
+  contextualHelpProps: Record<string, unknown> = {},
+  dialogContent: (() => unknown) | undefined = undefined
 ) {
   return mount(MenuTrigger as any, {
     props: {
@@ -45,7 +46,9 @@ function renderContextualHelpMenuTrigger(
             h(ContextualHelpTrigger as any, contextualHelpProps, {
               default: () => [
                 h(Item as any, { key: "help" }, { default: () => "Help" }),
-                h("div", { role: "dialog" }, "Contextual help dialog"),
+                dialogContent
+                  ? dialogContent()
+                  : h("div", { role: "dialog" }, "Contextual help dialog"),
               ],
             }),
             h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
@@ -419,6 +422,48 @@ describe("MenuTrigger", () => {
     expect(document.body.querySelector('[role="dialog"]')).toBeNull();
     expect(document.body.querySelector('[role="menu"]')).toBeNull();
     expect(document.activeElement).toBe(trigger.element);
+  });
+
+  it("contains focus when shift-tabbing within contextual help dialogs", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderContextualHelpMenuTrigger(
+        {},
+        {},
+        () => h("div", { role: "dialog", tabIndex: -1 }, [
+          h("a", { href: "#", "data-testid": "contextual-help-link" }, "Learn more"),
+        ])
+      );
+
+      const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+      expect(helpItem).toBeTruthy();
+
+      hoverWithMouse(helpItem as HTMLElement);
+      await vi.advanceTimersByTimeAsync(250);
+      await wrapper.vm.$nextTick();
+
+      const dialog = document.body.querySelector('[role="dialog"]') as HTMLElement | null;
+      const link = document.body.querySelector('[data-testid="contextual-help-link"]') as HTMLElement | null;
+      expect(dialog).toBeTruthy();
+      expect(link).toBeTruthy();
+
+      dialog?.focus();
+      expect(document.activeElement).toBe(dialog);
+
+      dialog?.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      }));
+      await wrapper.vm.$nextTick();
+
+      expect(document.body.querySelector('[role="dialog"]')).toBe(dialog);
+      expect(document.activeElement).toBe(link);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("exposes trigger dom node and focus handle", async () => {

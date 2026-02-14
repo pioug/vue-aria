@@ -1,4 +1,5 @@
 import { useSubmenuTrigger } from "@vue-aria/menu";
+import { FocusScope } from "@vue-aria/focus";
 import { cloneVNode, defineComponent, h, ref, type VNode } from "vue";
 import { createSubmenuState, useMenuStateContext } from "./context";
 import { Popover } from "./Popover";
@@ -26,6 +27,25 @@ function resolveMenuElement(value: unknown): HTMLElement | null {
   }
 
   return null;
+}
+
+const TABBABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function focusFirstTabbableIn(element: HTMLElement): boolean {
+  const tabbable = element.querySelector<HTMLElement>(TABBABLE_SELECTOR);
+  if (!tabbable) {
+    return false;
+  }
+
+  tabbable.focus();
+  return true;
 }
 
 /**
@@ -140,6 +160,40 @@ export const SubmenuTrigger = defineComponent({
             ref: submenuMenuRef,
           });
 
+      const onDialogKeyDown = (event: KeyboardEvent) => {
+        if (
+          event.key !== "Tab"
+          || !event.shiftKey
+          || event.defaultPrevented
+        ) {
+          return;
+        }
+
+        const target = event.target;
+        if (!(target instanceof HTMLElement) || target.getAttribute("role") !== "dialog") {
+          return;
+        }
+
+        if (focusFirstTabbableIn(target)) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      };
+
+      const popoverContent = props.type === "dialog"
+        ? h(FocusScope as any, {
+            contain: true,
+            restoreFocus: true,
+          }, {
+            default: () => [
+              h("div", {
+                onKeydown: onDialogKeyDown,
+                onKeyDown: onDialogKeyDown,
+              }, [submenuNode]),
+            ],
+          })
+        : submenuNode;
+
       return [
         triggerNode,
         h(
@@ -163,7 +217,7 @@ export const SubmenuTrigger = defineComponent({
             },
           },
           {
-            default: () => [submenuNode],
+            default: () => [popoverContent],
           }
         ),
       ];
