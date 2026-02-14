@@ -9075,3 +9075,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 27 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-toggle chevron parity update:
+  - added migrated coverage to verify row-triggered expansion toggles keep chevron labels and row `aria-expanded` state synchronized across collapse/expand cycles.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.

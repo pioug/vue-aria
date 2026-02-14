@@ -618,6 +618,36 @@ describe("TreeView", () => {
     expect(chevron.attributes("aria-label")).toBe("Expand");
   });
 
+  it("updates chevron labels when rows toggle expansion", async () => {
+    const wrapper = renderTree({
+      selectionMode: "none",
+      defaultExpandedKeys: ["projects"],
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+
+    let chevron = projectsRow!.get("button");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(chevron.attributes("aria-label")).toBe("Collapse");
+
+    await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    chevron = projectsRow!.get("button");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(chevron.attributes("aria-label")).toBe("Expand");
+
+    await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    chevron = projectsRow!.get("button");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(chevron.attributes("aria-label")).toBe("Collapse");
+  });
+
   it("keeps chevron tabIndex when disabledBehavior is selection and removes it for all", async () => {
     const wrapper = mount(TreeView as any, {
       props: {
