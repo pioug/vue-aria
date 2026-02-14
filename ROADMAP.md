@@ -7126,3 +7126,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - clarified callback behavior notes to document keyboard callback/shortcut suppression in disabled/read-only states.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added trigger accessibility regression coverage ensuring `aria-expanded` reflects open/close state transitions in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 109 tests).
+- Validation: `npm run check -- --pretty false` passed.

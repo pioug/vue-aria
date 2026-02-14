@@ -587,6 +587,30 @@ describe("DatePicker", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("updates date picker trigger aria-expanded across open and close", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+
+    await trigger.trigger("click");
+    await nextTick();
+    expect(wrapper.get(".react-spectrum-DatePicker-button").attributes("aria-expanded")).toBe("true");
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DatePicker-button").attributes("aria-expanded")).toBe("false");
+  });
+
   it("forwards onFocusChange for date picker group focus transitions", async () => {
     const onFocus = vi.fn();
     const onBlur = vi.fn();
@@ -1685,6 +1709,33 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("updates range picker trigger aria-expanded across open and close", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get(".react-spectrum-DateRangePicker-button");
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+
+    await trigger.trigger("click");
+    await nextTick();
+    expect(wrapper.get(".react-spectrum-DateRangePicker-button").attributes("aria-expanded")).toBe("true");
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-button").attributes("aria-expanded")).toBe("false");
   });
 
   it("forwards range onFocusChange for group focus transitions", async () => {
