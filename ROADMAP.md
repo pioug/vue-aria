@@ -9628,3 +9628,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu test-stability parity update:
+  - stabilized `SubmenuTrigger` test lifecycle by tracking mounted wrappers and unmounting after each test to avoid cross-test DOM leakage.
+  - aligned Escape-close assertion dispatch target to submenu popover container and added tick synchronization around close assertions for deterministic teardown.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 11 tests) across 3 consecutive runs.
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 36 tests).
+- Validation: `npm run check -- --pretty false` passed.

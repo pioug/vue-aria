@@ -8,6 +8,12 @@ import { SubmenuTrigger } from "../src/SubmenuTrigger";
 
 describe("SubmenuTrigger", () => {
   const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+  const mountedWrappers: Array<{ unmount: () => void }> = [];
+  const mountTracked = (...args: Parameters<typeof mount>) => {
+    const wrapper = mount(...args);
+    mountedWrappers.push(wrapper as unknown as { unmount: () => void });
+    return wrapper;
+  };
 
   beforeAll(() => {
     HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -18,11 +24,14 @@ describe("SubmenuTrigger", () => {
   });
 
   afterEach(() => {
+    while (mountedWrappers.length > 0) {
+      mountedWrappers.pop()?.unmount();
+    }
     document.body.innerHTML = "";
   });
 
   it("opens a nested submenu with keyboard ArrowRight", async () => {
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -62,7 +71,7 @@ describe("SubmenuTrigger", () => {
   });
 
   it("disables submenu triggers when their key is in disabledKeys", async () => {
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -106,7 +115,7 @@ describe("SubmenuTrigger", () => {
   });
 
   it("skips disabled submenu triggers during keyboard navigation", async () => {
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -157,7 +166,7 @@ describe("SubmenuTrigger", () => {
   });
 
   it("only keeps one sibling submenu open at a time", async () => {
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -215,7 +224,7 @@ describe("SubmenuTrigger", () => {
 
   it("does not trigger root onAction when pressing a submenu trigger item", async () => {
     const onAction = vi.fn();
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -263,7 +272,7 @@ describe("SubmenuTrigger", () => {
 
   it("does not trigger selection when pressing a submenu trigger item", async () => {
     const onSelectionChange = vi.fn();
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -302,7 +311,7 @@ describe("SubmenuTrigger", () => {
   it("supports independent selection callbacks on root menu and submenu", async () => {
     const onRootSelectionChange = vi.fn();
     const onSubmenuSelectionChange = vi.fn();
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
         closeOnSelect: false,
@@ -370,7 +379,7 @@ describe("SubmenuTrigger", () => {
     const onRootClose = vi.fn();
     const onSubmenuAction = vi.fn();
     const onSubmenuClose = vi.fn();
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -422,7 +431,7 @@ describe("SubmenuTrigger", () => {
   });
 
   it("closes submenu when focus moves to a sibling item in the parent menu", async () => {
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -471,7 +480,7 @@ describe("SubmenuTrigger", () => {
   it("closes submenu on Escape without closing root menu", async () => {
     const onRootClose = vi.fn();
     const onSubmenuClose = vi.fn();
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
@@ -505,12 +514,15 @@ describe("SubmenuTrigger", () => {
     submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
     await wrapper.vm.$nextTick();
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+    await wrapper.vm.$nextTick();
 
-    const submenuMenu = Array.from(document.body.querySelectorAll('[role="menu"]'))
-      .find((menu) => menu.textContent?.includes("Sub item")) as HTMLElement | undefined;
-    expect(submenuMenu).toBeTruthy();
+    const submenuPopover = Array.from(document.body.querySelectorAll(".spectrum-Menu-popover"))
+      .find((popover) => popover.textContent?.includes("Sub item")) as HTMLElement | undefined;
+    expect(submenuPopover).toBeTruthy();
+    await wrapper.vm.$nextTick();
 
-    submenuMenu?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    submenuPopover?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
@@ -520,7 +532,7 @@ describe("SubmenuTrigger", () => {
   });
 
   it("does not select submenu triggers even when selectedKeys includes the trigger key", async () => {
-    const wrapper = mount(MenuTrigger as any, {
+    const wrapper = mountTracked(MenuTrigger as any, {
       props: {
         defaultOpen: true,
       },
