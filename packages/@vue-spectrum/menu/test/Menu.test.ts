@@ -120,6 +120,30 @@ describe("Menu", () => {
     expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
   });
 
+  it("supports focusing items by typing letters in rapid succession", async () => {
+    const wrapper = renderMenu({
+      autoFocus: "first",
+    });
+    await nextTick();
+
+    const menu = wrapper.get('[role="menu"]');
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(5);
+    expect(document.activeElement).toBe(items[0]?.element);
+
+    (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(items[1]?.element);
+
+    (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "L", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(items[3]?.element);
+
+    (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "E", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(items[4]?.element);
+  });
+
   it("supports multiple selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderMenu({
