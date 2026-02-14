@@ -2771,11 +2771,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 2 (adapted)
-- Passing test files: 2 (validated 2026-02-14)
+- Ported test files: 3 (adapted)
+- Passing test files: 3 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `useTree` coverage for treegrid-role override behavior.
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
+  - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via keyboard expansion and arrow navigation focus movement).
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2785,7 +2786,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [x] Baseline treegrid role + expand button labeling semantics covered in adapted tests.
-- [ ] Full keyboard interaction parity validation pending through integrated tree harness scenarios.
+- [ ] Keyboard interaction parity is now partially covered via integrated harness tests; full matrix validation is still pending.
 
 ### Visual Parity
 - [ ] Pending upstream example-by-example comparison for tree row and disclosure markup.
@@ -2794,7 +2795,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) with integrated harness tests.
+1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) beyond the initial integrated harness test.
 2. Mirror upstream tree docs/examples and base styling patterns in VitePress.
 3. Close API checklist and coordinate remaining parity tasks with `@vue-aria/tree-state`.
 
@@ -5275,3 +5276,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added package record `31k`, updated `@vue-aria/tree` execution queue status to `In progress`, and advanced `@vue-aria/tree-state` next actions to post-integration steps.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/gridlist/test packages/@vue-aria/tree/test` passed (7 files, 16 tests).
+- Expanded `@vue-aria/tree` keyboard-navigation parity:
+  - added `packages/@vue-aria/tree/test/useTree.keyboardNavigation.test.ts` to mirror upstream tree-state `KeyboardNavigation` story behavior with integrated `useTreeState` + `useTree` + `useTreeItem` harness coverage.
+  - covered keyboard-driven expansion progression (`2 -> 6 -> 8` visible rows) and directional focus movement (`ArrowDown`) across expanded nodes.
+  - updated package record `31k` test/accessibility notes to reflect the new integrated interaction slice.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree/test` passed (3 files, 4 tests).
