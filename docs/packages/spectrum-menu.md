@@ -55,6 +55,57 @@ import { ActionMenu, Item } from "@vue-spectrum/menu";
 </template>
 ```
 
+## Open State Control
+
+```vue
+<script setup lang="ts">
+import { ActionMenu, Item } from "@vue-spectrum/menu";
+import { ref } from "vue";
+
+const isOpen = ref(false);
+const onOpenChange = (value: boolean) => {
+  isOpen.value = value;
+};
+</script>
+
+<template>
+  <ActionMenu
+    :is-open="isOpen"
+    :on-open-change="onOpenChange"
+  >
+    <Item key="rename">Rename</Item>
+    <Item key="share">Share</Item>
+  </ActionMenu>
+</template>
+```
+
+`MenuTrigger` and `ActionMenu` also support `defaultOpen` for uncontrolled initial open state.
+
+## Selection And Close Behavior
+
+```vue
+<script setup lang="ts">
+import { ActionButton } from "@vue-spectrum/button";
+import { Item, Menu, MenuTrigger } from "@vue-spectrum/menu";
+</script>
+
+<template>
+  <MenuTrigger :close-on-select="false">
+    <ActionButton>Filter</ActionButton>
+    <Menu
+      aria-label="Filter menu"
+      selection-mode="single"
+    >
+      <Item key="all">All</Item>
+      <Item key="active">Active</Item>
+      <Item key="archived">Archived</Item>
+    </Menu>
+  </MenuTrigger>
+</template>
+```
+
+With `closeOnSelect=false`, the menu stays open after item selection.
+
 ## Submenus
 
 ```vue
@@ -73,6 +124,27 @@ import { ActionMenu, Item } from "@vue-spectrum/menu";
   </MenuTrigger>
 </template>
 ```
+
+## Tooltip Composition
+
+```vue
+<script setup lang="ts">
+import { ActionMenu, Item } from "@vue-spectrum/menu";
+import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
+</script>
+
+<template>
+  <TooltipTrigger :delay="0">
+    <ActionMenu>
+      <Item key="download">Download</Item>
+      <Item key="move">Move</Item>
+    </ActionMenu>
+    <Tooltip>More actions</Tooltip>
+  </TooltipTrigger>
+</template>
+```
+
+Opening the menu via mouse or keyboard dismisses the tooltip trigger overlay before menu display.
 
 ## Accessibility
 
