@@ -7808,6 +7808,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 12 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` vertical-wrap parity update:
+  - added vertical ArrowUp wrap coverage from first tab to last tab, including focus and selection assertions.
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 13 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tabs` docs parity update:
   - expanded tabs keyboard docs to include `Home`/`End` behavior and disabled-tab skipping during keyboard traversal.
   - `docs/packages/spectrum-tabs.md`
