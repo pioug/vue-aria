@@ -99,6 +99,22 @@ const onOpenChange = (next: boolean) => {
 </template>
 ```
 
+### Uncontrolled initial open state
+
+```vue
+<DialogTrigger :default-open="true">
+  <template #trigger>
+    <button>Open dialog</button>
+  </template>
+  <template #default="{ close }">
+    <Dialog>
+      <h2>Initially open</h2>
+      <button @click="close">Close</button>
+    </Dialog>
+  </template>
+</DialogTrigger>
+```
+
 ## Content
 
 Provide your own content structure inside the dialog body (heading, text, actions, and form content).
