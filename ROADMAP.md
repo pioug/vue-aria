@@ -9420,3 +9420,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 70 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` single-highlight touch-replace parity update:
+  - added single highlight touch coverage to assert selecting a second row replaces prior selection and updates row-level `aria-selected`/`data-selected` state.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 71 tests).
+- Validation: `npm run check -- --pretty false` passed.
