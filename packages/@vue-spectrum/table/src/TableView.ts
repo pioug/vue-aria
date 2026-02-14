@@ -470,6 +470,11 @@ const TableBodyRow = defineComponent({
 
     return () => {
       const childNodes = Array.from(props.node.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
+      const isSelected =
+        props.state.selectionManager.selectionMode !== "none"
+        && props.selectedKeys.has(props.node.key);
+      const ariaDisabled = (rowProps as Record<string, unknown>)["aria-disabled"];
+      const isDisabled = ariaDisabled === true || ariaDisabled === "true";
 
       return h(
         "tr",
@@ -483,12 +488,14 @@ const TableBodyRow = defineComponent({
               "spectrum-Table-row--highlightSelection": props.state.selectionManager.selectionBehavior === "replace",
               "spectrum-Table-row--firstRow": props.rowIndex === 0,
               "spectrum-Table-row--lastRow": props.rowIndex === props.rowCount - 1,
+              "is-selected": isSelected,
+              "is-disabled": isDisabled,
             },
           ],
           "aria-rowindex": props.rowOffset + props.rowIndex + 1,
           "aria-selected":
             props.state.selectionManager.selectionMode !== "none"
-              ? (props.selectedKeys.has(props.node.key) ? "true" : "false")
+              ? (isSelected ? "true" : "false")
               : undefined,
         },
         childNodes.map((childNode) =>

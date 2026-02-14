@@ -1402,12 +1402,16 @@ export function tableTests() {
 
     let bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.classes()).not.toContain("is-selected");
+    expect(bodyRows[1]!.classes()).not.toContain("is-selected");
 
     await press(bodyRows[1]!);
 
     bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[0]!.classes()).not.toContain("is-selected");
+    expect(bodyRows[1]!.classes()).toContain("is-selected");
   });
 
   it("supports default selected keys initialization", () => {
@@ -1578,6 +1582,7 @@ export function tableTests() {
     const bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows).toHaveLength(2);
     expect(bodyRows[1]!.attributes("aria-disabled")).toBe("true");
+    expect(bodyRows[1]!.classes()).toContain("is-disabled");
 
     await press(bodyRows[1]!);
 
@@ -1632,6 +1637,7 @@ export function tableTests() {
     const bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows).toHaveLength(2);
     expect(bodyRows[1]!.attributes("aria-disabled")).toBe("true");
+    expect(bodyRows[1]!.classes()).toContain("is-disabled");
 
     await press(bodyRows[1]!);
 
