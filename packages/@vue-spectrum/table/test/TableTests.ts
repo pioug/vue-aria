@@ -575,6 +575,56 @@ export function tableTests() {
     expect(lastSelection?.has("row-2")).toBe(true);
   });
 
+  it("clears single highlight selection via Space key on the selected row", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      defaultSelectedKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(0);
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("clears single highlight selection via Enter key on the selected row", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      defaultSelectedKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(0);
+
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("defers row selection until press up when shouldSelectOnPressUp is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
