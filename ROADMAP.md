@@ -7081,3 +7081,6 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 93 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added callback-based validation-message example for `errorMessage` function usage.
+    - `docs/packages/spectrum-datepicker.md`

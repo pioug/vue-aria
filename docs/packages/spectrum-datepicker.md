@@ -208,6 +208,26 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Validation Callback Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+
+const errorMessage = () => "Choose a valid date from callback";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Booking date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    validation-state="invalid"
+    :error-message="errorMessage"
+  />
+</template>
+```
+
 ## Help Text Example
 
 ```vue
