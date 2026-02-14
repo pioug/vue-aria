@@ -6914,3 +6914,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 53 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added range-overlay regression coverage ensuring unavailable and min/max out-of-bounds end-date clicks do not commit `onChange` until a valid end date is selected.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 55 tests).
+- Validation: `npm run check -- --pretty false` passed.

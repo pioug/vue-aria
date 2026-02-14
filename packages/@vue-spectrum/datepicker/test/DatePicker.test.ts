@@ -1089,6 +1089,81 @@ describe("DateRangePicker", () => {
     expect(day10?.getAttribute("aria-disabled")).toBeNull();
   });
 
+  it("does not commit range selection when end date is unavailable", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 10),
+        isDateUnavailable: (date: { day: number }) => date.day === 12,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    const day14 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "14");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    expect(day14).toBeTruthy();
+
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+
+    pressElement(day14!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const value = onChange.mock.calls[0]?.[0] as { start: CalendarDate; end: CalendarDate };
+    expect(value.start.day).toBe(10);
+    expect(value.end.day).toBe(11);
+  });
+
+  it("does not commit range selection when end date is out of bounds", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 10),
+        minValue: new CalendarDate(2019, 6, 10),
+        maxValue: new CalendarDate(2019, 6, 20),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day9 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "9");
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day9).toBeTruthy();
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+
+    pressElement(day10!);
+    pressElement(day9!);
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+
+    pressElement(day12!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const value = onChange.mock.calls[0]?.[0] as { start: CalendarDate; end: CalendarDate };
+    expect(value.start.day).toBe(10);
+    expect(value.end.day).toBe(12);
+  });
+
   it("constrains range selection across unavailable dates by default", async () => {
     const onChange = vi.fn();
     const wrapper = mount(DateRangePicker as any, {
