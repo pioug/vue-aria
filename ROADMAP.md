@@ -9580,3 +9580,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 45 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-selection-isolation parity update:
+  - added migrated `SubmenuTrigger` coverage for mixed root/submenu selection modes to assert submenu item selection triggers only submenu `onSelectionChange` and does not mutate root selection callbacks.
+  - validated root selection callback payload shape and persistence across submenu open/select flows with `closeOnSelect={false}`.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 46 tests).
+- Validation: `npm run check -- --pretty false` passed.

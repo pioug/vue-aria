@@ -245,6 +245,72 @@ describe("SubmenuTrigger", () => {
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
   });
 
+  it("supports independent selection callbacks on root menu and submenu", async () => {
+    const onRootSelectionChange = vi.fn();
+    const onSubmenuSelectionChange = vi.fn();
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+        closeOnSelect: false,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, {
+            ariaLabel: "Menu",
+            selectionMode: "multiple",
+            onSelectionChange: onRootSelectionChange,
+          }, {
+            default: () => [
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, {
+                    ariaLabel: "Submenu",
+                    selectionMode: "single",
+                    onSelectionChange: onSubmenuSelectionChange,
+                  }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item 1" }),
+                      h(Item as any, { key: "sub-2" }, { default: () => "Sub item 2" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const alphaItem = Array.from(document.body.querySelectorAll('[role="menuitemcheckbox"]'))
+      .find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+    expect(alphaItem).toBeTruthy();
+
+    alphaItem?.click();
+    await wrapper.vm.$nextTick();
+    expect(onRootSelectionChange).toHaveBeenCalledTimes(1);
+    expect(new Set(onRootSelectionChange.mock.calls[0]?.[0] as Iterable<string>)).toEqual(new Set(["alpha"]));
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    const submenuFirstItem = Array.from(document.body.querySelectorAll('[role="menuitemradio"]'))
+      .find((item) => item.textContent?.includes("Sub item 1")) as HTMLElement | undefined;
+    expect(submenuFirstItem).toBeTruthy();
+    submenuFirstItem?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(onSubmenuSelectionChange).toHaveBeenCalledTimes(1);
+    expect(new Set(onSubmenuSelectionChange.mock.calls[0]?.[0] as Iterable<string>)).toEqual(new Set(["sub-1"]));
+    expect(onRootSelectionChange).toHaveBeenCalledTimes(1);
+  });
+
   it("closes submenu on Escape without closing root menu", async () => {
     const onRootClose = vi.fn();
     const onSubmenuClose = vi.fn();
