@@ -101,26 +101,30 @@ export function useFormattedTextField(
     selectionStart: number | null;
     selectionEnd: number | null;
   } | null>(null);
+  const handleCompositionStart = () => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    const { value, selectionStart, selectionEnd } = inputRef.current;
+    compositionStartState.value = { value, selectionStart, selectionEnd };
+  };
+  const handleCompositionEnd = () => {
+    if (inputRef.current && !state.validate(inputRef.current.value) && compositionStartState.value) {
+      const { value, selectionStart, selectionEnd } = compositionStartState.value;
+      inputRef.current.value = value;
+      inputRef.current.setSelectionRange(selectionStart, selectionEnd);
+      state.setInputValue(value);
+    }
+  };
 
   return {
     inputProps: mergeProps(textFieldProps, {
       onBeforeInput,
-      onCompositionStart() {
-        if (!inputRef.current) {
-          return;
-        }
-
-        const { value, selectionStart, selectionEnd } = inputRef.current;
-        compositionStartState.value = { value, selectionStart, selectionEnd };
-      },
-      onCompositionEnd() {
-        if (inputRef.current && !state.validate(inputRef.current.value) && compositionStartState.value) {
-          const { value, selectionStart, selectionEnd } = compositionStartState.value;
-          inputRef.current.value = value;
-          inputRef.current.setSelectionRange(selectionStart, selectionEnd);
-          state.setInputValue(value);
-        }
-      },
+      onCompositionStart: handleCompositionStart,
+      onCompositionstart: handleCompositionStart,
+      onCompositionEnd: handleCompositionEnd,
+      onCompositionend: handleCompositionEnd,
     }),
     labelProps,
     descriptionProps,

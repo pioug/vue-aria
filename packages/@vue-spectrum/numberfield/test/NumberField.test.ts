@@ -190,6 +190,38 @@ describe("NumberField", () => {
     expect(textField.attributes("data-testid")).toBe("numberfield-input");
   });
 
+  it("handles compositionend events and undoes invalid compositions", async () => {
+    const wrapper = renderNumberField({ onChange: vi.fn() });
+    const input = wrapper.get('input[type="text"]');
+    const element = input.element as HTMLInputElement;
+
+    element.focus();
+    await nextTick();
+    await input.setValue("123");
+    element.setSelectionRange(1, 1);
+
+    await input.trigger("compositionstart");
+    const beforeInputProceed = element.dispatchEvent(
+      new InputEvent("beforeinput", {
+        cancelable: false,
+        data: "ü",
+        inputType: "insertCompositionText",
+      })
+    );
+    expect(beforeInputProceed).toBe(true);
+
+    element.dispatchEvent(new InputEvent("input", { bubbles: true, data: "ü" }));
+
+    element.value = "1ü23";
+    element.setSelectionRange(2, 2);
+    await input.trigger("compositionend");
+    await nextTick();
+
+    expect(element.value).toBe("123");
+    expect(element.selectionStart).toBe(1);
+    expect(element.selectionEnd).toBe(1);
+  });
+
   it("renders hidden form input when name is provided", () => {
     const wrapper = renderNumberField({
       name: "amount",

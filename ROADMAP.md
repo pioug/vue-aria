@@ -10057,3 +10057,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 42 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` composition rollback parity update:
+  - added migrated coverage asserting invalid composition input is reverted on `compositionend`, including caret restoration.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - normalized formatted textfield composition handler aliases (`onCompositionStart`/`onCompositionstart`, `onCompositionEnd`/`onCompositionend`) so rollback handlers are attached consistently in Vue render-prop paths.
+    - `packages/@vue-aria/textfield/src/useFormattedTextField.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 43 tests).
+- Validation: `npm test -- packages/@vue-aria/textfield/test` passed (1 file, 9 tests).
+- Validation: `npm run check -- --pretty false` passed.
