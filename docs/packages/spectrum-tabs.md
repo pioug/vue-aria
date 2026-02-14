@@ -50,6 +50,13 @@ import { Item, TabList, TabPanels, Tabs } from "@vue-spectrum/tabs";
 - `selectedKey` / `defaultSelectedKey`.
 - `disabledKeys` and `isDisabled`.
 
+## Keyboard Activation Modes
+
+- `automatic`: arrow-key navigation moves focus and updates selected tab.
+- `manual`: arrow-key navigation moves focus only; selection commits with `Enter` or `Space`.
+
+Tabs also wrap keyboard navigation at boundaries (for example first to last with `ArrowLeft` in horizontal orientation).
+
 ## Accessibility
 
 - Tab list uses `role="tablist"`.
