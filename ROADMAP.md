@@ -9435,3 +9435,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 72 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` single-highlight non-virtual pointer-toggle parity update:
+  - added single highlight non-virtual mouse coverage to assert repeated row activation toggles selection clear state and removes row-level `data-selected`.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 73 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -1650,6 +1650,39 @@ describe("TreeView", () => {
     expect(gammaRow!.attributes("data-selected")).toBeUndefined();
   });
 
+  it("toggles single highlight selection on repeated non-virtual pointer activation", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    let betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    expect(betaRow).toBeTruthy();
+
+    await realPointerPress(betaRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("beta")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    await realPointerPress(betaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.size).toBe(0);
+
+    betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    expect(betaRow).toBeTruthy();
+    expect(betaRow!.attributes("aria-selected")).toBe("false");
+    expect(betaRow!.attributes("data-selected")).toBeUndefined();
+  });
+
   it("toggles single highlight selection from keyboard activation", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTree({
