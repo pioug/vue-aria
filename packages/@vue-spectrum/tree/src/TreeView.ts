@@ -647,6 +647,7 @@ export const TreeView = defineComponent({
           props.UNSAFE_className,
         ],
         style: [attrsStyle, props.UNSAFE_style],
+        "data-empty": visibleRows.length === 0 ? "true" : undefined,
       }) as Record<string, unknown>;
 
       return h(

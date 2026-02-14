@@ -117,7 +117,7 @@ describe("TreeView", () => {
     expect(onScroll).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps empty trees tabbable", () => {
+  it("keeps empty trees tabbable", async () => {
     const wrapper = mount(TreeView as any, {
       props: {
         "aria-label": "Empty tree",
@@ -128,8 +128,13 @@ describe("TreeView", () => {
     });
 
     const tree = wrapper.get('[role="treegrid"]');
+    expect(tree.attributes("data-empty")).toBe("true");
     expect(tree.attributes("tabindex")).toBe("0");
     expect(wrapper.text()).toContain("No rows");
+
+    (tree.element as HTMLElement).focus();
+    await nextTick();
+    expect(document.activeElement).toBe(tree.element);
   });
 
   it("supports DOM props on tree rows", async () => {
