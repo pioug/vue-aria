@@ -1854,6 +1854,8 @@ describe("TreeView", () => {
     expect(gammaRow).toBeTruthy();
     expect(betaRow!.attributes("aria-selected")).toBe("false");
     expect(gammaRow!.attributes("aria-selected")).toBe("true");
+    expect(betaRow!.attributes("data-selected")).toBeUndefined();
+    expect(gammaRow!.attributes("data-selected")).toBe("true");
   });
 
   it("applies highlight selection data attributes on rows", async () => {
