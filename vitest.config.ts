@@ -259,6 +259,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/numberfield": fileURLToPath(
         new URL("./packages/@vue-spectrum/numberfield/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/breadcrumbs": fileURLToPath(
+        new URL("./packages/@vue-spectrum/breadcrumbs/src/index.ts", import.meta.url)
       )
     }
   }

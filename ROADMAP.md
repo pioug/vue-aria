@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/numberfield`
+- Current focus package: `@vue-spectrum/breadcrumbs`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -118,7 +118,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/tree`: Not started
 - `@vue-spectrum/calendar`: Not started
 - `@vue-spectrum/datepicker`: Not started
-- `@vue-spectrum/breadcrumbs`: Not started
+- `@vue-spectrum/breadcrumbs`: In progress
 - `@vue-spectrum/dialog`: Not started
 - `@vue-spectrum/tooltip`: Not started
 - `@vue-spectrum/progress`: In progress
@@ -483,6 +483,37 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand test parity coverage for locale/inputMode matrix, keyboard stepping, wheel behavior, and validation flows from upstream.
 - Validate visual parity for quiet/stepper/label/help-text states against upstream docs.
+
+## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/breadcrumbs/src`
+  - `references/react-spectrum/packages/@react-spectrum/breadcrumbs/test`
+  - `references/react-spectrum/packages/@react-spectrum/breadcrumbs/docs`
+- Local package path: `packages/@vue-spectrum/breadcrumbs`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `Breadcrumbs`, `BreadcrumbItem`, `Item`, and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/Breadcrumbs.test.ts`
+  - `test/Breadcrumbs.ssr.test.ts`
+- Initial parity coverage added:
+  - nav labeling/id and `UNSAFE_className` propagation
+  - current-item `aria-current` handling and size variant classes
+  - disabled state propagation and `onAction` callback behavior
+- Documentation scaffold added:
+  - `docs/packages/spectrum-breadcrumbs.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-breadcrumbs`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/breadcrumbs`.
+
+### Remaining for completion
+- Port overflow/menu-collapse behavior and associated tests once `@vue-spectrum/menu` is available.
+- Expand parity coverage for root-overflow, multiline truncation, and menu-action edge cases from upstream.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):
