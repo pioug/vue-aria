@@ -1744,7 +1744,7 @@ describe("TreeView", () => {
     expect(betaRow).toBeTruthy();
     expect(alphaRow).toBeTruthy();
     expect(document.activeElement).toBe(betaRow!.element);
-    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
     const selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(selected?.has("beta")).toBe(true);
     expect(selected?.has("alpha")).toBe(false);
