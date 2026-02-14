@@ -710,6 +710,50 @@ describe("TreeView", () => {
     expect(selected.has("projects-1")).toBe(true);
   });
 
+  it("toggles and replaces highlight selection based on modifier keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "multiple",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(photosRow).toBeTruthy();
+    expect(projectsRow).toBeTruthy();
+
+    await press(photosRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(selected).toBeInstanceOf(Set);
+    expect(selected?.has("photos")).toBe(true);
+
+    await projectsRow!.trigger("pointerdown", {
+      button: 0,
+      pointerId: 1,
+      pointerType: "mouse",
+      ctrlKey: true,
+      metaKey: true,
+    });
+    await projectsRow!.trigger("pointerup", {
+      button: 0,
+      pointerId: 1,
+      pointerType: "mouse",
+      ctrlKey: true,
+      metaKey: true,
+    });
+    await projectsRow!.trigger("click", {
+      button: 0,
+      ctrlKey: true,
+      metaKey: true,
+    });
+    await nextTick();
+
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(selected?.has("photos")).toBe(true);
+    expect(selected?.has("projects")).toBe(true);
+  });
+
   it("supports row action callbacks", async () => {
     const onAction = vi.fn();
     const wrapper = renderTree({
