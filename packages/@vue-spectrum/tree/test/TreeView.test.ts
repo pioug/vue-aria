@@ -581,6 +581,33 @@ describe("TreeView", () => {
     expect(rowTexts.some((text) => text.includes("Project 2"))).toBe(true);
   });
 
+  it("supports controlled expansion", async () => {
+    const onExpandedChange = vi.fn();
+    const wrapper = renderTree({
+      expandedKeys: [],
+      onExpandedChange,
+    });
+
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+
+    await press(projectsRow!.get("button"));
+    expect(onExpandedChange).toHaveBeenCalled();
+    const requestedKeys = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(requestedKeys?.has("projects")).toBe(true);
+
+    let rowTexts = wrapper.findAll('[role="row"]').map((row) => row.text());
+    expect(rowTexts.some((text) => text.includes("Project 1"))).toBe(false);
+
+    await wrapper.setProps({
+      expandedKeys: ["projects"],
+    });
+    await nextTick();
+
+    rowTexts = wrapper.findAll('[role="row"]').map((row) => row.text());
+    expect(rowTexts.some((text) => text.includes("Project 1"))).toBe(true);
+  });
+
   it("supports selection callbacks", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTree({

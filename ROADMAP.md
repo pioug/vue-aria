@@ -7668,6 +7668,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` controlled-expansion parity update:
+  - added migrated controlled `expandedKeys` coverage to verify expand requests emit `onExpandedChange` while row visibility remains prop-driven until controlled keys update.
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 20 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
