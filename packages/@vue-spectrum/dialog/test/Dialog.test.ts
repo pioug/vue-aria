@@ -130,4 +130,49 @@ describe("Dialog", () => {
     expect(fullscreen.get("section").classes()).toContain("spectrum-Dialog--fullscreen");
     expect(takeover.get("section").classes()).toContain("spectrum-Dialog--fullscreenTakeover");
   });
+
+  it("applies dismissable class when enabled", () => {
+    const wrapper = mount(Dialog as any, {
+      props: {
+        isDismissable: true,
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    expect(wrapper.get("section").classes()).toContain("spectrum-Dialog--dismissable");
+  });
+
+  it("respects explicit alertdialog role", () => {
+    const wrapper = mount(Dialog as any, {
+      props: {
+        role: "alertdialog",
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    expect(wrapper.get("section").attributes("role")).toBe("alertdialog");
+  });
+
+  it("applies UNSAFE_className and UNSAFE_style to the dialog root", () => {
+    const wrapper = mount(Dialog as any, {
+      props: {
+        UNSAFE_className: "custom-dialog",
+        UNSAFE_style: {
+          borderWidth: "2px",
+          borderStyle: "solid",
+        },
+      },
+      slots: {
+        default: () => "contents",
+      },
+    });
+
+    const root = wrapper.get("section.custom-dialog");
+    expect(root.attributes("style")).toContain("border-width: 2px");
+    expect(root.attributes("style")).toContain("border-style: solid");
+  });
 });

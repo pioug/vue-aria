@@ -7266,3 +7266,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 13 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded `Dialog` root parity coverage for:
+    - dismissable class rendering
+    - explicit `alertdialog` role passthrough
+    - `UNSAFE_className` / `UNSAFE_style` root styling
+    - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 16 tests).
+- Validation: `npm run check -- --pretty false` passed.
