@@ -197,4 +197,42 @@ describe("SubmenuTrigger", () => {
 
     expect(onAction).toHaveBeenCalledTimes(0);
   });
+
+  it("does not trigger selection when pressing a submenu trigger item", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu", selectionMode: "single", onSelectionChange }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = document.body.querySelector('[role="menuitem"]') as HTMLElement | null;
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
 });

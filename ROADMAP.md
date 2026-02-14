@@ -9554,3 +9554,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-selection suppression parity update:
+  - added migrated `SubmenuTrigger` coverage to assert submenu trigger rows do not fire selection callbacks when the root menu uses `selectionMode="single"`.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 42 tests).
+- Validation: `npm run check -- --pretty false` passed.
