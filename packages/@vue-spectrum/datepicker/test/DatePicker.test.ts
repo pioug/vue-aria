@@ -96,6 +96,29 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("17");
   });
 
+  it("keeps rendered value stable in controlled mode until prop updates", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        value: new CalendarDate(2019, 6, 5),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("5");
+  });
+
   it("prevents opening when date picker is disabled", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -295,6 +318,36 @@ describe("DateRangePicker", () => {
     const text = wrapper.get(".react-spectrum-DateRangePicker-value").text();
     expect(text).toContain("10");
     expect(text).toContain("12");
+  });
+
+  it("keeps rendered range stable in controlled mode until prop updates", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        value: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(wrapper.get(".react-spectrum-DateRangePicker-value").text()).toContain("5");
+    expect(wrapper.get(".react-spectrum-DateRangePicker-value").text()).toContain("8");
   });
 
   it("commits a selected range through onChange", async () => {
