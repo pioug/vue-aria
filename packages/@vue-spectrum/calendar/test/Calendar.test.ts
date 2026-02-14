@@ -425,6 +425,22 @@ describe("Calendar", () => {
     expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please choose a valid date");
   });
 
+  it("marks selected calendar cells invalid when validationState is invalid", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        validationState: "invalid",
+      },
+      attachTo: document.body,
+    });
+
+    const selectedCell = wrapper.get('td[aria-selected="true"]');
+    expect(selectedCell.classes()).toContain("is-invalid");
+    expect(selectedCell.attributes("aria-invalid")).toBe("true");
+    expect(selectedCell.get(".react-spectrum-Calendar-date").attributes("aria-invalid")).toBe("true");
+  });
+
   it("uses a custom createCalendar implementation when provided", () => {
     const createCalendar = vi.fn((name: CalendarIdentifier) => createIntlCalendar(name));
     mount(Calendar as any, {
@@ -579,6 +595,24 @@ describe("Calendar", () => {
     });
 
     expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please pick a valid range");
+  });
+
+  it("marks selected range cells invalid when validationState is invalid", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        validationState: "invalid",
+      },
+      attachTo: document.body,
+    });
+
+    const selectedInvalidCells = wrapper.findAll("td.is-selected.is-invalid");
+    expect(selectedInvalidCells.length).toBeGreaterThan(0);
+    expect(selectedInvalidCells[0]?.attributes("aria-invalid")).toBe("true");
   });
 
   it("uses a custom createCalendar implementation in range-calendar mode", () => {
