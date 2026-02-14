@@ -114,6 +114,8 @@ const merged = useProviderProps({
 });
 ```
 
+`useProviderProps` preserves inherited provider values when local props are `undefined`. Explicit values (including `false`) override inherited values.
+
 ## useProvider
 
 `useProvider` returns the nearest provider context (`theme`, `colorScheme`, `scale`, breakpoints, inherited property-group values). This is useful for theme-aware custom components.
@@ -123,7 +125,20 @@ const { colorScheme } = useProvider();
 const icon = colorScheme === "dark" ? "moon" : "sun";
 ```
 
+## Wrapper class stack
+
+Provider wrapper output includes:
+
+- `vue-spectrum-provider`
+- `spectrum`
+- active color-scheme class from `theme.light` / `theme.dark`
+- active scale class from `theme.medium` / `theme.large`
+- any `theme.global` classes
+
+When compatibility mode is enabled via `keepSpectrumClassNames()`, provider wrappers also include `react-spectrum-provider` plus compatibility aliases for active theme/scale keys.
+
 ## Notes
 
-- Upstream provider test parity is in progress for scenarios that depend on downstream Spectrum component packages.
+- Upstream provider test-intent migration is complete for current provider/mediaQueries/SSR sources.
+- Exact upstream Spectrum CSS-module class fidelity remains pending the CSS-module token integration strategy.
 - `Spectrum S2` is out of scope unless explicitly requested.

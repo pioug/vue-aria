@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/theme`
+- Current focus package: `@vue-spectrum/provider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -4560,6 +4560,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/provider.md`)
 - [x] Examples/instructions mirrored from upstream provider docs with Vue-adapted snippets
+- [x] Provider docs expanded with wrapper class-stack, compatibility mode, and `useProviderProps` override semantics guidance.
 - [ ] Base styles parity complete
 
 ### Accessibility
@@ -7500,6 +7501,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-theme-light.md`
   - `docs/packages/spectrum-theme-dark.md`
   - `docs/packages/spectrum-theme-express.md`
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/provider` docs parity update:
+  - expanded provider docs with wrapper class-stack behavior, compatibility-mode class guidance, and `useProviderProps` undefined-vs-explicit override semantics.
+  - `docs/packages/provider.md`
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.
