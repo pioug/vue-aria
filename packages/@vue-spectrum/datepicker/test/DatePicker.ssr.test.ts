@@ -41,4 +41,43 @@ describe("DatePicker SSR", () => {
     expect(html).toContain("react-spectrum-DateRangePicker");
     expect(html).toContain("June");
   });
+
+  it("renders DatePicker with visibleMonths without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DatePickerSSRMultiMonthApp",
+      setup() {
+        return () =>
+          h(DatePicker, {
+            "aria-label": "Date picker",
+            defaultValue: new CalendarDate(2019, 6, 5),
+            visibleMonths: 2,
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DatePicker");
+    expect(html).toContain("June");
+  });
+
+  it("renders DateRangePicker with visibleMonths without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DateRangePickerSSRMultiMonthApp",
+      setup() {
+        return () =>
+          h(DateRangePicker, {
+            "aria-label": "Date range picker",
+            defaultValue: {
+              start: new CalendarDate(2019, 6, 5),
+              end: new CalendarDate(2019, 6, 8),
+            },
+            visibleMonths: 2,
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DateRangePicker");
+    expect(html).toContain("June");
+  });
 });

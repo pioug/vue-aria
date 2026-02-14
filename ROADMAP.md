@@ -6856,6 +6856,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added `DateRangePicker` read-only trigger-gating coverage to ensure popover opening is blocked when `isReadOnly` is set.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 33 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - expanded SSR coverage for `visibleMonths` prop wiring in both picker variants (closed-overlay SSR path).
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 35 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
