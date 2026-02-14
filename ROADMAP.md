@@ -9238,3 +9238,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 54 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-selection chevron parity update:
+  - added migrated coverage for `selectionMode="multiple"` + `disabledBehavior="selection"` to verify disabled rows toggle expansion via chevron while keeping selection callbacks untouched.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 55 tests).
+- Validation: `npm run check -- --pretty false` passed.

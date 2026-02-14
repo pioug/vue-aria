@@ -1076,6 +1076,46 @@ describe("TreeView", () => {
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(true);
   });
 
+  it('toggles disabled row expansion via chevron when disabledBehavior is "selection" and selection is enabled', async () => {
+    const onExpandedChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "multiple",
+      disabledBehavior: "selection",
+      disabledKeys: ["projects"],
+      defaultExpandedKeys: ["projects"],
+      onExpandedChange,
+      onSelectionChange,
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-disabled")).toBeUndefined();
+    expect(projectsRow!.attributes("data-disabled")).toBeUndefined();
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    await press(projectsRow!.get("button"));
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
+    expect(onExpandedChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    await press(projectsRow!.get("button"));
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(onExpandedChange).toHaveBeenCalledTimes(2);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
   it("does not expand rows from row press when row actions are configured", async () => {
     const onAction = vi.fn();
     const wrapper = renderTree({
