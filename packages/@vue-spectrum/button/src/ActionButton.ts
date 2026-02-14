@@ -17,12 +17,14 @@ export const ActionButton = defineComponent({
   inheritAttrs: false,
   props: {
     isQuiet: {
-      type: Boolean,
+      type: Boolean as () => boolean | undefined,
       required: false,
+      default: undefined,
     },
     isDisabled: {
-      type: Boolean,
+      type: Boolean as () => boolean | undefined,
       required: false,
+      default: undefined,
     },
     staticColor: {
       type: String as () => SpectrumActionButtonProps["staticColor"],

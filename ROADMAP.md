@@ -4533,6 +4533,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Provider-prop forwarding parity slice ported:
   - `useProviderProps` now preserves inherited provider values when local component props are `undefined`.
   - `Checkbox` provider-state guard now honors merged provider props (`isReadOnly`/`isDisabled`) for selection-change suppression.
+  - `ActionButton` provider-inheritable boolean props now preserve `undefined` when omitted (`isQuiet`/`isDisabled`) so provider context values are not masked by Vue boolean coercion.
 - Open adaptation notes:
   - Remaining upstream wrapper gaps: exact upstream CSS-module class stack parity for Spectrum page/typography temp styles.
 
@@ -4552,6 +4553,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
   - Added provider/theme integration coverage validating `theme-light`, `theme-dark`, and `theme-express` variant class composition.
   - Added provider integration coverage using real `@vue-spectrum/checkbox` and `@vue-spectrum/switch` components for provider-prop forwarding semantics.
+  - Added provider integration coverage using real `@vue-spectrum/button` `ActionButton` for nested disabled/quiet forwarding semantics.
 - [x] All relevant upstream tests migrated
 
 ### Docs
@@ -7475,6 +7477,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/provider/test/Provider.test.ts`
   - `packages/@vue-spectrum/checkbox/src/Checkbox.ts`
 - Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/provider` forwarding parity update:
+  - expanded provider integration coverage for nested disabled/quiet forwarding with real `@vue-spectrum/button` `ActionButton`.
+  - updated `ActionButton` boolean prop definitions (`isQuiet`/`isDisabled`) to preserve `undefined` when omitted so provider-inherited values are retained.
+  - `packages/@vue-spectrum/provider/test/Provider.test.ts`
+  - `packages/@vue-spectrum/button/src/ActionButton.ts`
+- Validation: `npm test -- packages/@vue-spectrum/provider/test packages/@vue-spectrum/button/test` passed (9 files, 100 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.

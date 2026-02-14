@@ -1,5 +1,6 @@
 import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
+import { ActionButton } from "@vue-spectrum/button";
 import { Checkbox } from "@vue-spectrum/checkbox";
 import { theme as defaultTheme } from "@vue-spectrum/theme";
 import { Switch } from "@vue-spectrum/switch";
@@ -601,6 +602,49 @@ describe("Provider", () => {
 
     checkboxInput?.click();
     expect(onChangeSpy).not.toHaveBeenCalled();
+    unmount();
+  });
+
+  it("forwards nested provider disabled and quiet props to spectrum action buttons", () => {
+    const onPressSpy = vi.fn();
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isDisabled: true,
+              },
+              () =>
+                h(
+                  Provider,
+                  {
+                    isQuiet: true,
+                  },
+                  () =>
+                    h(
+                      ActionButton as any,
+                      {
+                        onPress: onPressSpy,
+                      },
+                      () => "Hello"
+                    )
+                )
+            );
+        },
+      })
+    );
+
+    const actionButton = container.querySelector(".spectrum-ActionButton") as HTMLButtonElement | null;
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.classList.contains("spectrum-ActionButton--quiet")).toBe(true);
+    expect(actionButton?.disabled).toBe(true);
+
+    actionButton?.click();
+    expect(onPressSpy).not.toHaveBeenCalled();
     unmount();
   });
 
