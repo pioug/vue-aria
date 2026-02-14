@@ -71,6 +71,12 @@ const { rowProps, rowHeaderProps, rowGroupProps } = useGridListSection(
 );
 ```
 
+## State management
+
+`useGridList` consumes a collection + selection manager, typically from `useListState`. For tree-backed collections, `useTreeState` is supported and row metadata is derived automatically.
+
+`useGridList` and `useGridListItem` manage container/row semantics, keyboard navigation, and selection behavior. `useGridListSelectionCheckbox` connects row checkboxes to the selection manager and row labels.
+
 ## Base markup example
 
 ```html
@@ -130,6 +136,148 @@ const { rowProps, rowHeaderProps, rowGroupProps } = useGridListSection(
   outline-offset: 2px;
 }
 ```
+
+## Checkbox and Button helpers
+
+Use reusable primitives for row checkboxes and action buttons.
+
+```ts
+import { useCheckbox } from "@vue-aria/checkbox";
+import { useToggleState } from "@vue-aria/toggle-state";
+import { useButton } from "@vue-aria/button";
+
+const checkboxRef = { current: null as HTMLInputElement | null };
+const buttonRef = { current: null as HTMLButtonElement | null };
+
+const checkboxState = useToggleState({ defaultSelected: false });
+const { inputProps } = useCheckbox({}, checkboxState, checkboxRef);
+const { buttonProps } = useButton({}, buttonRef);
+```
+
+## Usage
+
+### Dynamic collections
+
+Pass `items` with `getKey`/`getTextValue` (and optional `children` for nested data) to build the collection reactively.
+
+```ts
+const state = useListState({
+  items,
+  getKey: (item) => item.id,
+  getTextValue: (item) => item.label,
+});
+```
+
+### Selection modes
+
+`selectionMode` supports `"none"`, `"single"`, and `"multiple"`.
+
+```ts
+const single = useListState({ selectionMode: "single", items, getKey, getTextValue });
+const multiple = useListState({ selectionMode: "multiple", items, getKey, getTextValue });
+```
+
+### Disallow empty selection
+
+```ts
+const state = useListState({
+  selectionMode: "single",
+  disallowEmptySelection: true,
+  items,
+  getKey,
+  getTextValue,
+});
+```
+
+### Controlled selection
+
+```ts
+const state = useListState({
+  selectionMode: "multiple",
+  selectedKeys: new Set(["a", "c"]),
+  onSelectionChange: (keys) => {
+    // persist keys in app state
+  },
+  items,
+  getKey,
+  getTextValue,
+});
+```
+
+### Disabled rows
+
+```ts
+const state = useListState({
+  selectionMode: "multiple",
+  disabledKeys: new Set(["archived-row"]),
+  items,
+  getKey,
+  getTextValue,
+});
+```
+
+### Selection behavior
+
+`selectionBehavior` controls whether interactions replace selection (`"replace"`) or toggle items (`"toggle"`).
+
+```ts
+const state = useListState({
+  selectionMode: "multiple",
+  selectionBehavior: "toggle",
+  items,
+  getKey,
+  getTextValue,
+});
+```
+
+### Row actions
+
+Use `onAction` for row-level behavior (navigation/details/etc.) while preserving keyboard selection semantics.
+
+```ts
+const { gridProps } = useGridList(
+  {
+    "aria-label": "Grid list",
+    onAction: (key) => {
+      // open row details
+    },
+  },
+  state,
+  listRef
+);
+```
+
+### Links and routing
+
+Rows can expose link-like behavior through item props and shared routing helpers.
+
+```ts
+const items = [
+  { id: "doc-1", label: "API reference", href: "/docs/api" },
+  { id: "doc-2", label: "Guides", href: "/docs/guides" },
+];
+```
+
+### Asynchronous loading
+
+Use `useListData`/`useAsyncList` style data sources with `useListState` to support incremental loading and virtualization.
+
+```ts
+const state = useListState({
+  selectionMode: "multiple",
+  items: asyncItems,
+  getKey,
+  getTextValue,
+});
+```
+
+## Internationalization
+
+Row selection announcements and interactive row keyboard behavior are localized through `@vue-aria/i18n` and copied upstream `intl` bundles.
+
+### RTL
+
+For `keyboardNavigationBehavior="arrow"`, left/right child traversal automatically mirrors in RTL locales.
 
 ## Notes
 

@@ -2728,8 +2728,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/gridlist.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Expanded docs with upstream-aligned state-management, selection/action/link/async usage guidance and base markup/style patterns.
 
 ### Accessibility
 - [x] Baseline ARIA role/row/gridcell semantics validated in adapted tests.
@@ -2743,8 +2744,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Next Actions
 1. Expand integration-style interaction parity coverage from upstream consumers (`tree`, `tag`, list-view patterns) beyond the initial row-child navigation harness.
-2. Mirror additional upstream docs examples, including section and tabbable-child navigation variants.
-3. Close API checklist and visual/accessibility parity gates.
+2. Close API checklist and visual/accessibility parity gates.
+3. Monitor upstream gridlist docs and shared consumer stories for parity drift.
 
 ## 31k) Package Record: @vue-aria/tree
 - Upstream source path(s):
