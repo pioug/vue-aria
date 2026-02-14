@@ -181,4 +181,42 @@ describe("MenuTrigger", () => {
       vi.useRealTimers();
     }
   });
+
+  it("does not open menu on short press when trigger is longPress", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderMenuTrigger({
+        trigger: "longPress",
+      });
+      const trigger = wrapper.get('[data-testid="trigger"]');
+
+      expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+      trigger.element.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0, detail: 1 }));
+      await vi.advanceTimersByTimeAsync(300);
+      await trigger.trigger("mouseup", { button: 0 });
+      await wrapper.vm.$nextTick();
+
+      expect(document.body.querySelector('[role="menu"]')).toBeNull();
+      expect(trigger.attributes("aria-expanded")).toBe("false");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("does not open menu on Enter or Space when trigger is longPress", async () => {
+    const wrapper = renderMenuTrigger({
+      trigger: "longPress",
+    });
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    await trigger.trigger("keydown", { key: "Enter" });
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: " " });
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+  });
 });

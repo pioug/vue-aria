@@ -9521,3 +9521,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 33 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` long-press guard parity update:
+  - expanded `MenuTrigger` long-press coverage to assert sub-threshold presses do not open menus and keyboard `Enter`/`Space` do not open when long-press mode is active.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.
