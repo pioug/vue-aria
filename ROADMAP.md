@@ -9710,3 +9710,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 57 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` nested ArrowLeft close parity update:
+  - added migrated `SubmenuTrigger` coverage asserting nested submenu triggers open to a third menu level and `ArrowLeft` on the focused nested trigger closes only the deepest submenu layer.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 20 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 58 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
