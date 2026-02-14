@@ -588,9 +588,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
   - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
   - `docs/packages/spectrum-dialog.md`
+- Additional focus-restore parity update:
+  - `DialogTrigger` now restores focus to the trigger element after dialog close transitions.
+  - expanded nested trigger coverage to ensure opening/closing inner dialogs does not incorrectly restore focus to the outer trigger.
+  - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `docs/packages/spectrum-dialog.md`
 
 ### Remaining for completion
-- Add targeted parity coverage for nested focus-restore interaction flows from upstream dialog tests.
+- None currently tracked in this slice.
 
 ## 4m) Active Package Slice: @vue-spectrum/tooltip
 - Upstream source path(s):
@@ -7480,6 +7486,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
   - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` focus parity update:
+  - restored trigger focus on dialog close in `DialogTrigger`.
+  - expanded nested trigger focus-flow coverage to guard outer-trigger focus stability while inner dialogs open/close.
+  - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+  - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+  - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` composition parity update:
   - aligned `Header`/`Heading` conditional slot classes with upstream Spectrum states for missing heading/type icon context.

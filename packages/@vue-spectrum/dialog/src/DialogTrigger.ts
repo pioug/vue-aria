@@ -1,6 +1,6 @@
 import { useOverlayTrigger, useUNSAFE_PortalContext } from "@vue-aria/overlays";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
-import { Teleport, cloneVNode, computed, defineComponent, h, provide, ref, type PropType } from "vue";
+import { Teleport, cloneVNode, computed, defineComponent, h, nextTick, provide, ref, watch, type PropType } from "vue";
 import { DialogContext } from "./context";
 import type { DialogContextValue } from "./context";
 
@@ -82,6 +82,16 @@ export const DialogTrigger = defineComponent({
       ...overlayProps,
     }));
     provide(DialogContext, context as any);
+    watch(
+      () => state.isOpen,
+      (isOpen, wasOpen) => {
+        if (!isOpen && wasOpen) {
+          void nextTick(() => {
+            triggerRef.value?.focus();
+          });
+        }
+      }
+    );
 
     return () => {
       const triggerNodes = slots.trigger?.() ?? [];

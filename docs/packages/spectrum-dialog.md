@@ -106,6 +106,7 @@ const onOpenChange = (next: boolean) => {
 - for `modal`, outside-interaction dismiss requires `is-dismissable`.
 - `is-keyboard-dismiss-disabled` prevents Escape-key dismissal.
 - dialog overlays can render into custom portal roots via `portal-container` or `UNSAFE_PortalProvider`.
+- focus is restored to the triggering element when a dialog closes, including nested trigger flows.
 
 ### Uncontrolled initial open state
 

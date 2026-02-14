@@ -61,6 +61,60 @@ describe("DialogTrigger", () => {
     portalContainer.remove();
   });
 
+  it("restores focus to trigger when dialog closes", async () => {
+    const wrapper = mount(DialogTrigger as any, {
+      slots: {
+        trigger: () => h("button", { "data-testid": "trigger" }, "Trigger"),
+        default: ({ close }: { close: () => void }) =>
+          h(Dialog as any, null, {
+            default: () => h("button", { "data-testid": "close", onClick: close }, "Close"),
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get('[data-testid="trigger"]').trigger("click");
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(true);
+    await wrapper.get('[data-testid="close"]').trigger("click");
+    await wrapper.vm.$nextTick();
+    expect(document.activeElement).toBe(wrapper.get('[data-testid="trigger"]').element);
+    wrapper.unmount();
+  });
+
+  it("keeps outer trigger focus stable while nested dialogs open and close", async () => {
+    const wrapper = mount(DialogTrigger as any, {
+      slots: {
+        trigger: () => h("button", { "data-testid": "outer-trigger" }, "Open outer"),
+        default: () =>
+          h(Dialog as any, null, {
+            default: () =>
+              h(DialogTrigger as any, null, {
+                trigger: () => h("button", { "data-testid": "inner-trigger" }, "Open inner"),
+                default: ({ close }: { close: () => void }) =>
+                  h(Dialog as any, null, {
+                    default: () => h("button", { "data-testid": "inner-close", onClick: close }, "Close inner"),
+                  }),
+              }),
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get('[data-testid="outer-trigger"]').trigger("click");
+    await wrapper.get('[data-testid="inner-trigger"]').trigger("click");
+    await wrapper.vm.$nextTick();
+
+    const dialogs = wrapper.findAll('[role="dialog"]');
+    expect(dialogs.length).toBe(2);
+    expect(document.activeElement).not.toBe(wrapper.get('[data-testid="outer-trigger"]').element);
+
+    await wrapper.get('[data-testid="inner-close"]').trigger("click");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll('[role="dialog"]').length).toBe(1);
+    expect(document.activeElement).toBe(wrapper.get('[data-testid="inner-trigger"]').element);
+    wrapper.unmount();
+  });
+
   it("supports outside-interaction dismissal semantics by type", async () => {
     const nonDismissableModal = mount(DialogTrigger as any, {
       props: {
