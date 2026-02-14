@@ -369,6 +369,32 @@ export function tableTests() {
     expect(bodyRows[1]!.text()).toContain("Alpha");
   });
 
+  it("emits sort callbacks for interactive sorting on spanned columns", async () => {
+    const onSortChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Interactive sortable callback prop colSpan table",
+        columns: sortableColumnsWithSpan,
+        items: unsortedSortableItemsWithPropSpanCells,
+        onSortChange,
+      },
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    await press(headers[3]!);
+    await press(headers[3]!);
+
+    expect(onSortChange).toHaveBeenNthCalledWith(1, {
+      column: "col-4",
+      direction: "ascending",
+    });
+    expect(onSortChange).toHaveBeenNthCalledWith(2, {
+      column: "col-4",
+      direction: "descending",
+    });
+  });
+
   it("supports keyboard row navigation", async () => {
     const wrapper = renderTable({
       selectionMode: "single",

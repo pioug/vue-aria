@@ -8024,6 +8024,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 31 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` colSpan sort-callback parity update:
+  - added regression coverage to verify `onSortChange` payloads remain correct for repeated interactive sorting on spanned trailing columns.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 32 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` docs parity update:
   - documented that controlled sorting follows logical column indexes when earlier cells are spanned.
   - `docs/packages/spectrum-table.md`
