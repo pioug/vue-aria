@@ -2278,6 +2278,27 @@ export function tableTests() {
     expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("descending");
   });
 
+  it("applies sortable and sorted header state classes", async () => {
+    const wrapper = renderTable();
+
+    let headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.classes()).toContain("is-sortable");
+    expect(headers[1]!.classes()).toContain("is-sortable");
+    expect(headers[2]!.classes()).not.toContain("is-sortable");
+    expect(headers[0]!.classes()).not.toContain("is-sorted-asc");
+    expect(headers[0]!.classes()).not.toContain("is-sorted-desc");
+
+    await press(headers[0]!);
+    headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.classes()).toContain("is-sorted-asc");
+    expect(headers[0]!.classes()).not.toContain("is-sorted-desc");
+
+    await press(headers[0]!);
+    headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.classes()).toContain("is-sorted-desc");
+    expect(headers[0]!.classes()).not.toContain("is-sorted-asc");
+  });
+
   it("resets sort direction when switching to a different column", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });

@@ -322,6 +322,9 @@ const TableHeaderCell = defineComponent({
       domRef
     );
     const alignment = computed(() => resolveCellAlignment(props.node));
+    const columnProps = computed(() => (props.node.props ?? {}) as Record<string, unknown>);
+    const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
+    const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
 
     return () =>
       h(
@@ -334,10 +337,13 @@ const TableHeaderCell = defineComponent({
             "react-spectrum-Table-headCell",
             "react-spectrum-Table-cell",
             {
+              "is-sortable": Boolean(columnProps.value.allowsSorting),
+              "is-sorted-asc": sortDirection.value === "ascending",
+              "is-sorted-desc": sortDirection.value === "descending",
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
-              "spectrum-Table-cell--hideHeader": Boolean((props.node.props as Record<string, unknown> | undefined)?.hideHeader),
+              "spectrum-Table-cell--hideHeader": Boolean(columnProps.value.hideHeader),
             },
           ],
           "aria-colindex":
