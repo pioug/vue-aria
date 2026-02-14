@@ -1002,6 +1002,7 @@ export const TableView = defineComponent({
           attrsClass,
           "spectrum-Table",
           `spectrum-Table--${props.density ?? "regular"}`,
+          "react-spectrum-Table",
           "react-spectrum-TableView",
           {
             "spectrum-Table--quiet": props.isQuiet,

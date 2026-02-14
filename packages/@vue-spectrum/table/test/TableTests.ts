@@ -195,6 +195,7 @@ export function tableTests() {
     const grid = wrapper.get('[role="grid"]');
 
     expect(grid.classes()).toContain("spectrum-Table");
+    expect(grid.classes()).toContain("react-spectrum-Table");
     expect(grid.classes()).toContain("spectrum-Table--regular");
     expect(grid.classes()).not.toContain("spectrum-Table--quiet");
     expect(grid.classes()).not.toContain("spectrum-Table--wrap");
