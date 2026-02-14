@@ -140,7 +140,13 @@ export function usePickerState(
     },
     setValue(value: string | string[]) {
       const candidate = Array.isArray(value) ? value[0] : value;
-      if (!candidate) {
+      if (candidate == null) {
+        singleState.setSelectedKey(null);
+        return;
+      }
+
+      // Preserve falsy keys such as "" when they exist in the collection.
+      if (candidate === "" && !singleState.collection.getItem("" as Key)) {
         singleState.setSelectedKey(null);
         return;
       }

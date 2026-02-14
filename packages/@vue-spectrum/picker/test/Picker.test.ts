@@ -96,6 +96,48 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Two");
   });
 
+  it("supports selecting items with falsy keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+        items: [
+          { key: "", label: "Empty" },
+          { key: 0, label: "Zero" },
+          { key: "three", label: "Three" },
+        ],
+        onSelectionChange,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get("button");
+    expect(trigger.text()).toContain("Select…");
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    const select = wrapper.get("select");
+    (select.element as HTMLSelectElement).value = "";
+    await select.trigger("change");
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]).toBe("");
+    expect(wrapper.text()).toContain("Empty");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    (select.element as HTMLSelectElement).value = "0";
+    await select.trigger("change");
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(String(onSelectionChange.mock.calls[1]?.[0])).toBe("0");
+    expect(wrapper.text()).toContain("Zero");
+  });
+
   it("supports controlled selectedKey updates", async () => {
     const wrapper = renderPicker({
       selectedKey: "1",
