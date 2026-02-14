@@ -74,4 +74,51 @@ describe("useCalendarCell", () => {
     scope.stop();
     button.remove();
   });
+
+  it("adds start and finish range-selection prompts on the focused range cell", () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useRangeCalendarState>;
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+
+    scope.run(() => {
+      state = useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultFocusedValue: new CalendarDate(2024, 1, 10),
+      });
+      state.setFocused(true);
+    });
+
+    const focusedDate = state.focusedDate;
+    const startCell = useCalendarCell(
+      { date: focusedDate },
+      state,
+      { current: button }
+    );
+
+    const startDescriptionId = (startCell.buttonProps["aria-describedby"] as string | undefined)?.split(" ")[0];
+    expect(startDescriptionId).toBeDefined();
+    expect(document.getElementById(startDescriptionId!)?.textContent).toBe(
+      "Click to start selecting date range"
+    );
+
+    state.selectDate(focusedDate);
+
+    const finishCell = useCalendarCell(
+      { date: focusedDate },
+      state,
+      { current: button }
+    );
+
+    const finishDescriptionId = (finishCell.buttonProps["aria-describedby"] as string | undefined)?.split(" ")[0];
+    expect(finishDescriptionId).toBeDefined();
+    expect(document.getElementById(finishDescriptionId!)?.textContent).toBe(
+      "Click to finish selecting date range"
+    );
+
+    scope.stop();
+    button.remove();
+  });
 });
