@@ -2645,17 +2645,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation notes:
-  - Current tree-state slice supports iterable node collections and expanded-key + selection state parity paths.
-  - `@vue-aria/tree` hook integration is now wired through `@vue-aria/gridlist`; collection-builder parity expansion is still pending.
+  - Current tree-state slice now supports iterable node collections plus item-data builder callbacks (`items`, `getChildren`, `getKey`, `getTextValue`).
+  - `@vue-aria/tree` hook integration is now wired through `@vue-aria/gridlist`; broader collection-builder/story parity is still pending.
 
 ### Tests
 - Total upstream test files: 1 (`useTreeState.test.js`)
 - Ported test files: 1 (adapted)
-- Passing test files: 1 (validated 2026-02-13)
+- Passing test files: 1 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `TreeCollection` flattening coverage for collapsed vs expanded key visibility.
   - Added adapted `useTreeState` coverage for expanded-key toggling and selection-manager exposure.
   - Added adapted focused-key reset coverage when a focused node is removed from the reactive collection.
+  - Added adapted collection-builder callback coverage for nested item-data sources and fallback nested key generation.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -2674,7 +2675,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand tree-state collection-builder parity to cover children-driven story/test flows from upstream.
+1. Expand tree-state collection-builder parity beyond callback-based item sources to cover full children-driven story flows from upstream.
 2. Migrate additional upstream tree interaction assertions now that the `@vue-aria/tree` harness is in place.
 3. Close package-level docs/accessibility parity gates after tree integration matrix validation.
 
@@ -5282,3 +5283,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31k` test/accessibility notes to reflect the new integrated interaction slice.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree/test` passed (3 files, 4 tests).
+- Expanded `@vue-aria/tree-state` collection-builder parity:
+  - extended `useTreeState` with item-data callback inputs (`items`, `getChildren`, `getKey`, `getTextValue`) while preserving existing iterable-node collection paths.
+  - added adapted tests for nested callback-driven collection building and fallback nested-key generation behavior.
+  - updated tree-state docs with an item-data builder usage example.
+  - updated package record `31i` implementation/test notes and next-action wording to reflect completed callback-builder slice.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree-state/test packages/@vue-aria/tree/test` passed (4 files, 9 tests).

@@ -27,6 +27,28 @@ state.toggleKey("animals");
 state.setExpandedKeys(new Set(["plants"]));
 ```
 
+## Item-data builder example
+
+```ts
+import { useTreeState } from "@vue-aria/tree-state";
+
+const state = useTreeState({
+  selectionMode: "single",
+  items: [
+    {
+      id: "animals",
+      label: "Animals",
+      children: [{ id: "aardvark", label: "Aardvark" }],
+    },
+    { id: "plants", label: "Plants" },
+  ],
+  getKey: (item) => item.id,
+  getTextValue: (item) => item.label,
+  getChildren: (item) => item.children,
+  defaultExpandedKeys: ["animals"],
+});
+```
+
 ## Notes
 
 - Current package status: in progress (foundational tree state + collection slice).

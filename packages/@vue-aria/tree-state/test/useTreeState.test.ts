@@ -115,4 +115,78 @@ describe("useTreeState", () => {
 
     scope.stop();
   });
+
+  it("builds nested nodes from items/getChildren callbacks", () => {
+    interface RawNode {
+      id: string;
+      label: string;
+      children?: RawNode[];
+    }
+
+    const items: RawNode[] = [
+      {
+        id: "animals",
+        label: "Animals",
+        children: [
+          { id: "aardvark", label: "Aardvark" },
+          { id: "bear", label: "Bear" },
+        ],
+      },
+      {
+        id: "plants",
+        label: "Plants",
+      },
+    ];
+
+    const scope = effectScope();
+    let state!: ReturnType<typeof useTreeState<RawNode>>;
+    scope.run(() => {
+      state = useTreeState({
+        items,
+        getKey: (item) => item.id,
+        getTextValue: (item) => item.label,
+        getChildren: (item) => item.children,
+        defaultExpandedKeys: ["animals"],
+      });
+    });
+
+    expect([...state.collection.getKeys()]).toEqual([
+      "animals",
+      "aardvark",
+      "bear",
+      "plants",
+    ]);
+    expect(state.collection.getItem("bear")?.parentKey).toBe("animals");
+
+    scope.stop();
+  });
+
+  it("generates fallback nested keys for item data without explicit key extractors", () => {
+    interface RawNode {
+      label: string;
+      children?: RawNode[];
+    }
+
+    const items: RawNode[] = [
+      {
+        label: "Parent",
+        children: [{ label: "Child" }],
+      },
+    ];
+
+    const scope = effectScope();
+    let state!: ReturnType<typeof useTreeState<RawNode>>;
+    scope.run(() => {
+      state = useTreeState({
+        items,
+        getChildren: (item) => item.children,
+        defaultExpandedKeys: [0],
+      });
+    });
+
+    expect([...state.collection.getKeys()]).toEqual([0, "0.0"]);
+    expect(state.collection.getItem("0.0")?.parentKey).toBe(0);
+
+    scope.stop();
+  });
 });
