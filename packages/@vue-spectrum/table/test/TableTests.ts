@@ -519,6 +519,103 @@ export function tableTests() {
     expect(firstRowGridCells[1]!.attributes("aria-colindex")).toBe("4");
   });
 
+  it("supports kebab-case static slot cell col-span metadata", () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab col-span table">
+          <TableHeader>
+            <Column id="foo" is-row-header>Foo</Column>
+            <Column id="bar">Bar</Column>
+            <Column id="baz">Baz</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell>Foo 1</Cell>
+              <Cell col-span="2">Span 2</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const bodyRow = wrapper.get('tbody [role="row"]');
+    const rowHeaders = bodyRow.findAll('[role="rowheader"]');
+    const gridCells = bodyRow.findAll('[role="gridcell"]');
+
+    expect(rowHeaders).toHaveLength(1);
+    expect(gridCells).toHaveLength(1);
+    expect(gridCells[0]!.text()).toContain("Span 2");
+    expect(gridCells[0]!.attributes("colspan")).toBe("2");
+    expect(gridCells[0]!.attributes("aria-colspan")).toBe("2");
+    expect(gridCells[0]!.attributes("aria-colindex")).toBe("2");
+  });
+
+  it("supports kebab-case static slot row is-disabled metadata", async () => {
+    const onSelectionChange = vi.fn();
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      setup() {
+        return {
+          onSelectionChange,
+        };
+      },
+      template: `
+        <TableView
+          aria-label="Slot kebab disabled-row table"
+          selection-mode="single"
+          selection-style="highlight"
+          :on-selection-change="onSelectionChange"
+        >
+          <TableHeader>
+            <Column id="foo" is-row-header>Foo</Column>
+            <Column id="bar">Bar</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell>Foo 1</Cell>
+              <Cell>Bar 1</Cell>
+            </Row>
+            <Row id="row-2" is-disabled>
+              <Cell>Foo 2</Cell>
+              <Cell>Bar 2</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    const nextRows = wrapper.findAll('tbody [role="row"]');
+    expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports data-driven table cells with colSpan", () => {
     const wrapper = mount(TableView as any, {
       props: {

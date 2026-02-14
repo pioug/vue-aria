@@ -129,6 +129,26 @@ function normalizeBooleanProp(value: unknown): boolean {
   return Boolean(value);
 }
 
+function normalizeNumberProp(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.length === 0) {
+      return undefined;
+    }
+
+    const parsed = Number(trimmed);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+
+  return undefined;
+}
+
 function normalizeKey(value: unknown, fallback: TableKey): TableKey {
   return isTableKey(value) ? value : fallback;
 }
@@ -281,7 +301,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     align: normalizeColumnAlign(align),
     hideHeader: normalizeBooleanProp(hideHeader),
     showDivider: normalizeBooleanProp(showDivider),
-    colSpan: typeof colSpan === "number" && Number.isFinite(colSpan) ? colSpan : undefined,
+    colSpan: normalizeNumberProp(colSpan),
     content,
   };
 }
@@ -295,7 +315,7 @@ function parseCellNode(node: VNode, index: number): ParsedSpectrumTableCell {
   return {
     key: normalizeKey(node.key ?? props.id ?? props.key, `cell-${index}`),
     textValue,
-    colSpan: typeof colSpan === "number" && Number.isFinite(colSpan) ? colSpan : undefined,
+    colSpan: normalizeNumberProp(colSpan),
     content,
   };
 }
@@ -461,7 +481,7 @@ function normalizeColumnsFromProps(
         align: normalizeColumnAlign(column.align),
         hideHeader: column.hideHeader,
         showDivider: column.showDivider,
-        colSpan: column.colSpan,
+        colSpan: normalizeNumberProp(column.colSpan),
       };
     });
   }
@@ -520,9 +540,9 @@ function normalizeRowsFromProps(
           key: normalizeKey(cell.key, fallbackKey),
           textValue: cell.textValue ?? extractTextContent(cell.value),
           value: cell.value,
-          colSpan: cell.colSpan,
+          colSpan: normalizeNumberProp(cell.colSpan),
         });
-        columnCursor += Math.max(1, cell.colSpan ?? 1);
+        columnCursor += Math.max(1, normalizeNumberProp(cell.colSpan) ?? 1);
       }
 
       while (columnCursor < columns.length) {
@@ -541,7 +561,7 @@ function normalizeRowsFromProps(
           key: normalizeKey(cell.key, column.key),
           textValue: cell.textValue ?? extractTextContent(cell.value),
           value: cell.value,
-          colSpan: cell.colSpan,
+          colSpan: normalizeNumberProp(cell.colSpan),
         };
       });
     }
