@@ -2911,6 +2911,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useRangeCalendar` blur-to-commit range-selection behavior coverage.
   - Added adapted `useCalendarCell` selected/focused wiring and range hover-highlight coverage.
   - Added adapted range-selection prompt coverage for focused range cells (`start` and `finish` prompt descriptions).
+  - Added adapted range-cell interaction coverage for boundary-drag initiation, keyboard range-start auto-focus advance, and pointer-capture release behavior.
   - Added adapted upstream-style interaction matrix coverage for calendar keyboard navigation and visible/single pagination behavior.
   - Added adapted week/day pagination matrix coverage for visible vs single page behavior in both directions (`weeks:3`, `days:5`) and first-day-of-week locale matrix assertions (`en-US`, `fr-FR`).
   - Added upstream custom 4-5-4 calendar visible-range description cases for single-month and multi-month formatting branches.
