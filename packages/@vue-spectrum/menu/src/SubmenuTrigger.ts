@@ -163,7 +163,6 @@ export const SubmenuTrigger = defineComponent({
       const onDialogKeyDown = (event: KeyboardEvent) => {
         if (
           event.key !== "Tab"
-          || !event.shiftKey
           || event.defaultPrevented
         ) {
           return;

@@ -9978,3 +9978,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 95 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` contextual-help tab containment parity update:
+  - added migrated `MenuTrigger` coverage asserting `Tab` from a focused contextual-help dialog container moves focus to the first tabbable dialog element and remains contained on subsequent `Tab`.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+  - updated dialog-mode submenu key handling to apply the focused-dialog container guard for both `Tab` and `Shift+Tab`.
+    - `packages/@vue-spectrum/menu/src/SubmenuTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/MenuTrigger.test.ts` passed (1 file, 32 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 96 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.
