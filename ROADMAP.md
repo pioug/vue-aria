@@ -7035,3 +7035,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 83 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - blocked keyboard shortcut popover opening for disabled/read-only pickers by guarding group `onKeydown` handling in both variants.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added regression coverage ensuring `Alt+ArrowDown` does not open disabled/read-only pickers.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - clarified keyboard shortcut notes to document disabled/read-only suppression behavior.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 85 tests).
+- Validation: `npm run check -- --pretty false` passed.

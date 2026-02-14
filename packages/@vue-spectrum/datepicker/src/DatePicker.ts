@@ -472,7 +472,14 @@ export const DatePicker = defineComponent({
               ref: group.elementRef,
               class: "react-spectrum-DatePicker-group",
               "aria-required": merged.isRequired ? "true" : undefined,
-              onKeydown: (pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined,
+              onKeydown: (event: KeyboardEvent) => {
+                if (merged.isDisabled || merged.isReadOnly) {
+                  event.preventDefault();
+                  return;
+                }
+
+                ((pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(event);
+              },
               onKeyup: (pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined,
             },
             [
@@ -945,7 +952,14 @@ export const DateRangePicker = defineComponent({
               ref: group.elementRef,
               class: "react-spectrum-DateRangePicker-group",
               "aria-required": merged.isRequired ? "true" : undefined,
-              onKeydown: (pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined,
+              onKeydown: (event: KeyboardEvent) => {
+                if (merged.isDisabled || merged.isReadOnly) {
+                  event.preventDefault();
+                  return;
+                }
+
+                ((pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(event);
+              },
               onKeyup: (pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined,
             },
             [

@@ -329,4 +329,4 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 - Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `onFocus`, `onBlur`, `onFocusChange`, `onKeyDown`, `onKeyUp`, `isDisabled`, `isReadOnly`, `isRequired`, `isQuiet`, `isInvalid`, `validationState`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.
-- Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants.
+- Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants (shortcuts are ignored when disabled or read-only).
