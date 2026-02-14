@@ -9939,3 +9939,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 90 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` contextual-help underlay-dismiss parity update:
+  - added migrated `MenuTrigger` coverage asserting clicking the root underlay closes both the open contextual-help dialog and root menu, restoring focus to the trigger.
+    - `packages/@vue-spectrum/menu/test/MenuTrigger.test.ts`
+  - updated shared popover underlay/Escape dismissal handling to restore focus to the trigger after close.
+    - `packages/@vue-spectrum/menu/src/Popover.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 91 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -84,6 +84,16 @@ export const Popover = defineComponent({
   },
   setup(props, { slots }) {
     const container = computed(() => props.portalContainer ?? (typeof document !== "undefined" ? document.body : null));
+    const closeAndRestoreFocus = () => {
+      props.state.close();
+
+      Promise.resolve().then(() => {
+        if (props.triggerRef.current instanceof HTMLElement) {
+          props.triggerRef.current.focus();
+        }
+      });
+    };
+
     const onEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape" || event.defaultPrevented) {
         return;
@@ -91,7 +101,7 @@ export const Popover = defineComponent({
 
       event.stopPropagation();
       event.preventDefault();
-      props.state.close();
+      closeAndRestoreFocus();
     };
 
     return () => {
@@ -108,7 +118,7 @@ export const Popover = defineComponent({
           !props.isNonModal
             ? h("div", {
                 class: "spectrum-Underlay",
-                onClick: () => props.state.close(),
+                onClick: closeAndRestoreFocus,
               })
             : null,
           h(

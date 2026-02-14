@@ -336,6 +336,36 @@ describe("MenuTrigger", () => {
     expect(document.body.querySelector('[role="dialog"]')).toBeNull();
   });
 
+  it("closes the root menu and contextual help dialog when clicking the underlay", async () => {
+    const wrapper = renderContextualHelpMenuTrigger();
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(document.body.querySelector('[role="menu"]')).toBeTruthy();
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+    helpItem?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+
+    const underlay = document.body.querySelector(".spectrum-Underlay") as HTMLElement | null;
+    expect(underlay).toBeTruthy();
+
+    underlay?.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    underlay?.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+    underlay?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+    expect(document.activeElement).toBe(trigger.element);
+  });
+
   it("exposes trigger dom node and focus handle", async () => {
     const wrapper = renderMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');
