@@ -292,4 +292,50 @@ describe("SubmenuTrigger", () => {
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
     expect(document.body.textContent).not.toContain("Sub item");
   });
+
+  it("does not select submenu triggers even when selectedKeys includes the trigger key", async () => {
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, {
+            ariaLabel: "Menu",
+            selectionMode: "multiple",
+            selectedKeys: ["alpha", "more"],
+          }, {
+            default: () => [
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const checkedItems = Array.from(document.body.querySelectorAll('[role="menuitemcheckbox"]')) as HTMLElement[];
+    expect(checkedItems).toHaveLength(1);
+    expect(checkedItems[0]?.textContent).toContain("Alpha");
+    expect(checkedItems[0]?.getAttribute("aria-checked")).toBe("true");
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    expect(submenuTriggerItem?.getAttribute("aria-checked")).toBeNull();
+    expect(submenuTriggerItem?.getAttribute("aria-expanded")).toBe("false");
+
+    await wrapper.vm.$nextTick();
+  });
 });
