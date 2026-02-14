@@ -738,6 +738,25 @@ describe("TreeView", () => {
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
   });
 
+  it("does not expand rows from Enter when selection is enabled", async () => {
+    const wrapper = renderTree({
+      selectionMode: "single",
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("aria-selected")).toBe("false");
+
+    await pressEnter(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("aria-selected")).toBe("true");
+    expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+  });
+
   it('does not expand disabled rows when disabledBehavior is "all"', async () => {
     const wrapper = renderTree({
       selectionMode: "none",
@@ -790,6 +809,27 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
 
     await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenCalledWith("projects");
+    expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+  });
+
+  it("does not expand rows from Enter when row actions are configured", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "none",
+      onAction,
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+
+    await pressEnter(projectsRow!);
 
     projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
