@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { I18nProvider } from "@vue-aria/i18n";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h } from "vue";
 import { Item } from "../src/Item";
@@ -68,6 +69,64 @@ describe("SubmenuTrigger", () => {
     const allMenus = document.body.querySelectorAll('[role=\"menu\"]');
     expect(allMenus.length).toBeGreaterThanOrEqual(2);
     expect(document.body.textContent).toContain("Sub item");
+  });
+
+  it("opens and closes a nested submenu with rtl arrow keys", async () => {
+    const wrapper = mountTracked(I18nProvider as any, {
+      props: {
+        locale: "ar-AE",
+      },
+      slots: {
+        default: () =>
+          h(MenuTrigger as any, { defaultOpen: true }, {
+            default: () => [
+              h("button", { "data-testid": "trigger" }, "Menu Button"),
+              h(Menu as any, { ariaLabel: "Menu" }, {
+                default: () => [
+                  h(SubmenuTrigger as any, null, {
+                    default: () => [
+                      h(Item as any, { key: "more" }, { default: () => "More" }),
+                      h(Menu as any, { ariaLabel: "Submenu" }, {
+                        default: () => [
+                          h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+                ],
+              }),
+            ],
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    submenuTriggerItem?.focus();
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const openedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(openedTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    const submenuItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Sub item")) as HTMLElement | undefined;
+    expect(submenuItem).toBeTruthy();
+    submenuItem?.focus();
+    submenuItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const collapsedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(collapsedTrigger?.getAttribute("aria-expanded")).toBe("false");
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
   });
 
   it("opens a nested submenu with keyboard Enter and closes on Escape", async () => {
