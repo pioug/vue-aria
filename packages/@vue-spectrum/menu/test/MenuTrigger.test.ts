@@ -546,6 +546,67 @@ describe("MenuTrigger", () => {
     }
   });
 
+  it("keeps contextual help focus contained after reopening via hover", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderContextualHelpMenuTrigger(
+        {},
+        {},
+        () => h("div", { role: "dialog", tabIndex: -1 }, [
+          h("a", { href: "#", "data-testid": "contextual-help-link" }, "Learn more"),
+        ])
+      );
+
+      const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+      const siblingItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+      expect(helpItem).toBeTruthy();
+      expect(siblingItem).toBeTruthy();
+
+      helpItem?.click();
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+      expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+
+      hoverWithMouse(siblingItem as HTMLElement);
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+      expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+      hoverWithMouse(helpItem as HTMLElement);
+      await vi.advanceTimersByTimeAsync(250);
+      await wrapper.vm.$nextTick();
+
+      const dialog = document.body.querySelector('[role="dialog"]') as HTMLElement | null;
+      const link = document.body.querySelector('[data-testid="contextual-help-link"]') as HTMLElement | null;
+      expect(dialog).toBeTruthy();
+      expect(link).toBeTruthy();
+
+      dialog?.focus();
+      expect(document.activeElement).toBe(dialog);
+
+      dialog?.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      }));
+      await wrapper.vm.$nextTick();
+      expect(document.activeElement).toBe(link);
+
+      link?.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      }));
+      await wrapper.vm.$nextTick();
+      expect(document.body.querySelector('[role="dialog"]')).toBe(dialog);
+      expect(document.activeElement).toBe(link);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("supports refs on both the trigger element and MenuTrigger", async () => {
     let buttonRef: HTMLElement | null = null;
     let triggerRef: any = null;
