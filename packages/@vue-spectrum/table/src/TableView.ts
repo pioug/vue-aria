@@ -787,8 +787,13 @@ export const TableView = defineComponent({
       },
       onSelectionChange(keys) {
         if (keys === "all") {
+          const disabledKeys = new Set(props.disabledKeys as Iterable<TableKey> | undefined);
           const allKeys = new Set<TableKey>();
           for (const row of normalizedDefinition.value.rows) {
+            if (row.isDisabled || disabledKeys.has(row.key)) {
+              continue;
+            }
+
             allKeys.add(row.key);
           }
 

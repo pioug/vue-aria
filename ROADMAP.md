@@ -8115,6 +8115,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-aria/selection/src/useSelectableCollection.ts`
 - Validation: `npm test -- packages/@vue-aria/selection/test/useSelectableCollection.test.ts packages/@vue-spectrum/table/test` passed (3 files, 86 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` disabled select-all parity fix:
+  - fixed `"all"` selection payload conversion to exclude disabled rows/keys when translating checkbox-style select-all state into `onSelectionChange` key sets.
+  - added regression coverage to verify `Ctrl+A` does not include disabled rows in checkbox-style multiple selection.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 47 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

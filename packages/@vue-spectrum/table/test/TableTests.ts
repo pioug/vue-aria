@@ -710,6 +710,31 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("does not select disabled rows when using Ctrl+A in checkbox-style multiple selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      disabledKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+    expect(lastSelection?.has("row-2")).toBe(false);
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("clears checkbox-style multiple selection via Escape", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
