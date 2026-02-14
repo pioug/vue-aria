@@ -42,6 +42,29 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   await nextTick();
 }
 
+async function realPointerPress(target: { element: Element }) {
+  const element = target.element as HTMLElement;
+  element.dispatchEvent(new MouseEvent("mousedown", {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+    detail: 1,
+  }));
+  element.dispatchEvent(new MouseEvent("mouseup", {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+    detail: 1,
+  }));
+  element.dispatchEvent(new MouseEvent("click", {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+    detail: 1,
+  }));
+  await nextTick();
+}
+
 async function pointerDown(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
   await target.trigger("mousedown", { button: 0 });
   await nextTick();
@@ -1546,6 +1569,45 @@ describe("TreeView", () => {
     expect(updatedProjectsRow).toBeTruthy();
     expect(updatedPhotosRow!.attributes("aria-selected")).toBe("true");
     expect(updatedProjectsRow!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("replaces highlight selection without modifiers in multiple mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      selectionMode: "multiple",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const alphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    const gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(alphaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+
+    await realPointerPress(alphaRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("alpha")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    await realPointerPress(gammaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.has("alpha")).toBe(false);
+    expect(selected?.size).toBe(1);
+
+    const updatedAlphaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Alpha"));
+    const updatedGammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(updatedAlphaRow).toBeTruthy();
+    expect(updatedGammaRow).toBeTruthy();
+    expect(updatedAlphaRow!.attributes("aria-selected")).toBe("false");
+    expect(updatedGammaRow!.attributes("aria-selected")).toBe("true");
   });
 
   it("applies highlight selection data attributes on rows", async () => {

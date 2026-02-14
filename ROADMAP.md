@@ -9325,6 +9325,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 62 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` highlight-replace pointer parity update:
+  - added non-virtual mouse-press test harness helper and coverage to assert `selectionMode="multiple"` + `selectionStyle="highlight"` performs replace selection on unmodified row activation.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 63 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tree` highlight-toggle callback-count parity update:
   - expanded modifier-toggle highlight coverage to assert exactly two `onSelectionChange` emissions across initial select and modifier-add selection flows.
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
