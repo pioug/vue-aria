@@ -1,11 +1,14 @@
 # @vue-aria/datepicker-state
 
-`@vue-aria/datepicker-state` ports upstream `@react-stately/datepicker` picker state for single-date and range-date popover flows.
+`@vue-aria/datepicker-state` ports upstream `@react-stately/datepicker` state hooks for picker, field, and range flows.
 
 ## Implemented modules
 
 - `useDatePickerState`
+- `useDateFieldState`
 - `useDateRangePickerState`
+- `useTimeFieldState`
+- internal helpers: `IncompleteDate`, `placeholders`
 - shared formatter/validation helpers from `utils.ts`
 
 ## useDatePickerState example
@@ -39,8 +42,38 @@ state.setDateRange({
 });
 ```
 
+## useDateFieldState example
+
+```ts
+import { createCalendar } from "@internationalized/date";
+import { useDateFieldState } from "@vue-aria/datepicker-state";
+
+const state = useDateFieldState({
+  locale: "en-US",
+  createCalendar,
+});
+
+state.setSegment("month", 7);
+state.setSegment("day", 4);
+state.setSegment("year", 2025);
+```
+
+## useTimeFieldState example
+
+```ts
+import { useTimeFieldState } from "@vue-aria/datepicker-state";
+
+const state = useTimeFieldState({
+  locale: "en-US",
+  granularity: "minute",
+});
+
+state.setSegment("hour", 9);
+state.setSegment("minute", 30);
+```
+
 ## Notes
 
-- Current package status: in progress (date-picker and date-range-picker state core).
-- Date field/time field state modules remain to be ported.
+- Current package status: in progress (all upstream stately hooks are now ported).
+- Remaining closeout is focused on additional parity scenarios and downstream datepicker integration.
 - `Spectrum S2` is out of scope unless explicitly requested.
