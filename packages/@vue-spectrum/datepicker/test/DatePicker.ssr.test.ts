@@ -1,4 +1,4 @@
-import { CalendarDate } from "@internationalized/date";
+import { CalendarDate, CalendarDateTime } from "@internationalized/date";
 import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { describe, expect, it } from "vitest";
@@ -212,5 +212,46 @@ describe("DatePicker SSR", () => {
 
     const html = await renderToString(createSSRApp(App));
     expect(html).toContain("Range callback error");
+  });
+
+  it("renders DatePicker with CalendarDateTime granularity without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DatePickerSSRTimeGranularityApp",
+      setup() {
+        return () =>
+          h(DatePicker, {
+            "aria-label": "Date picker",
+            defaultValue: new CalendarDateTime(2019, 6, 5, 9, 30),
+            granularity: "minute",
+            hourCycle: 24,
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DatePicker");
+    expect(html).toContain("June");
+  });
+
+  it("renders DateRangePicker with CalendarDateTime granularity without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DateRangePickerSSRTimeGranularityApp",
+      setup() {
+        return () =>
+          h(DateRangePicker, {
+            "aria-label": "Date range picker",
+            defaultValue: {
+              start: new CalendarDateTime(2019, 6, 5, 9, 30),
+              end: new CalendarDateTime(2019, 6, 8, 11, 0),
+            },
+            granularity: "minute",
+            hourCycle: 24,
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("react-spectrum-DateRangePicker");
+    expect(html).toContain("June");
   });
 });
