@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/calendar-state`
+- Current focus package: `@vue-aria/calendar`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -2903,13 +2903,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 1 (`useCalendar.test.js`)
-- Ported test files: 4 (adapted)
-- Passing test files: 4 (validated 2026-02-14)
+- Ported test files: 5 (adapted)
+- Passing test files: 5 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted keyboard mapping coverage for `useCalendarGrid`.
   - Added adapted `useCalendar` base-aria/title navigation coverage.
   - Added adapted `useRangeCalendar` blur-to-commit range-selection behavior coverage.
   - Added adapted `useCalendarCell` selected/focused wiring and range hover-highlight coverage.
+  - Added adapted upstream-style interaction matrix coverage for calendar keyboard navigation and visible/single pagination behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
