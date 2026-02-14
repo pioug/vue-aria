@@ -184,6 +184,34 @@ describe("ListBox", () => {
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
   });
 
+  it("skips disabled options during keyboard navigation", async () => {
+    const wrapper = renderListBox({
+      selectionMode: "single",
+      disabledKeys: ["Baz"],
+    });
+    const listbox = wrapper.get('[role="listbox"]');
+    (listbox.element as HTMLElement).focus();
+    await nextTick();
+
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
+
+    (document.activeElement as HTMLElement | null)?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Bar");
+
+    (document.activeElement as HTMLElement | null)?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Blah");
+
+    (document.activeElement as HTMLElement | null)?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Bar");
+
+    (document.activeElement as HTMLElement | null)?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    await nextTick();
+    expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
+  });
+
   it("wraps keyboard focus when shouldFocusWrap is enabled", async () => {
     const wrapper = renderListBox({
       shouldFocusWrap: true,

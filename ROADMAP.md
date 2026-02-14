@@ -7687,6 +7687,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 12 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` disabled-navigation parity update:
+  - added keyboard-navigation coverage asserting disabled options are skipped during ArrowUp/ArrowDown traversal.
+  - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 13 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
