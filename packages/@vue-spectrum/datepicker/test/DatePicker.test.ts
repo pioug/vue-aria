@@ -732,6 +732,9 @@ describe("DatePicker", () => {
 
     expect(wrapper.text()).toContain("Choose a valid date from callback");
     expect(errorMessage).toHaveBeenCalled();
+    const callArgs = errorMessage.mock.calls as unknown[][];
+    const payload = (callArgs.at(0)?.[0] ?? {}) as { validationErrors?: unknown[] };
+    expect(Array.isArray(payload?.validationErrors)).toBe(true);
   });
 
   it("renders description text when provided", () => {
@@ -1691,6 +1694,9 @@ describe("DateRangePicker", () => {
 
     expect(wrapper.text()).toContain("Choose a valid range from callback");
     expect(errorMessage).toHaveBeenCalled();
+    const callArgs = errorMessage.mock.calls as unknown[][];
+    const payload = (callArgs.at(0)?.[0] ?? {}) as { validationErrors?: unknown[] };
+    expect(Array.isArray(payload?.validationErrors)).toBe(true);
   });
 
   it("renders range description text when provided", () => {
