@@ -9804,3 +9804,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 68 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/menu` tray hover-guard hook parity update:
+  - added adapted `useSubmenuTrigger` hook coverage asserting small-screen tray mode:
+    - does not open submenus from delayed hover on submenu trigger rows
+    - does not close open submenus from parent-menu sibling `pointerover` events
+    - `packages/@vue-aria/menu/test/useSubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 68 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

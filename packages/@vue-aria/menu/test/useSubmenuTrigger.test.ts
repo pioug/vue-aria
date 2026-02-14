@@ -134,6 +134,69 @@ describe("useSubmenuTrigger", () => {
     vi.useRealTimers();
   });
 
+  it("does not open on hover in small-screen tray mode", () => {
+    const screenWidthSpy = vi.spyOn(window.screen, "width", "get").mockImplementation(() => 700);
+    vi.useFakeTimers();
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const submenu = document.createElement("ul");
+    parent.appendChild(trigger);
+    document.body.append(parent, submenu);
+
+    const state = createState();
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    let submenuTriggerProps: any = null;
+    scope.run(() => {
+      ({ submenuTriggerProps } = useSubmenuTrigger(
+        { parentMenuRef, submenuRef, delay: 150 },
+        state,
+        triggerRef
+      ));
+    });
+
+    submenuTriggerProps.onHoverChange(true);
+    vi.advanceTimersByTime(200);
+    expect(state.open).not.toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+    screenWidthSpy.mockRestore();
+    vi.useRealTimers();
+  });
+
+  it("does not close on parent pointerover in small-screen tray mode", () => {
+    const screenWidthSpy = vi.spyOn(window.screen, "width", "get").mockImplementation(() => 700);
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const sibling = document.createElement("li");
+    const submenu = document.createElement("ul");
+    parent.append(trigger, sibling);
+    document.body.append(parent, submenu);
+
+    const state = createState({ isOpen: true });
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useSubmenuTrigger({ parentMenuRef, submenuRef }, state, triggerRef);
+    });
+
+    sibling.dispatchEvent(new Event("pointerover", { bubbles: true }));
+    expect(state.close).not.toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+    screenWidthSpy.mockRestore();
+  });
+
   it("closes submenu on Escape from submenu and restores focus to trigger", () => {
     const parent = document.createElement("ul");
     const trigger = document.createElement("li");
