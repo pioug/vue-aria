@@ -9493,3 +9493,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 80 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/tree` integration metadata parity update:
+  - corrected integration expectation for child row `aria-posinset` to match sibling-relative ordering within parent branches.
+    - `packages/@vue-aria/tree/test/useTreeItem.integration.test.ts`
+- Validation: `npm test -- packages/@vue-aria/tree/test packages/@vue-aria/tree-state/test packages/@vue-spectrum/tree/test` passed (9 files, 96 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -210,7 +210,7 @@ describe("useTreeItem integration", () => {
     )!;
 
     expect(childAria.rowProps["aria-level"]).toBe(2);
-    expect(childAria.rowProps["aria-posinset"]).toBe(3);
+    expect(childAria.rowProps["aria-posinset"]).toBe(2);
     expect(childAria.rowProps["aria-setsize"]).toBe(2);
     scope.stop();
   });
