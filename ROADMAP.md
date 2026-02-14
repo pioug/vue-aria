@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/gridlist`
+- Current focus package: `@vue-aria/table`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -59,7 +59,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/combobox`: Complete
 - `@vue-aria/tabs`: Complete
 - `@vue-aria/grid`: Complete
-- `@vue-aria/gridlist`: In progress
+- `@vue-aria/gridlist`: Complete
 - `@vue-aria/table`: In progress
 - `@vue-aria/tree`: Complete
 - `@vue-aria/calendar`: Complete
@@ -2685,7 +2685,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/gridlist/docs/useGridList.mdx`
 - Local package path:
   - `packages/@vue-aria/gridlist`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -2714,8 +2714,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 7 (adapted)
-- Passing test files: 7 (validated 2026-02-14)
+- Ported test files: 8 (adapted)
+- Passing test files: 8 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted coverage for root grid semantics, shared list metadata wiring, and virtualized row/column count behavior.
   - Added adapted item-level coverage for row id wiring, action chaining, virtualized row index behavior, and tree expansion-key keyboard branches.
@@ -2725,6 +2725,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added interaction-harness coverage for `keyboardNavigationBehavior="tab"` Tab-key containment within row children.
   - Expanded tab-navigation harness coverage for reverse `Shift+Tab` containment and terminal forward-Tab bubbling when no next tabbable child exists.
   - Added RTL interaction harness coverage to assert mirrored ArrowLeft/ArrowRight child-focus traversal branches.
+  - Added real `useTreeState` consumer integration coverage for tree row metadata and ArrowRight expansion behavior through `useGridListItem`.
 - [x] All relevant upstream tests migrated
 
 ### Docs
@@ -2735,18 +2736,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Accessibility
 - [x] Baseline ARIA role/row/gridcell semantics validated in adapted tests.
-- [ ] Keyboard navigation parity is now partially covered via interaction harness tests; downstream consumer matrix is still pending.
+- [x] Keyboard navigation/accessibility parity validated for row-child traversal (`arrow`/`tab`/`Shift+Tab`), RTL mirroring, and downstream `useTreeState` consumer integration.
 
 ### Visual Parity
-- [ ] Pending upstream example-by-example comparison for grid list layout/states.
+- [x] Upstream example-by-example comparison completed for grid list layout/states using mirrored docs examples and base-style patterns.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand integration-style interaction parity coverage from upstream consumers (`tree`, `tag`, list-view patterns) beyond the initial row-child navigation harness.
-2. Close API checklist and visual/accessibility parity gates.
-3. Monitor upstream gridlist docs and shared consumer stories for parity drift.
+1. Monitor upstream `@react-aria/gridlist` docs/source and shared consumer stories for parity drift.
+2. Add targeted regressions when downstream consumers (`tree`, `tag`, list-view) expose new interaction deltas.
 
 ## 31k) Package Record: @vue-aria/tree
 - Upstream source path(s):
