@@ -982,6 +982,7 @@ describe("TreeView", () => {
     let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
     expect(projectsRow!.attributes("aria-selected")).toBe("false");
 
     await press(projectsRow!);
@@ -989,6 +990,7 @@ describe("TreeView", () => {
     projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
     expect(projectsRow!.attributes("aria-selected")).toBe("true");
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
   });
@@ -1001,6 +1003,7 @@ describe("TreeView", () => {
     let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
     expect(projectsRow!.attributes("aria-selected")).toBe("false");
 
     await pressEnter(projectsRow!);
@@ -1008,6 +1011,7 @@ describe("TreeView", () => {
     projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
     expect(projectsRow!.attributes("aria-selected")).toBe("true");
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
   });
