@@ -248,6 +248,40 @@ describe("useSubmenuTrigger", () => {
     submenu.remove();
   });
 
+  it("keeps aria-haspopup while disabled and blocks open interactions", () => {
+    const parent = document.createElement("ul");
+    const trigger = document.createElement("li");
+    const submenu = document.createElement("ul");
+    parent.appendChild(trigger);
+    document.body.append(parent, submenu);
+
+    const state = createState();
+    const parentMenuRef = { current: parent as HTMLElement | null };
+    const submenuRef = { current: submenu as HTMLElement | null };
+    const triggerRef = { current: trigger as HTMLElement | null };
+
+    const scope = effectScope();
+    let submenuTriggerProps: any = null;
+    scope.run(() => {
+      ({ submenuTriggerProps } = useSubmenuTrigger(
+        { parentMenuRef, submenuRef, isDisabled: true },
+        state,
+        triggerRef
+      ));
+    });
+
+    expect(submenuTriggerProps["aria-haspopup"]).toBe("menu");
+
+    submenuTriggerProps.onPressStart({ pointerType: "keyboard" });
+    submenuTriggerProps.onPress({ pointerType: "mouse" });
+    submenuTriggerProps.onKeyDown(createKeyboardEvent("ArrowRight", trigger, trigger));
+    expect(state.open).not.toHaveBeenCalled();
+
+    scope.stop();
+    parent.remove();
+    submenu.remove();
+  });
+
   it("closes when focus moves to another item in the same parent menu", () => {
     const parent = document.createElement("ul");
     const trigger = document.createElement("li");

@@ -9618,3 +9618,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 35 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/menu` disabled-submenu trigger semantics parity update:
+  - kept submenu trigger `aria-haspopup` semantics active even when the trigger item is disabled, while preserving disabled open-guard behavior for keyboard/press interactions.
+    - `packages/@vue-aria/menu/src/useSubmenuTrigger.ts`
+  - added adapted hook coverage asserting disabled submenu triggers retain `aria-haspopup` and block open interactions.
+    - `packages/@vue-aria/menu/test/useSubmenuTrigger.test.ts`
+  - tightened `@vue-spectrum/menu` disabled-submenu coverage to assert `aria-haspopup="menu"` on disabled submenu trigger rows.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 36 tests).
+- Validation: `npm run check -- --pretty false` passed.

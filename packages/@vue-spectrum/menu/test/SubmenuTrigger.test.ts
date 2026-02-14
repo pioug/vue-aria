@@ -92,6 +92,7 @@ describe("SubmenuTrigger", () => {
     const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
     const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
     expect(submenuTriggerItem).toBeTruthy();
+    expect(submenuTriggerItem?.getAttribute("aria-haspopup")).toBe("menu");
     expect(submenuTriggerItem?.getAttribute("aria-disabled")).toBe("true");
 
     submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
@@ -505,12 +506,11 @@ describe("SubmenuTrigger", () => {
     await wrapper.vm.$nextTick();
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
 
-    const submenuItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
-      .find((item) => item.textContent?.includes("Sub item")) as HTMLElement | undefined;
-    expect(submenuItem).toBeTruthy();
-    submenuItem?.focus();
+    const submenuMenu = Array.from(document.body.querySelectorAll('[role="menu"]'))
+      .find((menu) => menu.textContent?.includes("Sub item")) as HTMLElement | undefined;
+    expect(submenuMenu).toBeTruthy();
 
-    submenuItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    submenuMenu?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     await wrapper.vm.$nextTick();
 
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
