@@ -2726,6 +2726,56 @@ describe("TreeView", () => {
     expect(document.activeElement).toBe(rows[1]!.element);
   });
 
+  it("navigates visible rows with ArrowUp and ArrowDown after collapsing a parent row", async () => {
+    const wrapper = renderTree({
+      items: [
+        {
+          id: "projects",
+          name: "Projects",
+          children: [{ id: "projects-1", name: "Project 1" }],
+        },
+        { id: "reports", name: "Reports" },
+      ],
+      defaultExpandedKeys: ["projects"],
+      autoFocus: "first",
+    });
+
+    await nextTick();
+
+    const tree = wrapper.get('[role="treegrid"]');
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(3);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    await tree.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[1]!.element);
+
+    await tree.trigger("keydown", { key: "ArrowUp" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    await projectsRow!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(2);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    await tree.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[1]!.element);
+
+    await tree.trigger("keydown", { key: "ArrowUp" });
+    await nextTick();
+    rows = wrapper.findAll('[role="row"]');
+    expect(document.activeElement).toBe(rows[0]!.element);
+  });
+
   it("navigates visible rows with Home and End", async () => {
     const wrapper = renderTree({
       defaultExpandedKeys: ["projects"],

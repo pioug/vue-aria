@@ -9445,3 +9445,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 74 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` collapsed-row keyboard-navigation parity update:
+  - added keyboard navigation coverage to assert ArrowUp/ArrowDown target only visible rows after collapsing an expanded parent row with ArrowLeft.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 75 tests).
+- Validation: `npm run check -- --pretty false` passed.
