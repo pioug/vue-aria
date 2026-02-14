@@ -90,6 +90,10 @@ describe("TreeView SSR", () => {
     expect(html).toContain("react-spectrum-TreeView");
     expect(html).toContain('data-empty="true"');
     expect(html).toContain('role="row"');
+    expect(html).toContain('aria-level="1"');
+    expect(html).toContain('data-level="1"');
+    expect(html).not.toContain("aria-posinset");
+    expect(html).not.toContain("aria-setsize");
     expect(html).toContain('role="gridcell"');
     expect(html).toContain("No rows");
   });

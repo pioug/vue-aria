@@ -9483,3 +9483,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 79 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` empty-state SSR metadata parity update:
+  - expanded SSR empty-state assertions to cover row-level `aria-level`/`data-level` metadata and absence of hierarchy-position attributes in server-rendered markup.
+    - `packages/@vue-spectrum/tree/test/TreeView.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 79 tests).
+- Validation: `npm run check -- --pretty false` passed.
