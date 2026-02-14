@@ -54,6 +54,73 @@ describe("TreeView", () => {
     expect(rows[1]!.text()).toContain("Projects");
   });
 
+  it("supports DOM props on tree rows", async () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "DOM tree",
+        "data-testid": "tree-root",
+        defaultExpandedKeys: ["projects"],
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos", "data-testid": "row-photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects", "data-testid": "row-projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1", "data-testid": "row-project-1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const tree = wrapper.get('[role="treegrid"]');
+    expect(tree.attributes("data-testid")).toBe("tree-root");
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows.find((row) => row.text().includes("Photos"))?.attributes("data-testid")).toBe("row-photos");
+    expect(rows.find((row) => row.text().includes("Projects"))?.attributes("data-testid")).toBe("row-projects");
+    expect(rows.find((row) => row.text().includes("Project 1"))?.attributes("data-testid")).toBe("row-project-1");
+  });
+
+  it("applies custom aria-label to rows", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Label tree",
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "row-1", textValue: "Row 1", "aria-label": "Custom row label" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Row 1",
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const row = wrapper.get('[role="row"]');
+    expect(row.attributes("aria-label")).toBe("Custom row label");
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 

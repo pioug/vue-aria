@@ -134,13 +134,15 @@ const TreeRow = defineComponent({
       expandButtonRef as any
     );
 
-    return () =>
-      h(
+    return () => {
+      const rowProps = rowAria.rowProps as Record<string, unknown>;
+      return h(
         "div",
         {
-          ...rowAria.rowProps,
+          ...rowProps,
           ref: rowElementRef,
           class: [
+            rowProps.class,
             "react-spectrum-TreeView-row",
             {
               "is-disabled": rowAria.isDisabled,
@@ -200,6 +202,7 @@ const TreeRow = defineComponent({
           ),
         ]
       );
+    };
   },
 });
 

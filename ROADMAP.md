@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/table`
+- Current focus package: `@vue-spectrum/tree`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7604,6 +7604,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - tightened disabled keyboard-navigation coverage by dispatching arrow-key input from the focused row element (matching runtime event-target semantics) rather than the root grid element.
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 116 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row prop and label parity update:
+  - forwarded custom tree-item row DOM props through collection nodes into row semantics (including static-slot and data-driven trees).
+  - added row `aria-label` override support from tree-item props, aligning row labeling behavior with upstream expectations.
+  - preserved custom row class merging while retaining Spectrum state classes.
+  - `packages/@vue-spectrum/tree/src/types.ts`
+  - `packages/@vue-spectrum/tree/src/TreeView.ts`
+  - `packages/@vue-aria/gridlist/src/useGridListItem.ts`
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test packages/@vue-aria/gridlist/test` passed (10 files, 27 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.

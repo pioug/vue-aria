@@ -24,6 +24,8 @@ export interface NormalizedTreeItem {
   rendered: VNodeChild;
   isDisabled?: boolean | undefined;
   href?: string | undefined;
+  ariaLabel?: string | undefined;
+  rowProps?: Record<string, unknown> | undefined;
   value?: SpectrumTreeViewItemData | undefined;
   children: NormalizedTreeItem[];
 }
@@ -46,6 +48,43 @@ function normalizeKey(value: unknown, fallback: TreeKey): TreeKey {
   }
 
   return fallback;
+}
+
+function normalizeAriaLabel(value: unknown): string | undefined {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }
+
+  return undefined;
+}
+
+function extractTreeItemRowProps(source: Record<string, unknown>): Record<string, unknown> {
+  const rowProps: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(source)) {
+    if (
+      key === "id"
+      || key === "key"
+      || key === "textValue"
+      || key === "text-value"
+      || key === "name"
+      || key === "isDisabled"
+      || key === "is-disabled"
+      || key === "href"
+      || key === "children"
+      || key === "childItems"
+      || key === "child-items"
+      || key === "rendered"
+      || key === "ariaLabel"
+      || key === "aria-label"
+    ) {
+      continue;
+    }
+
+    rowProps[key] = value;
+  }
+
+  return rowProps;
 }
 
 export function extractTextContent(value: unknown): string {
@@ -184,6 +223,8 @@ function parseTreeItemNode(node: VNode, index: number, parentPath: string): Norm
     rendered,
     isDisabled: Boolean(props.isDisabled),
     href: toStringValue(props.href) || undefined,
+    ariaLabel: normalizeAriaLabel(props["aria-label"] ?? props.ariaLabel),
+    rowProps: extractTreeItemRowProps(props),
     children: itemNodes.map((child, childIndex) => parseTreeItemNode(child, childIndex, String(key))),
   };
 }
@@ -203,6 +244,7 @@ export function parseTreeSlotItems(nodes: VNode[] | undefined): NormalizedTreeIt
 }
 
 function normalizeDataItem(item: SpectrumTreeViewItemData, index: number, parentPath: string): NormalizedTreeItem {
+  const itemRecord = item as Record<string, unknown>;
   const key = normalizeKey(item.key ?? item.id, `${parentPath}-${index}`);
   const rendered = item.rendered ?? item.name ?? item.textValue ?? String(key);
   const textValue = item.textValue ?? item.name ?? extractTextContent(rendered) ?? String(key);
@@ -214,6 +256,8 @@ function normalizeDataItem(item: SpectrumTreeViewItemData, index: number, parent
     rendered,
     isDisabled: item.isDisabled,
     href: item.href,
+    ariaLabel: normalizeAriaLabel(itemRecord["aria-label"] ?? itemRecord.ariaLabel),
+    rowProps: extractTreeItemRowProps(itemRecord),
     value: item,
     children: childItems.map((child, childIndex) => normalizeDataItem(child, childIndex, String(key))),
   };
@@ -261,6 +305,8 @@ function toCollectionNode(
     props: {
       isDisabled: item.isDisabled,
       href: item.href,
+      rowProps: item.rowProps,
+      "aria-label": item.ariaLabel,
     },
     colSpan: null,
     colIndex: null,

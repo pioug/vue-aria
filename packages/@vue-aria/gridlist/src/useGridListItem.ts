@@ -29,6 +29,27 @@ export interface GridListItemAria extends SelectableItemStates {
   descriptionProps: Record<string, unknown>;
 }
 
+function getNodeRowProps(node: CollectionNode<unknown>): Record<string, unknown> {
+  const props = node.props as Record<string, unknown> | undefined;
+  const rowProps = props?.rowProps;
+  if (!rowProps || typeof rowProps !== "object" || Array.isArray(rowProps)) {
+    return {};
+  }
+
+  return rowProps as Record<string, unknown>;
+}
+
+function getNodeAriaLabel(node: CollectionNode<unknown>): string | undefined {
+  const props = node.props as Record<string, unknown> | undefined;
+  const ariaLabel = props?.["aria-label"] ?? props?.ariaLabel;
+  if (typeof ariaLabel !== "string") {
+    return undefined;
+  }
+
+  const trimmed = ariaLabel.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
 const EXPANSION_KEYS = {
   expand: {
     ltr: "ArrowRight",
@@ -263,12 +284,14 @@ export function useGridListItem<T>(
 
   const syntheticLinkProps = useSyntheticLinkProps(node.props);
   const linkProps = itemStates.hasAction ? syntheticLinkProps : {};
-  const rowProps = mergeProps(itemProps, linkProps, {
+  const customRowProps = getNodeRowProps(node);
+  const nodeAriaLabel = getNodeAriaLabel(node);
+  const rowProps = mergeProps(itemProps, linkProps, customRowProps, {
     role: "row",
     onKeydownCapture,
     onKeydown,
     onFocus,
-    "aria-label": node["aria-label"] || node.textValue || undefined,
+    "aria-label": (nodeAriaLabel ?? node["aria-label"] ?? node.textValue) || undefined,
     "aria-selected": state.selectionManager.canSelectItem(node.key)
       ? state.selectionManager.isSelected(node.key)
       : undefined,
