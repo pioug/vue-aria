@@ -215,6 +215,68 @@ describe("NumberField", () => {
     }
   });
 
+  it("uses numeric inputMode on iPad WebKit paths", () => {
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+
+    try {
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "iPad",
+      });
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "AppleWebKit",
+      });
+
+      expect(renderNumberField().get('input[type="text"]').attributes("inputmode")).toBe("numeric");
+      expect(
+        renderNumberField({ minValue: 0 }).get('input[type="text"]').attributes("inputmode")
+      ).toBe("numeric");
+      expect(
+        renderNumberField({
+          minValue: 0,
+          formatOptions: { maximumFractionDigits: 0 },
+        }).get('input[type="text"]').attributes("inputmode")
+      ).toBe("numeric");
+    } finally {
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+    }
+  });
+
+  it("uses numeric inputMode on Mac WebKit paths", () => {
+    const platformDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "platform");
+    const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
+
+    try {
+      Object.defineProperty(window.navigator, "platform", {
+        configurable: true,
+        value: "MacIntel",
+      });
+      Object.defineProperty(window.navigator, "userAgent", {
+        configurable: true,
+        value: "AppleWebKit",
+      });
+
+      expect(renderNumberField().get('input[type="text"]').attributes("inputmode")).toBe("numeric");
+      expect(
+        renderNumberField({ minValue: 0 }).get('input[type="text"]').attributes("inputmode")
+      ).toBe("numeric");
+    } finally {
+      if (platformDescriptor) {
+        Object.defineProperty(window.navigator, "platform", platformDescriptor);
+      }
+      if (userAgentDescriptor) {
+        Object.defineProperty(window.navigator, "userAgent", userAgentDescriptor);
+      }
+    }
+  });
+
   it("supports wheel stepping only while focused", async () => {
     const onChange = vi.fn();
     const wrapper = renderNumberField({

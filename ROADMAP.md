@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/numberfield`
+- Current focus package: `@vue-spectrum/breadcrumbs`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -107,7 +107,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/switch`: Complete
 - `@vue-spectrum/textfield`: Complete
 - `@vue-spectrum/searchfield`: Complete
-- `@vue-spectrum/numberfield`: In progress
+- `@vue-spectrum/numberfield`: Complete
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: Complete
 - `@vue-spectrum/menu`: In progress
@@ -140,7 +140,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/button/test`
   - `references/react-spectrum/packages/@react-spectrum/button/docs`
 - Local package path: `packages/@vue-spectrum/button`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -581,9 +581,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - leading-decimal commit parsing (`.5` -> `0.5`)
     - step-rounding commit behavior payloads for positive/negative values
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Additional input-mode parity update:
+  - expanded WebKit-desktop matrix coverage for iPad and Mac Safari user-agent/platform branches, asserting numeric keyboard fallback behavior for default, constrained, and integer-only configurations.
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 
 ### Remaining for completion
-- Expand test parity coverage for the remaining locale/inputMode matrix from upstream.
+- None currently tracked in this slice.
 
 ## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
 - Upstream source path(s):
@@ -7569,6 +7572,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` input-mode parity update:
+  - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
+  - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 37 tests).
 - Additional `@vue-spectrum/progress` visual parity update:
   - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
   - expanded progress docs with explicit `overBackground` examples for both components.
