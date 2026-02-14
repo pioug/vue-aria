@@ -9110,3 +9110,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` checkbox-link parity update:
+  - added migrated coverage to verify row links continue dispatching synthetic link clicks in checkbox-style selection modes (`single`/`multiple`) while row checkbox controls remain selectable.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 38 tests).
+- Validation: `npm run check -- --pretty false` passed.
