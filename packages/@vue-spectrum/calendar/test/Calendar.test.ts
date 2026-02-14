@@ -128,6 +128,28 @@ describe("Calendar", () => {
     expect(wrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(2);
   });
 
+  it("clamps visibleMonths to one month for zero or negative values", () => {
+    const zeroWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 0,
+      },
+      attachTo: document.body,
+    });
+    const negativeWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: -2,
+      },
+      attachTo: document.body,
+    });
+
+    expect(zeroWrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(1);
+    expect(negativeWrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(1);
+  });
+
   it("applies firstDayOfWeek to weekday ordering", () => {
     const defaultWrapper = mount(Calendar as any, {
       props: {
