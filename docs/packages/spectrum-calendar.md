@@ -69,6 +69,24 @@ import { Calendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## End-Aligned Multi-Month Selection
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <Calendar
+    aria-label="Release planning"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :visible-months="2"
+    selection-alignment="end"
+  />
+</template>
+```
+
 ## Validation Message Example
 
 ```vue
@@ -197,7 +215,7 @@ import { RangeCalendar } from "@vue-spectrum/calendar";
 
 ## Key Props
 
-- Shared: `visibleMonths`, `firstDayOfWeek`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`.
+- Shared: `visibleMonths`, `firstDayOfWeek`, `pageBehavior`, `selectionAlignment`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`, `isDateUnavailable`.
 - `Calendar`: `value` / `defaultValue`, `onChange`.
 - `RangeCalendar`: range `value` / `defaultValue`, `onChange`, `allowsNonContiguousRanges`.
 

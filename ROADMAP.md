@@ -6619,6 +6619,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added `selectionAlignment` coverage for multi-month initial-range composition (`start` vs `end` alignment behavior).
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 36 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - added `selectionAlignment="end"` multi-month example and expanded key-prop documentation to include `pageBehavior`, `selectionAlignment`, and `isDateUnavailable`.
+    - `docs/packages/spectrum-calendar.md`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
