@@ -522,6 +522,8 @@ export const TreeView = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const treeElementRef = ref<HTMLElement | null>(null);
+    const rootFocused = ref(false);
+    const rootFocusVisible = ref(false);
     const treeRef = {
       get current() {
         return treeElementRef.value;
@@ -649,6 +651,27 @@ export const TreeView = defineComponent({
         ],
         style: [attrsStyle, props.UNSAFE_style],
         "data-empty": visibleRows.length === 0 ? "true" : undefined,
+        "data-focused": rootFocused.value ? "true" : undefined,
+        "data-focus-visible": rootFocused.value && rootFocusVisible.value ? "true" : undefined,
+        onFocus: (event: FocusEvent) => {
+          rootFocused.value = true;
+          rootFocusVisible.value = isFocusVisible();
+        },
+        onBlur: (event: FocusEvent) => {
+          rootFocused.value = false;
+          rootFocusVisible.value = false;
+        },
+        onKeydown: (event: KeyboardEvent) => {
+          if (document.activeElement === treeElementRef.value) {
+            rootFocusVisible.value = true;
+          }
+        },
+        onPointerdown: (event: PointerEvent) => {
+          rootFocusVisible.value = false;
+        },
+        onMousedown: (event: MouseEvent) => {
+          rootFocusVisible.value = false;
+        },
       }) as Record<string, unknown>;
 
       return h(

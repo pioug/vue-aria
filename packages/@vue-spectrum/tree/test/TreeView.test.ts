@@ -130,11 +130,19 @@ describe("TreeView", () => {
     const tree = wrapper.get('[role="treegrid"]');
     expect(tree.attributes("data-empty")).toBe("true");
     expect(tree.attributes("tabindex")).toBe("0");
+    expect(tree.attributes("data-focused")).toBeUndefined();
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
     expect(wrapper.text()).toContain("No rows");
 
     (tree.element as HTMLElement).focus();
     await nextTick();
+    expect(tree.attributes("data-focused")).toBe("true");
     expect(document.activeElement).toBe(tree.element);
+
+    setInteractionModality("keyboard");
+    await tree.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    expect(tree.attributes("data-focus-visible")).toBe("true");
   });
 
   it("supports DOM props on tree rows", async () => {

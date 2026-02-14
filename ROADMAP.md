@@ -9186,3 +9186,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 52 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` root-focus state parity update:
+  - added root-level focus annotations (`data-focused`, `data-focus-visible`) tied to treegrid focus and interaction modality, while preserving existing keyboard navigation behavior.
+  - expanded empty-tree coverage to assert root focus-state annotations and keyboard focus-visible transitions on the treegrid.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 52 tests).
+- Validation: `npm run check -- --pretty false` passed.
