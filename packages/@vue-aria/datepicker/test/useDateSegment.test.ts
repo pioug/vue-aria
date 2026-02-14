@@ -1,8 +1,8 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
 import { effectScope } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { useDateFieldState } from "@vue-aria/datepicker-state";
-import { useDateField } from "../src/useDateField";
+import { hookData, useDateField } from "../src/useDateField";
 import { useDateSegment } from "../src/useDateSegment";
 
 describe("useDateSegment", () => {
@@ -39,6 +39,70 @@ describe("useDateSegment", () => {
 
     expect(literalProps.segmentProps["aria-hidden"]).toBe(true);
     expect(editableProps.segmentProps.role).toBe("spinbutton");
+    scope.stop();
+  });
+
+  it("moves focus to the previous segment when deleting a placeholder", () => {
+    const scope = effectScope();
+    const focusPrevious = vi.fn();
+
+    scope.run(() => {
+      const state = useDateFieldState({
+        locale: "en-US",
+        createCalendar,
+      });
+
+      hookData.set(state, {
+        focusManager: {
+          focusNext: vi.fn(),
+          focusPrevious,
+          focusFirst: vi.fn(),
+          focusLast: vi.fn(),
+        },
+      });
+
+      const month = state.segments.find((segment) => segment.type === "month")!;
+      const segment = useDateSegment(month, state, {
+        current: document.createElement("div"),
+      });
+
+      const event = new KeyboardEvent("keydown", { key: "Backspace" });
+      (segment.segmentProps as any).onKeyDown(event);
+    });
+
+    expect(focusPrevious).toHaveBeenCalledTimes(1);
+    scope.stop();
+  });
+
+  it("uses numeric input mode for editable numeric segments", () => {
+    const scope = effectScope();
+    let segmentProps!: ReturnType<typeof useDateSegment>;
+
+    scope.run(() => {
+      const state = useDateFieldState({
+        locale: "en-US",
+        createCalendar,
+        defaultValue: new CalendarDate(2024, 6, 15),
+      });
+
+      hookData.set(state, {
+        focusManager: {
+          focusNext: vi.fn(),
+          focusPrevious: vi.fn(),
+          focusFirst: vi.fn(),
+          focusLast: vi.fn(),
+        },
+      });
+
+      const year = state.segments.find((segment) => segment.type === "year")!;
+      segmentProps = useDateSegment(year, state, {
+        current: document.createElement("div"),
+      });
+    });
+
+    const style = (segmentProps.segmentProps.style ?? {}) as Record<string, string>;
+    expect(segmentProps.segmentProps.inputMode).toBe("numeric");
+    expect(style.caretColor).toBe("transparent");
     scope.stop();
   });
 });

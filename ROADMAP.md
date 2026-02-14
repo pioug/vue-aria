@@ -3051,6 +3051,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted upstream scenario coverage for programmatic date-field value commits when initially empty.
   - Added adapted hook-level coverage for range picker field propagation, native hidden-input behavior, time-field input serialization, and literal segment a11y hiding.
+  - Added adapted date-segment interaction coverage for placeholder backspace focus handoff and numeric-segment input-mode wiring.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
