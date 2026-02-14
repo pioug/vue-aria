@@ -45,12 +45,32 @@ const onSubmit = (value: string) => {
 
 Use `validationState`, `isInvalid`, `description`, and `errorMessage` for validation feedback.
 
+- `validate` supports custom aria-mode validation.
+- `name` + form-level server errors (via `FormValidationContext`) surface invalid help text.
+- `validationBehavior="native"` enables browser-native required/constraint semantics.
+
 ## Visual options
+
+### Search icon and clear button
+
+- A default search icon is rendered unless `icon=""` is passed.
+- The clear button appears when the field has text and is not read-only.
+
+```vue
+<SearchField label="Search users" defaultValue="devon" />
+```
 
 ### Quiet
 
 ```vue
 <SearchField label="Search" isQuiet />
+```
+
+### Invalid and valid states
+
+```vue
+<SearchField label="Search" validationState="invalid" errorMessage="Enter a valid query." />
+<SearchField label="Search" validationState="valid" />
 ```
 
 ### Disabled

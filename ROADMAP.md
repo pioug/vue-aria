@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/searchfield`
+- Current focus package: `@vue-spectrum/progress`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -106,7 +106,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/radio`: Complete
 - `@vue-spectrum/switch`: Complete
 - `@vue-spectrum/textfield`: Complete
-- `@vue-spectrum/searchfield`: In progress
+- `@vue-spectrum/searchfield`: Complete
 - `@vue-spectrum/numberfield`: In progress
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: Complete
@@ -399,7 +399,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/searchfield/test`
   - `references/react-spectrum/packages/@react-spectrum/searchfield/docs`
 - Local package path: `packages/@vue-spectrum/searchfield`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -423,10 +423,24 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-searchfield`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/searchfield`.
+- Additional parity update:
+  - expanded controlled/disabled clear behavior coverage for:
+    - clear button press in controlled mode (value remains controlled)
+    - clear button press in disabled mode (no clear)
+    - Escape clear suppression in disabled mode
+  - added advanced validation coverage for:
+    - `validate` callback behavior in aria mode
+    - server validation via `FormValidationContext`
+    - native required semantics in `validationBehavior="native"` mode
+  - added visual parity coverage for default search icon, clear-button class, and quiet/invalid/valid class states.
+  - expanded docs with validation-behavior guidance and visual-state examples.
+  - `packages/@vue-spectrum/searchfield/test/SearchField.test.ts`
+  - `packages/@vue-spectrum/searchfield/src/SearchField.ts`
+  - `packages/@vue-aria/searchfield/src/useSearchField.ts`
+  - `docs/packages/spectrum-searchfield.md`
 
 ### Remaining for completion
-- Expand parity coverage for controlled clearing and advanced validation scenarios.
-- Validate visual parity for search icon, clear button, and quiet/invalid/valid variants.
+- None currently tracked in this slice.
 
 ## 4h) Active Package Slice: @vue-spectrum/progress
 - Upstream source path(s):
@@ -7548,10 +7562,22 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added icon + validation-indicator rendering coverage.
   - expanded textfield/textarea docs with quiet-vs-standard examples and icon/indicator guidance.
   - marked `@vue-spectrum/textfield` slice complete and advanced focus to `@vue-spectrum/searchfield`.
-  - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
-  - `docs/packages/spectrum-textfield.md`
-  - `docs/packages/spectrum-textarea.md`
+- `packages/@vue-spectrum/textfield/test/TextField.test.ts`
+- `docs/packages/spectrum-textfield.md`
+- `docs/packages/spectrum-textarea.md`
 - Validation: `npm test -- packages/@vue-spectrum/textfield/test` passed (4 files, 27 tests).
+- Additional `@vue-spectrum/searchfield` parity update:
+  - expanded controlled/disabled clear-flow coverage (controlled clear button behavior, disabled clear button/Escape suppression).
+  - added advanced validation coverage for aria `validate`, aria server errors (`FormValidationContext`), and native required semantics.
+  - added visual-state coverage for default icon, clear-button class, and quiet/invalid/valid variants.
+  - expanded searchfield docs with validation behavior guidance and visual-state examples.
+  - marked `@vue-spectrum/searchfield` slice complete and advanced focus to `@vue-spectrum/progress`.
+  - `packages/@vue-spectrum/searchfield/test/SearchField.test.ts`
+  - `packages/@vue-spectrum/searchfield/src/SearchField.ts`
+  - `packages/@vue-aria/searchfield/src/useSearchField.ts`
+  - `docs/packages/spectrum-searchfield.md`
+- Validation: `npm test -- packages/@vue-spectrum/searchfield/test` passed (2 files, 19 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/provider` forwarding parity update:
   - added real-component provider forwarding coverage for:
     - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`

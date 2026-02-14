@@ -61,6 +61,11 @@ export const SearchField = defineComponent({
       required: false,
       default: undefined,
     },
+    isRequired: {
+      type: Boolean as () => boolean | undefined,
+      required: false,
+      default: undefined,
+    },
     validationState: {
       type: String as () => "valid" | "invalid" | undefined,
       required: false,
@@ -69,6 +74,24 @@ export const SearchField = defineComponent({
       type: Boolean as () => boolean | undefined,
       required: false,
       default: undefined,
+    },
+    validationBehavior: {
+      type: String as () => "aria" | "native" | undefined,
+      required: false,
+    },
+    validate: {
+      type: Function as PropType<
+      ((value: string) => boolean | string | string[] | null | undefined) | undefined
+      >,
+      required: false,
+    },
+    name: {
+      type: String,
+      required: false,
+    },
+    form: {
+      type: String,
+      required: false,
     },
     placeholder: {
       type: String,

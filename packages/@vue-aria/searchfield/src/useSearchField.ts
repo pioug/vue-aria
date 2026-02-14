@@ -7,6 +7,11 @@ import { intlMessages } from "./intlMessages";
 export interface AriaSearchFieldProps {
   isDisabled?: boolean;
   isReadOnly?: boolean;
+  isRequired?: boolean;
+  validationBehavior?: "aria" | "native";
+  validate?: (value: string) => boolean | string | string[] | null | undefined;
+  name?: string;
+  form?: string;
   onSubmit?: (value: string) => void;
   onClear?: () => void;
   onKeydown?: (event: KeyboardEvent) => void;
