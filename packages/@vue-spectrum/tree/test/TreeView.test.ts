@@ -292,6 +292,8 @@ describe("TreeView", () => {
     expect(photosRow!.attributes("aria-posinset")).toBe("1");
     expect(photosRow!.attributes("aria-setsize")).toBe("2");
     expect(photosRow!.attributes("aria-expanded")).toBeUndefined();
+    expect(photosRow!.attributes("data-expanded")).toBeUndefined();
+    expect(photosRow!.attributes("data-has-child-items")).toBeUndefined();
 
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-level")).toBe("1");
@@ -299,6 +301,8 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-posinset")).toBe("2");
     expect(projectsRow!.attributes("aria-setsize")).toBe("2");
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("data-has-child-items")).toBe("true");
 
     expect(projectOneRow).toBeTruthy();
     expect(projectOneRow!.attributes("aria-level")).toBe("2");
@@ -306,6 +310,8 @@ describe("TreeView", () => {
     expect(projectOneRow!.attributes("aria-posinset")).toBe("1");
     expect(projectOneRow!.attributes("aria-setsize")).toBe("2");
     expect(projectOneRow!.attributes("aria-expanded")).toBeUndefined();
+    expect(projectOneRow!.attributes("data-expanded")).toBeUndefined();
+    expect(projectOneRow!.attributes("data-has-child-items")).toBeUndefined();
   });
 
   it("supports dynamic nested data trees", () => {

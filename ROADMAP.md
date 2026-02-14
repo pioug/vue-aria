@@ -9198,3 +9198,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` hierarchy row-metadata parity update:
+  - expanded hierarchy assertions to verify parent/leaf row metadata differences for `data-has-child-items` and `data-expanded` alongside existing aria hierarchy attributes.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 53 tests).
+- Validation: `npm run check -- --pretty false` passed.
