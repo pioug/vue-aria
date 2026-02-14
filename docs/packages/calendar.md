@@ -25,7 +25,21 @@
 - Calendar cell (`useCalendarCell`)
 - Shared button primitive for month paging
 
+`useCalendarGrid` and `useCalendarCell` are shared between `Calendar` and `RangeCalendar`. The primary difference is state and root hook choice (`useCalendarState` + `useCalendar` vs `useRangeCalendarState` + `useRangeCalendar`).
+
+## Date and Time Values
+
+Calendar values are represented with `@internationalized/date` objects. `useCalendar` and `useRangeCalendar` support date-only values as well as values with time components.
+
+When a `CalendarDateTime`/`ZonedDateTime`-like value is provided, emitted values preserve time fields while updating only the date portion.
+
 ## Example
+
+A complete implementation is composed from three pieces:
+
+- Root calendar hook (`useCalendar` or `useRangeCalendar`)
+- Grid rendering (`useCalendarGrid`)
+- Cell rendering (`useCalendarCell`)
 
 ### `Calendar`
 
@@ -103,6 +117,20 @@ const rangeAria = useRangeCalendar(
 );
 ```
 
+### `Button`
+
+The previous/next controls are typically implemented with `useButton` and shared with the rest of your component library.
+
+```ts
+import { useButton } from "@vue-aria/button";
+
+function useCalendarNavButton() {
+  const ref = { current: null as HTMLButtonElement | null };
+  const { buttonProps } = useButton({}, ref);
+  return { ref, buttonProps };
+}
+```
+
 ## Base Style Parity Snippet
 
 ```css
@@ -145,18 +173,18 @@ const rangeAria = useRangeCalendar(
 }
 ```
 
-## Styled Example References
+## Styled Examples
 
-- Calendar + Tailwind: <https://codesandbox.io/s/objective-shape-8r4utm?file=/src/Calendar.js>
-- Calendar + Styled Components: <https://codesandbox.io/s/stupefied-almeida-01yvsp?file=/src/WeekView.js>
-- Calendar + CSS Modules: <https://codesandbox.io/s/affectionate-rosalind-tdm323?file=/src/Calendar.js>
-- RangeCalendar + Tailwind: <https://codesandbox.io/s/objective-shape-8r4utm?file=/src/RangeCalendar.js>
+- Calendar + Tailwind: <https://codesandbox.io/s/objective-shape-8r4utm?file=/src/Calendar.js> (multiple visible months)
+- Calendar + Styled Components: <https://codesandbox.io/s/stupefied-almeida-01yvsp?file=/src/WeekView.js> (week-view styling)
+- Calendar + CSS Modules: <https://codesandbox.io/s/affectionate-rosalind-tdm323?file=/src/Calendar.js> (custom month/year controls)
+- RangeCalendar + Tailwind: <https://codesandbox.io/s/objective-shape-8r4utm?file=/src/RangeCalendar.js> (multi-month range UI)
 
 ## Usage
 
 ### Value
 
-`useCalendarState` and `useRangeCalendarState` support both controlled (`value`) and uncontrolled (`defaultValue`) usage.
+`useCalendarState` and `useRangeCalendarState` support both controlled (`value`) and uncontrolled (`defaultValue`) usage. `RangeCalendar` values use `{ start, end }` objects.
 
 ```ts
 import { CalendarDate } from "@internationalized/date";
@@ -176,11 +204,23 @@ const uncontrolled = useCalendarState({
   createCalendar,
   defaultValue: new CalendarDate(2020, 2, 3),
 });
+
+const controlledRange = useRangeCalendarState({
+  locale: "en-US",
+  createCalendar,
+  value: {
+    start: new CalendarDate(2020, 2, 3),
+    end: new CalendarDate(2020, 2, 12),
+  },
+  onChange: (nextRange) => {
+    // persist selected range
+  },
+});
 ```
 
 ### Events
 
-`onChange` fires when a selection commits. `onFocusChange` lets you control the focused date.
+`onChange` fires when a selection commits. `onFocusChange` lets you control the focused date and therefore the visible range.
 
 ```ts
 const state = useCalendarState({
@@ -192,6 +232,14 @@ const state = useCalendarState({
   },
   onChange: (value) => {
     // handle committed date selection
+  },
+});
+
+const rangeState = useRangeCalendarState({
+  locale: "en-US",
+  createCalendar,
+  onChange: (range) => {
+    // range.start / range.end
   },
 });
 ```
@@ -332,11 +380,17 @@ const grid = useCalendarGrid(
 );
 ```
 
-### Labeling And Internationalization
+### Labeling
 
-- Provide `aria-label` or `aria-labelledby` to `useCalendar` / `useRangeCalendar`.
+Provide `aria-label` or `aria-labelledby` to `useCalendar` and `useRangeCalendar`. A label is required for accessibility.
+
+### Internationalization
+
 - RTL locales automatically mirror left/right grid navigation.
+- Dates and weekday names follow the current locale and calendar system.
 - Live-announcer strings are localized through copied upstream `intl` messages.
+
+## Advanced Topics
 
 ### Reducing Bundle Size
 

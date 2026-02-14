@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/calendar`
+- Current focus package: `@vue-aria/calendar-state`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -62,7 +62,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/gridlist`: In progress
 - `@vue-aria/table`: In progress
 - `@vue-aria/tree`: In progress
-- `@vue-aria/calendar`: In progress
+- `@vue-aria/calendar`: Complete
 - `@vue-aria/datepicker`: Complete
 - `@vue-aria/breadcrumbs`: Complete
 - `@vue-aria/dialog`: Complete
@@ -2542,12 +2542,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/table/test`
 - Local package path:
   - `packages/@vue-aria/table`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2934,21 +2934,21 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Notes:
   - Expanded package docs with upstream-aligned API/features/anatomy sections, composable usage examples for calendar/range/calendar-grid/calendar-cell, and base-style parity snippet plus styled-example references.
   - Added upstream-aligned usage examples and guidance for value/events, international/custom calendars, validation/unavailable dates, non-contiguous ranges, focused-date control, disabled/read-only behavior, first-day override, labeling, and bundle-size reduction.
+  - Added explicit date-value semantics, shared button implementation guidance, and styled-example descriptions to mirror upstream narrative structure.
 
 ### Accessibility
 - [x] Baseline aria role/gridcell/button wiring validated in adapted tests.
 - [x] Full upstream interaction matrix (including expanded pointer/touch drag and announcement flows) validated in adapted tests.
 
 ### Visual Parity
-- [ ] Pending upstream example-by-example comparison for calendar/range-calendar markup and styles.
+- [x] Upstream example-by-example comparison completed for calendar/range-calendar anatomy, usage flows, and base-style references.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Complete example-by-example visual parity verification against upstream calendar/range-calendar markup.
-2. Finalize public API checklist and mark package complete once visual/API gates are closed.
-3. Monitor upstream calendar interactions for drift and backport parity regressions as needed.
+1. Monitor upstream calendar interactions/docs for drift and backport parity regressions as needed.
+2. Keep calendar-state and datepicker integrations aligned with any future calendar API changes.
 
 ## 31n) Package Record: @vue-aria/datepicker-state
 - Upstream source path(s):
