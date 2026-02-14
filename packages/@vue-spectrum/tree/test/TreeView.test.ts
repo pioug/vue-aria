@@ -1489,6 +1489,7 @@ describe("TreeView", () => {
     const updatedProjectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
     expect(updatedProjectOneRow).toBeTruthy();
     expect(updatedProjectOneRow!.attributes("aria-selected")).toBe("false");
+    expect(updatedProjectOneRow!.attributes("data-selected")).toBeUndefined();
   });
 
   it("toggles and replaces highlight selection based on modifier keys", async () => {
