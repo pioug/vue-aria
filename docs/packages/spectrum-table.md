@@ -79,6 +79,7 @@ In static slot composition, each row's total cell span must match the declared c
 Selection keys preserve row key types (for example, numeric keys such as `0` remain numbers).
 Rows can provide either `key` or `id`; `id` is used as the row key when `key` is omitted.
 Empty string IDs are preserved as valid row keys.
+Select-all interactions (for example `Ctrl+A` in checkbox-style multiple selection) exclude disabled rows from callback key sets.
 
 ## Selection Initialization and Disabled Keys
 
@@ -87,6 +88,7 @@ Use `defaultSelectedKeys` to seed initial row selection. Use `disabledKeys` to p
 For controlled selection, pair `selectedKeys` with `onSelectionChange` and update `selectedKeys` from parent state.
 
 `disabledKeys` updates are reactive, so changing the set at runtime immediately updates row interactivity.
+In checkbox-style multiple selection, `Escape` clears selection when rows are selected and is a no-op when selection is already empty.
 
 ## Sort Initialization
 
