@@ -7355,3 +7355,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - clarified `DialogTrigger` type-driven nested dialog sizing defaults in type-variant guidance.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 26 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded SSR coverage for dialog composition slot components (`Heading`, `Header`, `Content`, `Footer`, `ButtonGroup`).
+    - `packages/@vue-spectrum/dialog/test/Dialog.ssr.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 27 tests).
+- Validation: `npm run check -- --pretty false` passed.
