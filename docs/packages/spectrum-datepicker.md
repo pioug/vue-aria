@@ -132,6 +132,31 @@ import { DatePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Focus Callback Example
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+
+const isFocused = ref(false);
+const onFocusChange = (nextFocused: boolean) => {
+  isFocused.value = nextFocused;
+};
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Meeting date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :on-focus-change="onFocusChange"
+  />
+
+  <p>Focused: {{ isFocused }}</p>
+</template>
+```
+
 ## Validation Message Example
 
 ```vue
