@@ -1874,6 +1874,8 @@ describe("TreeView", () => {
     expect(gammaRow).toBeTruthy();
     expect(alphaRow!.attributes("aria-selected")).toBe("false");
     expect(gammaRow!.attributes("aria-selected")).toBe("true");
+    expect(alphaRow!.attributes("data-selected")).toBeUndefined();
+    expect(gammaRow!.attributes("data-selected")).toBe("true");
   });
 
   it("replaces highlight selection while moving focus with ArrowDown", async () => {
@@ -1912,6 +1914,8 @@ describe("TreeView", () => {
     expect(selected?.size).toBe(1);
     expect(betaRow!.attributes("aria-selected")).toBe("true");
     expect(alphaRow!.attributes("aria-selected")).toBe("false");
+    expect(betaRow!.attributes("data-selected")).toBe("true");
+    expect(alphaRow!.attributes("data-selected")).toBeUndefined();
   });
 
   it("toggles highlight selection with keyboard modifiers in multiple mode", async () => {
