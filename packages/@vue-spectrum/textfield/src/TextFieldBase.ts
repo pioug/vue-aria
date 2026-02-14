@@ -42,6 +42,10 @@ export const TextFieldBase = defineComponent({
       required: false,
       default: undefined,
     },
+    validationErrors: {
+      type: Array as PropType<string[] | undefined>,
+      required: false,
+    },
     multiLine: {
       type: Boolean as () => boolean | undefined,
       required: false,
@@ -116,7 +120,8 @@ export const TextFieldBase = defineComponent({
 
     return () => {
       const ElementType = props.multiLine ? "textarea" : "input";
-      const descriptionText = isInvalid.value ? props.errorMessage : props.description;
+      const resolvedErrorMessage = props.errorMessage ?? props.validationErrors?.[0];
+      const descriptionText = isInvalid.value ? resolvedErrorMessage : props.description;
       const descriptionProps = isInvalid.value ? props.errorMessageProps : props.descriptionProps;
       const validationIcon =
         computedValidationState.value && !props.isDisabled

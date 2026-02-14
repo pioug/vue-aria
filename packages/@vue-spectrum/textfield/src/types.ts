@@ -8,6 +8,7 @@ export interface SpectrumTextFieldBaseProps {
   isQuiet?: boolean;
   validationState?: "valid" | "invalid";
   isInvalid?: boolean;
+  validationErrors?: string[];
   multiLine?: boolean;
   icon?: unknown;
   inputClassName?: string;

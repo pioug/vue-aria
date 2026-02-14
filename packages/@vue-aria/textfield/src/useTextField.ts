@@ -2,6 +2,11 @@ import { filterDOMProps, mergeProps, useFormReset } from "@vue-aria/utils";
 import { useControlledState } from "@vue-aria/utils-state";
 import { useField } from "@vue-aria/label";
 import { useFocusable } from "@vue-aria/interactions";
+import { useFormValidation } from "@vue-aria/form";
+import { useFormValidationState } from "@vue-aria/form-state";
+
+type ValidateResult = boolean | string | string[] | null | undefined;
+type ValidateFn = (value: string) => ValidateResult;
 
 export interface AriaTextFieldOptions {
   inputElementType?: "input" | "textarea";
@@ -50,6 +55,7 @@ export interface AriaTextFieldOptions {
   onKeydown?: (event: KeyboardEvent) => void;
   onKeyDown?: (event: KeyboardEvent) => void;
   onKeyup?: (event: KeyboardEvent) => void;
+  validate?: ValidateFn;
   [key: string]: unknown;
 }
 
@@ -91,13 +97,15 @@ export function useTextField(
     },
   };
   const { focusableProps } = useFocusable(props as any, focusRef as any);
-  const isInvalid = Boolean(props.isInvalid || props.validationState === "invalid");
-  const validationErrors = isInvalid ? ["Invalid text field value"] : [];
-  const validationDetails = undefined;
+  const validationState = useFormValidationState({
+    ...props,
+    value: () => valueRef.value,
+  });
+  const { isInvalid, validationErrors, validationDetails } = validationState.displayValidation;
   const { labelProps, fieldProps, descriptionProps, errorMessageProps } = useField({
     ...props,
     isInvalid,
-    errorMessage: props.errorMessage || validationErrors.join(", "),
+    errorMessage: props.errorMessage || validationErrors,
   });
   const domProps = { ...filterDOMProps(props, { labelable: true }) };
   if (inputElementType !== "input") {
@@ -112,6 +120,14 @@ export function useTextField(
 
   const initialValue = valueRef.value;
   useFormReset(focusRef as any, props.defaultValue ?? initialValue, setValue);
+  useFormValidation(
+    {
+      validationBehavior: props.validationBehavior,
+      focus: () => ref.current?.focus(),
+    },
+    validationState as any,
+    focusRef as any
+  );
 
   return {
     labelProps,

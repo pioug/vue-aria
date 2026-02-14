@@ -3,7 +3,7 @@ import { useLabel, type LabelAria, type LabelAriaProps } from "./useLabel";
 
 export interface AriaFieldProps extends LabelAriaProps {
   description?: string;
-  errorMessage?: string;
+  errorMessage?: string | string[];
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";
   "aria-describedby"?: string;

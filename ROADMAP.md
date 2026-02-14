@@ -366,9 +366,22 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entries for `/packages/spectrum-textfield` and `/packages/spectrum-textarea`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/textfield`.
+- Additional validation parity update:
+  - wired `@vue-aria/textfield` into `useFormValidationState` and `useFormValidation`.
+  - added adapted `TextField` coverage for:
+    - `validate` callback behavior in `validationBehavior="aria"` mode
+    - server validation via `FormValidationContext` in aria mode
+    - native required semantics in `validationBehavior="native"` mode
+  - added invalid help-text fallback to display first validation error when `errorMessage` prop is omitted.
+  - `packages/@vue-aria/textfield/src/useTextField.ts`
+  - `packages/@vue-aria/label/src/useField.ts`
+  - `packages/@vue-spectrum/textfield/src/TextFieldBase.ts`
+  - `packages/@vue-spectrum/textfield/src/TextField.ts`
+  - `packages/@vue-spectrum/textfield/src/TextArea.ts`
+  - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
+  - `packages/@vue-spectrum/textfield/src/types.ts`
 
 ### Remaining for completion
-- Expand parity coverage for native/aria validation behavior and server-validation scenarios from upstream.
 - Validate visual parity for icon/validation-indicator and quiet/standard field variants against upstream docs.
 
 ## 4g) Active Package Slice: @vue-spectrum/searchfield
@@ -7509,6 +7522,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/link/test/Link.test.ts`
   - `docs/packages/spectrum-link.md`
 - Validation: `npm test -- packages/@vue-spectrum/link/test` passed (2 files, 13 tests).
+- Additional `@vue-spectrum/textfield` validation parity update:
+  - wired `@vue-aria/textfield` through `useFormValidationState`/`useFormValidation` for `validate` and server-validation flows.
+  - expanded `TextField` tests for aria validate callback behavior, aria server errors via `FormValidationContext`, and native required semantics.
+  - added invalid help-text fallback to render validation-state errors when `errorMessage` prop is omitted.
+  - `packages/@vue-aria/textfield/src/useTextField.ts`
+  - `packages/@vue-aria/label/src/useField.ts`
+  - `packages/@vue-spectrum/textfield/src/TextFieldBase.ts`
+  - `packages/@vue-spectrum/textfield/src/TextField.ts`
+  - `packages/@vue-spectrum/textfield/src/TextArea.ts`
+  - `packages/@vue-spectrum/textfield/src/types.ts`
+  - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/textfield/test packages/@vue-aria/textfield/test/useTextField.test.ts` passed (5 files, 34 tests).
 - Additional `@vue-spectrum/provider` forwarding parity update:
   - added real-component provider forwarding coverage for:
     - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`

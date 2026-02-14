@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, provide, ref } from "vue";
+import { FormValidationContext } from "@vue-aria/form-state";
 import { TextField } from "../src/TextField";
 
 const TEST_ID = "test-id";
@@ -270,6 +271,63 @@ describe("TextField", () => {
     const input = wrapper.get(`[data-testid="${TEST_ID}"]`);
     await nextTick();
     expect(wrapper.text()).toContain("Single digit numbers are 0-9.");
+  });
+
+  it("supports validate function in aria mode", () => {
+    const wrapper = mount(TextField as any, {
+      props: {
+        "aria-label": "mandatory label",
+        "data-testid": TEST_ID,
+        defaultValue: "Foo",
+        validate: (value: string) => (value === "Foo" ? "Invalid name" : null),
+      },
+    });
+
+    const input = wrapper.get(`[data-testid="${TEST_ID}"]`);
+    expect(input.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid name");
+  });
+
+  it("supports server validation in aria mode", () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      name: "Invalid name.",
+    });
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(TextField as any, {
+              "aria-label": "mandatory label",
+              "data-testid": TEST_ID,
+              name: "name",
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get(`[data-testid="${TEST_ID}"]`);
+    expect(input.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid name.");
+  });
+
+  it("supports required native validation semantics", () => {
+    const wrapper = mount(TextField as any, {
+      props: {
+        "aria-label": "mandatory label",
+        "data-testid": TEST_ID,
+        isRequired: true,
+        validationBehavior: "native",
+      },
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get(`[data-testid="${TEST_ID}"]`);
+    expect(input.attributes("required")).toBeDefined();
+    expect(input.attributes("aria-required")).toBeUndefined();
+    expect((input.element as HTMLInputElement).checkValidity()).toBe(false);
   });
 
   it("passes through ARIA props and supports excludeFromTabOrder", () => {

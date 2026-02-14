@@ -67,6 +67,12 @@ export const TextField = defineComponent({
       type: String as () => "aria" | "native" | undefined,
       required: false,
     },
+    validate: {
+      type: Function as PropType<
+      ((value: string) => boolean | string | string[] | null | undefined) | undefined
+      >,
+      required: false,
+    },
     name: {
       type: String,
       required: false,
