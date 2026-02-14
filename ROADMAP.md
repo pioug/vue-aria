@@ -9069,3 +9069,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 26 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` linked-expansion parity update:
+  - added migrated interaction coverage to verify activating an expanded row link does not collapse the row or emit expansion-change callbacks.
+  - added click-default test harness and interaction-modality reset to keep synthetic-link assertions deterministic across subsequent focus tests.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 27 tests).
+- Validation: `npm run check -- --pretty false` passed.

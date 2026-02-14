@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { setInteractionModality } from "@vue-aria/interactions";
 import { h, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { TreeView, TreeViewItem, TreeViewItemContent, type SpectrumTreeViewItemData } from "../src";
@@ -39,6 +40,24 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   });
   await target.trigger("click", { button: 0 });
   await nextTick();
+}
+
+function mockClickDefault() {
+  const onClick = vi.fn((event: MouseEvent) => {
+    event.preventDefault();
+  });
+  const listener: EventListener = (event) => {
+    if (event instanceof MouseEvent) {
+      onClick(event);
+    }
+  };
+  document.addEventListener("click", listener);
+  return {
+    onClick,
+    restore() {
+      document.removeEventListener("click", listener);
+    },
+  };
 }
 
 describe("TreeView", () => {
@@ -800,6 +819,69 @@ describe("TreeView", () => {
     const row = wrapper.get('[role="row"]');
     expect(row.attributes("data-href")).toBe("https://example.com/docs");
     expect(row.attributes("aria-selected")).toBeUndefined();
+  });
+
+  it("does not collapse expanded rows when activating row links", async () => {
+    const onExpandedChange = vi.fn();
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Linked expandable tree",
+        selectionMode: "none",
+        defaultExpandedKeys: ["projects"],
+        onExpandedChange,
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, {
+            id: "projects",
+            textValue: "Projects",
+            href: "https://example.com/projects",
+          }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(2);
+
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-href")).toBe("https://example.com/projects");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+
+    const onClickDefault = mockClickDefault();
+    try {
+      await press(projectsRow!);
+    } finally {
+      onClickDefault.restore();
+      setInteractionModality("keyboard");
+    }
+
+    const linkClick = onClickDefault.onClick.mock.calls
+      .map((args) => args[0] as MouseEvent)
+      .find((event) => event.target instanceof HTMLAnchorElement);
+    expect(linkClick).toBeTruthy();
+    expect((linkClick!.target as HTMLAnchorElement).href).toBe("https://example.com/projects");
+
+    rows = wrapper.findAll('[role="row"]');
+    const updatedProjectsRow = rows.find((row) => row.text().includes("Projects"));
+    expect(updatedProjectsRow).toBeTruthy();
+    expect(updatedProjectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(onExpandedChange).not.toHaveBeenCalled();
   });
 
   it("supports static tree item composition", async () => {
