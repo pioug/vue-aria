@@ -83,6 +83,11 @@ function renderComponent(children?: ReturnType<typeof h>) {
   return wrapper;
 }
 
+function pressEnter(element: HTMLElement) {
+  element.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }));
+  element.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true, cancelable: true }));
+}
+
 describe("ToastContainer", () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -277,5 +282,79 @@ describe("ToastContainer", () => {
     await nextTick();
     const region = document.body.querySelector('[role="region"]');
     expect(region?.getAttribute("aria-label")).toBe("Toasts");
+  });
+
+  it("focuses the toast region on F6", async () => {
+    const wrapper = renderComponent(h(RenderToastButton as any, { timeout: 5000 }));
+    await nextTick();
+    const trigger = wrapper.get('[data-testid="show-toast"]').element as HTMLButtonElement;
+    trigger.focus();
+
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await nextTick();
+
+    expect(document.activeElement).toBe(trigger);
+    trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    trigger.dispatchEvent(new KeyboardEvent("keyup", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+
+    const region = document.body.querySelector('[role="region"]') as HTMLElement;
+    expect(document.activeElement).toBe(region);
+  });
+
+  it("restores focus to launcher when closing visible toasts with pointer", async () => {
+    const wrapper = renderComponent();
+    await nextTick();
+    const trigger = wrapper.get('[data-testid="show-toast"]').element as HTMLButtonElement;
+    trigger.focus();
+
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await nextTick();
+
+    const closeButtons = Array.from(document.body.querySelectorAll('[data-testid="rsp-Toast-closeButton"]')) as HTMLElement[];
+    closeButtons[0].click();
+    await nextTick();
+    expect(document.activeElement).toBe(trigger);
+
+    const remainingClose = document.body.querySelector('[data-testid="rsp-Toast-closeButton"]') as HTMLElement;
+    remainingClose.click();
+    await nextTick();
+    expect(document.body.querySelector('[role="alertdialog"]')).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it("moves focus across remaining toasts and restores launcher focus after sequential keyboard close", async () => {
+    const wrapper = renderComponent();
+    await nextTick();
+    const trigger = wrapper.get('[data-testid="show-toast"]').element as HTMLButtonElement;
+    trigger.focus();
+
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await wrapper.get('[data-testid="show-toast"]').trigger("click");
+    await nextTick();
+
+    trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "F6", bubbles: true, cancelable: true }));
+    trigger.dispatchEvent(new KeyboardEvent("keyup", { key: "F6", bubbles: true, cancelable: true }));
+    await nextTick();
+    const region = document.body.querySelector('[role="region"]') as HTMLElement;
+    region.dispatchEvent(new FocusEvent("focusin", { bubbles: true, relatedTarget: trigger }));
+
+    const firstClose = document.body.querySelector('[data-testid="rsp-Toast-closeButton"]') as HTMLElement;
+    firstClose.focus();
+    firstClose.dispatchEvent(new FocusEvent("focus", { bubbles: true, relatedTarget: trigger }));
+    pressEnter(firstClose);
+    await nextTick();
+
+    const remainingToast = document.body.querySelector('[role="alertdialog"]') as HTMLElement;
+    expect(remainingToast).toBeTruthy();
+    expect(document.activeElement).toBe(remainingToast);
+
+    const finalClose = remainingToast.querySelector('[data-testid="rsp-Toast-closeButton"]') as HTMLElement;
+    finalClose.focus();
+    pressEnter(finalClose);
+    await nextTick();
+
+    expect(document.body.querySelector('[role="alertdialog"]')).toBeNull();
   });
 });

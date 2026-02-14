@@ -41,6 +41,7 @@ Toasts are stacked in queue order with most recent shown first. Use:
 - Toasts are exposed in a landmark `region` labeled notifications by default.
 - Individual toasts use `alertdialog` + `alert` semantics.
 - Region label can be overridden via `ToastContainer` `aria-label`.
+- Press `F6` to move keyboard focus into the toast region and navigate close/action buttons.
 
 ## Events
 

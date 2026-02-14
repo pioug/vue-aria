@@ -163,17 +163,23 @@ export function useToastRegion<T>(
     };
   }, []);
 
+  const handleRegionFocus = (event: FocusEvent) => {
+    const target = (event.target as Element | null)?.closest?.('[role="alertdialog"]');
+    focusedToast.value = toasts.value.findIndex((toast) => toast === target);
+  };
+
+  const handleRegionBlur = () => {
+    focusedToast.value = -1;
+  };
+
   return {
     regionProps: mergeProps(landmarkProps, hoverProps, focusWithinProps, {
       tabIndex: -1,
       "data-react-aria-top-layer": true,
-      onFocus(event: FocusEvent) {
-        const target = (event.target as Element | null)?.closest?.('[role="alertdialog"]');
-        focusedToast.value = toasts.value.findIndex((toast) => toast === target);
-      },
-      onBlur() {
-        focusedToast.value = -1;
-      },
+      onFocus: handleRegionFocus,
+      onFocusin: handleRegionFocus,
+      onBlur: handleRegionBlur,
+      onFocusout: handleRegionBlur,
     }),
   };
 }

@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-aria/toast-state`
+- Current focus package: `@vue-spectrum/toast`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -84,7 +84,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/numberfield-state`: Complete
 - `@vue-aria/slider-state`: Complete
 - `@vue-aria/overlays-state`: Complete
-- `@vue-aria/toast-state`: In progress
+- `@vue-aria/toast-state`: Complete
 - `@vue-aria/tooltip-state`: Complete
 - `@vue-aria/disclosure-state`: Complete
 - `@vue-aria/list-state`: Complete
@@ -602,7 +602,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-stately/toast/test`
   - `references/react-spectrum/packages/@react-stately/toast/docs`
 - Local package path: `packages/@vue-aria/toast-state`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -630,9 +630,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional docs parity update:
   - documented pause/resume timer behavior details for visible toasts.
   - `docs/packages/toast-state.md`
+- Downstream integration validation completed:
+  - verified toast-region keyboard/pointer focus and toast-dismiss interactions through `@vue-spectrum/toast` integration coverage.
+  - `packages/@vue-spectrum/toast/test/ToastContainer.test.ts`
 
 ### Remaining for completion
-- Validate downstream integration in `@vue-spectrum/toast` container behavior.
+- None currently tracked in this slice.
 
 ## 4o) Active Package Slice: @vue-spectrum/toast
 - Upstream source path(s):
@@ -663,9 +666,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-toast`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/toast`.
+- Additional parity coverage added:
+  - `F6` keyboard focus transfer into the toast region.
+  - focus restoration to launcher after pointer-driven multi-toast dismissals.
+  - sequential keyboard close flow coverage across multiple visible toasts.
+  - `packages/@vue-spectrum/toast/test/ToastContainer.test.ts`
+- Supporting integration fix:
+  - `useToastRegion` now tracks focused toast via bubbling `focusin`/`focusout` in addition to `focus`/`blur` handlers.
+  - `packages/@vue-aria/toast/src/useToastRegion.ts`
 
 ### Remaining for completion
-- Expand focus-restore and multi-toast navigation parity coverage from upstream (`F6` and sequential close flows).
 - Align visual styling parity with upstream CSS transitions and placement-specific animation details.
 
 ## 5) Package Record: @vue-aria/utils
@@ -7430,6 +7440,20 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented pause/resume timer behavior for visible toasts.
     - `docs/packages/toast-state.md`
 - Validation: `npm test -- packages/@vue-aria/toast-state/test` passed (1 file, 8 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/toast` parity update:
+  - added upstream-aligned integration coverage for:
+    - `F6` region focus transfer
+    - pointer-driven multi-toast focus restoration to launcher
+    - sequential keyboard dismissal flow across multiple visible toasts
+    - `packages/@vue-spectrum/toast/test/ToastContainer.test.ts`
+- Additional `@vue-aria/toast` parity update:
+  - improved region focus tracking by handling bubbling `focusin`/`focusout` events in addition to `focus`/`blur`.
+    - `packages/@vue-aria/toast/src/useToastRegion.ts`
+- Additional `@vue-spectrum/toast` docs parity update:
+  - documented `F6` keyboard entry into the toast region for action/close navigation.
+    - `docs/packages/spectrum-toast.md`
+- Validation: `npm test -- packages/@vue-spectrum/toast/test packages/@vue-aria/toast/test` passed (4 files, 26 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
   - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.
