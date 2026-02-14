@@ -990,6 +990,43 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("allows disabled-row actions when disabledBehavior is selection", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithDisabledFlag,
+      selectionMode: "none",
+      disabledBehavior: "selection",
+      onAction,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[1]!.attributes("aria-disabled")).toBeUndefined();
+
+    await press(bodyRows[1]!);
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenCalledWith("row-2");
+  });
+
+  it("disables disabled-row actions when disabledBehavior is all", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithDisabledFlag,
+      selectionMode: "none",
+      disabledBehavior: "all",
+      onAction,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[1]!.attributes("aria-disabled")).toBe("true");
+
+    await press(bodyRows[1]!);
+
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
   it("updates disabled row selection behavior when disabledKeys changes", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
