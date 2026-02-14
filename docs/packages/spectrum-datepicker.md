@@ -112,6 +112,31 @@ const onOpenChange = (nextOpen: boolean) => {
 </template>
 ```
 
+## Validation Message Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Booking date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    validation-state="invalid"
+    error-message="Choose a valid date"
+  />
+
+  <DateRangePicker
+    aria-label="Booking range"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+    validation-state="invalid"
+    error-message="Choose a valid range"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `placeholderValue`, `autoFocus`.
