@@ -115,6 +115,34 @@ describe("Calendar", () => {
     expect(updatedTitle).not.toBe(initialTitle);
   });
 
+  it("supports pageBehavior differences for multi-month navigation", async () => {
+    const defaultWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+    const singleWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+        pageBehavior: "single",
+      },
+      attachTo: document.body,
+    });
+
+    await press(defaultWrapper.findAll(".react-spectrum-Calendar-navButton")[1]!);
+    await press(singleWrapper.findAll(".react-spectrum-Calendar-navButton")[1]!);
+
+    const defaultTitle = defaultWrapper.get(".react-spectrum-Calendar-title").text();
+    const singleTitle = singleWrapper.get(".react-spectrum-Calendar-title").text();
+    expect(defaultTitle).toContain("August");
+    expect(singleTitle).toContain("July");
+  });
+
   it("renders multiple month grids when visibleMonths is set", () => {
     const wrapper = mount(Calendar as any, {
       props: {
