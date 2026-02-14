@@ -10041,3 +10041,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 40 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` form-value parity update:
+  - added migrated coverage asserting hidden form-value behavior forwards `name`/`form` to the hidden input and clears to an empty value when controlled `value` is updated to `null`.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - updated hidden input value resolution to derive controlled form values from reactive component props, ensuring null-clearing behavior is reflected in the hidden form field.
+    - `packages/@vue-spectrum/numberfield/src/NumberField.ts`
+  - normalized controlled-value parsing in `useNumberFieldState` using reactive `props.value` normalization (`null` -> `NaN`) so controlled state updates stay aligned with current props.
+    - `packages/@vue-aria/numberfield-state/src/useNumberFieldState.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

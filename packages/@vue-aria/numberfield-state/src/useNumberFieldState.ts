@@ -71,17 +71,21 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
     isReadOnly,
     onChange,
   } = props;
-  let { value, defaultValue = Number.NaN } = props;
+  const normalizeControlledValue = (nextValue: number | null | undefined): number | undefined => {
+    if (nextValue === null) {
+      return Number.NaN;
+    }
 
-  if (value === null) {
-    value = Number.NaN;
-  }
+    if (nextValue !== undefined && !Number.isNaN(nextValue)) {
+      return step !== undefined && !Number.isNaN(step)
+        ? snapValueToStep(nextValue, minValue, maxValue, step)
+        : clamp(nextValue, minValue, maxValue);
+    }
 
-  if (value !== undefined && !Number.isNaN(value)) {
-    value = step !== undefined && !Number.isNaN(step)
-      ? snapValueToStep(value, minValue, maxValue, step)
-      : clamp(value, minValue, maxValue);
-  }
+    return nextValue as number | undefined;
+  };
+
+  let defaultValue = props.defaultValue ?? Number.NaN;
 
   if (!Number.isNaN(defaultValue)) {
     defaultValue = step !== undefined && !Number.isNaN(step)
@@ -89,8 +93,13 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
       : clamp(defaultValue, minValue, maxValue);
   }
 
+  const controlledValueFromProps = computed(() =>
+    normalizeControlledValue(props.value as number | null | undefined)
+  );
+  const isControlled = computed(() => controlledValueFromProps.value !== undefined);
+
   const [controlledValue, setControlledValue] = useControlledState<number, number>(
-    () => value,
+    () => controlledValueFromProps.value,
     Number.isNaN(defaultValue) ? Number.NaN : defaultValue,
     onChange
   );
@@ -135,7 +144,7 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
 
     if (!newInputValue.length) {
       setControlledValue(Number.NaN);
-      inputValueRef.value = value === undefined ? "" : format(controlledValue.value);
+      inputValueRef.value = !isControlled.value ? "" : format(controlledValue.value);
       return;
     }
 
@@ -149,7 +158,7 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
       : snapValueToStep(newParsedValue, minValue, maxValue, step);
     clampedValue = numberParser.value.parse(format(clampedValue));
     setControlledValue(clampedValue);
-    inputValueRef.value = format(value === undefined ? clampedValue : controlledValue.value);
+    inputValueRef.value = format(!isControlled.value ? clampedValue : controlledValue.value);
     validation.commitValidation();
   };
 

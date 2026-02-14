@@ -239,13 +239,21 @@ export const NumberField = defineComponent({
         );
       }
 
-      if (merged.name) {
-        const value = Number.isNaN(state.numberValue) ? "" : String(state.numberValue);
+      if (props.name) {
+        const controlledValue = props.value as number | null | undefined;
+        const value = controlledValue === null
+          || (typeof controlledValue === "number" && Number.isNaN(controlledValue))
+          ? ""
+          : controlledValue !== undefined
+            ? String(controlledValue)
+            : Number.isNaN(state.numberValue)
+              ? ""
+              : String(state.numberValue);
         children.push(
           h("input", {
             type: "hidden",
-            name: merged.name,
-            form: merged.form,
+            name: props.name,
+            form: props.form,
             value,
           })
         );

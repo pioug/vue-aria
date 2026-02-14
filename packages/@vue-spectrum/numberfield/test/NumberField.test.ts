@@ -204,6 +204,27 @@ describe("NumberField", () => {
     expect(hiddenInput.attributes("value")).toBe("45");
   });
 
+  it("supports form value forwarding and null clearing", async () => {
+    const wrapper = renderNumberField({
+      name: "age",
+      form: "test",
+      value: 30,
+    });
+
+    const textField = wrapper.get('input[type="text"]');
+    expect(textField.attributes("name")).toBeUndefined();
+
+    const hiddenInput = wrapper.get('input[type="hidden"][name="age"]');
+    expect(hiddenInput.attributes("form")).toBe("test");
+    expect((hiddenInput.element as HTMLInputElement).value).toBe("30");
+
+    await wrapper.setProps({ value: null as any });
+    await nextTick();
+    expect((wrapper.props() as any).value).toBeNull();
+
+    expect((wrapper.get('input[type="hidden"][name="age"]').element as HTMLInputElement).value).toBe("");
+  });
+
   it("supports inputMode numeric when no decimals and non-negative range", () => {
     const wrapper = renderNumberField({
       minValue: 0,
