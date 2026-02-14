@@ -9455,3 +9455,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 76 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` typeahead hidden-row parity update:
+  - added typeahead coverage to assert collapsed child rows are excluded from matching, preserving focus on visible rows after parent collapse.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 77 tests).
+- Validation: `npm run check -- --pretty false` passed.

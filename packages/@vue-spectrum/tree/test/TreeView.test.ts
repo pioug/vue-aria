@@ -2880,6 +2880,60 @@ describe("TreeView", () => {
     expect(document.activeElement).toBe(gammaRow!.element);
   });
 
+  it("does not match hidden rows with typeahead after collapsing a parent", async () => {
+    const wrapper = renderTree({
+      items: [
+        {
+          id: "projects",
+          name: "Projects",
+          children: [{ id: "zeta-child", name: "Zeta Child" }],
+        },
+        { id: "reports", name: "Reports" },
+      ],
+      defaultExpandedKeys: ["projects"],
+      autoFocus: "first",
+    });
+
+    await nextTick();
+
+    const tree = wrapper.get('[role="treegrid"]');
+    let rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(3);
+    expect(document.activeElement).toBe(rows[0]!.element);
+
+    await tree.trigger("keydown", { key: "z" });
+    await nextTick();
+
+    rows = wrapper.findAll('[role="row"]');
+    const zetaRow = rows.find((row) => row.text().includes("Zeta Child"));
+    expect(zetaRow).toBeTruthy();
+    expect(document.activeElement).toBe(zetaRow!.element);
+
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    (projectsRow!.element as HTMLElement).focus();
+    await nextTick();
+    await projectsRow!.trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+
+    rows = wrapper.findAll('[role="row"]');
+    expect(rows).toHaveLength(2);
+    expect(rows.some((row) => row.text().includes("Zeta Child"))).toBe(false);
+
+    const reportsRow = rows.find((row) => row.text().includes("Reports"));
+    expect(reportsRow).toBeTruthy();
+    (reportsRow!.element as HTMLElement).focus();
+    await nextTick();
+    expect(document.activeElement).toBe(reportsRow!.element);
+
+    await tree.trigger("keydown", { key: "z" });
+    await nextTick();
+
+    rows = wrapper.findAll('[role="row"]');
+    expect(rows.some((row) => row.text().includes("Zeta Child"))).toBe(false);
+    expect(document.activeElement).toBe(reportsRow!.element);
+  });
+
   it('supports focusing the first row with autoFocus="first"', async () => {
     const wrapper = renderTree({
       autoFocus: "first",
