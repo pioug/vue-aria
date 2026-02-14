@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/tree`
+- Current focus package: `@vue-spectrum/calendar`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -117,7 +117,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/tabs`: In progress
 - `@vue-spectrum/table`: In progress
 - `@vue-spectrum/tree`: In progress
-- `@vue-spectrum/calendar`: Not started
+- `@vue-spectrum/calendar`: In progress
 - `@vue-spectrum/datepicker`: Not started
 - `@vue-spectrum/breadcrumbs`: In progress
 - `@vue-spectrum/dialog`: In progress
@@ -6476,3 +6476,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 7 tests).
 - Note: Vue warns about slot invocation outside render for static tree-slot parsing paths in test/SSR harnesses; behavior/tests are passing and this remains a follow-up cleanup item.
+- Started `@vue-spectrum/calendar` foundational slice:
+  - scaffolded `@vue-spectrum/calendar` package with upstream-aligned surface exports: `Calendar` and `RangeCalendar`.
+  - implemented calendar and range-calendar composition over `@vue-aria/calendar` + `@vue-aria/calendar-state`, including:
+    - visible month grid rendering
+    - next/previous navigation controls
+    - calendar cell semantics/selection wiring via `useCalendarCell`
+    - shared base rendering for single and range modes
+  - added adapted tests:
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+    - `packages/@vue-spectrum/calendar/test/Calendar.ssr.test.ts`
+  - added docs page `docs/packages/spectrum-calendar.md` and linked it in docs sidebar/index.
+  - added TypeScript/Vitest alias wiring for `@vue-spectrum/calendar`.
+  - updated execution queue status for `@vue-spectrum/calendar` to `In progress`.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 6 tests).
+- Note: current calendar tests/SSR emit repeated `onScopeDispose()` warnings from lower-level composables; behavior/tests are passing, and lifecycle cleanup parity remains a follow-up task.

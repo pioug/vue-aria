@@ -169,6 +169,7 @@ export default defineConfig({
           { text: "@vue-spectrum/tabs", link: "/packages/spectrum-tabs" },
           { text: "@vue-spectrum/table", link: "/packages/spectrum-table" },
           { text: "@vue-spectrum/tree", link: "/packages/spectrum-tree" },
+          { text: "@vue-spectrum/calendar", link: "/packages/spectrum-calendar" },
           { text: "@vue-spectrum/progress ProgressBar", link: "/packages/spectrum-progressbar" },
           { text: "@vue-spectrum/progress ProgressCircle", link: "/packages/spectrum-progresscircle" },
           { text: "@vue-spectrum/meter", link: "/packages/spectrum-meter" },

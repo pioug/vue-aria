@@ -295,6 +295,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/tree": fileURLToPath(
         new URL("./packages/@vue-spectrum/tree/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/calendar": fileURLToPath(
+        new URL("./packages/@vue-spectrum/calendar/src/index.ts", import.meta.url)
       )
     }
   }

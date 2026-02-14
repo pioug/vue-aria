@@ -82,3 +82,4 @@ This project ports the current upstream Spectrum version.
 - [@vue-spectrum/tabs](/packages/spectrum-tabs)
 - [@vue-spectrum/table](/packages/spectrum-table)
 - [@vue-spectrum/tree](/packages/spectrum-tree)
+- [@vue-spectrum/calendar](/packages/spectrum-calendar)

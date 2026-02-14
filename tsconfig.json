@@ -103,7 +103,8 @@
       "@vue-spectrum/combobox": ["packages/@vue-spectrum/combobox/src/index.ts"],
       "@vue-spectrum/tabs": ["packages/@vue-spectrum/tabs/src/index.ts"],
       "@vue-spectrum/table": ["packages/@vue-spectrum/table/src/index.ts"],
-      "@vue-spectrum/tree": ["packages/@vue-spectrum/tree/src/index.ts"]
+      "@vue-spectrum/tree": ["packages/@vue-spectrum/tree/src/index.ts"],
+      "@vue-spectrum/calendar": ["packages/@vue-spectrum/calendar/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
