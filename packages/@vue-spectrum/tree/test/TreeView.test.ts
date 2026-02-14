@@ -42,6 +42,27 @@ async function press(target: { trigger: (event: string, options?: Record<string,
   await nextTick();
 }
 
+async function touchPress(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+  await target.trigger("pointerdown", {
+    button: 0,
+    pointerId: 2,
+    pointerType: "touch",
+    width: 8,
+    height: 8,
+    pressure: 0.5,
+  });
+  await target.trigger("pointerup", {
+    button: 0,
+    pointerId: 2,
+    pointerType: "touch",
+    width: 8,
+    height: 8,
+    pressure: 0,
+  });
+  await target.trigger("click", { button: 0 });
+  await nextTick();
+}
+
 async function realPointerPress(target: { element: Element }) {
   const element = target.element as HTMLElement;
   element.dispatchEvent(new MouseEvent("mousedown", {
@@ -1701,6 +1722,52 @@ describe("TreeView", () => {
     expect(selected?.size).toBe(1);
     expect(betaRow!.attributes("aria-selected")).toBe("true");
     expect(alphaRow!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("toggles highlight selection on touch interactions in multiple mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      selectionMode: "multiple",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    let betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    let gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(betaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+
+    await touchPress(gammaRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    await touchPress(betaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.has("beta")).toBe(true);
+    expect(selected?.size).toBe(2);
+
+    await touchPress(betaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(3);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.has("beta")).toBe(false);
+    expect(selected?.size).toBe(1);
+
+    betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    gammaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Gamma"));
+    expect(betaRow).toBeTruthy();
+    expect(gammaRow).toBeTruthy();
+    expect(betaRow!.attributes("aria-selected")).toBe("false");
+    expect(gammaRow!.attributes("aria-selected")).toBe("true");
   });
 
   it("applies highlight selection data attributes on rows", async () => {
