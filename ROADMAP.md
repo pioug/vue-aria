@@ -9547,3 +9547,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 40 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-action suppression parity update:
+  - fixed `MenuItem` submenu trigger wiring to pass `aria-haspopup`/`aria-expanded`/`aria-controls` into `useMenuItem`, ensuring submenu-trigger rows are treated as triggers and do not emit root menu `onAction`.
+  - added migrated `SubmenuTrigger` coverage to assert pressing submenu trigger rows does not call root `onAction`.
+    - `packages/@vue-spectrum/menu/src/MenuItem.ts`
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

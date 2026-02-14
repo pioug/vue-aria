@@ -158,4 +158,43 @@ describe("SubmenuTrigger", () => {
     const allMenus = document.body.querySelectorAll('[role="menu"]');
     expect(allMenus.length).toBeGreaterThanOrEqual(2);
   });
+
+  it("does not trigger root onAction when pressing a submenu trigger item", async () => {
+    const onAction = vi.fn();
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu", onAction }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(onAction).toHaveBeenCalledTimes(0);
+  });
 });
