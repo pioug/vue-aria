@@ -7116,3 +7116,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 105 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - guarded group `onKeyup` handling (alongside `onKeydown`) for disabled/read-only pickers to prevent callback/open interaction leakage.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added disabled/read-only regression coverage ensuring `onKeyDown` / `onKeyUp` callbacks are suppressed for non-interactive pickers.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 107 tests).
+- Validation: `npm run check -- --pretty false` passed.

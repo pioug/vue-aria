@@ -484,7 +484,14 @@ export const DatePicker = defineComponent({
 
                 ((pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(event);
               },
-              onKeyup: (pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined,
+              onKeyup: (event: KeyboardEvent) => {
+                if (merged.isDisabled || merged.isReadOnly) {
+                  event.preventDefault();
+                  return;
+                }
+
+                ((pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined)?.(event);
+              },
             },
             [
               h(
@@ -977,7 +984,14 @@ export const DateRangePicker = defineComponent({
 
                 ((pickerAria.groupProps as Record<string, unknown>).onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(event);
               },
-              onKeyup: (pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined,
+              onKeyup: (event: KeyboardEvent) => {
+                if (merged.isDisabled || merged.isReadOnly) {
+                  event.preventDefault();
+                  return;
+                }
+
+                ((pickerAria.groupProps as Record<string, unknown>).onKeyUp as ((event: KeyboardEvent) => void) | undefined)?.(event);
+              },
             },
             [
               h(

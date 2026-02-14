@@ -335,6 +335,29 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("suppresses date picker key callbacks when disabled", async () => {
+    const onKeyDown = vi.fn();
+    const onKeyUp = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDisabled: true,
+        onKeyDown,
+        onKeyUp,
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get(".react-spectrum-DatePicker-group");
+    await group.trigger("keydown", { key: "a" });
+    await group.trigger("keyup", { key: "a" });
+    await nextTick();
+
+    expect(onKeyDown).not.toHaveBeenCalled();
+    expect(onKeyUp).not.toHaveBeenCalled();
+  });
+
   it("inherits disabled and quiet state from Provider", async () => {
     const wrapper = mount(
       defineComponent({
@@ -1507,6 +1530,32 @@ describe("DateRangePicker", () => {
 
     expect(onOpenChange).not.toHaveBeenCalled();
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("suppresses range key callbacks when read-only", async () => {
+    const onKeyDown = vi.fn();
+    const onKeyUp = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isReadOnly: true,
+        onKeyDown,
+        onKeyUp,
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get(".react-spectrum-DateRangePicker-group");
+    await group.trigger("keydown", { key: "a" });
+    await group.trigger("keyup", { key: "a" });
+    await nextTick();
+
+    expect(onKeyDown).not.toHaveBeenCalled();
+    expect(onKeyUp).not.toHaveBeenCalled();
   });
 
   it("sets aria-required on range picker group when required", () => {
