@@ -85,19 +85,23 @@ export function useTableColumnHeader<T>(
     }
   });
 
+  const mergedProps = mergeProps(
+    focusableProps,
+    gridCellProps,
+    pressProps,
+    descriptionProps.value,
+    shouldDisableFocus.value ? { tabIndex: -1 } : undefined
+  ) as Record<string, unknown>;
+
   return {
     columnHeaderProps: {
-      ...mergeProps(
-        focusableProps,
-        gridCellProps,
-        pressProps,
-        descriptionProps.value,
-        shouldDisableFocus.value ? { tabIndex: -1 } : undefined
-      ),
+      ...mergedProps,
       role: "columnheader",
       id: getColumnHeaderId(state, node.key),
       "aria-colspan": node.colSpan && node.colSpan > 1 ? node.colSpan : undefined,
-      "aria-sort": ariaSort.value,
+      get "aria-sort"() {
+        return ariaSort.value;
+      },
     },
     isPressed,
   };

@@ -293,7 +293,7 @@ export function tableTests() {
     });
   });
 
-  it("toggles sorting callback direction when pressing the same header", async () => {
+  it("toggles sorting direction when pressing the same header", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });
 
@@ -309,6 +309,7 @@ export function tableTests() {
       column: "foo",
       direction: "descending",
     });
+    expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("descending");
   });
 
   it("resets sort direction when switching to a different column", async () => {

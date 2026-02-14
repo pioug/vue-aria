@@ -7881,6 +7881,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented `defaultSelectedKeys` and `disabledKeys` selection behavior, `renderEmptyState`, and `UNSAFE_className`/`UNSAFE_style` passthrough guidance.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/table` + `@vue-spectrum/table` sort-state parity update:
+  - fixed `useTableColumnHeader` to expose reactive `aria-sort` updates instead of setup-time snapshot values.
+  - restored repeated-header sort regression coverage to assert rendered `aria-sort` transitions to `descending`.
+  - `packages/@vue-aria/table/src/useTableColumnHeader.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test packages/@vue-aria/table/test` passed (10 files, 42 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
