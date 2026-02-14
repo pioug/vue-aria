@@ -8441,6 +8441,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 98 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` header/body content-wrapper parity update:
+  - aligned header/body render structure with Spectrum wrapper classes by adding `spectrum-Table-headCellContents`, `spectrum-Table-cellContents`, and hidden-header wrapper markup (`spectrum-Table-visuallyHidden`).
+  - expanded regression coverage for header/body content wrappers and hidden-header wrapper output in both camelCase and kebab-case static slot metadata flows.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 98 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

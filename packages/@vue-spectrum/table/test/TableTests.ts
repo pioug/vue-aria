@@ -165,6 +165,9 @@ export function tableTests() {
     expect(headers[0]!.text()).toContain("Foo");
     expect(headers[1]!.text()).toContain("Bar");
     expect(headers[2]!.text()).toContain("Baz");
+    expect(headers[0]!.find(".spectrum-Table-headCellContents").exists()).toBe(true);
+    expect(headers[1]!.find(".spectrum-Table-headCellContents").exists()).toBe(true);
+    expect(headers[2]!.find(".spectrum-Table-headCellContents").exists()).toBe(true);
     expect(headers[0]!.attributes("aria-sort")).toBe("none");
     expect(headers[1]!.attributes("aria-sort")).toBe("none");
     expect(headers[2]!.attributes("aria-sort")).toBeUndefined();
@@ -188,6 +191,8 @@ export function tableTests() {
     expect(firstRowCells[1]!.attributes("aria-colindex")).toBe("3");
     expect(firstRowCells[0]!.text()).toContain("Bar 1");
     expect(firstRowCells[1]!.text()).toContain("Baz 1");
+    expect(firstRowCells[0]!.find(".spectrum-Table-cellContents").exists()).toBe(true);
+    expect(firstRowCells[1]!.find(".spectrum-Table-cellContents").exists()).toBe(true);
   });
 
   it("applies default visual classes", () => {
@@ -273,6 +278,7 @@ export function tableTests() {
     const headers = wrapper.findAll('[role="columnheader"]');
     expect(headers).toHaveLength(3);
     expect(headers[1]!.classes()).toContain("spectrum-Table-cell--hideHeader");
+    expect(headers[1]!.find(".spectrum-Table-visuallyHidden").exists()).toBe(true);
 
     const bodyRows = wrapper.findAll('tbody [role="row"]');
     const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
@@ -413,6 +419,7 @@ export function tableTests() {
 
     const headers = wrapper.findAll('[role="columnheader"]');
     expect(headers[1]!.classes()).toContain("spectrum-Table-cell--hideHeader");
+    expect(headers[1]!.find(".spectrum-Table-visuallyHidden").exists()).toBe(true);
 
     const rowHeaderCells = wrapper.findAll('tbody [role="rowheader"]');
     expect(rowHeaderCells).toHaveLength(1);

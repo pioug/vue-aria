@@ -349,7 +349,9 @@ const TableHeaderCell = defineComponent({
           "aria-colindex":
             props.node.colIndex != null ? props.node.colIndex + 1 : props.node.index + 1,
         },
-        props.node.rendered as any
+        Boolean(columnProps.value.hideHeader)
+          ? h("span", { class: "spectrum-Table-visuallyHidden" }, props.node.rendered as any)
+          : h("div", { class: "spectrum-Table-headCellContents" }, props.node.rendered as any)
       );
   },
 });
@@ -414,7 +416,7 @@ const TableBodyCell = defineComponent({
           colSpan: resolvedColSpan.value,
           "aria-colspan": resolvedColSpan.value,
         },
-        props.node.rendered as any
+        h("div", { class: "spectrum-Table-cellContents" }, props.node.rendered as any)
       );
   },
 });
