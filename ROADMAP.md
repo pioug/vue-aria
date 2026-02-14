@@ -3941,8 +3941,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
-- Ported test files: 3 (adapted)
-- Passing test files: 3 (validated 2026-02-14)
+- Ported test files: 4 (adapted + variant integration extensions)
+- Passing test files: 4 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
   - Added adapted `Provider` coverage for OS color-scheme class application (dark/light defaults), explicit color-scheme override, and nested-provider inheritance/override behavior.
@@ -3953,6 +3953,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted provider responsive style-props coverage for default/custom breakpoint width matrices and omitted-size fallback behavior.
   - Added adapted provider class-stack coverage for baseline `spectrum` class/root isolation and compatibility mode (`react-spectrum-provider` class).
   - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
+  - Added provider/theme integration coverage validating `theme-light`, `theme-dark`, and `theme-express` variant class composition.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
