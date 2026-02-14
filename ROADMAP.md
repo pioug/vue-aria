@@ -9673,3 +9673,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 53 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu aria-expanded close-transition parity update:
+  - expanded migrated `SubmenuTrigger` coverage to assert sibling-item hover closure updates submenu trigger ARIA state back to collapsed (`aria-expanded="false"` with `aria-controls` removed) after an open state.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 16 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 54 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
