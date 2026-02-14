@@ -102,6 +102,9 @@ const onOpenChange = (next: boolean) => {
 `DialogTrigger` type influences nested `Dialog` defaults:
 - `popover` defaults to small sizing.
 - `modal`, `tray`, and fullscreen variants default to large/fullscreen sizing as applicable.
+- outside-interaction dismiss defaults to enabled for `popover` and `tray`.
+- for `modal`, outside-interaction dismiss requires `is-dismissable`.
+- `is-keyboard-dismiss-disabled` prevents Escape-key dismissal.
 
 ### Uncontrolled initial open state
 
@@ -208,6 +211,8 @@ const onDismiss = () => {
 - `type="popover"` makes nested `Dialog` default to small sizing.
 - `type="fullscreen"` uses fullscreen dialog sizing.
 - `is-dismissable` enables the nested dialog dismiss button.
+- outside-interaction dismiss follows trigger semantics (`popover`/`tray` dismiss by default; `modal` requires `is-dismissable`).
+- `is-keyboard-dismiss-disabled` disables Escape-key dismissal for the nested dialog.
 
 ## Labeling
 

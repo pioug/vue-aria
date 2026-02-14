@@ -4,6 +4,12 @@ import { h } from "vue";
 import { Dialog } from "../src/Dialog";
 import { DialogTrigger } from "../src/DialogTrigger";
 
+function dispatchOutsideInteraction() {
+  document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+  document.body.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+  document.body.dispatchEvent(new MouseEvent("click", { bubbles: true, button: 0 }));
+}
+
 describe("DialogTrigger", () => {
   it("opens and closes dialog content", async () => {
     const wrapper = mount(DialogTrigger as any, {
@@ -27,6 +33,106 @@ describe("DialogTrigger", () => {
 
     await wrapper.get('[data-testid="close"]').trigger("click");
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
+
+  it("supports outside-interaction dismissal semantics by type", async () => {
+    const nonDismissableModal = mount(DialogTrigger as any, {
+      props: {
+        type: "modal",
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "modal-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await nonDismissableModal.get('[data-testid="modal-trigger"]').trigger("click");
+    expect(nonDismissableModal.find('[role="dialog"]').exists()).toBe(true);
+    dispatchOutsideInteraction();
+    await nonDismissableModal.vm.$nextTick();
+    expect(nonDismissableModal.find('[role="dialog"]').exists()).toBe(true);
+    nonDismissableModal.unmount();
+
+    const dismissableModal = mount(DialogTrigger as any, {
+      props: {
+        type: "modal",
+        isDismissable: true,
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "dismissable-modal-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await dismissableModal.get('[data-testid="dismissable-modal-trigger"]').trigger("click");
+    expect(dismissableModal.find('[role="dialog"]').exists()).toBe(true);
+    dispatchOutsideInteraction();
+    await dismissableModal.vm.$nextTick();
+    expect(dismissableModal.find('[role="dialog"]').exists()).toBe(false);
+    dismissableModal.unmount();
+
+    const popover = mount(DialogTrigger as any, {
+      props: {
+        type: "popover",
+        isDismissable: false,
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "popover-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await popover.get('[data-testid="popover-trigger"]').trigger("click");
+    expect(popover.find('[role="dialog"]').exists()).toBe(true);
+    dispatchOutsideInteraction();
+    await popover.vm.$nextTick();
+    expect(popover.find('[role="dialog"]').exists()).toBe(false);
+    popover.unmount();
+  });
+
+  it("honors keyboard dismiss disablement", async () => {
+    const escapeEnabled = mount(DialogTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "escape-enabled-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    expect(escapeEnabled.find('[role="dialog"]').exists()).toBe(true);
+    await escapeEnabled.get('[role="dialog"]').trigger("keydown", { key: "Escape" });
+    await escapeEnabled.vm.$nextTick();
+    expect(escapeEnabled.find('[role="dialog"]').exists()).toBe(false);
+    escapeEnabled.unmount();
+
+    const escapeDisabled = mount(DialogTrigger as any, {
+      props: {
+        defaultOpen: true,
+        isKeyboardDismissDisabled: true,
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "escape-disabled-trigger" }, "Trigger"),
+        default: ({ close }: { close: () => void }) =>
+          h(Dialog as any, null, {
+            default: () => h("button", { "data-testid": "dialog-close", onClick: close }, "Close"),
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    expect(escapeDisabled.find('[role="dialog"]').exists()).toBe(true);
+    await escapeDisabled.get('[role="dialog"]').trigger("keydown", { key: "Escape" });
+    await escapeDisabled.vm.$nextTick();
+    expect(escapeDisabled.find('[role="dialog"]').exists()).toBe(true);
+    await escapeDisabled.get('[data-testid="dialog-close"]').trigger("click");
+    expect(escapeDisabled.find('[role="dialog"]').exists()).toBe(false);
+    escapeDisabled.unmount();
   });
 
   it("supports controlled open state", async () => {

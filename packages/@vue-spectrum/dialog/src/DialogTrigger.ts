@@ -71,6 +71,7 @@ export const DialogTrigger = defineComponent({
       type: props.type,
       onClose: () => state.close(),
       isDismissable: props.isDismissable,
+      isKeyboardDismissDisabled: props.isKeyboardDismissDisabled,
       ...overlayProps,
     }));
     provide(DialogContext, context as any);

@@ -5,6 +5,12 @@ import { Dialog } from "../src/Dialog";
 import { DialogContainer } from "../src/DialogContainer";
 import { useDialogContainer } from "../src/useDialogContainer";
 
+function dispatchOutsideInteraction() {
+  document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+  document.body.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+  document.body.dispatchEvent(new MouseEvent("click", { bubbles: true, button: 0 }));
+}
+
 const ExampleDialog = defineComponent({
   name: "ExampleDialog",
   setup() {
@@ -45,6 +51,91 @@ describe("DialogContainer", () => {
     await wrapper.get('[data-testid="confirm"]').trigger("click");
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
+
+  it("supports outside-interaction dismissal semantics by container type", () => {
+    const modalDismiss = vi.fn();
+    const modal = mount(DialogContainer as any, {
+      props: {
+        type: "modal",
+        onDismiss: modalDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    dispatchOutsideInteraction();
+    expect(modalDismiss).not.toHaveBeenCalled();
+    modal.unmount();
+
+    const dismissableModalDismiss = vi.fn();
+    const dismissableModal = mount(DialogContainer as any, {
+      props: {
+        type: "modal",
+        isDismissable: true,
+        onDismiss: dismissableModalDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    dispatchOutsideInteraction();
+    expect(dismissableModalDismiss).toHaveBeenCalledTimes(1);
+    dismissableModal.unmount();
+
+    const popoverDismiss = vi.fn();
+    const popover = mount(DialogContainer as any, {
+      props: {
+        type: "popover",
+        isDismissable: false,
+        onDismiss: popoverDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    dispatchOutsideInteraction();
+    expect(popoverDismiss).toHaveBeenCalledTimes(1);
+    popover.unmount();
+  });
+
+  it("honors container keyboard dismiss disablement", async () => {
+    const escapeEnabledDismiss = vi.fn();
+    const escapeEnabled = mount(DialogContainer as any, {
+      props: {
+        onDismiss: escapeEnabledDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await escapeEnabled.get('[role="dialog"]').trigger("keydown", { key: "Escape" });
+    expect(escapeEnabledDismiss).toHaveBeenCalledTimes(1);
+    escapeEnabled.unmount();
+
+    const escapeDisabledDismiss = vi.fn();
+    const escapeDisabled = mount(DialogContainer as any, {
+      props: {
+        onDismiss: escapeDisabledDismiss,
+        isKeyboardDismissDisabled: true,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await escapeDisabled.get('[role="dialog"]').trigger("keydown", { key: "Escape" });
+    expect(escapeDisabledDismiss).not.toHaveBeenCalled();
+    escapeDisabled.unmount();
   });
 
   it("propagates container type to nested dialog sizing", () => {

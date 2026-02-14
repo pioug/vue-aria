@@ -4,6 +4,7 @@ export interface DialogContextValue {
   type?: "modal" | "popover" | "tray" | "fullscreen" | "fullscreenTakeover";
   onClose?: () => void;
   isDismissable?: boolean;
+  isKeyboardDismissDisabled?: boolean;
   role?: "dialog" | "alertdialog";
   "aria-label"?: string;
   "aria-labelledby"?: string;

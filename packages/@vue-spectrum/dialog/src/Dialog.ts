@@ -1,4 +1,5 @@
 import { useDialog } from "@vue-aria/dialog";
+import { useOverlay } from "@vue-aria/overlays";
 import { mergeProps, useId } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
@@ -68,6 +69,12 @@ export const Dialog = defineComponent({
     const isDismissable = computed(() => merged.isDismissable ?? context.value?.isDismissable ?? false);
     const onDismiss = computed(() => merged.onDismiss ?? context.value?.onClose);
     const type = computed(() => merged.type ?? context.value?.type ?? "modal");
+    const isKeyboardDismissDisabled = computed(() =>
+      Boolean(merged.isKeyboardDismissDisabled ?? context.value?.isKeyboardDismissDisabled ?? false)
+    );
+    const isInteractionDismissable = computed(
+      () => isDismissable.value || type.value === "popover" || type.value === "tray"
+    );
     const size = computed(() => (type.value === "popover" ? merged.size ?? "S" : merged.size ?? "L"));
     const sizeVariant = computed(() => sizeMap[type.value ?? ""] ?? sizeMap[size.value ?? ""]);
     const generatedHeadingId = useId();
@@ -89,16 +96,26 @@ export const Dialog = defineComponent({
     });
 
     const domRef = ref<HTMLElement | null>(null);
+    const domRefObject = {
+      get current() {
+        return domRef.value;
+      },
+      set current(value: HTMLElement | null) {
+        domRef.value = value;
+      },
+    };
+    const { overlayProps } = useOverlay(
+      {
+        isOpen: true,
+        onClose: () => onDismiss.value?.(),
+        isDismissable: isInteractionDismissable.value,
+        isKeyboardDismissDisabled: isKeyboardDismissDisabled.value,
+      },
+      domRefObject
+    );
     const { dialogProps } = useDialog(
       mergeProps(context.value ?? {}, merged),
-      {
-        get current() {
-          return domRef.value;
-        },
-        set current(value: HTMLElement | null) {
-          domRef.value = value;
-        },
-      }
+      domRefObject
     );
     provide(DialogTitlePropsContext, headingProps as any);
     const { styleProps } = useStyleProps(merged);
@@ -113,7 +130,7 @@ export const Dialog = defineComponent({
         "section",
         {
           ...styleProps.value,
-          ...dialogProps,
+          ...mergeProps(dialogProps, overlayProps),
           "aria-labelledby": labelledBy.value as string | undefined,
           ref: domRef,
           class: [

@@ -34,6 +34,7 @@ export const DialogContainer = defineComponent({
       type: props.type,
       onClose: props.onDismiss,
       isDismissable: props.isDismissable,
+      isKeyboardDismissDisabled: props.isKeyboardDismissDisabled,
     }));
     provide(DialogContext, context as any);
 
