@@ -33,6 +33,7 @@ export interface SpectrumTreeViewProps {
   selectedKeys?: Iterable<TreeKey> | undefined;
   defaultSelectedKeys?: Iterable<TreeKey> | undefined;
   disabledKeys?: Iterable<TreeKey> | undefined;
+  disabledBehavior?: "all" | "selection" | undefined;
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   disallowEmptySelection?: boolean | undefined;
   isDisabled?: boolean | undefined;
@@ -138,6 +139,7 @@ const TreeRow = defineComponent({
       {
         ...(rowAria.expandButtonProps as any),
         elementType: "button",
+        isDisabled: rowAria.isDisabled,
       },
       expandButtonRef as any
     );
@@ -157,6 +159,13 @@ const TreeRow = defineComponent({
       const canSelectItem = props.state.selectionManager.canSelectItem(props.node.key);
       const isSelected = canSelectItem && props.state.selectionManager.isSelected(props.node.key);
       const isDisabled = props.state.selectionManager.isDisabled(props.node.key);
+      const loadedChildRows = [...props.state.collection.getChildren(props.node.key)].filter((node) => node.type === "item");
+      const hasLoadedChildRows = loadedChildRows.length > 0;
+      const isExpanded = hasLoadedChildRows ? props.state.expandedKeys.has(props.node.key) : undefined;
+      const chevronButtonProps = buttonProps as Record<string, unknown>;
+      const onChevronClick = chevronButtonProps.onClick as ((event: MouseEvent) => void) | undefined;
+      const onChevronPointerDown = chevronButtonProps.onPointerdown as ((event: PointerEvent) => void) | undefined;
+      const onChevronPointerUp = chevronButtonProps.onPointerup as ((event: PointerEvent) => void) | undefined;
       return h(
         "div",
         {
@@ -173,6 +182,7 @@ const TreeRow = defineComponent({
           ],
           "aria-selected": canSelectItem ? (isSelected ? "true" : "false") : undefined,
           "aria-disabled": isDisabled ? "true" : undefined,
+          "aria-expanded": isExpanded == null ? undefined : (isExpanded ? "true" : "false"),
           "data-level": String(props.node.level + 1),
         },
         [
@@ -193,9 +203,24 @@ const TreeRow = defineComponent({
                 ? h(
                   "button",
                   {
-                    ...buttonProps,
+                    ...chevronButtonProps,
                     ref: expandButtonElementRef,
                     class: "react-spectrum-TreeView-chevron",
+                    disabled: isDisabled || Boolean(chevronButtonProps.disabled),
+                    tabIndex: isDisabled ? undefined : (chevronButtonProps.tabIndex as number | undefined),
+                    onClick: (event: MouseEvent) => {
+                      event.stopPropagation();
+                      onChevronClick?.(event);
+                    },
+                    onPointerdown: (event: PointerEvent) => {
+                      event.stopPropagation();
+                      onChevronPointerDown?.(event);
+                    },
+                    onPointerup: (event: PointerEvent) => {
+                      event.stopPropagation();
+                      onChevronPointerUp?.(event);
+                    },
+                    "aria-label": props.state.expandedKeys.has(props.node.key) ? "Collapse" : "Expand",
                     "aria-expanded": props.state.expandedKeys.has(props.node.key),
                   },
                   props.state.expandedKeys.has(props.node.key) ? "▾" : "▸"
@@ -304,6 +329,10 @@ export const TreeView = defineComponent({
     },
     disabledKeys: {
       type: [Object, Array, Set] as PropType<Iterable<TreeKey> | undefined>,
+      default: undefined,
+    },
+    disabledBehavior: {
+      type: String as PropType<"all" | "selection" | undefined>,
       default: undefined,
     },
     escapeKeyBehavior: {
@@ -444,6 +473,9 @@ export const TreeView = defineComponent({
       },
       get disabledKeys() {
         return props.disabledKeys;
+      },
+      get disabledBehavior() {
+        return props.disabledBehavior;
       },
       get disallowEmptySelection() {
         return props.disallowEmptySelection;

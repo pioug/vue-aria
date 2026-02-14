@@ -7678,6 +7678,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 21 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` chevron-interaction parity update:
+  - added migrated chevron behavior coverage for expand/collapse labeling and disabled-behavior tab-index behavior.
+  - fixed tree row `aria-expanded` semantics to derive from live expanded-key state with deferred-child safeguards.
+  - prevented chevron pointer/click interactions from bubbling into row-level handlers and wired live chevron disabled/tab-index behavior from selection-manager disabled state.
+  - added `disabledBehavior` passthrough on `TreeView` and updated shared multiple-selection state to react to runtime prop updates (`selectionMode`, `disallowEmptySelection`, `disabledBehavior`).
+  - `packages/@vue-spectrum/tree/src/TreeView.ts`
+  - `packages/@vue-aria/selection-state/src/useMultipleSelectionState.ts`
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test packages/@vue-aria/selection-state/test` passed (4 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`

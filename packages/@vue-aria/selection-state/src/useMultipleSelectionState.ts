@@ -51,17 +51,17 @@ function convertSelection(selection: SelectionType | null | undefined, defaultVa
 
 export function useMultipleSelectionState(props: MultipleSelectionStateProps): MultipleSelectionState {
   const {
-    selectionMode = "none" as SelectionMode,
-    disallowEmptySelection = false,
     allowDuplicateSelectionEvents,
     selectionBehavior: selectionBehaviorProp = "toggle",
-    disabledBehavior = "all",
   } = props;
 
   const isFocusedRef = ref(false);
   const focusedKeyRef = ref<Key | null>(null);
   const childFocusStrategyRef = ref<FocusStrategy | null>(null);
 
+  const selectionModeProp = computed<SelectionMode>(() => props.selectionMode ?? "none");
+  const disallowEmptySelectionProp = computed(() => props.disallowEmptySelection ?? false);
+  const disabledBehaviorProp = computed<DisabledBehavior>(() => props.disabledBehavior ?? "all");
   const selectedKeysProp = computed(() => convertSelection(props.selectedKeys));
   const defaultSelectedKeys = computed<SelectionType>(() => convertSelection(props.defaultSelectedKeys, new Selection()) as SelectionType);
 
@@ -82,8 +82,12 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
   );
 
   return {
-    selectionMode,
-    disallowEmptySelection,
+    get selectionMode() {
+      return selectionModeProp.value;
+    },
+    get disallowEmptySelection() {
+      return disallowEmptySelectionProp.value;
+    },
     get selectionBehavior() {
       return selectionBehavior.value;
     },
@@ -117,6 +121,8 @@ export function useMultipleSelectionState(props: MultipleSelectionStateProps): M
     get disabledKeys() {
       return disabledKeysProp.value;
     },
-    disabledBehavior,
+    get disabledBehavior() {
+      return disabledBehaviorProp.value;
+    },
   };
 }

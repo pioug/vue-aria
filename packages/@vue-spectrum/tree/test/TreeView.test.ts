@@ -578,6 +578,73 @@ describe("TreeView", () => {
     expect(row.find("button").exists()).toBe(true);
   });
 
+  it("applies expand and collapse labels on chevrons", async () => {
+    const wrapper = renderTree({
+      defaultExpandedKeys: ["projects"],
+    });
+
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+
+    let chevron = projectsRow!.get("button");
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(chevron.attributes("aria-label")).toBe("Collapse");
+
+    await press(chevron);
+
+    const updatedProjectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(updatedProjectsRow).toBeTruthy();
+    chevron = updatedProjectsRow!.get("button");
+    expect(updatedProjectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(chevron.attributes("aria-label")).toBe("Expand");
+  });
+
+  it("keeps chevron tabIndex when disabledBehavior is selection and removes it for all", async () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Disabled behavior tree",
+        selectionMode: "multiple",
+        disabledBehavior: "selection",
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "test", textValue: "Test", hasChildItems: true }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Test",
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    let row = wrapper.get('[role="row"]');
+    let chevron = row.get("button");
+    expect(chevron.attributes("tabindex")).toBe("-1");
+
+    await wrapper.setProps({
+      disabledKeys: ["test"],
+      disabledBehavior: "selection",
+    });
+    await nextTick();
+
+    row = wrapper.get('[role="row"]');
+    chevron = row.get("button");
+    expect(chevron.attributes("tabindex")).toBe("-1");
+
+    await wrapper.setProps({
+      disabledKeys: ["test"],
+      disabledBehavior: "all",
+    });
+    await nextTick();
+
+    row = wrapper.get('[role="row"]');
+    chevron = row.get("button");
+    expect(chevron.attributes("tabindex")).toBeUndefined();
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 
