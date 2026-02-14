@@ -126,6 +126,20 @@ describe("DatePicker", () => {
     expect(value.day).toBe(17);
   });
 
+  it("opens date picker popover by default when defaultOpen is true", async () => {
+    mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        defaultOpen: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
   it("updates rendered value in controlled mode", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -520,6 +534,23 @@ describe("DateRangePicker", () => {
     await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
     await nextTick();
 
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
+  });
+
+  it("opens range picker popover by default when defaultOpen is true", async () => {
+    mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        defaultOpen: true,
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeTruthy();
   });
 
