@@ -72,9 +72,21 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 
 `onSelectionChange` receives a `Set` of selected row keys in the current table collection.
 
+## Selection Initialization and Disabled Keys
+
+Use `defaultSelectedKeys` to seed initial row selection. Use `disabledKeys` to prevent specific rows from being selected via interaction.
+
 ## Sort Initialization
 
 Use `defaultSortDescriptor` to apply initial row ordering and header sort state before user interaction.
+
+## Empty State Rendering
+
+Pass `renderEmptyState` to render custom body content when the collection has no rows.
+
+## Unsafe Passthrough Props
+
+Use `UNSAFE_className` and `UNSAFE_style` to append custom classes/styles to the underlying grid element.
 
 ## Related
 
