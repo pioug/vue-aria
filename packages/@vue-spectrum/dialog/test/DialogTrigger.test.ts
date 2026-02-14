@@ -86,4 +86,32 @@ describe("DialogTrigger", () => {
     await fullscreen.get('[data-testid="fullscreen-trigger"]').trigger("click");
     expect(fullscreen.find('[data-testid="fullscreen"]').exists()).toBe(true);
   });
+
+  it("supports defaultOpen and close transition callbacks", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(DialogTrigger as any, {
+      props: {
+        defaultOpen: true,
+        onOpenChange,
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "trigger" }, "Trigger"),
+        default: ({ close }: { close: () => void }) =>
+          h(Dialog as any, null, {
+            default: () => [
+              h("p", "contents"),
+              h("button", { "data-testid": "close", onClick: close }, "Close"),
+            ],
+          }),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(true);
+    expect(onOpenChange).not.toHaveBeenCalled();
+
+    await wrapper.get('[data-testid="close"]').trigger("click");
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
 });

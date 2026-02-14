@@ -7337,3 +7337,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added composition-slot usage docs (`Heading`, `Header`, `Content`, `Footer`, `ButtonGroup`) and expanded related-package guidance.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 24 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded `DialogTrigger` interaction coverage for `defaultOpen` behavior and close-transition `onOpenChange(false)` callback semantics.
+    - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 25 tests).
+- Validation: `npm run check -- --pretty false` passed.
