@@ -8014,6 +8014,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 29 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` controlled colSpan sort parity update:
+  - added regression coverage for parent-driven `sortDescriptor` updates on data-driven rows with spanned cells.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 30 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` docs parity update:
   - documented that controlled sorting follows logical column indexes when earlier cells are spanned.
   - `docs/packages/spectrum-table.md`

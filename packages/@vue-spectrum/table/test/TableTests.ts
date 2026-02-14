@@ -308,6 +308,38 @@ export function tableTests() {
     expect(bodyRows[1]!.text()).toContain("Alpha");
   });
 
+  it("updates controlled sortDescriptor for data-driven colSpan rows", async () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Controlled sortable prop colSpan table",
+        columns: sortableColumnsWithSpan,
+        items: sortableItemsWithPropSpanCells,
+        sortDescriptor: {
+          column: "col-4",
+          direction: "ascending",
+        },
+      },
+      attachTo: document.body,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.text()).toContain("Alpha");
+    expect(bodyRows[1]!.text()).toContain("Zulu");
+
+    await wrapper.setProps({
+      sortDescriptor: {
+        column: "col-4",
+        direction: "descending",
+      },
+    });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.text()).toContain("Zulu");
+    expect(bodyRows[1]!.text()).toContain("Alpha");
+  });
+
   it("supports keyboard row navigation", async () => {
     const wrapper = renderTable({
       selectionMode: "single",
