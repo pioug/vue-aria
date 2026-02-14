@@ -2476,6 +2476,22 @@ export function tableTests() {
     expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("none");
   });
 
+  it("disables sortable header keyboard interactions when table is disabled", async () => {
+    const onSortChange = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      onSortChange,
+    });
+
+    const header = wrapper.findAll('[role="columnheader"]')[0]!;
+    await header.trigger("keydown", { key: "Enter" });
+    await header.trigger("keyup", { key: "Enter" });
+    await nextTick();
+
+    expect(onSortChange).not.toHaveBeenCalled();
+    expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("none");
+  });
+
   it("adds sort direction info to aria-describedby on Android", async () => {
     const userAgentDescriptor = Object.getOwnPropertyDescriptor(window.navigator, "userAgent");
     const hadOwnUserAgent = Object.prototype.hasOwnProperty.call(window.navigator, "userAgent");
