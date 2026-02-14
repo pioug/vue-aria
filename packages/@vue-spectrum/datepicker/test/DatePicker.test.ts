@@ -1037,6 +1037,29 @@ describe("DatePicker", () => {
     expect(validate).toHaveBeenCalled();
   });
 
+  it("defers custom validate errors in native validationBehavior until commit", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        validationBehavior: "native",
+        validate: () => "Date failed native validation",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DatePicker-error").text()).toContain("Date failed native validation");
+  });
+
   it("renders description text when provided", () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -2342,6 +2365,33 @@ describe("DateRangePicker", () => {
     expect(wrapper.text()).toContain("Range failed custom validation");
     expect(wrapper.get(".react-spectrum-DateRangePicker").classes()).toContain("is-invalid");
     expect(validate).toHaveBeenCalled();
+  });
+
+  it("defers custom range validate errors in native validationBehavior until commit", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 5),
+        validationBehavior: "native",
+        validate: () => "Range failed native validation",
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-error").text()).toContain("Range failed native validation");
   });
 
   it("renders range description text when provided", () => {

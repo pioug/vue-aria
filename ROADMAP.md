@@ -7194,3 +7194,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented custom `validate` callback usage for both picker variants and added `validate` to the shared key-prop reference.
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 121 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added native-validation behavior coverage for custom validator callbacks, ensuring errors are deferred until commit/select interactions in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 123 tests).
+- Validation: `npm run check -- --pretty false` passed.
