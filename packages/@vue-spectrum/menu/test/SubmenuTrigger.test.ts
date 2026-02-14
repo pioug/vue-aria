@@ -830,7 +830,9 @@ describe("SubmenuTrigger", () => {
     const firstTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
       .find((item) => item.textContent?.includes("More 1")) as HTMLElement | undefined;
     expect(firstTrigger).toBeTruthy();
-    firstTrigger?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    firstTrigger?.focus();
+    firstTrigger?.click();
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
 
@@ -1280,6 +1282,56 @@ describe("SubmenuTrigger", () => {
     expect(onRootAction).toHaveBeenCalledTimes(0);
     expect(onRootClose).toHaveBeenCalledTimes(0);
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(0);
+  });
+
+  it("closes submenu when keyboard focus moves from trigger to a sibling item", async () => {
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(Item as any, { key: "first" }, { default: () => "First" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "last" }, { default: () => "Last" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const firstItem = rootItems.find((item) => item.textContent?.includes("First"));
+    const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+    expect(firstItem).toBeTruthy();
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    submenuTriggerItem?.focus();
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.activeElement).toBe(firstItem);
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+    expect(document.body.textContent).not.toContain("Sub item");
   });
 
   it("closes submenu when focus moves to a sibling item in the parent menu", async () => {

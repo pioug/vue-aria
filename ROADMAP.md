@@ -9763,3 +9763,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 63 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` keyboard sibling-focus close parity update:
+  - added migrated `SubmenuTrigger` coverage asserting an open submenu closes when keyboard navigation (`ArrowUp`) moves focus from the submenu trigger item to a sibling root-menu item.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+  - stabilized nested Tab-retention coverage by opening the first nested submenu trigger via click before deep-stack assertions.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 64 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.
