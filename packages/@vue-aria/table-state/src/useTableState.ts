@@ -68,9 +68,35 @@ export function useTableState<T extends object>(
   );
 
   const gridState = useGridState<T, ITableCollection<T>>({
-    ...props,
     get collection() {
       return collectionRef.value;
+    },
+    get selectionMode() {
+      return props.selectionMode;
+    },
+    get disallowEmptySelection() {
+      return props.disallowEmptySelection;
+    },
+    get allowDuplicateSelectionEvents() {
+      return props.allowDuplicateSelectionEvents;
+    },
+    get selectionBehavior() {
+      return props.selectionBehavior;
+    },
+    get selectedKeys() {
+      return props.selectedKeys;
+    },
+    get defaultSelectedKeys() {
+      return props.defaultSelectedKeys;
+    },
+    onSelectionChange(keys) {
+      props.onSelectionChange?.(keys);
+    },
+    get disabledKeys() {
+      return props.disabledKeys;
+    },
+    get UNSAFE_selectionState() {
+      return props.UNSAFE_selectionState;
     },
     disabledBehavior: props.disabledBehavior || "selection",
   });

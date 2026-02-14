@@ -46,13 +46,17 @@ export function useGridRow<
     isDisabled: state.collection.size === 0,
   });
 
-  const isSelected = state.selectionManager.isSelected(node.key);
   const rowProps: Record<string, unknown> = {
-    role: "row",
-    "aria-selected":
-      state.selectionManager.selectionMode !== "none" ? isSelected : undefined,
-    "aria-disabled": states.isDisabled || undefined,
     ...itemProps,
+    role: "row",
+    get "aria-selected"() {
+      return state.selectionManager.selectionMode !== "none"
+        ? state.selectionManager.isSelected(node.key)
+        : undefined;
+    },
+    get "aria-disabled"() {
+      return states.isDisabled || undefined;
+    },
   };
 
   if (isVirtualized) {

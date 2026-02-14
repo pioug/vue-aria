@@ -373,6 +373,10 @@ const TableBodyRow = defineComponent({
       required: false,
       default: undefined,
     },
+    selectedKeys: {
+      type: Object as PropType<Set<TableKey>>,
+      required: true,
+    },
   },
   setup(props) {
     const refObject = ref<HTMLElement | null>(null);
@@ -406,6 +410,10 @@ const TableBodyRow = defineComponent({
           ref: refObject,
           class: "react-spectrum-Table-row",
           "aria-rowindex": props.rowOffset + props.rowIndex + 1,
+          "aria-selected":
+            props.state.selectionManager.selectionMode !== "none"
+              ? (props.selectedKeys.has(props.node.key) ? "true" : "false")
+              : undefined,
         },
         childNodes.map((childNode) =>
           h(TableBodyCell, {
@@ -690,10 +698,19 @@ export const TableView = defineComponent({
     const resolvedSortDescriptor = ref<SpectrumSortDescriptor | null>(
       props.sortDescriptor ?? props.defaultSortDescriptor ?? null
     );
+    const resolvedSelectedKeys = ref<Set<TableKey>>(
+      new Set((props.selectedKeys ?? props.defaultSelectedKeys ?? []) as Iterable<TableKey>)
+    );
 
     watchEffect(() => {
       if (props.sortDescriptor !== undefined) {
         resolvedSortDescriptor.value = props.sortDescriptor ?? null;
+      }
+    });
+
+    watchEffect(() => {
+      if (props.selectedKeys !== undefined) {
+        resolvedSelectedKeys.value = new Set(props.selectedKeys as Iterable<TableKey>);
       }
     });
 
@@ -724,10 +741,10 @@ export const TableView = defineComponent({
         return props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none";
       },
       get selectedKeys() {
-        return props.selectedKeys as any;
+        return resolvedSelectedKeys.value as any;
       },
       get defaultSelectedKeys() {
-        return props.defaultSelectedKeys as any;
+        return undefined;
       },
       get disabledKeys() {
         return props.disabledKeys;
@@ -750,11 +767,20 @@ export const TableView = defineComponent({
           for (const row of normalizedDefinition.value.rows) {
             allKeys.add(row.key);
           }
+
+          if (props.selectedKeys === undefined) {
+            resolvedSelectedKeys.value = allKeys;
+          }
+
           props.onSelectionChange?.(allKeys);
           return;
         }
 
-        props.onSelectionChange?.(new Set(keys as Set<TableKey>));
+        const nextKeys = new Set(keys as Set<TableKey>);
+        if (props.selectedKeys === undefined) {
+          resolvedSelectedKeys.value = nextKeys;
+        }
+        props.onSelectionChange?.(nextKeys);
       },
     });
 
@@ -872,6 +898,7 @@ export const TableView = defineComponent({
                   rowIndex,
                   rowOffset,
                   onAction: props.onAction,
+                  selectedKeys: resolvedSelectedKeys.value,
                 })
               )
               : [

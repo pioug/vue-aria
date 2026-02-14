@@ -234,6 +234,27 @@ export function tableTests() {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("updates selection when controlled selectedKeys changes", async () => {
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      selectedKeys: new Set(["row-1"]),
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+
+    await wrapper.setProps({
+      selectedKeys: new Set(["row-2"]),
+    });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("supports UNSAFE className passthrough", () => {
     const wrapper = renderTable({
       UNSAFE_className: "test-class",
