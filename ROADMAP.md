@@ -2690,7 +2690,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2788,8 +2788,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/tree.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
+  - Upstream `@react-aria/tree` has no dedicated package-local docs folder; examples/styles are mirrored from source-level API and shared tree-state story flows.
 
 ### Accessibility
 - [x] Baseline treegrid role + expand button labeling semantics covered in adapted tests.
@@ -2802,9 +2803,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) beyond the initial integrated harness test.
-2. Mirror upstream tree docs/examples and base styling patterns in VitePress.
-3. Close API checklist and coordinate remaining parity tasks with `@vue-aria/tree-state`.
+1. Expand tree interaction matrix coverage (focus, arrow navigation, expansion/collapse, selection interplay) beyond the current integrated harness tests.
+2. Complete remaining visual/accessibility parity validation for tree row/disclosure states.
+3. Monitor upstream `@react-aria/tree` and shared consumer stories for behavior drift.
 
 ## 31l) Package Record: @vue-aria/calendar-state
 - Upstream source path(s):

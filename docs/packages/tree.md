@@ -2,6 +2,11 @@
 
 `@vue-aria/tree` ports upstream `@react-aria/tree` hooks for treegrid semantics and row-level expand/collapse interaction wiring.
 
+## Reference sources
+
+- `@react-aria/tree` source (`src/*`)
+- `@react-stately/tree` keyboard-navigation story/test flows (used for integration parity examples)
+
 ## Implemented modules
 
 - `useTree`
@@ -100,4 +105,5 @@ if (node) {
 - `useTree` reuses grid list behavior and forces treegrid role semantics.
 - `useTreeItem` exposes `expandButtonProps` for a dedicated disclosure control in each row.
 - Keyboard interaction parity currently includes integrated expansion/collapse and directional navigation harness coverage in tests.
+- Upstream `@react-aria/tree` has no dedicated package-local docs folder; this page mirrors the source-level API and shared upstream story interactions.
 - `Spectrum S2` is out of scope unless explicitly requested.
