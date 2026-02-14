@@ -1608,6 +1608,12 @@ describe("TreeView", () => {
     expect(updatedGammaRow).toBeTruthy();
     expect(updatedAlphaRow!.attributes("aria-selected")).toBe("false");
     expect(updatedGammaRow!.attributes("aria-selected")).toBe("true");
+
+    await realPointerPress(updatedGammaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.has("gamma")).toBe(true);
+    expect(selected?.size).toBe(1);
   });
 
   it("applies highlight selection data attributes on rows", async () => {
