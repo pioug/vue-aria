@@ -1,4 +1,4 @@
-import { CalendarDate, CalendarDateTime } from "@internationalized/date";
+import { CalendarDate, CalendarDateTime, parseZonedDateTime } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -82,6 +82,41 @@ describe("DatePicker", () => {
 
     expect(wrapper.get(".react-spectrum-DatePicker-value").classes()).not.toContain("is-placeholder");
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("2019");
+  });
+
+  it("renders timezone text for ZonedDateTime values when hideTimeZone is false", () => {
+    const zonedValue = parseZonedDateTime("2019-06-05T09:30[America/New_York]");
+    const withZone = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: zonedValue,
+        granularity: "minute",
+        hourCycle: 24,
+        shouldForceLeadingZeros: true,
+        hideTimeZone: false,
+      },
+      attachTo: document.body,
+    });
+
+    const withoutZone = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: zonedValue,
+        granularity: "minute",
+        hourCycle: 24,
+        shouldForceLeadingZeros: true,
+        hideTimeZone: true,
+      },
+      attachTo: document.body,
+    });
+
+    const withZoneText = withZone.get(".react-spectrum-DatePicker-value").text();
+    const withoutZoneText = withoutZone.get(".react-spectrum-DatePicker-value").text();
+
+    expect(withZoneText).toContain("09:30");
+    expect(withoutZoneText).toContain("09:30");
+    expect(withZoneText).not.toBe(withoutZoneText);
+    expect(withZoneText.length).toBeGreaterThan(withoutZoneText.length);
   });
 
   it("renders custom placeholder text until a date is selected", async () => {
@@ -1208,6 +1243,48 @@ describe("DateRangePicker", () => {
 
     expect(wrapper.get(".react-spectrum-DateRangePicker-value").classes()).not.toContain("is-placeholder");
     expect(wrapper.get(".react-spectrum-DateRangePicker-value").text()).toContain("2019");
+  });
+
+  it("renders timezone text for ZonedDateTime ranges when hideTimeZone is false", () => {
+    const withZone = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: parseZonedDateTime("2019-06-05T09:30[America/New_York]"),
+          end: parseZonedDateTime("2019-06-06T10:45[America/New_York]"),
+        },
+        granularity: "minute",
+        hourCycle: 24,
+        shouldForceLeadingZeros: true,
+        hideTimeZone: false,
+      },
+      attachTo: document.body,
+    });
+
+    const withoutZone = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: parseZonedDateTime("2019-06-05T09:30[America/New_York]"),
+          end: parseZonedDateTime("2019-06-06T10:45[America/New_York]"),
+        },
+        granularity: "minute",
+        hourCycle: 24,
+        shouldForceLeadingZeros: true,
+        hideTimeZone: true,
+      },
+      attachTo: document.body,
+    });
+
+    const withZoneText = withZone.get(".react-spectrum-DateRangePicker-value").text();
+    const withoutZoneText = withoutZone.get(".react-spectrum-DateRangePicker-value").text();
+
+    expect(withZoneText).toContain("09:30");
+    expect(withZoneText).toContain("10:45");
+    expect(withoutZoneText).toContain("09:30");
+    expect(withoutZoneText).toContain("10:45");
+    expect(withZoneText).not.toBe(withoutZoneText);
+    expect(withZoneText.length).toBeGreaterThan(withoutZoneText.length);
   });
 
   it("renders custom range placeholder text until a range is selected", async () => {

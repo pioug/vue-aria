@@ -7165,3 +7165,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded date/time configuration examples to include `hideTimeZone` and added a dedicated `validationBehavior` usage example.
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 115 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - updated `DatePicker` / `DateRangePicker` display formatting to include time segments for time granularities, ensuring `hideTimeZone` affects rendered zoned date-time values.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added regression coverage for `hideTimeZone` rendering behavior with `ZonedDateTime` values and ranges.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 117 tests).
+- Validation: `npm run check -- --pretty false` passed.

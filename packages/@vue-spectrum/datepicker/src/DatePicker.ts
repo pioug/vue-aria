@@ -104,6 +104,40 @@ function createMergedProps<T extends Record<string, unknown>>(
   });
 }
 
+function getDisplayFieldOptions(granularity: string | undefined) {
+  const baseOptions = {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  } as const;
+
+  if (granularity === "hour") {
+    return {
+      ...baseOptions,
+      hour: "numeric",
+    };
+  }
+
+  if (granularity === "minute") {
+    return {
+      ...baseOptions,
+      hour: "numeric",
+      minute: "2-digit",
+    };
+  }
+
+  if (granularity === "second") {
+    return {
+      ...baseOptions,
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+  }
+
+  return baseOptions;
+}
+
 export const DatePicker = defineComponent({
   name: "SpectrumDatePicker",
   props: {
@@ -443,11 +477,10 @@ export const DatePicker = defineComponent({
         return merged.placeholder ?? "Select date";
       }
 
-      return state.formatValue(locale.value.locale, {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
+      return state.formatValue(
+        locale.value.locale,
+        getDisplayFieldOptions(state.granularity) as Record<string, unknown>
+      );
     });
 
     const errorText = computed(() => {
@@ -979,11 +1012,10 @@ export const DateRangePicker = defineComponent({
     );
 
     const displayValue = computed(() => {
-      const range = state.formatValue(locale.value.locale, {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
+      const range = state.formatValue(
+        locale.value.locale,
+        getDisplayFieldOptions(state.granularity) as Record<string, unknown>
+      );
 
       if (!range) {
         return merged.placeholder ?? "Select date range";
