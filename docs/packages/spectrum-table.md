@@ -72,6 +72,7 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 
 `onSelectionChange` receives a `Set` of selected row keys in the current table collection.
 Selection keys preserve row key types (for example, numeric keys such as `0` remain numbers).
+Rows can provide either `key` or `id`; `id` is used as the row key when `key` is omitted.
 
 ## Selection Initialization and Disabled Keys
 
