@@ -9320,3 +9320,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 61 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-selection keyboard-focus parity update:
+  - expanded focus-navigation coverage to assert rows in `disabledKeys` remain keyboard-focusable when `disabledBehavior="selection"` (and are not marked with `data-disabled`).
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 62 tests).
+- Validation: `npm run check -- --pretty false` passed.

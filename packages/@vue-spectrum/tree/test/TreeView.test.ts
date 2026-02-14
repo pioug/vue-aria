@@ -659,6 +659,29 @@ describe("TreeView", () => {
     expect(photosRow!.attributes("data-focus-visible")).toBeUndefined();
   });
 
+  it('keeps disabled rows keyboard-focusable when disabledBehavior is "selection"', async () => {
+    const wrapper = renderTree({
+      autoFocus: "first",
+      selectionMode: "multiple",
+      disabledBehavior: "selection",
+      disabledKeys: ["projects"],
+    });
+
+    await nextTick();
+
+    let photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+
+    setInteractionModality("keyboard");
+    await photosRow!.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-disabled")).toBeUndefined();
+    expect(document.activeElement).toBe(projectsRow!.element);
+  });
+
   it("tracks root focus state for populated trees across modality changes", async () => {
     setInteractionModality("pointer");
     const wrapper = renderTree({
