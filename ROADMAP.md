@@ -9636,3 +9636,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 49 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu hover-retention parity update:
+  - added migrated `SubmenuTrigger` coverage asserting submenu overlays remain open when pointer hover moves from submenu content back onto the owning submenu trigger.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 12 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 50 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 36 tests).
+- Validation: `npm run check -- --pretty false` passed.
