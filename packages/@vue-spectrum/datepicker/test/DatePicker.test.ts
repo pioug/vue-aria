@@ -907,4 +907,65 @@ describe("DateRangePicker", () => {
     expect(day9?.getAttribute("aria-disabled")).toBe("true");
     expect(day10?.getAttribute("aria-disabled")).toBeNull();
   });
+
+  it("constrains range selection across unavailable dates by default", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 10),
+        isDateUnavailable: (date: { day: number }) => date.day === 12,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day14 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "14");
+    expect(day10).toBeTruthy();
+    expect(day14).toBeTruthy();
+
+    pressElement(day10!);
+    pressElement(day14!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const value = onChange.mock.calls[0]?.[0] as { start: CalendarDate; end: CalendarDate };
+    expect(value.start.day).toBe(10);
+    expect(value.end.day).toBe(11);
+  });
+
+  it("allows non-contiguous range selection when enabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 10),
+        isDateUnavailable: (date: { day: number }) => date.day === 12,
+        allowsNonContiguousRanges: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day14 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "14");
+    expect(day10).toBeTruthy();
+    expect(day14).toBeTruthy();
+
+    pressElement(day10!);
+    pressElement(day14!);
+    await nextTick();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const value = onChange.mock.calls[0]?.[0] as { start: CalendarDate; end: CalendarDate };
+    expect(value.start.day).toBe(10);
+    expect(value.end.day).toBe(14);
+  });
 });
