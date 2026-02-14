@@ -1,3 +1,5 @@
+import { ModalProvider, useModal } from "@vue-aria/overlays";
+import { useRouter } from "@vue-aria/utils";
 import { createApp, defineComponent, h, nextTick, ref } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Provider, useProviderProps } from "../src/Provider";
@@ -386,6 +388,104 @@ describe("Provider", () => {
     const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
     expect(probe?.dataset.readonly).toBe("true");
     unmount();
+  });
+
+  it("provides router context to descendants when router is set", () => {
+    const Probe = defineComponent({
+      name: "RouterProbe",
+      setup() {
+        const router = useRouter();
+        return () =>
+          h("div", {
+            "data-testid": "router-probe",
+            "data-href": router.useHref("/test"),
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                router: {
+                  navigate: vi.fn(),
+                  useHref: (href: string) => `/app${href}`,
+                },
+              },
+              () => h(Probe)
+            );
+        },
+      })
+    );
+
+    const probe = container.querySelector('[data-testid="router-probe"]') as HTMLElement | null;
+    expect(probe?.dataset.href).toBe("/app/test");
+    unmount();
+  });
+
+  it("applies modal provider aria state on the wrapper", async () => {
+    const ActiveModal = defineComponent({
+      name: "ActiveModal",
+      setup() {
+        useModal();
+        return () => h("div", { "data-testid": "modal-node" });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider",
+              },
+              () => h(ModalProvider, null, () => h(ActiveModal))
+            );
+        },
+      })
+    );
+
+    await nextTick();
+    const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
+    expect(provider?.getAttribute("aria-hidden")).toBe("true");
+    unmount();
+  });
+
+  it("warns when nested language directions conflict", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const host = document.createElement("div");
+    host.setAttribute("dir", "rtl");
+    document.body.appendChild(host);
+    const app = createApp(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                locale: "en-US",
+                "data-testid": "provider",
+              },
+              () => h("div", "hello")
+            );
+        },
+      })
+    );
+
+    app.mount(host);
+    await nextTick();
+
+    expect(warnSpy).toHaveBeenCalledWith("Language directions cannot be nested. ltr inside rtl.");
+    app.unmount();
+    host.remove();
   });
 
   it("throws when no theme is provided and no parent provider exists", () => {

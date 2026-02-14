@@ -1,12 +1,87 @@
 import { I18nProvider, useLocale } from "@vue-aria/i18n";
+import { ModalProvider, useModalProvider } from "@vue-aria/overlays";
 import type { ReadonlyRef } from "@vue-aria/types";
-import { computed, defineComponent, h, inject, provide, type PropType } from "vue";
+import { RouterProvider } from "@vue-aria/utils";
+import { computed, defineComponent, h, inject, onMounted, provide, ref, type PropType, type VNodeChild } from "vue";
 import { ProviderContextSymbol } from "./context";
 import { useColorScheme, useScale } from "./mediaQueries";
 import type { ProviderContext, ProviderProps } from "./types";
 
 const DEFAULT_BREAKPOINTS = { S: 640, M: 768, L: 1024, XL: 1280, XXL: 1536 };
 const VERSION = "0.1.0";
+
+const ProviderWrapper = defineComponent({
+  name: "SpectrumProviderWrapper",
+  inheritAttrs: false,
+  props: {
+    colorScheme: {
+      type: String as PropType<ProviderProps["colorScheme"]>,
+      required: false,
+    },
+  },
+  setup(props, { slots, attrs }) {
+    const localeInfo = useLocale();
+    const providerContext = inject<ReadonlyRef<ProviderContext> | null>(ProviderContextSymbol, null);
+    if (!providerContext) {
+      throw new Error("No root provider found, please wrap your app within a <Provider>.");
+    }
+
+    const { modalProviderProps } = useModalProvider();
+    const domRef = ref<HTMLElement | null>(null);
+    const hasWarned = ref(false);
+
+    const className = computed(() => {
+      const { theme, colorScheme, scale } = providerContext.value;
+      const classes = [
+        attrs.class,
+        "vue-spectrum-provider",
+        ...(theme[colorScheme] ? Object.values(theme[colorScheme]!) : []),
+        ...(theme[scale] ? Object.values(theme[scale]!) : []),
+        ...(theme.global ? Object.values(theme.global) : []),
+      ];
+      return classes.filter(Boolean);
+    });
+
+    const style = computed(() => {
+      const { theme, colorScheme } = providerContext.value;
+      const availableColorSchemes = [theme.light ? "light" : null, theme.dark ? "dark" : null].filter(Boolean).join(" ");
+      return {
+        ...(attrs.style as Record<string, unknown> | undefined),
+        // Keep browser-native widgets (e.g. scrollbars) in sync with provider color mode.
+        colorScheme: props.colorScheme ?? colorScheme ?? availableColorSchemes,
+      };
+    });
+
+    onMounted(() => {
+      const direction = localeInfo.value.direction;
+      if (!direction || !domRef.value || hasWarned.value || process.env.NODE_ENV === "production") {
+        return;
+      }
+
+      const closestDir = domRef.value.parentElement?.closest("[dir]");
+      const parentDirection = closestDir?.getAttribute("dir");
+      if (parentDirection && parentDirection !== direction) {
+        console.warn(`Language directions cannot be nested. ${direction} inside ${parentDirection}.`);
+        hasWarned.value = true;
+      }
+    });
+
+    return () =>
+      h(
+        "div",
+        {
+          ...attrs,
+          ...modalProviderProps,
+          class: className.value,
+          style: style.value,
+          lang: localeInfo.value.locale,
+          dir: localeInfo.value.direction,
+          ref: domRef,
+        },
+        slots.default?.()
+      );
+  },
+});
 
 /**
  * Root visual provider for Vue Spectrum packages.
@@ -63,10 +138,17 @@ export const Provider = defineComponent({
       type: String as PropType<ProviderProps["validationState"]>,
       required: false,
     },
+    router: {
+      type: Object as PropType<ProviderProps["router"]>,
+      required: false,
+    },
   },
   setup(props, { slots, attrs }) {
     const parentContext = inject<ReadonlyRef<ProviderContext> | null>(ProviderContextSymbol, null);
     const currentLocale = useLocale();
+    if (props.router) {
+      RouterProvider(props.router);
+    }
 
     const resolvedTheme = computed(() => props.theme ?? parentContext?.value.theme);
     if (!resolvedTheme.value) {
@@ -88,7 +170,6 @@ export const Provider = defineComponent({
 
     const scale = computed(() => props.scale ?? parentContext?.value.scale ?? autoScale.value);
     const locale = computed(() => props.locale ?? currentLocale.value.locale);
-    const direction = computed(() => (props.locale ? (props.locale.startsWith("ar") || props.locale.startsWith("he") ? "rtl" : "ltr") : currentLocale.value.direction));
 
     const context = computed<ProviderContext>(() => {
       const parent = parentContext?.value;
@@ -109,42 +190,48 @@ export const Provider = defineComponent({
 
     provide(ProviderContextSymbol, context);
 
-    const className = computed(() => {
-      const theme = resolvedTheme.value!;
-      const classes = [
-        attrs.class,
-        "vue-spectrum-provider",
-        ...(theme[colorScheme.value] ? Object.values(theme[colorScheme.value]!) : []),
-        ...(theme[scale.value] ? Object.values(theme[scale.value]!) : []),
-        ...(theme.global ? Object.values(theme.global) : []),
-      ];
-      return classes.filter(Boolean);
+    const shouldWrap = computed(() => {
+      const parent = parentContext?.value;
+      if (!parent) {
+        return true;
+      }
+
+      return Boolean(
+        props.locale
+        || resolvedTheme.value !== parent.theme
+        || colorScheme.value !== parent.colorScheme
+        || scale.value !== parent.scale
+        || Object.keys(attrs).length > 0
+      );
     });
 
-    const style = computed(() => ({
-      ...(attrs.style as Record<string, unknown> | undefined),
-      colorScheme: props.colorScheme ?? colorScheme.value,
-    }));
+    return () => {
+      let contents: VNodeChild = slots.default?.() ?? null;
+      if (shouldWrap.value) {
+        const children = contents;
+        contents = h(
+          ProviderWrapper,
+          {
+            ...attrs,
+            colorScheme: props.colorScheme,
+          },
+          {
+            default: () => children,
+          }
+        );
+      }
 
-    return () =>
-      h(
+      return h(
         I18nProvider,
         { locale: locale.value },
         {
           default: () =>
-            h(
-              "div",
-              {
-                ...attrs,
-                class: className.value,
-                style: style.value,
-                lang: locale.value,
-                dir: direction.value,
-              },
-              slots.default?.()
-            ),
+            h(ModalProvider, null, {
+              default: () => contents,
+            }),
         }
       );
+    };
   },
 });
 

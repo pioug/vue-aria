@@ -3919,8 +3919,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useColorScheme`
   - `useScale`
   - `Provider` / `useProvider` / `useProviderProps` baseline Vue API surface
+- [x] Wrapper-composition parity slice ported:
+  - `ProviderWrapper` split with reactive provider-context consumption
+  - Root `ModalProvider` integration + wrapper `useModalProvider` aria propagation
+  - `router` prop wiring via `RouterProvider`
+  - Upstream nested direction warning behavior
+  - Conditional wrapper rendering when provider-level styles/attrs or effective context differ
 - Open adaptation notes:
-  - Current provider implementation is a bootstrap slice and does not yet include full upstream wrapper integrations (e.g. Spectrum CSS class stack, breakpoint provider, modal provider, router provider composition).
+  - Remaining upstream wrapper gaps: Spectrum base typography/page class stack and breakpoint/style-props responsive plumbing (`BreakpointProvider`/`useMatchedBreakpoints`/`useStyleProps` parity).
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
@@ -3930,6 +3936,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
   - Added adapted `Provider` coverage for OS color-scheme class application (dark/light defaults), explicit color-scheme override, and nested-provider inheritance/override behavior.
   - Added adapted `Provider` coverage for inherited prop wiring through `useProviderProps`, missing-theme guard behavior, theme compatibility fallback, and auto theme updates when OS preference changes.
+  - Added adapted `Provider` coverage for router-context provisioning, modal wrapper aria propagation, and nested-direction warning behavior.
   - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
 - [ ] All relevant upstream tests migrated
 
@@ -3939,7 +3946,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Provider-level accessibility parity pending full wrapper composition and inherited-prop behavior validation.
+- [ ] Provider-level accessibility parity pending responsive style/breakpoint plumbing and full docs/example validation.
 
 ### Visual Parity
 - [ ] Pending upstream example-by-example comparison for provider wrapper class/style output.
@@ -3948,8 +3955,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port provider wrapper behavior from upstream (`ProviderWrapper`, context merge precedence, locale/direction warnings, and inherited prop plumbing).
-2. Continue migrating remaining `Provider.test.tsx` scenarios (prop forwarding/inherited props/responsive behavior) and add `Provider.ssr.test.js` Vue SSR adaptation.
+1. Port remaining responsive provider behavior (`BreakpointProvider` + `useMatchedBreakpoints` + style-props driven responsive values) and migrate corresponding upstream responsive tests.
+2. Add remaining upstream provider class/style parity (`spectrum`/typography/page class stack and compatibility behavior).
 3. Mirror upstream Provider docs/examples and base style/class composition.
 
 ## 45) Session Log

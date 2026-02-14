@@ -1,3 +1,5 @@
+import type { ProvideRouterOptions } from "@vue-aria/utils";
+
 export type ColorScheme = "light" | "dark";
 export type Scale = "medium" | "large";
 export type ValidationState = "valid" | "invalid";
@@ -40,4 +42,5 @@ export interface ProviderProps {
   isRequired?: boolean;
   isReadOnly?: boolean;
   validationState?: ValidationState;
+  router?: ProvideRouterOptions;
 }
