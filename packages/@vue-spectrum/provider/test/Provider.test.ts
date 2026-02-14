@@ -1,5 +1,6 @@
 import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
+import { useBreakpoint } from "@vue-spectrum/utils";
 import { createApp, defineComponent, h, nextTick, ref } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Provider, useProviderProps } from "../src/Provider";
@@ -486,6 +487,60 @@ describe("Provider", () => {
     expect(warnSpy).toHaveBeenCalledWith("Language directions cannot be nested. ltr inside rtl.");
     app.unmount();
     host.remove();
+  });
+
+  it("only updates breakpoint observers when the range changes", async () => {
+    matchMediaController.setActiveQueries(new Set(["(min-width: 768px)"]));
+    const onBreakpointChange = vi.fn<(breakpoint: string) => void>();
+
+    const Probe = defineComponent({
+      name: "BreakpointProbe",
+      setup() {
+        const context = useBreakpoint();
+        const previousBreakpoint = ref<string | null>(null);
+
+        return () => {
+          const breakpoint = context?.value.matchedBreakpoints[0] ?? "base";
+          if (breakpoint !== previousBreakpoint.value) {
+            onBreakpointChange(breakpoint);
+            previousBreakpoint.value = breakpoint;
+          }
+
+          return h("button", { type: "button" }, "push me");
+        };
+      },
+    });
+
+    const { unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+              },
+              () => h(Probe)
+            );
+        },
+      })
+    );
+
+    expect(onBreakpointChange).toHaveBeenCalledTimes(1);
+    expect(onBreakpointChange).toHaveBeenNthCalledWith(1, "M");
+
+    matchMediaController.setActiveQueries(new Set(["(min-width: 1024px)"]));
+    window.dispatchEvent(new Event("resize"));
+    await nextTick();
+
+    expect(onBreakpointChange).toHaveBeenCalledTimes(2);
+    expect(onBreakpointChange).toHaveBeenNthCalledWith(2, "L");
+
+    window.dispatchEvent(new Event("resize"));
+    await nextTick();
+    expect(onBreakpointChange).toHaveBeenCalledTimes(2);
+
+    unmount();
   });
 
   it("throws when no theme is provided and no parent provider exists", () => {

@@ -97,6 +97,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/selection-state`: Complete
 
 ### React Spectrum component packages
+- `@vue-spectrum/utils`: In progress
 - `@vue-spectrum/provider`: In progress
 - `@vue-spectrum/theme`: Not started
 - `@vue-spectrum/button`: Not started
@@ -3925,8 +3926,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `router` prop wiring via `RouterProvider`
   - Upstream nested direction warning behavior
   - Conditional wrapper rendering when provider-level styles/attrs or effective context differ
+- [x] Responsive breakpoint-context slice ported:
+  - Integrated `BreakpointProvider` + `useMatchedBreakpoints` to publish responsive context
+  - Wrapped provider subtree with breakpoint context between i18n and modal wrappers
 - Open adaptation notes:
-  - Remaining upstream wrapper gaps: Spectrum base typography/page class stack and breakpoint/style-props responsive plumbing (`BreakpointProvider`/`useMatchedBreakpoints`/`useStyleProps` parity).
+  - Remaining upstream wrapper gaps: Spectrum base typography/page class stack and style-props responsive value plumbing (`useStyleProps` parity) for provider-level responsive style props.
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
@@ -3937,6 +3941,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `Provider` coverage for OS color-scheme class application (dark/light defaults), explicit color-scheme override, and nested-provider inheritance/override behavior.
   - Added adapted `Provider` coverage for inherited prop wiring through `useProviderProps`, missing-theme guard behavior, theme compatibility fallback, and auto theme updates when OS preference changes.
   - Added adapted `Provider` coverage for router-context provisioning, modal wrapper aria propagation, and nested-direction warning behavior.
+  - Added adapted `Provider` breakpoint-context coverage for range-change-only updates (`useBreakpoint` observer parity).
   - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
 - [ ] All relevant upstream tests migrated
 
@@ -3955,11 +3960,63 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining responsive provider behavior (`BreakpointProvider` + `useMatchedBreakpoints` + style-props driven responsive values) and migrate corresponding upstream responsive tests.
+1. Port remaining responsive provider behavior for style-props driven responsive values (`useStyleProps`) and migrate corresponding upstream responsive tests.
 2. Add remaining upstream provider class/style parity (`spectrum`/typography/page class stack and compatibility behavior).
 3. Mirror upstream Provider docs/examples and base style/class composition.
 
-## 45) Session Log
+## 45) Package Record: @vue-spectrum/utils
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/utils/src/BreakpointProvider.tsx`
+  - `references/react-spectrum/packages/@react-spectrum/utils/src/index.ts`
+- Local package path:
+  - `packages/@vue-spectrum/utils`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Initial utility modules enumerated for provider-responsive parity slice
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/BreakpointProvider.ts`
+- [x] Initial parity slice ported:
+  - `BreakpointProvider`
+  - `useMatchedBreakpoints`
+  - `useBreakpoint`
+- Open adaptation notes:
+  - Remaining upstream utils modules (style props, class names, slots, DOM refs, media-query helper, etc.) are not yet ported.
+
+### Tests
+- Total upstream test files: 0 (breakpoint behavior is validated indirectly in upstream provider tests)
+- Ported test files: 1 (Vue adaptation)
+- Passing test files: 1 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted breakpoint coverage for min-width matching, resize updates, and no-op updates when resize remains in the same breakpoint range.
+  - Added adapted context coverage for `useBreakpoint` provider consumption.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [ ] VitePress docs page scaffold pending
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Utility-level accessibility expectations inherit from downstream component validations.
+
+### Visual Parity
+- [ ] Utility package has no direct visual output; parity tracked via downstream provider/component behavior.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port `styleProps` utility surface needed by provider responsive style tests.
+2. Port remaining `@react-spectrum/utils` module surface as downstream packages require it.
+
+## 46) Session Log
 ### 2026-02-13
 - Marked package records `@vue-aria/tooltip` (+ `@vue-aria/tooltip-state` + `@vue-aria/overlays-state`), `@vue-aria/disclosure` (+ state), and `@vue-aria/overlays` as complete after reconciling migrated tests with docs/example/accessibility gates.
 - Marked package records `@vue-aria/dialog`, `@vue-aria/breadcrumbs`, and `@vue-aria/separator` as complete; `useDialog` now calls `useOverlayFocusContain` for upstream focus-containment parity.

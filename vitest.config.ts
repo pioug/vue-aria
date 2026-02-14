@@ -209,6 +209,9 @@ export default defineConfig({
       "@vue-aria/overlays": fileURLToPath(
         new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/utils": fileURLToPath(
+        new URL("./packages/@vue-spectrum/utils/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/slider": fileURLToPath(
         new URL("./packages/@vue-spectrum/slider/src/index.ts", import.meta.url)
       )

@@ -2,6 +2,7 @@ import { I18nProvider, useLocale } from "@vue-aria/i18n";
 import { ModalProvider, useModalProvider } from "@vue-aria/overlays";
 import type { ReadonlyRef } from "@vue-aria/types";
 import { RouterProvider } from "@vue-aria/utils";
+import { BreakpointProvider, useMatchedBreakpoints } from "@vue-spectrum/utils";
 import { computed, defineComponent, h, inject, onMounted, provide, ref, type PropType, type VNodeChild } from "vue";
 import { ProviderContextSymbol } from "./context";
 import { useColorScheme, useScale } from "./mediaQueries";
@@ -189,6 +190,7 @@ export const Provider = defineComponent({
     });
 
     provide(ProviderContextSymbol, context);
+    const matchedBreakpoints = useMatchedBreakpoints(computed(() => context.value.breakpoints));
 
     const shouldWrap = computed(() => {
       const parent = parentContext?.value;
@@ -226,9 +228,14 @@ export const Provider = defineComponent({
         { locale: locale.value },
         {
           default: () =>
-            h(ModalProvider, null, {
-              default: () => contents,
-            }),
+            h(
+              BreakpointProvider,
+              { matchedBreakpoints: matchedBreakpoints.value },
+              () =>
+                h(ModalProvider, null, {
+                  default: () => contents,
+                })
+            ),
         }
       );
     };
