@@ -137,6 +137,25 @@ Provider wrapper output includes:
 
 When compatibility mode is enabled via `keepSpectrumClassNames()`, provider wrappers also include `react-spectrum-provider` plus compatibility aliases for active theme/scale keys.
 
+## Wrapper style output
+
+Provider wrapper nodes also merge incoming class/style props with the provider class stack.
+
+```vue
+<Provider
+  :theme="theme"
+  class="app-provider"
+  width="320px"
+  :UNSAFE_style="{ marginTop: '8px' }"
+>
+  <AppContent />
+</Provider>
+```
+
+- style props like `width` are resolved through provider breakpoints.
+- `UNSAFE_style` is merged after resolved style props.
+- nested providers without overrides do not add extra wrapper layers.
+
 ## Notes
 
 - Upstream provider test-intent migration is complete for current provider/mediaQueries/SSR sources.

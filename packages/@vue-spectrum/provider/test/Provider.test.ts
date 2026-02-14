@@ -852,6 +852,78 @@ describe("Provider", () => {
     unmount();
   });
 
+  it("merges wrapper class and style attrs with provider class stack", () => {
+    const themed: Theme = {
+      global: {
+        "spectrum-theme": "spectrum-theme",
+      },
+      light: {
+        "spectrum--light": "spectrum--light",
+      },
+      dark: {
+        "spectrum--dark": "spectrum--dark",
+      },
+      medium: {
+        "spectrum--medium": "spectrum--medium",
+      },
+      large: {
+        "spectrum--large": "spectrum--large",
+      },
+    };
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme: themed,
+                class: "custom-provider",
+                UNSAFE_style: { marginTop: "8px" },
+                width: "320px",
+                "data-testid": "provider",
+              },
+              () => h("div", "hello")
+            );
+        },
+      })
+    );
+
+    const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
+    expect(provider?.classList.contains("custom-provider")).toBe(true);
+    expect(provider?.classList.contains("vue-spectrum-provider")).toBe(true);
+    expect(provider?.classList.contains("spectrum-theme")).toBe(true);
+    expect(provider?.style.width).toBe("320px");
+    expect(provider?.style.marginTop).toBe("8px");
+    unmount();
+  });
+
+  it("does not render a redundant nested wrapper when provider context is unchanged", () => {
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              { theme },
+              () =>
+                h(
+                  Provider,
+                  null,
+                  () => h("div", { "data-testid": "leaf" }, "hello")
+                )
+            );
+        },
+      })
+    );
+
+    const wrappers = container.querySelectorAll(".vue-spectrum-provider");
+    expect(wrappers).toHaveLength(1);
+    expect(container.querySelector('[data-testid="leaf"]')).not.toBeNull();
+    unmount();
+  });
+
   it("only updates breakpoint observers when the range changes", async () => {
     matchMediaController.setActiveQueries(new Set(["(min-width: 768px)"]));
     const onBreakpointChange = vi.fn<(breakpoint: string) => void>();

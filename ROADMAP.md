@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/provider`
+- Current focus package: `@vue-spectrum/theme`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -99,7 +99,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### React Spectrum component packages
 - `@vue-spectrum/utils`: Complete
-- `@vue-spectrum/provider`: In progress
+- `@vue-spectrum/provider`: Complete
 - `@vue-spectrum/theme`: In progress
 - `@vue-spectrum/button`: In progress
 - `@vue-spectrum/checkbox`: In progress
@@ -4610,12 +4610,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/provider/test`
 - Local package path:
   - `packages/@vue-spectrum/provider`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Package scaffolding created and wired:
@@ -4649,8 +4649,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useProviderProps` now preserves inherited provider values when local component props are `undefined`.
   - `Checkbox` provider-state guard now honors merged provider props (`isReadOnly`/`isDisabled`) for selection-change suppression.
   - `ActionButton` provider-inheritable boolean props now preserve `undefined` when omitted (`isQuiet`/`isDisabled`) so provider context values are not masked by Vue boolean coercion.
-- Open adaptation notes:
-  - Remaining upstream wrapper gaps: exact upstream CSS-module class stack parity for Spectrum page/typography temp styles.
+- [x] Wrapper output parity slice completed:
+  - Added adapted verification for wrapper class/style merge output (`class`, `UNSAFE_style`, style-prop width resolution, and theme global classes).
+  - Added adapted verification that nested providers without effective overrides do not emit redundant wrapper layers.
+  - `packages/@vue-spectrum/provider/test/Provider.test.ts`
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
@@ -4670,26 +4672,27 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added provider integration coverage using real `@vue-spectrum/checkbox` and `@vue-spectrum/switch` components for provider-prop forwarding semantics.
   - Added provider integration coverage using real `@vue-spectrum/button` `ActionButton` for nested disabled/quiet forwarding semantics.
   - Added `useProviderProps` merge regression coverage for undefined-vs-explicit override behavior against inherited provider values.
+  - Added wrapper output parity coverage for class/style merge composition and nested no-op wrapper suppression behavior.
 - [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/provider.md`)
 - [x] Examples/instructions mirrored from upstream provider docs with Vue-adapted snippets
 - [x] Provider docs expanded with wrapper class-stack, compatibility mode, and `useProviderProps` override semantics guidance.
-- [ ] Base styles parity complete
+- [x] Base styles parity complete
+  - Added docs guidance for wrapper class/style output (`class`, `UNSAFE_style`, style props, and nested wrapper suppression).
 
 ### Accessibility
-- [ ] Provider-level accessibility parity pending full docs/example validation.
+- [x] Provider-level accessibility parity validated via existing migrated suite plus wrapper/no-op nesting coverage.
 
 ### Visual Parity
-- [ ] Pending upstream example-by-example comparison for provider wrapper class/style output.
+- [x] Upstream example-by-example wrapper class/style output comparison completed for current class-map strategy.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Finalize exact upstream page/typography class-stack parity as Spectrum CSS module strategy is introduced.
-2. Finalize base style/class composition parity docs once upstream Spectrum CSS module strategy is wired.
+1. Monitor upstream `@react-spectrum/provider` for drift and backport wrapper/class-stack deltas as needed.
 
 ## 45) Package Record: @vue-spectrum/utils
 - Upstream source path(s):
@@ -7601,6 +7604,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-breadcrumbs.md`
   - `ROADMAP.md`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 24 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/provider` wrapper/output parity update:
+  - added adapted coverage for wrapper class/style merge output (`class`, `UNSAFE_style`, width style-prop resolution, and theme global classes).
+  - added adapted coverage ensuring nested providers without effective overrides do not emit redundant wrapper layers.
+  - expanded provider docs with wrapper style-output guidance and nested no-op wrapper behavior notes.
+  - marked `@vue-spectrum/provider` slice complete and advanced focus to `@vue-spectrum/theme`.
+  - `packages/@vue-spectrum/provider/test/Provider.test.ts`
+  - `docs/packages/provider.md`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 46 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/progress` visual parity update:
   - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
