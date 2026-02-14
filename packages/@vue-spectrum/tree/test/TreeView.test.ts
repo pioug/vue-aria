@@ -54,6 +54,16 @@ describe("TreeView", () => {
     expect(rows[1]!.text()).toContain("Projects");
   });
 
+  it("forwards onScroll from tree props", async () => {
+    const onScroll = vi.fn();
+    const wrapper = renderTree({ onScroll });
+
+    const tree = wrapper.get('[role="treegrid"]');
+    await tree.trigger("scroll");
+
+    expect(onScroll).toHaveBeenCalledTimes(1);
+  });
+
   it("supports DOM props on tree rows", async () => {
     const wrapper = mount(TreeView as any, {
       props: {

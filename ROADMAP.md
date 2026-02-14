@@ -7663,6 +7663,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 18 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` root-scroll parity update:
+  - added migrated coverage to verify `onScroll` handlers passed to `TreeView` are forwarded to the rendered treegrid root.
+  - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 19 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` data-attribute passthrough parity update:
   - added regression coverage to verify `DatePicker` and `DateRangePicker` pass through `data-*` attributes to their outer wrapper elements.
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
