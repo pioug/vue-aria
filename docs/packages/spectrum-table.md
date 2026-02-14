@@ -61,6 +61,7 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 ```
 
 `Cell` supports `colSpan` in static slot composition, including correct column indexing and ARIA colspan output.
+In static slot composition, each row's total cell span must match the declared column count.
 
 ## Key Props
 
