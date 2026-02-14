@@ -414,6 +414,7 @@ describe("TreeView", () => {
     const projectsRow = rows.find((row) => row.text().includes("Projects"));
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-label")).toBe("Projects");
+    expect(projectsRow!.attributes("data-has-child-items")).toBe("true");
     expect(projectsRow!.attributes("aria-selected")).toBe("false");
   });
 
