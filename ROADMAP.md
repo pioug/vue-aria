@@ -7378,6 +7378,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
+  - expanded trigger composition coverage for:
+    - `@vue-spectrum/button` trigger children
+    - wrapped trigger components forwarding attrs and exposed DOM refs
+    - `packages/@vue-spectrum/tooltip/test/TooltipTrigger.test.ts`
+- Additional `@vue-aria/interactions` parity update:
+  - set `FocusableProvider` `inheritAttrs: false` to silence extraneous attribute warnings while passing focusable trigger props through context.
+    - `packages/@vue-aria/interactions/src/useFocusable.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
+- Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tooltip` parity update:
   - expanded trigger-composition coverage for:
     - `@vue-spectrum/button` trigger children
     - wrapped trigger components that forward attrs and exposed DOM handles
