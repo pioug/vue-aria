@@ -125,6 +125,17 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("One");
   });
 
+  it("propagates name and form attributes to the input", () => {
+    const wrapper = renderComboBox({
+      name: "combobox-name",
+      form: "combobox-form",
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("name")).toBe("combobox-name");
+    expect(input.attributes("form")).toBe("combobox-form");
+  });
+
   it("supports slot-defined items and sections", async () => {
     const wrapper = mount(ComboBox as any, {
       props: {
