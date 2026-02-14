@@ -4000,6 +4000,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useMatchedBreakpoints`
   - `useBreakpoint`
   - `useMediaQuery`
+  - `useIsMobileDevice`
+  - `useHasChild`
   - `classNames`
   - `keepSpectrumClassNames`
   - `shouldKeepSpectrumClassNames`
@@ -4014,14 +4016,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 0 (breakpoint behavior is validated indirectly in upstream provider tests)
-- Ported test files: 4 (Vue adaptations)
-- Passing test files: 4 (validated 2026-02-14)
+- Ported test files: 6 (Vue adaptations)
+- Passing test files: 6 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted breakpoint coverage for min-width matching, resize updates, and no-op updates when resize remains in the same breakpoint range.
   - Added adapted context coverage for `useBreakpoint` provider consumption.
   - Added adapted style-props coverage for dimension token conversion, responsive-prop fallback, and breakpoint-context style resolution.
   - Added adapted class-name compatibility coverage for css-module mapping and legacy class preservation mode.
   - Added adapted `useMediaQuery` coverage for unsupported environments and live match-state updates.
+  - Added adapted `useIsMobileDevice` coverage for screen-width threshold behavior.
+  - Added adapted `useHasChild` coverage for descendant-query detection.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
