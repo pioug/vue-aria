@@ -69,6 +69,25 @@ import { Calendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## Date Availability Constraints
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <Calendar
+    aria-label="Delivery date"
+    :default-value="new CalendarDate(2019, 6, 15)"
+    :min-value="new CalendarDate(2019, 6, 10)"
+    :max-value="new CalendarDate(2019, 6, 20)"
+    :is-date-unavailable="(date) => date.day === 17"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `visibleMonths`, `firstDayOfWeek`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`.
