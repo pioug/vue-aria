@@ -9559,3 +9559,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 42 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-escape parity update:
+  - expanded `SubmenuTrigger` coverage to assert pressing `Escape` in a nested submenu closes only the submenu while keeping the root menu open.
+  - tightened submenu-trigger action suppression coverage by asserting normal root item activation still triggers root `onAction`.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.
