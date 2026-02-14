@@ -78,6 +78,8 @@ Use `defaultSelectedKeys` to seed initial row selection. Use `disabledKeys` to p
 
 For controlled selection, pair `selectedKeys` with `onSelectionChange` and update `selectedKeys` from parent state.
 
+`disabledKeys` updates are reactive, so changing the set at runtime immediately updates row interactivity.
+
 ## Sort Initialization
 
 Use `defaultSortDescriptor` to apply initial row ordering and header sort state before user interaction.
