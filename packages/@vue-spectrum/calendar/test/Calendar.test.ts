@@ -1,4 +1,4 @@
-import { CalendarDate } from "@internationalized/date";
+import { CalendarDate, createCalendar as createIntlCalendar } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { Calendar, RangeCalendar } from "../src";
@@ -383,6 +383,20 @@ describe("Calendar", () => {
     expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please choose a valid date");
   });
 
+  it("uses a custom createCalendar implementation when provided", () => {
+    const createCalendar = vi.fn((name: string) => createIntlCalendar(name));
+    mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        createCalendar,
+      },
+      attachTo: document.body,
+    });
+
+    expect(createCalendar).toHaveBeenCalled();
+  });
+
   it("applies a computed aria-label including visible range context", () => {
     const wrapper = mount(Calendar as any, {
       props: {
@@ -488,6 +502,23 @@ describe("Calendar", () => {
     });
 
     expect(wrapper.get(".react-spectrum-Calendar-errorMessage").text()).toBe("Please pick a valid range");
+  });
+
+  it("uses a custom createCalendar implementation in range-calendar mode", () => {
+    const createCalendar = vi.fn((name: string) => createIntlCalendar(name));
+    mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        createCalendar,
+      },
+      attachTo: document.body,
+    });
+
+    expect(createCalendar).toHaveBeenCalled();
   });
 
   it("disables range-calendar previous navigation when minValue blocks paging", () => {

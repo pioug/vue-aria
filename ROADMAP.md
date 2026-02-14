@@ -6628,6 +6628,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 37 tests).
 - Additional `@vue-spectrum/calendar` docs parity update:
   - added `RangeCalendar` multi-month `pageBehavior="single"` example in `docs/packages/spectrum-calendar.md`.
+- Additional `@vue-spectrum/calendar` parity update:
+  - added API-parity coverage for `createCalendar` overrides in both `Calendar` and `RangeCalendar`.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 39 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
