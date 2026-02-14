@@ -9507,3 +9507,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/Menu.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 27 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` labeling and DOM-attr parity update:
+  - added migrated coverage for section/item `aria-label` propagation, asserting item-level labeling suppresses generated `aria-labelledby`/`aria-describedby` wiring.
+  - added accessibility warning coverage for unlabeled menus.
+  - added passthrough coverage for custom `data-*` attributes on the menu root element.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 30 tests).
+- Validation: `npm run check -- --pretty false` passed.

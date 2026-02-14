@@ -282,4 +282,63 @@ describe("Menu", () => {
     expect(onAction).toHaveBeenLastCalledWith("cat");
     expect(itemAction).toHaveBeenCalledTimes(1);
   });
+
+  it("supports aria-label on sections and items", () => {
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+      },
+      slots: {
+        default: () => [
+          h(Section as any, { ariaLabel: "Section" }, {
+            default: () => [
+              h(Item as any, { key: "item", ariaLabel: "Item" }, {
+                default: () => h("span", { "aria-hidden": "true" }, "I"),
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get('[role="group"]');
+    expect(group.attributes("aria-label")).toBe("Section");
+
+    const menuItem = wrapper.get('[role="menuitem"]');
+    expect(menuItem.attributes("aria-label")).toBe("Item");
+    expect(menuItem.attributes("aria-labelledby")).toBeUndefined();
+    expect(menuItem.attributes("aria-describedby")).toBeUndefined();
+  });
+
+  it("warns if aria-label and aria-labelledby are missing", () => {
+    const spyWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mount(Menu as any, {
+      slots: {
+        default: () => [h(Item as any, { key: "One" }, { default: () => "One" })],
+      },
+      attachTo: document.body,
+    });
+
+    expect(spyWarn).toHaveBeenCalledWith("An aria-label or aria-labelledby prop is required for accessibility.");
+    spyWarn.mockRestore();
+  });
+
+  it("supports custom data attributes", () => {
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+      },
+      attrs: {
+        "data-testid": "menu-test",
+      },
+      slots: {
+        default: () => [h(Item as any, { key: "One" }, { default: () => "One" })],
+      },
+      attachTo: document.body,
+    });
+
+    const menu = wrapper.get('[role="menu"]');
+    expect(menu.attributes("data-testid")).toBe("menu-test");
+  });
 });
