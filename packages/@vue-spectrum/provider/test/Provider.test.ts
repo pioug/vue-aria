@@ -1,7 +1,7 @@
 import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
-import { useBreakpoint } from "@vue-spectrum/utils";
-import { createApp, defineComponent, h, nextTick, ref } from "vue";
+import { useBreakpoint, useStyleProps } from "@vue-spectrum/utils";
+import { createApp, defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Provider, useProviderProps } from "../src/Provider";
 import type { Theme } from "../src/types";
@@ -16,6 +16,10 @@ const theme: Theme = {
 
 const mediaQueryLight = "(prefers-color-scheme: light)";
 const mediaQueryDark = "(prefers-color-scheme: dark)";
+const mediaQueryMinXSmall = "(min-width: 190px)";
+const mediaQueryMinSmall = "(min-width: 640px)";
+const mediaQueryMinMedium = "(min-width: 768px)";
+const mediaQueryMinLarge = "(min-width: 1024px)";
 
 type MatchMediaChangeListener = (event: MediaQueryListEvent) => void;
 
@@ -540,6 +544,123 @@ describe("Provider", () => {
     await nextTick();
     expect(onBreakpointChange).toHaveBeenCalledTimes(2);
 
+    unmount();
+  });
+
+  it.each`
+    name                    | mediaQuery               | providerProps          | expected
+    ${"default"}            | ${mediaQueryMinXSmall}   | ${{}}                  | ${"192px"}
+    ${"default"}            | ${mediaQueryMinSmall}    | ${{}}                  | ${"1000px"}
+    ${"default"}            | ${mediaQueryMinMedium}   | ${{}}                  | ${"2000px"}
+    ${"default"}            | ${mediaQueryMinLarge}    | ${{}}                  | ${"3000px"}
+    ${"custom breakpoints"} | ${mediaQueryMinXSmall}   | ${{ breakpoints: { S: 480, M: 640, L: 1024 } }} | ${"192px"}
+    ${"custom breakpoints"} | ${"(min-width: 480px)"}  | ${{ breakpoints: { S: 480, M: 640, L: 1024 } }} | ${"1000px"}
+    ${"custom breakpoints"} | ${"(min-width: 640px)"}  | ${{ breakpoints: { S: 480, M: 640, L: 1024 } }} | ${"2000px"}
+    ${"custom breakpoints"} | ${"(min-width: 1024px)"} | ${{ breakpoints: { S: 480, M: 640, L: 1024 } }} | ${"3000px"}
+  `("applies responsive width values ($name $mediaQuery)", ({ mediaQuery, providerProps, expected }) => {
+    matchMediaController.setActiveQueries(new Set([mediaQuery]));
+
+    const ResponsiveProbe = defineComponent({
+      name: "ResponsiveProbe",
+      props: {
+        width: {
+          type: [String, Object] as PropType<
+            string | { base?: string; S?: string; M?: string; L?: string }
+          >,
+          required: true,
+        },
+      },
+      setup(props) {
+        const { styleProps } = useStyleProps(props as unknown as Record<string, unknown>);
+        return () =>
+          h("div", {
+            "data-testid": "field",
+            ...styleProps.value,
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider",
+                ...(providerProps as Record<string, unknown>),
+              },
+              () =>
+                h(ResponsiveProbe, {
+                  width: {
+                    base: "192px",
+                    S: "1000px",
+                    M: "2000px",
+                    L: "3000px",
+                  },
+                })
+            );
+        },
+      })
+    );
+
+    const field = container.querySelector('[data-testid="field"]') as HTMLElement | null;
+    expect(field?.style.width).toBe(expected);
+    unmount();
+  });
+
+  it.each`
+    mediaQuery             | expected
+    ${mediaQueryMinXSmall} | ${"192px"}
+    ${mediaQueryMinSmall}  | ${"192px"}
+    ${mediaQueryMinMedium} | ${"192px"}
+    ${mediaQueryMinLarge}  | ${"3000px"}
+  `("uses base width when intermediate sizes are omitted ($mediaQuery)", ({ mediaQuery, expected }) => {
+    matchMediaController.setActiveQueries(new Set([mediaQuery]));
+
+    const ResponsiveProbe = defineComponent({
+      name: "ResponsiveProbeOmitted",
+      props: {
+        width: {
+          type: [String, Object] as PropType<string | { base?: string; L?: string }>,
+          required: true,
+        },
+      },
+      setup(props) {
+        const { styleProps } = useStyleProps(props as unknown as Record<string, unknown>);
+        return () =>
+          h("div", {
+            "data-testid": "field",
+            ...styleProps.value,
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider",
+              },
+              () =>
+                h(ResponsiveProbe, {
+                  width: {
+                    base: "192px",
+                    L: "3000px",
+                  },
+                })
+            );
+        },
+      })
+    );
+
+    const field = container.querySelector('[data-testid="field"]') as HTMLElement | null;
+    expect(field?.style.width).toBe(expected);
     unmount();
   });
 

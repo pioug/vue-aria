@@ -1,0 +1,75 @@
+import { createApp, defineComponent, h } from "vue";
+import { afterEach, describe, expect, it } from "vitest";
+import { BreakpointProvider } from "../src/BreakpointProvider";
+import { dimensionValue, getResponsiveProp, useStyleProps } from "../src/styleProps";
+
+function mount(component: unknown) {
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+  const app = createApp(component as Parameters<typeof createApp>[0]);
+  app.mount(container);
+  return {
+    container,
+    unmount() {
+      app.unmount();
+      container.remove();
+    },
+  };
+}
+
+describe("styleProps", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("resolves dimension values with spectrum token fallback", () => {
+    expect(dimensionValue(24)).toBe("24px");
+    expect(dimensionValue("200px")).toBe("200px");
+    expect(dimensionValue("size-100")).toBe("var(--spectrum-global-dimension-size-100, var(--spectrum-alias-size-100))");
+  });
+
+  it("resolves responsive props from matched breakpoints", () => {
+    expect(getResponsiveProp({ base: "a", M: "b", L: "c" }, ["L", "M", "base"])).toBe("c");
+    expect(getResponsiveProp({ base: "a", L: "c" }, ["M", "base"])).toBe("a");
+  });
+
+  it("derives responsive style props from breakpoint context", () => {
+    const Probe = defineComponent({
+      name: "StylePropsProbe",
+      props: {
+        width: {
+          type: Object,
+          required: true,
+        },
+      },
+      setup(props) {
+        const { styleProps } = useStyleProps(props as unknown as Record<string, unknown>);
+        return () =>
+          h("div", {
+            "data-testid": "probe",
+            ...styleProps.value,
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(BreakpointProvider, { matchedBreakpoints: ["M", "base"] }, () =>
+              h(Probe, {
+                width: {
+                  base: "100px",
+                  M: "200px",
+                },
+              })
+            );
+        },
+      })
+    );
+
+    const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
+    expect(probe?.style.width).toBe("200px");
+    unmount();
+  });
+});

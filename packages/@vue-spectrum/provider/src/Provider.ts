@@ -1,8 +1,8 @@
 import { I18nProvider, useLocale } from "@vue-aria/i18n";
 import { ModalProvider, useModalProvider } from "@vue-aria/overlays";
 import type { ReadonlyRef } from "@vue-aria/types";
-import { RouterProvider } from "@vue-aria/utils";
-import { BreakpointProvider, useMatchedBreakpoints } from "@vue-spectrum/utils";
+import { filterDOMProps, RouterProvider } from "@vue-aria/utils";
+import { baseStyleProps, BreakpointProvider, useMatchedBreakpoints, useStyleProps } from "@vue-spectrum/utils";
 import { computed, defineComponent, h, inject, onMounted, provide, ref, type PropType, type VNodeChild } from "vue";
 import { ProviderContextSymbol } from "./context";
 import { useColorScheme, useScale } from "./mediaQueries";
@@ -19,6 +19,10 @@ const ProviderWrapper = defineComponent({
       type: String as PropType<ProviderProps["colorScheme"]>,
       required: false,
     },
+    matchedBreakpoints: {
+      type: Array as PropType<string[]>,
+      required: true,
+    },
   },
   setup(props, { slots, attrs }) {
     const localeInfo = useLocale();
@@ -30,10 +34,16 @@ const ProviderWrapper = defineComponent({
     const { modalProviderProps } = useModalProvider();
     const domRef = ref<HTMLElement | null>(null);
     const hasWarned = ref(false);
+    const { styleProps } = useStyleProps(attrs as Record<string, unknown>, baseStyleProps, {
+      matchedBreakpoints: computed(() => props.matchedBreakpoints),
+    });
+    const domProps = computed(() => filterDOMProps(attrs as Record<string, unknown>));
 
     const className = computed(() => {
       const { theme, colorScheme, scale } = providerContext.value;
+      const resolvedStyleProps = styleProps.value;
       const classes = [
+        resolvedStyleProps.class,
         attrs.class,
         "vue-spectrum-provider",
         ...(theme[colorScheme] ? Object.values(theme[colorScheme]!) : []),
@@ -45,8 +55,10 @@ const ProviderWrapper = defineComponent({
 
     const style = computed(() => {
       const { theme, colorScheme } = providerContext.value;
+      const resolvedStyleProps = styleProps.value;
       const availableColorSchemes = [theme.light ? "light" : null, theme.dark ? "dark" : null].filter(Boolean).join(" ");
       return {
+        ...(resolvedStyleProps.style as Record<string, unknown> | undefined),
         ...(attrs.style as Record<string, unknown> | undefined),
         // Keep browser-native widgets (e.g. scrollbars) in sync with provider color mode.
         colorScheme: props.colorScheme ?? colorScheme ?? availableColorSchemes,
@@ -71,7 +83,7 @@ const ProviderWrapper = defineComponent({
       h(
         "div",
         {
-          ...attrs,
+          ...domProps.value,
           ...modalProviderProps,
           class: className.value,
           style: style.value,
@@ -216,6 +228,7 @@ export const Provider = defineComponent({
           {
             ...attrs,
             colorScheme: props.colorScheme,
+            matchedBreakpoints: matchedBreakpoints.value,
           },
           {
             default: () => children,
