@@ -9779,3 +9779,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 64 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` static/dynamic submenu render parity update:
+  - added migrated `SubmenuTrigger` coverage asserting nested submenu ARIA wiring and content rendering for both static and dynamic composition styles.
+  - validated first-level and second-level submenu `aria-expanded`/`aria-controls` transitions and submenu `aria-labelledby` linkage across both variants.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 66 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -31,6 +31,126 @@ describe("SubmenuTrigger", () => {
     document.body.innerHTML = "";
   });
 
+  it.each([
+    { name: "static", dynamic: false },
+    { name: "dynamic", dynamic: true },
+  ])("renders nested submenu content for $name composition", async ({ dynamic }) => {
+    const level1Items = ["Lvl 1 Item 1", "Lvl 1 Item 3"];
+    const level2Items = ["Lvl 2 Item 1", "Lvl 2 Item 2", "Lvl 2 Item 3"];
+    const level3Items = ["Lvl 3 Item 1", "Lvl 3 Item 2", "Lvl 3 Item 3"];
+
+    const renderLevel3Menu = () =>
+      h(Menu as any, { ariaLabel: "Submenu 2" }, {
+        default: () =>
+          level3Items.map((label, index) =>
+            h(Item as any, { key: `lvl3-${index + 1}` }, { default: () => label })
+          ),
+      });
+
+    const renderLevel2Content = () => {
+      if (!dynamic) {
+        return [
+          h(Item as any, { key: "lvl2-1" }, { default: () => "Lvl 2 Item 1" }),
+          h(Item as any, { key: "lvl2-2" }, { default: () => "Lvl 2 Item 2" }),
+          h(SubmenuTrigger as any, null, {
+            default: () => [
+              h(Item as any, { key: "lvl2-3" }, { default: () => "Lvl 2 Item 3" }),
+              renderLevel3Menu(),
+            ],
+          }),
+        ];
+      }
+
+      return level2Items.map((label, index) => {
+        const key = `lvl2-${index + 1}`;
+        if (index !== 2) {
+          return h(Item as any, { key }, { default: () => label });
+        }
+
+        return h(SubmenuTrigger as any, null, {
+          default: () => [
+            h(Item as any, { key }, { default: () => label }),
+            renderLevel3Menu(),
+          ],
+        });
+      });
+    };
+
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(Item as any, { key: "lvl1-1" }, { default: () => level1Items[0] }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "lvl1-2" }, { default: () => "Lvl 1 Item 2" }),
+                  h(Menu as any, { ariaLabel: "Submenu 1" }, {
+                    default: () => renderLevel2Content(),
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "lvl1-3" }, { default: () => level1Items[1] }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Lvl 1 Item 2")) as HTMLElement | undefined;
+    expect(rootTrigger).toBeTruthy();
+    expect(rootTrigger?.getAttribute("aria-haspopup")).toBe("menu");
+    expect(rootTrigger?.getAttribute("aria-expanded")).toBe("false");
+
+    rootTrigger?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    let menus = Array.from(document.body.querySelectorAll('[role="menu"]')) as HTMLElement[];
+    expect(menus.length).toBeGreaterThanOrEqual(2);
+    const submenu1 = menus.find((menu) => menu.textContent?.includes("Lvl 2 Item 1"));
+    expect(submenu1).toBeTruthy();
+    expect(submenu1?.getAttribute("aria-labelledby")).toBe(rootTrigger?.id ?? null);
+
+    const openedRootTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Lvl 1 Item 2")) as HTMLElement | undefined;
+    expect(openedRootTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(openedRootTrigger?.getAttribute("aria-controls")).toBe(submenu1?.id ?? null);
+
+    const submenu1Items = Array.from(submenu1?.querySelectorAll('[role="menuitem"]') ?? []) as HTMLElement[];
+    expect(submenu1Items).toHaveLength(3);
+    expect(submenu1Items[2]?.textContent).toContain("Lvl 2 Item 3");
+
+    const nestedTrigger = submenu1Items[2];
+    expect(nestedTrigger?.getAttribute("aria-haspopup")).toBe("menu");
+    expect(nestedTrigger?.getAttribute("aria-expanded")).toBe("false");
+
+    nestedTrigger?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    menus = Array.from(document.body.querySelectorAll('[role="menu"]')) as HTMLElement[];
+    expect(menus.length).toBeGreaterThanOrEqual(3);
+    const submenu2 = menus.find((menu) => menu.textContent?.includes("Lvl 3 Item 1"));
+    expect(submenu2).toBeTruthy();
+    expect(submenu2?.getAttribute("aria-labelledby")).toBe(nestedTrigger?.id ?? null);
+
+    const openedNestedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Lvl 2 Item 3")) as HTMLElement | undefined;
+    expect(openedNestedTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(openedNestedTrigger?.getAttribute("aria-controls")).toBe(submenu2?.id ?? null);
+
+    const submenu2Items = Array.from(submenu2?.querySelectorAll('[role="menuitem"]') ?? []) as HTMLElement[];
+    expect(submenu2Items).toHaveLength(3);
+    expect(submenu2Items[2]?.textContent).toContain("Lvl 3 Item 3");
+  });
+
   it("opens a nested submenu with keyboard ArrowRight", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {
