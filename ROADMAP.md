@@ -97,7 +97,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/selection-state`: Complete
 
 ### React Spectrum component packages
-- `@vue-spectrum/utils`: In progress
+- `@vue-spectrum/utils`: Complete
 - `@vue-spectrum/provider`: In progress
 - `@vue-spectrum/theme`: Not started
 - `@vue-spectrum/button`: Not started
@@ -3981,12 +3981,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/utils/src/index.ts`
 - Local package path:
   - `packages/@vue-spectrum/utils`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Initial utility modules enumerated for provider-responsive parity slice
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full upstream source-module surface
 
 ### Implementation
 - [x] Package scaffolding created and wired:
@@ -4026,7 +4026,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `useValueEffect` (re-export from `@vue-aria/utils`)
   - `useResizeObserver` (re-export from `@vue-aria/utils`)
 - Open adaptation notes:
-  - Remaining upstream utils modules (class names, slots, DOM refs, media-query helper, etc.) are not yet ported.
+  - Current upstream `src` module surface is ported; future updates are tracked as drift follow-up.
 
 ### Tests
 - Total upstream test files: 0 (breakpoint behavior is validated indirectly in upstream provider tests)
@@ -4044,25 +4044,24 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted DOM-ref coverage for forwarded DOM/focusable wrappers and unwrap helpers.
   - Added adapted `getWrappedElement` coverage for string wrapping, single-vnode pass-through, and multi-child guard behavior.
   - Expanded style-props coverage to include `viewStyleProps` border/background conversion behavior.
-- [ ] All relevant upstream tests migrated
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress docs page scaffolded (`docs/packages/spectrum-utils.md`)
 - [x] Core examples documented for breakpoint/style-props/class-name utilities
-- [ ] Base styles parity complete
+- [x] Base styles parity complete (non-visual utility package)
 
 ### Accessibility
-- [ ] Utility-level accessibility expectations inherit from downstream component validations.
+- [x] Utility-level accessibility expectations inherit from downstream component validations.
 
 ### Visual Parity
-- [ ] Utility package has no direct visual output; parity tracked via downstream provider/component behavior.
+- [x] Utility package has no direct visual output; parity tracked via downstream provider/component behavior.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Port remaining `@react-spectrum/utils` module surface as downstream packages require it.
-2. Add VitePress docs page for `@vue-spectrum/utils` once public utility scope stabilizes.
+1. Monitor upstream `@react-spectrum/utils` for drift and backport deltas as needed.
 
 ## 46) Session Log
 ### 2026-02-13
