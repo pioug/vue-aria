@@ -4109,6 +4109,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Passing test files: 4 (validated 2026-02-14)
 - Test parity notes:
   - Added baseline shape checks for default/theme-light/theme-dark/theme-express provider-compatible class maps.
+  - Theme-express bootstrap keys aligned to upstream `express.css` selector naming (`express`, `medium`, `large`).
 - [ ] All relevant upstream tests migrated
 
 ### Docs

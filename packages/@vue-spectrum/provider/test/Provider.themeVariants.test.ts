@@ -111,8 +111,8 @@ describe("Provider theme variants", () => {
     );
 
     const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
-    expect(provider?.classList.contains("spectrum--express")).toBe(true);
-    expect(provider?.classList.contains("spectrum--express-medium")).toBe(true);
+    expect(provider?.classList.contains("express")).toBe(true);
+    expect(provider?.classList.contains("medium")).toBe(true);
     unmount();
   });
 });

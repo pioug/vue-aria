@@ -5,14 +5,14 @@ export const theme: Theme = {
   ...defaultTheme,
   global: {
     ...defaultTheme.global,
-    express: "spectrum--express",
+    express: "express",
   },
   medium: {
     ...defaultTheme.medium,
-    express: "spectrum--express-medium",
+    express: "medium",
   },
   large: {
     ...defaultTheme.large,
-    express: "spectrum--express-large",
+    express: "large",
   },
 };
