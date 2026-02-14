@@ -98,6 +98,14 @@ Set `isInvalid` to reflect application validation state.
 
 ## Visual options
 
+### Quiet (default)
+
+Checkboxes are quiet by default unless emphasized.
+
+```vue
+<Checkbox>Default quiet checkbox</Checkbox>
+```
+
 ### Disabled
 
 ```vue
@@ -108,6 +116,12 @@ Set `isInvalid` to reflect application validation state.
 
 ```vue
 <Checkbox isEmphasized defaultSelected>Subscribe</Checkbox>
+```
+
+### Emphasized + invalid
+
+```vue
+<Checkbox isEmphasized isInvalid>I accept the terms and conditions</Checkbox>
 ```
 
 ## Related

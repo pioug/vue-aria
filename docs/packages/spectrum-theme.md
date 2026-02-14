@@ -40,12 +40,15 @@ All variants export the same provider-compatible shape:
 
 Current bootstrap class-map values:
 
-| Package | `light["spectrum--light"]` | `dark["spectrum--dark"]` | Extra keys |
-| --- | --- | --- | --- |
-| `@vue-spectrum/theme` | `spectrum--light` | `spectrum--darkest` | none |
-| `@vue-spectrum/theme-light` | `spectrum--lightest` | `spectrum--darkest` | none |
-| `@vue-spectrum/theme-dark` | `spectrum--dark` | `spectrum--darkest` | none |
-| `@vue-spectrum/theme-express` | `spectrum--light` | `spectrum--darkest` | `global.express`, `medium.express`, `large.express` |
+- `theme.global` (all variants): `spectrum`, `spectrum--light`, `spectrum--lightest`, `spectrum--dark`, `spectrum--darkest`, `spectrum--medium`, `spectrum--large`
+- `@vue-spectrum/theme-express` adds `global.express` plus `medium.express` and `large.express`.
+
+| Package | `light["spectrum--light"]` | `dark["spectrum--dark"]` |
+| --- | --- | --- |
+| `@vue-spectrum/theme` | `spectrum--light` | `spectrum--darkest` |
+| `@vue-spectrum/theme-light` | `spectrum--lightest` | `spectrum--darkest` |
+| `@vue-spectrum/theme-dark` | `spectrum--dark` | `spectrum--darkest` |
+| `@vue-spectrum/theme-express` | `spectrum--light` | `spectrum--darkest` |
 
 ## Runtime Switching Example
 

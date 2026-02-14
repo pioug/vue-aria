@@ -126,6 +126,8 @@ describe("Checkbox", () => {
       },
     });
 
+    expect(wrapper.get("label").classes()).toContain("is-invalid");
+    expect(wrapper.get("label").classes()).toContain("spectrum-Checkbox--quiet");
     const checkbox = wrapper.get('input[type="checkbox"]');
     expect(checkbox.attributes("aria-invalid")).toBe("true");
   });
@@ -328,5 +330,21 @@ describe("Checkbox", () => {
       },
     });
     expect(emphasized.get("label").classes()).not.toContain("spectrum-Checkbox--quiet");
+  });
+
+  it("combines emphasized and invalid visual classes", () => {
+    const emphasizedInvalid = mount(Checkbox as any, {
+      props: {
+        isEmphasized: true,
+        isInvalid: true,
+      },
+      slots: {
+        default: () => "Emphasized invalid",
+      },
+    });
+
+    const label = emphasizedInvalid.get("label");
+    expect(label.classes()).not.toContain("spectrum-Checkbox--quiet");
+    expect(label.classes()).toContain("is-invalid");
   });
 });

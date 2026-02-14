@@ -162,3 +162,19 @@ const onChange = (next: string[]) => {
   <Checkbox value="basketball">Basketball</Checkbox>
 </CheckboxGroup>
 ```
+
+### Invalid + emphasized
+
+```vue
+<CheckboxGroup
+  label="Favorite sports"
+  isEmphasized
+  isInvalid
+  errorMessage="Select only soccer and baseball."
+  :defaultValue="['soccer']"
+>
+  <Checkbox value="soccer">Soccer</Checkbox>
+  <Checkbox value="baseball">Baseball</Checkbox>
+  <Checkbox value="basketball">Basketball</Checkbox>
+</CheckboxGroup>
+```

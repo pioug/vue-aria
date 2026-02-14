@@ -2,6 +2,16 @@ import { describe, expect, it } from "vitest";
 import * as themeModule from "../src";
 import { theme } from "../src";
 
+const expectedGlobalKeys = [
+  "spectrum",
+  "spectrum--light",
+  "spectrum--lightest",
+  "spectrum--dark",
+  "spectrum--darkest",
+  "spectrum--medium",
+  "spectrum--large",
+];
+
 describe("@vue-spectrum/theme-dark", () => {
   it("exports only the upstream-aligned theme symbol", () => {
     expect(Object.keys(themeModule)).toEqual(["theme"]);
@@ -9,7 +19,7 @@ describe("@vue-spectrum/theme-dark", () => {
 
   it("exports a dark-leaning provider theme variant", () => {
     expect(Object.keys(theme)).toEqual(["global", "light", "dark", "medium", "large"]);
-    expect(Object.keys(theme.global ?? {})).toEqual(["spectrum"]);
+    expect(Object.keys(theme.global ?? {})).toEqual(expectedGlobalKeys);
     expect(Object.keys(theme.light ?? {})).toEqual(["spectrum--light"]);
     expect(Object.keys(theme.dark ?? {})).toEqual(["spectrum--dark"]);
     expect(Object.keys(theme.medium ?? {})).toEqual(["spectrum--medium"]);

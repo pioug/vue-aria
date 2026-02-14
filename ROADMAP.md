@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/theme`
+- Current focus package: `@vue-spectrum/menu`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -100,9 +100,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### React Spectrum component packages
 - `@vue-spectrum/utils`: Complete
 - `@vue-spectrum/provider`: Complete
-- `@vue-spectrum/theme`: In progress
+- `@vue-spectrum/theme`: Complete
 - `@vue-spectrum/button`: In progress
-- `@vue-spectrum/checkbox`: In progress
+- `@vue-spectrum/checkbox`: Complete
 - `@vue-spectrum/radio`: Complete
 - `@vue-spectrum/switch`: Complete
 - `@vue-spectrum/textfield`: Complete
@@ -180,7 +180,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/checkbox/test`
   - `references/react-spectrum/packages/@react-spectrum/checkbox/docs`
 - Local package path: `packages/@vue-spectrum/checkbox`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -203,9 +203,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-checkbox`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/checkbox`.
+- Additional visual parity update:
+  - expanded checkbox visual-state coverage for invalid class behavior across quiet and emphasized variants.
+  - expanded checkbox-group visual-state coverage for invalid and emphasized+invalid class propagation.
+  - expanded docs with explicit quiet-default and emphasized-invalid examples for checkbox and checkbox-group usage.
+  - `packages/@vue-spectrum/checkbox/test/Checkbox.test.ts`
+  - `packages/@vue-spectrum/checkbox/test/CheckboxGroup.test.ts`
+  - `docs/packages/spectrum-checkbox.md`
+  - `docs/packages/spectrum-checkbox-group.md`
 
 ### Remaining for completion
-- Validate visual parity against upstream docs examples for quiet/emphasized/invalid states.
+- None currently tracked in this slice.
 
 ## 4c) Active Package Slice: @vue-spectrum/radio
 - Upstream source path(s):
@@ -4794,7 +4802,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/theme-light`
   - `packages/@vue-spectrum/theme-dark`
   - `packages/@vue-spectrum/theme-express`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
@@ -4818,9 +4826,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `theme-dark` variant package bootstrap export
   - `theme-express` variant package bootstrap export
   - Default dark-scheme mapping aligned to upstream `spectrum-darkest` token class
-- Open adaptation notes:
-  - Current slice is a bootstrap class-map adaptation without upstream Spectrum CSS module imports.
-  - Exact upstream Spectrum CSS variable/class fidelity is pending CSS-module integration.
+- [x] Global class-stack parity slice ported:
+  - expanded `theme.global` bootstrap class maps to include upstream `spectrum-global.css` selector keys (`spectrum`, light/dark variants, and scale selectors).
+  - aligned `theme-light` and `theme-dark` variants to extend the default class stack while overriding only light/dark tokens.
+  - retained express overlays (`global.express`, `medium.express`, `large.express`) on top of the shared default stack.
 
 ### Tests
 - Total upstream test files: 0
@@ -4837,20 +4846,21 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Variant docs pages scaffolded (`docs/packages/spectrum-theme-express.md`, `docs/packages/spectrum-theme-light.md`, `docs/packages/spectrum-theme-dark.md`)
 - [x] Examples parity complete
 - [x] Class-map matrix documentation added for default/light/dark/express bootstrap variants.
-- [ ] Base styles parity complete
+- [x] Base styles parity complete
+  - Bootstrap class-map parity validated against upstream selector sets from `spectrum-global` and variant vars files.
 
 ### Accessibility
 - [x] Theme package has no direct interaction semantics; parity validated via downstream provider/components.
 
 ### Visual Parity
-- [ ] Full visual parity requires upstream Spectrum CSS module strategy and variant package ports.
+- [x] Bootstrap class-map visual parity validated for current provider-integration strategy.
 
 ### React Dependency Check
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Introduce CSS-module-backed Spectrum token maps for higher-fidelity visual parity.
-2. Align bootstrap class-map values with upstream generated class tokens once CSS integration lands.
+1. Monitor upstream `@react-spectrum/theme-*` packages for class-map drift and backport selector updates as needed.
+2. Revisit CSS-module-backed token imports if the Vue build pipeline adopts first-class Spectrum CSS module consumption.
 
 ## 47) Session Log
 ### 2026-02-13
@@ -7627,6 +7637,34 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-theme.md`
   - `ROADMAP.md`
 - Validation: `npm test -- packages/@vue-spectrum/theme/test packages/@vue-spectrum/theme-light/test packages/@vue-spectrum/theme-dark/test packages/@vue-spectrum/theme-express/test` passed (4 files, 8 tests).
+- Additional `@vue-spectrum/theme` global-class parity update:
+  - expanded default/light/dark theme maps to include upstream `spectrum-global` selector keys in `theme.global`.
+  - aligned light/dark variants to extend the default global/scale class stack while overriding only light/dark token mappings.
+  - marked `@vue-spectrum/theme` slice complete and advanced focus to `@vue-spectrum/checkbox`.
+  - `packages/@vue-spectrum/theme/src/index.ts`
+  - `packages/@vue-spectrum/theme-light/src/index.ts`
+  - `packages/@vue-spectrum/theme-dark/src/index.ts`
+  - `packages/@vue-spectrum/theme/test/theme.test.ts`
+  - `packages/@vue-spectrum/theme-light/test/theme-light.test.ts`
+  - `packages/@vue-spectrum/theme-dark/test/theme-dark.test.ts`
+  - `packages/@vue-spectrum/theme-express/test/theme-express.test.ts`
+  - `docs/packages/spectrum-theme.md`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/theme/test packages/@vue-spectrum/theme-light/test packages/@vue-spectrum/theme-dark/test packages/@vue-spectrum/theme-express/test` passed (4 files, 8 tests).
+- Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 46 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/checkbox` visual parity update:
+  - expanded checkbox visual-state coverage for invalid class handling across quiet and emphasized variants.
+  - expanded checkbox-group visual-state coverage for invalid and emphasized+invalid propagation to child checkbox labels.
+  - expanded checkbox docs with explicit quiet-default and emphasized-invalid examples for checkbox and checkbox-group usage.
+  - marked `@vue-spectrum/checkbox` slice complete and advanced focus to `@vue-spectrum/menu`.
+  - `packages/@vue-spectrum/checkbox/test/Checkbox.test.ts`
+  - `packages/@vue-spectrum/checkbox/test/CheckboxGroup.test.ts`
+  - `docs/packages/spectrum-checkbox.md`
+  - `docs/packages/spectrum-checkbox-group.md`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/checkbox/test` passed (3 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/progress` visual parity update:
   - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
   - expanded progress docs with explicit `overBackground` examples for both components.

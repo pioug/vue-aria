@@ -4,6 +4,12 @@ import type { Theme } from "../../provider/src/types";
 export const theme: Theme = {
   global: {
     spectrum: "spectrum",
+    "spectrum--light": "spectrum--light",
+    "spectrum--lightest": "spectrum--lightest",
+    "spectrum--dark": "spectrum--dark",
+    "spectrum--darkest": "spectrum--darkest",
+    "spectrum--medium": "spectrum--medium",
+    "spectrum--large": "spectrum--large",
   },
   light: {
     "spectrum--light": "spectrum--light",
