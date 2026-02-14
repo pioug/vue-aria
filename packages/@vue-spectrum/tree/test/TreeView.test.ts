@@ -1107,6 +1107,9 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
     expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
     expect(onExpandedChange).toHaveBeenCalledTimes(1);
+    const collapsedKeys = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(collapsedKeys).toBeInstanceOf(Set);
+    expect(collapsedKeys?.has("projects")).toBe(false);
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
 
     await press(projectsRow!.get("button"));
@@ -1116,6 +1119,9 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
     expect(onExpandedChange).toHaveBeenCalledTimes(2);
+    const expandedKeys = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(expandedKeys).toBeInstanceOf(Set);
+    expect(expandedKeys?.has("projects")).toBe(true);
     expect(onSelectionChange).toHaveBeenCalledTimes(0);
   });
 
