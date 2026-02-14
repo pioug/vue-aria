@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/combobox`
+- Current focus package: `@vue-spectrum/tabs`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7782,6 +7782,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added uncontrolled `defaultSelectedKey` interaction coverage to verify user selection updates combobox input value and selection callbacks.
   - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 13 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` keyboard-activation parity update:
+  - added manual keyboard-activation coverage to verify arrow-key focus movement without selection changes, and Enter-based selection commit.
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.

@@ -68,6 +68,32 @@ describe("Tabs", () => {
     expect(updatedTabs[1]?.attributes("aria-selected")).toBe("true");
   });
 
+  it("supports manual keyboard activation", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTabs({
+      keyboardActivation: "manual",
+      defaultSelectedKey: "tab-1",
+      onSelectionChange,
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[0]?.element as HTMLElement).focus();
+
+    await tabs[0]?.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+
+    let updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[0]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[1]?.element);
+
+    await updatedTabs[1]?.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[1]?.attributes("aria-selected")).toBe("true");
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
+  });
+
   it("respects disabledKeys", async () => {
     const wrapper = renderTabs({
       disabledKeys: ["tab-2"],
