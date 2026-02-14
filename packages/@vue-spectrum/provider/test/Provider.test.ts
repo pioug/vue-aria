@@ -1,6 +1,6 @@
 import { createApp, defineComponent, h } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Provider } from "../src/Provider";
+import { Provider, useProviderProps } from "../src/Provider";
 import type { Theme } from "../src/types";
 
 const theme: Theme = {
@@ -172,5 +172,52 @@ describe("Provider", () => {
     expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
     expect(provider2?.classList.contains("spectrum--light")).toBe(true);
     unmount();
+  });
+
+  it("passes inherited provider props via useProviderProps", () => {
+    const Probe = defineComponent({
+      name: "Probe",
+      setup() {
+        const merged = useProviderProps({});
+
+        return () =>
+          h("div", {
+            "data-testid": "probe",
+            "data-readonly": String((merged as { isReadOnly?: boolean }).isReadOnly),
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isReadOnly: true,
+              },
+              () => h(Probe)
+            );
+        },
+      })
+    );
+
+    const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
+    expect(probe?.dataset.readonly).toBe("true");
+    unmount();
+  });
+
+  it("throws when no theme is provided and no parent provider exists", () => {
+    expect(() =>
+      mount(
+        defineComponent({
+          setup() {
+            return () => h(Provider, {}, () => h("div", "hello"));
+          },
+        })
+      )
+    ).toThrowError("theme not found");
   });
 });

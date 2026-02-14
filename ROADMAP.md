@@ -3929,6 +3929,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
   - Added adapted `Provider` coverage for OS color-scheme class application, explicit color-scheme override, and nested-provider inheritance/override behavior.
+  - Added adapted `Provider` coverage for inherited prop wiring through `useProviderProps` and missing-theme guard behavior.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
