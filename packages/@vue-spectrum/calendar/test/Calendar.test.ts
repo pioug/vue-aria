@@ -480,6 +480,65 @@ describe("Calendar", () => {
     expect(rangeValue.end.day).toBe(21);
   });
 
+  it("constrains unavailable dates for contiguous range selection by default", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 10),
+        isDateUnavailable: (date: { day: number }) => date.day === 12,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day10 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "10");
+    const day14 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "14");
+    expect(day10).toBeTruthy();
+    expect(day14).toBeTruthy();
+
+    await press(day10!);
+    await press(day14!);
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const rangeValue = onChange.mock.calls[0]?.[0] as {
+      start: CalendarDate;
+      end: CalendarDate;
+    };
+    expect(rangeValue.start.day).toBe(10);
+    expect(rangeValue.end.day).toBe(11);
+  });
+
+  it("allows non-contiguous ranges when explicitly enabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 10),
+        isDateUnavailable: (date: { day: number }) => date.day === 12,
+        allowsNonContiguousRanges: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day10 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "10");
+    const day14 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "14");
+    expect(day10).toBeTruthy();
+    expect(day14).toBeTruthy();
+
+    await press(day10!);
+    await press(day14!);
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const rangeValue = onChange.mock.calls[0]?.[0] as {
+      start: CalendarDate;
+      end: CalendarDate;
+    };
+    expect(rangeValue.start.day).toBe(10);
+    expect(rangeValue.end.day).toBe(14);
+  });
+
   it("commits a single-day range when selection is blurred before completion", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
