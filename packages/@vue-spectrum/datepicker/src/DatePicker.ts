@@ -68,6 +68,32 @@ function createDomRef<T extends Element>() {
   };
 }
 
+function createMergedProps<T extends Record<string, unknown>>(
+  props: T,
+  attrs: Record<string, unknown>
+): T & Record<string, unknown> {
+  const providerDefaults = useProviderProps({} as Record<string, unknown>) as Record<string, unknown>;
+  return new Proxy({} as T & Record<string, unknown>, {
+    get(_, key) {
+      if (typeof key !== "string") {
+        return undefined;
+      }
+
+      const propValue = props[key];
+      if (propValue !== undefined) {
+        return propValue;
+      }
+
+      const attrValue = attrs[key];
+      if (attrValue !== undefined) {
+        return attrValue;
+      }
+
+      return providerDefaults[key];
+    },
+  });
+}
+
 export const DatePicker = defineComponent({
   name: "SpectrumDatePicker",
   props: {
@@ -202,26 +228,10 @@ export const DatePicker = defineComponent({
   },
   setup(props) {
     const attrs = useAttrs();
-    const providerDefaults = useProviderProps({} as Record<string, unknown>) as Record<string, unknown>;
-    const merged = new Proxy({} as SpectrumDatePickerProps & Record<string, unknown>, {
-      get(_, key) {
-        if (typeof key !== "string") {
-          return undefined;
-        }
-
-        const propValue = (props as Record<string, unknown>)[key];
-        if (propValue !== undefined) {
-          return propValue;
-        }
-
-        const attrValue = (attrs as Record<string, unknown>)[key];
-        if (attrValue !== undefined) {
-          return attrValue;
-        }
-
-        return providerDefaults[key];
-      },
-    });
+    const merged = createMergedProps(
+      props as Record<string, unknown>,
+      attrs as Record<string, unknown>
+    ) as SpectrumDatePickerProps & Record<string, unknown>;
     const locale = useLocale();
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
@@ -635,26 +645,10 @@ export const DateRangePicker = defineComponent({
   },
   setup(props) {
     const attrs = useAttrs();
-    const providerDefaults = useProviderProps({} as Record<string, unknown>) as Record<string, unknown>;
-    const merged = new Proxy({} as SpectrumDateRangePickerProps & Record<string, unknown>, {
-      get(_, key) {
-        if (typeof key !== "string") {
-          return undefined;
-        }
-
-        const propValue = (props as Record<string, unknown>)[key];
-        if (propValue !== undefined) {
-          return propValue;
-        }
-
-        const attrValue = (attrs as Record<string, unknown>)[key];
-        if (attrValue !== undefined) {
-          return attrValue;
-        }
-
-        return providerDefaults[key];
-      },
-    });
+    const merged = createMergedProps(
+      props as Record<string, unknown>,
+      attrs as Record<string, unknown>
+    ) as SpectrumDateRangePickerProps & Record<string, unknown>;
     const locale = useLocale();
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);

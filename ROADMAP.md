@@ -6997,3 +6997,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 77 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - extracted shared provider/attrs merged-prop fallback logic into `createMergedProps` to de-duplicate DatePicker/DateRangePicker setup behavior.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 77 tests).
+- Validation: `npm run check -- --pretty false` passed.
