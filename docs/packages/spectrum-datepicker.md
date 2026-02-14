@@ -137,6 +137,29 @@ const keepOpenOnSelect = () => false;
 </template>
 ```
 
+## Custom Id Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Meeting date"
+    id="meeting-date-field"
+    :default-value="new CalendarDate(2019, 6, 5)"
+  />
+
+  <DateRangePicker
+    aria-label="Trip dates"
+    id="trip-range-field"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+  />
+</template>
+```
+
 ## Provider Inheritance Example
 
 ```vue
@@ -513,7 +536,7 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 
 ## Key Props
 
-- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `onFocus`, `onBlur`, `onFocusChange`, `onKeyDown`, `onKeyUp`, `isDisabled`, `isReadOnly`, `isRequired`, `isQuiet`, `isInvalid`, `validationState`, `validationBehavior`, `validate`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `granularity`, `hideTimeZone`, `hourCycle`, `shouldForceLeadingZeros`, `shouldCloseOnSelect`, `placeholderValue`, `autoFocus`.
+- Shared: `id`, `isOpen` / `defaultOpen`, `onOpenChange`, `onFocus`, `onBlur`, `onFocusChange`, `onKeyDown`, `onKeyUp`, `isDisabled`, `isReadOnly`, `isRequired`, `isQuiet`, `isInvalid`, `validationState`, `validationBehavior`, `validate`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `granularity`, `hideTimeZone`, `hourCycle`, `shouldForceLeadingZeros`, `shouldCloseOnSelect`, `placeholderValue`, `autoFocus`.
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.
 - Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants (shortcuts are ignored when disabled or read-only).
