@@ -64,6 +64,29 @@ describe("DatePicker", () => {
     expect(input.element.getAttribute("form")).toBe("event-form");
   });
 
+  it("updates hidden form input value after date selection", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        name: "eventDate",
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+
+    pressElement(day17!);
+    await nextTick();
+
+    const input = wrapper.get('input[type="hidden"][name="eventDate"]');
+    expect(input.element.getAttribute("value")).toBe("2019-06-17");
+  });
+
   it("focuses date picker trigger when autoFocus is enabled", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -573,6 +596,35 @@ describe("DateRangePicker", () => {
     expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
     expect(startInput.element.getAttribute("form")).toBe("range-form");
     expect(endInput.element.getAttribute("form")).toBe("range-form");
+  });
+
+  it("updates hidden range form inputs after range selection", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholderValue: new CalendarDate(2019, 6, 10),
+        startName: "rangeStart",
+        endName: "rangeEnd",
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    const startInput = wrapper.get('input[type="hidden"][name="rangeStart"]');
+    const endInput = wrapper.get('input[type="hidden"][name="rangeEnd"]');
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-10");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-12");
   });
 
   it("focuses range picker trigger when autoFocus is enabled", async () => {
