@@ -120,6 +120,32 @@ describe("Tabs", () => {
     expect(onSelectionChange).toHaveBeenCalledWith("tab-2");
   });
 
+  it("does not auto-select on home/end in manual keyboard activation", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTabs({
+      keyboardActivation: "manual",
+      defaultSelectedKey: "tab-1",
+      onSelectionChange,
+    });
+
+    const tabs = wrapper.findAll('[role="tab"]');
+    (tabs[0]?.element as HTMLElement).focus();
+
+    await tabs[0]?.trigger("keydown", { key: "End" });
+    await nextTick();
+
+    let updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[0]?.attributes("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(updatedTabs[2]?.element);
+
+    await updatedTabs[2]?.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    updatedTabs = wrapper.findAll('[role="tab"]');
+    expect(updatedTabs[2]?.attributes("aria-selected")).toBe("true");
+    expect(onSelectionChange).toHaveBeenCalledWith("tab-3");
+  });
+
   it("wraps horizontal keyboard navigation from first to last tab", async () => {
     const wrapper = renderTabs({
       defaultSelectedKey: "tab-1",

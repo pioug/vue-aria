@@ -7813,6 +7813,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 13 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` manual-home-end parity update:
+  - added manual-activation coverage to ensure `Home`/`End` moves focus without auto-selection, with Enter-based commit to selected tab.
+  - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 14 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tabs` docs parity update:
   - expanded tabs keyboard docs to include `Home`/`End` behavior and disabled-tab skipping during keyboard traversal.
   - `docs/packages/spectrum-tabs.md`
