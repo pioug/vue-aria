@@ -9100,3 +9100,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 33 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` collapsed-link keyboard parity update:
+  - added migrated keyboard-activation coverage to verify `Enter` on collapsed linked rows dispatches synthetic link clicks without expanding rows or emitting expansion callbacks.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 34 tests).
+- Validation: `npm run check -- --pretty false` passed.
