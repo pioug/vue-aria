@@ -56,6 +56,8 @@ import { Item, TabList, TabPanels, Tabs } from "@vue-spectrum/tabs";
 - `manual`: arrow-key navigation moves focus only; selection commits with `Enter` or `Space`.
 
 Tabs also wrap keyboard navigation at boundaries (for example first to last with `ArrowLeft` in horizontal orientation).
+`Home` and `End` move focus/selection to first and last enabled tabs.
+Disabled tabs are skipped during keyboard navigation.
 
 ## Accessibility
 

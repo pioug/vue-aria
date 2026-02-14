@@ -7803,6 +7803,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test` passed (2 files, 11 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` docs parity update:
+  - expanded tabs keyboard docs to include `Home`/`End` behavior and disabled-tab skipping during keyboard traversal.
+  - `docs/packages/spectrum-tabs.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
