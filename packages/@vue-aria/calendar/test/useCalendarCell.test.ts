@@ -137,6 +137,80 @@ describe("useCalendarCell", () => {
     button.remove();
   });
 
+  it("ignores touch pointer-enter when range selection is not dragging", () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useRangeCalendarState>;
+    let cell!: ReturnType<typeof useCalendarCell>;
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+
+    scope.run(() => {
+      state = useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultFocusedValue: new CalendarDate(2024, 1, 10),
+      });
+
+      state.selectDate(new CalendarDate(2024, 1, 10));
+
+      cell = useCalendarCell(
+        { date: new CalendarDate(2024, 1, 12) },
+        state,
+        { current: button }
+      );
+    });
+
+    const beforeFocus = state.focusedDate.toString();
+    const onPointerenter = cell.buttonProps.onPointerenter as
+      | ((event: PointerEvent) => void)
+      | undefined;
+
+    onPointerenter?.({ pointerType: "touch" } as PointerEvent);
+
+    expect(state.focusedDate.toString()).toBe(beforeFocus);
+
+    scope.stop();
+    button.remove();
+  });
+
+  it("highlights touch pointer-enter when range selection is dragging", () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useRangeCalendarState>;
+    let cell!: ReturnType<typeof useCalendarCell>;
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+
+    scope.run(() => {
+      state = useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultFocusedValue: new CalendarDate(2024, 1, 10),
+      });
+
+      state.selectDate(new CalendarDate(2024, 1, 10));
+      state.setDragging(true);
+
+      cell = useCalendarCell(
+        { date: new CalendarDate(2024, 1, 12) },
+        state,
+        { current: button }
+      );
+    });
+
+    const onPointerenter = cell.buttonProps.onPointerenter as
+      | ((event: PointerEvent) => void)
+      | undefined;
+
+    onPointerenter?.({ pointerType: "touch" } as PointerEvent);
+
+    expect(state.focusedDate.toString()).toBe("2024-01-12");
+
+    scope.stop();
+    button.remove();
+  });
+
   it("adds start and finish range-selection prompts on the focused range cell", () => {
     const scope = effectScope();
     let state!: ReturnType<typeof useRangeCalendarState>;
