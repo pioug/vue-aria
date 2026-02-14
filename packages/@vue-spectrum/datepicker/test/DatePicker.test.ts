@@ -54,12 +54,14 @@ describe("DatePicker", () => {
         "aria-label": "Date picker",
         defaultValue: new CalendarDate(2019, 6, 5),
         name: "eventDate",
+        form: "event-form",
       },
       attachTo: document.body,
     });
 
     const input = wrapper.get('input[type="hidden"][name="eventDate"]');
     expect(input.element.getAttribute("value")).toBe("2019-06-05");
+    expect(input.element.getAttribute("form")).toBe("event-form");
   });
 
   it("focuses date picker trigger when autoFocus is enabled", async () => {
@@ -394,6 +396,7 @@ describe("DateRangePicker", () => {
         },
         startName: "rangeStart",
         endName: "rangeEnd",
+        form: "range-form",
       },
       attachTo: document.body,
     });
@@ -402,6 +405,8 @@ describe("DateRangePicker", () => {
     const endInput = wrapper.get('input[type="hidden"][name="rangeEnd"]');
     expect(startInput.element.getAttribute("value")).toBe("2019-06-05");
     expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
+    expect(startInput.element.getAttribute("form")).toBe("range-form");
+    expect(endInput.element.getAttribute("form")).toBe("range-form");
   });
 
   it("focuses range picker trigger when autoFocus is enabled", async () => {
