@@ -6830,6 +6830,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added integration coverage for `firstDayOfWeek` passthrough into the calendar/range-calendar popover overlays.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 26 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added `visibleMonths` passthrough support and regression coverage for multi-month calendar/range-calendar popover rendering.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - expanded key-prop reference to include `visibleMonths`.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

@@ -26,6 +26,7 @@ export interface SpectrumDatePickerProps {
   isDateUnavailable?: ((date: DateValue) => boolean) | undefined;
   firstDayOfWeek?: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | undefined;
   pageBehavior?: "visible" | "single" | undefined;
+  visibleMonths?: number | undefined;
   placeholderValue?: DateValue | undefined;
   placeholder?: string | undefined;
   autoFocus?: boolean | undefined;
@@ -133,6 +134,10 @@ export const DatePicker = defineComponent({
     },
     pageBehavior: {
       type: String as PropType<SpectrumDatePickerProps["pageBehavior"]>,
+      default: undefined,
+    },
+    visibleMonths: {
+      type: Number as PropType<number | undefined>,
       default: undefined,
     },
     placeholderValue: {
@@ -408,6 +413,7 @@ export const DatePicker = defineComponent({
               default: () => [
                 h(Calendar as any, {
                   "aria-label": calendarAriaLabel,
+                  visibleMonths: props.visibleMonths,
                   ...(pickerAria.calendarProps as Record<string, unknown>),
                 }),
               ],
@@ -488,6 +494,10 @@ export const DateRangePicker = defineComponent({
     },
     pageBehavior: {
       type: String as PropType<SpectrumDatePickerProps["pageBehavior"]>,
+      default: undefined,
+    },
+    visibleMonths: {
+      type: Number as PropType<number | undefined>,
       default: undefined,
     },
     placeholderValue: {
@@ -782,6 +792,7 @@ export const DateRangePicker = defineComponent({
               default: () => [
                 h(RangeCalendar as any, {
                   "aria-label": calendarAriaLabel,
+                  visibleMonths: props.visibleMonths,
                   ...(pickerAria.calendarProps as Record<string, unknown>),
                 }),
               ],

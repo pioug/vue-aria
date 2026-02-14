@@ -277,6 +277,22 @@ describe("DatePicker", () => {
     expect(defaultFirstDay).not.toBe(mondayFirstDay);
     expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
   });
+
+  it("passes visibleMonths through to calendar overlay", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelectorAll(".react-spectrum-Calendar-table")).toHaveLength(2);
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -564,5 +580,24 @@ describe("DateRangePicker", () => {
 
     expect(defaultFirstDay).not.toBe(mondayFirstDay);
     expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
+  });
+
+  it("passes visibleMonths through to range-calendar overlay", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelectorAll(".react-spectrum-Calendar-table")).toHaveLength(2);
   });
 });
