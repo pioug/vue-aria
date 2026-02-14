@@ -7045,3 +7045,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 85 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added keyboard callback regression coverage for `onKeyUp` forwarding and open-state suppression in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 87 tests).
+- Validation: `npm run check -- --pretty false` passed.
