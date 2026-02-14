@@ -7389,6 +7389,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tooltip` parity update:
+  - improved semantic tooltip icon implementation by adding localized variant labels (`info`/`positive`/`negative`) and exposing icon semantics via `role="img"` + `aria-label`.
+    - `packages/@vue-spectrum/tooltip/src/Tooltip.ts`
+    - `packages/@vue-spectrum/tooltip/src/intlMessages.ts`
+  - expanded tooltip variant icon coverage to assert semantic labels for info/positive/negative variants.
+    - `packages/@vue-spectrum/tooltip/test/Tooltip.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 15 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tooltip` parity update:
   - expanded trigger-composition coverage for:
     - `@vue-spectrum/button` trigger children
     - wrapped trigger components that forward attrs and exposed DOM handles

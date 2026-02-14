@@ -54,6 +54,32 @@ describe("Tooltip", () => {
         default: () => "Info",
       },
     });
-    expect(wrapper.find(".spectrum-Tooltip-typeIcon").exists()).toBe(true);
+    const icon = wrapper.get(".spectrum-Tooltip-typeIcon");
+    expect(icon.attributes("role")).toBe("img");
+    expect(icon.attributes("aria-label")).toBe("Information");
+  });
+
+  it("renders variant-specific semantic icon labels", () => {
+    const positive = mount(Tooltip as any, {
+      props: {
+        variant: "positive",
+        showIcon: true,
+      },
+      slots: {
+        default: () => "Done",
+      },
+    });
+    const negative = mount(Tooltip as any, {
+      props: {
+        variant: "negative",
+        showIcon: true,
+      },
+      slots: {
+        default: () => "Error",
+      },
+    });
+
+    expect(positive.get(".spectrum-Tooltip-typeIcon").attributes("aria-label")).toBe("Success");
+    expect(negative.get(".spectrum-Tooltip-typeIcon").attributes("aria-label")).toBe("Error");
   });
 });

@@ -1,7 +1,9 @@
 import { mergeProps } from "@vue-aria/utils";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useTooltip } from "@vue-aria/tooltip";
 import { computed, defineComponent, h, inject, ref } from "vue";
 import { TooltipContext } from "./context";
+import { intlMessages } from "./intlMessages";
 import type { SpectrumTooltipPlacement, SpectrumTooltipProps, SpectrumTooltipVariant } from "./types";
 
 const iconText: Record<Exclude<SpectrumTooltipVariant, "neutral">, string> = {
@@ -49,6 +51,7 @@ export const Tooltip = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const contextRef = inject(TooltipContext, ref(null));
     const context = computed(() => contextRef?.value ?? null);
+    const stringFormatter = useLocalizedStringFormatter(intlMessages as any, "@vue-spectrum/tooltip");
     const domRef = ref<HTMLElement | null>(null);
     const backupPlacement = props.placement;
     const { tooltipProps } = useTooltip(
@@ -90,6 +93,10 @@ export const Tooltip = defineComponent({
       const placement = (merged.placement as string | undefined) ?? backupPlacement ?? "top";
       const isOpen = Boolean(merged.isOpen);
       const showIcon = Boolean(merged.showIcon);
+      const iconLabel =
+        variant !== "neutral"
+          ? stringFormatter.format(variant as Exclude<SpectrumTooltipVariant, "neutral">)
+          : undefined;
       const rootProps = mergeProps(
         attrs as Record<string, unknown>,
         tooltipProps,
@@ -127,7 +134,8 @@ export const Tooltip = defineComponent({
                 "span",
                 {
                   class: ["spectrum-Tooltip-typeIcon", "spectrum-Icon"],
-                  "aria-hidden": "true",
+                  role: "img",
+                  "aria-label": iconLabel,
                 },
                 iconText[variant as Exclude<SpectrumTooltipVariant, "neutral">]
               )
