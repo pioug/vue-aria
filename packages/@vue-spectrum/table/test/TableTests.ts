@@ -24,6 +24,11 @@ const items: SpectrumTableRowData[] = [
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
 ];
 
+const itemsWithFalsyRowKey: SpectrumTableRowData[] = [
+  { key: 0, foo: "Foo 0", bar: "Bar 0", baz: "Baz 0" },
+  { key: 1, foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
+];
+
 function renderTable(props: Record<string, unknown> = {}) {
   return mount(TableView as any, {
     props: {
@@ -197,6 +202,33 @@ export function tableTests() {
     const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(lastSelection).toBeInstanceOf(Set);
     expect(lastSelection?.has("row-2")).toBe(true);
+  });
+
+  it("supports UNSAFE className passthrough", () => {
+    const wrapper = renderTable({
+      UNSAFE_className: "test-class",
+    });
+
+    expect(wrapper.get('[role="grid"]').attributes("class")).toContain("test-class");
+  });
+
+  it("preserves falsy numeric row keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithFalsyRowKey,
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[0]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<number> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has(0)).toBe(true);
   });
 
   it("supports sorting callbacks and aria-sort updates", async () => {

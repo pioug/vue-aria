@@ -7841,6 +7841,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented row-selection callback payload shape and `defaultSortDescriptor` initialization behavior.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` row-key/class parity update:
+  - added `UNSAFE_className` passthrough coverage for the table grid element.
+  - added selection-path coverage to verify falsy numeric row keys (e.g. `key: 0`) are preserved in `onSelectionChange`.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 11 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
