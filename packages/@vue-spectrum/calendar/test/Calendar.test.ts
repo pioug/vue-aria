@@ -75,6 +75,29 @@ describe("Calendar", () => {
     expect(lastValue.day).toBe(17);
   });
 
+  it("keeps visual selection stable in controlled calendar mode", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        value: new CalendarDate(2019, 6, 5),
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    const day5 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "5");
+    expect(day17).toBeTruthy();
+    expect(day5).toBeTruthy();
+
+    await press(day17!);
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    expect(day17?.element.closest("td")?.getAttribute("aria-selected")).not.toBe("true");
+    expect(day5?.element.closest("td")?.getAttribute("aria-selected")).toBe("true");
+  });
+
   it("navigates months with next button", async () => {
     const wrapper = mount(Calendar as any, {
       props: {
@@ -293,6 +316,34 @@ describe("Calendar", () => {
     expect(rangeValue.start.day).toBe(17);
     expect(rangeValue.end.month).toBe(6);
     expect(rangeValue.end.day).toBe(21);
+  });
+
+  it("keeps visual range stable in controlled range-calendar mode", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        value: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    const day5 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "5");
+    expect(day17).toBeTruthy();
+    expect(day5).toBeTruthy();
+
+    await press(day17!);
+    expect(onChange).not.toHaveBeenCalled();
+    await press(day17!);
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    expect(day17?.element.closest("td")?.getAttribute("aria-selected")).not.toBe("true");
+    expect(day5?.element.closest("td")?.getAttribute("aria-selected")).toBe("true");
   });
 
   it("normalizes reverse-order range selection into start/end order", async () => {

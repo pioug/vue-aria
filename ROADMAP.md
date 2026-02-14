@@ -6534,6 +6534,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 18 tests).
 - Additional `@vue-spectrum/calendar` docs parity update:
   - expanded `docs/packages/spectrum-calendar.md` with date-availability and boundary-constraint example usage (`isDateUnavailable`, `minValue`, `maxValue`).
+- Additional `@vue-spectrum/calendar` parity update:
+  - added controlled-mode stability coverage for:
+    - controlled `Calendar` selection remaining stable until prop update
+    - controlled `RangeCalendar` range remaining stable until prop update
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 20 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
