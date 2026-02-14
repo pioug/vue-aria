@@ -274,6 +274,50 @@ describe("SubmenuTrigger", () => {
     }
   });
 
+  it("opens submenu when pressing a submenu trigger item with pointer click", async () => {
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const openedTrigger = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    expect(openedTrigger?.getAttribute("aria-expanded")).toBe("true");
+    expect(openedTrigger?.getAttribute("aria-controls")).toBeTruthy();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+    expect(document.body.textContent).toContain("Sub item");
+  });
+
   it("keeps submenu open when pointer moves from submenu content back to its trigger", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {

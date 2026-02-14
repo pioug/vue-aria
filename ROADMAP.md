@@ -9703,3 +9703,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 56 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu pointer-press parity update:
+  - added migrated `SubmenuTrigger` coverage asserting pressing a submenu trigger item with pointer click opens submenu content and updates trigger ARIA state (`aria-expanded`/`aria-controls`).
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 19 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 57 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
