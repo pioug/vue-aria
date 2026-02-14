@@ -44,6 +44,22 @@ describe("Calendar SSR", () => {
     expect((html.match(/react-spectrum-Calendar-table/g) ?? []).length).toBe(2);
   });
 
+  it("renders Calendar with defaultFocusedValue month in SSR output", async () => {
+    const App = defineComponent({
+      name: "CalendarSSRFocusedApp",
+      setup() {
+        return () =>
+          h(Calendar, {
+            "aria-label": "Calendar",
+            defaultFocusedValue: new CalendarDate(2019, 8, 15),
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("August 2019");
+  });
+
   it("renders RangeCalendar without errors", async () => {
     const App = defineComponent({
       name: "RangeCalendarSSRApp",
@@ -62,5 +78,21 @@ describe("Calendar SSR", () => {
     const html = await renderToString(createSSRApp(App));
     expect(html).toContain("react-spectrum-Calendar");
     expect(html).toContain("June 2019");
+  });
+
+  it("renders RangeCalendar with defaultFocusedValue month in SSR output", async () => {
+    const App = defineComponent({
+      name: "RangeCalendarSSRFocusedApp",
+      setup() {
+        return () =>
+          h(RangeCalendar, {
+            "aria-label": "Range calendar",
+            defaultFocusedValue: new CalendarDate(2019, 8, 15),
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("August 2019");
   });
 });
