@@ -1,4 +1,4 @@
-import { createApp, defineComponent, h } from "vue";
+import { createApp, defineComponent, h, nextTick, ref } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Provider, useProviderProps } from "../src/Provider";
 import type { Theme } from "../src/types";
@@ -14,21 +14,93 @@ const theme: Theme = {
 const mediaQueryLight = "(prefers-color-scheme: light)";
 const mediaQueryDark = "(prefers-color-scheme: dark)";
 
-function mockMatchMedia(activeQueries: Set<string>) {
+type MatchMediaChangeListener = (event: MediaQueryListEvent) => void;
+
+interface MockMediaQueryList {
+  media: string;
+  matches: boolean;
+  onchange: MatchMediaChangeListener | null;
+  addListener: (listener: MatchMediaChangeListener) => void;
+  removeListener: (listener: MatchMediaChangeListener) => void;
+  addEventListener: (type: string, listener: MatchMediaChangeListener) => void;
+  removeEventListener: (type: string, listener: MatchMediaChangeListener) => void;
+  dispatchEvent: (event: Event) => boolean;
+}
+
+function createMatchMediaController(initialActiveQueries: Set<string>) {
+  let activeQueries = new Set(initialActiveQueries);
+  const lists = new Map<string, MockMediaQueryList>();
+  const listeners = new Map<string, Set<MatchMediaChangeListener>>();
+
+  const getListeners = (query: string) => {
+    let set = listeners.get(query);
+    if (!set) {
+      set = new Set();
+      listeners.set(query, set);
+    }
+    return set;
+  };
+
+  const notifyQuery = (query: string, nextMatches: boolean) => {
+    const list = lists.get(query);
+    if (!list || list.matches === nextMatches) {
+      return;
+    }
+
+    list.matches = nextMatches;
+    const event = { matches: nextMatches, media: query } as MediaQueryListEvent;
+    for (const listener of getListeners(query)) {
+      listener(event);
+    }
+    list.onchange?.(event);
+  };
+
+  const matchMedia = vi.fn().mockImplementation((query: string): MockMediaQueryList => {
+    const existing = lists.get(query);
+    if (existing) {
+      return existing;
+    }
+
+    const list: MockMediaQueryList = {
+      media: query,
+      matches: activeQueries.has(query),
+      onchange: null,
+      addListener: (listener) => {
+        getListeners(query).add(listener);
+      },
+      removeListener: (listener) => {
+        getListeners(query).delete(listener);
+      },
+      addEventListener: (type, listener) => {
+        if (type === "change") {
+          getListeners(query).add(listener);
+        }
+      },
+      removeEventListener: (type, listener) => {
+        if (type === "change") {
+          getListeners(query).delete(listener);
+        }
+      },
+      dispatchEvent: () => true,
+    };
+    lists.set(query, list);
+    return list;
+  });
+
   Object.defineProperty(window, "matchMedia", {
     configurable: true,
     writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches: activeQueries.has(query),
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
+    value: matchMedia,
   });
+
+  return {
+    setActiveQueries(nextQueries: Set<string>) {
+      activeQueries = new Set(nextQueries);
+      for (const query of lists.keys()) {
+        notifyQuery(query, activeQueries.has(query));
+      }
+    },
+  };
 }
 
 function mount(component: any) {
@@ -46,8 +118,10 @@ function mount(component: any) {
 }
 
 describe("Provider", () => {
+  let matchMediaController: ReturnType<typeof createMatchMediaController>;
+
   beforeEach(() => {
-    mockMatchMedia(new Set());
+    matchMediaController = createMatchMediaController(new Set());
   });
 
   afterEach(() => {
@@ -56,7 +130,7 @@ describe("Provider", () => {
   });
 
   it("uses OS theme by default - dark", () => {
-    mockMatchMedia(new Set([mediaQueryDark]));
+    matchMediaController.setActiveQueries(new Set([mediaQueryDark]));
 
     const { container, unmount } = mount(
       defineComponent({
@@ -80,8 +154,32 @@ describe("Provider", () => {
     unmount();
   });
 
+  it("uses OS theme by default - light", () => {
+    matchMediaController.setActiveQueries(new Set([mediaQueryLight]));
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider",
+              },
+              () => h("div", "hello")
+            );
+        },
+      })
+    );
+
+    const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
+    expect(provider?.classList.contains("spectrum--light")).toBe(true);
+    unmount();
+  });
+
   it("can be set to dark regardless of OS setting", () => {
-    mockMatchMedia(new Set([mediaQueryLight]));
+    matchMediaController.setActiveQueries(new Set([mediaQueryLight]));
 
     const { container, unmount } = mount(
       defineComponent({
@@ -106,7 +204,7 @@ describe("Provider", () => {
   });
 
   it("nested providers follow their ancestors by default", () => {
-    mockMatchMedia(new Set([mediaQueryLight]));
+    matchMediaController.setActiveQueries(new Set([mediaQueryLight]));
 
     const { container, unmount } = mount(
       defineComponent({
@@ -139,8 +237,49 @@ describe("Provider", () => {
     unmount();
   });
 
+  it("nested providers can update to follow their ancestors", async () => {
+    matchMediaController.setActiveQueries(new Set([mediaQueryDark]));
+    const outerColorScheme = ref<"light" | "dark" | undefined>(undefined);
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                colorScheme: outerColorScheme.value,
+                "data-testid": "provider-1",
+              },
+              () =>
+                h(
+                  Provider,
+                  {
+                    "data-testid": "provider-2",
+                  },
+                  () => h("div", "hello")
+                )
+            );
+        },
+      })
+    );
+
+    const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
+    const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
+    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider2?.classList.contains("spectrum--dark")).toBe(true);
+
+    outerColorScheme.value = "light";
+    await nextTick();
+
+    expect(provider1?.classList.contains("spectrum--light")).toBe(true);
+    expect(provider2?.classList.contains("spectrum--light")).toBe(true);
+    unmount();
+  });
+
   it("nested providers can be explicitly set to something else", () => {
-    mockMatchMedia(new Set([mediaQueryLight]));
+    matchMediaController.setActiveQueries(new Set([mediaQueryLight]));
 
     const { container, unmount } = mount(
       defineComponent({
@@ -158,6 +297,46 @@ describe("Provider", () => {
                   Provider,
                   {
                     colorScheme: "light",
+                    "data-testid": "provider-2",
+                  },
+                  () => h("div", "hello")
+                )
+            );
+        },
+      })
+    );
+
+    const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
+    const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
+    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider2?.classList.contains("spectrum--light")).toBe(true);
+    unmount();
+  });
+
+  it("renders an available color scheme automatically when parent one is missing in child theme", () => {
+    matchMediaController.setActiveQueries(new Set([mediaQueryDark]));
+    const lightOnlyTheme: Theme = {
+      global: {},
+      light: { "spectrum--light": "spectrum--light" },
+      medium: { "spectrum--medium": "spectrum--medium" },
+      large: { "spectrum--large": "spectrum--large" },
+    };
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider-1",
+              },
+              () =>
+                h(
+                  Provider,
+                  {
+                    theme: lightOnlyTheme,
                     "data-testid": "provider-2",
                   },
                   () => h("div", "hello")
@@ -219,5 +398,44 @@ describe("Provider", () => {
         })
       )
     ).toThrowError("theme not found");
+  });
+
+  it("rerenders when OS preferred theme changes while on auto", async () => {
+    matchMediaController.setActiveQueries(new Set([mediaQueryLight]));
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider-1",
+              },
+              () =>
+                h(
+                  Provider,
+                  {
+                    "data-testid": "provider-2",
+                  },
+                  () => h("div", "hello")
+                )
+            );
+        },
+      })
+    );
+
+    const provider1 = container.querySelector('[data-testid="provider-1"]') as HTMLElement | null;
+    const provider2 = container.querySelector('[data-testid="provider-2"]') as HTMLElement | null;
+    expect(provider1?.classList.contains("spectrum--light")).toBe(true);
+    expect(provider2?.classList.contains("spectrum--light")).toBe(true);
+
+    matchMediaController.setActiveQueries(new Set([mediaQueryDark]));
+    await nextTick();
+
+    expect(provider1?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider2?.classList.contains("spectrum--dark")).toBe(true);
+    unmount();
   });
 });

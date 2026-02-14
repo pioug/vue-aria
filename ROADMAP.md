@@ -3924,12 +3924,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
-- Ported test files: 2 (adapted)
-- Passing test files: 2 (validated 2026-02-14)
+- Ported test files: 3 (adapted)
+- Passing test files: 3 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
-  - Added adapted `Provider` coverage for OS color-scheme class application, explicit color-scheme override, and nested-provider inheritance/override behavior.
-  - Added adapted `Provider` coverage for inherited prop wiring through `useProviderProps` and missing-theme guard behavior.
+  - Added adapted `Provider` coverage for OS color-scheme class application (dark/light defaults), explicit color-scheme override, and nested-provider inheritance/override behavior.
+  - Added adapted `Provider` coverage for inherited prop wiring through `useProviderProps`, missing-theme guard behavior, theme compatibility fallback, and auto theme updates when OS preference changes.
+  - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
