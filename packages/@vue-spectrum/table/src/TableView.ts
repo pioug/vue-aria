@@ -131,9 +131,17 @@ function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridN
     props: {
       allowsSorting: column.allowsSorting,
       isRowHeader: column.isRowHeader,
+      align: column.align,
       colSpan: column.colSpan,
     },
   }));
+}
+
+function resolveCellAlignment(node: GridNode<NormalizedSpectrumTableRow>): "start" | "center" | "end" | undefined {
+  const columnProps = node.column?.props as Record<string, unknown> | undefined;
+  const nodeProps = node.props as Record<string, unknown> | undefined;
+  const align = columnProps?.align ?? nodeProps?.align;
+  return align === "start" || align === "center" || align === "end" ? align : undefined;
 }
 
 function createRowCellNodes(
@@ -311,6 +319,7 @@ const TableHeaderCell = defineComponent({
       props.state,
       domRef
     );
+    const alignment = computed(() => resolveCellAlignment(props.node));
 
     return () =>
       h(
@@ -318,7 +327,14 @@ const TableHeaderCell = defineComponent({
         {
           ...columnHeaderProps,
           ref: refObject,
-          class: "react-spectrum-Table-headCell",
+          class: [
+            "react-spectrum-Table-headCell",
+            {
+              "react-spectrum-Table-cell--alignStart": alignment.value === "start",
+              "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
+              "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
+            },
+          ],
           "aria-colindex":
             props.node.colIndex != null ? props.node.colIndex + 1 : props.node.index + 1,
         },
@@ -363,6 +379,7 @@ const TableBodyCell = defineComponent({
     const resolvedColSpan = computed(() =>
       props.node.colSpan != null && props.node.colSpan > 1 ? props.node.colSpan : undefined
     );
+    const alignment = computed(() => resolveCellAlignment(props.node));
 
     return () =>
       h(
@@ -370,7 +387,14 @@ const TableBodyCell = defineComponent({
         {
           ...gridCellProps,
           ref: refObject,
-          class: "react-spectrum-Table-cell",
+          class: [
+            "react-spectrum-Table-cell",
+            {
+              "react-spectrum-Table-cell--alignStart": alignment.value === "start",
+              "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
+              "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
+            },
+          ],
           colSpan: resolvedColSpan.value,
           "aria-colspan": resolvedColSpan.value,
         },

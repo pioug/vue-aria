@@ -5,6 +5,7 @@ import { Fragment, Text, isVNode, type VNode, type VNodeChild } from "vue";
 export type TableKey = Key;
 export type SpectrumTableSelectionMode = "none" | "single" | "multiple";
 export type SpectrumTableSelectionStyle = "highlight" | "checkbox";
+export type SpectrumTableColumnAlign = "start" | "center" | "end";
 export type SpectrumSortDirection = SortDirection;
 export type SpectrumSortDescriptor = SortDescriptor;
 
@@ -16,6 +17,7 @@ export interface SpectrumTableColumnData {
   textValue?: string | undefined;
   allowsSorting?: boolean | undefined;
   isRowHeader?: boolean | undefined;
+  align?: SpectrumTableColumnAlign | undefined;
   colSpan?: number | undefined;
 }
 
@@ -40,6 +42,7 @@ export interface ParsedSpectrumTableColumn {
   textValue?: string | undefined;
   allowsSorting?: boolean | undefined;
   isRowHeader?: boolean | undefined;
+  align?: SpectrumTableColumnAlign | undefined;
   colSpan?: number | undefined;
   content?: VNodeChild;
 }
@@ -76,6 +79,7 @@ export interface NormalizedSpectrumTableColumn {
   content?: VNodeChild;
   allowsSorting?: boolean | undefined;
   isRowHeader?: boolean | undefined;
+  align?: SpectrumTableColumnAlign | undefined;
   colSpan?: number | undefined;
 }
 
@@ -101,6 +105,10 @@ export interface NormalizedSpectrumTableDefinition {
 
 function isTableKey(value: unknown): value is TableKey {
   return typeof value === "string" || typeof value === "number";
+}
+
+function normalizeColumnAlign(value: unknown): SpectrumTableColumnAlign | undefined {
+  return value === "start" || value === "center" || value === "end" ? value : undefined;
 }
 
 function normalizeKey(value: unknown, fallback: TableKey): TableKey {
@@ -246,6 +254,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     textValue,
     allowsSorting: Boolean(props.allowsSorting),
     isRowHeader: Boolean(props.isRowHeader),
+    align: normalizeColumnAlign(props.align),
     colSpan: typeof props.colSpan === "number" && Number.isFinite(props.colSpan) ? props.colSpan : undefined,
     content,
   };
@@ -348,6 +357,7 @@ function normalizeColumnsFromSlot(
         content: column.content,
         allowsSorting: column.allowsSorting,
         isRowHeader: column.isRowHeader,
+        align: column.align,
         colSpan: column.colSpan,
       };
     });
@@ -419,6 +429,7 @@ function normalizeColumnsFromProps(
         title,
         allowsSorting: column.allowsSorting,
         isRowHeader: column.isRowHeader,
+        align: normalizeColumnAlign(column.align),
         colSpan: column.colSpan,
       };
     });

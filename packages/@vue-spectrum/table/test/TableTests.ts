@@ -25,6 +25,12 @@ const columnsWithMultipleRowHeaders: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithAlignment: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true },
+  { key: "bar", title: "Bar", align: "center" },
+  { key: "baz", title: "Baz", align: "end" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -215,6 +221,23 @@ export function tableTests() {
     const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
     expect(firstRowCells).toHaveLength(1);
     expect(firstRowCells[0]!.attributes("aria-colindex")).toBe("3");
+  });
+
+  it("applies column alignment classes to headers and cells", () => {
+    const wrapper = renderTable({
+      columns: columnsWithAlignment,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(headers[1]!.classes()).toContain("react-spectrum-Table-cell--alignCenter");
+    expect(headers[2]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowCells).toHaveLength(2);
+    expect(firstRowCells[0]!.classes()).toContain("react-spectrum-Table-cell--alignCenter");
+    expect(firstRowCells[1]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
   });
 
   it("supports static slot table syntax", async () => {

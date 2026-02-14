@@ -8341,6 +8341,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 89 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` column-alignment parity update:
+  - added `columns[].align` support (`"start" | "center" | "end"`) through table column normalization and collection metadata.
+  - applied alignment classes to both header and body cells.
+  - added regression coverage for center/end alignment class output on headers and body cells.
+  - documented column alignment support in package docs.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 90 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
