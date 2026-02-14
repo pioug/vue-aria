@@ -361,19 +361,23 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-level")).toBe("1");
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(projectsRow!.attributes("aria-setsize")).toBe("2");
+    expect(projectsRow!.attributes("data-has-child-items")).toBe("true");
 
     expect(projectTwoRow).toBeTruthy();
     expect(projectTwoRow!.attributes("aria-level")).toBe("2");
     expect(projectTwoRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectTwoRow!.attributes("data-has-child-items")).toBe("true");
 
     expect(projectTwoARow).toBeTruthy();
     expect(projectTwoARow!.attributes("aria-level")).toBe("3");
     expect(projectTwoARow!.attributes("aria-setsize")).toBe("2");
+    expect(projectTwoARow!.attributes("data-has-child-items")).toBeUndefined();
 
     expect(reportsRow).toBeTruthy();
     expect(reportsRow!.attributes("aria-level")).toBe("1");
     expect(reportsRow!.attributes("aria-expanded")).toBe("true");
     expect(reportsRow!.attributes("aria-posinset")).toBe("2");
+    expect(reportsRow!.attributes("data-has-child-items")).toBe("true");
   });
 
   it("marks expandable rows as selectable when selection mode is enabled", () => {
