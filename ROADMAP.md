@@ -8212,6 +8212,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 60 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` press-up selection parity update:
+  - added `shouldSelectOnPressUp` prop support to `TableView`, forwarding pointer-selection timing behavior into grid selection handling.
+  - added regression coverage to verify row selection is deferred until press-up/click when `shouldSelectOnPressUp` is true.
+  - documented `shouldSelectOnPressUp` in package docs.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 61 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

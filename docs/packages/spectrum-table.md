@@ -71,6 +71,7 @@ In static slot composition, each row's total cell span must match the declared c
 - `disallowSelectAll`: disables keyboard select-all (`Ctrl+A`) when `selectionMode` is `"multiple"`.
 - `disallowEmptySelection`: prevents toggling the final selected row off when selection is enabled.
 - `escapeKeyBehavior`: `"clearSelection" | "none"` to control Escape-key clearing behavior in selectable tables.
+- `shouldSelectOnPressUp`: defers pointer-driven selection from press-start to press-up/click handling.
 - `sortDescriptor` / `defaultSortDescriptor` with `onSortChange`.
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
 - `columns` + `items` for data-driven rendering.

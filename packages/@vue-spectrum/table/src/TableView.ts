@@ -35,6 +35,7 @@ export interface SpectrumTableViewProps {
   disallowEmptySelection?: boolean | undefined;
   disallowSelectAll?: boolean | undefined;
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
+  shouldSelectOnPressUp?: boolean | undefined;
   isDisabled?: boolean | undefined;
   autoFocus?: true | "first" | "last" | undefined;
   sortDescriptor?: SpectrumSortDescriptor | null | undefined;
@@ -615,6 +616,10 @@ export const TableView = defineComponent({
       type: String as PropType<"clearSelection" | "none" | undefined>,
       default: undefined,
     },
+    shouldSelectOnPressUp: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     isDisabled: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -867,6 +872,9 @@ export const TableView = defineComponent({
       },
       get disallowSelectAll() {
         return props.disallowSelectAll;
+      },
+      get shouldSelectOnPressUp() {
+        return props.shouldSelectOnPressUp;
       },
     };
 
