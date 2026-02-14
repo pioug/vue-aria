@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/provider`
+- Current focus package: `@vue-spectrum/theme`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -99,7 +99,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### React Spectrum component packages
 - `@vue-spectrum/utils`: Complete
 - `@vue-spectrum/provider`: In progress
-- `@vue-spectrum/theme`: Not started
+- `@vue-spectrum/theme`: In progress
 - `@vue-spectrum/button`: Not started
 - `@vue-spectrum/checkbox`: Not started
 - `@vue-spectrum/radio`: Not started
@@ -4063,7 +4063,57 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Monitor upstream `@react-spectrum/utils` for drift and backport deltas as needed.
 
-## 46) Session Log
+## 46) Package Record: @vue-spectrum/theme
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/theme-default/src`
+  - `references/react-spectrum/packages/@react-spectrum/theme-light/src`
+  - `references/react-spectrum/packages/@react-spectrum/theme-dark/src`
+- Local package path:
+  - `packages/@vue-spectrum/theme`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream theme package variants enumerated (`theme-default`, `theme-light`, `theme-dark`)
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+- [x] Initial parity slice ported:
+  - Default `theme` export (provider-compatible class-map bootstrap)
+- Open adaptation notes:
+  - Current slice is a bootstrap class-map adaptation without upstream Spectrum CSS module imports.
+  - Variant package parity (`theme-light`, `theme-dark`, `theme-express`) is pending.
+
+### Tests
+- Total upstream test files: 0
+- Ported test files: 1 (Vue adaptation)
+- Passing test files: 1 (validated 2026-02-14)
+- Test parity notes:
+  - Added baseline shape checks ensuring provider-compatible `theme` keys/classes are present.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress docs page scaffolded (`docs/packages/spectrum-theme.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Theme package has no direct interaction semantics; parity validated via downstream provider/components.
+
+### Visual Parity
+- [ ] Full visual parity requires upstream Spectrum CSS module strategy and variant package ports.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Add variant exports/packages for light/dark theme behavior and reconcile naming parity strategy.
+2. Introduce CSS-module-backed Spectrum token maps for higher-fidelity visual parity.
+
+## 47) Session Log
 ### 2026-02-13
 - Marked package records `@vue-aria/tooltip` (+ `@vue-aria/tooltip-state` + `@vue-aria/overlays-state`), `@vue-aria/disclosure` (+ state), and `@vue-aria/overlays` as complete after reconciling migrated tests with docs/example/accessibility gates.
 - Marked package records `@vue-aria/dialog`, `@vue-aria/breadcrumbs`, and `@vue-aria/separator` as complete; `useDialog` now calls `useOverlayFocusContain` for upstream focus-containment parity.
