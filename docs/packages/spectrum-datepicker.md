@@ -565,3 +565,4 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 - Validation note: `errorMessage` accepts either a static string or a callback function.
 - Validation behavior note: in `validationBehavior="native"` mode, custom `validate` errors display after commit/select interactions.
 - Callback note: keyboard callbacks and keyboard-open shortcuts are suppressed while pickers are disabled or read-only.
+- Imperative handles: both components expose `focus()`, `blur()`, and `UNSAFE_getDOMNode()` via component refs.
