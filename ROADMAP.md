@@ -6716,6 +6716,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `RangeCalendar` (`value` prop update reflects selected range cell updates)
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 60 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - added paging-boundary regression coverage ensuring next/previous nav disabled states update after navigating into max/min constrained months.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+  - switched calendar nav button rendering to direct reactive props in `CalendarBaseView`, and made `useCalendarBase` nav-button `isDisabled` values getter-backed for runtime recomputation.
+    - `packages/@vue-spectrum/calendar/src/Calendar.ts`
+    - `packages/@vue-aria/calendar/src/useCalendarBase.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 62 tests).
+- Validation: `npm test -- packages/@vue-aria/calendar/test` passed (6 files, 117 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

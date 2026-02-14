@@ -403,6 +403,28 @@ describe("Calendar", () => {
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
+  it("updates next navigation disabled state after paging into max boundary", async () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2020, 1, 15),
+        maxValue: new CalendarDate(2020, 2, 29),
+      },
+      attachTo: document.body,
+    });
+
+    const getNextButton = () => wrapper.findAll(".react-spectrum-Calendar-navButton")[1];
+    expect(getNextButton()).toBeTruthy();
+    expect(getNextButton()?.attributes("disabled")).toBeUndefined();
+    expect(getNextButton()?.attributes("aria-disabled")).not.toBe("true");
+
+    await press(getNextButton()!);
+
+    const disabledAttr = getNextButton()?.attributes("disabled");
+    const ariaDisabled = getNextButton()?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
   it("disables previous navigation when minValue blocks the previous visible range", () => {
     const wrapper = mount(Calendar as any, {
       props: {
@@ -417,6 +439,28 @@ describe("Calendar", () => {
     expect(prevButton).toBeTruthy();
     const disabledAttr = prevButton?.attributes("disabled");
     const ariaDisabled = prevButton?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
+  it("updates previous navigation disabled state after paging into min boundary", async () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2020, 2, 15),
+        minValue: new CalendarDate(2020, 1, 1),
+      },
+      attachTo: document.body,
+    });
+
+    const getPrevButton = () => wrapper.findAll(".react-spectrum-Calendar-navButton")[0];
+    expect(getPrevButton()).toBeTruthy();
+    expect(getPrevButton()?.attributes("disabled")).toBeUndefined();
+    expect(getPrevButton()?.attributes("aria-disabled")).not.toBe("true");
+
+    await press(getPrevButton()!);
+
+    const disabledAttr = getPrevButton()?.attributes("disabled");
+    const ariaDisabled = getPrevButton()?.attributes("aria-disabled");
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 

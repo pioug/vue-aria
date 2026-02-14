@@ -1,5 +1,4 @@
 import { createCalendar as defaultCreateCalendar, type CalendarDate } from "@internationalized/date";
-import { useButton } from "@vue-aria/button";
 import { useCalendar, useCalendarCell, useCalendarGrid, useRangeCalendar } from "@vue-aria/calendar";
 import { useCalendarState, useRangeCalendarState, type CalendarState, type RangeCalendarState } from "@vue-aria/calendar-state";
 import { useLocale } from "@vue-aria/i18n";
@@ -110,31 +109,6 @@ const CalendarCellView = defineComponent({
       );
   },
 });
-
-function createNavButton(props: Record<string, unknown>) {
-  const elementRef = ref<HTMLElement | null>(null);
-  const domRef = {
-    get current() {
-      return elementRef.value;
-    },
-    set current(value: HTMLElement | null) {
-      elementRef.value = value;
-    },
-  };
-
-  const { buttonProps } = useButton(
-    {
-      ...(props as any),
-      elementType: "button",
-    },
-    domRef as any
-  );
-
-  return {
-    elementRef,
-    buttonProps,
-  };
-}
 
 const CalendarMonthView = defineComponent({
   name: "SpectrumCalendarMonthView",
@@ -301,8 +275,6 @@ const CalendarBaseView = defineComponent({
     },
   },
   setup(props) {
-    const prevButton = createNavButton(props.prevButtonProps);
-    const nextButton = createNavButton(props.nextButtonProps);
     const renderStateKey = computed(() => {
       const focused = String(props.state.focusedDate);
       const value = (props.state as any).value;
@@ -331,6 +303,9 @@ const CalendarBaseView = defineComponent({
       ].join("|");
     });
 
+    const prevButtonProps = computed(() => props.prevButtonProps as any);
+    const nextButtonProps = computed(() => props.nextButtonProps as any);
+
     return () =>
       h(
         "div",
@@ -345,8 +320,12 @@ const CalendarBaseView = defineComponent({
             h(
               "button",
               {
-                ...prevButton.buttonProps,
-                ref: prevButton.elementRef,
+                type: "button",
+                "aria-label": prevButtonProps.value["aria-label"] as string | undefined,
+                disabled: Boolean(prevButtonProps.value.isDisabled),
+                onClick: () => prevButtonProps.value.onPress?.(),
+                onFocus: () => prevButtonProps.value.onFocusChange?.(true),
+                onBlur: () => prevButtonProps.value.onFocusChange?.(false),
                 class: "react-spectrum-Calendar-navButton",
               },
               "‹"
@@ -361,8 +340,12 @@ const CalendarBaseView = defineComponent({
             h(
               "button",
               {
-                ...nextButton.buttonProps,
-                ref: nextButton.elementRef,
+                type: "button",
+                "aria-label": nextButtonProps.value["aria-label"] as string | undefined,
+                disabled: Boolean(nextButtonProps.value.isDisabled),
+                onClick: () => nextButtonProps.value.onPress?.(),
+                onFocus: () => nextButtonProps.value.onFocusChange?.(true),
+                onBlur: () => nextButtonProps.value.onFocusChange?.(false),
                 class: "react-spectrum-Calendar-navButton",
               },
               "›"

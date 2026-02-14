@@ -153,24 +153,38 @@ export function useCalendarBase(
     },
   });
 
+  const nextButtonProps: AriaButtonProps = {
+    onPress: () => state.focusNextPage(),
+    "aria-label": stringFormatter.format("next"),
+    onFocusChange: (isFocused) => {
+      nextFocused.value = isFocused;
+    },
+  };
+  Object.defineProperty(nextButtonProps, "isDisabled", {
+    configurable: true,
+    get() {
+      return nextDisabled.value;
+    },
+  });
+
+  const prevButtonProps: AriaButtonProps = {
+    onPress: () => state.focusPreviousPage(),
+    "aria-label": stringFormatter.format("previous"),
+    onFocusChange: (isFocused) => {
+      previousFocused.value = isFocused;
+    },
+  };
+  Object.defineProperty(prevButtonProps, "isDisabled", {
+    configurable: true,
+    get() {
+      return previousDisabled.value;
+    },
+  });
+
   return {
     calendarProps,
-    nextButtonProps: {
-      onPress: () => state.focusNextPage(),
-      "aria-label": stringFormatter.format("next"),
-      isDisabled: nextDisabled.value,
-      onFocusChange: (isFocused) => {
-        nextFocused.value = isFocused;
-      },
-    },
-    prevButtonProps: {
-      onPress: () => state.focusPreviousPage(),
-      "aria-label": stringFormatter.format("previous"),
-      isDisabled: previousDisabled.value,
-      onFocusChange: (isFocused) => {
-        previousFocused.value = isFocused;
-      },
-    },
+    nextButtonProps,
+    prevButtonProps,
     errorMessageProps: {
       id: errorMessageId,
     },
