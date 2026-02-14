@@ -44,9 +44,15 @@ export const DialogTrigger = defineComponent({
   setup(props, { slots }) {
     const triggerRef = ref<HTMLElement | null>(null);
     const state = useOverlayTriggerState({
-      isOpen: props.isOpen,
-      defaultOpen: props.defaultOpen,
-      onOpenChange: props.onOpenChange,
+      get isOpen() {
+        return props.isOpen;
+      },
+      get defaultOpen() {
+        return props.defaultOpen;
+      },
+      get onOpenChange() {
+        return props.onOpenChange;
+      },
     });
     const { triggerProps, overlayProps } = useOverlayTrigger(
       { type: "dialog" },

@@ -7278,3 +7278,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded docs examples for dialog type variants, role overrides, and root-level `UNSAFE_className`/`UNSAFE_style` customization.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 16 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - fixed controlled `DialogTrigger` open-state reactivity by forwarding `isOpen`/`defaultOpen`/`onOpenChange` as getters into overlay-trigger state.
+    - `packages/@vue-spectrum/dialog/src/DialogTrigger.ts`
+  - expanded trigger parity coverage for:
+    - controlled open-state request/update semantics
+    - tray/fullscreen type marker rendering
+    - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.
