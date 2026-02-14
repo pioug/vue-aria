@@ -293,6 +293,30 @@ describe("MenuTrigger", () => {
     expect(document.body.textContent).toContain("Contextual help dialog");
   });
 
+  it("closes an open contextual help dialog when hovering a sibling item", async () => {
+    const wrapper = renderContextualHelpMenuTrigger();
+
+    const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+    const siblingItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(siblingItem).toBeTruthy();
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+    helpItem?.click();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+
+    hoverWithMouse(siblingItem as HTMLElement);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+  });
+
   it("exposes trigger dom node and focus handle", async () => {
     const wrapper = renderMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');
