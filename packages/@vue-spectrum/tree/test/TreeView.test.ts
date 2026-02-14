@@ -1487,6 +1487,7 @@ describe("TreeView", () => {
     await press(projectOneRow!);
 
     const cleared = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string>;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
     expect(cleared.size).toBe(0);
     const updatedProjectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
     expect(updatedProjectOneRow).toBeTruthy();
