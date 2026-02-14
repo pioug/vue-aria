@@ -207,6 +207,7 @@ describe("DatePicker", () => {
     const dialog = document.body.querySelector(".react-spectrum-DatePicker-dialog") as HTMLElement | null;
     expect(dialog).toBeTruthy();
     expect(dialog?.getAttribute("id")).toBeTruthy();
+    expect(dialog?.getAttribute("aria-labelledby")).toBeTruthy();
   });
 
   it("opens date picker popover with Alt+ArrowUp on the group", async () => {
@@ -1310,6 +1311,7 @@ describe("DateRangePicker", () => {
     const dialog = document.body.querySelector(".react-spectrum-DateRangePicker-dialog") as HTMLElement | null;
     expect(dialog).toBeTruthy();
     expect(dialog?.getAttribute("id")).toBeTruthy();
+    expect(dialog?.getAttribute("aria-labelledby")).toBeTruthy();
   });
 
   it("opens range picker popover with Alt+ArrowUp on the group", async () => {
