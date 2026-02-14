@@ -180,6 +180,29 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Required Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Start date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :is-required="true"
+  />
+
+  <DateRangePicker
+    aria-label="Trip dates"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+    :is-required="true"
+  />
+</template>
+```
+
 ## Multi-Month Overlay Example
 
 ```vue
