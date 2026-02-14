@@ -371,6 +371,39 @@ describe("MenuTrigger", () => {
     expect(document.body.textContent).toContain("Contextual help dialog");
   });
 
+  it("opens unavailable contextual help dialogs with rtl keyboard traversal", async () => {
+    const wrapper = renderContextualHelpMenuTriggerWithLocale("ar-AE");
+
+    const menuItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const helpItem = menuItems.find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+    const siblingItem = menuItems.find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(siblingItem).toBeTruthy();
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+    helpItem?.focus();
+    expect(document.activeElement).toBe(helpItem);
+
+    helpItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    helpItem?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowDown", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.activeElement).toBe(siblingItem);
+
+    siblingItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    siblingItem?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowUp", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.activeElement).toBe(helpItem);
+
+    helpItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    helpItem?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowLeft", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+    expect(document.body.textContent).toContain("Contextual help dialog");
+  });
+
   it("closes an open contextual help dialog when hovering a sibling item", async () => {
     const wrapper = renderContextualHelpMenuTrigger();
 
