@@ -75,6 +75,8 @@
       "@vue-aria/disclosure-state": ["packages/@vue-aria/disclosure-state/src/index.ts"],
       "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
       "@vue-aria/overlays": ["packages/@vue-aria/overlays/src/index.ts"],
+      "@vue-spectrum/theme-dark": ["packages/@vue-spectrum/theme-dark/src/index.ts"],
+      "@vue-spectrum/theme-light": ["packages/@vue-spectrum/theme-light/src/index.ts"],
       "@vue-spectrum/theme": ["packages/@vue-spectrum/theme/src/index.ts"],
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"]

@@ -4070,6 +4070,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/theme-dark/src`
 - Local package path:
   - `packages/@vue-spectrum/theme`
+  - `packages/@vue-spectrum/theme-light`
+  - `packages/@vue-spectrum/theme-dark`
 - Status: In progress
 - Owner: Codex
 
@@ -4079,24 +4081,31 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Implementation
 - [x] Package scaffolding created and wired:
-  - `package.json`
-  - `src/index.ts`
+  - `@vue-spectrum/theme/package.json`
+  - `@vue-spectrum/theme/src/index.ts`
+  - `@vue-spectrum/theme-light/package.json`
+  - `@vue-spectrum/theme-light/src/index.ts`
+  - `@vue-spectrum/theme-dark/package.json`
+  - `@vue-spectrum/theme-dark/src/index.ts`
 - [x] Initial parity slice ported:
   - Default `theme` export (provider-compatible class-map bootstrap)
+  - `theme-light` variant package bootstrap export
+  - `theme-dark` variant package bootstrap export
 - Open adaptation notes:
   - Current slice is a bootstrap class-map adaptation without upstream Spectrum CSS module imports.
-  - Variant package parity (`theme-light`, `theme-dark`, `theme-express`) is pending.
+  - `theme-express` variant parity is pending.
 
 ### Tests
 - Total upstream test files: 0
-- Ported test files: 1 (Vue adaptation)
-- Passing test files: 1 (validated 2026-02-14)
+- Ported test files: 3 (Vue adaptations)
+- Passing test files: 3 (validated 2026-02-14)
 - Test parity notes:
-  - Added baseline shape checks ensuring provider-compatible `theme` keys/classes are present.
+  - Added baseline shape checks for default/theme-light/theme-dark provider-compatible class maps.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress docs page scaffolded (`docs/packages/spectrum-theme.md`)
+- [x] Variant docs pages scaffolded (`docs/packages/spectrum-theme-light.md`, `docs/packages/spectrum-theme-dark.md`)
 - [ ] Examples parity complete
 - [ ] Base styles parity complete
 
@@ -4110,7 +4119,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Add variant exports/packages for light/dark theme behavior and reconcile naming parity strategy.
+1. Add `@vue-spectrum/theme-express` variant parity.
 2. Introduce CSS-module-backed Spectrum token maps for higher-fidelity visual parity.
 
 ## 47) Session Log
