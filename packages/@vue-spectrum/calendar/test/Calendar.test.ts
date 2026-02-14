@@ -1070,6 +1070,36 @@ describe("Calendar", () => {
     expect(frFirstDay).not.toBe(enFirstDay);
   });
 
+  it("applies firstDayOfWeek to range-calendar weekday ordering", () => {
+    const defaultWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+    const mondayWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        firstDayOfWeek: "mon",
+      },
+      attachTo: document.body,
+    });
+
+    const defaultFirstDay = defaultWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+    const mondayFirstDay = mondayWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+
+    expect(defaultFirstDay).not.toBe(mondayFirstDay);
+    expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
+  });
+
   it("selects a date range after two date clicks", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
