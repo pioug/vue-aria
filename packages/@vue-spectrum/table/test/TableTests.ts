@@ -30,6 +30,11 @@ const items: SpectrumTableRowData[] = [
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
 ];
 
+const itemsWithDisabledFlag: SpectrumTableRowData[] = [
+  { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
+  { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
+];
+
 const itemsWithFalsyRowKey: SpectrumTableRowData[] = [
   { key: 0, foo: "Foo 0", bar: "Bar 0", baz: "Baz 0" },
   { key: 1, foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
@@ -759,6 +764,31 @@ export function tableTests() {
       selectionMode: "multiple",
       selectionStyle: "checkbox",
       disabledKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+    expect(lastSelection?.has("row-2")).toBe(false);
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("does not select item-level disabled rows when using Ctrl+A in checkbox-style multiple selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      items: itemsWithDisabledFlag,
       onSelectionChange,
     });
 
