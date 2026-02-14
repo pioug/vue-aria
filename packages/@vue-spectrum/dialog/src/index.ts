@@ -1,4 +1,9 @@
 export { Dialog } from "./Dialog";
+export { Heading } from "./Heading";
+export { Header } from "./Header";
+export { Content } from "./Content";
+export { Footer } from "./Footer";
+export { ButtonGroup } from "./ButtonGroup";
 export { AlertDialog } from "./AlertDialog";
 export { DialogTrigger } from "./DialogTrigger";
 export { DialogContainer } from "./DialogContainer";

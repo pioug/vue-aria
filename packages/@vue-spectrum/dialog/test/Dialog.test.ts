@@ -1,6 +1,11 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { Dialog } from "../src/Dialog";
+import { Heading } from "../src/Heading";
+import { Header } from "../src/Header";
+import { Content } from "../src/Content";
+import { Footer } from "../src/Footer";
+import { ButtonGroup } from "../src/ButtonGroup";
 
 describe("Dialog", () => {
   it("focuses the dialog when mounted", () => {
@@ -174,5 +179,50 @@ describe("Dialog", () => {
     const root = wrapper.get("section.custom-dialog");
     expect(root.attributes("style")).toContain("border-width: 2px");
     expect(root.attributes("style")).toContain("border-style: solid");
+  });
+
+  it("wires Heading ids to dialog aria-labelledby", () => {
+    const wrapper = mount(
+      {
+        components: { Dialog, Heading },
+        template: `
+          <Dialog>
+            <Heading>Dialog title</Heading>
+            <p>Dialog body</p>
+          </Dialog>
+        `,
+      },
+      { attachTo: document.body }
+    );
+
+    const dialog = wrapper.get('[role="dialog"]');
+    const heading = wrapper.get(".spectrum-Dialog-heading");
+    expect(heading.attributes("id")).toBeTruthy();
+    expect(dialog.attributes("aria-labelledby")).toBe(heading.attributes("id"));
+  });
+
+  it("renders composition slot class wrappers", () => {
+    const wrapper = mount(
+      {
+        components: { Dialog, Header, Content, Footer, ButtonGroup },
+        template: `
+          <Dialog>
+            <Header>Header</Header>
+            <Content>Body</Content>
+            <Footer>
+              <ButtonGroup>
+                <button>Confirm</button>
+              </ButtonGroup>
+            </Footer>
+          </Dialog>
+        `,
+      },
+      { attachTo: document.body }
+    );
+
+    expect(wrapper.find(".spectrum-Dialog-header").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-content").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-footer").exists()).toBe(true);
+    expect(wrapper.find(".spectrum-Dialog-buttonGroup").exists()).toBe(true);
   });
 });

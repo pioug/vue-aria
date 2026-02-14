@@ -7313,3 +7313,23 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added a `DialogContainer` usage example demonstrating typed container configuration and dismiss-driven close flow.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 22 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - introduced composition slot components and exports:
+    - `Heading` (aria-labelledby id wiring)
+    - `Header`
+    - `Content`
+    - `Footer`
+    - `ButtonGroup`
+    - `packages/@vue-spectrum/dialog/src/Heading.ts`
+    - `packages/@vue-spectrum/dialog/src/Header.ts`
+    - `packages/@vue-spectrum/dialog/src/Content.ts`
+    - `packages/@vue-spectrum/dialog/src/Footer.ts`
+    - `packages/@vue-spectrum/dialog/src/ButtonGroup.ts`
+    - `packages/@vue-spectrum/dialog/src/index.ts`
+  - switched dialog heading-label wiring to deterministic generated ids so `Heading` can reliably satisfy dialog `aria-labelledby` requirements.
+    - `packages/@vue-spectrum/dialog/src/Dialog.ts`
+    - `packages/@vue-spectrum/dialog/src/context.ts`
+  - expanded dialog test coverage for heading id wiring and composition slot class wrappers.
+    - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 24 tests).
+- Validation: `npm run check -- --pretty false` passed.

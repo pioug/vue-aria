@@ -1,9 +1,9 @@
 import { useDialog } from "@vue-aria/dialog";
-import { mergeProps } from "@vue-aria/utils";
+import { mergeProps, useId } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
-import { computed, defineComponent, h, inject, ref, type PropType } from "vue";
-import { DialogContext } from "./context";
+import { computed, defineComponent, h, inject, provide, ref, type PropType } from "vue";
+import { DialogContext, DialogTitlePropsContext } from "./context";
 import type { SpectrumDialogProps } from "./types";
 
 const sizeMap: Record<string, string> = {
@@ -70,6 +70,23 @@ export const Dialog = defineComponent({
     const type = computed(() => merged.type ?? context.value?.type ?? "modal");
     const size = computed(() => (type.value === "popover" ? merged.size ?? "S" : merged.size ?? "L"));
     const sizeVariant = computed(() => sizeMap[type.value ?? ""] ?? sizeMap[size.value ?? ""]);
+    const generatedHeadingId = useId();
+    const headingProps = computed<Record<string, unknown>>(() => {
+      if (merged["aria-label"] || merged["aria-labelledby"]) {
+        return {};
+      }
+
+      return {
+        id: generatedHeadingId,
+      };
+    });
+    const labelledBy = computed(() => {
+      if (merged["aria-label"]) {
+        return undefined;
+      }
+
+      return (merged["aria-labelledby"] as string | undefined) ?? generatedHeadingId;
+    });
 
     const domRef = ref<HTMLElement | null>(null);
     const { dialogProps } = useDialog(
@@ -83,6 +100,7 @@ export const Dialog = defineComponent({
         },
       }
     );
+    provide(DialogTitlePropsContext, headingProps as any);
     const { styleProps } = useStyleProps(merged);
 
     expose({
@@ -96,6 +114,7 @@ export const Dialog = defineComponent({
         {
           ...styleProps.value,
           ...dialogProps,
+          "aria-labelledby": labelledBy.value as string | undefined,
           ref: domRef,
           class: [
             "spectrum-Dialog",

@@ -10,3 +10,5 @@ export interface DialogContextValue {
 }
 
 export const DialogContext: InjectionKey<Ref<DialogContextValue | null>> = Symbol("SpectrumDialogContext");
+
+export const DialogTitlePropsContext: InjectionKey<Ref<Record<string, unknown> | null>> = Symbol("SpectrumDialogTitlePropsContext");
