@@ -107,6 +107,32 @@ describe("TreeView", () => {
     expect(rows[1]!.text()).toContain("Projects");
   });
 
+  it("applies base aria and data attributes on the tree and rows", () => {
+    const wrapper = renderTree();
+
+    const tree = wrapper.get('[role="treegrid"]');
+    expect(tree.attributes("aria-label")).toBe("Test tree");
+    expect(tree.attributes("data-empty")).toBeUndefined();
+    expect(tree.attributes("data-focused")).toBeUndefined();
+    expect(tree.attributes("data-focus-visible")).toBeUndefined();
+
+    const rows = wrapper.findAll('[role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      expect(row.attributes("aria-level")).toBeTruthy();
+      expect(row.attributes("data-level")).toBeTruthy();
+      expect(row.attributes("aria-posinset")).toBeTruthy();
+      expect(row.attributes("aria-setsize")).toBeTruthy();
+      expect(row.attributes("data-selected")).toBeUndefined();
+      expect(row.attributes("data-disabled")).toBeUndefined();
+      expect(row.attributes("data-hovered")).toBeUndefined();
+      expect(row.attributes("data-focused")).toBeUndefined();
+      expect(row.attributes("data-focus-visible")).toBeUndefined();
+      expect(row.attributes("data-pressed")).toBeUndefined();
+      expect(row.attributes("data-selection-mode")).toBeUndefined();
+    }
+  });
+
   it("forwards onScroll from tree props", async () => {
     const onScroll = vi.fn();
     const wrapper = renderTree({ onScroll });
