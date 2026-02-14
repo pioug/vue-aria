@@ -68,6 +68,14 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
 - `columns` + `items` for data-driven rendering.
 
+## Selection Callbacks
+
+`onSelectionChange` receives a `Set` of selected row keys in the current table collection.
+
+## Sort Initialization
+
+Use `defaultSortDescriptor` to apply initial row ordering and header sort state before user interaction.
+
 ## Related
 
 - `Spectrum S2` remains out of scope unless explicitly requested.
