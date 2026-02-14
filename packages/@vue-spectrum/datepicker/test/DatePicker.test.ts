@@ -48,6 +48,32 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("2019");
   });
 
+  it("renders custom placeholder text until a date is selected", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        placeholder: "Pick a day",
+        placeholderValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const value = wrapper.get(".react-spectrum-DatePicker-value");
+    expect(value.text()).toBe("Pick a day");
+    expect(value.classes()).toContain("is-placeholder");
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DatePicker-value").text()).not.toBe("Pick a day");
+    expect(wrapper.get(".react-spectrum-DatePicker-value").classes()).not.toContain("is-placeholder");
+  });
+
   it("serializes hidden form input value when name is provided", () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -573,6 +599,35 @@ describe("DateRangePicker", () => {
     const text = wrapper.get(".react-spectrum-DateRangePicker-value").text();
     expect(text).toContain("June");
     expect(text).toContain("2019");
+  });
+
+  it("renders custom range placeholder text until a range is selected", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        placeholder: "Pick a range",
+        placeholderValue: new CalendarDate(2019, 6, 10),
+      },
+      attachTo: document.body,
+    });
+
+    const value = wrapper.get(".react-spectrum-DateRangePicker-value");
+    expect(value.text()).toBe("Pick a range");
+    expect(value.classes()).toContain("is-placeholder");
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-value").text()).not.toBe("Pick a range");
+    expect(wrapper.get(".react-spectrum-DateRangePicker-value").classes()).not.toContain("is-placeholder");
   });
 
   it("serializes hidden range form inputs when names are provided", () => {
