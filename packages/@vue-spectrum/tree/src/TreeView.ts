@@ -159,6 +159,7 @@ const TreeRow = defineComponent({
       const canSelectItem = props.state.selectionManager.canSelectItem(props.node.key);
       const isSelected = canSelectItem && props.state.selectionManager.isSelected(props.node.key);
       const isDisabled = props.state.selectionManager.isDisabled(props.node.key);
+      const selectionMode = props.state.selectionManager.selectionMode;
       const loadedChildRows = [...props.state.collection.getChildren(props.node.key)].filter((node) => node.type === "item");
       const hasLoadedChildRows = loadedChildRows.length > 0;
       const isExpanded = hasLoadedChildRows ? props.state.expandedKeys.has(props.node.key) : undefined;
@@ -184,6 +185,12 @@ const TreeRow = defineComponent({
           "aria-disabled": isDisabled ? "true" : undefined,
           "aria-expanded": isExpanded == null ? undefined : (isExpanded ? "true" : "false"),
           "data-level": String(props.node.level + 1),
+          "data-disabled": isDisabled ? "true" : undefined,
+          "data-expanded": isExpanded ? "true" : undefined,
+          "data-focused": rowAria.isFocused ? "true" : undefined,
+          "data-pressed": rowAria.isPressed ? "true" : undefined,
+          "data-selected": isSelected ? "true" : undefined,
+          "data-selection-mode": selectionMode === "none" ? undefined : selectionMode,
         },
         [
           h(

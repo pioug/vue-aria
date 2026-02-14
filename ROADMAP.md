@@ -9125,3 +9125,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 40 tests).
 - Validation: `npm test -- packages/@vue-aria/selection/test/useSelectableItem.test.ts packages/@vue-aria/gridlist/test` passed (9 files, 45 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` row-state data-attribute parity update:
+  - added row state data attributes (`data-selection-mode`, `data-selected`, `data-disabled`, `data-focused`, `data-pressed`, `data-expanded`) to align with upstream tree interaction state annotations.
+  - added migrated coverage for highlight-selection row data attributes and expandable-row `data-expanded` transitions.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 42 tests).
+- Validation: `npm test -- packages/@vue-aria/selection/test/useSelectableItem.test.ts packages/@vue-aria/gridlist/test` passed (9 files, 45 tests).
+- Validation: `npm run check -- --pretty false` passed.

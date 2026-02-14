@@ -937,6 +937,53 @@ describe("TreeView", () => {
     expect(selected?.has("projects")).toBe(true);
   });
 
+  it("applies highlight selection data attributes on rows", async () => {
+    const wrapper = renderTree({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+    });
+
+    let photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(photosRow).toBeTruthy();
+    expect(projectsRow).toBeTruthy();
+    expect(photosRow!.attributes("data-selection-mode")).toBe("single");
+    expect(projectsRow!.attributes("data-selection-mode")).toBe("single");
+    expect(photosRow!.attributes("data-selected")).toBeUndefined();
+    expect(projectsRow!.attributes("data-selected")).toBeUndefined();
+
+    await press(photosRow!);
+
+    photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(photosRow).toBeTruthy();
+    expect(projectsRow).toBeTruthy();
+    expect(photosRow!.attributes("data-selected")).toBe("true");
+    expect(projectsRow!.attributes("data-selected")).toBeUndefined();
+  });
+
+  it("applies expansion data attributes for expandable rows", async () => {
+    const wrapper = renderTree({
+      selectionMode: "none",
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
+
+    await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+
+    await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("data-expanded")).toBeUndefined();
+  });
+
   it("supports row action callbacks", async () => {
     const onAction = vi.fn();
     const wrapper = renderTree({
