@@ -7136,3 +7136,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 109 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - exposed and forwarded date/time configuration props (`granularity`, `hideTimeZone`, `hourCycle`, `shouldForceLeadingZeros`, `validationBehavior`) through DatePicker and DateRangePicker state/aria layers.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added passthrough regression coverage using invalid-granularity guard behavior for date and range picker values.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+  - silenced expected Vue warning noise in throw-path tests to keep parity output clean.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - expanded shared key-prop reference with date/time configuration props and `validationBehavior`.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 111 tests).
+- Validation: `npm run check -- --pretty false` passed.

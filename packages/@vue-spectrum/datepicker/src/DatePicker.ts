@@ -34,6 +34,11 @@ export interface SpectrumDatePickerProps {
   firstDayOfWeek?: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | undefined;
   pageBehavior?: "visible" | "single" | undefined;
   visibleMonths?: number | undefined;
+  granularity?: "day" | "hour" | "minute" | "second" | undefined;
+  hideTimeZone?: boolean | undefined;
+  hourCycle?: 12 | 24 | undefined;
+  shouldForceLeadingZeros?: boolean | undefined;
+  validationBehavior?: "aria" | "native" | undefined;
   placeholderValue?: DateValue | undefined;
   placeholder?: string | undefined;
   autoFocus?: boolean | undefined;
@@ -198,6 +203,26 @@ export const DatePicker = defineComponent({
       type: Number as PropType<number | undefined>,
       default: undefined,
     },
+    granularity: {
+      type: String as PropType<SpectrumDatePickerProps["granularity"]>,
+      default: undefined,
+    },
+    hideTimeZone: {
+      type: Boolean,
+      default: undefined,
+    },
+    hourCycle: {
+      type: Number as PropType<12 | 24 | undefined>,
+      default: undefined,
+    },
+    shouldForceLeadingZeros: {
+      type: Boolean,
+      default: undefined,
+    },
+    validationBehavior: {
+      type: String as PropType<SpectrumDatePickerProps["validationBehavior"]>,
+      default: undefined,
+    },
     placeholderValue: {
       type: Object as PropType<DateValue | undefined>,
       default: undefined,
@@ -307,6 +332,21 @@ export const DatePicker = defineComponent({
       get placeholderValue() {
         return merged.placeholderValue;
       },
+      get granularity() {
+        return merged.granularity;
+      },
+      get hideTimeZone() {
+        return merged.hideTimeZone;
+      },
+      get hourCycle() {
+        return merged.hourCycle;
+      },
+      get shouldForceLeadingZeros() {
+        return merged.shouldForceLeadingZeros;
+      },
+      get validationBehavior() {
+        return merged.validationBehavior;
+      },
     } as any);
 
     const pickerAria = useDatePicker(
@@ -353,6 +393,21 @@ export const DatePicker = defineComponent({
         },
         get placeholderValue() {
           return merged.placeholderValue;
+        },
+        get granularity() {
+          return merged.granularity;
+        },
+        get hideTimeZone() {
+          return merged.hideTimeZone;
+        },
+        get hourCycle() {
+          return merged.hourCycle;
+        },
+        get shouldForceLeadingZeros() {
+          return merged.shouldForceLeadingZeros;
+        },
+        get validationBehavior() {
+          return merged.validationBehavior;
         },
         get autoFocus() {
           return merged.autoFocus;
@@ -671,6 +726,26 @@ export const DateRangePicker = defineComponent({
       type: Number as PropType<number | undefined>,
       default: undefined,
     },
+    granularity: {
+      type: String as PropType<SpectrumDatePickerProps["granularity"]>,
+      default: undefined,
+    },
+    hideTimeZone: {
+      type: Boolean,
+      default: undefined,
+    },
+    hourCycle: {
+      type: Number as PropType<12 | 24 | undefined>,
+      default: undefined,
+    },
+    shouldForceLeadingZeros: {
+      type: Boolean,
+      default: undefined,
+    },
+    validationBehavior: {
+      type: String as PropType<SpectrumDatePickerProps["validationBehavior"]>,
+      default: undefined,
+    },
     placeholderValue: {
       type: Object as PropType<DateValue | undefined>,
       default: undefined,
@@ -788,6 +863,21 @@ export const DateRangePicker = defineComponent({
       get placeholderValue() {
         return merged.placeholderValue;
       },
+      get granularity() {
+        return merged.granularity;
+      },
+      get hideTimeZone() {
+        return merged.hideTimeZone;
+      },
+      get hourCycle() {
+        return merged.hourCycle;
+      },
+      get shouldForceLeadingZeros() {
+        return merged.shouldForceLeadingZeros;
+      },
+      get validationBehavior() {
+        return merged.validationBehavior;
+      },
       get allowsNonContiguousRanges() {
         return merged.allowsNonContiguousRanges;
       },
@@ -837,6 +927,21 @@ export const DateRangePicker = defineComponent({
         },
         get placeholderValue() {
           return merged.placeholderValue;
+        },
+        get granularity() {
+          return merged.granularity;
+        },
+        get hideTimeZone() {
+          return merged.hideTimeZone;
+        },
+        get hourCycle() {
+          return merged.hourCycle;
+        },
+        get shouldForceLeadingZeros() {
+          return merged.shouldForceLeadingZeros;
+        },
+        get validationBehavior() {
+          return merged.validationBehavior;
         },
         get autoFocus() {
           return merged.autoFocus;

@@ -50,6 +50,24 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker-value").text()).toContain("2019");
   });
 
+  it("forwards granularity to state validation for date picker values", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(() =>
+        mount(DatePicker as any, {
+          props: {
+            "aria-label": "Date picker",
+            defaultValue: new CalendarDate(2019, 6, 5),
+            granularity: "minute",
+          },
+          attachTo: document.body,
+        })
+      ).toThrow(/Invalid granularity/);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("renders custom placeholder text until a date is selected", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -1135,6 +1153,27 @@ describe("DateRangePicker", () => {
     const text = wrapper.get(".react-spectrum-DateRangePicker-value").text();
     expect(text).toContain("June");
     expect(text).toContain("2019");
+  });
+
+  it("forwards granularity to state validation for range picker values", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(() =>
+        mount(DateRangePicker as any, {
+          props: {
+            "aria-label": "Date range picker",
+            defaultValue: {
+              start: new CalendarDate(2019, 6, 5),
+              end: new CalendarDate(2019, 6, 8),
+            },
+            granularity: "minute",
+          },
+          attachTo: document.body,
+        })
+      ).toThrow(/Invalid granularity/);
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 
   it("renders custom range placeholder text until a range is selected", async () => {
