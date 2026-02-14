@@ -174,4 +174,43 @@ describe("DatePicker SSR", () => {
     const html = await renderToString(createSSRApp(App));
     expect(html).toContain("react-spectrum-DateRangePicker");
   });
+
+  it("renders DatePicker with functional errorMessage without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DatePickerSSRFunctionalErrorApp",
+      setup() {
+        return () =>
+          h(DatePicker, {
+            "aria-label": "Date picker",
+            defaultValue: new CalendarDate(2019, 6, 5),
+            validationState: "invalid",
+            errorMessage: () => "Date callback error",
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("Date callback error");
+  });
+
+  it("renders DateRangePicker with functional errorMessage without SSR errors", async () => {
+    const App = defineComponent({
+      name: "DateRangePickerSSRFunctionalErrorApp",
+      setup() {
+        return () =>
+          h(DateRangePicker, {
+            "aria-label": "Date range picker",
+            defaultValue: {
+              start: new CalendarDate(2019, 6, 5),
+              end: new CalendarDate(2019, 6, 8),
+            },
+            validationState: "invalid",
+            errorMessage: () => "Range callback error",
+          });
+      },
+    });
+
+    const html = await renderToString(createSSRApp(App));
+    expect(html).toContain("Range callback error");
+  });
 });
