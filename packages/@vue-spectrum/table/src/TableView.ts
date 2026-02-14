@@ -330,7 +330,9 @@ const TableHeaderCell = defineComponent({
           ...columnHeaderProps,
           ref: refObject,
           class: [
+            "spectrum-Table-headCell",
             "react-spectrum-Table-headCell",
+            "react-spectrum-Table-cell",
             {
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
@@ -391,6 +393,7 @@ const TableBodyCell = defineComponent({
           ...gridCellProps,
           ref: refObject,
           class: [
+            "spectrum-Table-cell",
             "react-spectrum-Table-cell",
             {
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
@@ -1047,7 +1050,7 @@ export const TableView = defineComponent({
                       {
                         role: "gridcell",
                         colSpan: Math.max(1, normalizedDefinition.value.columns.length),
-                        class: "react-spectrum-Table-cell react-spectrum-Table-empty",
+                        class: "spectrum-Table-cell react-spectrum-Table-cell react-spectrum-Table-empty",
                       },
                       props.renderEmptyState ? (props.renderEmptyState() as any) : null
                     ),

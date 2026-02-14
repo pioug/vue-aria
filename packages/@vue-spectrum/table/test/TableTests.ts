@@ -211,6 +211,21 @@ export function tableTests() {
     expect(grid.classes()).toContain("spectrum-Table--wrap");
   });
 
+  it("applies spectrum header and body cell classes", () => {
+    const wrapper = renderTable();
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(headers[0]!.classes()).toContain("spectrum-Table-headCell");
+    expect(headers[0]!.classes()).toContain("react-spectrum-Table-cell");
+
+    const firstBodyRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeaderCell = firstBodyRow.find('[role="rowheader"]');
+    const bodyCells = firstBodyRow.findAll('[role="gridcell"]');
+    expect(rowHeaderCell.classes()).toContain("spectrum-Table-cell");
+    expect(bodyCells[0]!.classes()).toContain("spectrum-Table-cell");
+  });
+
   it("supports multiple row header columns", () => {
     const wrapper = renderTable({
       columns: columnsWithMultipleRowHeaders,
