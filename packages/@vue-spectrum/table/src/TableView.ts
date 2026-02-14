@@ -35,6 +35,7 @@ export interface SpectrumTableViewProps {
   disallowEmptySelection?: boolean | undefined;
   allowDuplicateSelectionEvents?: boolean | undefined;
   disallowSelectAll?: boolean | undefined;
+  disallowTypeAhead?: boolean | undefined;
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   shouldSelectOnPressUp?: boolean | undefined;
   isDisabled?: boolean | undefined;
@@ -617,6 +618,10 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    disallowTypeAhead: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     escapeKeyBehavior: {
       type: String as PropType<"clearSelection" | "none" | undefined>,
       default: undefined,
@@ -880,6 +885,9 @@ export const TableView = defineComponent({
       },
       get disallowSelectAll() {
         return props.disallowSelectAll;
+      },
+      get disallowTypeAhead() {
+        return props.disallowTypeAhead;
       },
       get shouldSelectOnPressUp() {
         return props.shouldSelectOnPressUp;

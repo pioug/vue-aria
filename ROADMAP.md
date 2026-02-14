@@ -8314,6 +8314,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 84 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/grid` + `@vue-spectrum/table` typeahead opt-out parity update:
+  - exposed `disallowTypeAhead` on `TableView` and forwarded it through `useTable` into grid selectable-collection keyboard handling.
+  - expanded `useGrid` forwarding coverage to assert `disallowTypeAhead` passthrough.
+  - added a dedicated `TableView` forwarding regression test (mocked `useTable`) to verify `disallowTypeAhead` is passed from Spectrum table props.
+  - documented `disallowTypeAhead` in package docs.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-aria/grid/test/useGrid.test.ts`
+  - `packages/@vue-spectrum/table/test/TableView.forwarding.test.ts`
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (10 files, 112 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

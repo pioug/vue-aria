@@ -156,6 +156,7 @@ describe("useGrid", () => {
       {
         "aria-label": "Grid",
         disallowSelectAll: true,
+        disallowTypeAhead: true,
         escapeKeyBehavior: "none",
       },
       state as any,
@@ -164,6 +165,7 @@ describe("useGrid", () => {
 
     const selectableCall = ((useSelectableCollectionMock as any).mock.calls[0]?.[0]) as any;
     expect(selectableCall.disallowSelectAll).toBe(true);
+    expect(selectableCall.disallowTypeAhead).toBe(true);
     expect(selectableCall.escapeKeyBehavior).toBe("none");
     ref.current?.remove();
   });

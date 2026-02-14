@@ -69,6 +69,7 @@ In static slot composition, each row's total cell span must match the declared c
 - `selectionStyle`: `"highlight" | "checkbox"`.
 - `disabledBehavior`: `"selection" | "all"` to control whether disabled rows remain actionable (`"selection"`) or become fully disabled (`"all"`).
 - `disallowSelectAll`: disables keyboard select-all (`Ctrl+A`) when `selectionMode` is `"multiple"`.
+- `disallowTypeAhead`: disables alphanumeric typeahead focus movement across rows.
 - `disallowEmptySelection`: prevents toggling the final selected row off when selection is enabled.
 - `allowDuplicateSelectionEvents`: emits `onSelectionChange` even when the next selected-key set is equal to the current controlled selection.
 - `escapeKeyBehavior`: `"clearSelection" | "none"` to control Escape-key clearing behavior in selectable tables.
