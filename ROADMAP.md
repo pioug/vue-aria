@@ -9330,6 +9330,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 63 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` highlight-replace data-attribute parity update:
+  - expanded non-modifier highlight-replace coverage to assert `data-selected` tracks selected/deselected row transitions alongside `aria-selected`.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 63 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tree` highlight-replace no-deselect parity update:
   - expanded non-modifier highlight-replace coverage to assert repeated activation of an already-selected row does not deselect and does not emit extra selection-change callbacks.
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`

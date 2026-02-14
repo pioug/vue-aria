@@ -1608,6 +1608,8 @@ describe("TreeView", () => {
     expect(updatedGammaRow).toBeTruthy();
     expect(updatedAlphaRow!.attributes("aria-selected")).toBe("false");
     expect(updatedGammaRow!.attributes("aria-selected")).toBe("true");
+    expect(updatedAlphaRow!.attributes("data-selected")).toBeUndefined();
+    expect(updatedGammaRow!.attributes("data-selected")).toBe("true");
 
     await realPointerPress(updatedGammaRow!);
     selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
