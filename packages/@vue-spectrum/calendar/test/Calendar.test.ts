@@ -827,6 +827,31 @@ describe("Calendar", () => {
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
+  it("updates range-calendar previous navigation disabled state after paging into min boundary", async () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2020, 2, 10),
+          end: new CalendarDate(2020, 2, 12),
+        },
+        minValue: new CalendarDate(2020, 1, 1),
+      },
+      attachTo: document.body,
+    });
+
+    const getPrevButton = () => wrapper.findAll(".react-spectrum-Calendar-navButton")[0];
+    expect(getPrevButton()).toBeTruthy();
+    expect(getPrevButton()?.attributes("disabled")).toBeUndefined();
+    expect(getPrevButton()?.attributes("aria-disabled")).not.toBe("true");
+
+    await press(getPrevButton()!);
+
+    const disabledAttr = getPrevButton()?.attributes("disabled");
+    const ariaDisabled = getPrevButton()?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
   it("disables range-calendar next navigation when maxValue blocks paging", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {
@@ -844,6 +869,31 @@ describe("Calendar", () => {
     expect(nextButton).toBeTruthy();
     const disabledAttr = nextButton?.attributes("disabled");
     const ariaDisabled = nextButton?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
+  it("updates range-calendar next navigation disabled state after paging into max boundary", async () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2020, 1, 10),
+          end: new CalendarDate(2020, 1, 12),
+        },
+        maxValue: new CalendarDate(2020, 2, 29),
+      },
+      attachTo: document.body,
+    });
+
+    const getNextButton = () => wrapper.findAll(".react-spectrum-Calendar-navButton")[1];
+    expect(getNextButton()).toBeTruthy();
+    expect(getNextButton()?.attributes("disabled")).toBeUndefined();
+    expect(getNextButton()?.attributes("aria-disabled")).not.toBe("true");
+
+    await press(getNextButton()!);
+
+    const disabledAttr = getNextButton()?.attributes("disabled");
+    const ariaDisabled = getNextButton()?.attributes("aria-disabled");
     expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
   });
 
