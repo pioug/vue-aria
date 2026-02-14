@@ -105,6 +105,65 @@ describe("Calendar", () => {
     expect(wrapper.findAll(".react-spectrum-Calendar-table")).toHaveLength(2);
   });
 
+  it("applies firstDayOfWeek to weekday ordering", () => {
+    const defaultWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+    const mondayWrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        firstDayOfWeek: "mon",
+      },
+      attachTo: document.body,
+    });
+
+    const defaultFirstDay = defaultWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+    const mondayFirstDay = mondayWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+
+    expect(defaultFirstDay).not.toBe(mondayFirstDay);
+    expect(mondayFirstDay.toLowerCase().startsWith("m")).toBe(true);
+  });
+
+  it("prevents selection changes when calendar is disabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDisabled: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+    await press(day17!);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("disables next navigation when maxValue blocks the next visible range", () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2020, 1, 15),
+        maxValue: new CalendarDate(2020, 1, 31),
+      },
+      attachTo: document.body,
+    });
+
+    const nextButton = wrapper.findAll(".react-spectrum-Calendar-navButton")[1];
+    expect(nextButton).toBeTruthy();
+    const disabledAttr = nextButton?.attributes("disabled");
+    const ariaDisabled = nextButton?.attributes("aria-disabled");
+    expect(disabledAttr !== undefined || ariaDisabled === "true").toBe(true);
+  });
+
   it("applies UNSAFE_className and UNSAFE_style to the calendar root", () => {
     const wrapper = mount(Calendar as any, {
       props: {

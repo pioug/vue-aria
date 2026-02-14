@@ -6519,6 +6519,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added reverse-order range-selection coverage to verify normalized `start`/`end` output after selecting end date before start date.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 13 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - expanded prop-driven behavior coverage for:
+    - `firstDayOfWeek` weekday ordering
+    - disabled calendar selection blocking
+    - next-navigation disabling when `maxValue` prevents paging
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 16 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
