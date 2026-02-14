@@ -217,6 +217,21 @@ describe("DatePicker", () => {
     expect(document.activeElement).not.toBe(wrapper.get(".react-spectrum-DatePicker-button").element);
   });
 
+  it("passes through data attributes on date picker root", () => {
+    const wrapper = mount(DatePicker as any, {
+      attrs: {
+        "data-testid": "date-picker-root",
+      },
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DatePicker").attributes("data-testid")).toBe("date-picker-root");
+  });
+
   it("opens a calendar popover and commits date selection", async () => {
     const onChange = vi.fn();
     const wrapper = mount(DatePicker as any, {
@@ -1484,6 +1499,24 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.activeElement).not.toBe(wrapper.get(".react-spectrum-DateRangePicker-button").element);
+  });
+
+  it("passes through data attributes on range picker root", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      attrs: {
+        "data-testid": "range-picker-root",
+      },
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker").attributes("data-testid")).toBe("range-picker-root");
   });
 
   it("opens range-calendar popover", async () => {
