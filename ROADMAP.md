@@ -6873,6 +6873,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - tightened hidden-input regression coverage to assert `form` attribute linkage for date and range hidden inputs.
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 37 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - extended autofocus coverage to ensure triggers are not programmatically focused when disabled/read-only.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 39 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
