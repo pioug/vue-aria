@@ -231,6 +231,27 @@ const onKeyUp = (event: KeyboardEvent) => {
 </template>
 ```
 
+## ARIA Alias Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <p id="team-date-label">Team date</p>
+  <p id="team-date-description">Choose a date for the team event.</p>
+
+  <DatePicker
+    ariaLabel="Team date picker"
+    ariaLabelledby="team-date-label"
+    ariaDescribedby="team-date-description"
+    :default-value="new CalendarDate(2019, 6, 5)"
+  />
+</template>
+```
+
 ## Validation Message Example
 
 ```vue
@@ -540,6 +561,7 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.
 - Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants (shortcuts are ignored when disabled or read-only).
+- ARIA note: `aria-label`, `aria-labelledby`, and `aria-describedby` support both kebab-case and camel-case aliases (`ariaLabel`, `ariaLabelledby`, `ariaDescribedby`).
 - Validation note: `errorMessage` accepts either a static string or a callback function.
 - Validation behavior note: in `validationBehavior="native"` mode, custom `validate` errors display after commit/select interactions.
 - Callback note: keyboard callbacks and keyboard-open shortcuts are suppressed while pickers are disabled or read-only.

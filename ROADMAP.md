@@ -7226,3 +7226,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 127 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added an ARIA alias usage example and documented supported kebab-case/camel-case label/description prop aliases.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 127 tests).
