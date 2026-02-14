@@ -180,6 +180,31 @@ Use `description` and `errorMessage` to provide additional context.
 </RadioGroup>
 ```
 
+### State matrix example
+
+```vue
+<template>
+  <RadioGroup
+    label="Delivery speed"
+    orientation="horizontal"
+    description="Choose one shipping option."
+    defaultValue="standard"
+    isEmphasized>
+    <Radio value="standard">Standard</Radio>
+    <Radio value="express">Express</Radio>
+    <Radio value="overnight" isDisabled>Overnight</Radio>
+  </RadioGroup>
+
+  <RadioGroup
+    label="Account mode"
+    defaultValue="readonly"
+    isReadOnly>
+    <Radio value="readonly">Read only</Radio>
+    <Radio value="edit">Editable</Radio>
+  </RadioGroup>
+</template>
+```
+
 ## Related
 
 - `Spectrum S2` remains out of scope unless explicitly requested.

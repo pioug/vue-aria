@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/radio`
+- Current focus package: `@vue-spectrum/switch`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -103,7 +103,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/theme`: In progress
 - `@vue-spectrum/button`: In progress
 - `@vue-spectrum/checkbox`: In progress
-- `@vue-spectrum/radio`: In progress
+- `@vue-spectrum/radio`: Complete
 - `@vue-spectrum/switch`: In progress
 - `@vue-spectrum/textfield`: In progress
 - `@vue-spectrum/searchfield`: In progress
@@ -213,7 +213,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/radio/test`
   - `references/react-spectrum/packages/@react-spectrum/radio/docs`
 - Local package path: `packages/@vue-spectrum/radio`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -246,9 +246,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/radio/src/RadioGroup.ts`
   - `packages/@vue-aria/radio-state/test/useRadioGroupState.test.ts`
   - `packages/@vue-aria/form-state/src/useFormValidationState.ts`
+- Additional docs parity update:
+  - expanded radio docs visual-state matrix examples for orientation/help text/disabled/read-only/emphasized combinations.
+  - `docs/packages/spectrum-radio.md`
 
 ### Remaining for completion
-- Validate visual parity against upstream docs examples for orientation/help-text/disabled/readOnly/emphasized states.
+- None currently tracked in this slice.
 
 ## 4d) Active Package Slice: @vue-spectrum/switch
 - Upstream source path(s):
@@ -7522,8 +7525,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/radio/test/Radio.test.ts`
   - `packages/@vue-spectrum/radio/src/RadioGroup.ts`
   - `packages/@vue-aria/radio-state/test/useRadioGroupState.test.ts`
-  - `packages/@vue-aria/form-state/src/useFormValidationState.ts`
+- `packages/@vue-aria/form-state/src/useFormValidationState.ts`
 - Validation: `npm test -- packages/@vue-aria/form-state/test packages/@vue-aria/radio-state/test packages/@vue-spectrum/radio/test` passed (4 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/radio` docs parity update:
+  - expanded visual-state examples to cover orientation/help text/disabled/read-only/emphasized combinations.
+  - marked radio slice remaining items complete.
+  - `docs/packages/spectrum-radio.md`
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.
