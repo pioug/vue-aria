@@ -795,6 +795,32 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("prevents clearing the last checkbox-style selection via keyboard when disallowEmptySelection is true", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      disallowEmptySelection: true,
+      defaultSelectedKeys: new Set(["row-1"]),
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    (bodyRows[0]!.element as HTMLElement).focus();
+    await bodyRows[0]!.trigger("keydown", { key: " " });
+    await nextTick();
+    await bodyRows[0]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports checkbox-style multiple selection via Space key", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
