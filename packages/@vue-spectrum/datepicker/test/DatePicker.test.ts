@@ -718,6 +718,22 @@ describe("DatePicker", () => {
     expect(wrapper.text()).toContain("Choose a valid date");
   });
 
+  it("renders functional error messages when invalid", () => {
+    const errorMessage = vi.fn(() => "Choose a valid date from callback");
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        validationState: "invalid",
+        errorMessage,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.text()).toContain("Choose a valid date from callback");
+    expect(errorMessage).toHaveBeenCalled();
+  });
+
   it("renders description text when provided", () => {
     const wrapper = mount(DatePicker as any, {
       props: {
@@ -1656,6 +1672,25 @@ describe("DateRangePicker", () => {
     });
 
     expect(wrapper.text()).toContain("Choose a valid range");
+  });
+
+  it("renders functional range error messages when invalid", () => {
+    const errorMessage = vi.fn(() => "Choose a valid range from callback");
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        validationState: "invalid",
+        errorMessage,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.text()).toContain("Choose a valid range from callback");
+    expect(errorMessage).toHaveBeenCalled();
   });
 
   it("renders range description text when provided", () => {

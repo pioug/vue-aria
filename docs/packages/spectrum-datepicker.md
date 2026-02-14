@@ -381,3 +381,4 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.
 - Keyboard interaction: `Alt+ArrowDown` or `Alt+ArrowUp` on the picker group opens the popover for both variants (shortcuts are ignored when disabled or read-only).
+- Validation note: `errorMessage` accepts either a static string or a callback function.

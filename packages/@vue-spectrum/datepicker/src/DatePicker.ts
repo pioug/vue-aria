@@ -27,7 +27,7 @@ export interface SpectrumDatePickerProps {
   isQuiet?: boolean | undefined;
   isInvalid?: boolean | undefined;
   validationState?: "valid" | "invalid" | null | undefined;
-  errorMessage?: string | undefined;
+  errorMessage?: string | ((validation: unknown) => string) | undefined;
   minValue?: DateValue | null | undefined;
   maxValue?: DateValue | null | undefined;
   isDateUnavailable?: ((date: DateValue) => boolean) | undefined;
@@ -171,7 +171,7 @@ export const DatePicker = defineComponent({
       default: undefined,
     },
     errorMessage: {
-      type: String as PropType<string | undefined>,
+      type: [String, Function] as PropType<string | ((validation: unknown) => string) | undefined>,
       default: undefined,
     },
     minValue: {
@@ -396,6 +396,10 @@ export const DatePicker = defineComponent({
     });
 
     const errorText = computed(() => {
+      if (typeof merged.errorMessage === "function") {
+        return merged.errorMessage(state.displayValidation);
+      }
+
       if (merged.errorMessage) {
         return merged.errorMessage;
       }
@@ -624,7 +628,7 @@ export const DateRangePicker = defineComponent({
       default: undefined,
     },
     errorMessage: {
-      type: String as PropType<string | undefined>,
+      type: [String, Function] as PropType<string | ((validation: unknown) => string) | undefined>,
       default: undefined,
     },
     minValue: {
@@ -868,6 +872,10 @@ export const DateRangePicker = defineComponent({
     });
 
     const errorText = computed(() => {
+      if (typeof merged.errorMessage === "function") {
+        return merged.errorMessage(state.displayValidation);
+      }
+
       if (merged.errorMessage) {
         return merged.errorMessage;
       }

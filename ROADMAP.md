@@ -7061,3 +7061,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - added keyboard-callback usage example for `onKeyDown` / `onKeyUp`.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - added functional `errorMessage` callback support for both picker variants while preserving string-message behavior.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added callback-based validation-message regression coverage for both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - clarified key-prop validation notes for callback-based `errorMessage` usage.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 91 tests).
+- Validation: `npm run check -- --pretty false` passed.
