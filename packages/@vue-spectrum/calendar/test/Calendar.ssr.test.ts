@@ -37,6 +37,10 @@ describe("Calendar SSR", () => {
 
     const html = await renderToString(createSSRApp(App));
     expect(html).toContain('aria-label="Team calendar,');
+    expect(html).toContain("June");
+    expect(html).toContain("July");
+    expect(html).not.toContain("{startDate}");
+    expect(html).not.toContain("{endDate}");
     expect((html.match(/react-spectrum-Calendar-table/g) ?? []).length).toBe(2);
   });
 
