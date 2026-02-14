@@ -30,6 +30,22 @@ import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 </TooltipTrigger>
 ```
 
+## Trigger composition with Spectrum Button
+
+```vue
+<script setup lang="ts">
+import { Button } from "@vue-spectrum/button";
+import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
+</script>
+
+<template>
+  <TooltipTrigger>
+    <Button variant="primary">Save</Button>
+    <Tooltip>Saves your updates.</Tooltip>
+  </TooltipTrigger>
+</template>
+```
+
 ## Accessibility
 
 - Trigger content must be focusable and hoverable.
@@ -78,6 +94,8 @@ import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
   <Tooltip variant="positive" :showIcon="true">Approve workflow.</Tooltip>
 </TooltipTrigger>
 ```
+
+Non-neutral variants render a semantic icon (`role="img"`) with an accessible label.
 
 ```vue
 <TooltipTrigger>

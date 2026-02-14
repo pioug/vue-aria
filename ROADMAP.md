@@ -7396,6 +7396,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tooltip/test/Tooltip.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 15 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tooltip` docs parity update:
+  - added button-trigger composition guidance for `TooltipTrigger` and documented semantic icon accessibility behavior for non-neutral variants.
+    - `docs/packages/spectrum-tooltip.md`
+- Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 15 tests).
 - Additional `@vue-spectrum/tooltip` parity update:
   - expanded trigger-composition coverage for:
     - `@vue-spectrum/button` trigger children
