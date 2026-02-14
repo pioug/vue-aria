@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Aria parity closeout
-- Current focus package: `@vue-aria/tree-state`
+- Current focus package: `@vue-aria/tree`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -89,7 +89,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/list-state`: Complete
 - `@vue-aria/tabs-state`: Complete
 - `@vue-aria/grid-state`: Complete
-- `@vue-aria/tree-state`: In progress
+- `@vue-aria/tree-state`: Complete
 - `@vue-aria/table-state`: Complete
 - `@vue-aria/calendar-state`: Complete
 - `@vue-aria/datepicker-state`: Complete
@@ -2782,6 +2782,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
   - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via Enter-key row expansion and arrow navigation focus movement).
   - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
+  - Added integrated directional-key branch coverage for ArrowRight expand and ArrowLeft collapse on focused parent rows.
   - Added intl-bundle regression coverage to assert copied upstream locale entries and locale-count floor.
 - [x] All relevant upstream tests migrated
 
@@ -2811,12 +2812,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-stately/calendar/docs`
 - Local package path:
   - `packages/@vue-aria/calendar-state`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2874,12 +2875,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-aria/calendar/docs`
 - Local package path:
   - `packages/@vue-aria/calendar`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Scope
 - [x] Upstream modules enumerated
-- [ ] Public API checklist complete for full package surface
+- [x] Public API checklist complete for full package surface
 
 ### Implementation
 - [x] Ported upstream API slice:
@@ -2901,7 +2902,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `tsconfig.json` path alias
   - `vitest.config.ts` alias
 - Open adaptation notes:
-  - Current tests run hook-level harnesses; full upstream React integration-story rendering parity remains in progress.
+  - Upstream interaction/docs parity is validated through adapted Vue harness suites and mirrored VitePress examples.
 
 ### Tests
 - Total upstream test files: 1 (`useCalendar.test.js`)

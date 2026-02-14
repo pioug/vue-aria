@@ -116,6 +116,72 @@ function attachRowHandlers(
 }
 
 describe("tree keyboard navigation parity", () => {
+  it("expands and collapses parent rows via directional keys", async () => {
+    const grid = document.createElement("div");
+    const animalsRow = document.createElement("div");
+    animalsRow.tabIndex = 0;
+    document.body.append(grid, animalsRow);
+
+    const scope = effectScope();
+    const state = scope.run(() =>
+      useTreeState({
+        collection: createTreeData(),
+        selectionMode: "none",
+      })
+    )!;
+
+    scope.run(() =>
+      useTree(
+        {
+          "aria-label": "Keyboard tree",
+        },
+        state,
+        { current: grid as HTMLElement | null }
+      )
+    );
+
+    const animalsItemAria = scope.run(() =>
+      useTreeItem(
+        {
+          node: state.collection.getItem("animals")!,
+        },
+        state,
+        { current: animalsRow as HTMLElement | null }
+      )
+    )!;
+
+    const disposeAnimalsHandlers = attachRowHandlers(animalsRow, animalsItemAria.rowProps);
+    state.selectionManager.setFocused(true);
+    state.selectionManager.setFocusedKey("animals");
+    animalsRow.focus();
+
+    animalsRow.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true })
+    );
+    await flush();
+    expect(state.expandedKeys.has("animals")).toBe(true);
+    expect([...state.collection.getKeys()]).toEqual([
+      "animals",
+      "aardvark",
+      "bear",
+      "kangaroo",
+      "snake",
+      "fruits",
+    ]);
+
+    animalsRow.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true })
+    );
+    await flush();
+    expect(state.expandedKeys.has("animals")).toBe(false);
+    expect([...state.collection.getKeys()]).toEqual(["animals", "fruits"]);
+
+    disposeAnimalsHandlers();
+    scope.stop();
+    grid.remove();
+    animalsRow.remove();
+  });
+
   it("supports keyboard expansion and directional navigation from upstream story behavior", async () => {
     const grid = document.createElement("div");
     const animalsRow = document.createElement("div");
