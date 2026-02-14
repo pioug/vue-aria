@@ -293,6 +293,47 @@ describe("DatePicker", () => {
 
     expect(document.body.querySelectorAll(".react-spectrum-Calendar-table")).toHaveLength(2);
   });
+
+  it("passes pageBehavior through to calendar overlay navigation", async () => {
+    const defaultWrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+    await defaultWrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const defaultNextButton = document.body.querySelectorAll(".react-spectrum-Calendar-navButton")[1];
+    pressElement(defaultNextButton!);
+    await nextTick();
+    const defaultTitle = document.body.querySelector(".react-spectrum-Calendar-title")?.textContent ?? "";
+
+    defaultWrapper.unmount();
+    document.body.innerHTML = "";
+
+    const singleWrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        visibleMonths: 2,
+        pageBehavior: "single",
+      },
+      attachTo: document.body,
+    });
+    await singleWrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const singleNextButton = document.body.querySelectorAll(".react-spectrum-Calendar-navButton")[1];
+    pressElement(singleNextButton!);
+    await nextTick();
+    const singleTitle = document.body.querySelector(".react-spectrum-Calendar-title")?.textContent ?? "";
+
+    expect(defaultTitle).toContain("August");
+    expect(singleTitle).toContain("July");
+  });
 });
 
 describe("DateRangePicker", () => {
@@ -599,5 +640,52 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(document.body.querySelectorAll(".react-spectrum-Calendar-table")).toHaveLength(2);
+  });
+
+  it("passes pageBehavior through to range-calendar overlay navigation", async () => {
+    const defaultWrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+      },
+      attachTo: document.body,
+    });
+    await defaultWrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const defaultNextButton = document.body.querySelectorAll(".react-spectrum-Calendar-navButton")[1];
+    pressElement(defaultNextButton!);
+    await nextTick();
+    const defaultTitle = document.body.querySelector(".react-spectrum-Calendar-title")?.textContent ?? "";
+
+    defaultWrapper.unmount();
+    document.body.innerHTML = "";
+
+    const singleWrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        visibleMonths: 2,
+        pageBehavior: "single",
+      },
+      attachTo: document.body,
+    });
+    await singleWrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const singleNextButton = document.body.querySelectorAll(".react-spectrum-Calendar-navButton")[1];
+    pressElement(singleNextButton!);
+    await nextTick();
+    const singleTitle = document.body.querySelector(".react-spectrum-Calendar-title")?.textContent ?? "";
+
+    expect(defaultTitle).toContain("August");
+    expect(singleTitle).toContain("July");
   });
 });
