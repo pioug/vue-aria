@@ -658,6 +658,34 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("keeps checkbox-style single selection constrained to one row", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[0]!);
+    let lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+
+    await press(bodyRows[1]!);
+    lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(false);
+    expect(lastSelection?.has("row-2")).toBe(true);
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("updates aria-selected on uncontrolled pointer selection", async () => {
     const wrapper = renderTable({
       selectionMode: "single",
