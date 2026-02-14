@@ -9258,3 +9258,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 56 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-all callback-suppression parity update:
+  - expanded disabled-row (`disabledBehavior="all"`) coverage to assert row presses never emit `onExpandedChange`, for both collapsed and pre-expanded disabled rows.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 56 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -1013,10 +1013,12 @@ describe("TreeView", () => {
   });
 
   it('does not expand disabled rows when disabledBehavior is "all"', async () => {
+    const onExpandedChange = vi.fn();
     const wrapper = renderTree({
       selectionMode: "none",
       disabledBehavior: "all",
       disabledKeys: ["projects"],
+      onExpandedChange,
     });
 
     let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
@@ -1024,6 +1026,7 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
     expect(projectsRow!.attributes("aria-disabled")).toBe("true");
     expect(projectsRow!.attributes("data-disabled")).toBe("true");
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
 
     await press(projectsRow!);
 
@@ -1031,15 +1034,18 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("false");
     expect(projectsRow!.attributes("data-disabled")).toBe("true");
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
   });
 
   it('does not collapse disabled rows when disabledBehavior is "all"', async () => {
+    const onExpandedChange = vi.fn();
     const wrapper = renderTree({
       selectionMode: "none",
       disabledBehavior: "all",
       disabledKeys: ["projects"],
       defaultExpandedKeys: ["projects"],
+      onExpandedChange,
     });
 
     let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
@@ -1048,6 +1054,7 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("aria-disabled")).toBe("true");
     expect(projectsRow!.attributes("data-disabled")).toBe("true");
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
 
     await press(projectsRow!);
 
@@ -1055,6 +1062,7 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(true);
   });
 
