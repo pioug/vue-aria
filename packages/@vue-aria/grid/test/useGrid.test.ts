@@ -188,4 +188,25 @@ describe("useGrid", () => {
     expect(shared?.shouldSelectOnPressUp).toBe(true);
     ref.current?.remove();
   });
+
+  it("omits collection keyboard handlers when keyboard navigation is disabled", () => {
+    const state = createState({
+      isKeyboardNavigationDisabled: true,
+    });
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    const { gridProps } = useGrid(
+      {
+        "aria-label": "Grid",
+      },
+      state as any,
+      ref
+    );
+
+    expect(gridProps.onKeydown).toBeUndefined();
+    expect(typeof gridProps.onFocus).toBe("function");
+    expect(typeof gridProps.onBlur).toBe("function");
+    ref.current?.remove();
+  });
 });
