@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/textfield`
+- Current focus package: `@vue-spectrum/searchfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -105,7 +105,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/checkbox`: In progress
 - `@vue-spectrum/radio`: Complete
 - `@vue-spectrum/switch`: Complete
-- `@vue-spectrum/textfield`: In progress
+- `@vue-spectrum/textfield`: Complete
 - `@vue-spectrum/searchfield`: In progress
 - `@vue-spectrum/numberfield`: In progress
 - `@vue-spectrum/slider`: Complete
@@ -340,7 +340,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/textfield/test`
   - `references/react-spectrum/packages/@react-spectrum/textfield/docs`
 - Local package path: `packages/@vue-spectrum/textfield`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -380,9 +380,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/textfield/src/TextArea.ts`
   - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
   - `packages/@vue-spectrum/textfield/src/types.ts`
+- Additional visual parity update:
+  - expanded `TextField` visual-state coverage for:
+    - quiet vs standard wrapper/field class behavior
+    - icon + validation indicator rendering classes
+    - explicit invalid/valid field-state class assertions
+  - expanded textfield/textarea docs with quiet-vs-standard examples and icon/validation-indicator guidance.
+  - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
+  - `docs/packages/spectrum-textfield.md`
+  - `docs/packages/spectrum-textarea.md`
 
 ### Remaining for completion
-- Validate visual parity for icon/validation-indicator and quiet/standard field variants against upstream docs.
+- None currently tracked in this slice.
 
 ## 4g) Active Package Slice: @vue-spectrum/searchfield
 - Upstream source path(s):
@@ -7531,9 +7540,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/textfield/src/TextFieldBase.ts`
   - `packages/@vue-spectrum/textfield/src/TextField.ts`
   - `packages/@vue-spectrum/textfield/src/TextArea.ts`
-  - `packages/@vue-spectrum/textfield/src/types.ts`
-  - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
+- `packages/@vue-spectrum/textfield/src/types.ts`
+- `packages/@vue-spectrum/textfield/test/TextField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/textfield/test packages/@vue-aria/textfield/test/useTextField.test.ts` passed (5 files, 34 tests).
+- Additional `@vue-spectrum/textfield` visual parity update:
+  - added class-level coverage for quiet/standard field variants and explicit invalid/valid state classes.
+  - added icon + validation-indicator rendering coverage.
+  - expanded textfield/textarea docs with quiet-vs-standard examples and icon/indicator guidance.
+  - marked `@vue-spectrum/textfield` slice complete and advanced focus to `@vue-spectrum/searchfield`.
+  - `packages/@vue-spectrum/textfield/test/TextField.test.ts`
+  - `docs/packages/spectrum-textfield.md`
+  - `docs/packages/spectrum-textarea.md`
+- Validation: `npm test -- packages/@vue-spectrum/textfield/test` passed (4 files, 27 tests).
 - Additional `@vue-spectrum/provider` forwarding parity update:
   - added real-component provider forwarding coverage for:
     - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`

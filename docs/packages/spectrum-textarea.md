@@ -42,6 +42,13 @@ Use `validationState`, `isInvalid`, `description`, and `errorMessage` similarly 
 
 ## Visual options
 
+### Standard vs quiet
+
+```vue
+<TextArea label="Message (standard)" />
+<TextArea label="Message (quiet)" isQuiet />
+```
+
 ### Quiet
 
 ```vue

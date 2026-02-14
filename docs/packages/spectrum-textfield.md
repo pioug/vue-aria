@@ -49,6 +49,9 @@ const onChange = (next: string) => {
 
 - `validationState="invalid"` and `isInvalid` mark the field invalid.
 - `validationState="valid"` adds a valid state indicator.
+- `validate` supports custom validation in aria mode.
+- `name` + form-level server errors (via `FormValidationContext`) surface as invalid help text.
+- `validationBehavior="native"` uses browser constraint validation semantics.
 - `errorMessage` and `description` render help text.
 
 ```vue
@@ -59,6 +62,13 @@ const onChange = (next: string) => {
 ```
 
 ## Visual options
+
+### Standard vs quiet
+
+```vue
+<TextField label="Email (standard)" />
+<TextField label="Email (quiet)" isQuiet />
+```
 
 ### Quiet
 
@@ -76,6 +86,22 @@ const onChange = (next: string) => {
 
 ```vue
 <TextField label="Name" isDisabled />
+```
+
+### Icon and validation indicator
+
+`icon` renders a leading visual element, and `validationState` shows Spectrum validation indicators.
+
+```vue
+<script setup lang="ts">
+import { h } from "vue";
+</script>
+
+<TextField
+  label="Search"
+  :icon="h('span', { role: 'img', 'aria-label': 'Search icon' }, 'S')"
+  validationState="invalid"
+  errorMessage="Enter a valid query." />
 ```
 
 ## Related

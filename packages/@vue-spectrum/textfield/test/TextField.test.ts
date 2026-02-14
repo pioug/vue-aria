@@ -158,6 +158,7 @@ describe("TextField", () => {
     });
     const invalidInput = invalid.get(`[data-testid="${TEST_ID}"]`);
     expect(invalidInput.attributes("aria-invalid")).toBe("true");
+    expect(invalid.get(".spectrum-Textfield").classes()).toContain("spectrum-Textfield--invalid");
     expect(invalid.find('[role="img"]').exists()).toBe(true);
 
     const valid = mount(TextField as any, {
@@ -171,8 +172,50 @@ describe("TextField", () => {
     });
     const validInput = valid.get(`[data-testid="${TEST_ID}"]`);
     expect(validInput.attributes("aria-invalid")).toBeUndefined();
+    expect(valid.get(".spectrum-Textfield").classes()).toContain("spectrum-Textfield--valid");
     const validIcon = valid.get('[aria-label="Valid"]');
     expect(validIcon.attributes("role")).toBe("img");
+  });
+
+  it("supports quiet and standard visual variants", () => {
+    const standard = mount(TextField as any, {
+      attrs: {
+        "aria-label": "mandatory label",
+        "data-testid": TEST_ID,
+      },
+    });
+    expect(standard.get(".spectrum-Textfield-wrapper").classes()).not.toContain("spectrum-Textfield-wrapper--quiet");
+    expect(standard.get(".spectrum-Textfield").classes()).not.toContain("spectrum-Textfield--quiet");
+
+    const quiet = mount(TextField as any, {
+      props: {
+        isQuiet: true,
+      },
+      attrs: {
+        "aria-label": "mandatory label",
+        "data-testid": TEST_ID,
+      },
+    });
+    expect(quiet.get(".spectrum-Textfield-wrapper").classes()).toContain("spectrum-Textfield-wrapper--quiet");
+    expect(quiet.get(".spectrum-Textfield").classes()).toContain("spectrum-Textfield--quiet");
+  });
+
+  it("supports icon + validation-indicator rendering", () => {
+    const wrapper = mount(TextField as any, {
+      props: {
+        validationState: "invalid",
+        icon: h("span", { "data-testid": "leading-icon", role: "img", "aria-label": "Search icon" }, "S"),
+      },
+      attrs: {
+        "aria-label": "mandatory label",
+        "data-testid": TEST_ID,
+      },
+    });
+
+    const input = wrapper.get(`[data-testid="${TEST_ID}"]`);
+    expect(input.classes()).toContain("spectrum-Textfield-inputIcon");
+    expect(wrapper.get('[data-testid="leading-icon"]').attributes("aria-label")).toBe("Search icon");
+    expect(wrapper.get(".spectrum-Textfield-validationIcon").attributes("role")).toBe("img");
   });
 
   it("passes through aria-errormessage", () => {
