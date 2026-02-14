@@ -238,6 +238,24 @@ describe("Calendar", () => {
     expect(updatedTitle).not.toBe(initialTitle);
   });
 
+  it("updates root aria-label visible-range text after month navigation", async () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    expect(root.attributes("aria-label")).toContain("June 2019");
+
+    const nextButton = wrapper.findAll(".react-spectrum-Calendar-navButton")[1];
+    await press(nextButton!);
+
+    expect(root.attributes("aria-label")).toContain("July 2019");
+  });
+
   it("supports pageBehavior differences for multi-month navigation", async () => {
     const defaultWrapper = mount(Calendar as any, {
       props: {
@@ -1032,6 +1050,27 @@ describe("Calendar", () => {
     const singleTitle = singleWrapper.get(".react-spectrum-Calendar-title").text();
     expect(defaultTitle).toContain("August");
     expect(singleTitle).toContain("July");
+  });
+
+  it("updates range-calendar root aria-label visible-range text after month navigation", async () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    expect(root.attributes("aria-label")).toContain("June 2019");
+
+    const nextButton = wrapper.findAll(".react-spectrum-Calendar-navButton")[1];
+    await press(nextButton!);
+
+    expect(root.attributes("aria-label")).toContain("July 2019");
   });
 
   it("applies selectionAlignment to multi-month range-calendar initial visible range", () => {
