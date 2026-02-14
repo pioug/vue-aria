@@ -6640,6 +6640,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 40 tests).
 - Validation: `npm test -- packages/@vue-aria/calendar/test/useCalendarGrid.test.ts` passed (1 file, 3 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - extended locale-override weekday-ordering regression coverage to `RangeCalendar`.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 41 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

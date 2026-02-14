@@ -648,6 +648,36 @@ describe("Calendar", () => {
     expect(singleTitle).toContain("July");
   });
 
+  it("applies locale overrides to range-calendar default weekday ordering", () => {
+    const enWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        locale: "en-US",
+      },
+      attachTo: document.body,
+    });
+    const frWrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        locale: "fr-FR",
+      },
+      attachTo: document.body,
+    });
+
+    const enFirstDay = enWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+    const frFirstDay = frWrapper.findAll(".react-spectrum-Calendar-weekday")[0]?.text() ?? "";
+
+    expect(frFirstDay).not.toBe(enFirstDay);
+  });
+
   it("selects a date range after two date clicks", async () => {
     const onChange = vi.fn();
     const wrapper = mount(RangeCalendar as any, {
