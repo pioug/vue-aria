@@ -9325,3 +9325,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 62 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-selection keyboard-collapse parity update:
+  - expanded `disabledBehavior="selection"` coverage (with `selectionMode="none"`) to assert disabled rows can collapse via `Enter` and emit correct `onExpandedChange` payload updates.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 62 tests).
+- Validation: `npm run check -- --pretty false` passed.

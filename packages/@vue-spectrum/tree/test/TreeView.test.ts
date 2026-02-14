@@ -1242,10 +1242,12 @@ describe("TreeView", () => {
   });
 
   it('expands disabled rows when disabledBehavior is "selection"', async () => {
+    const onExpandedChange = vi.fn();
     const wrapper = renderTree({
       selectionMode: "none",
       disabledBehavior: "selection",
       disabledKeys: ["projects"],
+      onExpandedChange,
     });
 
     let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
@@ -1260,6 +1262,17 @@ describe("TreeView", () => {
     expect(projectsRow).toBeTruthy();
     expect(projectsRow!.attributes("aria-expanded")).toBe("true");
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(true);
+    let expanded = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(expanded?.has("projects")).toBe(true);
+
+    await pressEnter(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+    expanded = onExpandedChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(expanded?.has("projects")).toBe(false);
   });
 
   it('toggles disabled row expansion via chevron when disabledBehavior is "selection" and selection is enabled', async () => {
