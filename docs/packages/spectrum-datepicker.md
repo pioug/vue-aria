@@ -112,6 +112,26 @@ const onOpenChange = (nextOpen: boolean) => {
 </template>
 ```
 
+## Provider Inheritance Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Provider } from "@vue-spectrum/provider";
+import { theme } from "@vue-spectrum/theme";
+import { DatePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <Provider :theme="theme" :is-disabled="true" :is-quiet="true">
+    <DatePicker
+      aria-label="Meeting date"
+      :default-value="new CalendarDate(2019, 6, 5)"
+    />
+  </Provider>
+</template>
+```
+
 ## Validation Message Example
 
 ```vue

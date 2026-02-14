@@ -4,6 +4,7 @@ import { useLocale } from "@vue-aria/i18n";
 import { defineComponent, h, computed, ref, useAttrs, onMounted, nextTick, type PropType } from "vue";
 import { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
 import { Popover } from "@vue-spectrum/menu";
+import { useProviderProps } from "@vue-spectrum/provider";
 
 type DateValue = any;
 export type DateRangeValue = { start: DateValue; end: DateValue } | null;
@@ -201,111 +202,131 @@ export const DatePicker = defineComponent({
   },
   setup(props) {
     const attrs = useAttrs();
+    const providerDefaults = useProviderProps({} as Record<string, unknown>) as Record<string, unknown>;
+    const merged = new Proxy({} as SpectrumDatePickerProps & Record<string, unknown>, {
+      get(_, key) {
+        if (typeof key !== "string") {
+          return undefined;
+        }
+
+        const propValue = (props as Record<string, unknown>)[key];
+        if (propValue !== undefined) {
+          return propValue;
+        }
+
+        const attrValue = (attrs as Record<string, unknown>)[key];
+        if (attrValue !== undefined) {
+          return attrValue;
+        }
+
+        return providerDefaults[key];
+      },
+    });
     const locale = useLocale();
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
 
     const state = useDatePickerState({
       get value() {
-        return props.value;
+        return merged.value;
       },
       get defaultValue() {
-        return props.defaultValue;
+        return merged.defaultValue;
       },
-      onChange: props.onChange,
+      onChange: merged.onChange,
       get isOpen() {
-        return props.isOpen;
+        return merged.isOpen;
       },
       get defaultOpen() {
-        return props.defaultOpen;
+        return merged.defaultOpen;
       },
-      onOpenChange: props.onOpenChange,
+      onOpenChange: merged.onOpenChange,
       get isDisabled() {
-        return props.isDisabled;
+        return merged.isDisabled;
       },
       get isReadOnly() {
-        return props.isReadOnly;
+        return merged.isReadOnly;
       },
       get isRequired() {
-        return props.isRequired;
+        return merged.isRequired;
       },
       get isInvalid() {
-        return props.isInvalid;
+        return merged.isInvalid;
       },
       get validationState() {
-        return props.validationState;
+        return merged.validationState;
       },
       get minValue() {
-        return props.minValue;
+        return merged.minValue;
       },
       get maxValue() {
-        return props.maxValue;
+        return merged.maxValue;
       },
-      isDateUnavailable: props.isDateUnavailable,
+      isDateUnavailable: merged.isDateUnavailable,
       get firstDayOfWeek() {
-        return props.firstDayOfWeek;
+        return merged.firstDayOfWeek;
       },
       get pageBehavior() {
-        return props.pageBehavior;
+        return merged.pageBehavior;
       },
       get placeholderValue() {
-        return props.placeholderValue;
+        return merged.placeholderValue;
       },
     } as any);
 
     const pickerAria = useDatePicker(
       {
         get label() {
-          return props.label;
+          return merged.label;
         },
         get description() {
-          return props.description;
+          return merged.description;
         },
         get "aria-label"() {
-          return props["aria-label"] ?? props.ariaLabel ?? (attrs["aria-label"] as string | undefined);
+          return merged["aria-label"] ?? merged.ariaLabel ?? (attrs["aria-label"] as string | undefined);
         },
         get "aria-labelledby"() {
-          return props["aria-labelledby"] ?? props.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
+          return merged["aria-labelledby"] ?? merged.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
         },
         get isDisabled() {
-          return props.isDisabled;
+          return merged.isDisabled;
         },
         get isReadOnly() {
-          return props.isReadOnly;
+          return merged.isReadOnly;
         },
         get isRequired() {
-          return props.isRequired;
+          return merged.isRequired;
         },
         get validationState() {
-          return props.validationState;
+          return merged.validationState;
         },
         get errorMessage() {
-          return props.errorMessage;
+          return merged.errorMessage;
         },
         get minValue() {
-          return props.minValue;
+          return merged.minValue;
         },
         get maxValue() {
-          return props.maxValue;
+          return merged.maxValue;
         },
-        isDateUnavailable: props.isDateUnavailable,
+        isDateUnavailable: merged.isDateUnavailable,
         get firstDayOfWeek() {
-          return props.firstDayOfWeek;
+          return merged.firstDayOfWeek;
         },
         get pageBehavior() {
-          return props.pageBehavior;
+          return merged.pageBehavior;
         },
         get placeholderValue() {
-          return props.placeholderValue;
+          return merged.placeholderValue;
         },
         get autoFocus() {
-          return props.autoFocus;
+          return merged.autoFocus;
         },
         get name() {
-          return props.name;
+          return merged.name;
         },
         get form() {
-          return props.form;
+          return merged.form;
         },
       } as any,
       state as any,
@@ -314,7 +335,7 @@ export const DatePicker = defineComponent({
 
     const displayValue = computed(() => {
       if (!state.value) {
-        return props.placeholder ?? "Select date";
+        return merged.placeholder ?? "Select date";
       }
 
       return state.formatValue(locale.value.locale, {
@@ -325,8 +346,8 @@ export const DatePicker = defineComponent({
     });
 
     const errorText = computed(() => {
-      if (props.errorMessage) {
-        return props.errorMessage;
+      if (merged.errorMessage) {
+        return merged.errorMessage;
       }
 
       return state.displayValidation.validationErrors.join(", ");
@@ -335,15 +356,15 @@ export const DatePicker = defineComponent({
     const showError = computed(() =>
       Boolean(errorText.value)
       && Boolean(
-        props.isInvalid
-        || props.validationState === "invalid"
+        merged.isInvalid
+        || merged.validationState === "invalid"
         || state.isInvalid
         || state.displayValidation.validationErrors.length > 0
       )
     );
 
     onMounted(() => {
-      if (!props.autoFocus || props.isDisabled || props.isReadOnly) {
+      if (!merged.autoFocus || merged.isDisabled || merged.isReadOnly) {
         return;
       }
 
@@ -353,7 +374,7 @@ export const DatePicker = defineComponent({
     });
 
     return () => {
-      const calendarAriaLabel = props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Calendar";
+      const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
       const isButtonDisabled = Boolean(buttonProps.isDisabled);
 
@@ -364,34 +385,34 @@ export const DatePicker = defineComponent({
             "react-spectrum-DatePicker",
             {
               "is-invalid": Boolean(
-                props.isInvalid
-                || props.validationState === "invalid"
+                merged.isInvalid
+                || merged.validationState === "invalid"
                 || state.isInvalid
               ),
-              "is-disabled": Boolean(props.isDisabled),
-              "is-quiet": Boolean(props.isQuiet),
+              "is-disabled": Boolean(merged.isDisabled),
+              "is-quiet": Boolean(merged.isQuiet),
             },
-            props.UNSAFE_className,
+            merged.UNSAFE_className,
           ],
-          style: props.UNSAFE_style,
+          style: merged.UNSAFE_style,
         },
         [
-          props.name
+          merged.name
             ? h("input", {
               type: "hidden",
-              name: props.name,
-              form: props.form,
+              name: merged.name,
+              form: merged.form,
               value: state.value ? state.value.toString() : "",
             })
             : null,
-          props.label
+          merged.label
             ? h(
               "span",
               {
                 ...pickerAria.labelProps,
                 class: "react-spectrum-DatePicker-label",
               },
-              props.label
+              merged.label
             )
             : null,
           h(
@@ -443,8 +464,8 @@ export const DatePicker = defineComponent({
           h("div", {
             ...pickerAria.descriptionProps,
             class: "react-spectrum-DatePicker-description",
-            style: props.description ? undefined : { display: "none" },
-          }, props.description),
+            style: merged.description ? undefined : { display: "none" },
+          }, merged.description),
           h(
             Popover as any,
             {
@@ -459,7 +480,7 @@ export const DatePicker = defineComponent({
               default: () => [
                 h(Calendar as any, {
                   "aria-label": calendarAriaLabel,
-                  visibleMonths: props.visibleMonths,
+                  visibleMonths: merged.visibleMonths,
                   ...(pickerAria.calendarProps as Record<string, unknown>),
                 }),
               ],
@@ -613,120 +634,140 @@ export const DateRangePicker = defineComponent({
   },
   setup(props) {
     const attrs = useAttrs();
+    const providerDefaults = useProviderProps({} as Record<string, unknown>) as Record<string, unknown>;
+    const merged = new Proxy({} as SpectrumDateRangePickerProps & Record<string, unknown>, {
+      get(_, key) {
+        if (typeof key !== "string") {
+          return undefined;
+        }
+
+        const propValue = (props as Record<string, unknown>)[key];
+        if (propValue !== undefined) {
+          return propValue;
+        }
+
+        const attrValue = (attrs as Record<string, unknown>)[key];
+        if (attrValue !== undefined) {
+          return attrValue;
+        }
+
+        return providerDefaults[key];
+      },
+    });
     const locale = useLocale();
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
 
     const state = useDateRangePickerState({
       get value() {
-        return props.value as any;
+        return merged.value as any;
       },
       get defaultValue() {
-        return props.defaultValue as any;
+        return merged.defaultValue as any;
       },
-      onChange: props.onChange as any,
+      onChange: merged.onChange as any,
       get isOpen() {
-        return props.isOpen;
+        return merged.isOpen;
       },
       get defaultOpen() {
-        return props.defaultOpen;
+        return merged.defaultOpen;
       },
-      onOpenChange: props.onOpenChange,
+      onOpenChange: merged.onOpenChange,
       get isDisabled() {
-        return props.isDisabled;
+        return merged.isDisabled;
       },
       get isReadOnly() {
-        return props.isReadOnly;
+        return merged.isReadOnly;
       },
       get isRequired() {
-        return props.isRequired;
+        return merged.isRequired;
       },
       get isInvalid() {
-        return props.isInvalid;
+        return merged.isInvalid;
       },
       get validationState() {
-        return props.validationState;
+        return merged.validationState;
       },
       get minValue() {
-        return props.minValue;
+        return merged.minValue;
       },
       get maxValue() {
-        return props.maxValue;
+        return merged.maxValue;
       },
-      isDateUnavailable: props.isDateUnavailable,
+      isDateUnavailable: merged.isDateUnavailable,
       get firstDayOfWeek() {
-        return props.firstDayOfWeek;
+        return merged.firstDayOfWeek;
       },
       get pageBehavior() {
-        return props.pageBehavior;
+        return merged.pageBehavior;
       },
       get placeholderValue() {
-        return props.placeholderValue;
+        return merged.placeholderValue;
       },
       get allowsNonContiguousRanges() {
-        return props.allowsNonContiguousRanges;
+        return merged.allowsNonContiguousRanges;
       },
     } as any);
 
     const pickerAria = useDateRangePicker(
       {
         get label() {
-          return props.label;
+          return merged.label;
         },
         get description() {
-          return props.description;
+          return merged.description;
         },
         get "aria-label"() {
-          return props["aria-label"] ?? props.ariaLabel ?? (attrs["aria-label"] as string | undefined);
+          return merged["aria-label"] ?? merged.ariaLabel ?? (attrs["aria-label"] as string | undefined);
         },
         get "aria-labelledby"() {
-          return props["aria-labelledby"] ?? props.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
+          return merged["aria-labelledby"] ?? merged.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
         },
         get isDisabled() {
-          return props.isDisabled;
+          return merged.isDisabled;
         },
         get isReadOnly() {
-          return props.isReadOnly;
+          return merged.isReadOnly;
         },
         get isRequired() {
-          return props.isRequired;
+          return merged.isRequired;
         },
         get validationState() {
-          return props.validationState;
+          return merged.validationState;
         },
         get errorMessage() {
-          return props.errorMessage;
+          return merged.errorMessage;
         },
         get minValue() {
-          return props.minValue;
+          return merged.minValue;
         },
         get maxValue() {
-          return props.maxValue;
+          return merged.maxValue;
         },
-        isDateUnavailable: props.isDateUnavailable,
+        isDateUnavailable: merged.isDateUnavailable,
         get firstDayOfWeek() {
-          return props.firstDayOfWeek;
+          return merged.firstDayOfWeek;
         },
         get pageBehavior() {
-          return props.pageBehavior;
+          return merged.pageBehavior;
         },
         get placeholderValue() {
-          return props.placeholderValue;
+          return merged.placeholderValue;
         },
         get autoFocus() {
-          return props.autoFocus;
+          return merged.autoFocus;
         },
         get startName() {
-          return props.startName;
+          return merged.startName;
         },
         get endName() {
-          return props.endName;
+          return merged.endName;
         },
         get form() {
-          return props.form;
+          return merged.form;
         },
         get allowsNonContiguousRanges() {
-          return props.allowsNonContiguousRanges;
+          return merged.allowsNonContiguousRanges;
         },
       } as any,
       state as any,
@@ -741,15 +782,15 @@ export const DateRangePicker = defineComponent({
       });
 
       if (!range) {
-        return props.placeholder ?? "Select date range";
+        return merged.placeholder ?? "Select date range";
       }
 
       return `${range.start} - ${range.end}`;
     });
 
     const errorText = computed(() => {
-      if (props.errorMessage) {
-        return props.errorMessage;
+      if (merged.errorMessage) {
+        return merged.errorMessage;
       }
 
       return state.displayValidation.validationErrors.join(", ");
@@ -758,15 +799,15 @@ export const DateRangePicker = defineComponent({
     const showError = computed(() =>
       Boolean(errorText.value)
       && Boolean(
-        props.isInvalid
-        || props.validationState === "invalid"
+        merged.isInvalid
+        || merged.validationState === "invalid"
         || state.isInvalid
         || state.displayValidation.validationErrors.length > 0
       )
     );
 
     onMounted(() => {
-      if (!props.autoFocus || props.isDisabled || props.isReadOnly) {
+      if (!merged.autoFocus || merged.isDisabled || merged.isReadOnly) {
         return;
       }
 
@@ -776,7 +817,7 @@ export const DateRangePicker = defineComponent({
     });
 
     return () => {
-      const calendarAriaLabel = props["aria-label"] ?? props.ariaLabel ?? props.label ?? "Range calendar";
+      const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Range calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
       const isButtonDisabled = Boolean(buttonProps.isDisabled);
 
@@ -787,42 +828,42 @@ export const DateRangePicker = defineComponent({
             "react-spectrum-DateRangePicker",
             {
               "is-invalid": Boolean(
-                props.isInvalid
-                || props.validationState === "invalid"
+                merged.isInvalid
+                || merged.validationState === "invalid"
                 || state.isInvalid
               ),
-              "is-disabled": Boolean(props.isDisabled),
-              "is-quiet": Boolean(props.isQuiet),
+              "is-disabled": Boolean(merged.isDisabled),
+              "is-quiet": Boolean(merged.isQuiet),
             },
-            props.UNSAFE_className,
+            merged.UNSAFE_className,
           ],
-          style: props.UNSAFE_style,
+          style: merged.UNSAFE_style,
         },
         [
-          props.startName
+          merged.startName
             ? h("input", {
               type: "hidden",
-              name: props.startName,
-              form: props.form,
+              name: merged.startName,
+              form: merged.form,
               value: state.value.start ? state.value.start.toString() : "",
             })
             : null,
-          props.endName
+          merged.endName
             ? h("input", {
               type: "hidden",
-              name: props.endName,
-              form: props.form,
+              name: merged.endName,
+              form: merged.form,
               value: state.value.end ? state.value.end.toString() : "",
             })
             : null,
-          props.label
+          merged.label
             ? h(
               "span",
               {
                 ...pickerAria.labelProps,
                 class: "react-spectrum-DateRangePicker-label",
               },
-              props.label
+              merged.label
             )
             : null,
           h(
@@ -874,8 +915,8 @@ export const DateRangePicker = defineComponent({
           h("div", {
             ...pickerAria.descriptionProps,
             class: "react-spectrum-DateRangePicker-description",
-            style: props.description ? undefined : { display: "none" },
-          }, props.description),
+            style: merged.description ? undefined : { display: "none" },
+          }, merged.description),
           h(
             Popover as any,
             {
@@ -890,7 +931,7 @@ export const DateRangePicker = defineComponent({
               default: () => [
                 h(RangeCalendar as any, {
                   "aria-label": calendarAriaLabel,
-                  visibleMonths: props.visibleMonths,
+                  visibleMonths: merged.visibleMonths,
                   ...(pickerAria.calendarProps as Record<string, unknown>),
                 }),
               ],

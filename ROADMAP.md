@@ -6957,3 +6957,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 63 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` parity update:
+  - wired provider-inherited defaults (`isDisabled`, `isReadOnly`, `isRequired`, `validationState`, `isQuiet`) through reactive prop fallback resolution for both picker variants.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added provider inheritance regression coverage for disabled/quiet state behavior in both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added `Provider` inheritance usage example for global disabled/quiet datepicker configuration.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 65 tests).
+- Validation: `npm run check -- --pretty false` passed.

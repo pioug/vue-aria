@@ -1,7 +1,9 @@
 import { CalendarDate } from "@internationalized/date";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { Provider } from "@vue-spectrum/provider";
+import { theme } from "@vue-spectrum/theme";
 import { DatePicker, DateRangePicker } from "../src";
 
 function createPointerEvent(type: "pointerdown" | "pointerup"): PointerEvent {
@@ -242,6 +244,41 @@ describe("DatePicker", () => {
     });
 
     const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("inherits disabled and quiet state from Provider", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                isDisabled: true,
+                isQuiet: true,
+              },
+              () =>
+                h(DatePicker as any, {
+                  "aria-label": "Date picker",
+                  defaultValue: new CalendarDate(2019, 6, 5),
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const root = wrapper.get(".react-spectrum-DatePicker");
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button");
+    expect(root.classes()).toContain("is-disabled");
+    expect(root.classes()).toContain("is-quiet");
     expect(trigger.attributes("disabled")).toBeDefined();
 
     await trigger.trigger("click");
@@ -794,6 +831,44 @@ describe("DateRangePicker", () => {
     });
 
     const trigger = wrapper.get(".react-spectrum-DateRangePicker-button");
+    expect(trigger.attributes("disabled")).toBeDefined();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("inherits range disabled and quiet state from Provider", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider as any,
+              {
+                theme,
+                isDisabled: true,
+                isQuiet: true,
+              },
+              () =>
+                h(DateRangePicker as any, {
+                  "aria-label": "Date range picker",
+                  defaultValue: {
+                    start: new CalendarDate(2019, 6, 5),
+                    end: new CalendarDate(2019, 6, 8),
+                  },
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const root = wrapper.get(".react-spectrum-DateRangePicker");
+    const trigger = wrapper.get(".react-spectrum-DateRangePicker-button");
+    expect(root.classes()).toContain("is-disabled");
+    expect(root.classes()).toContain("is-quiet");
     expect(trigger.attributes("disabled")).toBeDefined();
 
     await trigger.trigger("click");
