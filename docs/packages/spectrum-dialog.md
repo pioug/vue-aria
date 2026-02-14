@@ -96,6 +96,40 @@ const onDismiss = () => {
 </template>
 ```
 
+### Type variants
+
+```vue
+<template>
+  <Dialog type="modal"><p>Modal dialog</p></Dialog>
+  <Dialog type="popover"><p>Popover dialog</p></Dialog>
+  <Dialog type="fullscreen"><p>Fullscreen dialog</p></Dialog>
+  <Dialog type="fullscreenTakeover"><p>Fullscreen takeover dialog</p></Dialog>
+</template>
+```
+
+### Role override
+
+```vue
+<Dialog role="alertdialog">
+  <h2>Connection lost</h2>
+  <p>Reconnect to continue.</p>
+</Dialog>
+```
+
+### Root customization
+
+```vue
+<template>
+  <Dialog
+    UNSAFE_className="custom-dialog"
+    :UNSAFE_style="{ borderWidth: '2px', borderStyle: 'solid' }"
+  >
+    <h2>Custom shell</h2>
+    <p>Dialog content with root-level custom styling.</p>
+  </Dialog>
+</template>
+```
+
 ## Related
 
 - `DialogContainer` and `AlertDialog` are also available in this package.

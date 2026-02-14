@@ -7274,3 +7274,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/dialog/test/Dialog.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 16 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/dialog` docs parity update:
+  - expanded docs examples for dialog type variants, role overrides, and root-level `UNSAFE_className`/`UNSAFE_style` customization.
+    - `docs/packages/spectrum-dialog.md`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 16 tests).
