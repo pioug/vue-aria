@@ -2439,6 +2439,44 @@ export function tableTests() {
     });
   });
 
+  it("uses kebab-case static slot cell text-value metadata for sorting", async () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab text-value sort table">
+          <TableHeader>
+            <Column id="foo" is-row-header allows-sorting>Foo</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell text-value="a-sort">Zulu</Cell>
+            </Row>
+            <Row id="row-2">
+              <Cell text-value="z-sort">Alpha</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    await press(headers[0]!);
+
+    const sortedRows = wrapper.findAll('tbody [role="row"]');
+    expect(sortedRows[0]!.text()).toContain("Zulu");
+    expect(sortedRows[1]!.text()).toContain("Alpha");
+  });
+
   it("toggles sorting direction when pressing the same header", async () => {
     const onSortChange = vi.fn();
     const wrapper = renderTable({ onSortChange });
