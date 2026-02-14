@@ -7371,3 +7371,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented `DialogContainer` context effects for nested dialog sizing (`type`) and dismiss-button behavior (`is-dismissable`).
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded trigger/container type matrix coverage for `fullscreenTakeover` nested dialog sizing behavior.
+    - `packages/@vue-spectrum/dialog/test/DialogTrigger.test.ts`
+    - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -71,8 +71,20 @@ describe("DialogContainer", () => {
       attachTo: document.body,
     });
 
+    const takeover = mount(DialogContainer as any, {
+      props: {
+        type: "fullscreenTakeover",
+        onDismiss,
+      },
+      slots: {
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
     expect(popover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--small");
     expect(fullscreen.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreen");
+    expect(takeover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreenTakeover");
   });
 
   it("propagates dismissable context to nested dialogs", async () => {

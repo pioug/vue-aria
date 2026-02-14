@@ -143,5 +143,19 @@ describe("DialogTrigger", () => {
 
     await modal.get('[data-testid="modal-trigger"]').trigger("click");
     expect(modal.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--large");
+
+    const takeover = mount(DialogTrigger as any, {
+      props: {
+        type: "fullscreenTakeover",
+      },
+      slots: {
+        trigger: () => h("button", { "data-testid": "takeover-trigger" }, "Trigger"),
+        default: () => h(Dialog as any, null, { default: () => h("p", "contents") }),
+      },
+      attachTo: document.body,
+    });
+
+    await takeover.get('[data-testid="takeover-trigger"]').trigger("click");
+    expect(takeover.get('[role="dialog"]').classes()).toContain("spectrum-Dialog--fullscreenTakeover");
   });
 });
