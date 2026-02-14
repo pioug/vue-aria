@@ -7948,6 +7948,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented that `onSelectionChange` preserves original row key types (including numeric keys).
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/grid` + `@vue-spectrum/table` selection parity update:
+  - added `useGridRow` regression coverage to verify `aria-selected` reads from the latest selection manager state.
+  - `packages/@vue-aria/grid/test/useGridRow.test.ts`
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 48 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

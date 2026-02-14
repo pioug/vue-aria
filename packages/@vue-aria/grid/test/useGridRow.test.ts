@@ -145,4 +145,31 @@ describe("useGridRow", () => {
     expect(rowProps["aria-selected"]).toBeUndefined();
     expect(rowProps["aria-disabled"]).toBe(true);
   });
+
+  it("updates aria-selected from the latest selection manager state", () => {
+    const isSelected = vi.fn(() => false);
+    const selectionManager = {
+      selectionMode: "single",
+      isSelected,
+    };
+    const state = createState({
+      selectionManager,
+    });
+
+    const { rowProps } = useGridRow(
+      {
+        node: {
+          key: "row-1",
+          index: 0,
+        } as any,
+      },
+      state as any,
+      { current: document.createElement("div") as HTMLElement | null }
+    );
+
+    expect(rowProps["aria-selected"]).toBe(false);
+
+    isSelected.mockReturnValue(true);
+    expect(rowProps["aria-selected"]).toBe(true);
+  });
 });
