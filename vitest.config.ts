@@ -253,6 +253,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/progress": fileURLToPath(
         new URL("./packages/@vue-spectrum/progress/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/meter": fileURLToPath(
+        new URL("./packages/@vue-spectrum/meter/src/index.ts", import.meta.url)
       )
     }
   }
