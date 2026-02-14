@@ -59,6 +59,10 @@ export const TextFieldBase = defineComponent({
       type: String,
       required: false,
     },
+    wrapperChildren: {
+      type: null as unknown as PropType<unknown>,
+      required: false,
+    },
     inputProps: {
       type: Object as PropType<Record<string, unknown>>,
       required: true,
@@ -179,6 +183,7 @@ export const TextFieldBase = defineComponent({
             }),
             props.icon ? (props.icon as any) : null,
             validationIcon,
+            props.wrapperChildren ? (props.wrapperChildren as any) : null,
           ]),
           descriptionText
             ? h(

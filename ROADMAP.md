@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/textfield`
+- Current focus package: `@vue-spectrum/searchfield`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -105,7 +105,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/radio`: In progress
 - `@vue-spectrum/switch`: In progress
 - `@vue-spectrum/textfield`: In progress
-- `@vue-spectrum/searchfield`: Not started
+- `@vue-spectrum/searchfield`: In progress
 - `@vue-spectrum/numberfield`: Not started
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: In progress
@@ -345,6 +345,41 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Remaining for completion
 - Expand parity coverage for native/aria validation behavior and server-validation scenarios from upstream.
 - Validate visual parity for icon/validation-indicator and quiet/standard field variants against upstream docs.
+
+## 4g) Active Package Slice: @vue-spectrum/searchfield
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/searchfield/src`
+  - `references/react-spectrum/packages/@react-spectrum/searchfield/test`
+  - `references/react-spectrum/packages/@react-spectrum/searchfield/docs`
+- Local package path: `packages/@vue-spectrum/searchfield`
+- Status: In progress
+- Owner: Codex
+
+### Completed in current slice
+- Package scaffold aligned:
+  - `package.json`
+  - modules: `SearchField` and public type definitions
+  - package export surface wired via `src/index.ts`
+- Initial upstream test-intent migration:
+  - `test/SearchField.test.ts`
+  - `test/SearchField.ssr.test.ts`
+- Initial parity coverage added:
+  - default search input behavior
+  - clear-button visibility rules
+  - submit/clear keyboard interactions
+  - custom/no-icon behavior
+  - readonly/disabled behavior
+  - description/error help-text rendering
+  - aria-label and tab-order behavior
+- Documentation scaffold added:
+  - `docs/packages/spectrum-searchfield.md`
+  - VitePress nav/sidebar entry for `/packages/spectrum-searchfield`
+- Tooling wired:
+  - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/searchfield`.
+
+### Remaining for completion
+- Expand parity coverage for controlled clearing and advanced validation scenarios.
+- Validate visual parity for search icon, clear button, and quiet/invalid/valid variants.
 
 ## 5) Package Record: @vue-aria/utils
 - Upstream source path(s):

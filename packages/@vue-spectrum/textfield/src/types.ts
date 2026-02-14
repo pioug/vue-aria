@@ -12,6 +12,7 @@ export interface SpectrumTextFieldBaseProps {
   icon?: unknown;
   inputClassName?: string;
   validationIconClassName?: string;
+  wrapperChildren?: unknown;
   inputProps: Record<string, unknown>;
   labelProps?: Record<string, unknown>;
   descriptionProps?: Record<string, unknown>;

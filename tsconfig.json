@@ -87,7 +87,8 @@
       "@vue-spectrum/radio": ["packages/@vue-spectrum/radio/src/index.ts"],
       "@vue-spectrum/switch": ["packages/@vue-spectrum/switch/src/index.ts"],
       "@vue-spectrum/link": ["packages/@vue-spectrum/link/src/index.ts"],
-      "@vue-spectrum/textfield": ["packages/@vue-spectrum/textfield/src/index.ts"]
+      "@vue-spectrum/textfield": ["packages/@vue-spectrum/textfield/src/index.ts"],
+      "@vue-spectrum/searchfield": ["packages/@vue-spectrum/searchfield/src/index.ts"]
     },
     "strict": true,
     "declaration": true,
