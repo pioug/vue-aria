@@ -146,4 +146,25 @@ describe("useGrid", () => {
     warn.mockRestore();
     ref.current?.remove();
   });
+
+  it("forwards selection keyboard options to selectable collection", () => {
+    const state = createState();
+    const ref = { current: document.createElement("div") as HTMLElement | null };
+    document.body.appendChild(ref.current as HTMLElement);
+
+    useGrid(
+      {
+        "aria-label": "Grid",
+        disallowSelectAll: true,
+        escapeKeyBehavior: "none",
+      },
+      state as any,
+      ref
+    );
+
+    const selectableCall = ((useSelectableCollectionMock as any).mock.calls[0]?.[0]) as any;
+    expect(selectableCall.disallowSelectAll).toBe(true);
+    expect(selectableCall.escapeKeyBehavior).toBe("none");
+    ref.current?.remove();
+  });
 });

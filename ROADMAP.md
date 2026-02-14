@@ -8164,6 +8164,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 52 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/grid` + `@vue-spectrum/table` selection-prop parity update:
+  - added direct `useGrid` regression coverage to verify `disallowSelectAll` and `escapeKeyBehavior` are forwarded into selectable collection keyboard handling.
+  - `packages/@vue-aria/grid/test/useGrid.test.ts`
+- Validation: `npm test -- packages/@vue-aria/grid/test packages/@vue-spectrum/table/test` passed (9 files, 78 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
