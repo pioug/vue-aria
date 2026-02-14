@@ -76,6 +76,8 @@ import { Cell, Column, Row, TableBody, TableHeader, TableView } from "@vue-spect
 
 Use `defaultSelectedKeys` to seed initial row selection. Use `disabledKeys` to prevent specific rows from being selected via interaction.
 
+For controlled selection, pair `selectedKeys` with `onSelectionChange` and update `selectedKeys` from parent state.
+
 ## Sort Initialization
 
 Use `defaultSortDescriptor` to apply initial row ordering and header sort state before user interaction.

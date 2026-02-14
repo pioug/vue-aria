@@ -7914,6 +7914,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test packages/@vue-aria/table/test packages/@vue-aria/table-state/test packages/@vue-aria/grid/test` passed (23 files, 98 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` docs parity update:
+  - documented controlled selection usage (`selectedKeys` + `onSelectionChange`) in the table selection guidance.
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
