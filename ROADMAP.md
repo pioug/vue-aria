@@ -9345,6 +9345,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 66 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` single-highlight touch parity update:
+  - added touch interaction coverage for single highlight mode to assert select/deselect behavior and callback payload transitions on repeated row activation.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 67 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tree` highlight-replace data-attribute parity update:
   - expanded non-modifier highlight-replace coverage to assert `data-selected` tracks selected/deselected row transitions alongside `aria-selected`.
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`

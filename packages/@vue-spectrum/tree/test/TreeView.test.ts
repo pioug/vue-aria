@@ -1539,6 +1539,35 @@ describe("TreeView", () => {
     expect(updatedProjectOneRow!.attributes("data-selected")).toBeUndefined();
   });
 
+  it("toggles single highlight selection on touch interactions", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+      defaultExpandedKeys: ["projects"],
+    });
+
+    let projectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
+    expect(projectOneRow).toBeTruthy();
+
+    await touchPress(projectOneRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("projects-1")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    await touchPress(projectOneRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.size).toBe(0);
+
+    projectOneRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Project 1"));
+    expect(projectOneRow).toBeTruthy();
+    expect(projectOneRow!.attributes("aria-selected")).toBe("false");
+    expect(projectOneRow!.attributes("data-selected")).toBeUndefined();
+  });
+
   it("toggles and replaces highlight selection based on modifier keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTree({
