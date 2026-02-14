@@ -9537,3 +9537,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/Menu.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 38 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-disabled parity update:
+  - added migrated `SubmenuTrigger` coverage to assert submenu trigger items marked in `disabledKeys` expose `aria-disabled` and do not open nested submenu overlays on `ArrowRight`.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.

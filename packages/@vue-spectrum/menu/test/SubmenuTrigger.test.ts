@@ -60,4 +60,45 @@ describe("SubmenuTrigger", () => {
     expect(allMenus.length).toBeGreaterThanOrEqual(2);
     expect(document.body.textContent).toContain("Sub item");
   });
+
+  it("disables submenu triggers when their key is in disabledKeys", async () => {
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu", disabledKeys: ["more"] }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+    expect(submenuTriggerItem).toBeTruthy();
+    expect(submenuTriggerItem?.getAttribute("aria-disabled")).toBe("true");
+
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    const allMenus = document.body.querySelectorAll('[role="menu"]');
+    expect(allMenus).toHaveLength(1);
+    expect(document.body.textContent).not.toContain("Sub item");
+  });
 });
