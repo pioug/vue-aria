@@ -522,6 +522,24 @@ describe("NumberField", () => {
     expect(onChange).toHaveBeenCalledWith(12.83);
   });
 
+  it("does not lose precision with decimal step constraints", async () => {
+    const wrapper = renderNumberField({
+      minValue: 0.1,
+      maxValue: 24,
+      step: 0.1,
+      onChange: vi.fn(),
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("24");
+    (input.element as HTMLInputElement).blur();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("24");
+  });
+
   it.each([
     [{ defaultValue: 20, minValue: 50 }, "50"],
     [{ defaultValue: 20, maxValue: 10 }, "10"],

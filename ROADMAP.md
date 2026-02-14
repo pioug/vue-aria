@@ -10052,3 +10052,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/numberfield-state/src/useNumberFieldState.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` decimal-step precision parity update:
+  - added migrated coverage asserting decimal step constraints (`minValue: 0.1`, `step: 0.1`) preserve typed precision on commit without formatting drift.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 42 tests).
+- Validation: `npm run check -- --pretty false` passed.
