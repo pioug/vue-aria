@@ -16,7 +16,13 @@ function createState(overrides: Partial<Record<string, unknown>> = {}) {
   } as any;
 }
 
-function createProbe(state: any) {
+function createProbe(
+  state: any,
+  capture?: {
+    submenuTriggerProps?: any;
+    submenuProps?: any;
+  }
+) {
   return defineComponent({
     setup() {
       const parentRef = ref<HTMLElement | null>(null);
@@ -58,6 +64,10 @@ function createProbe(state: any) {
         state,
         triggerRef as any
       );
+      if (capture) {
+        capture.submenuTriggerProps = submenuTriggerProps;
+        capture.submenuProps = submenuProps;
+      }
 
       const onTriggerKeyDown = (event: KeyboardEvent) => {
         submenuTriggerProps.onKeyDown(event as any);
@@ -154,6 +164,71 @@ describe("useSubmenuTrigger locale integration", () => {
 
     expect(state.close).toHaveBeenCalled();
     expect(document.activeElement).toBe(trigger);
+
+    wrapper.unmount();
+  });
+
+  it("continues propagation on ArrowRight when closed in rtl", () => {
+    const state = createState({ isOpen: false });
+    const capture: { submenuTriggerProps?: any } = {};
+    const Probe = createProbe(state, capture);
+    const App = defineComponent({
+      setup() {
+        return () => h(I18nProvider, { locale: "ar-AE" }, { default: () => h(Probe) });
+      },
+    });
+
+    const wrapper = mount(App, {
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get('[data-testid="trigger"]').element as HTMLElement;
+    const event = {
+      key: "ArrowRight",
+      currentTarget: trigger,
+      target: trigger,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+      continuePropagation: vi.fn(),
+    } as unknown as KeyboardEvent & { continuePropagation: () => void };
+
+    capture.submenuTriggerProps?.onKeyDown(event);
+
+    expect(event.continuePropagation).toHaveBeenCalledTimes(1);
+    expect(state.open).not.toHaveBeenCalled();
+    expect(state.close).not.toHaveBeenCalled();
+
+    wrapper.unmount();
+  });
+
+  it("closes submenu on ArrowRight from trigger when open in rtl", () => {
+    const state = createState({ isOpen: true });
+    const capture: { submenuTriggerProps?: any } = {};
+    const Probe = createProbe(state, capture);
+    const App = defineComponent({
+      setup() {
+        return () => h(I18nProvider, { locale: "ar-AE" }, { default: () => h(Probe) });
+      },
+    });
+
+    const wrapper = mount(App, {
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get('[data-testid="trigger"]').element as HTMLElement;
+    const event = {
+      key: "ArrowRight",
+      currentTarget: trigger,
+      target: trigger,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+      continuePropagation: vi.fn(),
+    } as unknown as KeyboardEvent & { continuePropagation: () => void };
+
+    capture.submenuTriggerProps?.onKeyDown(event);
+
+    expect(state.close).toHaveBeenCalled();
+    expect(event.continuePropagation).not.toHaveBeenCalled();
 
     wrapper.unmount();
   });

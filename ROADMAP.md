@@ -9771,3 +9771,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 64 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/menu` submenu RTL trigger-key branch parity update:
+  - expanded locale-integration `useSubmenuTrigger` coverage for RTL trigger-key handling under `I18nProvider` (`ar-AE`):
+    - closed submenu trigger `ArrowRight` path calls `continuePropagation` (no open/close side effects)
+    - open submenu trigger `ArrowRight` path closes the submenu from trigger focus
+    - `packages/@vue-aria/menu/test/useSubmenuTrigger.locale.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 64 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
