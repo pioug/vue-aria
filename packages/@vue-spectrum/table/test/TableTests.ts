@@ -732,6 +732,35 @@ export function tableTests() {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("prevents selecting disabled rows in checkbox-style multiple selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      disabledKeys: new Set(["row-2"]),
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+
+    await press(bodyRows[0]!);
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+    expect(lastSelection?.has("row-2")).toBe(false);
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("updates disabled row selection behavior when disabledKeys changes", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
