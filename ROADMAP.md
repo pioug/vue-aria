@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/switch`
+- Current focus package: `@vue-spectrum/link`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -104,7 +104,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/button`: In progress
 - `@vue-spectrum/checkbox`: In progress
 - `@vue-spectrum/radio`: Complete
-- `@vue-spectrum/switch`: In progress
+- `@vue-spectrum/switch`: Complete
 - `@vue-spectrum/textfield`: In progress
 - `@vue-spectrum/searchfield`: In progress
 - `@vue-spectrum/numberfield`: In progress
@@ -259,7 +259,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/switch/test`
   - `references/react-spectrum/packages/@react-spectrum/switch/docs`
 - Local package path: `packages/@vue-spectrum/switch`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -282,10 +282,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-switch`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/switch`.
+- Additional docs parity update:
+  - expanded switch docs state-matrix and interaction examples (`excludeFromTabOrder`, form-reset behavior).
+  - `docs/packages/spectrum-switch.md`
 
 ### Remaining for completion
-- Validate visual parity against upstream docs examples and states.
-- Expand coverage for any upstream parity deltas discovered during full-suite execution.
+- None currently tracked in this slice.
 
 ## 4e) Active Package Slice: @vue-spectrum/link
 - Upstream source path(s):
@@ -7532,6 +7534,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded visual-state examples to cover orientation/help text/disabled/read-only/emphasized combinations.
   - marked radio slice remaining items complete.
   - `docs/packages/spectrum-radio.md`
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/switch` docs parity update:
+  - expanded switch docs visual/interactions matrix for disabled/read-only/emphasized variants, tab-order exclusion, and form-reset behavior.
+  - marked switch slice remaining items complete.
+  - `docs/packages/spectrum-switch.md`
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.

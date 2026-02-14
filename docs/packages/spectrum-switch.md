@@ -108,6 +108,46 @@ const onChange = (next: boolean) => {
 <Switch isReadOnly isSelected>Switch Label</Switch>
 ```
 
+### State matrix example
+
+```vue
+<template>
+  <Switch defaultSelected>Default on</Switch>
+  <Switch isDisabled>Disabled off</Switch>
+  <Switch isReadOnly isSelected>Read only on</Switch>
+  <Switch isEmphasized defaultSelected>Emphasized on</Switch>
+</template>
+```
+
+## Interaction options
+
+### Excluding from tab order
+
+```vue
+<Switch :excludeFromTabOrder="true">Mouse-only toggle</Switch>
+```
+
+### Form reset behavior
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { Switch } from "@vue-spectrum/switch";
+
+const selected = ref(false);
+const onChange = (next: boolean) => {
+  selected.value = next;
+};
+</script>
+
+<template>
+  <form>
+    <Switch :isSelected="selected" :onChange="onChange">Resettable switch</Switch>
+    <input type="reset">
+  </form>
+</template>
+```
+
 ## Related
 
 - `Spectrum S2` remains out of scope unless explicitly requested.
