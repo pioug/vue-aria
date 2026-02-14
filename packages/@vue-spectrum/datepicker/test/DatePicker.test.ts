@@ -298,6 +298,26 @@ describe("DatePicker", () => {
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
+  it("does not emit onOpenChange when disabled attempts click/keyboard open", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        isDisabled: true,
+        onOpenChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await wrapper.get(".react-spectrum-DatePicker-group").trigger("keydown", { key: "ArrowDown", altKey: true });
+    await nextTick();
+
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
   it("inherits disabled and quiet state from Provider", async () => {
     const wrapper = mount(
       defineComponent({
@@ -1399,6 +1419,29 @@ describe("DateRangePicker", () => {
     await trigger.trigger("click");
     await nextTick();
 
+    expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
+  });
+
+  it("does not emit range onOpenChange when read-only attempts click/keyboard open", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        isReadOnly: true,
+        onOpenChange,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await wrapper.get(".react-spectrum-DateRangePicker-group").trigger("keydown", { key: "ArrowDown", altKey: true });
+    await nextTick();
+
+    expect(onOpenChange).not.toHaveBeenCalled();
     expect(document.body.querySelector(".react-spectrum-Calendar")).toBeNull();
   });
 
