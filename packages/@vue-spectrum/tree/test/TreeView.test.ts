@@ -1533,6 +1533,14 @@ describe("TreeView", () => {
     selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(selected?.has("photos")).toBe(true);
     expect(selected?.has("projects")).toBe(true);
+    expect(selected?.size).toBe(2);
+
+    const updatedPhotosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    const updatedProjectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(updatedPhotosRow).toBeTruthy();
+    expect(updatedProjectsRow).toBeTruthy();
+    expect(updatedPhotosRow!.attributes("aria-selected")).toBe("true");
+    expect(updatedProjectsRow!.attributes("aria-selected")).toBe("true");
   });
 
   it("applies highlight selection data attributes on rows", async () => {
