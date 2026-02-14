@@ -83,6 +83,38 @@ async function flush() {
   await nextTick();
 }
 
+function attachRowHandlers(
+  element: HTMLElement,
+  rowProps: Record<string, unknown>
+): () => void {
+  const disposers: Array<() => void> = [];
+  const register = (
+    key: "onKeydownCapture" | "onKeydown" | "onKeyup" | "onFocus",
+    eventName: keyof HTMLElementEventMap,
+    capture = false
+  ) => {
+    const handler = rowProps[key] as ((event: Event) => void) | undefined;
+    if (!handler) {
+      return;
+    }
+
+    const listener = (event: Event) => handler(event);
+    element.addEventListener(eventName, listener as EventListener, capture);
+    disposers.push(() => element.removeEventListener(eventName, listener as EventListener, capture));
+  };
+
+  register("onFocus", "focus");
+  register("onKeydownCapture", "keydown", true);
+  register("onKeydown", "keydown");
+  register("onKeyup", "keyup");
+
+  return () => {
+    for (const dispose of disposers) {
+      dispose();
+    }
+  };
+}
+
 describe("tree keyboard navigation parity", () => {
   it("supports keyboard expansion and directional navigation from upstream story behavior", async () => {
     const grid = document.createElement("div");
@@ -122,19 +154,15 @@ describe("tree keyboard navigation parity", () => {
       )
     )!;
 
-    const animalsKeydownCapture = animalsItemAria.rowProps.onKeydownCapture as
-      | ((event: KeyboardEvent) => void)
-      | undefined;
-    if (!animalsKeydownCapture) {
-      throw new Error("Expected onKeydownCapture handler for animals row");
-    }
-
-    animalsRow.addEventListener("keydown", animalsKeydownCapture as EventListener, true);
+    const disposeAnimalsHandlers = attachRowHandlers(animalsRow, animalsItemAria.rowProps);
     state.selectionManager.setFocused(true);
     state.selectionManager.setFocusedKey("animals");
     animalsRow.focus();
     animalsRow.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true })
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true })
+    );
+    animalsRow.dispatchEvent(
+      new KeyboardEvent("keyup", { key: "Enter", bubbles: true, cancelable: true })
     );
     await flush();
     expect(state.expandedKeys.has("animals")).toBe(true);
@@ -156,18 +184,14 @@ describe("tree keyboard navigation parity", () => {
         { current: bearRow as HTMLElement | null }
       )
     )!;
-    const bearKeydownCapture = bearItemAria.rowProps.onKeydownCapture as
-      | ((event: KeyboardEvent) => void)
-      | undefined;
-    if (!bearKeydownCapture) {
-      throw new Error("Expected onKeydownCapture handler for bear row");
-    }
-
-    bearRow.addEventListener("keydown", bearKeydownCapture as EventListener, true);
+    const disposeBearHandlers = attachRowHandlers(bearRow, bearItemAria.rowProps);
     state.selectionManager.setFocusedKey("bear");
     bearRow.focus();
     bearRow.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true })
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true })
+    );
+    bearRow.dispatchEvent(
+      new KeyboardEvent("keyup", { key: "Enter", bubbles: true, cancelable: true })
     );
     await flush();
     expect(state.expandedKeys.has("bear")).toBe(true);
@@ -230,8 +254,8 @@ describe("tree keyboard navigation parity", () => {
     expect(state.expandedKeys.has("animals")).toBe(false);
     expect([...state.collection.getKeys()]).toEqual(["animals", "fruits"]);
 
-    animalsRow.removeEventListener("keydown", animalsKeydownCapture as EventListener, true);
-    bearRow.removeEventListener("keydown", bearKeydownCapture as EventListener, true);
+    disposeAnimalsHandlers();
+    disposeBearHandlers();
     scope.stop();
     grid.remove();
     animalsRow.remove();

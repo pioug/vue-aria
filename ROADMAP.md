@@ -2780,7 +2780,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Test parity notes:
   - Added adapted `useTree` coverage for treegrid-role override behavior.
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
-  - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via keyboard expansion and arrow navigation focus movement).
+  - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via Enter-key row expansion and arrow navigation focus movement).
   - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
   - Added intl-bundle regression coverage to assert copied upstream locale entries and locale-count floor.
 - [ ] All relevant upstream tests migrated
@@ -5330,3 +5330,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31j` test parity notes with tab-navigation harness coverage.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/gridlist/test` passed (6 files, 16 tests).
+- Aligned `@vue-aria/tree` keyboard harness expansion semantics with upstream:
+  - updated `useTree.keyboardNavigation.test.ts` to expand rows via Enter keydown/keyup flow before validating directional navigation and collapse branches.
+  - updated package record `31k` keyboard parity note to explicitly track Enter-key expansion behavior.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree/test` passed (4 files, 6 tests).
