@@ -2921,10 +2921,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/calendar.md`)
-- [ ] Examples parity complete
-- [ ] Base styles parity complete
+- [x] Examples parity complete
+- [x] Base styles parity complete
 - Notes:
   - Expanded package docs with upstream-aligned API/features/anatomy sections, composable usage examples for calendar/range/calendar-grid/calendar-cell, and base-style parity snippet plus styled-example references.
+  - Added upstream-aligned usage examples and guidance for value/events, international/custom calendars, validation/unavailable dates, non-contiguous ranges, focused-date control, disabled/read-only behavior, first-day override, labeling, and bundle-size reduction.
 
 ### Accessibility
 - [x] Baseline aria role/gridcell/button wiring validated in adapted tests.
@@ -2937,9 +2938,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Audit remaining `@react-spectrum/calendar` interaction scenarios for any uncovered hook-level parity gaps.
-2. Mirror upstream docs examples/styles more completely and close visual parity gates.
-3. Finalize public API checklist and mark package complete once docs/tests gates are closed.
+1. Audit remaining `@react-spectrum/calendar` interaction scenarios for any uncovered hook-level parity gaps (especially touch-drag edge cases).
+2. Complete example-by-example visual parity verification against upstream calendar/range-calendar markup.
+3. Finalize public API checklist and mark package complete once interaction/visual gates are closed.
 
 ## 31n) Package Record: @vue-aria/datepicker-state
 - Upstream source path(s):
