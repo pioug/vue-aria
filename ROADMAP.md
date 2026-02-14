@@ -9350,6 +9350,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 67 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` highlight keyboard-modifier toggle parity update:
+  - added keyboard modifier (`Alt`/`Ctrl` + `Enter`) coverage in highlight multiple mode to assert additive toggle behavior and repeated-press deselection of the focused row.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 68 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/tree` highlight-replace data-attribute parity update:
   - expanded non-modifier highlight-replace coverage to assert `data-selected` tracks selected/deselected row transitions alongside `aria-selected`.
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
