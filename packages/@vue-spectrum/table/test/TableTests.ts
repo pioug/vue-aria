@@ -1337,6 +1337,23 @@ export function tableTests() {
     expect(onAction).toHaveBeenCalledWith("row-2");
   });
 
+  it("allows disabled-row actions by default when disabledBehavior is omitted", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithDisabledFlag,
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onAction,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[1]!);
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenCalledWith("row-2");
+    expect(bodyRows[1]!.attributes("aria-disabled")).toBeUndefined();
+  });
+
   it("disables disabled-row actions when disabledBehavior is all", async () => {
     const onAction = vi.fn();
     const wrapper = renderTable({
@@ -1372,6 +1389,23 @@ export function tableTests() {
 
     expect(onAction).toHaveBeenCalledTimes(1);
     expect(onAction).toHaveBeenCalledWith("row-2");
+  });
+
+  it("allows disabledKeys row actions by default when disabledBehavior is omitted", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      disabledKeys: new Set(["row-2"]),
+      onAction,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[1]!);
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenCalledWith("row-2");
+    expect(bodyRows[1]!.attributes("aria-disabled")).toBeUndefined();
   });
 
   it("disables disabledKeys row actions when disabledBehavior is all", async () => {
