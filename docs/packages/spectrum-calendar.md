@@ -34,6 +34,41 @@ import { RangeCalendar } from "@vue-spectrum/calendar";
 </template>
 ```
 
+## Multi-Month View
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <Calendar
+    aria-label="Project timeline"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :visible-months="2"
+  />
+</template>
+```
+
+## Validation Message Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Calendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <Calendar
+    aria-label="Booking date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    error-message="Please choose a valid date."
+    validation-state="invalid"
+  />
+</template>
+```
+
 ## Key Props
 
 - Shared: `visibleMonths`, `firstDayOfWeek`, `isDisabled`, `isReadOnly`, `minValue`, `maxValue`.

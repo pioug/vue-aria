@@ -6507,6 +6507,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - error-message rendering on calendar root
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 11 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - expanded `docs/packages/spectrum-calendar.md` examples to include:
+    - multi-month (`visibleMonths`) usage
+    - invalid/validation `errorMessage` usage
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
