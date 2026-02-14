@@ -6651,6 +6651,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added root-labeling regression coverage for `ariaLabelledby` merge semantics with generated calendar ids.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 42 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - extended `ariaLabelledby` merge-semantic regression coverage to `RangeCalendar` root labeling.
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 43 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

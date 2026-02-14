@@ -505,6 +505,25 @@ describe("Calendar", () => {
     expect(root.attributes("aria-describedby")).toContain("trip-planner-help");
   });
 
+  it("merges range-calendar ariaLabelledby with generated id when ariaLabel is present", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        ariaLabel: "Trip planner",
+        ariaLabelledby: "external-trip-label",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const root = wrapper.get('[role="application"]');
+    const labelledBy = root.attributes("aria-labelledby");
+    expect(labelledBy).toContain("external-trip-label");
+    expect(labelledBy).toContain(root.attributes("id"));
+  });
+
   it("applies UNSAFE_className and UNSAFE_style to the range-calendar root", () => {
     const wrapper = mount(RangeCalendar as any, {
       props: {
