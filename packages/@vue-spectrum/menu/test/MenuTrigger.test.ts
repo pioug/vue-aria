@@ -56,6 +56,19 @@ function renderContextualHelpMenuTrigger(
   });
 }
 
+function hoverWithMouse(element: HTMLElement) {
+  if (typeof PointerEvent !== "undefined") {
+    element.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+    element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+  } else {
+    element.dispatchEvent(new MouseEvent("pointerenter", { bubbles: true }));
+    element.dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
+  }
+
+  element.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+  element.dispatchEvent(new Event("pointerover", { bubbles: true }));
+}
+
 describe("MenuTrigger", () => {
   const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
 
@@ -220,6 +233,46 @@ describe("MenuTrigger", () => {
     expect(helpItem?.classList.contains("is-selected")).toBe(true);
     expect(helpItem?.querySelector(".spectrum-Menu-checkmark")).toBeTruthy();
     expect(helpItem?.querySelector(".spectrum-Menu-end")).toBeNull();
+  });
+
+  it("opens unavailable contextual help dialogs on hover", async () => {
+    vi.useFakeTimers();
+    try {
+      renderContextualHelpMenuTrigger();
+
+      const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+      expect(helpItem).toBeTruthy();
+      expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+      hoverWithMouse(helpItem as HTMLElement);
+      await vi.advanceTimersByTimeAsync(250);
+
+      expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+      expect(document.body.textContent).toContain("Contextual help dialog");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("does not open contextual help dialogs on hover when available", async () => {
+    vi.useFakeTimers();
+    try {
+      renderContextualHelpMenuTrigger({}, { isUnavailable: false });
+
+      const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+      expect(helpItem).toBeTruthy();
+      expect(helpItem?.getAttribute("aria-haspopup")).toBeNull();
+      expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+      hoverWithMouse(helpItem as HTMLElement);
+      await vi.advanceTimersByTimeAsync(250);
+
+      expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("exposes trigger dom node and focus handle", async () => {
