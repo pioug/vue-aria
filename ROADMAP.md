@@ -575,9 +575,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded docs with validation + help-text examples and stepper visibility guidance.
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
   - `docs/packages/spectrum-numberfield.md`
+- Additional parsing/rounding parity update:
+  - added adapted coverage for:
+    - range clamping matrix across controlled/uncontrolled + step combinations
+    - leading-decimal commit parsing (`.5` -> `0.5`)
+    - step-rounding commit behavior payloads for positive/negative values
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 
 ### Remaining for completion
-- Expand test parity coverage for the remaining locale/inputMode matrix and advanced parsing/rounding flows from upstream.
+- Expand test parity coverage for the remaining locale/inputMode matrix from upstream.
 
 ## 4k) Active Package Slice: @vue-spectrum/breadcrumbs
 - Upstream source path(s):
@@ -7599,6 +7605,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-numberfield.md`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 22 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` parsing/rounding parity update:
+  - expanded coverage for clamp matrices (controlled/uncontrolled with step), leading-decimal commit parsing, and step-rounding commit payload behavior.
+  - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 35 tests).
 - Additional `@vue-spectrum/link` interaction parity update:
   - added adapted tooltip-trigger composition coverage for focus open/close behavior.
   - tightened router-provider behavior coverage to assert click-driven `navigate` dispatch with `routerOptions`.

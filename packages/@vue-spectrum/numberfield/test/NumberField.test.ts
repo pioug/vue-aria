@@ -370,4 +370,46 @@ describe("NumberField", () => {
 
     expect(onChange).toHaveBeenCalledWith(12.83);
   });
+
+  it.each([
+    [{ defaultValue: 20, minValue: 50 }, "50"],
+    [{ defaultValue: 20, maxValue: 10 }, "10"],
+    [{ defaultValue: 20, minValue: 50, step: 3 }, "50"],
+    [{ defaultValue: 20, maxValue: 10, step: 3 }, "9"],
+    [{ value: 20, minValue: 50 }, "50"],
+    [{ value: 20, maxValue: 10 }, "10"],
+    [{ value: 20, minValue: 50, step: 3 }, "50"],
+    [{ value: 20, maxValue: 10, step: 3 }, "9"],
+  ])("clamps value/defaultValue to allowed range", (props, expected) => {
+    const wrapper = renderNumberField(props);
+    expect((wrapper.get('input[type="text"]').element as HTMLInputElement).value).toBe(expected);
+  });
+
+  it("parses leading decimal input on commit", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({ onChange });
+    const input = wrapper.get('input[type="text"]');
+
+    await input.setValue(".5");
+    await input.trigger("blur");
+    expect(onChange).toHaveBeenCalledWith(0.5);
+  });
+
+  it.each([
+    ["6", 5],
+    ["8", 10],
+    ["-8", -10],
+    ["-6", -5],
+  ])("rounds to step on commit for %s", async (rawValue, expectedValue) => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      step: 5,
+      onChange,
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    await input.setValue(rawValue);
+    await input.trigger("blur");
+    expect(onChange).toHaveBeenCalledWith(expectedValue);
+  });
 });
