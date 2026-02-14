@@ -275,6 +275,24 @@ describe("MenuTrigger", () => {
     }
   });
 
+  it("opens unavailable contextual help dialogs with keyboard activation", async () => {
+    const wrapper = renderContextualHelpMenuTrigger();
+
+    const helpItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Help")) as HTMLElement | undefined;
+
+    expect(helpItem).toBeTruthy();
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+
+    helpItem?.focus();
+    helpItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="dialog"]')).toBeTruthy();
+    expect(document.body.textContent).toContain("Contextual help dialog");
+  });
+
   it("exposes trigger dom node and focus handle", async () => {
     const wrapper = renderMenuTrigger();
     const trigger = wrapper.get('[data-testid="trigger"]');
