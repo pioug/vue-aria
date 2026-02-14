@@ -406,6 +406,21 @@ describe("DatePicker", () => {
     expect(wrapper.text()).toContain("Choose a valid date");
   });
 
+  it("renders description text when provided", () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        description: "Choose the event date",
+      },
+      attachTo: document.body,
+    });
+
+    const description = wrapper.get(".react-spectrum-DatePicker-description");
+    expect(description.text()).toContain("Choose the event date");
+    expect(description.attributes("style")).toBeUndefined();
+  });
+
   it("passes firstDayOfWeek through to calendar overlay", async () => {
     const defaultWrapper = mount(DatePicker as any, {
       props: {
@@ -1046,6 +1061,24 @@ describe("DateRangePicker", () => {
     });
 
     expect(wrapper.text()).toContain("Choose a valid range");
+  });
+
+  it("renders range description text when provided", () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        description: "Choose travel dates",
+      },
+      attachTo: document.body,
+    });
+
+    const description = wrapper.get(".react-spectrum-DateRangePicker-description");
+    expect(description.text()).toContain("Choose travel dates");
+    expect(description.attributes("style")).toBeUndefined();
   });
 
   it("passes firstDayOfWeek through to range-calendar overlay", async () => {

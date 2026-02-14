@@ -6932,3 +6932,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional `@vue-spectrum/datepicker` docs parity update:
   - documented custom placeholder usage and availability/bounds configuration examples for both picker variants.
     - `docs/packages/spectrum-datepicker.md`
+- Additional `@vue-spectrum/datepicker` parity update:
+  - implemented `description` help-text support for `DatePicker` and `DateRangePicker`, including rendering via `descriptionProps` and shared prop plumbing.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added help-text rendering regression coverage for both picker variants.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - added help-text usage examples and key-prop reference for `description`.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 61 tests).
+- Validation: `npm run check -- --pretty false` passed.

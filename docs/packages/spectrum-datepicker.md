@@ -137,6 +137,29 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 </template>
 ```
 
+## Help Text Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Event date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    description="Choose the event date."
+  />
+
+  <DateRangePicker
+    aria-label="Trip dates"
+    :default-value="{ start: new CalendarDate(2019, 6, 5), end: new CalendarDate(2019, 6, 8) }"
+    description="Choose your departure and return dates."
+  />
+</template>
+```
+
 ## Multi-Month Overlay Example
 
 ```vue
@@ -260,6 +283,6 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 
 ## Key Props
 
-- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
+- Shared: `isOpen` / `defaultOpen`, `onOpenChange`, `isDisabled`, `isReadOnly`, `isRequired`, `isInvalid`, `validationState`, `description`, `errorMessage`, `minValue`, `maxValue`, `isDateUnavailable`, `firstDayOfWeek`, `pageBehavior`, `visibleMonths`, `placeholderValue`, `autoFocus`.
 - `DatePicker`: `value` / `defaultValue`, `onChange`, `name`, `form`.
 - `DateRangePicker`: range `value` / `defaultValue`, `onChange`, `startName`, `endName`, `allowsNonContiguousRanges`.

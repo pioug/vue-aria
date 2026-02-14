@@ -31,6 +31,7 @@ export interface SpectrumDatePickerProps {
   placeholder?: string | undefined;
   autoFocus?: boolean | undefined;
   label?: string | undefined;
+  description?: string | undefined;
   name?: string | undefined;
   form?: string | undefined;
   "aria-label"?: string | undefined;
@@ -156,6 +157,10 @@ export const DatePicker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    description: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     name: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -247,6 +252,9 @@ export const DatePicker = defineComponent({
       {
         get label() {
           return props.label;
+        },
+        get description() {
+          return props.description;
         },
         get "aria-label"() {
           return props["aria-label"] ?? props.ariaLabel ?? (attrs["aria-label"] as string | undefined);
@@ -428,8 +436,9 @@ export const DatePicker = defineComponent({
             : null,
           h("div", {
             ...pickerAria.descriptionProps,
-            style: { display: "none" },
-          }),
+            class: "react-spectrum-DatePicker-description",
+            style: props.description ? undefined : { display: "none" },
+          }, props.description),
           h(
             Popover as any,
             {
@@ -547,6 +556,10 @@ export const DateRangePicker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    description: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     startName: {
       type: String as PropType<string | undefined>,
       default: undefined,
@@ -649,6 +662,9 @@ export const DateRangePicker = defineComponent({
       {
         get label() {
           return props.label;
+        },
+        get description() {
+          return props.description;
         },
         get "aria-label"() {
           return props["aria-label"] ?? props.ariaLabel ?? (attrs["aria-label"] as string | undefined);
@@ -846,8 +862,9 @@ export const DateRangePicker = defineComponent({
             : null,
           h("div", {
             ...pickerAria.descriptionProps,
-            style: { display: "none" },
-          }),
+            class: "react-spectrum-DateRangePicker-description",
+            style: props.description ? undefined : { display: "none" },
+          }, props.description),
           h(
             Popover as any,
             {
