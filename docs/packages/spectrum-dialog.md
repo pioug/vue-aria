@@ -132,6 +132,29 @@ import { AlertDialog } from "@vue-spectrum/dialog";
 </template>
 ```
 
+## DialogContainer Example
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { Dialog, DialogContainer } from "@vue-spectrum/dialog";
+
+const isOpen = ref(true);
+const onDismiss = () => {
+  isOpen.value = false;
+};
+</script>
+
+<template>
+  <DialogContainer v-if="isOpen" type="tray" :on-dismiss="onDismiss">
+    <Dialog>
+      <h2>Container-managed dialog</h2>
+      <p>Dismiss closes the current container dialog.</p>
+    </Dialog>
+  </DialogContainer>
+</template>
+```
+
 ## Labeling
 
 - If no visible title is associated, pass `aria-label`.
