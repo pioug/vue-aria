@@ -1568,6 +1568,44 @@ describe("TreeView", () => {
     expect(projectOneRow!.attributes("data-selected")).toBeUndefined();
   });
 
+  it("toggles single highlight selection from keyboard activation", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      items: [
+        { id: "alpha", name: "Alpha" },
+        { id: "beta", name: "Beta" },
+        { id: "gamma", name: "Gamma" },
+      ],
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    let betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    expect(betaRow).toBeTruthy();
+
+    await pressEnter(betaRow!);
+    let selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(selected?.has("beta")).toBe(true);
+    expect(selected?.size).toBe(1);
+
+    betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    expect(betaRow).toBeTruthy();
+    expect(betaRow!.attributes("aria-selected")).toBe("true");
+    expect(betaRow!.attributes("data-selected")).toBe("true");
+
+    await pressEnter(betaRow!);
+    selected = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(selected?.size).toBe(0);
+
+    betaRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Beta"));
+    expect(betaRow).toBeTruthy();
+    expect(betaRow!.attributes("aria-selected")).toBe("false");
+    expect(betaRow!.attributes("data-selected")).toBeUndefined();
+  });
+
   it("toggles and replaces highlight selection based on modifier keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTree({
