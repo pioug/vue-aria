@@ -228,6 +228,31 @@ const setRange = (nextRange: { start: CalendarDate; end: CalendarDate } | null) 
 </template>
 ```
 
+## Initial Focus Without Selection
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
+</script>
+
+<template>
+  <Calendar
+    aria-label="Planning calendar"
+    :default-focused-value="new CalendarDate(2019, 8, 15)"
+    :min-value="new CalendarDate(2019, 8, 5)"
+    :max-value="new CalendarDate(2019, 8, 20)"
+  />
+
+  <RangeCalendar
+    aria-label="Planning range calendar"
+    :default-focused-value="new CalendarDate(2019, 8, 15)"
+    :min-value="new CalendarDate(2019, 8, 5)"
+    :max-value="new CalendarDate(2019, 8, 20)"
+  />
+</template>
+```
+
 ## Non-Contiguous Range Example
 
 ```vue

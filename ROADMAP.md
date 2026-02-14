@@ -6757,6 +6757,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added root `aria-label` range-description regression coverage for month navigation updates in both `Calendar` and `RangeCalendar`.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 73 tests).
+- Additional `@vue-spectrum/calendar` docs parity update:
+  - added initial-focus usage example for `defaultFocusedValue` (with boundary constraints) covering both `Calendar` and `RangeCalendar`.
+    - `docs/packages/spectrum-calendar.md`
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).
