@@ -35,6 +35,21 @@ function createMouseEvent(target: HTMLElement): MouseEvent {
   } as unknown as MouseEvent;
 }
 
+function createVirtualClickEvent(target: HTMLElement): MouseEvent {
+  return {
+    button: 0,
+    detail: 0,
+    currentTarget: target,
+    target,
+    shiftKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    altKey: false,
+    stopPropagation: () => {},
+    preventDefault: () => {},
+  } as unknown as MouseEvent;
+}
+
 function createKeyboardEvent(target: HTMLElement, key: string): KeyboardEvent {
   return {
     key,
@@ -261,6 +276,75 @@ describe("useCalendarCell", () => {
     button.remove();
   });
 
+  it("moves focus backward when keyboard range start reaches the max boundary", () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useRangeCalendarState>;
+    let cell!: ReturnType<typeof useCalendarCell>;
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+
+    scope.run(() => {
+      state = useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        minValue: new CalendarDate(2024, 1, 9),
+        maxValue: new CalendarDate(2024, 1, 10),
+        defaultFocusedValue: new CalendarDate(2024, 1, 10),
+      });
+
+      cell = useCalendarCell(
+        { date: new CalendarDate(2024, 1, 10) },
+        state,
+        { current: button }
+      );
+    });
+
+    const onKeydown = cell.buttonProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
+    const onKeyup = cell.buttonProps.onKeyup as ((event: KeyboardEvent) => void) | undefined;
+
+    onKeydown?.(createKeyboardEvent(button, "Enter"));
+    onKeyup?.(createKeyboardEvent(button, "Enter"));
+
+    expect(state.anchorDate?.toString()).toBe("2024-01-10");
+    expect(state.focusedDate.toString()).toBe("2024-01-09");
+
+    scope.stop();
+    button.remove();
+  });
+
+  it("starts range selection on virtual click in range mode", () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useRangeCalendarState>;
+    let cell!: ReturnType<typeof useCalendarCell>;
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+
+    scope.run(() => {
+      state = useRangeCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultFocusedValue: new CalendarDate(2024, 1, 10),
+      });
+
+      cell = useCalendarCell(
+        { date: new CalendarDate(2024, 1, 10) },
+        state,
+        { current: button }
+      );
+    });
+
+    const onClick = cell.buttonProps.onClick as ((event: MouseEvent) => void) | undefined;
+    onClick?.(createVirtualClickEvent(button));
+
+    expect(state.anchorDate?.toString()).toBe("2024-01-10");
+    expect(state.focusedDate.toString()).toBe("2024-01-10");
+
+    scope.stop();
+    button.remove();
+  });
+
   it("releases pointer capture on pointerdown when supported by the target", () => {
     const scope = effectScope();
     let state!: ReturnType<typeof useCalendarState>;
@@ -302,6 +386,38 @@ describe("useCalendarCell", () => {
 
     const onClick = cell.buttonProps.onClick as ((event: MouseEvent) => void) | undefined;
     onClick?.(createMouseEvent(button));
+
+    scope.stop();
+    button.remove();
+  });
+
+  it("prevents the default context menu action on calendar cells", () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useCalendarState>;
+    let cell!: ReturnType<typeof useCalendarCell>;
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+
+    scope.run(() => {
+      state = useCalendarState({
+        locale: "en-US",
+        createCalendar,
+        defaultValue: new CalendarDate(2024, 1, 10),
+      });
+
+      cell = useCalendarCell(
+        { date: new CalendarDate(2024, 1, 10) },
+        state,
+        { current: button }
+      );
+    });
+
+    const preventDefault = vi.fn();
+    const onContextmenu = cell.buttonProps.onContextmenu as ((event: Event) => void) | undefined;
+    onContextmenu?.({ preventDefault } as unknown as Event);
+
+    expect(preventDefault).toHaveBeenCalledTimes(1);
 
     scope.stop();
     button.remove();
