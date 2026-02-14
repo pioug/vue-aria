@@ -1,5 +1,6 @@
 import { useButton } from "@vue-aria/button";
 import { useGridListSelectionCheckbox } from "@vue-aria/gridlist";
+import { isFocusVisible } from "@vue-aria/interactions";
 import { useTree, useTreeItem } from "@vue-aria/tree";
 import { useTreeState, type TreeState } from "@vue-aria/tree-state";
 import type { Key, Node } from "@vue-aria/collections";
@@ -105,6 +106,7 @@ const TreeRow = defineComponent({
     const rowElementRef = ref<HTMLElement | null>(null);
     const pointerPressed = ref(false);
     const isHovered = ref(false);
+    const isFocusVisibleWithin = ref(false);
     const rowRef = {
       get current() {
         return rowElementRef.value;
@@ -166,6 +168,9 @@ const TreeRow = defineComponent({
       const onRowMouseEnter = rowProps.onMouseenter as ((event: MouseEvent) => void) | undefined;
       const onRowMouseUp = rowProps.onMouseup as ((event: MouseEvent) => void) | undefined;
       const onRowMouseLeave = rowProps.onMouseleave as ((event: MouseEvent) => void) | undefined;
+      const onRowFocus = rowProps.onFocus as ((event: FocusEvent) => void) | undefined;
+      const onRowBlur = rowProps.onBlur as ((event: FocusEvent) => void) | undefined;
+      const onRowKeyDown = rowProps.onKeydown as ((event: KeyboardEvent) => void) | undefined;
       const canSelectItem = props.state.selectionManager.canSelectItem(props.node.key);
       const isSelected = canSelectItem && props.state.selectionManager.isSelected(props.node.key);
       const isDisabled = props.state.selectionManager.isDisabled(props.node.key);
@@ -199,6 +204,7 @@ const TreeRow = defineComponent({
           "data-disabled": isDisabled ? "true" : undefined,
           "data-expanded": isExpanded ? "true" : undefined,
           "data-focused": rowAria.isFocused ? "true" : undefined,
+          "data-focus-visible": rowAria.isFocused && isFocusVisibleWithin.value ? "true" : undefined,
           "data-hovered": isHovered.value ? "true" : undefined,
           "data-pressed": rowAria.isPressed || pointerPressed.value ? "true" : undefined,
           "data-selected": isSelected ? "true" : undefined,
@@ -208,6 +214,7 @@ const TreeRow = defineComponent({
             if (!event.defaultPrevented && event.button === 0 && isRowInteractive) {
               pointerPressed.value = true;
             }
+            isFocusVisibleWithin.value = false;
           },
           onPointerup: (event: PointerEvent) => {
             onRowPointerUp?.(event);
@@ -229,6 +236,7 @@ const TreeRow = defineComponent({
             if (!event.defaultPrevented && event.button === 0 && isRowInteractive) {
               pointerPressed.value = true;
             }
+            isFocusVisibleWithin.value = false;
           },
           onMouseenter: (event: MouseEvent) => {
             onRowMouseEnter?.(event);
@@ -244,6 +252,20 @@ const TreeRow = defineComponent({
             onRowMouseLeave?.(event);
             isHovered.value = false;
             pointerPressed.value = false;
+          },
+          onFocus: (event: FocusEvent) => {
+            onRowFocus?.(event);
+            isFocusVisibleWithin.value = isFocusVisible();
+          },
+          onBlur: (event: FocusEvent) => {
+            onRowBlur?.(event);
+            isFocusVisibleWithin.value = false;
+          },
+          onKeydown: (event: KeyboardEvent) => {
+            onRowKeyDown?.(event);
+            if (document.activeElement === rowElementRef.value) {
+              isFocusVisibleWithin.value = true;
+            }
           },
         },
         [

@@ -9162,3 +9162,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` keyboard focus-visible parity update:
+  - added row focus-visible state annotations (`data-focus-visible`) driven by interaction modality and row focus lifecycle.
+  - added migrated keyboard-focus coverage to verify focused rows gain `data-focus-visible` after keyboard interaction and clear it when focus moves.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 51 tests).
+- Validation: `npm run check -- --pretty false` passed.

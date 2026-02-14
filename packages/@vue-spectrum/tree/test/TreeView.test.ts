@@ -564,6 +564,35 @@ describe("TreeView", () => {
     expect(projectsRow!.attributes("data-hovered")).toBeUndefined();
   });
 
+  it("tracks keyboard focus-visible state on rows", async () => {
+    const wrapper = renderTree({
+      autoFocus: "first",
+      selectionMode: "multiple",
+    });
+
+    await nextTick();
+
+    let photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-focused")).toBe("true");
+
+    setInteractionModality("keyboard");
+    await photosRow!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    expect(photosRow).toBeTruthy();
+    expect(photosRow!.attributes("data-focus-visible")).toBe("true");
+
+    await photosRow!.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+
+    photosRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Photos"));
+    const projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(document.activeElement).toBe(projectsRow!.element);
+    expect(photosRow!.attributes("data-focus-visible")).toBeUndefined();
+  });
+
   it("wires row checkbox aria attributes in single-selection mode", () => {
     const wrapper = mount(TreeView as any, {
       props: {
