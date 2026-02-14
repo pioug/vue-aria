@@ -2458,6 +2458,23 @@ export function tableTests() {
     expect(onAction).not.toHaveBeenCalled();
   });
 
+  it("suppresses keyboard row actions when table is disabled", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderTable({
+      isDisabled: true,
+      selectionMode: "none",
+      onAction,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    (bodyRows[0]!.element as HTMLElement).focus();
+    await bodyRows[0]!.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
   it("preserves falsy numeric row keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
