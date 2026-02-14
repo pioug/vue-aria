@@ -9501,3 +9501,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Additional roadmap execution-queue update:
   - marked `@vue-spectrum/tree` as `Complete` in the execution queue after tree package and related aria/stately suites stabilized.
   - advanced current focus package to `@vue-spectrum/menu` for the next implementation slice.
+- Additional `@vue-spectrum/menu` onAction parity update:
+  - added migrated `Menu` action coverage for static slot items and data-driven `items` collections to assert menu-level `onAction` callback key payloads.
+  - added coverage to assert both menu-level and item-level `onAction` handlers fire for plain items and section-wrapped items.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 27 tests).
+- Validation: `npm run check -- --pretty false` passed.

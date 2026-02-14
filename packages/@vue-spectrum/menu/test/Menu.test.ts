@@ -160,4 +160,126 @@ describe("Menu", () => {
     expect(wrapper.findAll('[role="menuitem"]')).toHaveLength(5);
     expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
   });
+
+  it("supports onAction with a static list", async () => {
+    const onAction = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+        onSelectionChange,
+        onAction,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: "One" }, { default: () => "One" }),
+          h(Item as any, { key: "Two" }, { default: () => "Two" }),
+          h(Item as any, { key: "Three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(3);
+
+    await items[0]?.trigger("click");
+    await items[1]?.trigger("click");
+    await items[2]?.trigger("click");
+
+    expect(onAction).toHaveBeenNthCalledWith(1, "One");
+    expect(onAction).toHaveBeenNthCalledWith(2, "Two");
+    expect(onAction).toHaveBeenNthCalledWith(3, "Three");
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
+  it("supports onAction with a data-driven list", async () => {
+    const onAction = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+        onSelectionChange,
+        onAction,
+        items: [
+          { key: "One", name: "One" },
+          { key: "Two", name: "Two" },
+          { key: "Three", name: "Three" },
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(3);
+
+    await items[0]?.trigger("click");
+    await items[1]?.trigger("click");
+    await items[2]?.trigger("click");
+
+    expect(onAction).toHaveBeenNthCalledWith(1, "One");
+    expect(onAction).toHaveBeenNthCalledWith(2, "Two");
+    expect(onAction).toHaveBeenNthCalledWith(3, "Three");
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
+  it("supports onAction on menu and menu items", async () => {
+    const onAction = vi.fn();
+    const itemAction = vi.fn();
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+        onAction,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: "cat", onAction: itemAction }, { default: () => "Cat" }),
+          h(Item as any, { key: "dog" }, { default: () => "Dog" }),
+          h(Item as any, { key: "kangaroo" }, { default: () => "Kangaroo" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(3);
+
+    await items[0]?.trigger("click");
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenLastCalledWith("cat");
+    expect(itemAction).toHaveBeenCalledTimes(1);
+  });
+
+  it("supports onAction on section items and menu", async () => {
+    const onAction = vi.fn();
+    const itemAction = vi.fn();
+    const wrapper = mount(Menu as any, {
+      props: {
+        ariaLabel: "Menu",
+        onAction,
+      },
+      slots: {
+        default: () => [
+          h(Section as any, { title: "Animals" }, {
+            default: () => [
+              h(Item as any, { key: "cat", onAction: itemAction }, { default: () => "Cat" }),
+              h(Item as any, { key: "dog" }, { default: () => "Dog" }),
+              h(Item as any, { key: "kangaroo" }, { default: () => "Kangaroo" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const items = wrapper.findAll('[role="menuitem"]');
+    expect(items).toHaveLength(3);
+
+    await items[0]?.trigger("click");
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenLastCalledWith("cat");
+    expect(itemAction).toHaveBeenCalledTimes(1);
+  });
 });
