@@ -9717,3 +9717,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 58 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` nested Tab-retention parity update:
+  - added migrated `SubmenuTrigger` coverage asserting nested submenu stacks remain open when `Tab` is pressed while focus is inside the deepest open submenu flow.
+  - stabilized nested submenu-open setup in deep-stack keyboard coverage by using trigger press interaction on the second-level submenu row before asserting deepest-layer behavior.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts` passed (1 file, 21 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 59 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (7 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
