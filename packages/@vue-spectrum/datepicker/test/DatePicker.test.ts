@@ -947,6 +947,7 @@ describe("DatePicker", () => {
       props: {
         ariaLabel: "Team date picker",
         ariaLabelledby: "team-date-label",
+        ariaDescribedby: "team-date-description",
         defaultValue: new CalendarDate(2019, 6, 5),
       },
       attachTo: document.body,
@@ -955,6 +956,7 @@ describe("DatePicker", () => {
     const group = wrapper.get(".react-spectrum-DatePicker-group");
     expect(group.attributes("aria-label")).toContain("Team date picker");
     expect(group.attributes("aria-labelledby")).toContain("team-date-label");
+    expect(group.attributes("aria-describedby")).toContain("team-date-description");
   });
 
   it("forwards custom id to date picker group", () => {
@@ -2269,6 +2271,7 @@ describe("DateRangePicker", () => {
       props: {
         ariaLabel: "Team range picker",
         ariaLabelledby: "team-range-label",
+        ariaDescribedby: "team-range-description",
         defaultValue: {
           start: new CalendarDate(2019, 6, 5),
           end: new CalendarDate(2019, 6, 8),
@@ -2280,6 +2283,7 @@ describe("DateRangePicker", () => {
     const group = wrapper.get(".react-spectrum-DateRangePicker-group");
     expect(group.attributes("aria-label")).toContain("Team range picker");
     expect(group.attributes("aria-labelledby")).toContain("team-range-label");
+    expect(group.attributes("aria-describedby")).toContain("team-range-description");
   });
 
   it("forwards custom id to range picker group", () => {

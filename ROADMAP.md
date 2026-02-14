@@ -7219,3 +7219,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added custom-id usage examples for both picker variants and included `id` in the shared key-prop reference.
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 127 tests).
+- Additional `@vue-spectrum/datepicker` parity update:
+  - exposed and forwarded `aria-describedby` (including camel-case alias) to picker aria hooks for both variants.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - extended camel-case aria regression coverage to assert external description ids merge into group-level `aria-describedby`.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 127 tests).
+- Validation: `npm run check -- --pretty false` passed.

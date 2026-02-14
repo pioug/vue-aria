@@ -51,8 +51,10 @@ export interface SpectrumDatePickerProps {
   id?: string | undefined;
   "aria-label"?: string | undefined;
   "aria-labelledby"?: string | undefined;
+  "aria-describedby"?: string | undefined;
   ariaLabel?: string | undefined;
   ariaLabelledby?: string | undefined;
+  ariaDescribedby?: string | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, unknown> | undefined;
 }
@@ -309,11 +311,19 @@ export const DatePicker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    "aria-describedby": {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     ariaLabel: {
       type: String as PropType<string | undefined>,
       default: undefined,
     },
     ariaLabelledby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaDescribedby: {
       type: String as PropType<string | undefined>,
       default: undefined,
     },
@@ -418,6 +428,9 @@ export const DatePicker = defineComponent({
         },
         get "aria-labelledby"() {
           return merged["aria-labelledby"] ?? merged.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
+        },
+        get "aria-describedby"() {
+          return merged["aria-describedby"] ?? merged.ariaDescribedby ?? (attrs["aria-describedby"] as string | undefined);
         },
         get isDisabled() {
           return merged.isDisabled;
@@ -860,11 +873,19 @@ export const DateRangePicker = defineComponent({
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    "aria-describedby": {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
     ariaLabel: {
       type: String as PropType<string | undefined>,
       default: undefined,
     },
     ariaLabelledby: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    ariaDescribedby: {
       type: String as PropType<string | undefined>,
       default: undefined,
     },
@@ -972,6 +993,9 @@ export const DateRangePicker = defineComponent({
         },
         get "aria-labelledby"() {
           return merged["aria-labelledby"] ?? merged.ariaLabelledby ?? (attrs["aria-labelledby"] as string | undefined);
+        },
+        get "aria-describedby"() {
+          return merged["aria-describedby"] ?? merged.ariaDescribedby ?? (attrs["aria-describedby"] as string | undefined);
         },
         get isDisabled() {
           return merged.isDisabled;
