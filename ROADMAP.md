@@ -9880,3 +9880,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 78 tests).
 - Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` typeahead timeout/wrap parity update:
+  - added migrated `Menu` coverage for typeahead buffer timeout reset and wrap-around focus behavior after timeout.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 80 tests).
+- Validation: `npm test -- packages/@vue-aria/menu/test` passed (8 files, 43 tests).
+- Validation: `npm run check -- --pretty false` passed.

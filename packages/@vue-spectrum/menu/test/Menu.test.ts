@@ -144,6 +144,62 @@ describe("Menu", () => {
     expect(document.activeElement).toBe(items[4]?.element);
   });
 
+  it("resets typeahead search text after a timeout", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderMenu({
+        autoFocus: "first",
+      });
+      await nextTick();
+
+      const menu = wrapper.get('[role="menu"]');
+      const items = wrapper.findAll('[role="menuitem"]');
+      expect(document.activeElement).toBe(items[0]?.element);
+
+      (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(items[1]?.element);
+
+      await vi.runAllTimersAsync();
+
+      (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(items[1]?.element);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("wraps around when no matching items remain past the current item", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderMenu({
+        autoFocus: "first",
+      });
+      await nextTick();
+
+      const menu = wrapper.get('[role="menu"]');
+      const items = wrapper.findAll('[role="menuitem"]');
+      expect(document.activeElement).toBe(items[0]?.element);
+
+      (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "L", bubbles: true }));
+      await nextTick();
+      (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "E", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(items[4]?.element);
+
+      await vi.runAllTimersAsync();
+
+      (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(items[4]?.element);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("supports multiple selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderMenu({
