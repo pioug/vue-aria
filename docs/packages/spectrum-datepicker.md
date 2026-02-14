@@ -242,7 +242,26 @@ import { DatePicker } from "@vue-spectrum/datepicker";
     :default-value="new CalendarDateTime(2019, 6, 5, 9, 30)"
     granularity="minute"
     :hour-cycle="24"
+    :hide-time-zone="false"
     :should-force-leading-zeros="true"
+  />
+</template>
+```
+
+## Validation Behavior Example
+
+```vue
+<script setup lang="ts">
+import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@vue-spectrum/datepicker";
+</script>
+
+<template>
+  <DatePicker
+    aria-label="Booking date"
+    :default-value="new CalendarDate(2019, 6, 5)"
+    :is-required="true"
+    validation-behavior="aria"
   />
 </template>
 ```

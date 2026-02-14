@@ -7161,3 +7161,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 115 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` docs parity update:
+  - expanded date/time configuration examples to include `hideTimeZone` and added a dedicated `validationBehavior` usage example.
+    - `docs/packages/spectrum-datepicker.md`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 115 tests).
