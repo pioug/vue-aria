@@ -222,6 +222,24 @@ export function useSubmenuTrigger<T>(
     }
   });
 
+  useEvent(parentMenuRefObject as any, "pointerover", (event: Event) => {
+    if (!state.isOpen) {
+      return;
+    }
+
+    const target = event.target as Node | null;
+    if (!nodeContains(parentMenuRef.current, target)) {
+      return;
+    }
+
+    const triggerElement = ref.current;
+    if (triggerElement && (target === triggerElement || nodeContains(triggerElement, target))) {
+      return;
+    }
+
+    onSubmenuClose();
+  });
+
   const shouldCloseOnInteractOutside = (target: Element) => target !== ref.current;
 
   useSafelyMouseToSubmenu({

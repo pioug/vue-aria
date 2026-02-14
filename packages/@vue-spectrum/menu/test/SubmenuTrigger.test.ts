@@ -173,6 +173,67 @@ describe("SubmenuTrigger", () => {
     expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
   });
 
+  it("closes submenu when pointer hover moves from submenu content to a sibling item", async () => {
+    const wrapper = mountTracked(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rootItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    const siblingItem = rootItems.find((item) => item.textContent?.includes("Alpha"));
+    const submenuTriggerItem = rootItems.find((item) => item.textContent?.includes("More"));
+    expect(siblingItem).toBeTruthy();
+    expect(submenuTriggerItem).toBeTruthy();
+
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    const submenuItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Sub item")) as HTMLElement | undefined;
+    expect(submenuItem).toBeTruthy();
+
+    const hover = (element: HTMLElement) => {
+      if (typeof PointerEvent !== "undefined") {
+        element.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true, pointerType: "mouse" }));
+        element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+        return;
+      }
+
+      element.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      element.dispatchEvent(new Event("pointerover", { bubbles: true }));
+    };
+
+    hover(submenuItem as HTMLElement);
+    hover(siblingItem as HTMLElement);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+  });
+
   it("skips disabled submenu triggers during keyboard navigation", async () => {
     const wrapper = mountTracked(MenuTrigger as any, {
       props: {
