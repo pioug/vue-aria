@@ -384,4 +384,26 @@ describe("MenuTrigger", () => {
     expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Foo");
     expect(getMenuItems()).toHaveLength(3);
   });
+
+  it("does not close if menu is tabbed away from", async () => {
+    const wrapper = renderMenuTrigger();
+    const trigger = wrapper.get('[data-testid="trigger"]');
+
+    await trigger.trigger("click");
+    await wrapper.vm.$nextTick();
+
+    const menu = document.body.querySelector('[role="menu"]') as HTMLElement | null;
+    const firstItem = document.body.querySelector('[role="menuitem"]') as HTMLElement | null;
+    expect(menu).toBeTruthy();
+    expect(firstItem).toBeTruthy();
+    firstItem?.focus();
+    expect(document.activeElement).toBe(firstItem);
+
+    firstItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", bubbles: true }));
+    firstItem?.dispatchEvent(new KeyboardEvent("keyup", { key: "Tab", bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelector('[role="menu"]')).toBe(menu);
+    expect(document.activeElement).toBe(firstItem);
+  });
 });
