@@ -1,4 +1,5 @@
 export { BreakpointProvider, useMatchedBreakpoints, useBreakpoint } from "./BreakpointProvider";
+export { classNames, keepSpectrumClassNames, shouldKeepSpectrumClassNames } from "./classNames";
 export {
   baseStyleProps,
   convertStyleProps,

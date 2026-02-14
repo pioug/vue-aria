@@ -2,7 +2,13 @@ import { I18nProvider, useLocale } from "@vue-aria/i18n";
 import { ModalProvider, useModalProvider } from "@vue-aria/overlays";
 import type { ReadonlyRef } from "@vue-aria/types";
 import { filterDOMProps, RouterProvider } from "@vue-aria/utils";
-import { baseStyleProps, BreakpointProvider, useMatchedBreakpoints, useStyleProps } from "@vue-spectrum/utils";
+import {
+  baseStyleProps,
+  BreakpointProvider,
+  shouldKeepSpectrumClassNames,
+  useMatchedBreakpoints,
+  useStyleProps,
+} from "@vue-spectrum/utils";
 import { computed, defineComponent, h, inject, onMounted, provide, ref, type PropType, type VNodeChild } from "vue";
 import { ProviderContextSymbol } from "./context";
 import { useColorScheme, useScale } from "./mediaQueries";
@@ -23,6 +29,10 @@ const ProviderWrapper = defineComponent({
       type: Array as PropType<string[]>,
       required: true,
     },
+    isRoot: {
+      type: Boolean as PropType<boolean | undefined>,
+      required: false,
+    },
   },
   setup(props, { slots, attrs }) {
     const localeInfo = useLocale();
@@ -42,13 +52,24 @@ const ProviderWrapper = defineComponent({
     const className = computed(() => {
       const { theme, colorScheme, scale } = providerContext.value;
       const resolvedStyleProps = styleProps.value;
+      const themeClasses = theme[colorScheme] ? Object.values(theme[colorScheme]!) : [];
+      const scaleClasses = theme[scale] ? Object.values(theme[scale]!) : [];
+      const themeKey = theme[colorScheme] ? Object.keys(theme[colorScheme]!)[0] : undefined;
+      const scaleKey = theme[scale] ? Object.keys(theme[scale]!)[0] : undefined;
       const classes = [
         resolvedStyleProps.class,
         attrs.class,
         "vue-spectrum-provider",
-        ...(theme[colorScheme] ? Object.values(theme[colorScheme]!) : []),
-        ...(theme[scale] ? Object.values(theme[scale]!) : []),
+        "spectrum",
+        ...themeClasses,
+        ...scaleClasses,
         ...(theme.global ? Object.values(theme.global) : []),
+        {
+          "react-spectrum-provider": shouldKeepSpectrumClassNames,
+          spectrum: shouldKeepSpectrumClassNames,
+          ...(themeKey ? { [themeKey]: shouldKeepSpectrumClassNames } : {}),
+          ...(scaleKey ? { [scaleKey]: shouldKeepSpectrumClassNames } : {}),
+        },
       ];
       return classes.filter(Boolean);
     });
@@ -60,6 +81,7 @@ const ProviderWrapper = defineComponent({
       return {
         ...(resolvedStyleProps.style as Record<string, unknown> | undefined),
         ...(attrs.style as Record<string, unknown> | undefined),
+        ...(props.isRoot ? { isolation: "isolate" } : {}),
         // Keep browser-native widgets (e.g. scrollbars) in sync with provider color mode.
         colorScheme: props.colorScheme ?? colorScheme ?? availableColorSchemes,
       };
@@ -229,6 +251,7 @@ export const Provider = defineComponent({
             ...attrs,
             colorScheme: props.colorScheme,
             matchedBreakpoints: matchedBreakpoints.value,
+            isRoot: !parentContext,
           },
           {
             default: () => children,

@@ -3932,8 +3932,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Responsive style-props slice ported:
   - Integrated `useStyleProps` + `baseStyleProps` in `ProviderWrapper`
   - Added responsive width resolution coverage for default/custom breakpoints and omitted-size fallback behavior
+- [x] Class-stack compatibility slice ported:
+  - Added baseline `spectrum` provider class + root isolation style behavior
+  - Added compatibility flag wiring via `shouldKeepSpectrumClassNames` (`react-spectrum-provider` class behavior)
 - Open adaptation notes:
-  - Remaining upstream wrapper gaps: Spectrum base typography/page class stack and compatibility class behavior (`shouldKeepSpectrumClassNames` equivalents).
+  - Remaining upstream wrapper gaps: exact upstream CSS-module class stack parity for Spectrum page/typography temp styles.
 
 ### Tests
 - Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
@@ -3946,6 +3949,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted `Provider` coverage for router-context provisioning, modal wrapper aria propagation, and nested-direction warning behavior.
   - Added adapted `Provider` breakpoint-context coverage for range-change-only updates (`useBreakpoint` observer parity).
   - Added adapted provider responsive style-props coverage for default/custom breakpoint width matrices and omitted-size fallback behavior.
+  - Added adapted provider class-stack coverage for baseline `spectrum` class/root isolation and compatibility mode (`react-spectrum-provider` class).
   - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
 - [ ] All relevant upstream tests migrated
 
@@ -3955,7 +3959,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [ ] Base styles parity complete
 
 ### Accessibility
-- [ ] Provider-level accessibility parity pending full docs/example validation and final wrapper class-stack parity.
+- [ ] Provider-level accessibility parity pending full docs/example validation.
 
 ### Visual Parity
 - [ ] Pending upstream example-by-example comparison for provider wrapper class/style output.
@@ -3964,8 +3968,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Add remaining upstream provider class/style parity (`spectrum`/typography/page class stack and compatibility behavior).
-2. Reconcile remaining `Provider.test.tsx` prop-forwarding scenarios tied to downstream Spectrum components as those component ports land.
+1. Reconcile remaining `Provider.test.tsx` prop-forwarding scenarios tied to downstream Spectrum components as those component ports land.
+2. Finalize exact upstream page/typography class-stack parity as Spectrum CSS module strategy is introduced.
 3. Mirror upstream Provider docs/examples and base style/class composition.
 
 ## 45) Package Record: @vue-spectrum/utils
@@ -3988,10 +3992,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `src/index.ts`
   - `src/BreakpointProvider.ts`
   - `src/styleProps.ts`
+  - `src/classNames.ts`
 - [x] Initial parity slice ported:
   - `BreakpointProvider`
   - `useMatchedBreakpoints`
   - `useBreakpoint`
+  - `classNames`
+  - `keepSpectrumClassNames`
+  - `shouldKeepSpectrumClassNames`
   - `baseStyleProps`
   - `dimensionValue`
   - `responsiveDimensionValue`
@@ -4003,12 +4011,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: 0 (breakpoint behavior is validated indirectly in upstream provider tests)
-- Ported test files: 2 (Vue adaptations)
-- Passing test files: 2 (validated 2026-02-14)
+- Ported test files: 3 (Vue adaptations)
+- Passing test files: 3 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted breakpoint coverage for min-width matching, resize updates, and no-op updates when resize remains in the same breakpoint range.
   - Added adapted context coverage for `useBreakpoint` provider consumption.
   - Added adapted style-props coverage for dimension token conversion, responsive-prop fallback, and breakpoint-context style resolution.
+  - Added adapted class-name compatibility coverage for css-module mapping and legacy class preservation mode.
 - [ ] All relevant upstream tests migrated
 
 ### Docs

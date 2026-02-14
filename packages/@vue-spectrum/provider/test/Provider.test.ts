@@ -1,8 +1,9 @@
 import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
-import { useBreakpoint, useStyleProps } from "@vue-spectrum/utils";
+import { keepSpectrumClassNames, useBreakpoint, useStyleProps } from "@vue-spectrum/utils";
 import { createApp, defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { UNSAFE_resetSpectrumClassNames } from "../../utils/src/classNames";
 import { Provider, useProviderProps } from "../src/Provider";
 import type { Theme } from "../src/types";
 
@@ -132,6 +133,7 @@ describe("Provider", () => {
   });
 
   afterEach(() => {
+    UNSAFE_resetSpectrumClassNames();
     vi.restoreAllMocks();
     document.body.innerHTML = "";
   });
@@ -158,6 +160,8 @@ describe("Provider", () => {
     const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
     expect(provider).not.toBeNull();
     expect(provider?.classList.contains("spectrum--dark")).toBe(true);
+    expect(provider?.classList.contains("spectrum")).toBe(true);
+    expect(provider?.style.isolation).toBe("isolate");
     unmount();
   });
 
@@ -491,6 +495,30 @@ describe("Provider", () => {
     expect(warnSpy).toHaveBeenCalledWith("Language directions cannot be nested. ltr inside rtl.");
     app.unmount();
     host.remove();
+  });
+
+  it("adds compatibility classes when keepSpectrumClassNames is enabled", () => {
+    keepSpectrumClassNames();
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                "data-testid": "provider",
+              },
+              () => h("div", "hello")
+            );
+        },
+      })
+    );
+
+    const provider = container.querySelector('[data-testid="provider"]') as HTMLElement | null;
+    expect(provider?.classList.contains("react-spectrum-provider")).toBe(true);
+    unmount();
   });
 
   it("only updates breakpoint observers when the range changes", async () => {
