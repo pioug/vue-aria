@@ -75,6 +75,17 @@ describe("Breadcrumbs", () => {
     expect(medium.get("ul").classes()).toContain("spectrum-Breadcrumbs--medium");
   });
 
+  it("handles showRoot and isMultiline class toggles", () => {
+    const wrapper = renderBreadcrumbs({
+      showRoot: true,
+      isMultiline: true,
+    });
+
+    const list = wrapper.get("ul");
+    expect(list.classes()).toContain("spectrum-Breadcrumbs--showRoot");
+    expect(list.classes()).toContain("spectrum-Breadcrumbs--multiline");
+  });
+
   it("handles isDisabled", () => {
     const wrapper = renderBreadcrumbs(
       { isDisabled: true },
@@ -100,6 +111,24 @@ describe("Breadcrumbs", () => {
 
     const links = wrapper.findAll("a");
     await links[0].trigger("click");
-    expect(onAction).toHaveBeenCalled();
+    expect(onAction).toHaveBeenCalledWith("folder-1");
+  });
+
+  it("does not fire onAction when disabled", async () => {
+    const onAction = vi.fn();
+    const wrapper = renderBreadcrumbs(
+      {
+        isDisabled: true,
+        onAction,
+      },
+      [
+        { key: "folder-1", label: "Folder 1", href: "#" },
+        { key: "folder-2", label: "Folder 2", href: "#" },
+      ]
+    );
+
+    const links = wrapper.findAll("a");
+    await links[0].trigger("click");
+    expect(onAction).not.toHaveBeenCalled();
   });
 });

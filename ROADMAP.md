@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/datepicker`
+- Current focus package: `@vue-spectrum/breadcrumbs`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7230,3 +7230,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added an ARIA alias usage example and documented supported kebab-case/camel-case label/description prop aliases.
     - `docs/packages/spectrum-datepicker.md`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 127 tests).
+- Additional `@vue-spectrum/breadcrumbs` parity update:
+  - expanded adapted test coverage for:
+    - `showRoot` and `isMultiline` class toggles
+    - key-specific `onAction` payload assertions
+    - disabled-state action suppression
+    - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 9 tests).
+- Validation: `npm run check -- --pretty false` passed.
