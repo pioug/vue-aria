@@ -9080,3 +9080,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 28 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` selection-expansion parity update:
+  - added migrated coverage to verify row presses do not expand/collapse tree rows when selection mode is enabled, and instead update row selection state.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.

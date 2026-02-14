@@ -712,6 +712,25 @@ describe("TreeView", () => {
     expect(rowTexts.some((text) => text.includes("Project 2"))).toBe(true);
   });
 
+  it("does not expand rows from row press when selection is enabled", async () => {
+    const wrapper = renderTree({
+      selectionMode: "single",
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("aria-selected")).toBe("false");
+
+    await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("false");
+    expect(projectsRow!.attributes("aria-selected")).toBe("true");
+    expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(false);
+  });
+
   it("supports controlled expansion", async () => {
     const onExpandedChange = vi.fn();
     const wrapper = renderTree({
