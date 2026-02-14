@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/listbox`
+- Current focus package: `@vue-spectrum/picker`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7691,6 +7691,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added keyboard-navigation coverage asserting disabled options are skipped during ArrowUp/ArrowDown traversal.
   - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 13 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` open-state parity update:
+  - added controlled/uncontrolled open-state coverage for `isOpen` and `defaultOpen`, including close-attempt semantics and trigger aria state assertions.
+  - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 8 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.

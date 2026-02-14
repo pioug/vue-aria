@@ -81,6 +81,58 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Three");
   });
 
+  it("supports controlled open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      isOpen: true,
+      onOpenChange,
+    });
+
+    await nextTick();
+
+    const trigger = wrapper.get("button");
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(listbox?.id);
+    expect(onOpenChange).not.toHaveBeenCalled();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(listbox?.id);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("supports default open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      defaultOpen: true,
+      onOpenChange,
+    });
+
+    await nextTick();
+
+    const trigger = wrapper.get("button");
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(listbox?.id);
+    expect(onOpenChange).not.toHaveBeenCalled();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(trigger.attributes("aria-controls")).toBeUndefined();
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderPicker({
       isDisabled: true,
