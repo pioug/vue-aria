@@ -97,7 +97,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-aria/selection-state`: Complete
 
 ### React Spectrum component packages
-- `@vue-spectrum/provider`: Not started
+- `@vue-spectrum/provider`: In progress
 - `@vue-spectrum/theme`: Not started
 - `@vue-spectrum/button`: Not started
 - `@vue-spectrum/checkbox`: Not started
@@ -3893,7 +3893,63 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 ### Next Actions
 1. Monitor upstream `@react-spectrum/slider` for behavioral drift and backport deltas as new regression cases.
 
-## 44) Session Log
+## 44) Package Record: @vue-spectrum/provider
+- Upstream source path(s):
+  - `references/react-spectrum/packages/@react-spectrum/provider/src`
+  - `references/react-spectrum/packages/@react-spectrum/provider/docs`
+  - `references/react-spectrum/packages/@react-spectrum/provider/test`
+- Local package path:
+  - `packages/@vue-spectrum/provider`
+- Status: In progress
+- Owner: Codex
+
+### Scope
+- [x] Upstream modules enumerated
+- [ ] Public API checklist complete for full package surface
+
+### Implementation
+- [x] Package scaffolding created and wired:
+  - `package.json`
+  - `src/index.ts`
+  - `src/types.ts`
+  - `src/context.ts`
+  - `src/mediaQueries.ts`
+  - `src/Provider.ts`
+- [x] Initial parity slice ported:
+  - `useColorScheme`
+  - `useScale`
+  - `Provider` / `useProvider` / `useProviderProps` baseline Vue API surface
+- Open adaptation notes:
+  - Current provider implementation is a bootstrap slice and does not yet include full upstream wrapper integrations (e.g. Spectrum CSS class stack, breakpoint provider, modal provider, router provider composition).
+
+### Tests
+- Total upstream test files: 3 (`Provider.test.tsx`, `Provider.ssr.test.js`, `mediaQueries.test.ts`)
+- Ported test files: 1 (adapted)
+- Passing test files: 1 (validated 2026-02-14)
+- Test parity notes:
+  - Added adapted `mediaQueries` coverage for OS/default color-scheme resolution and scale derivation.
+- [ ] All relevant upstream tests migrated
+
+### Docs
+- [x] VitePress package page scaffolded (`docs/packages/provider.md`)
+- [ ] Examples parity complete
+- [ ] Base styles parity complete
+
+### Accessibility
+- [ ] Provider-level accessibility parity pending full wrapper composition and inherited-prop behavior validation.
+
+### Visual Parity
+- [ ] Pending upstream example-by-example comparison for provider wrapper class/style output.
+
+### React Dependency Check
+- [x] No React runtime dependency in current slice
+
+### Next Actions
+1. Port provider wrapper behavior from upstream (`ProviderWrapper`, context merge precedence, locale/direction warnings, and inherited prop plumbing).
+2. Migrate `Provider.test.tsx` and `Provider.ssr.test.js` with Vue harness adaptations.
+3. Mirror upstream Provider docs/examples and base style/class composition.
+
+## 45) Session Log
 ### 2026-02-13
 - Marked package records `@vue-aria/tooltip` (+ `@vue-aria/tooltip-state` + `@vue-aria/overlays-state`), `@vue-aria/disclosure` (+ state), and `@vue-aria/overlays` as complete after reconciling migrated tests with docs/example/accessibility gates.
 - Marked package records `@vue-aria/dialog`, `@vue-aria/breadcrumbs`, and `@vue-aria/separator` as complete; `useDialog` now calls `useOverlayFocusContain` for upstream focus-containment parity.
