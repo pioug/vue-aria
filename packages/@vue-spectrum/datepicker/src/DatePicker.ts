@@ -336,13 +336,14 @@ export const DatePicker = defineComponent({
       default: undefined,
     },
   },
-  setup(props) {
+  setup(props, { expose }) {
     const attrs = useAttrs();
     const merged = createMergedProps(
       props as Record<string, unknown>,
       attrs as Record<string, unknown>
     ) as SpectrumDatePickerProps & Record<string, unknown>;
     const locale = useLocale();
+    const rootRef = ref<HTMLElement | null>(null);
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
 
@@ -553,6 +554,12 @@ export const DatePicker = defineComponent({
       });
     });
 
+    expose({
+      focus: () => triggerRef.value?.focus(),
+      blur: () => triggerRef.value?.blur(),
+      UNSAFE_getDOMNode: () => rootRef.value,
+    });
+
     return () => {
       const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
@@ -561,6 +568,7 @@ export const DatePicker = defineComponent({
       return h(
         "div",
         {
+          ref: rootRef,
           class: [
             "react-spectrum-DatePicker",
             {
@@ -898,13 +906,14 @@ export const DateRangePicker = defineComponent({
       default: undefined,
     },
   },
-  setup(props) {
+  setup(props, { expose }) {
     const attrs = useAttrs();
     const merged = createMergedProps(
       props as Record<string, unknown>,
       attrs as Record<string, unknown>
     ) as SpectrumDateRangePickerProps & Record<string, unknown>;
     const locale = useLocale();
+    const rootRef = ref<HTMLElement | null>(null);
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
 
@@ -1126,6 +1135,12 @@ export const DateRangePicker = defineComponent({
       });
     });
 
+    expose({
+      focus: () => triggerRef.value?.focus(),
+      blur: () => triggerRef.value?.blur(),
+      UNSAFE_getDOMNode: () => rootRef.value,
+    });
+
     return () => {
       const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Range calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
@@ -1134,6 +1149,7 @@ export const DateRangePicker = defineComponent({
       return h(
         "div",
         {
+          ref: rootRef,
           class: [
             "react-spectrum-DateRangePicker",
             {

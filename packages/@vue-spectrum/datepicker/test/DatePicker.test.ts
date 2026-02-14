@@ -232,6 +232,32 @@ describe("DatePicker", () => {
     expect(wrapper.get(".react-spectrum-DatePicker").attributes("data-testid")).toBe("date-picker-root");
   });
 
+  it("exposes imperative date picker handles", async () => {
+    const wrapper = mount(DatePicker as any, {
+      props: {
+        "aria-label": "Date picker",
+        defaultValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    const api = wrapper.vm as unknown as {
+      focus: () => void;
+      blur: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    };
+    const trigger = wrapper.get(".react-spectrum-DatePicker-button").element as HTMLButtonElement;
+
+    api.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(trigger);
+
+    api.blur();
+    await nextTick();
+    expect(document.activeElement).not.toBe(trigger);
+    expect(api.UNSAFE_getDOMNode()).toBe(wrapper.get(".react-spectrum-DatePicker").element);
+  });
+
   it("opens a calendar popover and commits date selection", async () => {
     const onChange = vi.fn();
     const wrapper = mount(DatePicker as any, {
@@ -1517,6 +1543,35 @@ describe("DateRangePicker", () => {
     });
 
     expect(wrapper.get(".react-spectrum-DateRangePicker").attributes("data-testid")).toBe("range-picker-root");
+  });
+
+  it("exposes imperative range picker handles", async () => {
+    const wrapper = mount(DateRangePicker as any, {
+      props: {
+        "aria-label": "Date range picker",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const api = wrapper.vm as unknown as {
+      focus: () => void;
+      blur: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    };
+    const trigger = wrapper.get(".react-spectrum-DateRangePicker-button").element as HTMLButtonElement;
+
+    api.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(trigger);
+
+    api.blur();
+    await nextTick();
+    expect(document.activeElement).not.toBe(trigger);
+    expect(api.UNSAFE_getDOMNode()).toBe(wrapper.get(".react-spectrum-DateRangePicker").element);
   });
 
   it("opens range-calendar popover", async () => {

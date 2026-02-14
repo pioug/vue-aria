@@ -7605,6 +7605,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 129 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` imperative-handle parity update:
+  - exposed imperative component handles (`focus`, `blur`, `UNSAFE_getDOMNode`) on both `DatePicker` and `DateRangePicker`.
+  - added regression coverage to verify imperative focus/blur behavior and DOM-node handle wiring for both picker variants.
+  - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 131 tests).
 - Additional `@vue-spectrum/menu` trigger-aria parity update:
   - synchronized trigger ARIA attributes (`id`, `aria-haspopup`, `aria-expanded`, `aria-controls`) directly onto resolved trigger DOM nodes so component triggers stay accurate across open-state transitions.
   - tightened `ActionMenu` uncontrolled-open coverage to assert trigger `aria-expanded` updates after close.
