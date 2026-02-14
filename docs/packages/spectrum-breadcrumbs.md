@@ -120,6 +120,24 @@ Items can navigate by providing `href`.
 </Breadcrumbs>
 ```
 
+### Overflow and menu collapse
+
+`Breadcrumbs` shows up to 4 visible items. Extra items collapse into an overflow menu button automatically.
+
+```vue
+<Breadcrumbs showRoot>
+  <Item key="folder-1">Folder 1</Item>
+  <Item key="folder-2">Folder 2</Item>
+  <Item key="folder-3">Folder 3</Item>
+  <Item key="folder-4">Folder 4</Item>
+  <Item key="folder-5">Folder 5</Item>
+</Breadcrumbs>
+```
+
+- With `showRoot`, the first item stays visible when there is room.
+- If width is constrained, the root item may collapse into the overflow menu.
+- Overflow menu actions call `onAction` for non-current items.
+
 ### Disabled
 
 ```vue

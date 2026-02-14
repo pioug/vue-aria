@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/breadcrumbs`
+- Current focus package: `@vue-spectrum/provider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -119,7 +119,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/tree`: In progress
 - `@vue-spectrum/calendar`: In progress
 - `@vue-spectrum/datepicker`: In progress
-- `@vue-spectrum/breadcrumbs`: In progress
+- `@vue-spectrum/breadcrumbs`: Complete
 - `@vue-spectrum/dialog`: Complete
 - `@vue-spectrum/tooltip`: Complete
 - `@vue-spectrum/progress`: Complete
@@ -594,7 +594,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/breadcrumbs/test`
   - `references/react-spectrum/packages/@react-spectrum/breadcrumbs/docs`
 - Local package path: `packages/@vue-spectrum/breadcrumbs`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -614,10 +614,22 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - VitePress nav/sidebar entry for `/packages/spectrum-breadcrumbs`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/breadcrumbs`.
+- Additional overflow/menu parity update:
+  - ported responsive overflow measurement behavior with upstream-aligned visibility limits (`max 4`) and width-aware collapse logic (including `showRoot` and multiline branches).
+  - wired collapsed overflow menu composition using `MenuTrigger` + `ActionButton` + `Menu`, including selected/current-item handling and `onAction` suppression for current items.
+  - expanded adapted coverage for:
+    - max-visible behavior with and without `showRoot`
+    - narrow-width collapse and root-collapse edge cases
+    - variable-width root item behavior
+    - overflow-menu open/selection behavior and current-item guard
+    - link forwarding in collapsed trail and overflow menu items
+  - expanded docs with explicit overflow/menu-collapse guidance.
+  - `packages/@vue-spectrum/breadcrumbs/src/Breadcrumbs.ts`
+  - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
+  - `docs/packages/spectrum-breadcrumbs.md`
 
 ### Remaining for completion
-- Port overflow/menu-collapse behavior and associated tests once `@vue-spectrum/menu` is available.
-- Expand parity coverage for root-overflow, multiline truncation, and menu-action edge cases from upstream.
+- None currently tracked in this slice.
 
 ## 4l) Active Package Slice: @vue-spectrum/dialog
 - Upstream source path(s):
@@ -7578,6 +7590,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
   - `ROADMAP.md`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 37 tests).
+- Additional `@vue-spectrum/breadcrumbs` overflow/menu parity update:
+  - ported width-aware overflow collapse logic and upstream-aligned max-visible behavior.
+  - added collapsed overflow menu composition with `MenuTrigger` + `ActionButton` + `Menu`, including current-item action suppression.
+  - expanded tests for root-collapse/narrow-width/variable-width scenarios and menu/link interaction parity.
+  - expanded docs with explicit overflow and menu-collapse behavior guidance.
+  - marked `@vue-spectrum/breadcrumbs` slice complete and advanced focus to `@vue-spectrum/provider`.
+  - `packages/@vue-spectrum/breadcrumbs/src/Breadcrumbs.ts`
+  - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
+  - `docs/packages/spectrum-breadcrumbs.md`
+  - `ROADMAP.md`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 24 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/progress` visual parity update:
   - added class-level parity coverage for `size`, `staticColor`, and `variant="overBackground"` on `ProgressBar` and `ProgressCircle`.
   - expanded progress docs with explicit `overBackground` examples for both components.
