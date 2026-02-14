@@ -32,6 +32,7 @@ export interface SpectrumTableViewProps {
   defaultSelectedKeys?: Iterable<TableKey> | undefined;
   disabledKeys?: Iterable<TableKey> | undefined;
   disallowEmptySelection?: boolean | undefined;
+  escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   isDisabled?: boolean | undefined;
   autoFocus?: true | "first" | "last" | undefined;
   sortDescriptor?: SpectrumSortDescriptor | null | undefined;
@@ -600,6 +601,10 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    escapeKeyBehavior: {
+      type: String as PropType<"clearSelection" | "none" | undefined>,
+      default: undefined,
+    },
     isDisabled: {
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
@@ -843,6 +848,9 @@ export const TableView = defineComponent({
       },
       get onRowAction() {
         return props.onAction;
+      },
+      get escapeKeyBehavior() {
+        return props.escapeKeyBehavior;
       },
     };
 

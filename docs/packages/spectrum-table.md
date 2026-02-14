@@ -67,6 +67,7 @@ In static slot composition, each row's total cell span must match the declared c
 
 - `selectionMode`: `"none" | "single" | "multiple"`.
 - `selectionStyle`: `"highlight" | "checkbox"`.
+- `escapeKeyBehavior`: `"clearSelection" | "none"` to control Escape-key clearing behavior in selectable tables.
 - `sortDescriptor` / `defaultSortDescriptor` with `onSortChange`.
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
 - `columns` + `items` for data-driven rendering.
