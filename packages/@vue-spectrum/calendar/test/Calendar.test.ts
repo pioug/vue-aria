@@ -111,6 +111,27 @@ describe("Calendar", () => {
     expect(lastValue.day).toBe(17);
   });
 
+  it("emits onFocusChange when focus moves to another date", async () => {
+    const onFocusChange = vi.fn();
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        onFocusChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+    await press(day17!);
+
+    expect(onFocusChange).toHaveBeenCalled();
+    const focusedValue = onFocusChange.mock.calls.at(-1)?.[0] as CalendarDate;
+    expect(focusedValue.month).toBe(6);
+    expect(focusedValue.day).toBe(17);
+  });
+
   it("keeps visual selection stable in controlled calendar mode", async () => {
     const onChange = vi.fn();
     const wrapper = mount(Calendar as any, {
@@ -920,6 +941,27 @@ describe("Calendar", () => {
     expect(rangeValue.start.day).toBe(17);
     expect(rangeValue.end.month).toBe(6);
     expect(rangeValue.end.day).toBe(21);
+  });
+
+  it("emits range-calendar onFocusChange as focus moves across dates", async () => {
+    const onFocusChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 5),
+        onFocusChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day17 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "17");
+    expect(day17).toBeTruthy();
+    await press(day17!);
+
+    expect(onFocusChange).toHaveBeenCalled();
+    const focusedValue = onFocusChange.mock.calls.at(-1)?.[0] as CalendarDate;
+    expect(focusedValue.month).toBe(6);
+    expect(focusedValue.day).toBe(17);
   });
 
   it("prevents range selection changes when range-calendar is read-only", async () => {
