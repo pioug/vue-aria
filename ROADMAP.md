@@ -193,6 +193,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `test/Checkbox.ssr.test.ts`
 - Documentation scaffold added:
   - `docs/packages/spectrum-checkbox.md`
+  - `docs/packages/spectrum-checkbox-group.md`
   - VitePress nav/sidebar entry for `/packages/spectrum-checkbox`
 - Tooling wired:
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/checkbox`.
