@@ -7606,6 +7606,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 14 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` ActionMenu tooltip parity update:
+  - added upstream-aligned `ActionMenu` + `TooltipTrigger` integration coverage for mouse and keyboard open paths, asserting tooltip dismissal before menu display.
+  - expanded `ActionMenu` test surface with tooltip composition branches.
+  - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
+- Additional `@vue-aria/tooltip` fallback parity update:
+  - added mouse-event fallback dismissal (`onMousedown`) in `useTooltipTrigger` so `shouldCloseOnPress` remains effective in environments without native pointer-event support.
+  - `packages/@vue-aria/tooltip/src/useTooltipTrigger.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 16 tests).
+- Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 16 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

@@ -1,8 +1,11 @@
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { h, nextTick } from "vue";
 import { ActionMenu } from "../src/ActionMenu";
 import { Item } from "../src/Item";
+import { Tooltip } from "@vue-spectrum/tooltip";
+import { TooltipTrigger } from "@vue-spectrum/tooltip";
+import { setInteractionModality } from "@vue-aria/interactions";
 
 describe("ActionMenu", () => {
   afterEach(() => {
@@ -131,5 +134,96 @@ describe("ActionMenu", () => {
     expect(onOpenChange).toHaveBeenCalledTimes(1);
     await nextTick();
     expect(triggerButton.attributes("aria-expanded")).toBe("false");
+  });
+
+  describe("with tooltips", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    });
+
+    it("closes tooltip when opening menu with pointer interaction", async () => {
+      const wrapper = mount(TooltipTrigger as any, {
+        props: {
+          delay: 0,
+        },
+        slots: {
+          default: () => [
+            h(ActionMenu as any, null, {
+              default: () => [
+                h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+                h(Item as any, { key: "Bar" }, { default: () => "Bar" }),
+                h(Item as any, { key: "Baz" }, { default: () => "Baz" }),
+              ],
+            }),
+            h(Tooltip as any, null, {
+              default: () => "A whale of a tale.",
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const button = wrapper.get("button");
+      setInteractionModality("pointer");
+      await button.trigger("mouseenter");
+      await button.trigger("mousemove");
+      await nextTick();
+
+      expect(document.body.querySelector('[role="tooltip"]')).toBeTruthy();
+
+      await button.trigger("mousedown");
+      await button.trigger("mouseup");
+      await button.trigger("click");
+      vi.runAllTimers();
+      await nextTick();
+
+      expect(document.body.querySelector('[role="tooltip"]')).toBeNull();
+      const menu = document.body.querySelector('[role="menu"]');
+      expect(menu).toBeTruthy();
+      expect(menu?.getAttribute("aria-labelledby")).toBe(button.attributes("id"));
+    });
+
+    it("closes tooltip when opening menu with keyboard interaction", async () => {
+      const wrapper = mount(TooltipTrigger as any, {
+        props: {
+          delay: 0,
+        },
+        slots: {
+          default: () => [
+            h(ActionMenu as any, null, {
+              default: () => [
+                h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+                h(Item as any, { key: "Bar" }, { default: () => "Bar" }),
+                h(Item as any, { key: "Baz" }, { default: () => "Baz" }),
+              ],
+            }),
+            h(Tooltip as any, null, {
+              default: () => "A whale of a tale.",
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const button = wrapper.get("button");
+      await button.trigger("focus");
+      await nextTick();
+      expect(document.body.querySelector('[role="tooltip"]')).toBeTruthy();
+
+      await button.trigger("keydown", { key: "Enter" });
+      await button.trigger("keyup", { key: "Enter" });
+      vi.runAllTimers();
+      await nextTick();
+
+      expect(document.body.querySelector('[role="tooltip"]')).toBeNull();
+      const menu = document.body.querySelector('[role="menu"]');
+      expect(menu).toBeTruthy();
+      expect(menu?.getAttribute("aria-labelledby")).toBe(button.attributes("id"));
+    });
   });
 });
