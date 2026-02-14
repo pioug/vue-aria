@@ -546,6 +546,42 @@ export function tableTests() {
     expect(lastSelection?.has("row-2")).toBe(true);
   });
 
+  it("toggles checkbox-style multiple row selection on repeated presses", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const getRows = () => wrapper.findAll('tbody [role="row"]');
+    expect(getRows()).toHaveLength(2);
+
+    await press(getRows()[0]!);
+    let lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+    expect(getRows()[0]!.attributes("aria-selected")).toBe("true");
+    expect(getRows()[1]!.attributes("aria-selected")).toBe("false");
+
+    await press(getRows()[1]!);
+    lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection?.size).toBe(2);
+    expect(lastSelection?.has("row-1")).toBe(true);
+    expect(lastSelection?.has("row-2")).toBe(true);
+    expect(getRows()[0]!.attributes("aria-selected")).toBe("true");
+    expect(getRows()[1]!.attributes("aria-selected")).toBe("true");
+
+    await press(getRows()[1]!);
+    lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection?.size).toBe(1);
+    expect(lastSelection?.has("row-1")).toBe(true);
+    expect(lastSelection?.has("row-2")).toBe(false);
+    expect(getRows()[0]!.attributes("aria-selected")).toBe("true");
+    expect(getRows()[1]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("updates aria-selected on uncontrolled pointer selection", async () => {
     const wrapper = renderTable({
       selectionMode: "single",
