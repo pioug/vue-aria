@@ -253,6 +253,47 @@ describe("TreeView", () => {
     expect(reportsRow!.attributes("aria-posinset")).toBe("2");
   });
 
+  it("marks expandable rows as selectable when selection mode is enabled", () => {
+    const wrapper = mount(TreeView as any, {
+      props: {
+        "aria-label": "Selectable tree",
+        selectionMode: "single",
+      },
+      slots: {
+        default: () => [
+          h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Photos",
+              }),
+            ],
+          }),
+          h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+            default: () => [
+              h(TreeViewItemContent as any, null, {
+                default: () => "Projects",
+              }),
+              h(TreeViewItem as any, { id: "project-1", textValue: "Project 1" }, {
+                default: () => [
+                  h(TreeViewItemContent as any, null, {
+                    default: () => "Project 1",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('[role="row"]');
+    const projectsRow = rows.find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-label")).toBe("Projects");
+    expect(projectsRow!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports expanding child rows", async () => {
     const wrapper = renderTree();
 
