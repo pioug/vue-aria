@@ -9293,3 +9293,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 59 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` disabled-all selection suppression parity update:
+  - added migrated selection-mode coverage to verify disabled rows (`disabledBehavior="all"`) suppress both selection and expansion side effects for row press and `Enter`, keeping `aria-selected` unset.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 60 tests).
+- Validation: `npm run check -- --pretty false` passed.

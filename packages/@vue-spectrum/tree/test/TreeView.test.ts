@@ -1125,6 +1125,49 @@ describe("TreeView", () => {
     expect(wrapper.findAll('[role="row"]').some((row) => row.text().includes("Project 1"))).toBe(true);
   });
 
+  it('suppresses disabled row selection and expansion when disabledBehavior is "all" and selection is enabled', async () => {
+    const onExpandedChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTree({
+      selectionMode: "multiple",
+      disabledBehavior: "all",
+      disabledKeys: ["projects"],
+      defaultExpandedKeys: ["projects"],
+      onExpandedChange,
+      onSelectionChange,
+    });
+
+    let projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-disabled")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    await press(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+    await pressEnter(projectsRow!);
+
+    projectsRow = wrapper.findAll('[role="row"]').find((row) => row.text().includes("Projects"));
+    expect(projectsRow).toBeTruthy();
+    expect(projectsRow!.attributes("aria-expanded")).toBe("true");
+    expect(projectsRow!.attributes("data-expanded")).toBe("true");
+    expect(projectsRow!.attributes("aria-selected")).toBeUndefined();
+    expect(onExpandedChange).toHaveBeenCalledTimes(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
   it('expands disabled rows when disabledBehavior is "selection"', async () => {
     const wrapper = renderTree({
       selectionMode: "none",
