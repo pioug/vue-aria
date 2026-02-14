@@ -2714,8 +2714,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 6 (adapted)
-- Passing test files: 6 (validated 2026-02-14)
+- Ported test files: 7 (adapted)
+- Passing test files: 7 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted coverage for root grid semantics, shared list metadata wiring, and virtualized row/column count behavior.
   - Added adapted item-level coverage for row id wiring, action chaining, virtualized row index behavior, and tree expansion-key keyboard branches.
@@ -2724,6 +2724,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added selection-checkbox coverage for tree-state consumer wiring (shared row labeling against tree rows).
   - Added interaction-harness coverage for `keyboardNavigationBehavior="tab"` Tab-key containment within row children.
   - Expanded tab-navigation harness coverage for reverse `Shift+Tab` containment and terminal forward-Tab bubbling when no next tabbable child exists.
+  - Added RTL interaction harness coverage to assert mirrored ArrowLeft/ArrowRight child-focus traversal branches.
 - [x] All relevant upstream tests migrated
 
 ### Docs
