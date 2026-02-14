@@ -87,6 +87,7 @@ Select-all interactions (for example `Ctrl+A` in checkbox-style multiple selecti
 ## Selection Initialization and Disabled Keys
 
 Use `defaultSelectedKeys` to seed initial row selection. Use `disabledKeys` to prevent specific rows from being selected via interaction.
+Rows marked with item-level `isDisabled` are also non-selectable and excluded from select-all key sets.
 
 For controlled selection, pair `selectedKeys` with `onSelectionChange` and update `selectedKeys` from parent state.
 
