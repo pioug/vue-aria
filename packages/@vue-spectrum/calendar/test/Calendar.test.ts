@@ -406,6 +406,27 @@ describe("Calendar", () => {
     expect(root.attributes("aria-describedby")).toContain("trip-planner-help");
   });
 
+  it("renders selected range cell aria labels without unresolved placeholders", () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+      },
+      attachTo: document.body,
+    });
+
+    const selectedCells = wrapper.findAll('td[aria-selected="true"]');
+    expect(selectedCells.length).toBeGreaterThan(0);
+
+    const selectedDateButton = selectedCells[0]!.find(".react-spectrum-Calendar-date");
+    const selectedAriaLabel = selectedDateButton.attributes("aria-label");
+    expect(selectedAriaLabel).toBeTruthy();
+    expect(selectedAriaLabel).not.toMatch(/\{[A-Za-z_][A-Za-z0-9_-]*\}/);
+  });
+
   it("clamps range-calendar visibleMonths to one month for zero or negative values", () => {
     const zeroWrapper = mount(RangeCalendar as any, {
       props: {
