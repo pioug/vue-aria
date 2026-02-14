@@ -53,10 +53,53 @@ import { TreeView, TreeViewItem, TreeViewItemContent } from "@vue-spectrum/tree"
 </template>
 ```
 
+## Empty State
+
+```vue
+<script setup lang="ts">
+import { TreeView } from "@vue-spectrum/tree";
+
+const items: unknown[] = [];
+const renderEmptyState = () => "No rows found.";
+</script>
+
+<template>
+  <TreeView
+    aria-label="Empty tree"
+    :items="items"
+    :render-empty-state="renderEmptyState"
+  />
+</template>
+```
+
+## Highlight Selection
+
+```vue
+<script setup lang="ts">
+import { TreeView } from "@vue-spectrum/tree";
+
+const items = [
+  { id: "alpha", name: "Alpha" },
+  { id: "beta", name: "Beta" },
+  { id: "gamma", name: "Gamma" },
+];
+</script>
+
+<template>
+  <TreeView
+    aria-label="Highlight tree"
+    :items="items"
+    selection-mode="multiple"
+    selection-style="highlight"
+  />
+</template>
+```
+
 ## Key Props
 
 - `selectionMode`: `"none" | "single" | "multiple"`.
 - `selectionStyle`: `"highlight" | "checkbox"`.
+- `renderEmptyState`: callback for empty-state row content.
 - `expandedKeys` / `defaultExpandedKeys` with `onExpandedChange`.
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
 - `onAction` for row action handling.

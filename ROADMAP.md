@@ -9472,3 +9472,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.ssr.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 79 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` docs parity update:
+  - expanded package docs with explicit empty-state and highlight-selection examples.
+  - documented `renderEmptyState` in the key props matrix.
+    - `docs/packages/spectrum-tree.md`
+- Validation: `npm run docs:build` passed.
+- Validation: `npm run check -- --pretty false` passed.
