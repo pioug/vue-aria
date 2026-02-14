@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { I18nProvider } from "@vue-aria/i18n";
+import { Button } from "@vue-spectrum/button";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h } from "vue";
 import { ContextualHelpTrigger } from "../src/ContextualHelpTrigger";
@@ -646,6 +647,47 @@ describe("MenuTrigger", () => {
     triggerRef.focus();
     await Promise.resolve();
     expect(document.activeElement).toBe(buttonRef);
+  });
+
+  it("supports refs on both Button and MenuTrigger components", async () => {
+    let buttonRef: any = null;
+    let menuTriggerRef: any = null;
+
+    mount({
+      render() {
+        return h(MenuTrigger as any, {
+          ref: (value: unknown) => {
+            menuTriggerRef = value;
+          },
+        }, {
+          default: () => [
+            h(Button as any, {
+              ref: (value: unknown) => {
+                buttonRef = value;
+              },
+            }, {
+              default: () => "Menu Button",
+            }),
+            h(Menu as any, { ariaLabel: "Menu" }, {
+              default: () => [
+                h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+              ],
+            }),
+          ],
+        });
+      },
+    }, {
+      attachTo: document.body,
+    });
+
+    await Promise.resolve();
+
+    const triggerButton = document.body.querySelector("button") as HTMLElement | null;
+    expect(triggerButton).toBeTruthy();
+    expect(buttonRef).toBeTruthy();
+    expect(menuTriggerRef).toBeTruthy();
+    expect(buttonRef.UNSAFE_getDOMNode()).toBe(triggerButton);
+    expect(menuTriggerRef.UNSAFE_getDOMNode()).toBe(triggerButton);
   });
 
   it("exposes trigger dom node and focus handle", async () => {
