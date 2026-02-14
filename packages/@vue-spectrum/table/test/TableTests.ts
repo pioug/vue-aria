@@ -276,6 +276,7 @@ export function tableTests() {
     const bodyRows = wrapper.findAll('tbody [role="row"]');
     const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
     expect(firstRowCells).toHaveLength(2);
+    expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--hideHeader");
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
     expect(firstRowCells[1]!.classes()).not.toContain("spectrum-Table-cell--divider");
   });
@@ -372,6 +373,7 @@ export function tableTests() {
     const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
     expect(firstRowCells).toHaveLength(2);
     expect(firstRowCells[0]!.classes()).toContain("react-spectrum-Table-cell--alignCenter");
+    expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--hideHeader");
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
     expect(firstRowCells[1]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
     expect(firstRowCells[1]!.classes()).not.toContain("spectrum-Table-cell--divider");

@@ -399,6 +399,7 @@ const TableBodyCell = defineComponent({
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
+              "spectrum-Table-cell--hideHeader": Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.hideHeader),
               "spectrum-Table-cell--divider":
                 Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.showDivider)
                 && props.node.column?.nextKey != null,
