@@ -367,6 +367,53 @@ describe("SubmenuTrigger", () => {
     expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(0);
   });
 
+  it("closes submenu when focus moves to a sibling item in the parent menu", async () => {
+    const wrapper = mount(MenuTrigger as any, {
+      props: {
+        defaultOpen: true,
+      },
+      slots: {
+        default: () => [
+          h("button", { "data-testid": "trigger" }, "Menu Button"),
+          h(Menu as any, { ariaLabel: "Menu" }, {
+            default: () => [
+              h(SubmenuTrigger as any, null, {
+                default: () => [
+                  h(Item as any, { key: "more" }, { default: () => "More" }),
+                  h(Menu as any, { ariaLabel: "Submenu" }, {
+                    default: () => [
+                      h(Item as any, { key: "sub-1" }, { default: () => "Sub item" }),
+                    ],
+                  }),
+                ],
+              }),
+              h(Item as any, { key: "alpha" }, { default: () => "Alpha" }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const submenuTriggerItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("More")) as HTMLElement | undefined;
+    const siblingItem = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+      .find((item) => item.textContent?.includes("Alpha")) as HTMLElement | undefined;
+    expect(submenuTriggerItem).toBeTruthy();
+    expect(siblingItem).toBeTruthy();
+
+    submenuTriggerItem?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(document.body.querySelectorAll('[role="menu"]').length).toBeGreaterThanOrEqual(2);
+
+    siblingItem?.focus();
+    siblingItem?.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    await wrapper.vm.$nextTick();
+
+    expect(document.body.querySelectorAll('[role="menu"]')).toHaveLength(1);
+    expect(document.body.textContent).not.toContain("Sub item");
+  });
+
   it("closes submenu on Escape without closing root menu", async () => {
     const onRootClose = vi.fn();
     const onSubmenuClose = vi.fn();

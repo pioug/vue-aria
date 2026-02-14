@@ -9592,3 +9592,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 47 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` submenu-focusout parity update:
+  - added migrated `SubmenuTrigger` coverage asserting open submenus close when focus moves to a sibling item in the parent menu.
+  - validated submenu content teardown after parent-menu focus transfer.
+    - `packages/@vue-spectrum/menu/test/SubmenuTrigger.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 48 tests).
+- Validation: `npm run check -- --pretty false` passed.
