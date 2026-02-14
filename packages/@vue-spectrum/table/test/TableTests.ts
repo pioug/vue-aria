@@ -368,4 +368,24 @@ export function tableTests() {
     expect(headers[1]!.attributes("aria-sort")).toBe("descending");
     expect(wrapper.findAll('tbody [role="row"]')[0]!.text()).toContain("Foo 2");
   });
+
+  it("emits controlled sort changes without mutating rendered state", async () => {
+    const onSortChange = vi.fn();
+    const wrapper = renderTable({
+      sortDescriptor: {
+        column: "foo",
+        direction: "ascending",
+      },
+      onSortChange,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    await press(headers[0]!);
+
+    expect(onSortChange).toHaveBeenCalledWith({
+      column: "foo",
+      direction: "descending",
+    });
+    expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("ascending");
+  });
 }

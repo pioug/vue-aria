@@ -7899,6 +7899,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented controlled `sortDescriptor` + `onSortChange` usage and parent-driven sort state updates.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` controlled-sort interaction parity update:
+  - added coverage to verify controlled sort header presses emit next descriptors while rendered sort state remains parent-driven until props update.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test packages/@vue-aria/table/test` passed (10 files, 44 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
