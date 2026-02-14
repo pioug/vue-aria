@@ -1,6 +1,8 @@
 import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
+import { Checkbox } from "@vue-spectrum/checkbox";
 import { theme as defaultTheme } from "@vue-spectrum/theme";
+import { Switch } from "@vue-spectrum/switch";
 import { keepSpectrumClassNames, useBreakpoint, useStyleProps } from "@vue-spectrum/utils";
 import { createApp, defineComponent, h, nextTick, ref, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -456,6 +458,52 @@ describe("Provider", () => {
     unmount();
   });
 
+  it("forwards read-only props to spectrum checkbox and switch components", () => {
+    const onChangeSpy = vi.fn();
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isReadOnly: true,
+              },
+              () => [
+                h(
+                  Checkbox as any,
+                  {
+                    onChange: onChangeSpy,
+                  },
+                  () => "Test Checkbox"
+                ),
+                h(
+                  Switch as any,
+                  {
+                    onChange: onChangeSpy,
+                  },
+                  () => "Test Switch"
+                ),
+              ]
+            );
+        },
+      })
+    );
+
+    const checkboxInput = container.querySelector(".spectrum-Checkbox-input") as HTMLInputElement | null;
+    const switchInput = container.querySelector(".spectrum-ToggleSwitch-input") as HTMLInputElement | null;
+
+    expect(checkboxInput?.getAttribute("aria-readonly")).toBe("true");
+    expect(switchInput?.getAttribute("aria-readonly")).toBe("true");
+
+    checkboxInput?.click();
+    switchInput?.click();
+    expect(onChangeSpy).not.toHaveBeenCalled();
+    unmount();
+  });
+
   it("nested providers merge shared props for descendants", () => {
     const onPressSpy = vi.fn();
     const ActionProbe = defineComponent({
@@ -509,6 +557,50 @@ describe("Provider", () => {
 
     actionProbe?.click();
     expect(onPressSpy).not.toHaveBeenCalled();
+    unmount();
+  });
+
+  it("forwards nested provider disabled and emphasized props to spectrum checkbox components", () => {
+    const onChangeSpy = vi.fn();
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isDisabled: true,
+              },
+              () =>
+                h(
+                  Provider,
+                  {
+                    isEmphasized: true,
+                  },
+                  () =>
+                    h(
+                      Checkbox as any,
+                      {
+                        onChange: onChangeSpy,
+                      },
+                      () => "Nested checkbox"
+                    )
+                )
+            );
+        },
+      })
+    );
+
+    const checkboxLabel = container.querySelector(".spectrum-Checkbox") as HTMLElement | null;
+    const checkboxInput = container.querySelector(".spectrum-Checkbox-input") as HTMLInputElement | null;
+    expect(checkboxLabel).not.toBeNull();
+    expect(checkboxLabel?.classList.contains("spectrum-Checkbox--quiet")).toBe(false);
+    expect(checkboxInput?.disabled).toBe(true);
+
+    checkboxInput?.click();
+    expect(onChangeSpy).not.toHaveBeenCalled();
     unmount();
   });
 

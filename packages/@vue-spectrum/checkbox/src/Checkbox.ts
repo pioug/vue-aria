@@ -150,7 +150,7 @@ export const Checkbox = defineComponent({
         return Boolean(props.defaultSelected);
       },
       setSelected(value: boolean) {
-        if (props.isReadOnly || props.isDisabled) {
+        if (provided.isReadOnly || provided.isDisabled) {
           if (inputRef.value) {
             inputRef.value.checked = getSelected();
           }

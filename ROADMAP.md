@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/dialog`
+- Current focus package: `@vue-spectrum/provider`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -120,7 +120,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/calendar`: In progress
 - `@vue-spectrum/datepicker`: In progress
 - `@vue-spectrum/breadcrumbs`: In progress
-- `@vue-spectrum/dialog`: In progress
+- `@vue-spectrum/dialog`: Complete
 - `@vue-spectrum/tooltip`: Complete
 - `@vue-spectrum/progress`: In progress
 - `@vue-spectrum/meter`: In progress
@@ -522,7 +522,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/dialog/test`
   - `references/react-spectrum/packages/@react-spectrum/dialog/docs`
 - Local package path: `packages/@vue-spectrum/dialog`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -4530,6 +4530,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] Class-stack compatibility slice ported:
   - Added baseline `spectrum` provider class + root isolation style behavior
   - Added compatibility flag wiring via `shouldKeepSpectrumClassNames` (`react-spectrum-provider` class behavior)
+- [x] Provider-prop forwarding parity slice ported:
+  - `useProviderProps` now preserves inherited provider values when local component props are `undefined`.
+  - `Checkbox` provider-state guard now honors merged provider props (`isReadOnly`/`isDisabled`) for selection-change suppression.
 - Open adaptation notes:
   - Remaining upstream wrapper gaps: exact upstream CSS-module class stack parity for Spectrum page/typography temp styles.
 
@@ -4548,7 +4551,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added adapted provider class-stack coverage for baseline `spectrum` class/root isolation and compatibility mode (`react-spectrum-provider` class).
   - Added adapted `Provider.ssr` coverage validating Vue SSR rendering under localized navigator state.
   - Added provider/theme integration coverage validating `theme-light`, `theme-dark`, and `theme-express` variant class composition.
-- [ ] All relevant upstream tests migrated
+  - Added provider integration coverage using real `@vue-spectrum/checkbox` and `@vue-spectrum/switch` components for provider-prop forwarding semantics.
+- [x] All relevant upstream tests migrated
 
 ### Docs
 - [x] VitePress package page scaffolded (`docs/packages/provider.md`)
@@ -4565,9 +4569,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - [x] No React runtime dependency in current slice
 
 ### Next Actions
-1. Reconcile remaining `Provider.test.tsx` prop-forwarding scenarios tied to downstream Spectrum components as those component ports land.
-2. Finalize exact upstream page/typography class-stack parity as Spectrum CSS module strategy is introduced.
-3. Finalize base style/class composition parity docs once upstream Spectrum CSS module strategy is wired.
+1. Finalize exact upstream page/typography class-stack parity as Spectrum CSS module strategy is introduced.
+2. Finalize base style/class composition parity docs once upstream Spectrum CSS module strategy is wired.
 
 ## 45) Package Record: @vue-spectrum/utils
 - Upstream source path(s):
@@ -7461,6 +7464,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/interactions/src/useFocusable.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tooltip/test` passed (4 files, 14 tests).
 - Validation: `npm test -- packages/@vue-aria/interactions/test` passed (14 files, 50 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/provider` forwarding parity update:
+  - added real-component provider forwarding coverage for:
+    - read-only propagation to `@vue-spectrum/checkbox` and `@vue-spectrum/switch`
+    - nested disabled/emphasized propagation to `@vue-spectrum/checkbox`
+  - updated `useProviderProps` merge behavior to preserve inherited provider values when local props are `undefined`.
+  - fixed `Checkbox` toggle guard to respect merged provider `isReadOnly`/`isDisabled` values.
+  - `packages/@vue-spectrum/provider/src/Provider.ts`
+  - `packages/@vue-spectrum/provider/test/Provider.test.ts`
+  - `packages/@vue-spectrum/checkbox/src/Checkbox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.

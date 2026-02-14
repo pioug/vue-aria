@@ -316,13 +316,20 @@ export function useProviderProps<T extends Record<string, unknown>>(props: T): T
     return props;
   }
 
-  return {
+  const merged: Record<string, unknown> = {
     isQuiet: context.value.isQuiet,
     isEmphasized: context.value.isEmphasized,
     isDisabled: context.value.isDisabled,
     isRequired: context.value.isRequired,
     isReadOnly: context.value.isReadOnly,
     validationState: context.value.validationState,
-    ...props,
-  } as T;
+  };
+
+  for (const [key, value] of Object.entries(props)) {
+    if (value !== undefined) {
+      merged[key] = value;
+    }
+  }
+
+  return merged as T;
 }
