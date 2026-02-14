@@ -7302,3 +7302,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added `AlertDialog` usage example covering destructive variant and primary/secondary disabled-action props.
     - `docs/packages/spectrum-dialog.md`
 - Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 20 tests).
+- Additional `@vue-spectrum/dialog` parity update:
+  - expanded `DialogContainer` parity coverage for:
+    - multiple-child guard error behavior
+    - `type` propagation through `useDialogContainer`
+    - `packages/@vue-spectrum/dialog/test/DialogContainer.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/dialog/test` passed (5 files, 22 tests).
+- Validation: `npm run check -- --pretty false` passed.

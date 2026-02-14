@@ -46,4 +46,39 @@ describe("DialogContainer", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
   });
+
+  it("throws when multiple children are passed", () => {
+    const onDismiss = vi.fn();
+    expect(() =>
+      mount(DialogContainer as any, {
+        props: {
+          onDismiss,
+        },
+        slots: {
+          default: () => [h("div", "one"), h("div", "two")],
+        },
+      })
+    ).toThrow("Only a single child can be passed to DialogContainer.");
+  });
+
+  it("exposes container type through useDialogContainer", () => {
+    const TypeReader = defineComponent({
+      setup() {
+        const container = useDialogContainer();
+        return () => h("p", { "data-testid": "container-type" }, container.type ?? "none");
+      },
+    });
+
+    const wrapper = mount(DialogContainer as any, {
+      props: {
+        type: "tray",
+        onDismiss: vi.fn(),
+      },
+      slots: {
+        default: () => h(TypeReader),
+      },
+    });
+
+    expect(wrapper.get('[data-testid="container-type"]').text()).toBe("tray");
+  });
 });
