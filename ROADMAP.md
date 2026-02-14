@@ -9478,3 +9478,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `docs/packages/spectrum-tree.md`
 - Validation: `npm run docs:build` passed.
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` empty-state metadata parity update:
+  - expanded empty-state structural coverage to assert row-level `data-level`, missing selection attributes, and empty-cell class wiring.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 79 tests).
+- Validation: `npm run check -- --pretty false` passed.
