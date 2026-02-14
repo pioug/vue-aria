@@ -4554,6 +4554,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - Added provider/theme integration coverage validating `theme-light`, `theme-dark`, and `theme-express` variant class composition.
   - Added provider integration coverage using real `@vue-spectrum/checkbox` and `@vue-spectrum/switch` components for provider-prop forwarding semantics.
   - Added provider integration coverage using real `@vue-spectrum/button` `ActionButton` for nested disabled/quiet forwarding semantics.
+  - Added `useProviderProps` merge regression coverage for undefined-vs-explicit override behavior against inherited provider values.
 - [x] All relevant upstream tests migrated
 
 ### Docs
@@ -7484,6 +7485,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/provider/test/Provider.test.ts`
   - `packages/@vue-spectrum/button/src/ActionButton.ts`
 - Validation: `npm test -- packages/@vue-spectrum/provider/test packages/@vue-spectrum/button/test` passed (9 files, 100 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/provider` merge regression update:
+  - added `useProviderProps` regression coverage for:
+    - inherited provider-value retention when local props are `undefined`
+    - explicit local boolean overrides (`false`) over inherited provider values
+  - `packages/@vue-spectrum/provider/test/Provider.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/provider/test` passed (4 files, 44 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/dialog` interaction parity update:
   - wired modal/popover/tray outside-interaction dismissal and Escape-key behavior through `useOverlay`, including `isKeyboardDismissDisabled` context propagation.

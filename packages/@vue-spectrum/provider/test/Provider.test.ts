@@ -399,6 +399,88 @@ describe("Provider", () => {
     unmount();
   });
 
+  it("preserves inherited provider values when local props are undefined", () => {
+    const Probe = defineComponent({
+      name: "UndefinedOverrideProbe",
+      setup() {
+        const merged = useProviderProps({
+          isReadOnly: undefined,
+          isDisabled: undefined,
+        });
+
+        return () =>
+          h("div", {
+            "data-testid": "probe",
+            "data-readonly": String((merged as { isReadOnly?: boolean }).isReadOnly),
+            "data-disabled": String((merged as { isDisabled?: boolean }).isDisabled),
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isReadOnly: true,
+                isDisabled: true,
+              },
+              () => h(Probe)
+            );
+        },
+      })
+    );
+
+    const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
+    expect(probe?.dataset.readonly).toBe("true");
+    expect(probe?.dataset.disabled).toBe("true");
+    unmount();
+  });
+
+  it("lets explicit local provider-prop values override inherited values", () => {
+    const Probe = defineComponent({
+      name: "ExplicitOverrideProbe",
+      setup() {
+        const merged = useProviderProps({
+          isReadOnly: false,
+          isDisabled: false,
+        });
+
+        return () =>
+          h("div", {
+            "data-testid": "probe",
+            "data-readonly": String((merged as { isReadOnly?: boolean }).isReadOnly),
+            "data-disabled": String((merged as { isDisabled?: boolean }).isDisabled),
+          });
+      },
+    });
+
+    const { container, unmount } = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              Provider,
+              {
+                theme,
+                isReadOnly: true,
+                isDisabled: true,
+              },
+              () => h(Probe)
+            );
+        },
+      })
+    );
+
+    const probe = container.querySelector('[data-testid="probe"]') as HTMLElement | null;
+    expect(probe?.dataset.readonly).toBe("false");
+    expect(probe?.dataset.disabled).toBe("false");
+    unmount();
+  });
+
   it("passes read-only provider props to child controls", () => {
     const onChangeSpy = vi.fn();
     const ToggleProbe = defineComponent({
