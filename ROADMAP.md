@@ -6692,6 +6692,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added focus-callback parity coverage for `onFocusChange` in both `Calendar` and `RangeCalendar`.
     - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 55 tests).
+- Additional `@vue-spectrum/calendar` parity update:
+  - added controlled-focus parity coverage for:
+    - `focusedValue` updates in both `Calendar` and `RangeCalendar`
+    - disabled interaction blocking in `RangeCalendar`
+    - `packages/@vue-spectrum/calendar/test/Calendar.test.ts`
+- Additional `@vue-spectrum/calendar` parity update:
+  - keyed month-view remounts to a reactive state snapshot so controlled focus/selection updates refresh calendar cell semantics.
+    - `packages/@vue-spectrum/calendar/src/Calendar.ts`
+- Additional `@vue-aria/calendar-state` parity update:
+  - fixed `useRangeCalendarState` controlled-prop reactivity by preserving dynamic getters (rather than destructuring) for range value/focus/calendar options.
+    - `packages/@vue-aria/calendar-state/src/useRangeCalendarState.ts`
+- Validation: `npm test -- packages/@vue-spectrum/calendar/test` passed (2 files, 58 tests).
+- Validation: `npm test -- packages/@vue-aria/calendar-state/test` passed (2 files, 16 tests).
 - Lifecycle cleanup parity update:
   - guarded `@vue-aria/i18n` default-locale listener disposal by active scope, eliminating repeated calendar `onScopeDispose()` warnings in test/SSR execution.
 - Validation: `npm test -- packages/@vue-aria/i18n/test` passed (3 files, 5 tests).

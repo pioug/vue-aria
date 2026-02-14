@@ -75,25 +75,15 @@ function nextUnavailableDate(
 export function useRangeCalendarState<T extends DateValue = DateValue>(
   props: RangeCalendarStateOptions<T>
 ): RangeCalendarState<T> {
-  const {
-    value: valueProp,
-    defaultValue,
-    onChange,
-    createCalendar,
-    locale,
-    visibleDuration = { months: 1 },
-    minValue,
-    maxValue,
-    ...calendarProps
-  } = props;
+  const visibleDuration = computed<DateDuration>(() => props.visibleDuration ?? { months: 1 });
 
   const [valueRef, setControlledValue] = useControlledState<
     RangeValue<any> | null,
     RangeValue<any> | null
   >(
-    () => valueProp as RangeValue<any> | null | undefined,
-    () => (defaultValue ?? null) as RangeValue<any> | null,
-    onChange as ((value: RangeValue<any> | null) => void) | undefined
+    () => props.value as RangeValue<any> | null | undefined,
+    () => (props.defaultValue ?? null) as RangeValue<any> | null,
+    props.onChange as ((value: RangeValue<any> | null) => void) | undefined
   );
 
   const anchorDateRef = ref<any>(null);
@@ -102,12 +92,12 @@ export function useRangeCalendarState<T extends DateValue = DateValue>(
   if (valueRef.value?.start && valueRef.value.end) {
     const start = alignCenter(
       toCalendarDate(valueRef.value.start),
-      visibleDuration,
-      locale,
-      minValue,
-      maxValue
+      visibleDuration.value,
+      props.locale,
+      props.minValue,
+      props.maxValue
     );
-    const end = start.add(visibleDuration).subtract({ days: 1 });
+    const end = start.add(visibleDuration.value).subtract({ days: 1 });
 
     if ((valueRef.value.end as any).compare(end) > 0) {
       alignment = "start";
@@ -117,24 +107,63 @@ export function useRangeCalendarState<T extends DateValue = DateValue>(
   const availableRangeRef = ref<Partial<RangeValue<DateValue>> | null>(null);
   const availableRange = ref<Partial<RangeValue<DateValue>> | null>(null);
 
-  const min = computed(() => maxDate(minValue, availableRange.value?.start));
-  const max = computed(() => minDate(maxValue, availableRange.value?.end));
+  const min = computed(() => maxDate(props.minValue, availableRange.value?.start));
+  const max = computed(() => minDate(props.maxValue, availableRange.value?.end));
 
   const calendar = useCalendarState({
-    ...calendarProps,
     get value() {
       return valueRef.value?.start ?? null;
     },
-    createCalendar,
-    locale,
-    visibleDuration,
+    get defaultValue() {
+      return valueRef.value?.start ?? null;
+    },
+    get focusedValue() {
+      return props.focusedValue;
+    },
+    get defaultFocusedValue() {
+      return props.defaultFocusedValue;
+    },
+    onFocusChange: props.onFocusChange,
+    get isDisabled() {
+      return props.isDisabled;
+    },
+    get isReadOnly() {
+      return props.isReadOnly;
+    },
+    isDateUnavailable: props.isDateUnavailable,
+    get autoFocus() {
+      return props.autoFocus;
+    },
+    get isInvalid() {
+      return props.isInvalid;
+    },
+    get validationState() {
+      return props.validationState;
+    },
+    get firstDayOfWeek() {
+      return props.firstDayOfWeek;
+    },
+    get pageBehavior() {
+      return props.pageBehavior;
+    },
+    get locale() {
+      return props.locale;
+    },
+    get visibleDuration() {
+      return visibleDuration.value;
+    },
+    get createCalendar() {
+      return props.createCalendar;
+    },
     get minValue() {
       return min.value;
     },
     get maxValue() {
       return max.value;
     },
-    selectionAlignment: props.selectionAlignment || alignment,
+    get selectionAlignment() {
+      return props.selectionAlignment || alignment;
+    },
   } as any);
 
   const updateAvailableRange = (date: any) => {
@@ -225,7 +254,8 @@ export function useRangeCalendarState<T extends DateValue = DateValue>(
       return true;
     }
 
-    return isInvalid(value.start, minValue, maxValue) || isInvalid(value.end, minValue, maxValue);
+    return isInvalid(value.start, props.minValue, props.maxValue)
+      || isInvalid(value.end, props.minValue, props.maxValue);
   });
 
   const isValueInvalid = computed(

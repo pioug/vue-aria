@@ -303,6 +303,33 @@ const CalendarBaseView = defineComponent({
   setup(props) {
     const prevButton = createNavButton(props.prevButtonProps);
     const nextButton = createNavButton(props.nextButtonProps);
+    const renderStateKey = computed(() => {
+      const focused = String(props.state.focusedDate);
+      const value = (props.state as any).value;
+      const isFocused = props.state.isFocused ? "1" : "0";
+      const validationState = String(props.state.validationState ?? "");
+
+      if (value && typeof value === "object" && "start" in value && "end" in value) {
+        const anchor = "anchorDate" in props.state && props.state.anchorDate
+          ? String(props.state.anchorDate)
+          : "";
+        return [
+          focused,
+          String(value.start),
+          String(value.end),
+          anchor,
+          isFocused,
+          validationState,
+        ].join("|");
+      }
+
+      return [
+        focused,
+        value ? String(value) : "",
+        isFocused,
+        validationState,
+      ].join("|");
+    });
 
     return () =>
       h(
@@ -348,7 +375,7 @@ const CalendarBaseView = defineComponent({
             },
             Array.from({ length: props.visibleMonths }, (_, index) =>
               h(CalendarMonthView, {
-                key: String(props.state.visibleRange.start.add({ months: index })),
+                key: `${String(props.state.visibleRange.start.add({ months: index }))}-${renderStateKey.value}`,
                 monthStart: props.state.visibleRange.start.add({ months: index }),
                 firstDayOfWeek: props.firstDayOfWeek,
                 locale: props.locale,

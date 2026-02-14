@@ -132,6 +132,26 @@ describe("Calendar", () => {
     expect(focusedValue.day).toBe(17);
   });
 
+  it("honors controlled focusedValue updates for calendar focus state", async () => {
+    const wrapper = mount(Calendar as any, {
+      props: {
+        "aria-label": "Calendar",
+        defaultValue: new CalendarDate(2019, 6, 5),
+        focusedValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-Calendar-date[tabindex='0']").text()).toBe("5");
+
+    await wrapper.setProps({
+      focusedValue: new CalendarDate(2019, 6, 17),
+    });
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-Calendar-date[tabindex='0']").text()).toBe("17");
+  });
+
   it("keeps visual selection stable in controlled calendar mode", async () => {
     const onChange = vi.fn();
     const wrapper = mount(Calendar as any, {
@@ -962,6 +982,51 @@ describe("Calendar", () => {
     const focusedValue = onFocusChange.mock.calls.at(-1)?.[0] as CalendarDate;
     expect(focusedValue.month).toBe(6);
     expect(focusedValue.day).toBe(17);
+  });
+
+  it("honors controlled focusedValue updates for range-calendar focus state", async () => {
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultValue: {
+          start: new CalendarDate(2019, 6, 5),
+          end: new CalendarDate(2019, 6, 8),
+        },
+        focusedValue: new CalendarDate(2019, 6, 5),
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get(".react-spectrum-Calendar-date[tabindex='0']").text()).toBe("5");
+
+    await wrapper.setProps({
+      focusedValue: new CalendarDate(2019, 6, 17),
+    });
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-Calendar-date[tabindex='0']").text()).toBe("17");
+  });
+
+  it("prevents range selection changes when range-calendar is disabled", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(RangeCalendar as any, {
+      props: {
+        "aria-label": "Range calendar",
+        defaultFocusedValue: new CalendarDate(2019, 6, 5),
+        isDisabled: true,
+        onChange,
+      },
+      attachTo: document.body,
+    });
+
+    const day10 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "10");
+    const day12 = wrapper.findAll(".react-spectrum-Calendar-date").find((cell) => cell.text() === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+
+    await press(day10!);
+    await press(day12!);
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("prevents range selection changes when range-calendar is read-only", async () => {
