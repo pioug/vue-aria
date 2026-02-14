@@ -34,6 +34,11 @@ const itemsWithIdOnly: SpectrumTableRowData[] = [
   { id: "id-2", foo: "Foo B", bar: "Bar B", baz: "Baz B" },
 ];
 
+const itemsWithEmptyStringId: SpectrumTableRowData[] = [
+  { id: "", foo: "Foo Empty", bar: "Bar Empty", baz: "Baz Empty" },
+  { id: "id-2", foo: "Foo B", bar: "Bar B", baz: "Baz B" },
+];
+
 const columnsWithSpan: SpectrumTableColumnData[] = [
   { key: "col-1", title: "Col 1", isRowHeader: true },
   { key: "col-2", title: "Col 2" },
@@ -492,6 +497,25 @@ export function tableTests() {
     const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
     expect(lastSelection).toBeInstanceOf(Set);
     expect(lastSelection?.has("id-2")).toBe(true);
+  });
+
+  it("preserves empty-string row ids in selection callbacks", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithEmptyStringId,
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[0]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has("")).toBe(true);
   });
 
   it("renders empty state content when no rows are present", () => {

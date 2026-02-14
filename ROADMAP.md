@@ -7998,6 +7998,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - documented `items[].cells` `colSpan` usage for data-driven table composition.
   - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` empty-string key parity update:
+  - added regression coverage to verify empty-string row `id` values are preserved in selection callback keys.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` docs parity update:
+  - clarified that empty-string row IDs remain valid row keys.
+  - `docs/packages/spectrum-table.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.
