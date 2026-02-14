@@ -29,6 +29,11 @@ const itemsWithFalsyRowKey: SpectrumTableRowData[] = [
   { key: 1, foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
 ];
 
+const itemsWithIdOnly: SpectrumTableRowData[] = [
+  { id: "id-1", foo: "Foo A", bar: "Bar A", baz: "Baz A" },
+  { id: "id-2", foo: "Foo B", bar: "Bar B", baz: "Baz B" },
+];
+
 function renderTable(props: Record<string, unknown> = {}) {
   return mount(TableView as any, {
     props: {
@@ -373,6 +378,25 @@ export function tableTests() {
     const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<number> | undefined;
     expect(lastSelection).toBeInstanceOf(Set);
     expect(lastSelection?.has(0)).toBe(true);
+  });
+
+  it("supports row id fallback when key is omitted", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithIdOnly,
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      onSelectionChange,
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await press(bodyRows[1]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has("id-2")).toBe(true);
   });
 
   it("renders empty state content when no rows are present", () => {
