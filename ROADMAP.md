@@ -2773,13 +2773,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 
 ### Tests
 - Total upstream test files: no dedicated package-local unit test folder
-- Ported test files: 3 (adapted)
-- Passing test files: 3 (validated 2026-02-14)
+- Ported test files: 4 (adapted)
+- Passing test files: 4 (validated 2026-02-14)
 - Test parity notes:
   - Added adapted `useTree` coverage for treegrid-role override behavior.
   - Added adapted `useTreeItem` coverage for expand-button labeling and toggle/focus state updates.
   - Added adapted keyboard-navigation integration coverage mirroring upstream tree-state story behavior (`2 -> 6 -> 8` visible item progression via keyboard expansion and arrow navigation focus movement).
   - Expanded integrated keyboard coverage to include nested and root-level ArrowLeft collapse behavior (`8 -> 6 -> 2` visible item progression).
+  - Added intl-bundle regression coverage to assert copied upstream locale entries and locale-count floor.
 - [ ] All relevant upstream tests migrated
 
 ### Docs
@@ -5308,3 +5309,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated package record `31k` implementation notes to reflect locale-bundle parity.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-aria/tree/test` passed (3 files, 4 tests).
+- Added `@vue-aria/tree` intl regression coverage:
+  - added `packages/@vue-aria/tree/test/intlMessages.test.ts` to assert copied locale entries and locale-count floor for the upstream bundle.
+  - updated package record `31k` test counts/notes to include intl bundle verification.
+- Validation: `npm run check -- --pretty false` passed.
+- Validation: `npm test -- packages/@vue-aria/tree/test` passed (4 files, 6 tests).
