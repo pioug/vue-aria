@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/picker`
+- Current focus package: `@vue-spectrum/combobox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -7749,6 +7749,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/picker/test/Picker.test.ts`
   - `packages/@vue-spectrum/menu/src/Popover.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test packages/@vue-spectrum/menu/test` passed (8 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-selection parity update:
+  - added controlled-selection interaction coverage to ensure `selectedKey` remains source-of-truth after user option selection.
+  - stabilized combobox keyboard-focus test harness with `scrollIntoView` mocking.
+  - enforced controlled `selectedKey` synchronization in `ComboBox` to prevent uncontrolled internal drift while preserving prop-driven updates.
+  - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 7 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.

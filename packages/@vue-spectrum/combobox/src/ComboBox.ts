@@ -262,13 +262,13 @@ export const ComboBox = defineComponent({
     } as any);
 
     watch(
-      () => props.selectedKey,
-      (selectedKey) => {
+      () => [props.selectedKey, state.selectedKey] as const,
+      ([selectedKey, currentSelectedKey]) => {
         if (selectedKey === undefined) {
           return;
         }
 
-        if (state.selectedKey !== selectedKey) {
+        if (currentSelectedKey !== selectedKey) {
           state.setSelectedKey(selectedKey ?? null);
         }
       },

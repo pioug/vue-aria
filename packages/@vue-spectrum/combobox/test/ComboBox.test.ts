@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { h, nextTick } from "vue";
 import { ComboBox } from "../src/ComboBox";
 import { Item } from "../src/Item";
@@ -22,7 +22,37 @@ function renderComboBox(props: Record<string, unknown> = {}) {
   });
 }
 
+let restoreScrollIntoView: (() => void) | null = null;
+
 describe("ComboBox", () => {
+  beforeAll(() => {
+    const prototype = window.HTMLElement.prototype as HTMLElement & { scrollIntoView?: (arg?: unknown) => void };
+    const original = prototype.scrollIntoView;
+
+    Object.defineProperty(prototype, "scrollIntoView", {
+      configurable: true,
+      writable: true,
+      value: vi.fn(),
+    });
+
+    restoreScrollIntoView = () => {
+      if (original) {
+        Object.defineProperty(prototype, "scrollIntoView", {
+          configurable: true,
+          writable: true,
+          value: original,
+        });
+        return;
+      }
+
+      delete (prototype as unknown as { scrollIntoView?: unknown }).scrollIntoView;
+    };
+  });
+
+  afterAll(() => {
+    restoreScrollIntoView?.();
+  });
+
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -72,6 +102,27 @@ describe("ComboBox", () => {
     await nextTick();
 
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Three");
+  });
+
+  it("keeps controlled selectedKey value on selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "1",
+      onSelectionChange,
+    });
+
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[1]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("One");
   });
 
   it("supports slot-defined items and sections", async () => {
