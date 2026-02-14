@@ -250,6 +250,32 @@ export function tableTests() {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("updates disabled row selection behavior when disabledKeys changes", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      disabledKeys: new Set(["row-1"]),
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    await wrapper.setProps({
+      disabledKeys: new Set(["row-2"]),
+    });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toBeInstanceOf(Set);
+    expect(lastSelection?.has("row-1")).toBe(true);
+  });
+
   it("updates selection when controlled selectedKeys changes", async () => {
     const wrapper = renderTable({
       selectionMode: "single",

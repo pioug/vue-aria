@@ -715,6 +715,9 @@ export const TableView = defineComponent({
     });
 
     const slotDefinition = computed(() => parseTableSlotDefinition(slots.default?.() as VNode[] | undefined));
+    const disabledKeysVersion = computed(() =>
+      props.disabledKeys ? Array.from(props.disabledKeys).map((key) => String(key)).sort().join("|") : ""
+    );
 
     const normalizedDefinition = computed<NormalizedSpectrumTableDefinition>(() => {
       const normalized = normalizeTableDefinition({
@@ -892,7 +895,7 @@ export const TableView = defineComponent({
             bodyRows.length > 0
               ? bodyRows.map((rowNode, rowIndex) =>
                 h(TableBodyRow, {
-                  key: String(rowNode.key),
+                  key: `${String(rowNode.key)}:${disabledKeysVersion.value}`,
                   node: rowNode,
                   state,
                   rowIndex,
