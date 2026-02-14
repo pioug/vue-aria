@@ -8363,6 +8363,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `docs/packages/spectrum-table.md`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 91 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` static-slot column-metadata parity update:
+  - added static-slot regression coverage to verify `align`, `hideHeader`, and `showDivider` metadata apply the same header/body classes as data-driven columns.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 92 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/numberfield` input-mode parity update:
   - added adapted iPad and Mac WebKit branch coverage to lock numeric inputMode behavior in non-mobile Safari paths.
   - marked `@vue-spectrum/numberfield` slice complete and advanced focus to `@vue-spectrum/breadcrumbs`.

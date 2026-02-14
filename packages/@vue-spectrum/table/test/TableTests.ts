@@ -314,6 +314,51 @@ export function tableTests() {
     expect(onAction).toHaveBeenCalledWith("row-2");
   });
 
+  it("applies column metadata classes in static slot syntax", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot metadata table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+              h(Column as any, { id: "bar", align: "center", hideHeader: true, showDivider: true }, () => "Bar"),
+              h(Column as any, { id: "baz", align: "end", showDivider: true }, () => "Baz"),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Alpha"),
+                  h(Cell as any, () => "Beta"),
+                  h(Cell as any, () => "Gamma"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(headers[1]!.classes()).toContain("react-spectrum-Table-cell--alignCenter");
+    expect(headers[1]!.classes()).toContain("spectrum-Table-cell--hideHeader");
+    expect(headers[2]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    const firstRowCells = bodyRows[0]!.findAll('[role="gridcell"]');
+    expect(firstRowCells).toHaveLength(2);
+    expect(firstRowCells[0]!.classes()).toContain("react-spectrum-Table-cell--alignCenter");
+    expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
+    expect(firstRowCells[1]!.classes()).toContain("react-spectrum-Table-cell--alignEnd");
+    expect(firstRowCells[1]!.classes()).not.toContain("spectrum-Table-cell--divider");
+  });
+
   it("throws when static slot row cells do not match column count", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
