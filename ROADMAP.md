@@ -11793,3 +11793,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 144 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 200 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` sizing baseline parity implementation:
+  - added column sizing metadata support for `width`, `minWidth`, and `maxWidth` across data and slot definitions:
+    - normalized sizing props in table column parsing/normalization (including kebab-case slot props and numeric-string coercion).
+    - propagated column sizing styles to header and body cells.
+    - `packages/@vue-spectrum/table/src/types.ts`
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded table coverage for sizing metadata:
+    - numeric and string sizing styles with prop-driven `columns`.
+    - static slot and kebab-case static slot sizing metadata.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 148 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 204 tests).
+- Validation: `npm run check -- --pretty false` passed.

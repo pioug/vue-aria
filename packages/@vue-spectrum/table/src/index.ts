@@ -24,6 +24,7 @@ export type {
   TableKey,
   SpectrumTableSelectionMode,
   SpectrumTableSelectionStyle,
+  SpectrumTableColumnSize,
   SpectrumSortDescriptor,
   SpectrumSortDirection,
   SpectrumTableColumnData,

@@ -38,6 +38,18 @@ const columnsWithHeaderDisplayMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", showDivider: true },
 ];
 
+const columnsWithSizingMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 200 },
+  { key: "bar", title: "Bar", minWidth: 150 },
+  { key: "baz", title: "Baz", maxWidth: 300 },
+];
+
+const columnsWithStringSizingMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: "25%" },
+  { key: "bar", title: "Bar", minWidth: "12rem" },
+  { key: "baz", title: "Baz", maxWidth: "40ch" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -312,6 +324,44 @@ export function tableTests() {
     expect(firstRowCells[1]!.classes()).not.toContain("spectrum-Table-cell--divider");
   });
 
+  it("applies numeric column sizing styles to headers and body cells", () => {
+    const wrapper = renderTable({
+      columns: columnsWithSizingMetadata,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect((headers[0]!.element as HTMLElement).style.width).toBe("200px");
+    expect((headers[1]!.element as HTMLElement).style.minWidth).toBe("150px");
+    expect((headers[2]!.element as HTMLElement).style.maxWidth).toBe("300px");
+
+    const firstRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeader = firstRow.get('[role="rowheader"]');
+    const bodyCells = firstRow.findAll('[role="gridcell"]');
+    expect((rowHeader.element as HTMLElement).style.width).toBe("200px");
+    expect((bodyCells[0]!.element as HTMLElement).style.minWidth).toBe("150px");
+    expect((bodyCells[1]!.element as HTMLElement).style.maxWidth).toBe("300px");
+  });
+
+  it("applies string column sizing styles to headers and body cells", () => {
+    const wrapper = renderTable({
+      columns: columnsWithStringSizingMetadata,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect((headers[0]!.element as HTMLElement).style.width).toBe("25%");
+    expect((headers[1]!.element as HTMLElement).style.minWidth).toBe("12rem");
+    expect((headers[2]!.element as HTMLElement).style.maxWidth).toBe("40ch");
+
+    const firstRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeader = firstRow.get('[role="rowheader"]');
+    const bodyCells = firstRow.findAll('[role="gridcell"]');
+    expect((rowHeader.element as HTMLElement).style.width).toBe("25%");
+    expect((bodyCells[0]!.element as HTMLElement).style.minWidth).toBe("12rem");
+    expect((bodyCells[1]!.element as HTMLElement).style.maxWidth).toBe("40ch");
+  });
+
   it("supports static slot table syntax", async () => {
     const onAction = vi.fn();
 
@@ -490,6 +540,86 @@ export function tableTests() {
     const firstRowCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="gridcell"]');
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--hideHeader");
     expect(firstRowCells[0]!.classes()).toContain("spectrum-Table-cell--divider");
+  });
+
+  it("supports static slot column sizing metadata", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot sizing table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true, width: 220 }, () => "Foo"),
+              h(Column as any, { id: "bar", minWidth: 180 }, () => "Bar"),
+              h(Column as any, { id: "baz", maxWidth: 280 }, () => "Baz"),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                  h(Cell as any, () => "Baz 1"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect((headers[0]!.element as HTMLElement).style.width).toBe("220px");
+    expect((headers[1]!.element as HTMLElement).style.minWidth).toBe("180px");
+    expect((headers[2]!.element as HTMLElement).style.maxWidth).toBe("280px");
+
+    const firstRow = wrapper.get('tbody [role="row"]');
+    const rowHeader = firstRow.get('[role="rowheader"]');
+    const bodyCells = firstRow.findAll('[role="gridcell"]');
+    expect((rowHeader.element as HTMLElement).style.width).toBe("220px");
+    expect((bodyCells[0]!.element as HTMLElement).style.minWidth).toBe("180px");
+    expect((bodyCells[1]!.element as HTMLElement).style.maxWidth).toBe("280px");
+  });
+
+  it("supports kebab-case static slot column sizing metadata", () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab sizing table">
+          <TableHeader>
+            <Column id="foo" is-row-header width="120">Foo</Column>
+            <Column id="bar" min-width="10rem">Bar</Column>
+            <Column id="baz" max-width="36ch">Baz</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell>Foo 1</Cell>
+              <Cell>Bar 1</Cell>
+              <Cell>Baz 1</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect((headers[0]!.element as HTMLElement).style.width).toBe("120px");
+    expect((headers[1]!.element as HTMLElement).style.minWidth).toBe("10rem");
+    expect((headers[2]!.element as HTMLElement).style.maxWidth).toBe("36ch");
   });
 
   it("throws when static slot row cells do not match column count", () => {

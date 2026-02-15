@@ -6,6 +6,7 @@ export type TableKey = Key;
 export type SpectrumTableSelectionMode = "none" | "single" | "multiple";
 export type SpectrumTableSelectionStyle = "highlight" | "checkbox";
 export type SpectrumTableColumnAlign = "start" | "center" | "end";
+export type SpectrumTableColumnSize = number | string;
 export type SpectrumSortDirection = SortDirection;
 export type SpectrumSortDescriptor = SortDescriptor;
 
@@ -21,6 +22,9 @@ export interface SpectrumTableColumnData {
   hideHeader?: boolean | undefined;
   showDivider?: boolean | undefined;
   colSpan?: number | undefined;
+  width?: SpectrumTableColumnSize | undefined;
+  minWidth?: SpectrumTableColumnSize | undefined;
+  maxWidth?: SpectrumTableColumnSize | undefined;
 }
 
 export interface SpectrumTableCellData {
@@ -50,6 +54,9 @@ export interface ParsedSpectrumTableColumn {
   hideHeader?: boolean | undefined;
   showDivider?: boolean | undefined;
   colSpan?: number | undefined;
+  width?: SpectrumTableColumnSize | undefined;
+  minWidth?: SpectrumTableColumnSize | undefined;
+  maxWidth?: SpectrumTableColumnSize | undefined;
   content?: VNodeChild;
 }
 
@@ -90,6 +97,9 @@ export interface NormalizedSpectrumTableColumn {
   hideHeader?: boolean | undefined;
   showDivider?: boolean | undefined;
   colSpan?: number | undefined;
+  width?: SpectrumTableColumnSize | undefined;
+  minWidth?: SpectrumTableColumnSize | undefined;
+  maxWidth?: SpectrumTableColumnSize | undefined;
 }
 
 export interface NormalizedSpectrumTableCell {
@@ -148,6 +158,30 @@ function normalizeNumberProp(value: unknown): number | undefined {
     if (Number.isFinite(parsed)) {
       return parsed;
     }
+  }
+
+  return undefined;
+}
+
+function normalizeColumnSizeProp(value: unknown): SpectrumTableColumnSize | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.length === 0) {
+      return undefined;
+    }
+
+    if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+      const parsed = Number(trimmed);
+      if (Number.isFinite(parsed)) {
+        return parsed;
+      }
+    }
+
+    return trimmed;
   }
 
   return undefined;
@@ -294,6 +328,9 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
   const hideHeader = props.hideHeader ?? props["hide-header"];
   const showDivider = props.showDivider ?? props["show-divider"];
   const colSpan = props.colSpan ?? props["col-span"];
+  const width = props.width;
+  const minWidth = props.minWidth ?? props["min-width"];
+  const maxWidth = props.maxWidth ?? props["max-width"];
   const textValue =
     toStringValue(props.textValue ?? props.title ?? props.name) || extractTextContent(content);
 
@@ -306,6 +343,9 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     hideHeader: normalizeBooleanProp(hideHeader),
     showDivider: normalizeBooleanProp(showDivider),
     colSpan: normalizeNumberProp(colSpan),
+    width: normalizeColumnSizeProp(width),
+    minWidth: normalizeColumnSizeProp(minWidth),
+    maxWidth: normalizeColumnSizeProp(maxWidth),
     content,
   };
 }
@@ -424,6 +464,9 @@ function normalizeColumnsFromSlot(
         hideHeader: column.hideHeader,
         showDivider: column.showDivider,
         colSpan: column.colSpan,
+        width: column.width,
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth,
       };
     });
   }
@@ -507,6 +550,9 @@ function normalizeColumnsFromProps(
         hideHeader: column.hideHeader,
         showDivider: column.showDivider,
         colSpan: normalizeNumberProp(column.colSpan),
+        width: normalizeColumnSizeProp(column.width),
+        minWidth: normalizeColumnSizeProp(column.minWidth),
+        maxWidth: normalizeColumnSizeProp(column.maxWidth),
       };
     });
   }

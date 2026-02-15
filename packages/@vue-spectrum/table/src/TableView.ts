@@ -26,6 +26,7 @@ import type {
   ParsedSpectrumTableDefinition,
   NormalizedSpectrumTableRow,
   SpectrumSortDescriptor,
+  SpectrumTableColumnSize,
   SpectrumTableCellData,
   SpectrumTableColumnData,
   SpectrumTableRowData,
@@ -183,6 +184,9 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
         column.textValue ?? "",
         column.align ?? "",
         column.colSpan ?? "",
+        column.width ?? "",
+        column.minWidth ?? "",
+        column.maxWidth ?? "",
         column.allowsSorting ? "1" : "0",
         column.isRowHeader ? "1" : "0",
         column.hideHeader ? "1" : "0",
@@ -233,6 +237,9 @@ function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridN
       hideHeader: column.hideHeader,
       showDivider: column.showDivider,
       colSpan: column.colSpan,
+      width: column.width,
+      minWidth: column.minWidth,
+      maxWidth: column.maxWidth,
     },
   }));
 }
@@ -242,6 +249,43 @@ function resolveCellAlignment(node: GridNode<NormalizedSpectrumTableRow>): "star
   const nodeProps = node.props as Record<string, unknown> | undefined;
   const align = columnProps?.align ?? nodeProps?.align;
   return align === "start" || align === "center" || align === "end" ? align : undefined;
+}
+
+function toColumnSizeStyleValue(value: SpectrumTableColumnSize | unknown): string | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return `${value}px`;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }
+
+  return undefined;
+}
+
+function resolveColumnSizingStyles(columnProps: Record<string, unknown> | undefined): Record<string, string> | undefined {
+  const width = toColumnSizeStyleValue(columnProps?.width);
+  const minWidth = toColumnSizeStyleValue(columnProps?.minWidth);
+  const maxWidth = toColumnSizeStyleValue(columnProps?.maxWidth);
+  if (!width && !minWidth && !maxWidth) {
+    return undefined;
+  }
+
+  const style: Record<string, string> = {};
+  if (width) {
+    style.width = width;
+  }
+
+  if (minWidth) {
+    style.minWidth = minWidth;
+  }
+
+  if (maxWidth) {
+    style.maxWidth = maxWidth;
+  }
+
+  return style;
 }
 
 function createRowCellNodes(
@@ -614,6 +658,7 @@ const TableHeaderCell = defineComponent({
     const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
     const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
     const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
+    const columnSizingStyles = computed(() => resolveColumnSizingStyles(columnProps.value));
     const handleHeaderArrowDown = (event: KeyboardEvent) => {
       if (!("expandedKeys" in props.state)) {
         return;
@@ -666,6 +711,7 @@ const TableHeaderCell = defineComponent({
           ],
           "aria-colindex":
             props.node.colIndex != null ? props.node.colIndex + 1 : props.node.index + 1,
+          style: columnSizingStyles.value,
         },
         isSelectionCell.value
           ? h(TableSelectionCheckbox, { checkboxProps: selectAllCheckboxProps })
@@ -765,6 +811,9 @@ const TableBodyCell = defineComponent({
       "@react-spectrum/table"
     );
     const alignment = computed(() => resolveCellAlignment(props.node));
+    const columnSizingStyles = computed(() =>
+      resolveColumnSizingStyles((props.node.column?.props as Record<string, unknown> | undefined))
+    );
     const { checkboxProps: selectionCheckboxProps } = useTableSelectionCheckbox(
       {
         get key() {
@@ -825,6 +874,7 @@ const TableBodyCell = defineComponent({
           ],
           colSpan: resolvedColSpan.value,
           "aria-colspan": resolvedColSpan.value,
+          style: columnSizingStyles.value,
         },
         isSelectionCell.value
           ? h(TableSelectionCheckbox, { checkboxProps: selectionCheckboxProps })
@@ -1024,6 +1074,18 @@ export const Column = createStaticTableComponent("Column", {
   },
   colSpan: {
     type: Number as PropType<number | undefined>,
+    default: undefined,
+  },
+  width: {
+    type: [Number, String] as PropType<SpectrumTableColumnSize | undefined>,
+    default: undefined,
+  },
+  minWidth: {
+    type: [Number, String] as PropType<SpectrumTableColumnSize | undefined>,
+    default: undefined,
+  },
+  maxWidth: {
+    type: [Number, String] as PropType<SpectrumTableColumnSize | undefined>,
     default: undefined,
   },
 });
