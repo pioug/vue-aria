@@ -10769,3 +10769,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-prop rerender parity update:
+  - added migrated coverage for controlled prop update matrix behavior:
+    - updates when `selectedKey` and `inputValue` change together
+    - does not change controlled `inputValue` when only `selectedKey` changes
+    - updates input field when `inputValue` prop changes
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 51 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -199,6 +199,74 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("updates when selectedKey and inputValue controlled props change together", async () => {
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      inputValue: "Two",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await wrapper.setProps({
+      selectedKey: "1",
+      inputValue: "One",
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.setProps({
+      selectedKey: null,
+      inputValue: "",
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("");
+  });
+
+  it("does not update controlled inputValue when only selectedKey changes", async () => {
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      inputValue: "Two",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await wrapper.setProps({
+      selectedKey: "1",
+      inputValue: "Two",
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await wrapper.setProps({
+      selectedKey: null,
+      inputValue: "Two",
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+  });
+
+  it("updates the input field when inputValue prop changes", async () => {
+    const wrapper = renderComboBox({
+      inputValue: "T",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+
+    await wrapper.setProps({
+      inputValue: "Tw",
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Tw");
+  });
+
   it("sets aria-invalid semantics when validationState is invalid", () => {
     const wrapper = renderComboBox({
       validationState: "invalid",
