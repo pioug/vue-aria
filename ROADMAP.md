@@ -10932,3 +10932,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 84 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` active-descendant arrow-clear parity update:
+  - added migrated coverage asserting ArrowLeft/ArrowRight clear `aria-activedescendant` after an option receives virtual focus.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 85 tests).
+- Validation: `npm run check -- --pretty false` passed.

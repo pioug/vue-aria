@@ -1351,6 +1351,26 @@ describe("ComboBox", () => {
     expect(input.attributes("aria-activedescendant")).toBe(options[2]?.attributes("id"));
   });
 
+  it("clears aria-activedescendant on ArrowLeft and ArrowRight", async () => {
+    for (const key of ["ArrowRight", "ArrowLeft"] as const) {
+      const wrapper = renderComboBox();
+      const input = wrapper.get('input[role="combobox"]');
+
+      await input.trigger("focus");
+      await input.trigger("keydown", { key: "ArrowDown" });
+      await nextTick();
+      await nextTick();
+
+      expect(input.attributes("aria-activedescendant")).toBeDefined();
+
+      await input.trigger("keydown", { key });
+      await nextTick();
+      expect(input.attributes("aria-activedescendant")).toBeUndefined();
+
+      wrapper.unmount();
+    }
+  });
+
   it("commits focused option on Enter and closes the menu", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
