@@ -102,6 +102,16 @@ describe("ComboBox", () => {
     }
   });
 
+  it("supports ariaLabel when no visible label is provided", () => {
+    const wrapper = renderComboBox({
+      label: undefined,
+      ariaLabel: "Framework",
+    });
+
+    expect(wrapper.find("label").exists()).toBe(false);
+    expect(wrapper.get('input[role="combobox"]').attributes("aria-label")).toBe("Framework");
+  });
+
   it("opens with trigger click and selects an option", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
