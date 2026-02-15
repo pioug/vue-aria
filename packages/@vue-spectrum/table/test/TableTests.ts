@@ -3000,6 +3000,27 @@ export function tableTests() {
     expect(selectAll.attributes("aria-checked")).toBe("false");
   });
 
+  it("disables the select-all checkbox in checkbox single-selection mode", () => {
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "single",
+      selectionStyle: "checkbox",
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    expect(selectAll.attributes("disabled")).toBeDefined();
+  });
+
+  it("does not render a select-all checkbox when selection mode is none", () => {
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "none",
+      selectionStyle: "checkbox",
+    });
+
+    expect(wrapper.find('thead input[role="checkbox"]').exists()).toBe(false);
+  });
+
   it("excludes disabled keys when selecting all via the select-all checkbox", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
