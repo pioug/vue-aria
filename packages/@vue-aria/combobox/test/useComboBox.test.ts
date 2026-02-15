@@ -273,4 +273,91 @@ describe("useComboBox", () => {
     expect(announceMock).toHaveBeenCalledTimes(1);
     stop();
   });
+
+  it("announces focused option changes with section details on Apple devices", async () => {
+    isAppleDeviceMock.mockReturnValue(true);
+    const { state, stop } = createScopedComboBox({
+      items: [
+        { id: 1, name: "one" },
+        { id: 2, name: "two" },
+      ],
+    });
+    const section = {
+      key: "group-a",
+      rendered: "Group A",
+      childNodes: [{ key: 1 }, { key: 2 }],
+    };
+    const itemOne = { key: 1, parentKey: "group-a", textValue: "one" };
+    const itemTwo = { key: 2, parentKey: "group-a", textValue: "two" };
+
+    const collection = (state as any).collection as {
+      getItem: (key: string | number) => unknown;
+      getChildren?: (key: string | number) => Iterable<unknown>;
+    };
+    const originalGetItem = collection.getItem.bind(collection);
+    vi.spyOn(collection as any, "getItem").mockImplementation((...args: unknown[]) => {
+      const key = args[0] as string | number;
+      if (key === 1) {
+        return itemOne;
+      }
+      if (key === 2) {
+        return itemTwo;
+      }
+      if (key === "group-a") {
+        return section;
+      }
+      return originalGetItem(key);
+    });
+    if (typeof collection.getChildren === "function") {
+      vi.spyOn(collection as any, "getChildren").mockImplementation((...args: unknown[]) => {
+        const key = args[0] as string | number;
+        if (key === "group-a") {
+          return section.childNodes.values();
+        }
+        return [][Symbol.iterator]();
+      });
+    } else {
+      Object.defineProperty(collection, "getChildren", {
+        configurable: true,
+        value(key: string | number) {
+          if (key === "group-a") {
+            return section.childNodes.values();
+          }
+          return [][Symbol.iterator]();
+        },
+      });
+    }
+
+    state.open();
+    await nextTick();
+    announceMock.mockClear();
+
+    state.selectionManager.setFocusedKey(1);
+    await nextTick();
+    expect(announceMock).toHaveBeenCalledTimes(1);
+    expect(announceMock).toHaveBeenLastCalledWith(expect.stringContaining("Entered group Group A"));
+    expect(announceMock).toHaveBeenLastCalledWith(expect.stringContaining("one"));
+
+    state.selectionManager.setFocusedKey(2);
+    await nextTick();
+    expect(announceMock).toHaveBeenCalledTimes(2);
+    expect(announceMock).toHaveBeenLastCalledWith(expect.stringContaining("two"));
+
+    stop();
+  });
+
+  it("does not announce focused option changes on non-Apple devices", async () => {
+    isAppleDeviceMock.mockReturnValue(false);
+    const { state, stop } = createScopedComboBox();
+
+    state.open();
+    await nextTick();
+    announceMock.mockClear();
+
+    state.selectionManager.setFocusedKey(1);
+    await nextTick();
+
+    expect(announceMock).toHaveBeenCalledTimes(0);
+    stop();
+  });
 });

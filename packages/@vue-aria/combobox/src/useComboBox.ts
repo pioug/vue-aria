@@ -60,6 +60,29 @@ export interface ComboBoxAria<T> {
   validationDetails: ValidityState | null;
 }
 
+function getCollectionChildren(
+  collection: { getChildren?: (key: Key) => Iterable<unknown> },
+  node: { key: Key; childNodes?: Iterable<unknown> }
+): Iterable<unknown> {
+  if (typeof collection.getChildren === "function") {
+    return collection.getChildren(node.key);
+  }
+
+  return node.childNodes ?? [];
+}
+
+function getChildCount(
+  collection: { getChildren?: (key: Key) => Iterable<unknown> },
+  node: { key: Key; childNodes?: Iterable<unknown> }
+): number {
+  let count = 0;
+  for (const _ of getCollectionChildren(collection, node)) {
+    count += 1;
+  }
+
+  return count;
+}
+
 export function useComboBox<T>(
   props: AriaComboBoxOptions<T>,
   state: ComboBoxState<T>
@@ -379,6 +402,60 @@ export function useComboBox<T>(
     });
   });
 
+  const lastSectionKey = ref<Key | null>(null);
+  const lastFocusedKey = ref<Key | null>(null);
+  const lastOptionCount = ref(getItemCount(state.collection as any));
+  const lastOpenState = ref(state.isOpen);
+  const lastSelectedKey = ref(state.selectedKey);
+
+  watchEffect(() => {
+    const focusedItem =
+      state.selectionManager.focusedKey != null && state.isOpen
+        ? (state.collection.getItem(state.selectionManager.focusedKey as Key) as
+          | {
+            parentKey?: Key | null;
+            textValue?: string;
+            rendered?: unknown;
+            childNodes?: Iterable<unknown>;
+            "aria-label"?: string;
+            key?: Key;
+          }
+          | null)
+        : null;
+    const sectionKey = focusedItem?.parentKey ?? null;
+    const itemKey = state.selectionManager.focusedKey ?? null;
+    const section = sectionKey != null
+      ? (state.collection.getItem(sectionKey as Key) as
+        | { key: Key; childNodes?: Iterable<unknown>; rendered?: unknown; "aria-label"?: string }
+        | null)
+      : null;
+
+    if (
+      shouldAnnounceAppleSelection()
+      && focusedItem != null
+      && itemKey != null
+      && itemKey !== lastFocusedKey.value
+    ) {
+      const sectionTitle = section?.["aria-label"]
+        ?? (typeof section?.rendered === "string" ? section.rendered : "")
+        ?? "";
+      const groupCount = section ? getChildCount(state.collection as any, section) : 0;
+      const optionText = focusedItem["aria-label"] ?? focusedItem.textValue ?? "";
+      announce(
+        stringFormatter.format("focusAnnouncement", {
+          isGroupChange: Boolean(section && sectionKey !== lastSectionKey.value),
+          groupTitle: sectionTitle,
+          groupCount,
+          optionText,
+          isSelected: state.selectionManager.isSelected(itemKey),
+        } as any)
+      );
+    }
+
+    lastSectionKey.value = sectionKey;
+    lastFocusedKey.value = itemKey;
+  });
+
   watchEffect(() => {
     const focusedKey = state.selectionManager.focusedKey;
     if (
@@ -390,13 +467,11 @@ export function useComboBox<T>(
     }
   });
 
-  const lastOptionCount = ref(getItemCount(state.collection as any));
-  const lastOpenState = ref(state.isOpen);
   watchEffect(() => {
     const optionCount = getItemCount(state.collection as any);
     const didOpenWithoutFocusedItem =
       state.isOpen !== lastOpenState.value
-      && (state.selectionManager.focusedKey == null || isAppleDevice());
+      && (state.selectionManager.focusedKey == null || shouldAnnounceAppleSelection());
 
     if (state.isOpen && (didOpenWithoutFocusedItem || optionCount !== lastOptionCount.value)) {
       announce(getComboBoxCountAnnouncement(state as any, stringFormatter as any));
@@ -406,7 +481,6 @@ export function useComboBox<T>(
     lastOpenState.value = state.isOpen;
   });
 
-  const lastSelectedKey = ref(state.selectedKey);
   watchEffect(() => {
     if (shouldAnnounceAppleSelection() && state.isFocused && state.selectedItem && state.selectedKey !== lastSelectedKey.value) {
       const optionText = (state.selectedItem as { "aria-label"?: string; textValue?: string })["aria-label"]

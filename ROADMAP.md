@@ -11577,3 +11577,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/combobox` Apple focus-announcement parity refinement:
+  - aligned VoiceOver focus-announcement handling with upstream semantics by tracking focused-item and section transitions in `useComboBox`, including group-title/group-count announcement payloads.
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+  - hardened child-node counting fallback so grouped announcements work with either `collection.getChildren` or section `childNodes` data.
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+  - added hook-level regression coverage asserting:
+    - Apple-platform focused option changes announce section-entry and option text details.
+    - non-Apple focused option changes do not trigger VoiceOver-specific focus announcements.
+    - `packages/@vue-aria/combobox/test/useComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-aria/combobox/test/useComboBox.test.ts` passed (1 file, 11 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (5 files, 170 tests).
+- Validation: `npm run check -- --pretty false` passed.
