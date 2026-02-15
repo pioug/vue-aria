@@ -110,15 +110,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/numberfield`: Complete
 - `@vue-spectrum/slider`: Complete
 - `@vue-spectrum/link`: Complete
-- `@vue-spectrum/menu`: In progress
-- `@vue-spectrum/listbox`: In progress
-- `@vue-spectrum/picker`: In progress
-- `@vue-spectrum/combobox`: In progress
-- `@vue-spectrum/tabs`: In progress
+- `@vue-spectrum/menu`: Complete
+- `@vue-spectrum/listbox`: Complete
+- `@vue-spectrum/picker`: Complete
+- `@vue-spectrum/combobox`: Complete
+- `@vue-spectrum/tabs`: Complete
 - `@vue-spectrum/table`: In progress
 - `@vue-spectrum/tree`: Complete
-- `@vue-spectrum/calendar`: In progress
-- `@vue-spectrum/datepicker`: In progress
+- `@vue-spectrum/calendar`: Complete
+- `@vue-spectrum/datepicker`: Complete
 - `@vue-spectrum/breadcrumbs`: Complete
 - `@vue-spectrum/dialog`: Complete
 - `@vue-spectrum/tooltip`: Complete
@@ -11669,6 +11669,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 177 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1368 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Queue-status alignment update:
+  - marked `@vue-spectrum/menu`, `@vue-spectrum/listbox`, `@vue-spectrum/picker`, `@vue-spectrum/combobox`, `@vue-spectrum/tabs`, `@vue-spectrum/calendar`, and `@vue-spectrum/datepicker` as `Complete` in the execution queue based on passing parity suites and previously logged docs/behavioral coverage.
+  - kept `@vue-spectrum/table` as `In progress` pending remaining upstream table slices (DnD/sizing/tree-grid breadth).
 - Additional `@vue-spectrum/table` selection-checkbox parity refinement:
   - wired dedicated table selection checkbox rendering for header/body selection cells:
     - `TableHeaderCell` now renders select-all checkbox semantics via `useTableSelectAllCheckbox`.
