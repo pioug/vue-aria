@@ -1,7 +1,7 @@
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 import { useSingleSelectListState } from "@vue-aria/list-state";
 import { useFormValidationState, type ValidationResult } from "@vue-aria/form-state";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { Key } from "@vue-aria/collections";
 import type { SpectrumPickerProps } from "./types";
 
@@ -83,8 +83,6 @@ export function usePickerState(
   const focusStrategyRef = ref<"first" | "last" | null>(null);
   const isFocusedRef = ref(false);
 
-  const defaultValue = keyToString(props.defaultSelectedKey);
-
   const singleState = useSingleSelectListState<object>({
     collection,
     disabledKeys,
@@ -99,6 +97,17 @@ export function usePickerState(
       overlayState.close();
     },
   });
+
+  watch(
+    () => props.defaultSelectedKey,
+    (nextDefault, previousDefault) => {
+      if (props.selectedKey !== undefined || Object.is(nextDefault, previousDefault)) {
+        return;
+      }
+
+      singleState.setSelectedKey(nextDefault ?? null);
+    }
+  );
 
   const validation = useFormValidationState<string | null>({
     ...props,
@@ -181,7 +190,7 @@ export function usePickerState(
       return keyToString(singleState.selectedKey);
     },
     get defaultValue() {
-      return defaultValue;
+      return keyToString(props.defaultSelectedKey);
     },
     setValue(value: string | string[]) {
       const candidate = Array.isArray(value) ? value[0] : value;

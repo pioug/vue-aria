@@ -11305,3 +11305,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 72 tests).
 - Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test` passed (7 files, 120 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` form-action default-key parity refinement:
+  - added migrated coverage asserting uncontrolled picker `defaultSelectedKey` updates are reflected after form submit action flows.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - synced uncontrolled picker selection when `defaultSelectedKey` changes and exposed live picker `defaultValue` for hidden-select integration.
+    - `packages/@vue-spectrum/picker/src/state.ts`
+  - fixed hidden-select render wiring to keep native select `value`/`defaultValue` in sync with reactive picker state across prop-driven updates.
+    - `packages/@vue-aria/select/src/HiddenSelect.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 73 tests).
+- Validation: `npm test -- packages/@vue-aria/select/test packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/combobox/test packages/@vue-spectrum/picker/test` passed (12 files, 280 tests).
+- Validation: `npm run check -- --pretty false` passed.

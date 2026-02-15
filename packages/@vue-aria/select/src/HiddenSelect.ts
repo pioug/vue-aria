@@ -89,8 +89,6 @@ export function useHiddenSelect(
       required: validationBehavior === "native" && isRequired,
       name,
       form,
-      defaultValue: (state.defaultValue as string | string[] | null) ?? "",
-      value: (state.value as string | string[]) ?? "",
       onChange,
       onInput: onChange,
       onFocus: () => (triggerRef.current as HTMLElement | null)?.focus(),
@@ -134,6 +132,8 @@ export const HiddenSelect = defineComponent({
       const resolvedName = selectProps.name as string | undefined;
       const resolvedForm = selectProps.form as string | undefined;
       const resolvedDisabled = selectProps.disabled as boolean | undefined;
+      const resolvedDefaultValue = (props.state.defaultValue as string | string[] | null) ?? "";
+      const resolvedValue = (props.state.value as string | string[]) ?? "";
 
       if (props.state.collection?.size <= 300) {
         const optionNodes: any[] = [];
@@ -168,7 +168,12 @@ export const HiddenSelect = defineComponent({
         return h(
           "div",
           { ...containerProps, "data-testid": "hidden-select-container" },
-          h("label", [props.label, h("select", { ...selectProps, ref: selectRef }, optionNodes)])
+          h("label", [props.label, h("select", {
+            ...selectProps,
+            defaultValue: resolvedDefaultValue,
+            value: resolvedValue,
+            ref: selectRef,
+          }, optionNodes)])
         );
       }
 

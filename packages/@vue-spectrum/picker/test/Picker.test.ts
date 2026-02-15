@@ -1075,6 +1075,48 @@ describe("Picker", () => {
     expect((select.element as HTMLSelectElement).value).toBe("2");
   });
 
+  it("updates defaultSelectedKey after form submit action", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const defaultKey = ref("1");
+          const onSubmit = (event: Event) => {
+            event.preventDefault();
+            defaultKey.value = "2";
+          };
+
+          return () =>
+            h("form", { onSubmit }, [
+              h(Picker as any, {
+                ariaLabel: "Picker",
+                name: "picker",
+                items,
+                defaultSelectedKey: defaultKey.value,
+              }),
+              h("button", {
+                type: "submit",
+                "data-testid": "submit",
+              }, "submit"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get('button[aria-haspopup="listbox"]');
+    const select = wrapper.get('select[name="picker"]');
+    expect(trigger.text()).toContain("One");
+    expect((select.element as HTMLSelectElement).value).toBe("1");
+
+    await wrapper.get('[data-testid="submit"]').trigger("click");
+    await nextTick();
+
+    expect(trigger.text()).toContain("Two");
+    expect((select.element as HTMLSelectElement).value).toBe("2");
+  });
+
   it("submits empty option value by default", () => {
     const wrapper = mount(
       defineComponent({
