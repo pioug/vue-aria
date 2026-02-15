@@ -810,6 +810,43 @@ export function tableTests() {
     expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(390, 3);
   });
 
+  it("supports kebab-case static slot default-width metadata", () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab default-width table">
+          <TableHeader>
+            <Column id="foo" is-row-header default-width="30%">Foo</Column>
+            <Column id="bar">Bar</Column>
+            <Column id="baz">Baz</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell>Foo 1</Cell>
+              <Cell>Bar 1</Cell>
+              <Cell>Baz 1</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
+    expect(parseFloat((headers[1]!.element as HTMLElement).style.width)).toBeCloseTo(350, 3);
+    expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(350, 3);
+  });
+
   it("supports kebab-case static slot column sizing metadata", () => {
     const TemplateHarness = defineComponent({
       components: {
