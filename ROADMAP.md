@@ -11166,3 +11166,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/src/state.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 42 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` labeling parity update:
+  - added migrated coverage for `aria-labelledby` labeling and combined `aria-label` + `aria-labelledby` trigger labeling paths.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 44 tests).
+- Validation: `npm run check -- --pretty false` passed.

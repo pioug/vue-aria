@@ -739,6 +739,53 @@ describe("Picker", () => {
     expect(select.attributes("autocomplete")).toBe("address-level1");
   });
 
+  it("supports labeling via aria-labelledby", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", null, [
+              h("span", { id: "picker-labelledby" }, "External label"),
+              h(Picker as any, {
+                ariaLabelledby: "picker-labelledby",
+                items,
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get("button");
+    expect(trigger.attributes("aria-labelledby")).toContain("picker-labelledby");
+  });
+
+  it("supports combined aria-label and aria-labelledby labeling", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("div", null, [
+              h("span", { id: "picker-labelledby" }, "External label"),
+              h(Picker as any, {
+                ariaLabel: "Fallback label",
+                ariaLabelledby: "picker-labelledby",
+                items,
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get("button");
+    expect(trigger.attributes("aria-labelledby")).toContain("picker-labelledby");
+  });
+
   it("focuses trigger when clicking the label", async () => {
     const wrapper = renderPicker({
       label: "Test",
