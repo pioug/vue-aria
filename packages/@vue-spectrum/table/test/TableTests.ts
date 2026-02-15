@@ -185,6 +185,11 @@ const itemsWithThreeRows: SpectrumTableRowData[] = [
   { key: "row-3", foo: "Foo 3", bar: "Bar 3", baz: "Baz 3" },
 ];
 
+const itemsWithFourRows: SpectrumTableRowData[] = [
+  ...itemsWithThreeRows,
+  { key: "row-4", foo: "Foo 4", bar: "Bar 4", baz: "Baz 4" },
+];
+
 const itemsWithDisabledFlag: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
@@ -2872,6 +2877,50 @@ export function tableTests() {
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("automatically selects newly added rows when select-all is active", async () => {
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    await selectAll.setValue(true);
+
+    await wrapper.setProps({ items: itemsWithFourRows });
+    await nextTick();
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(4);
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[3]!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("does not auto-select newly added rows after manual full selection", async () => {
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+    await press(bodyRows[1]!);
+    await press(bodyRows[2]!);
+
+    await wrapper.setProps({ items: itemsWithFourRows });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(4);
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[3]!.attributes("aria-selected")).toBe("false");
   });
 
   it("supports clearing all rows via the select-all checkbox", async () => {
