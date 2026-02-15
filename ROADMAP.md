@@ -10114,3 +10114,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 54 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` devanagari numeral parity update:
+  - added adapted coverage asserting devanagari numeral entry (`२१`) parses and commits in default locale with `en-US-u-nu-deva` formatted output.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 55 tests).
+- Validation: `npm run check -- --pretty false` passed.

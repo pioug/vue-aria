@@ -925,4 +925,25 @@ describe("NumberField", () => {
     expect((input.element as HTMLInputElement).value).toBe(expected);
     expect(onChange).toHaveBeenCalledWith(21);
   });
+
+  it("accepts devanagari numeral entry in default locale", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      onChange,
+      formatOptions: { style: "currency", currency: "USD" },
+    });
+    const input = wrapper.get('input[type="text"]');
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("२१");
+    await input.trigger("blur");
+
+    const expected = new Intl.NumberFormat("en-US-u-nu-deva", {
+      style: "currency",
+      currency: "USD",
+    }).format(21);
+    expect((input.element as HTMLInputElement).value).toBe(expected);
+    expect(onChange).toHaveBeenCalledWith(21);
+  });
 });
