@@ -12328,3 +12328,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 250 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 306 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid drag-column parity coverage expansion:
+  - added migrated nested-row coverage for `showDragButtons` + checkbox selection mode to verify treegrid structural semantics with both synthetic columns enabled.
+  - assertions cover header/body `aria-colindex` shifts and drag/selection cell class wiring on nested rows.
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 50 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 251 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 307 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -493,6 +493,43 @@ describe("TableView nested rows", () => {
     expect(rows[1]!.attributes("aria-level")).toBe("2");
   });
 
+  it("renders treegrid drag and selection columns when showDragButtons is enabled", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows drag selection table",
+        columns,
+        items: nestedItems,
+        showDragButtons: true,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const treegrid = wrapper.get('[role="treegrid"]');
+    expect(treegrid.attributes("aria-colcount")).toBe("5");
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(5);
+    expect(headerCells[0]!.attributes("aria-colindex")).toBe("1");
+    expect(headerCells[0]!.classes()).toContain("react-spectrum-Table-dragButtonHeadCell");
+    expect(headerCells[1]!.attributes("aria-colindex")).toBe("2");
+    expect(headerCells[1]!.find('[role="checkbox"]').exists()).toBe(true);
+
+    const firstRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeader = firstRow.get('[role="rowheader"]');
+    const rowCells = firstRow.findAll('[role="gridcell"]');
+    expect(rowHeader.attributes("aria-colindex")).toBe("3");
+    expect(rowCells).toHaveLength(4);
+    expect(rowCells[0]!.attributes("aria-colindex")).toBe("1");
+    expect(rowCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(rowCells[1]!.attributes("aria-colindex")).toBe("2");
+    expect(rowCells[1]!.classes()).toContain("react-spectrum-Table-cell--selectionCell");
+  });
+
   it("supports selecting nested rows through row checkboxes", async () => {
     enableTableNestedRows();
     const onSelectionChange = vi.fn();
