@@ -722,6 +722,7 @@ describe("ComboBox", () => {
     await options[0]?.trigger("click");
     await nextTick();
     await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("One");
 
     await input.trigger("blur");
     await nextTick();
@@ -903,6 +904,51 @@ describe("ComboBox", () => {
     const describedBy = input.attributes("aria-describedby");
     expect(describedBy).toBeTruthy();
     expect(wrapper.get(`#${describedBy}`).text()).toContain("Constraints not satisfied");
+  });
+
+  it("clears native required validation after selecting a valid option and blurring", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-test": "form" }, [
+              h(ComboBox as any, {
+                label: "Test",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const form = wrapper.get('[data-test="form"]').element as HTMLFormElement;
+    const input = wrapper.get('input[role="combobox"]');
+
+    await nextTick();
+    form.checkValidity();
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect(input.attributes("aria-describedby")).toBeDefined();
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    await input.trigger("blur");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+    expect(input.attributes("aria-describedby")).toBeUndefined();
   });
 
   it("supports matching defaultSelectedKey and defaultInputValue", () => {

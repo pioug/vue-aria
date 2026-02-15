@@ -124,6 +124,7 @@ export function useTextField(
     {
       validationBehavior: props.validationBehavior,
       focus: () => ref.current?.focus(),
+      value: () => valueRef.value,
     },
     validationState as any,
     focusRef as any

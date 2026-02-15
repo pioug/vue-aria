@@ -21,6 +21,7 @@ export interface FormValidationState {
 export interface FormValidationProps {
   validationBehavior?: "aria" | "native";
   focus?: () => void;
+  value?: () => unknown;
 }
 
 function getValiditySnapshot(input: ValidatableElement): ValidityState {
@@ -63,7 +64,7 @@ export function useFormValidation(
   state: FormValidationState,
   ref?: { value: ValidatableElement | null } | null
 ): void {
-  const { validationBehavior, focus } = props;
+  const { validationBehavior, focus, value } = props;
   let isIgnoredReset = false;
 
   useLayoutEffect(() => {
@@ -94,6 +95,7 @@ export function useFormValidation(
     }
   }, [
     () => validationBehavior,
+    () => value?.(),
     () => ref?.value,
     () => state.realtimeValidation?.isInvalid,
     () => (state.realtimeValidation?.validationErrors ?? []).join("\n"),
@@ -125,6 +127,11 @@ export function useFormValidation(
   });
 
   const onChange = useEffectEvent(() => {
+    const input = ref?.value;
+    if (validationBehavior === "native" && input && !input.disabled) {
+      state.updateValidation?.(getNativeValidity(input));
+    }
+
     state.commitValidation?.();
   });
 

@@ -241,7 +241,9 @@ export function useComboBox<T>(
         )
         : (props.onKeyDown as ((event: KeyboardEvent) => void) | undefined),
       onBlur,
-      value: state.inputValue,
+      get value() {
+        return state.inputValue;
+      },
       defaultValue: state.defaultInputValue,
       onFocus,
       autoComplete: "off",

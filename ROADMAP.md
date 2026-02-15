@@ -11091,3 +11091,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 113 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` native required-clear parity update:
+  - added migrated coverage asserting native required validation clears after selecting a valid option and blurring.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - fixed native validation refresh wiring so programmatic value updates (e.g. combobox option selection) recompute and commit current native validity.
+    - `packages/@vue-aria/form/src/useFormValidation.ts`
+    - `packages/@vue-aria/textfield/src/useTextField.ts`
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 114 tests).
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 87 tests).
+- Validation: `npm test -- packages/@vue-spectrum/textfield/test` passed (4 files, 27 tests).
+- Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.
