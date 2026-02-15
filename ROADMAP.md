@@ -10455,3 +10455,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 30 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` outside-click dismissal parity update:
+  - added migrated coverage for dismissing an open picker by clicking outside the menu (underlay interaction path).
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 31 tests).
+- Validation: `npm run check -- --pretty false` passed.

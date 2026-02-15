@@ -407,6 +407,30 @@ describe("Picker", () => {
     expect(wrapper.get("button").attributes("aria-controls")).toBeUndefined();
   });
 
+  it("closes when clicking outside", async () => {
+    const wrapper = renderPicker();
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("click");
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+
+    const underlay = document.body.querySelector(".spectrum-Underlay") as HTMLElement | null;
+    expect(underlay).toBeTruthy();
+    underlay?.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+  });
+
   it("supports hidden select form attributes and default value", () => {
     const wrapper = renderPicker({
       name: "picker",
