@@ -1386,6 +1386,62 @@ describe("ComboBox", () => {
     expect(options[0]?.text()).toContain("The second item");
   });
 
+  it("updates the rendered option list when controlled items prop changes", async () => {
+    const initialItems = [
+      { id: "1", name: "Aardvark" },
+      { id: "2", name: "Kangaroo" },
+      { id: "3", name: "Snake" },
+    ];
+    const updatedItems = [
+      { id: "1", name: "New Text" },
+      { id: "2", name: "Item 2" },
+      { id: "3", name: "Item 3" },
+    ];
+
+    const wrapper = mount(defineComponent({
+      props: {
+        items: {
+          type: Array,
+          required: true,
+        },
+      },
+      setup(componentProps) {
+        return () =>
+          h(ComboBox as any, {
+            label: "Combobox",
+            items: componentProps.items,
+          });
+      },
+    }), {
+      props: {
+        items: initialItems,
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    let options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[0]?.text()).toContain("Aardvark");
+    expect(options[1]?.text()).toContain("Kangaroo");
+    expect(options[2]?.text()).toContain("Snake");
+
+    await wrapper.setProps({
+      items: updatedItems,
+    });
+    await nextTick();
+    await nextTick();
+
+    options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[0]?.text()).toContain("New Text");
+    expect(options[1]?.text()).toContain("Item 2");
+    expect(options[2]?.text()).toContain("Item 3");
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",

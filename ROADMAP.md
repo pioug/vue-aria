@@ -11007,3 +11007,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
 - Validation: `npm test -- packages/@vue-aria/select/test` passed (3 files, 42 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-items update-list parity update:
+  - added migrated coverage asserting open option content refreshes when controlled `items` prop updates.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 98 tests).
+- Validation: `npm run check -- --pretty false` passed.
