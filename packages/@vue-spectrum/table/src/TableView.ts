@@ -1821,7 +1821,7 @@ export const TableView = defineComponent({
     const resolvedSortDescriptor = ref<SpectrumSortDescriptor | null>(
       props.sortDescriptor ?? props.defaultSortDescriptor ?? null
     );
-    const resolvedSelectedKeys = ref<Set<TableKey>>(
+    const resolvedSelectedKeys = ref<Set<TableKey> | "all">(
       new Set((props.selectedKeys ?? props.defaultSelectedKeys ?? []) as Iterable<TableKey>)
     );
 
@@ -1892,6 +1892,26 @@ export const TableView = defineComponent({
 
       return disabledKeys;
     });
+    const selectableRowKeys = computed(() => {
+      const keys = new Set<TableKey>();
+      const disabledKeys = resolvedDisabledKeys.value;
+      for (const row of allRows.value) {
+        if (row.isDisabled || disabledKeys.has(row.key)) {
+          continue;
+        }
+
+        keys.add(row.key);
+      }
+
+      return keys;
+    });
+    const resolvedSelectedKeySet = computed(() => {
+      if (resolvedSelectedKeys.value === "all") {
+        return new Set(selectableRowKeys.value);
+      }
+
+      return new Set(resolvedSelectedKeys.value);
+    });
 
     const stateProps = {
       get collection() {
@@ -1944,28 +1964,18 @@ export const TableView = defineComponent({
       },
       onSelectionChange(keys: Set<TableKey> | "all") {
         if (keys === "all") {
-          const disabledKeys = new Set((props.disabledKeys ?? []) as Iterable<TableKey>);
-          if (props.isDisabled) {
-            for (const row of allRows.value) {
-              disabledKeys.add(row.key);
-            }
-          }
-          const allKeys = new Set<TableKey>();
-          for (const row of allRows.value) {
-            if (row.isDisabled || disabledKeys.has(row.key)) {
-              continue;
-            }
-
-            allKeys.add(row.key);
-          }
-
-          const currentSelectedKeys = new Set((props.selectedKeys ?? resolvedSelectedKeys.value) as Iterable<TableKey>);
+          const allKeys = new Set(selectableRowKeys.value);
+          const currentSelectedKeys = props.selectedKeys !== undefined
+            ? new Set(props.selectedKeys as Iterable<TableKey>)
+            : resolvedSelectedKeys.value === "all"
+              ? new Set(selectableRowKeys.value)
+              : new Set(resolvedSelectedKeys.value);
           if (!props.allowDuplicateSelectionEvents && setsEqual(allKeys, currentSelectedKeys)) {
             return;
           }
 
           if (props.selectedKeys === undefined) {
-            resolvedSelectedKeys.value = allKeys;
+            resolvedSelectedKeys.value = "all";
           }
 
           props.onSelectionChange?.(allKeys);
@@ -2146,7 +2156,7 @@ export const TableView = defineComponent({
                   rowOffset,
                   rowCount: bodyRows.length,
                   onAction: props.onAction,
-                  selectedKeys: resolvedSelectedKeys.value,
+                  selectedKeys: resolvedSelectedKeySet.value,
                   columnResizeState,
                   useResizeColumnWidths: useResizeColumnWidths.value,
                 })

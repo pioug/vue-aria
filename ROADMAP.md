@@ -12121,3 +12121,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 198 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 254 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` select-all shift-range parity refinement:
+  - preserved internal uncontrolled select-all sentinel state (`\"all\"`) so downstream range-selection behavior remains aligned after select-all interactions.
+  - continued emitting concrete selectable-key sets through `onSelectionChange` callbacks for select-all branches.
+  - added regression coverage ensuring `Shift+click` after select-all resets selection to the clicked row range.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 199 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 255 tests).
+- Validation: `npm run check -- --pretty false` passed.

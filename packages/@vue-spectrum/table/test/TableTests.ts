@@ -2849,6 +2849,31 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("supports shift-click reset after selecting all rows", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    await selectAll.setValue(true);
+
+    onSelectionChange.mockClear();
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[1]!, { shiftKey: true });
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-2"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports clearing all rows via the select-all checkbox", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
