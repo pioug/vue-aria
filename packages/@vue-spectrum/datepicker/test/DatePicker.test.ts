@@ -1329,6 +1329,14 @@ describe("DatePicker", () => {
     await nextTick();
     await nextTick();
     expect(wrapper.get(".react-spectrum-DatePicker-error").text()).toContain("Invalid date.");
+    const group = wrapper.get(".react-spectrum-DatePicker-group");
+    const getDescription = () =>
+      (group.attributes("aria-describedby") ?? "")
+        .split(" ")
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent ?? "")
+        .join(" ");
+    expect(getDescription()).toContain("Invalid date.");
 
     await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
     await nextTick();
@@ -1339,6 +1347,7 @@ describe("DatePicker", () => {
     await nextTick();
 
     expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
+    expect(getDescription()).not.toContain("Invalid date.");
   });
 
   it("supports aria date server validation", async () => {
@@ -3190,6 +3199,14 @@ describe("DateRangePicker", () => {
     await nextTick();
     await nextTick();
     expect(wrapper.get(".react-spectrum-DateRangePicker-error").text()).toContain("Invalid range.");
+    const group = wrapper.get(".react-spectrum-DateRangePicker-group");
+    const getDescription = () =>
+      (group.attributes("aria-describedby") ?? "")
+        .split(" ")
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent ?? "")
+        .join(" ");
+    expect(getDescription()).toContain("Invalid range.");
 
     await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
     await nextTick();
@@ -3203,6 +3220,7 @@ describe("DateRangePicker", () => {
     await nextTick();
 
     expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
+    expect(getDescription()).not.toContain("Invalid range.");
   });
 
   it("supports aria range server validation", async () => {
