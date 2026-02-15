@@ -397,6 +397,28 @@ describe("Picker", () => {
     expect((select.element as HTMLSelectElement).value).toBe("2");
   });
 
+  it("supports hidden select autocomplete attribute", () => {
+    const wrapper = renderPicker({
+      label: "Test",
+      autoComplete: "address-level1",
+    });
+
+    const select = wrapper.get("select");
+    expect(select.attributes("autocomplete")).toBe("address-level1");
+  });
+
+  it("focuses trigger when clicking the label", async () => {
+    const wrapper = renderPicker({
+      label: "Test",
+    });
+
+    const label = wrapper.get(".spectrum-FieldLabel");
+    await label.trigger("click");
+    await nextTick();
+
+    expect(document.activeElement).toBe(wrapper.get("button").element);
+  });
+
   it("focuses the trigger when autoFocus is true", async () => {
     const wrapper = renderPicker({
       autoFocus: true,

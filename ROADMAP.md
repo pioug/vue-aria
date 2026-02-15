@@ -10438,3 +10438,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 26 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` label/autocomplete parity update:
+  - added `autoComplete` prop support and wired it through picker/select hidden native select rendering.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for:
+    - hidden select `autocomplete` attribute passthrough
+    - clicking visible picker label focuses the trigger
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.

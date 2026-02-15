@@ -86,6 +86,7 @@ export const Picker = defineComponent({
       required: false,
       default: "Select…",
     },
+    autoComplete: String,
     name: String,
     form: String,
     autoFocus: {
@@ -128,6 +129,7 @@ export const Picker = defineComponent({
         label: props.label,
         name: props.name,
         form: props.form,
+        autoComplete: props.autoComplete,
         isDisabled: props.isDisabled,
         isRequired: props.isRequired,
         "aria-label": props.ariaLabel,
@@ -207,6 +209,7 @@ export const Picker = defineComponent({
         [
           h(HiddenSelect as any, {
             ...hiddenSelectProps,
+            autoComplete: props.autoComplete,
           }),
           props.label
             ? h(

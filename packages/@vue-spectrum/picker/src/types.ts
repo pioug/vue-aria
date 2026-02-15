@@ -35,6 +35,7 @@ export interface SpectrumPickerProps {
   placeholder?: string;
   name?: string;
   form?: string;
+  autoComplete?: string;
   autoFocus?: boolean;
   UNSAFE_className?: string;
   UNSAFE_style?: Record<string, unknown>;
