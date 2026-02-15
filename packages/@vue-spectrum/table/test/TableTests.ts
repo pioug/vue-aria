@@ -50,6 +50,12 @@ const columnsWithStringSizingMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", maxWidth: "40ch" },
 ];
 
+const columnsWithPartialSizingMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 200 },
+  { key: "bar", title: "Bar" },
+  { key: "baz", title: "Baz" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -360,6 +366,42 @@ export function tableTests() {
     expect((rowHeader.element as HTMLElement).style.width).toBe("25%");
     expect((bodyCells[0]!.element as HTMLElement).style.minWidth).toBe("12rem");
     expect((bodyCells[1]!.element as HTMLElement).style.maxWidth).toBe("40ch");
+  });
+
+  it("distributes default widths for unsized columns in selectable tables", () => {
+    const wrapper = renderTable({
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(4);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(38, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38) / 3, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38) / 3, 3);
+    expect(parseFloat((headerCells[3]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38) / 3, 3);
+
+    const firstBodyRowCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(firstBodyRowCells).toHaveLength(4);
+    expect(parseFloat((firstBodyRowCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(38, 3);
+    expect(parseFloat((firstBodyRowCells[1]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38) / 3, 3);
+    expect(parseFloat((firstBodyRowCells[2]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38) / 3, 3);
+    expect(parseFloat((firstBodyRowCells[3]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38) / 3, 3);
+  });
+
+  it("divides remaining width among unsized columns after explicit widths", () => {
+    const wrapper = renderTable({
+      columns: columnsWithPartialSizingMetadata,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(4);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(38, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38 - 200) / 2, 3);
+    expect(parseFloat((headerCells[3]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38 - 200) / 2, 3);
   });
 
   it("supports static slot table syntax", async () => {

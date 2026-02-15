@@ -265,9 +265,15 @@ function toColumnSizeStyleValue(value: SpectrumTableColumnSize | unknown): strin
 }
 
 function resolveColumnSizingStyles(columnProps: Record<string, unknown> | undefined): Record<string, string> | undefined {
-  const width = toColumnSizeStyleValue(columnProps?.width);
-  const minWidth = toColumnSizeStyleValue(columnProps?.minWidth);
-  const maxWidth = toColumnSizeStyleValue(columnProps?.maxWidth);
+  let width = toColumnSizeStyleValue(columnProps?.width);
+  let minWidth = toColumnSizeStyleValue(columnProps?.minWidth);
+  let maxWidth = toColumnSizeStyleValue(columnProps?.maxWidth);
+  if (columnProps?.isSelectionCell) {
+    width = width ?? "38px";
+    minWidth = minWidth ?? width;
+    maxWidth = maxWidth ?? width;
+  }
+
   if (!width && !minWidth && !maxWidth) {
     return undefined;
   }
@@ -372,6 +378,11 @@ interface CreateCollectionOptions {
   showSelectionCheckboxes?: boolean;
 }
 
+interface ResolveColumnWidthsOptions {
+  showSelectionCheckboxes?: boolean;
+  tableWidth?: number;
+}
+
 function createRowNodes(
   rows: NormalizedSpectrumTableRow[],
   columns: NormalizedSpectrumTableColumn[],
@@ -473,6 +484,77 @@ function createCollection(
         showSelectionCheckboxes: Boolean(options.showSelectionCheckboxes),
       }
   );
+}
+
+function parseNumericColumnSize(value: SpectrumTableColumnSize | undefined): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+      const parsed = Number(trimmed);
+      if (Number.isFinite(parsed)) {
+        return parsed;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function resolveColumnWidths(
+  definition: NormalizedSpectrumTableDefinition,
+  options: ResolveColumnWidthsOptions = {}
+): NormalizedSpectrumTableDefinition {
+  const tableWidth = Math.max(0, options.tableWidth ?? 1000);
+  const selectionWidth = options.showSelectionCheckboxes ? 38 : 0;
+  let remainingWidth = Math.max(0, tableWidth - selectionWidth);
+  const columns = definition.columns.map((column) => ({ ...column }));
+  const autoIndices: number[] = [];
+
+  for (let index = 0; index < columns.length; index += 1) {
+    const column = columns[index]!;
+    const hasExplicitWidth =
+      column.width !== undefined
+      && column.width !== null
+      && String(column.width).trim().length > 0;
+    if (hasExplicitWidth) {
+      const numericWidth = parseNumericColumnSize(column.width);
+      if (numericWidth != null) {
+        column.width = numericWidth;
+        remainingWidth -= numericWidth;
+      }
+      continue;
+    }
+
+    autoIndices.push(index);
+  }
+
+  if (autoIndices.length > 0) {
+    const baseWidth = Math.max(0, remainingWidth / autoIndices.length);
+    for (const index of autoIndices) {
+      const column = columns[index]!;
+      let width = baseWidth;
+      const minWidth = parseNumericColumnSize(column.minWidth);
+      const maxWidth = parseNumericColumnSize(column.maxWidth);
+      if (minWidth != null && width < minWidth) {
+        width = minWidth;
+      }
+
+      if (maxWidth != null && width > maxWidth) {
+        width = maxWidth;
+      }
+
+      column.width = width;
+    }
+  }
+
+  return {
+    columns,
+    rows: definition.rows,
+  };
 }
 
 function sortDefinition(
@@ -1415,20 +1497,28 @@ export const TableView = defineComponent({
       return `${props.isDisabled ? "__all__|" : ""}${keySegment}`;
     });
 
+    const showSelectionCheckboxes = computed(
+      () => props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none"
+    );
+    const tableLayoutWidth = computed(() => {
+      const measuredWidth = tableElementRef.value?.clientWidth ?? 0;
+      return measuredWidth > 0 ? measuredWidth : 1000;
+    });
     const normalizedDefinition = computed<NormalizedSpectrumTableDefinition>(() => {
       const normalized = normalizeTableDefinition({
         columns: props.columns,
         items: props.items,
         slotDefinition: slotDefinition.value,
       });
-      return sortDefinition(normalized, resolvedSortDescriptor.value);
+      const sorted = sortDefinition(normalized, resolvedSortDescriptor.value);
+      return resolveColumnWidths(sorted, {
+        showSelectionCheckboxes: showSelectionCheckboxes.value,
+        tableWidth: tableLayoutWidth.value,
+      });
     });
 
     const allRows = computed(() => flattenNormalizedRows(normalizedDefinition.value.rows));
     const allowsExpandableRows = Boolean(props.UNSTABLE_allowsExpandableRows && tableNestedRows());
-    const showSelectionCheckboxes = computed(
-      () => props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none"
-    );
     const collection = computed(() =>
       createCollection(normalizedDefinition.value, {
         allowsExpandableRows,

@@ -11806,3 +11806,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 148 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 204 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` sizing distribution parity expansion:
+  - implemented baseline width distribution for unsized columns:
+    - allocates default widths across unsized columns using table-width fallback sizing.
+    - reserves fixed selection-column width in checkbox-selection mode.
+    - distributes remaining width when some columns have explicit numeric width values.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded sizing coverage for distributed widths:
+    - verifies unsized-column default width distribution in selectable tables.
+    - verifies remaining-width distribution after explicit numeric column widths.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 150 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 206 tests).
+- Validation: `npm run check -- --pretty false` passed.
