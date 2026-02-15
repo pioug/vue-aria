@@ -1422,6 +1422,22 @@ const TableBodyRow = defineComponent({
             return;
           }
 
+          if (event.key === "PageDown" || event.key === "PageUp") {
+            const rows = getTableBodyRows(refObject.value);
+            if (rows.length === 0) {
+              return;
+            }
+
+            const nextRow = event.key === "PageDown" ? rows[rows.length - 1] : rows[0];
+            if (!nextRow || nextRow === refObject.value) {
+              return;
+            }
+
+            nextRow.focus();
+            event.preventDefault();
+            return;
+          }
+
           if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
             return;
           }

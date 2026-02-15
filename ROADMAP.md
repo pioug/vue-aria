@@ -12280,3 +12280,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 42 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 296 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid page-navigation focus parity expansion:
+  - added migrated nested-row focus-navigation coverage for:
+    - PageDown moving row focus to the last visible nested row.
+    - PageUp moving row focus to the first visible nested row.
+  - expanded treegrid row keyboard handling to include PageUp/PageDown visible-row focus fallback when delegate paging is unavailable in the current layout environment.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 44 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 298 tests).
+- Validation: `npm run check -- --pretty false` passed.
