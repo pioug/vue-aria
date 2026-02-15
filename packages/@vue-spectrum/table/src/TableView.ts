@@ -397,6 +397,12 @@ interface ResolveColumnWidthsOptions {
   tableWidth?: number;
 }
 
+interface UnresolvedWidthEntry {
+  index: number;
+  weight: number;
+  target: "width" | "defaultWidth";
+}
+
 function createRowNodes(
   rows: NormalizedSpectrumTableRow[],
   columns: NormalizedSpectrumTableColumn[],
@@ -528,6 +534,25 @@ function parseNumericColumnSize(
   return undefined;
 }
 
+function parseFractionalColumnSize(value: SpectrumTableColumnSize | undefined): number | undefined {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  const match = trimmed.match(/^(-?(?:\d+|\d*\.\d+))?fr$/i);
+  if (!match) {
+    return undefined;
+  }
+
+  const parsed = match[1] == null ? 1 : Number(match[1]);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return undefined;
+  }
+
+  return parsed;
+}
+
 function resolveColumnWidths(
   definition: NormalizedSpectrumTableDefinition,
   options: ResolveColumnWidthsOptions = {}
@@ -537,7 +562,19 @@ function resolveColumnWidths(
   const sizingBaseWidth = Math.max(0, tableWidth - selectionWidth);
   let remainingWidth = sizingBaseWidth;
   const columns = definition.columns.map((column) => ({ ...column }));
-  const autoIndices: number[] = [];
+  const unresolvedEntries: UnresolvedWidthEntry[] = [];
+  const setResolvedColumnWidth = (
+    column: NormalizedSpectrumTableColumn,
+    target: "width" | "defaultWidth",
+    value: SpectrumTableColumnSize
+  ) => {
+    if (target === "width") {
+      column.width = value;
+      return;
+    }
+
+    column.defaultWidth = value;
+  };
 
   for (let index = 0; index < columns.length; index += 1) {
     const column = columns[index]!;
@@ -550,6 +587,16 @@ function resolveColumnWidths(
       && widthValue !== null
       && String(widthValue).trim().length > 0;
     if (hasControlledWidth) {
+      const fractionalWidth = parseFractionalColumnSize(widthValue);
+      if (fractionalWidth != null) {
+        unresolvedEntries.push({
+          index,
+          weight: fractionalWidth,
+          target: "width",
+        });
+        continue;
+      }
+
       const numericWidth = parseNumericColumnSize(widthValue, sizingBaseWidth);
       if (numericWidth != null) {
         let resolvedWidth = numericWidth;
@@ -574,6 +621,16 @@ function resolveColumnWidths(
       && defaultWidthValue !== null
       && String(defaultWidthValue).trim().length > 0;
     if (hasDefaultWidth) {
+      const fractionalWidth = parseFractionalColumnSize(defaultWidthValue);
+      if (fractionalWidth != null) {
+        unresolvedEntries.push({
+          index,
+          weight: fractionalWidth,
+          target: "defaultWidth",
+        });
+        continue;
+      }
+
       const numericWidth = parseNumericColumnSize(defaultWidthValue, sizingBaseWidth);
       if (numericWidth != null) {
         let resolvedWidth = numericWidth;
@@ -593,20 +650,28 @@ function resolveColumnWidths(
       continue;
     }
 
-    autoIndices.push(index);
+    unresolvedEntries.push({
+      index,
+      weight: 1,
+      target: "defaultWidth",
+    });
   }
 
-  if (autoIndices.length > 0) {
-    const unresolved = new Set(autoIndices);
+  if (unresolvedEntries.length > 0) {
+    const unresolved = new Map<number, UnresolvedWidthEntry>(
+      unresolvedEntries.map((entry) => [entry.index, entry] as const)
+    );
     while (unresolved.size > 0) {
-      const share = Math.max(0, remainingWidth / unresolved.size);
+      const totalWeight = Array.from(unresolved.values()).reduce((sum, entry) => sum + entry.weight, 0);
+      const safeTotalWeight = totalWeight > 0 ? totalWeight : unresolved.size;
       let constrainedInPass = false;
-      for (const index of Array.from(unresolved)) {
+      for (const [index, entry] of Array.from(unresolved.entries())) {
         const column = columns[index]!;
         const minWidth = parseNumericColumnSize(column.minWidth, sizingBaseWidth);
         const maxWidth = parseNumericColumnSize(column.maxWidth, sizingBaseWidth);
+        const share = Math.max(0, remainingWidth * (entry.weight / safeTotalWeight));
         if (minWidth != null && share < minWidth) {
-          column.defaultWidth = minWidth;
+          setResolvedColumnWidth(column, entry.target, minWidth);
           remainingWidth -= minWidth;
           unresolved.delete(index);
           constrainedInPass = true;
@@ -614,7 +679,7 @@ function resolveColumnWidths(
         }
 
         if (maxWidth != null && share > maxWidth) {
-          column.defaultWidth = maxWidth;
+          setResolvedColumnWidth(column, entry.target, maxWidth);
           remainingWidth -= maxWidth;
           unresolved.delete(index);
           constrainedInPass = true;
@@ -622,9 +687,11 @@ function resolveColumnWidths(
       }
 
       if (!constrainedInPass) {
-        const finalShare = Math.max(0, remainingWidth / unresolved.size);
-        for (const index of unresolved) {
-          columns[index]!.defaultWidth = finalShare;
+        const finalWeight = Array.from(unresolved.values()).reduce((sum, entry) => sum + entry.weight, 0);
+        const safeFinalWeight = finalWeight > 0 ? finalWeight : unresolved.size;
+        for (const [index, entry] of unresolved.entries()) {
+          const finalShare = Math.max(0, remainingWidth * (entry.weight / safeFinalWeight));
+          setResolvedColumnWidth(columns[index]!, entry.target, finalShare);
         }
         break;
       }

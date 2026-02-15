@@ -104,6 +104,18 @@ const columnsWithPercentageDefaultWidthMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithFractionalDefaultWidthMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, defaultWidth: "1fr" },
+  { key: "bar", title: "Bar", defaultWidth: "2fr" },
+  { key: "baz", title: "Baz", defaultWidth: "1fr" },
+];
+
+const columnsWithMixedFractionalSizingMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 200 },
+  { key: "bar", title: "Bar", defaultWidth: "1fr" },
+  { key: "baz", title: "Baz", defaultWidth: "3fr" },
+];
+
 const columnsWithResizableMetadata: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, defaultWidth: 220 },
   { key: "bar", title: "Bar", defaultWidth: 390 },
@@ -563,6 +575,30 @@ export function tableTests() {
     expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
   });
 
+  it("resolves fractional defaultWidth values into proportional widths", () => {
+    const wrapper = renderTable({
+      columns: columnsWithFractionalDefaultWidthMetadata,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(250, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(250, 3);
+  });
+
+  it("resolves mixed static and fractional sizing values", () => {
+    const wrapper = renderTable({
+      columns: columnsWithMixedFractionalSizingMetadata,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(600, 3);
+  });
+
   it("renders column resizer affordances for resizable headers", () => {
     const wrapper = renderTable({
       columns: columnsWithResizableMetadata,
@@ -979,6 +1015,42 @@ export function tableTests() {
     expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(220, 3);
     expect(parseFloat((headers[1]!.element as HTMLElement).style.width)).toBeCloseTo(390, 3);
     expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(390, 3);
+  });
+
+  it("supports static slot fractional default-width metadata", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot fractional default-width table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true, defaultWidth: "1fr" }, () => "Foo"),
+              h(Column as any, { id: "bar", defaultWidth: "2fr" }, () => "Bar"),
+              h(Column as any, { id: "baz", defaultWidth: "1fr" }, () => "Baz"),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                  h(Cell as any, () => "Baz 1"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(250, 3);
+    expect(parseFloat((headers[1]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+    expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(250, 3);
   });
 
   it("supports kebab-case static slot default-width metadata", () => {

@@ -73,6 +73,7 @@ Column sizing metadata is supported in both data and slot composition:
 
 Numeric values are treated as pixel widths. Numeric strings are normalized to pixel widths.
 Percentage values are resolved against the table width.
+Fractional values (for example `1fr`, `2fr`) are resolved proportionally against remaining table width.
 In templates, kebab-case sizing props are supported (for example: `default-width`, `min-width`, `max-width`).
 
 Column resizing is supported via `columns[].allowsResizing` (or `allows-resizing` in static slot syntax). Resizers are rendered for non-hidden header columns only.

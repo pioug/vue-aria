@@ -11912,3 +11912,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 165 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 221 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` fractional sizing parity expansion:
+  - extended column-width resolution to support fractional `fr` units across `width` and `defaultWidth`:
+    - added fractional token parsing (`1fr`, `2fr`, etc.).
+    - applied weighted proportional distribution for unresolved fractional/auto columns with min/max constraint clamping.
+    - preserved controlled `width` vs uncontrolled `defaultWidth` assignment semantics in the resolved output.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded sizing coverage for fractional layouts:
+    - prop-driven fractional `defaultWidth` distribution.
+    - mixed static + fractional sizing distribution.
+    - static-slot fractional `defaultWidth` metadata behavior.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - updated docs to explicitly document fractional (`fr`) sizing support.
+    - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 168 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 224 tests).
+- Validation: `npm run check -- --pretty false` passed.
