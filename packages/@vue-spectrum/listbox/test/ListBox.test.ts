@@ -310,6 +310,29 @@ describe("ListBox", () => {
     expect(onSelectionChange.mock.calls[0]?.[0]?.has("Bar")).toBe(true);
   });
 
+  it('does not clear multiple selection on Escape when escapeKeyBehavior is "none"', async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderListBox({
+      selectionMode: "multiple",
+      escapeKeyBehavior: "none",
+      onSelectionChange,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[3]?.trigger("click");
+    await options[1]?.trigger("click");
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(options[3]?.attributes("aria-selected")).toBe("true");
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+
+    await wrapper.get('[role="listbox"]').trigger("keydown", { key: "Escape" });
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(options[3]?.attributes("aria-selected")).toBe("true");
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+  });
+
   it("does not render selection checkmarks when selectionMode is not set", () => {
     const wrapper = renderListBox({
       selectedKeys: ["Foo"],

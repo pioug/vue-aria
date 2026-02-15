@@ -10306,3 +10306,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 29 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 30 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` escape-key behavior parity update:
+  - wired `escapeKeyBehavior` through Spectrum ListBox props into `useListBox`, enabling selection-manager Escape behavior parity controls.
+    - `packages/@vue-spectrum/listbox/src/types.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBox.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBoxBase.ts`
+  - added migrated coverage asserting `selectionMode="multiple"` with `escapeKeyBehavior="none"` preserves selection on `Escape`.
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 30 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 31 tests).
+- Validation: `npm run check -- --pretty false` passed.

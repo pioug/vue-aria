@@ -56,6 +56,11 @@ export const ListBoxBase = defineComponent({
       required: false,
       default: false,
     },
+    escapeKeyBehavior: {
+      type: String as () => SpectrumListBoxProps<object>["escapeKeyBehavior"],
+      required: false,
+      default: undefined,
+    },
     onAction: {
       type: Function as PropType<SpectrumListBoxProps<object>["onAction"]>,
       required: false,
@@ -100,6 +105,7 @@ export const ListBoxBase = defineComponent({
         shouldUseVirtualFocus: props.shouldUseVirtualFocus,
         shouldSelectOnPressUp: props.shouldSelectOnPressUp,
         shouldFocusOnHover: props.shouldFocusOnHover,
+        escapeKeyBehavior: props.escapeKeyBehavior,
         onAction: props.onAction,
         onFocus: props.onFocus,
         onBlur: props.onBlur,

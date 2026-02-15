@@ -23,6 +23,7 @@ export interface SpectrumListBoxProps<T extends object> {
   disabledKeys?: Iterable<Key>;
   selectionMode?: "none" | "single" | "multiple";
   disallowEmptySelection?: boolean;
+  escapeKeyBehavior?: "clearSelection" | "none";
   selectedKeys?: SelectionValue;
   defaultSelectedKeys?: SelectionValue;
   onSelectionChange?: (keys: SelectionValue) => void;
