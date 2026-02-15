@@ -6,6 +6,8 @@ import { provideListBoxContext } from "./context";
 import type { ListBoxCollectionNode, SpectrumListBoxProps } from "./types";
 import type { ListState } from "@vue-aria/list-state";
 
+const loadMoreScrollHeightCache = new Map<string, number>();
+
 export function useListBoxLayout<T>(): { type: "listbox-layout" } {
   return { type: "listbox-layout" };
 }
@@ -113,7 +115,11 @@ export const ListBoxBase = defineComponent({
     const listRef = {
       current: null as HTMLElement | null,
     };
-    let lastLoadMoreScrollHeight: number | null = null;
+    const loadMoreCacheKey = props.id ?? null;
+    let lastLoadMoreScrollHeight: number | null =
+      loadMoreCacheKey != null && loadMoreScrollHeightCache.has(loadMoreCacheKey)
+        ? (loadMoreScrollHeightCache.get(loadMoreCacheKey) ?? null)
+        : null;
 
     const maybeLoadMore = () => {
       if (!props.onLoadMore || props.isLoading) {
@@ -139,6 +145,9 @@ export const ListBoxBase = defineComponent({
       }
 
       lastLoadMoreScrollHeight = scrollHeight;
+      if (loadMoreCacheKey != null) {
+        loadMoreScrollHeightCache.set(loadMoreCacheKey, scrollHeight);
+      }
       props.onLoadMore();
     };
 

@@ -10733,3 +10733,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 44 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` reopen-load-more parity update:
+  - added migrated coverage asserting `onLoadMore` does not refire when reopening an unchanged underfilled combobox menu.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - persisted listbox load-more dedupe by listbox id across close/reopen cycles in shared Spectrum listbox base behavior.
+    - `packages/@vue-spectrum/listbox/src/ListBoxBase.ts`
+  - added migrated manual filtering behavior coverage updates:
+    - unmatched controlled-typing guard
+    - manual-trigger full-list open check
+    - Enter-key focused option commit
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 45 tests).
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
