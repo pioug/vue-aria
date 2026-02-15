@@ -10869,3 +10869,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 72 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` blur-reset parity update:
+  - added migrated coverage asserting blur restores the selected item text when typed input no longer matches any option.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 73 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` invalid-blur no-reopen parity update:
+  - added migrated coverage asserting unmatched typed input clears on blur without reopening the menu.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 74 tests).
+- Validation: `npm run check -- --pretty false` passed.

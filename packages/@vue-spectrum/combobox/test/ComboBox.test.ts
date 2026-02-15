@@ -1383,6 +1383,56 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("does not open the menu on blur when unmatched input is entered", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        onInputChange,
+        onSelectionChange,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    await input.trigger("focus");
+    await input.setValue("On");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    await input.setValue("z");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect((input.element as HTMLInputElement).value).toBe("z");
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
