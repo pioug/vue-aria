@@ -709,6 +709,52 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
   });
 
+  it("updates input text and selected key freely in uncontrolled mode", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    await input.setValue("Two");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const listbox = wrapper.get('[role="listbox"]');
+    const options = listbox.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[1]?.text()).toBe("Two");
+    expect(options[1]?.attributes("aria-selected")).toBe("false");
+
+    await options[1]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("clears selection when all input text is deleted in uncontrolled mode", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = mount(ComboBox as any, {

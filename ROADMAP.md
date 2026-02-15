@@ -11017,3 +11017,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 99 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` uncontrolled input/selection flow parity update:
+  - added migrated coverage asserting uncontrolled input typing, clearing, and option selection update callbacks/state in upstream order.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 100 tests).
+- Validation: `npm run check -- --pretty false` passed.
