@@ -7,6 +7,7 @@ import type { Key, Node } from "@vue-aria/collections";
 import { mergeProps } from "@vue-aria/utils";
 import { computed, defineComponent, h, ref, type PropType, type VNode, type VNodeChild } from "vue";
 import type {
+  NormalizedTreeItem,
   SpectrumTreeSelectionMode,
   SpectrumTreeSelectionStyle,
   SpectrumTreeViewItemData,
@@ -25,6 +26,34 @@ const srOnlyStyle: Record<string, string> = {
   width: "1px",
   whiteSpace: "nowrap",
 };
+
+function isRenderableNode(node: VNode): boolean {
+  return typeof node.type !== "symbol";
+}
+
+function getTreeSlotItemsSignature(items: NormalizedTreeItem[]): string {
+  const parts: string[] = [];
+  const visit = (nodes: NormalizedTreeItem[]) => {
+    for (const node of nodes) {
+      parts.push(
+        [
+          String(node.key),
+          node.textValue,
+          node.isDisabled ? "1" : "0",
+          node.hasChildItems ? "1" : "0",
+          node.href ?? "",
+          node.ariaLabel ?? "",
+        ].join(":")
+      );
+      if (node.children.length > 0) {
+        visit(node.children);
+      }
+    }
+  };
+
+  visit(items);
+  return parts.join("|");
+}
 
 export interface SpectrumTreeViewProps {
   id?: string | undefined;
@@ -533,8 +562,11 @@ export const TreeView = defineComponent({
       },
     };
 
-    const slotItems = computed(() => parseTreeSlotItems(slots.default?.() as VNode[] | undefined));
-    const normalizedItems = computed(() => normalizeTreeItems(props.items, slotItems.value));
+    const slotItems = ref<any[]>([]);
+    const slotItemsSignature = ref("");
+    const normalizedItems = computed(() =>
+      normalizeTreeItems(props.items, slotItems.value as NormalizedTreeItem[])
+    );
     const collectionNodes = computed(() => buildTreeCollectionNodes(normalizedItems.value));
 
     const selectionBehavior = computed(() =>
@@ -625,6 +657,15 @@ export const TreeView = defineComponent({
     });
 
     return () => {
+      const parsedSlotItems = parseTreeSlotItems(
+        (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node))
+      ) as NormalizedTreeItem[];
+      const nextSlotSignature = getTreeSlotItemsSignature(parsedSlotItems);
+      if (nextSlotSignature !== slotItemsSignature.value) {
+        slotItemsSignature.value = nextSlotSignature;
+        slotItems.value = parsedSlotItems;
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const attrsClass = attrsRecord.class;
       const attrsStyle = attrsRecord.style;

@@ -151,6 +151,49 @@ describe("TreeView", () => {
     expect(rows[1]!.text()).toContain("Projects");
   });
 
+  it("does not warn about invoking default slots outside render", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      mount(TreeView as any, {
+        props: {
+          "aria-label": "Slot warning tree",
+        },
+        slots: {
+          default: () => [
+            h(TreeViewItem as any, { id: "photos", textValue: "Photos" }, {
+              default: () => [
+                h(TreeViewItemContent as any, null, {
+                  default: () => "Photos",
+                }),
+              ],
+            }),
+            h(TreeViewItem as any, { id: "projects", textValue: "Projects" }, {
+              default: () => [
+                h(TreeViewItemContent as any, null, {
+                  default: () => "Projects",
+                }),
+                h(TreeViewItem as any, { id: "projects-1", textValue: "Project 1" }, {
+                  default: () => [
+                    h(TreeViewItemContent as any, null, {
+                      default: () => "Project 1",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining("Slot \"default\" invoked outside of the render function")
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("applies base aria and data attributes on the tree and rows", () => {
     const wrapper = renderTree();
 

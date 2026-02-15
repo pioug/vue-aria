@@ -11589,3 +11589,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/combobox/test/useComboBox.test.ts` passed (1 file, 11 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (5 files, 170 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tree` slot-collection warning stabilization:
+  - moved static-slot tree item parsing into render-time synchronization with signature-based updates, preventing default-slot invocation during setup/computed evaluation while preserving slot/data-driven collection parity.
+    - `packages/@vue-spectrum/tree/src/TreeView.ts`
+  - added explicit regression coverage asserting slot-based `TreeView` mounts do not emit Vue's default-slot-outside-render warning.
+    - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 81 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 116 tests).
+- Validation: `npm run check -- --pretty false` passed.
