@@ -860,6 +860,58 @@ export function tableTests() {
     expect(onResizeEnd).toHaveBeenCalled();
   });
 
+  it("resizes columns through touch pointer interactions", async () => {
+    const onResize = vi.fn();
+    const onResizeEnd = vi.fn();
+    const wrapper = renderTable({
+      columns: columnsWithResizableMetadata,
+      onResize,
+      onResizeEnd,
+    });
+
+    const firstHeader = wrapper.findAll('[role="columnheader"]')[0]!;
+    const resizer = firstHeader.get(".spectrum-Table-columnResizer");
+    const initialWidth = parseFloat((firstHeader.element as HTMLElement).style.width);
+
+    if (typeof PointerEvent === "undefined") {
+      return;
+    }
+
+    await resizer.trigger("pointerdown", {
+      button: 0,
+      pointerId: 2,
+      pointerType: "touch",
+      clientX: initialWidth,
+      clientY: 0,
+    });
+    window.dispatchEvent(
+      new PointerEvent("pointermove", {
+        pointerId: 2,
+        pointerType: "touch",
+        clientX: initialWidth + 20,
+        clientY: 0,
+        bubbles: true,
+      })
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointerup", {
+        button: 0,
+        pointerId: 2,
+        pointerType: "touch",
+        clientX: initialWidth + 20,
+        clientY: 0,
+        bubbles: true,
+      })
+    );
+    await nextTick();
+
+    const updatedFirstHeader = wrapper.findAll('[role="columnheader"]')[0]!;
+    const nextWidth = parseFloat((updatedFirstHeader.element as HTMLElement).style.width);
+    expect(nextWidth).toBeGreaterThan(initialWidth);
+    expect(onResize).toHaveBeenCalled();
+    expect(onResizeEnd).toHaveBeenCalled();
+  });
+
   it("clamps resizing interactions to minWidth and maxWidth", async () => {
     const wrapper = renderTable({
       columns: columnsWithResizableConstraints,
