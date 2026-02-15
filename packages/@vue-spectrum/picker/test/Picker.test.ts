@@ -329,6 +329,96 @@ describe("Picker", () => {
     expect(document.body.querySelector('[role="listbox"]')).toBeNull();
   });
 
+  it("supports rapid closed type-to-select sequences", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      onSelectionChange,
+    });
+
+    const trigger = wrapper.get("button");
+    (trigger.element as HTMLElement).focus();
+    await nextTick();
+
+    await trigger.trigger("keydown", { key: "t" });
+    await trigger.trigger("keyup", { key: "t" });
+    await nextTick();
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+    expect(wrapper.text()).toContain("Two");
+
+    await trigger.trigger("keydown", { key: "h" });
+    await trigger.trigger("keyup", { key: "h" });
+    await nextTick();
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("3");
+    expect(wrapper.text()).toContain("Three");
+  });
+
+  it("resets closed type-to-select search text after timeout", async () => {
+    vi.useFakeTimers();
+    try {
+      const onSelectionChange = vi.fn();
+      const wrapper = renderPicker({
+        onSelectionChange,
+      });
+
+      const trigger = wrapper.get("button");
+      (trigger.element as HTMLElement).focus();
+      await nextTick();
+
+      await trigger.trigger("keydown", { key: "t" });
+      await trigger.trigger("keyup", { key: "t" });
+      await nextTick();
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+      expect(wrapper.text()).toContain("Two");
+
+      vi.runAllTimers();
+      await nextTick();
+
+      await trigger.trigger("keydown", { key: "h" });
+      await trigger.trigger("keyup", { key: "h" });
+      await nextTick();
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(wrapper.text()).toContain("Two");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("wraps closed type-to-select matching from the start", async () => {
+    vi.useFakeTimers();
+    try {
+      const onSelectionChange = vi.fn();
+      const wrapper = renderPicker({
+        onSelectionChange,
+      });
+
+      const trigger = wrapper.get("button");
+      (trigger.element as HTMLElement).focus();
+      await nextTick();
+
+      await trigger.trigger("keydown", { key: "t" });
+      await trigger.trigger("keyup", { key: "t" });
+      await nextTick();
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+      expect(wrapper.text()).toContain("Two");
+
+      vi.runAllTimers();
+      await nextTick();
+
+      await trigger.trigger("keydown", { key: "o" });
+      await trigger.trigger("keyup", { key: "o" });
+      await nextTick();
+      expect(onSelectionChange).toHaveBeenCalledTimes(2);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("1");
+      expect(wrapper.text()).toContain("One");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("closes when trigger is pressed while open", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderPicker({

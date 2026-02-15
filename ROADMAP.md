@@ -11201,3 +11201,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/select/test packages/@vue-spectrum/combobox/test packages/@vue-spectrum/picker/test packages/@vue-spectrum/numberfield/test packages/@vue-spectrum/textfield/test` passed (13 files, 327 tests).
 - Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` closed typeahead parity update:
+  - added migrated coverage for rapid multi-character closed type-to-select sequences, timeout reset behavior, and wraparound matching from the start of the collection.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 57 tests).
+- Validation: `npm run check -- --pretty false` passed.
