@@ -10902,3 +10902,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 78 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-spectrum/combobox/test` passed (4 files, 87 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` default-input trigger-open parity update:
+  - added migrated coverage asserting trigger-button open shows all options even when `defaultInputValue` is preset.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 79 tests).
+- Validation: `npm run check -- --pretty false` passed.

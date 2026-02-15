@@ -820,6 +820,30 @@ describe("ComboBox", () => {
     }
   });
 
+  it("shows all options on trigger-open when defaultInputValue is set", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        defaultInputValue: "Tw",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+  });
+
   it("opens when typing by default", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');
