@@ -179,6 +179,12 @@ const items: SpectrumTableRowData[] = [
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
 ];
 
+const itemsWithThreeRows: SpectrumTableRowData[] = [
+  { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
+  { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
+  { key: "row-3", foo: "Foo 3", bar: "Bar 3", baz: "Baz 3" },
+];
+
 const itemsWithDisabledFlag: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
@@ -2476,6 +2482,37 @@ export function tableTests() {
     bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("extends checkbox-style keyboard selection with Shift+ArrowDown", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+
+    (bodyRows[0]!.element as HTMLElement).focus();
+    await bodyRows[0]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    let lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1"]));
+
+    await bodyRows[0]!.trigger("keydown", { key: "ArrowDown", shiftKey: true });
+    await nextTick();
+
+    lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-2"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
   });
 
   it("supports checkbox-style multiple selection via Enter key", async () => {

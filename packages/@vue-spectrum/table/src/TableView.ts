@@ -1182,6 +1182,10 @@ const TableBodyCell = defineComponent({
             return;
           }
 
+          if (event.shiftKey) {
+            return;
+          }
+
           if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
             return;
           }
@@ -1317,6 +1321,10 @@ const TableBodyRow = defineComponent({
           }
 
           if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+          }
+
+          if (event.shiftKey) {
             return;
           }
 
@@ -1913,11 +1921,11 @@ export const TableView = defineComponent({
           return;
         }
 
-        const nextKeys = new Set(keys as Set<TableKey>);
+        const nextKeys = keys as Set<TableKey>;
         if (props.selectedKeys === undefined) {
           resolvedSelectedKeys.value = nextKeys;
         }
-        props.onSelectionChange?.(nextKeys);
+        props.onSelectionChange?.(new Set(nextKeys));
       },
     };
 

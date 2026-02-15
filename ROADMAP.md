@@ -11993,3 +11993,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 179 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 235 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` keyboard range-selection parity refinement:
+  - preserved uncontrolled selection anchor/current metadata by avoiding `Selection`-to-`Set` cloning during `onSelectionChange` state synchronization.
+  - prevented custom treegrid ArrowUp/ArrowDown handlers from intercepting Shift-modified key flows so range-selection delegates can handle modifier navigation.
+  - added integration coverage for checkbox-style keyboard range extension in regular tables (`Shift+ArrowDown`).
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 180 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 236 tests).
+- Validation: `npm run check -- --pretty false` passed.
