@@ -10630,3 +10630,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded async-loading docs guidance with explicit loading and empty-state placeholder behavior (`Loading…` / `No results`).
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` focus-trigger parity update:
+  - added migrated coverage for `menuTrigger="focus"` opening behavior on input focus.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 30 tests).
+- Validation: `npm run check -- --pretty false` passed.

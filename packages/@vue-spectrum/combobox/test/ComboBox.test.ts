@@ -389,6 +389,18 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("opens when focused with menuTrigger focus", async () => {
+    const wrapper = renderComboBox({
+      menuTrigger: "focus",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+  });
+
   it("calls onFocus and onBlur for outside focus transitions", async () => {
     const onFocus = vi.fn();
     const onBlur = vi.fn();
