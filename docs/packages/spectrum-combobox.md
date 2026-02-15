@@ -102,6 +102,47 @@ Set `name` and optional `form` to attach the combobox input to form submission, 
 - `allowsCustomValue` always uses text submission semantics.
 - `validationBehavior="native"` enables native required semantics on the input when `isRequired` is set.
 
+## Validation
+
+Use `validate` for custom client validation and `errorMessage` for custom invalid text rendering.
+
+- `validate` receives `{ inputValue, selectedKey }`.
+- `validationBehavior="aria"` renders invalid messaging with ARIA semantics.
+- `validationBehavior="native"` integrates with native form validity (`checkValidity`, required fields, and browser validity APIs).
+
+```vue
+<script setup lang="ts">
+import { ComboBox } from "@vue-spectrum/combobox";
+
+const items = [
+  { key: "vue", label: "Vue" },
+  { key: "react", label: "React" },
+  { key: "svelte", label: "Svelte" },
+];
+
+const validateSelection = ({ selectedKey }: { inputValue: string; selectedKey: string | number | null }) =>
+  selectedKey == null ? "Please choose a framework" : null;
+</script>
+
+<template>
+  <ComboBox
+    label="Framework (ARIA validation)"
+    :items="items"
+    :validate="validateSelection"
+    validation-behavior="aria"
+  />
+
+  <ComboBox
+    label="Framework (Native validation)"
+    :items="items"
+    is-required
+    validation-behavior="native"
+    :error-message="({ validationDetails }) =>
+      validationDetails?.valueMissing ? 'Please choose a framework' : null"
+  />
+</template>
+```
+
 ## Async Loading
 
 Use `loadingState` to expose loading UI and `onLoadMore` for incremental loading when the listbox scroll reaches the end.
