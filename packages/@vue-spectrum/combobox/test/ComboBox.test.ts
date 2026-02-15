@@ -1561,6 +1561,125 @@ describe("ComboBox", () => {
     expect(options[2]?.text()).toContain("Item 3");
   });
 
+  it("updates selected input text when controlled item labels change while blurred", async () => {
+    const initialItems = [
+      { id: "1", name: "Aardvark" },
+      { id: "2", name: "Kangaroo" },
+      { id: "3", name: "Snake" },
+    ];
+    const updatedItems = [
+      { id: "1", name: "New Text" },
+      { id: "2", name: "Item 2" },
+      { id: "3", name: "Item 3" },
+    ];
+
+    const wrapper = mount(defineComponent({
+      props: {
+        items: {
+          type: Array,
+          required: true,
+        },
+      },
+      setup(componentProps) {
+        return () =>
+          h(ComboBox as any, {
+            label: "Combobox",
+            items: componentProps.items,
+          });
+      },
+    }), {
+      props: {
+        items: initialItems,
+      },
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    await input.trigger("focus");
+    await input.setValue("Aar");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Aardvark");
+
+    const outside = document.createElement("button");
+    document.body.append(outside);
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    await wrapper.setProps({
+      items: updatedItems,
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("New Text");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it("does not update selected input text when controlled item labels change while focused", async () => {
+    const initialItems = [
+      { id: "1", name: "Aardvark" },
+      { id: "2", name: "Kangaroo" },
+      { id: "3", name: "Snake" },
+    ];
+    const updatedItems = [
+      { id: "1", name: "New Text" },
+      { id: "2", name: "Item 2" },
+      { id: "3", name: "Item 3" },
+    ];
+
+    const wrapper = mount(defineComponent({
+      props: {
+        items: {
+          type: Array,
+          required: true,
+        },
+      },
+      setup(componentProps) {
+        return () =>
+          h(ComboBox as any, {
+            label: "Combobox",
+            items: componentProps.items,
+          });
+      },
+    }), {
+      props: {
+        items: initialItems,
+      },
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    await input.trigger("focus");
+    await input.setValue("Aar");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Aardvark");
+
+    await input.trigger("focus");
+    await nextTick();
+
+    await wrapper.setProps({
+      items: updatedItems,
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Aardvark");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",
