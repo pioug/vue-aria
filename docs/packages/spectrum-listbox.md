@@ -2,7 +2,7 @@
 
 `ListBox` renders selectable option lists with Spectrum menu/listbox semantics.
 
-## Example
+## Basic Usage
 
 ```vue
 <script setup lang="ts">
@@ -22,7 +22,7 @@ import { Item, ListBox, Section } from "@vue-spectrum/listbox";
 </template>
 ```
 
-## Selection
+## Selection Modes
 
 - `selectionMode="single"`
 - `selectionMode="multiple"`
@@ -44,6 +44,29 @@ import { Item, ListBox, Section } from "@vue-spectrum/listbox";
 
 Selection checkmarks render only when `selectionMode` is set.
 
+## Data-Driven Items
+
+```vue
+<script setup lang="ts">
+import { ListBox } from "@vue-spectrum/listbox";
+
+const items = [
+  { key: "todo", name: "To do" },
+  { key: "doing", name: "In progress" },
+  { key: "done", name: "Done" },
+];
+</script>
+
+<template>
+  <ListBox
+    aria-label="Workflow status"
+    :items="items"
+    selection-mode="single"
+    :default-selected-keys="['doing']"
+  />
+</template>
+```
+
 ## Keyboard Navigation
 
 ```vue
@@ -61,6 +84,74 @@ Selection checkmarks render only when `selectionMode` is set.
 
 With `shouldFocusWrap`, arrow-key navigation wraps between first and last options.
 
+## Async Loading
+
+`ListBox` supports progressive loading with `isLoading`, `maxHeight`, and `onLoadMore`.
+
+```vue
+<script setup lang="ts">
+import { ListBox } from "@vue-spectrum/listbox";
+import { ref } from "vue";
+
+const items = ref(
+  Array.from({ length: 20 }, (_, index) => ({
+    key: `item-${index + 1}`,
+    name: `Item ${index + 1}`,
+  }))
+);
+const isLoading = ref(false);
+
+async function onLoadMore() {
+  if (isLoading.value) {
+    return;
+  }
+
+  isLoading.value = true;
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  const start = items.value.length + 1;
+  items.value = [
+    ...items.value,
+    ...Array.from({ length: 20 }, (_, offset) => ({
+      key: `item-${start + offset}`,
+      name: `Item ${start + offset}`,
+    })),
+  ];
+  isLoading.value = false;
+}
+</script>
+
+<template>
+  <ListBox
+    aria-label="Infinite list"
+    :items="items"
+    :is-loading="isLoading"
+    :max-height="320"
+    :on-load-more="onLoadMore"
+  />
+</template>
+```
+
+When loading:
+- empty list renders a `Loading…` option with a progressbar
+- populated list renders a trailing `Loading more…` option
+
+## Link Items
+
+`Item` can render links with `href`. Internal navigation can be routed through `Provider` router config.
+
+```vue
+<script setup lang="ts">
+import { Item, ListBox } from "@vue-spectrum/listbox";
+</script>
+
+<template>
+  <ListBox aria-label="Links">
+    <Item key="home" href="/home" :router-options="{ from: 'listbox' }">Home</Item>
+    <Item key="docs" href="https://adobe.com">External docs</Item>
+  </ListBox>
+</template>
+```
+
 ## Key Handling
 
 `ListBox` supports section/item keys that are numeric or empty-string values in addition to typical string keys.
@@ -70,6 +161,8 @@ With `shouldFocusWrap`, arrow-key navigation wraps between first and last option
 - Root uses `role="listbox"`.
 - Options use `role="option"` and `aria-selected` for selectable modes.
 - Section groups use `role="group"` with heading labeling.
+- Provide either `aria-label` or `aria-labelledby` for the listbox.
+- Complex options can include label and description content for `aria-labelledby` / `aria-describedby` wiring.
 
 ## Related
 

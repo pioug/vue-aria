@@ -10386,3 +10386,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 40 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` docs parity update:
+  - expanded `docs/packages/spectrum-listbox.md` coverage with:
+    - data-driven `items` usage
+    - async loading examples (`isLoading`, `maxHeight`, `onLoadMore`)
+    - link-item and router-integration usage guidance
+    - accessibility guidance for listbox labeling and complex option label/description content
+    - `docs/packages/spectrum-listbox.md`
+- Validation: `npm run check -- --pretty false` passed.
