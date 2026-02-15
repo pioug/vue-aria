@@ -422,6 +422,19 @@ describe("Picker", () => {
     expect(document.body.querySelector('[role="listbox"]')).toBeNull();
   });
 
+  it("does not open on mouse down when disabled", async () => {
+    const wrapper = renderPicker({
+      isDisabled: true,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("mousedown");
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+  });
+
   it("does not open on space key when disabled", async () => {
     const wrapper = renderPicker({
       isDisabled: true,
