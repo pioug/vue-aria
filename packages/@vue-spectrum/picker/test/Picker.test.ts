@@ -1255,6 +1255,29 @@ describe("Picker", () => {
     expect(trigger.attributes("aria-label")).toBe("Test label");
   });
 
+  it("supports labeling via a visible label", async () => {
+    const wrapper = renderPicker({
+      label: "Test",
+    });
+
+    const trigger = wrapper.get("button");
+    const label = wrapper.get(".spectrum-FieldLabel");
+    const value = wrapper.get(".spectrum-Dropdown-label");
+    const labelId = label.attributes("id");
+    const valueId = value.attributes("id");
+    expect(labelId).toBeTruthy();
+    expect(valueId).toBeTruthy();
+    expect(trigger.attributes("aria-labelledby")).toContain(labelId ?? "");
+    expect(trigger.attributes("aria-labelledby")).toContain(valueId ?? "");
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(listbox?.getAttribute("aria-labelledby")).toContain(labelId ?? "");
+  });
+
   it("supports labeling via aria-labelledby", () => {
     const wrapper = mount(
       defineComponent({
