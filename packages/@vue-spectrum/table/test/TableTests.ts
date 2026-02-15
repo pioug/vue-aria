@@ -4854,6 +4854,20 @@ export function tableTests() {
     expect(rows[0]!.classes()).toContain("spectrum-Table-row--lastRow");
   });
 
+  it("uses drag and selection aware colspan for empty state", () => {
+    const wrapper = renderTable({
+      items: [],
+      showDragButtons: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      renderEmptyState: () => "No rows",
+    });
+
+    const emptyCell = wrapper.get('tbody [role="row"] [role="gridcell"]');
+    expect(emptyCell.attributes("aria-colspan")).toBe("5");
+    expect(wrapper.get('[role="grid"]').attributes("aria-colcount")).toBe("5");
+  });
+
   it("renders a spinner row when loading with no items", () => {
     const wrapper = renderTable({
       items: [],
@@ -4873,6 +4887,23 @@ export function tableTests() {
     const spinner = bodyRows[0]!.get('[role="progressbar"]');
     expect(spinner.attributes("aria-label")).toBe("Loading…");
     expect(spinner.attributes("aria-valuenow")).toBeUndefined();
+  });
+
+  it("uses drag and selection aware colspan for loading spinner rows", () => {
+    const wrapper = renderTable({
+      items: [],
+      showDragButtons: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      loadingState: "loading",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("5");
+
+    const loadingCell = wrapper.get('tbody [role="row"] [role="rowheader"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe("5");
+    expect(loadingCell.find('[role="progressbar"]').exists()).toBe(true);
   });
 
   it("renders a spinner row at the bottom when loading more", () => {
