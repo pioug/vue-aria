@@ -622,6 +622,30 @@ describe("ComboBox", () => {
     expect(input.attributes("aria-activedescendant")).toBe(options[2]?.attributes("id"));
   });
 
+  it("commits focused option on Enter and closes the menu", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(input.attributes("aria-activedescendant")).toBeTruthy();
+
+    await input.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("1");
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
