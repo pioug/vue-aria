@@ -750,4 +750,29 @@ describe("NumberField", () => {
     expect(incrementAriaDisabled()).toBeUndefined();
     expect(decrementAriaDisabled()).toBeDefined();
   });
+
+  it("supports typing arabic-indic numerals in default locale", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({ onChange });
+    const input = wrapper.get('input[type="text"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("٤٢");
+    await input.trigger("blur");
+    expect((input.element as HTMLInputElement).value).toBe("٤٢");
+    expect(onChange).toHaveBeenCalledWith(42);
+    onChange.mockReset();
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("");
+    await nextTick();
+    await input.setValue("56");
+    await input.trigger("blur");
+    expect((input.element as HTMLInputElement).value).toBe("56");
+    expect(onChange).toHaveBeenCalledWith(56);
+  });
 });
