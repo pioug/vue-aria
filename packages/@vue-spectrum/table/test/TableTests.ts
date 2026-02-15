@@ -3695,6 +3695,51 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBeUndefined();
   });
 
+  it("does not select linked rows on row press in checkbox mode", async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const wrapper = renderTable({
+        items: itemsWithRowLinks,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+      });
+
+      let bodyRows = wrapper.findAll('tbody [role="row"]');
+      expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+
+      await bodyRows[0]!.trigger("click");
+      await nextTick();
+
+      bodyRows = wrapper.findAll('tbody [role="row"]');
+      expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+      expect(bodyRows[0]!.attributes("data-href")).toBe("https://example.com/docs");
+    } finally {
+      restoreNavigation();
+    }
+  });
+
+  it("selects linked rows on row press in highlight mode", async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const wrapper = renderTable({
+        items: itemsWithRowLinks,
+        selectionMode: "single",
+        selectionStyle: "highlight",
+      });
+
+      let bodyRows = wrapper.findAll('tbody [role="row"]');
+      expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+
+      await press(bodyRows[0]!);
+
+      bodyRows = wrapper.findAll('tbody [role="row"]');
+      expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+      expect(bodyRows[0]!.attributes("data-href")).toBe("https://example.com/docs");
+    } finally {
+      restoreNavigation();
+    }
+  });
+
   it("retains row links in checkbox selection mode", async () => {
     const wrapper = renderTable({
       items: itemsWithRowLinks,

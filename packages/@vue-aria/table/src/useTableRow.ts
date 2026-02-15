@@ -86,7 +86,7 @@ export function useTableRow<T>(
   }
 
   const syntheticLinkProps = useSyntheticLinkProps(node.props);
-  const linkProps = states.hasAction ? syntheticLinkProps : {};
+  const linkProps = (node.props as { href?: unknown } | undefined)?.href ? syntheticLinkProps : {};
   return {
     rowProps: {
       ...mergeProps(rowProps, treeGridRowProps, linkProps),

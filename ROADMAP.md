@@ -12195,3 +12195,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 216 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 272 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional table row-link selection-style parity refinement:
+  - updated `@vue-aria/table` row-link prop wiring so synthetic link attributes are exposed whenever row link metadata exists, independent of action-state classification.
+  - added `@vue-spectrum/table` regression coverage for row-link interaction semantics across selection styles:
+    - checkbox mode row presses keep selection unchanged while preserving link metadata.
+    - highlight mode row presses perform selection while preserving link metadata.
+  - `packages/@vue-aria/table/src/useTableRow.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 218 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 274 tests).
+- Validation: `npm run check -- --pretty false` passed.
