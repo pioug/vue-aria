@@ -485,6 +485,25 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Custom value");
   });
 
+  it("does not set selectedKey from defaultInputValue alone", () => {
+    const wrapper = renderComboBox({
+      defaultInputValue: "Two",
+      formValue: "key",
+      name: "selection",
+    });
+
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
+    expect((wrapper.get('input[type=\"hidden\"]').element as HTMLInputElement).value).toBe("");
+  });
+
+  it("sets the input value from defaultSelectedKey", () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+    });
+
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
+  });
+
   it("keeps controlled selectedKey value on selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
