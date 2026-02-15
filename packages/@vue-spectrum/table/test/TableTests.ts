@@ -190,6 +190,18 @@ const itemsWithFourRows: SpectrumTableRowData[] = [
   { key: "row-4", foo: "Foo 4", bar: "Bar 4", baz: "Baz 4" },
 ];
 
+const itemsWithFourRowsWithoutSecond: SpectrumTableRowData[] = [
+  itemsWithFourRows[0]!,
+  itemsWithFourRows[2]!,
+  itemsWithFourRows[3]!,
+];
+
+const itemsWithThreeRowsEdited: SpectrumTableRowData[] = [
+  itemsWithThreeRows[0]!,
+  { key: "row-2", foo: "Foo 2 edited", bar: "Bar 2 edited", baz: "Baz 2 edited" },
+  itemsWithThreeRows[2]!,
+];
+
 const itemsWithDisabledFlag: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
@@ -499,6 +511,67 @@ export function tableTests() {
     expect(bodyRows[0]!.text()).toContain("Bar 1");
     expect(bodyRows[0]!.text()).toContain("Baz 1");
     expect(bodyRows[0]!.text()).toContain("Qux 1");
+  });
+
+  it("supports adding rows via reactive item updates", async () => {
+    const wrapper = renderTable();
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+
+    await wrapper.setProps({ items: itemsWithThreeRows });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+    expect(bodyRows[2]!.text()).toContain("Foo 3");
+    expect(bodyRows[2]!.text()).toContain("Bar 3");
+    expect(bodyRows[2]!.text()).toContain("Baz 3");
+  });
+
+  it("supports removing rows via reactive item updates", async () => {
+    const wrapper = renderTable({ items: itemsWithFourRows });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(4);
+
+    await wrapper.setProps({ items: itemsWithThreeRows });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+    expect(wrapper.text()).not.toContain("Foo 4");
+  });
+
+  it("resets body row indexes after removing a row", async () => {
+    const wrapper = renderTable({ items: itemsWithFourRows });
+
+    await wrapper.setProps({ items: itemsWithFourRowsWithoutSecond });
+    await nextTick();
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+    expect(bodyRows[0]!.attributes("aria-rowindex")).toBe("2");
+    expect(bodyRows[1]!.attributes("aria-rowindex")).toBe("3");
+    expect(bodyRows[2]!.attributes("aria-rowindex")).toBe("4");
+    expect(bodyRows[0]!.text()).toContain("Foo 1");
+    expect(bodyRows[1]!.text()).toContain("Foo 3");
+    expect(bodyRows[2]!.text()).toContain("Foo 4");
+  });
+
+  it("supports editing row content via reactive item updates", async () => {
+    const wrapper = renderTable({ items: itemsWithThreeRows });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[1]!.text()).toContain("Foo 2");
+
+    await wrapper.setProps({ items: itemsWithThreeRowsEdited });
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[1]!.text()).toContain("Foo 2 edited");
+    expect(bodyRows[1]!.text()).toContain("Bar 2 edited");
+    expect(bodyRows[1]!.text()).toContain("Baz 2 edited");
   });
 
   it("recomputes distributed widths when columns are removed and added", async () => {

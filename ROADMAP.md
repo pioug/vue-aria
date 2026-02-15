@@ -12147,3 +12147,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 203 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 259 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` dynamic-row mutation parity coverage:
+  - added regression coverage for reactive row-data mutation flows:
+    - adding rows via item-prop updates.
+    - removing rows via item-prop updates.
+    - resetting `aria-rowindex` values after row removal.
+    - editing row cell content via item-prop updates.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 207 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 263 tests).
+- Validation: `npm run check -- --pretty false` passed.
