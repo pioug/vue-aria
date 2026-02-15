@@ -1,7 +1,7 @@
 import { useComboBox } from "@vue-aria/combobox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
+import { useFilter } from "@vue-aria/i18n";
 import { getItemId } from "@vue-aria/listbox";
-import { ListCollection } from "@vue-aria/list-state";
 import { defineComponent, h, onMounted, ref, watch, type PropType, type VNode } from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { createComboBoxCollection, getComboBoxDisabledKeys } from "./collection";
@@ -32,14 +32,6 @@ function resolveElement(value: unknown): HTMLElement | null {
   }
 
   return null;
-}
-
-function syncListCollection(target: any, source: any): void {
-  target.keyMap = source.keyMap;
-  target.iterable = source.iterable;
-  target.firstKey = source.firstKey;
-  target.lastKey = source.lastKey;
-  target._size = source._size;
 }
 
 const PLACEHOLDER_DEPRECATION_WARNING =
@@ -199,6 +191,7 @@ export const ComboBox = defineComponent({
     UNSAFE_style: Object as PropType<Record<string, unknown> | undefined>,
   },
   setup(props, { attrs, slots, expose }) {
+    const { contains } = useFilter({ sensitivity: "base" });
     const inputRef = ref<HTMLInputElement | null>(null);
     const buttonRef = ref<HTMLElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
@@ -237,11 +230,14 @@ export const ComboBox = defineComponent({
       },
     };
 
-    const initialCollectionNodes = createComboBoxCollection(props.items, []);
+    const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+    const initialCollectionNodes = createComboBoxCollection(props.items, slotChildren);
     const initialDisabledKeys = getComboBoxDisabledKeys(initialCollectionNodes);
 
     const state = useComboBoxState<object>({
-      items: initialCollectionNodes as any,
+      ...(props.items != null
+        ? { items: initialCollectionNodes as any }
+        : { defaultItems: initialCollectionNodes as any }),
       disabledKeys: initialDisabledKeys,
       defaultSelectedKey: props.selectedKey ?? props.defaultSelectedKey,
       onSelectionChange: props.onSelectionChange,
@@ -259,7 +255,7 @@ export const ComboBox = defineComponent({
         return props.defaultOpen;
       },
       onOpenChange: props.onOpenChange,
-      defaultFilter: props.defaultFilter,
+      defaultFilter: props.defaultFilter ?? contains,
       get menuTrigger() {
         return props.menuTrigger;
       },
@@ -355,15 +351,11 @@ export const ComboBox = defineComponent({
 
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
-      const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-      const collectionNodes = createComboBoxCollection(props.items, slotChildren);
-      const nextCollection = new ListCollection(collectionNodes as any);
-      syncListCollection(state.collection as any, nextCollection as any);
-      (state.selectionManager as any).collection = state.collection as any;
       const resolvedErrorMessage = props.errorMessage ?? validationErrors.join(", ");
       const focusedKey = state.selectionManager.focusedKey as ComboBoxKey | null;
       const activeDescendant =
         focusedKey != null ? getItemId(state as any, focusedKey) : undefined;
+      const collectionSize = Number((state.collection as { size?: number } | null)?.size ?? 0);
 
       return h(
         "div",
@@ -444,7 +436,7 @@ export const ComboBox = defineComponent({
                 value: state.selectedKey == null ? "" : String(state.selectedKey),
               })
             : null,
-          state.isOpen && (collectionNodes.length > 0 || props.loadingState != null)
+          state.isOpen && (collectionSize > 0 || props.loadingState != null)
             ? h(
                 "div",
                 {

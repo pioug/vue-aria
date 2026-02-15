@@ -434,6 +434,40 @@ describe("ComboBox", () => {
     expect(onOpenChange).toHaveBeenCalledWith(true, "input");
   });
 
+  it("closes the menu when no items match typed input", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("One");
+    await nextTick();
+    await nextTick();
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    const initialOptions = wrapper.findAll('[role="option"]');
+    expect(initialOptions).toHaveLength(1);
+
+    await input.setValue("Onez");
+    await nextTick();
+    await nextTick();
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",

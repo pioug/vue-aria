@@ -10646,8 +10646,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 32 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` slot-collection parity refinement:
-  - moved slot-driven collection parsing into render-time sync to avoid invoking slots outside render and to keep combobox collection internals aligned with current slot output.
-    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - attempted render-time slot-collection syncing; later reverted after detecting it interfered with combobox filtering behavior.
+  - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 32 tests).
 - Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` default-input parity update:
@@ -10662,4 +10662,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - focus-triggered open with `menuTrigger="focus"` (`focus`)
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` default-filter parity update:
+  - enabled locale-aware default filtering (`contains`) for combobox state when no explicit `defaultFilter` is provided.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - aligned state wiring to pass slot-defined collections as `defaultItems` (uncontrolled) while preserving `items` handling for controlled item collections.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated no-match coverage asserting an input-triggered menu closes when filtering transitions from a matched result to no matching options.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
