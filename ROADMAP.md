@@ -10589,3 +10589,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - focus callback and validation-state prop guidance
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` form-value parity update:
+  - added `formValue` prop support with Spectrum-compatible submission behavior:
+    - `formValue="text"` keeps native name/form wiring on the combobox input
+    - `formValue="key"` renders a hidden input containing `selectedKey` while removing name/form from the visible text input
+    - `allowsCustomValue` continues forcing text-form submission semantics
+    - `packages/@vue-spectrum/combobox/src/types.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage for hidden-input key submission updates after user selection.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 27 tests).
+- Validation: `npm run check -- --pretty false` passed.

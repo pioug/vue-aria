@@ -40,6 +40,7 @@ export interface SpectrumComboBoxProps {
   maxHeight?: number;
   onLoadMore?: () => void;
   loadingState?: SpectrumComboBoxLoadingState;
+  formValue?: SpectrumComboBoxFormValue;
   isDisabled?: boolean;
   isReadOnly?: boolean;
   isRequired?: boolean;
@@ -80,6 +81,7 @@ export type SpectrumComboBoxLoadingState =
   | "loading"
   | "filtering"
   | "loadingMore";
+export type SpectrumComboBoxFormValue = "text" | "key";
 
 export interface ComboBoxCollectionNode<T extends object = object> extends Node<T> {
   wrapper?: (node: VNode) => VNode;

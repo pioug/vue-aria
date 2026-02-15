@@ -183,6 +183,34 @@ describe("ComboBox", () => {
     expect(input.attributes("form")).toBe("combobox-form");
   });
 
+  it("supports formValue key with hidden-input submission", async () => {
+    const wrapper = renderComboBox({
+      name: "framework",
+      form: "framework-form",
+      formValue: "key",
+      defaultSelectedKey: "2",
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("name")).toBeUndefined();
+    expect(input.attributes("form")).toBeUndefined();
+
+    const hiddenInput = wrapper.get('input[type="hidden"][name="framework"]');
+    expect(hiddenInput.attributes("form")).toBe("framework-form");
+    expect((hiddenInput.element as HTMLInputElement).value).toBe("2");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[2]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((wrapper.get('input[type="hidden"][name="framework"]').element as HTMLInputElement).value).toBe("3");
+    expect((input.element as HTMLInputElement).value).toBe("Three");
+  });
+
   it("supports controlled open state", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderComboBox({

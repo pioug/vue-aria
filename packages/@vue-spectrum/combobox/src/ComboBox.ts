@@ -165,6 +165,11 @@ export const ComboBox = defineComponent({
     },
     name: String,
     form: String,
+    formValue: {
+      type: String as PropType<SpectrumComboBoxProps["formValue"]>,
+      required: false,
+      default: undefined,
+    },
     autoFocus: {
       type: Boolean as PropType<SpectrumComboBoxProps["autoFocus"]>,
       required: false,
@@ -306,8 +311,11 @@ export const ComboBox = defineComponent({
         popoverRef: popoverRefObject,
         buttonRef: buttonRefObject,
         label: props.label,
-        name: props.name,
-        form: props.form,
+        name: (props.allowsCustomValue ? "text" : (props.formValue ?? "text")) === "text" ? props.name : undefined,
+        form:
+          (props.allowsCustomValue ? "text" : (props.formValue ?? "text")) === "text"
+            ? props.form
+            : undefined,
         isDisabled: props.isDisabled,
         isReadOnly: props.isReadOnly,
         allowsCustomValue: props.allowsCustomValue,
@@ -415,6 +423,14 @@ export const ComboBox = defineComponent({
               ),
             ]
           ),
+          props.name && (props.allowsCustomValue ? "text" : (props.formValue ?? "text")) === "key"
+            ? h("input", {
+                type: "hidden",
+                name: props.name,
+                form: props.form,
+                value: state.selectedKey == null ? "" : String(state.selectedKey),
+              })
+            : null,
           state.isOpen && (collectionNodes.length > 0 || props.loadingState === "loading" || props.loadingState === "loadingMore")
             ? h(
                 "div",
