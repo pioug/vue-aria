@@ -12422,3 +12422,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 264 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 320 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` slot-loading synthetic-column parity fix:
+  - fixed slot normalization to retain slot-defined columns even when `TableBody` currently has zero rows, preventing synthetic drag/selection columns from collapsing in slot-loading states.
+  - added regression coverage for slot-loading spinner colspan/count with drag + selection columns enabled.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 265 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 321 tests).
+- Validation: `npm run check -- --pretty false` passed.

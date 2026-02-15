@@ -704,7 +704,10 @@ function normalizeRowsFromProps(
 export function normalizeTableDefinition(
   options: NormalizeTableDefinitionOptions
 ): NormalizedSpectrumTableDefinition {
-  if (options.slotDefinition && options.slotDefinition.rows.length > 0) {
+  if (
+    options.slotDefinition
+    && (options.slotDefinition.rows.length > 0 || options.slotDefinition.columns.length > 0)
+  ) {
     const columns = normalizeColumnsFromSlot(options.slotDefinition.columns, options.slotDefinition.rows);
     const rows = normalizeRowsFromSlot(options.slotDefinition.rows, columns);
     return {

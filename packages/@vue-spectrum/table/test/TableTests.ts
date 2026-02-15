@@ -5055,6 +5055,41 @@ export function tableTests() {
     expect(spinner.attributes("aria-label")).toBe("Loading…");
   });
 
+  it("uses drag and selection aware colspan for TableBody slot loading spinner state", async () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot loading drag table",
+        showDragButtons: true,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+              h(Column as any, { id: "bar" }, () => "Bar"),
+            ],
+          }),
+          h(TableBody as any, { loadingState: "loading" }, {
+            default: () => [],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("4");
+
+    const loadingCell = wrapper.get('tbody [role="row"] [role="rowheader"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe("4");
+    expect(loadingCell.find('[role="progressbar"]').exists()).toBe(true);
+  });
+
   it("fires onLoadMore from TableBody slot props when scrolling near the bottom", async () => {
     const onLoadMore = vi.fn();
     const wrapper = mount(TableView as any, {
