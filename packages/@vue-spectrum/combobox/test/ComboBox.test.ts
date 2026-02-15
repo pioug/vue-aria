@@ -3436,6 +3436,141 @@ describe("ComboBox", () => {
     }
   });
 
+  it("shows delayed input loading only for initial loading when the menu is closed", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "loading",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      expect(findInputSpinner().exists()).toBe(false);
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+
+      await wrapper.setProps({
+        loadingState: "filtering",
+      });
+      await nextTick();
+
+      expect(findInputSpinner().exists()).toBe(false);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("shows delayed input loading in manual mode while closed", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "loading",
+        menuTrigger: "manual",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      expect(findInputSpinner().exists()).toBe(false);
+      vi.advanceTimersByTime(500);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+
+      await wrapper.setProps({
+        loadingState: "filtering",
+      });
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+
+      await wrapper.setProps({
+        menuTrigger: "input",
+      });
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("shows delayed filtering input loading once the menu is open", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "filtering",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      vi.advanceTimersByTime(500);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("hides delayed input loading when loading stops", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "filtering",
+        menuTrigger: "manual",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      vi.advanceTimersByTime(500);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+
+      await wrapper.setProps({
+        loadingState: "idle",
+      });
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("resets delayed input loading when loading input text changes", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "loading",
+        menuTrigger: "manual",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+      const input = wrapper.get('input[role="combobox"]');
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      await input.setValue("O");
+      await nextTick();
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("shows a loading-more spinner in the open listbox when loadingState is loadingMore", async () => {
     const wrapper = renderComboBox({
       loadingState: "loadingMore",

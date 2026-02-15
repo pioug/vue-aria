@@ -3,7 +3,17 @@ import { useComboBoxState } from "@vue-aria/combobox-state";
 import { useFilter } from "@vue-aria/i18n";
 import { getItemId } from "@vue-aria/listbox";
 import { useId } from "@vue-aria/utils";
-import { computed, defineComponent, h, onMounted, ref, type PropType, type VNode } from "vue";
+import {
+  computed,
+  defineComponent,
+  h,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  type PropType,
+  type VNode,
+} from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { createComboBoxCollection, getComboBoxDisabledKeys } from "./collection";
 import type { ComboBoxKey, SpectrumComboBoxNodeData, SpectrumComboBoxProps } from "./types";
@@ -343,6 +353,56 @@ export const ComboBox = defineComponent({
       },
     } as any);
 
+    const showLoadingIndicator = ref(false);
+    const loadingIndicatorTimer = ref<ReturnType<typeof setTimeout> | null>(null);
+    const lastLoadingInputValue = ref<string | undefined>(state.inputValue);
+    const isInputLoadingState = computed(
+      () => props.loadingState === "loading" || props.loadingState === "filtering"
+    );
+    const clearLoadingIndicatorTimer = () => {
+      if (loadingIndicatorTimer.value != null) {
+        clearTimeout(loadingIndicatorTimer.value);
+        loadingIndicatorTimer.value = null;
+      }
+    };
+    const scheduleLoadingIndicator = () => {
+      clearLoadingIndicatorTimer();
+      loadingIndicatorTimer.value = setTimeout(() => {
+        showLoadingIndicator.value = true;
+        loadingIndicatorTimer.value = null;
+      }, 500);
+    };
+
+    watch(
+      [isInputLoadingState, () => state.inputValue],
+      ([isLoading, inputValue]) => {
+        if (isLoading && !showLoadingIndicator.value) {
+          if (loadingIndicatorTimer.value == null) {
+            scheduleLoadingIndicator();
+          }
+
+          if (inputValue !== lastLoadingInputValue.value) {
+            scheduleLoadingIndicator();
+          }
+        } else if (!isLoading) {
+          clearLoadingIndicatorTimer();
+        }
+
+        lastLoadingInputValue.value = inputValue;
+      },
+      { immediate: true }
+    );
+
+    watch(isInputLoadingState, (isLoading, wasLoading) => {
+      if (wasLoading && !isLoading) {
+        showLoadingIndicator.value = false;
+      }
+    });
+
+    onBeforeUnmount(() => {
+      clearLoadingIndicatorTimer();
+    });
+
     const syncControlledInputValue = (event: Event) => {
       if (props.inputValue === undefined) {
         return;
@@ -424,6 +484,9 @@ export const ComboBox = defineComponent({
         focusedKey != null ? getItemId(state as any, focusedKey) : undefined;
       const collectionSize = Number((state.collection as { size?: number } | null)?.size ?? 0);
       const formValueMode = props.allowsCustomValue ? "text" : (props.formValue ?? "text");
+      const shouldShowInputLoadingIndicator =
+        showLoadingIndicator.value
+        && (state.isOpen || props.menuTrigger === "manual" || props.loadingState === "loading");
 
       return h(
         "div",
@@ -485,6 +548,13 @@ export const ComboBox = defineComponent({
                 "aria-controls": state.isOpen ? (listBoxProps.id as string | undefined) : undefined,
                 "aria-activedescendant": activeDescendant,
               }),
+              props.loadingState != null && shouldShowInputLoadingIndicator
+                ? h("span", {
+                    role: "progressbar",
+                    "aria-label": "Loading…",
+                    class: "spectrum-Textfield-circleLoader spectrum-InputGroup-input-circleLoader",
+                  })
+                : null,
               h(
                 "button",
                 {
