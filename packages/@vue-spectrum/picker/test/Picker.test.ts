@@ -1093,6 +1093,59 @@ describe("Picker", () => {
     expect((select.element as HTMLSelectElement).validationMessage).toContain("Please enter a value");
   });
 
+  it("clears native validation state on form reset", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", null, [
+              h(Picker as any, {
+                label: "Test",
+                name: "picker",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+              h("button", {
+                type: "reset",
+                "data-testid": "reset",
+              }, "Reset"),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+
+    await nextTick();
+    await nextTick();
+    (select.element as HTMLSelectElement).checkValidity();
+    (select.element as HTMLSelectElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+    expect(trigger.attributes("aria-describedby")).toBeTruthy();
+
+    await trigger.trigger("click");
+    await nextTick();
+    (select.element as HTMLSelectElement).value = "1";
+    await select.trigger("change");
+    await nextTick();
+    await nextTick();
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
+    await nextTick();
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+  });
+
   it("supports aria validate callback flow", async () => {
     const wrapper = renderPicker({
       name: "picker",
