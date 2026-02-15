@@ -674,6 +674,60 @@ describe("TableView nested rows", () => {
     expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("true");
   });
 
+  it("supports selecting a row with Enter on a focused treegrid row checkbox", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedCheckbox = getRowByText(wrapper, "Row 1, Lvl 2, Foo").get('[role="checkbox"]');
+    (nestedCheckbox.element as HTMLElement).focus();
+    await nestedCheckbox.trigger("focus");
+    await moveFocus(nestedCheckbox, "Enter");
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]).toEqual(new Set(["row-1-level-2"]));
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("true");
+  });
+
+  it("supports selecting a row with Space on a focused treegrid row checkbox", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedCheckbox = getRowByText(wrapper, "Row 1, Lvl 2, Foo").get('[role="checkbox"]');
+    (nestedCheckbox.element as HTMLElement).focus();
+    await nestedCheckbox.trigger("focus");
+    await moveFocus(nestedCheckbox, " ");
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]).toEqual(new Set(["row-1-level-2"]));
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("true");
+  });
+
   it("does not select disabled nested rows with keyboard selection keys", async () => {
     enableTableNestedRows();
     const onSelectionChange = vi.fn();
