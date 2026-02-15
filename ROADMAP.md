@@ -11972,3 +11972,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 175 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 231 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` bounded-sizing distribution parity coverage:
+  - added regression coverage for upstream bounded/dynamic allocation scenarios:
+    - dynamic leading column absorbs remaining width when following columns are max-bounded.
+    - less-bounded dynamic column absorbs remaining width when later columns are constrained by min/max bounds.
+  - asserted both header and body cell width outputs for each scenario.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 177 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 233 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -109,6 +109,18 @@ const columnsWithWithinMaxExplicitWidth: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithDynamicBeforeBoundedMax: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true },
+  { key: "bar", title: "Bar", maxWidth: 200 },
+  { key: "baz", title: "Baz", maxWidth: 200 },
+];
+
+const columnsWithMixedBoundsAndDynamic: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, minWidth: 100 },
+  { key: "bar", title: "Bar", minWidth: 500 },
+  { key: "baz", title: "Baz", maxWidth: 200 },
+];
+
 const columnsWithDefaultWidthMetadata: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true, defaultWidth: 200 },
   { key: "bar", title: "Bar" },
@@ -684,6 +696,40 @@ export function tableTests() {
     expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
     expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
     expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
+  });
+
+  it("allocates remaining width to earlier dynamic columns when later columns are max-bounded", () => {
+    const wrapper = renderTable({
+      columns: columnsWithDynamicBeforeBoundedMax,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(600, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+
+    const bodyCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(parseFloat((bodyCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(600, 3);
+    expect(parseFloat((bodyCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((bodyCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+  });
+
+  it("allocates remaining width to less-bounded dynamic columns when later columns are constrained", () => {
+    const wrapper = renderTable({
+      columns: columnsWithMixedBoundsAndDynamic,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+
+    const bodyCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(parseFloat((bodyCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
+    expect(parseFloat((bodyCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+    expect(parseFloat((bodyCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
   });
 
   it("uses defaultWidth when width is not provided", () => {
