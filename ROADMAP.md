@@ -10371,3 +10371,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 38 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` router-link parity update:
+  - added migrated RouterProvider integration coverage for listbox link items, including:
+    - router `useHref` mapping for internal links
+    - router `navigate` dispatch with `routerOptions`
+    - external link clicks bypassing router navigation
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 39 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.

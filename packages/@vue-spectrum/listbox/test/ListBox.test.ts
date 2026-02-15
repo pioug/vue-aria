@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { h, nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
+import { Provider } from "@vue-spectrum/provider";
+import { theme } from "@vue-spectrum/theme";
 import { Item } from "../src/Item";
 import { ListBox } from "../src/ListBox";
 import { Section } from "../src/Section";
@@ -614,6 +616,61 @@ describe("ListBox", () => {
       }
     }
   );
+
+  it("supports links with RouterProvider", async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const navigate = vi.fn();
+      const useHref = (href: string) => (href.startsWith("http") ? href : `/base${href}`);
+      const wrapper = mount(
+        defineComponent({
+          setup() {
+            return () =>
+              h(
+                Provider as any,
+                {
+                  theme,
+                  router: { navigate, useHref },
+                },
+                () =>
+                  h(
+                    ListBox as any,
+                    {
+                      ariaLabel: "ListBox",
+                    },
+                    {
+                      default: () => [
+                        h(
+                          Item as any,
+                          { key: "one", href: "/one", routerOptions: { foo: "bar" } },
+                          { default: () => "One" }
+                        ),
+                        h(Item as any, { key: "two", href: "https://adobe.com" }, { default: () => "Two" }),
+                      ],
+                    }
+                  )
+              );
+          },
+        }),
+        {
+          attachTo: document.body,
+        }
+      );
+
+      const options = wrapper.findAll('[role="option"]');
+      expect(options).toHaveLength(2);
+      expect(options[0]?.attributes("href")).toBe("/base/one");
+
+      await options[0]?.trigger("click");
+      expect(navigate).toHaveBeenCalledWith("/one", { foo: "bar" });
+
+      navigate.mockReset();
+      await options[1]?.trigger("click");
+      expect(navigate).not.toHaveBeenCalled();
+    } finally {
+      restoreNavigation();
+    }
+  });
 
   it("supports keyboard Enter activation on links without selecting", async () => {
     const restoreNavigation = preventLinkNavigation();
