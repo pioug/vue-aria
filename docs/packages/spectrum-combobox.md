@@ -153,6 +153,7 @@ const onLoadMore = async () => {
 
 - `ArrowDown` opens suggestions and focuses the first option.
 - `ArrowUp` opens suggestions and focuses the last option.
+- `Enter` and `Tab` commit the currently focused option when the menu is open.
 - `menuTrigger="manual"` keeps suggestions closed while typing.
 
 ## Accessibility

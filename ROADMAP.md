@@ -10752,3 +10752,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 46 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` keyboard docs parity update:
+  - expanded keyboard guidance to document Enter/Tab commit behavior for focused options in open combobox menus.
+    - `docs/packages/spectrum-combobox.md`
+- Validation: `npm run check -- --pretty false` passed.
