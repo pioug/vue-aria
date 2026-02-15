@@ -364,6 +364,44 @@ export function tableTests() {
     expect(onAction).toHaveBeenCalledWith("row-2");
   });
 
+  it("does not warn about invoking default slots outside render", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      mount(TableView as any, {
+        props: {
+          "aria-label": "Slot warning table",
+        },
+        slots: {
+          default: () => [
+            h(TableHeader as any, null, {
+              default: () => [
+                h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+                h(Column as any, { id: "bar" }, () => "Bar"),
+              ],
+            }),
+            h(TableBody as any, null, {
+              default: () => [
+                h(Row as any, { id: "row-1" }, {
+                  default: () => [
+                    h(Cell as any, () => "Foo 1"),
+                    h(Cell as any, () => "Bar 1"),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining("Slot \"default\" invoked outside of the render function")
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("applies column metadata classes in static slot syntax", () => {
     const wrapper = mount(TableView as any, {
       props: {

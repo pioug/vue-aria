@@ -6674,7 +6674,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated execution queue status for `@vue-spectrum/table` to `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (2 files, 7 tests).
-- Note: Vue warns about invoking default slots outside render in static table-slot parsing paths; behavior/tests are currently passing and this remains a known follow-up parity refinement.
+- Note (resolved 2026-02-15): static table-slot parsing now runs in render-time synchronization and no longer emits Vue default-slot-outside-render warnings.
 - Started `@vue-spectrum/tree` foundational slice:
   - scaffolded `@vue-spectrum/tree` package with upstream-aligned surface exports: `TreeView`, `TreeViewItem`, and `TreeViewItemContent`.
   - implemented tree item normalization for both data-driven (`items`) and static-slot composition trees, backed by `@vue-aria/tree-state` and `@vue-aria/tree`.
@@ -6687,7 +6687,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - updated execution queue status for `@vue-spectrum/tree` to `In progress`.
 - Validation: `npm run check -- --pretty false` passed.
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 7 tests).
-- Note: Vue warns about slot invocation outside render for static tree-slot parsing paths in test/SSR harnesses; behavior/tests are passing and this remains a follow-up cleanup item.
+- Note (resolved 2026-02-15): static tree-slot parsing now runs in render-time synchronization and no longer emits Vue default-slot-outside-render warnings.
 - Started `@vue-spectrum/calendar` foundational slice:
   - scaffolded `@vue-spectrum/calendar` package with upstream-aligned surface exports: `Calendar` and `RangeCalendar`.
   - implemented calendar and range-calendar composition over `@vue-aria/calendar` + `@vue-aria/calendar-state`, including:
@@ -11596,4 +11596,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/tree/test/TreeView.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 81 tests).
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 116 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` slot-collection warning stabilization:
+  - moved static-slot table definition parsing into render-time synchronization with signature-based updates backed by `shallowRef`, eliminating setup/computed-time default-slot invocation while avoiding recursive collection update loops.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - added explicit regression coverage asserting slot-based `TableView` mounts do not emit Vue's default-slot-outside-render warning.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 117 tests).
+- Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 81 tests).
 - Validation: `npm run check -- --pretty false` passed.

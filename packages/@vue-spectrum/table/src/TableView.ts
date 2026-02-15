@@ -1,11 +1,12 @@
 import { useTable, useTableCell, useTableColumnHeader, useTableRow } from "@vue-aria/table";
 import { TableCollection, useTableState, type GridNode, type SortDescriptor, type TableState } from "@vue-aria/table-state";
 import { mergeProps } from "@vue-aria/utils";
-import { defineComponent, h, ref, computed, watchEffect, type PropType, type VNode, type VNodeChild } from "vue";
+import { defineComponent, h, ref, shallowRef, computed, watchEffect, type PropType, type VNode, type VNodeChild } from "vue";
 import type {
   NormalizedSpectrumTableCell,
   NormalizedSpectrumTableColumn,
   NormalizedSpectrumTableDefinition,
+  ParsedSpectrumTableDefinition,
   NormalizedSpectrumTableRow,
   SpectrumSortDescriptor,
   SpectrumTableCellData,
@@ -125,6 +126,41 @@ function setsEqual(left: Set<TableKey>, right: Set<TableKey>): boolean {
   }
 
   return true;
+}
+
+function isRenderableNode(node: VNode): boolean {
+  return typeof node.type !== "symbol";
+}
+
+function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefinition | null): string {
+  if (!definition) {
+    return "";
+  }
+
+  const columnSignature = definition.columns
+    .map((column) =>
+      [
+        String(column.key ?? ""),
+        column.textValue ?? "",
+        column.align ?? "",
+        column.colSpan ?? "",
+        column.allowsSorting ? "1" : "0",
+        column.isRowHeader ? "1" : "0",
+        column.hideHeader ? "1" : "0",
+        column.showDivider ? "1" : "0",
+      ].join(":")
+    )
+    .join("|");
+  const rowSignature = definition.rows
+    .map((row) => {
+      const cells = row.cells
+        .map((cell) => [String(cell.key ?? ""), cell.textValue ?? "", cell.colSpan ?? ""].join(":"))
+        .join(",");
+      return [String(row.key ?? ""), row.textValue ?? "", row.isDisabled ? "1" : "0", cells].join(":");
+    })
+    .join("|");
+
+  return `${columnSignature}__${rowSignature}`;
 }
 
 function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridNode<NormalizedSpectrumTableRow>[] {
@@ -880,7 +916,8 @@ export const TableView = defineComponent({
       }
     });
 
-    const slotDefinition = computed(() => parseTableSlotDefinition(slots.default?.() as VNode[] | undefined));
+    const slotDefinition = shallowRef<ParsedSpectrumTableDefinition | null>(null);
+    const slotDefinitionSignature = ref("");
     const disabledKeysVersion = computed(() => {
       const keySegment = props.disabledKeys
         ? Array.from(props.disabledKeys).map((key) => String(key)).sort().join("|")
@@ -1045,6 +1082,14 @@ export const TableView = defineComponent({
     });
 
     return () => {
+      const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+      const nextSlotDefinition = parseTableSlotDefinition(slotChildren) as ParsedSpectrumTableDefinition | null;
+      const nextSlotSignature = getTableSlotDefinitionSignature(nextSlotDefinition);
+      if (nextSlotSignature !== slotDefinitionSignature.value) {
+        slotDefinitionSignature.value = nextSlotSignature;
+        slotDefinition.value = nextSlotDefinition;
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const attrsClass = attrsRecord.class;
       const attrsStyle = attrsRecord.style;
