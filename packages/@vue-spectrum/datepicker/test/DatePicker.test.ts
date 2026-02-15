@@ -1683,6 +1683,54 @@ describe("DateRangePicker", () => {
     expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
   });
 
+  it("updates range picker defaultValue after form submit action", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const defaultRange = ref({
+            start: new CalendarDate(2019, 6, 5),
+            end: new CalendarDate(2019, 6, 8),
+          });
+          const onSubmit = (event: Event) => {
+            event.preventDefault();
+            defaultRange.value = {
+              start: new CalendarDate(2019, 6, 10),
+              end: new CalendarDate(2019, 6, 12),
+            };
+          };
+
+          return () =>
+            h("form", { onSubmit }, [
+              h(DateRangePicker as any, {
+                "aria-label": "Date range picker",
+                defaultValue: defaultRange.value,
+                startName: "rangeStart",
+                endName: "rangeEnd",
+              }),
+              h("button", {
+                type: "submit",
+                "data-testid": "submit",
+              }, "submit"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const startInput = wrapper.get('input[type="hidden"][name="rangeStart"]');
+    const endInput = wrapper.get('input[type="hidden"][name="rangeEnd"]');
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-05");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
+
+    await wrapper.get('[data-testid="submit"]').trigger("click");
+    await nextTick();
+
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-10");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-12");
+  });
+
   it("focuses range picker trigger when autoFocus is enabled", async () => {
     const wrapper = mount(DateRangePicker as any, {
       props: {
