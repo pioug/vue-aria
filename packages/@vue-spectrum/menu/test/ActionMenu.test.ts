@@ -32,11 +32,19 @@ describe("ActionMenu", () => {
     expect(button.attributes("aria-label")).toBe("More actions");
 
     await button.trigger("click");
+    await nextTick();
 
-    const menuItem = document.body.querySelector('[role="menuitem"]') as HTMLElement | null;
-    expect(menuItem?.textContent).toContain("Foo");
+    const menu = document.body.querySelector('[role="menu"]') as HTMLElement | null;
+    expect(menu).toBeTruthy();
+    expect(menu?.getAttribute("aria-labelledby")).toBe(button.attributes("id"));
 
-    menuItem?.click();
+    const menuItems = Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+    expect(menuItems).toHaveLength(3);
+    expect(menuItems[0]?.textContent).toContain("Foo");
+    expect(menuItems[1]?.textContent).toContain("Bar");
+    expect(menuItems[2]?.textContent).toContain("Baz");
+
+    menuItems[0]?.click();
     expect(onAction).toHaveBeenCalledTimes(1);
   });
 
@@ -54,6 +62,22 @@ describe("ActionMenu", () => {
     });
 
     expect(wrapper.get("button").attributes("aria-label")).toBe("Custom Aria Label");
+  });
+
+  it("supports custom aria-label via native attribute", () => {
+    const wrapper = mount(ActionMenu as any, {
+      attrs: {
+        "aria-label": "Attr Aria Label",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get("button").attributes("aria-label")).toBe("Attr Aria Label");
   });
 
   it("renders menu popover in a provided portal container", async () => {

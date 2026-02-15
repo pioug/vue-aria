@@ -1,6 +1,6 @@
 # Vue Aria / Vue Spectrum Roadmap
 
-Last updated: 2026-02-14
+Last updated: 2026-02-15
 Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 
 ## 1) Program Status
@@ -538,7 +538,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `references/react-spectrum/packages/@react-spectrum/numberfield/test`
   - `references/react-spectrum/packages/@react-spectrum/numberfield/docs`
 - Local package path: `packages/@vue-spectrum/numberfield`
-- Status: In progress
+- Status: Complete
 - Owner: Codex
 
 ### Completed in current slice
@@ -10257,4 +10257,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/form/src/useFormValidation.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 87 tests).
 - Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` ActionMenu labeling parity update:
+  - expanded migrated `ActionMenu` coverage to assert trigger/menu `aria-labelledby` wiring and full rendered item-set coverage for default trigger labeling.
+    - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
+  - added migrated `ActionMenu` coverage asserting native `aria-label` attribute forwarding on the trigger button.
+    - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test/ActionMenu.test.ts` passed (1 file, 11 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 102 tests).
 - Validation: `npm run check -- --pretty false` passed.
