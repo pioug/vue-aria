@@ -1729,6 +1729,65 @@ describe("DateRangePicker", () => {
     expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
   });
 
+  it("supports controlled range picker form reset", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const value = ref({
+            start: new CalendarDate(2020, 2, 3),
+            end: new CalendarDate(2020, 2, 6),
+          });
+          return () =>
+            h("form", null, [
+              h(DateRangePicker as any, {
+                "aria-label": "Date range picker",
+                value: value.value,
+                onChange: (next: { start: CalendarDate; end: CalendarDate } | null) => {
+                  if (next) {
+                    value.value = next;
+                  }
+                },
+                startName: "rangeStart",
+                endName: "rangeEnd",
+              }),
+              h("input", {
+                type: "reset",
+                "data-testid": "reset",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const startInput = wrapper.get('input[type="hidden"][name="rangeStart"]');
+    const endInput = wrapper.get('input[type="hidden"][name="rangeEnd"]');
+    expect(startInput.element.getAttribute("value")).toBe("2020-02-03");
+    expect(endInput.element.getAttribute("value")).toBe("2020-02-06");
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(startInput.element.getAttribute("value")).toBe("2020-02-10");
+    expect(endInput.element.getAttribute("value")).toBe("2020-02-12");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
+
+    expect(startInput.element.getAttribute("value")).toBe("2020-02-03");
+    expect(endInput.element.getAttribute("value")).toBe("2020-02-06");
+  });
+
   it("updates range picker defaultValue after form submit action", async () => {
     const wrapper = mount(
       defineComponent({
