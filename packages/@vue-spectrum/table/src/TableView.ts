@@ -1335,6 +1335,7 @@ const TableBodyCell = defineComponent({
             {
               "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
               "react-spectrum-Table-cell--dragButtonCell": isDragButtonCell.value,
+              "is-disabled": isDragButtonCell.value && isDragButtonDisabled.value,
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",

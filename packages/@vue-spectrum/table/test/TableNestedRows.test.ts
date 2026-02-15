@@ -584,6 +584,8 @@ describe("TableView nested rows", () => {
     const enabledDragCell = enabledRow.findAll('[role="gridcell"]')[0]!;
 
     expect(disabledDragCell.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(disabledDragCell.classes()).toContain("is-disabled");
+    expect(enabledDragCell.classes()).not.toContain("is-disabled");
     expect(disabledDragCell.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
     expect(enabledDragCell.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
   });

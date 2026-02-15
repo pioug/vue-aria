@@ -543,6 +543,8 @@ export function tableTests() {
     const rows = wrapper.findAll('tbody [role="row"]');
     const firstRowCells = rows[0]!.findAll('[role="gridcell"]');
     const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.classes()).toContain("is-disabled");
+    expect(secondRowCells[0]!.classes()).not.toContain("is-disabled");
     expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
     expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
   });
@@ -558,6 +560,8 @@ export function tableTests() {
     const rows = wrapper.findAll('tbody [role="row"]');
     const firstRowCells = rows[0]!.findAll('[role="gridcell"]');
     const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.classes()).not.toContain("is-disabled");
+    expect(secondRowCells[0]!.classes()).not.toContain("is-disabled");
     expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
     expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
   });
@@ -572,6 +576,8 @@ export function tableTests() {
     const rows = wrapper.findAll('tbody [role="row"]');
     const firstRowCells = rows[0]!.findAll('[role="gridcell"]');
     const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.classes()).toContain("is-disabled");
+    expect(secondRowCells[0]!.classes()).toContain("is-disabled");
     expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
     expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
   });
