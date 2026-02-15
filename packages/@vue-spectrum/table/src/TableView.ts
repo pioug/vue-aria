@@ -16,6 +16,7 @@ import {
   type TableState,
   type TreeGridState,
 } from "@vue-aria/table-state";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { mergeProps } from "@vue-aria/utils";
 import { defineComponent, h, ref, shallowRef, computed, watchEffect, type PropType, type VNode, type VNodeChild } from "vue";
 import type {
@@ -38,6 +39,7 @@ import {
   normalizeTableDefinition,
   parseTableSlotDefinition,
 } from "./types";
+import { intlMessages } from "./intlMessages";
 
 export interface SpectrumTableViewProps {
   id?: string | undefined;
@@ -663,6 +665,10 @@ const TableBodyCell = defineComponent({
     const canRenderExpander = computed(
       () => isTreeGridState.value && isPrimaryRowHeaderCell.value && hasExpandableChildren.value
     );
+    const stringFormatter = useLocalizedStringFormatter(
+      intlMessages as any,
+      "@react-spectrum/table"
+    );
     const alignment = computed(() => resolveCellAlignment(props.node));
     const { checkboxProps: selectionCheckboxProps } = useTableSelectionCheckbox(
       {
@@ -713,7 +719,7 @@ const TableBodyCell = defineComponent({
                   type: "button",
                   class: "react-spectrum-Table-expander",
                   "data-table-expander": "true",
-                  "aria-label": isExpanded.value ? "Collapse row" : "Expand row",
+                  "aria-label": stringFormatter.format(isExpanded.value ? "collapse" : "expand"),
                   "aria-expanded": isExpanded.value ? "true" : "false",
                   onClick: () => {
                     toggleExpanded();

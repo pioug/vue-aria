@@ -11700,6 +11700,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 182 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1373 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid localization parity refinement:
+  - localized expander button ARIA labels using package message dictionaries (`expand` / `collapse`) instead of hardcoded English strings.
+    - `packages/@vue-spectrum/table/src/intlMessages.ts`
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded nested-row tests for locale-aware expander labels (including `ar-AE`) and updated baseline expectations to upstream-aligned `Expand`/`Collapse`.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 127 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 183 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1374 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` selection-checkbox parity refinement:
   - wired dedicated table selection checkbox rendering for header/body selection cells:
     - `TableHeaderCell` now renders select-all checkbox semantics via `useTableSelectAllCheckbox`.

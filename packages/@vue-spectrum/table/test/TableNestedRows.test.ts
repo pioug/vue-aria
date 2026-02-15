@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import { disableTableNestedRows, enableTableNestedRows } from "@vue-aria/flags";
+import { I18nProvider } from "@vue-aria/i18n";
 import {
   TableView,
   type SpectrumTableColumnData,
@@ -159,7 +160,7 @@ describe("TableView nested rows", () => {
     const firstRowExpander = wrapper
       .findAll('tbody [role="row"]')[0]!
       .get('[data-table-expander="true"]');
-    expect(firstRowExpander.attributes("aria-label")).toBe("Expand row");
+    expect(firstRowExpander.attributes("aria-label")).toBe("Expand");
 
     await firstRowExpander.trigger("click");
     await nextTick();
@@ -168,7 +169,7 @@ describe("TableView nested rows", () => {
     const expandedExpander = wrapper
       .findAll('tbody [role="row"]')[0]!
       .get('[data-table-expander="true"]');
-    expect(expandedExpander.attributes("aria-label")).toBe("Collapse row");
+    expect(expandedExpander.attributes("aria-label")).toBe("Collapse");
 
     await expandedExpander.trigger("click");
     await nextTick();
@@ -223,6 +224,42 @@ describe("TableView nested rows", () => {
     expect(firstRow.attributes("aria-selected")).toBe("true");
     expect(onSelectionChange).toHaveBeenCalledTimes(1);
     expect(onSelectionChange.mock.calls[0]?.[0]).toEqual(new Set(["row-1"]));
+  });
+
+  it("localizes expander labels with locale provider", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              I18nProvider,
+              { locale: "ar-AE" },
+              () =>
+                h(TableView as any, {
+                  "aria-label": "Nested rows table",
+                  columns,
+                  items: nestedItems,
+                  UNSTABLE_allowsExpandableRows: true,
+                })
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const firstRowExpander = wrapper
+      .findAll('tbody [role="row"]')[0]!
+      .get('[data-table-expander="true"]');
+    expect(firstRowExpander.attributes("aria-label")).toBe("مد");
+
+    await firstRowExpander.trigger("click");
+    await nextTick();
+
+    const expandedExpander = wrapper
+      .findAll('tbody [role="row"]')[0]!
+      .get('[data-table-expander="true"]');
+    expect(expandedExpander.attributes("aria-label")).toBe("طي");
   });
 
   it("supports controlled expanded keys callbacks", async () => {
