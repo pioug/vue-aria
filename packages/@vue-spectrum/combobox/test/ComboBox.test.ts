@@ -1316,6 +1316,44 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("does not change selected key on Tab when allowsCustomValue and selectedKey are controlled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await nextTick();
+
+    await input.trigger("keydown", { key: "Tab" });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("does not change selected key on Enter when allowsCustomValue and selectedKey are controlled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await nextTick();
+
+    await input.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,

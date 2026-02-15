@@ -10864,3 +10864,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 70 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-custom key-commit parity update:
+  - added migrated coverage asserting Tab and Enter do not emit `onSelectionChange` when `allowsCustomValue` is enabled and `selectedKey` remains controlled/matching.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 72 tests).
+- Validation: `npm run check -- --pretty false` passed.
