@@ -1120,6 +1120,32 @@ describe("TableView nested rows", () => {
     expect((document.activeElement as HTMLElement).textContent).toContain("Row 2, Lvl 1, Foo");
   });
 
+  it("allows focusing disabled nested rows while navigating with ArrowDown", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        disabledKeys: ["row-1-level-2"],
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(6);
+
+    (rows[0]!.element as HTMLElement).focus();
+    await rows[0]!.trigger("focus");
+    await moveFocus(rows[0]!, "ArrowDown");
+
+    const currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[1]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 2, Foo");
+  });
+
   it("moves row focus up through nested rows with ArrowUp", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {

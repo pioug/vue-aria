@@ -12290,3 +12290,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 44 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 298 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid focus-navigation parity refinement:
+  - normalized treegrid header keydown wiring to compose base header handlers with explicit Vue `onKeydown` behavior (preventing event-handler casing drift from bypassing custom treegrid keyboard paths).
+  - added migrated nested-row coverage asserting disabled nested rows remain keyboard-focusable during ArrowDown traversal.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 45 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 299 tests).
+- Validation: `npm run check -- --pretty false` passed.

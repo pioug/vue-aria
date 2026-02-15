@@ -988,7 +988,11 @@ const TableHeaderCell = defineComponent({
         return;
       }
 
-      const firstBodyRow = getTableBodyRows(refObject.value)[0] ?? null;
+      let firstBodyRow: HTMLElement | null = getTableBodyRows(refObject.value)[0] ?? null;
+      if (!firstBodyRow && refObject.value) {
+        const tableRoot = refObject.value.closest('[role="treegrid"],[role="grid"]');
+        firstBodyRow = tableRoot?.querySelector('tbody [role="row"]') as HTMLElement | null;
+      }
       if (!firstBodyRow) {
         return;
       }
@@ -997,12 +1001,24 @@ const TableHeaderCell = defineComponent({
         event.preventDefault();
       }
     };
-    const headerCellProps = computed(() =>
-      mergeProps(columnHeaderProps, {
-        onKeydown: handleHeaderArrowDown,
-        onKeyDown: handleHeaderArrowDown,
-      }) as Record<string, unknown>
-    );
+    const headerCellProps = computed(() => {
+      const merged = mergeProps(columnHeaderProps) as Record<string, unknown>;
+      const baseOnKeydown =
+        (merged.onKeydown as ((event: KeyboardEvent) => void) | undefined)
+        ?? (merged.onKeyDown as ((event: KeyboardEvent) => void) | undefined);
+
+      return {
+        ...merged,
+        onKeydown: (event: KeyboardEvent) => {
+          baseOnKeydown?.(event);
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          handleHeaderArrowDown(event);
+        },
+      } as Record<string, unknown>;
+    });
 
     return () =>
       h(
