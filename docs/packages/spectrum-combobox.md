@@ -48,6 +48,7 @@ import { ComboBox, Item, Section } from "@vue-spectrum/combobox";
 - `loadingState`, `maxHeight`, and `onLoadMore` for async loading flows.
 - `onSelectionChange`, `onInputChange`, and `onOpenChange` callbacks.
 - `onFocus` and `onBlur` for combobox focus event hooks.
+- `formValue` (`"text" | "key"`) for native form submission payload strategy.
 - `name` / `form` for form participation when used inside or alongside native forms.
 - `validationState` for invalid semantics and styling.
 
@@ -89,6 +90,10 @@ Use `isOpen` for controlled popup visibility or `defaultOpen` for initial uncont
 ## Form Integration
 
 Set `name` and optional `form` to attach the combobox input to form submission, including cases where the input is outside the target `<form>` element.
+
+- `formValue="text"` (default) submits the typed input text.
+- `formValue="key"` submits the selected option key through a hidden input.
+- `allowsCustomValue` always uses text submission semantics.
 
 ## Async Loading
 
