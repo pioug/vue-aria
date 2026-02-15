@@ -11619,3 +11619,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/tabs/test packages/@vue-spectrum/picker/test` passed (4 files, 91 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/menu` slot-collection warning stabilization:
+  - moved menu slot/data collection normalization to render-time signature synchronization, removing setup-time default-slot reads that emitted Vue slot-tracking warnings.
+    - `packages/@vue-spectrum/menu/src/Menu.ts`
+  - preserved menu trigger/submenu keyboard and focus behavior under render-time collection updates by syncing in-place collection internals and restoring focused-key alignment when slot collections materialize.
+    - `packages/@vue-spectrum/menu/src/Menu.ts`
+  - added regression coverage asserting slot-defined menu composition does not emit Vue's default-slot-outside-render warning, and aligned affected auto-focus timing assertions with render-time collection sync behavior.
+    - `packages/@vue-spectrum/menu/test/Menu.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 103 tests).
+- Validation: `npm test -- packages/@vue-spectrum/menu/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test packages/@vue-spectrum/tabs/test packages/@vue-spectrum/calendar/test packages/@vue-spectrum/datepicker/test` passed (15 files, 462 tests) with no Vue default-slot-outside-render warnings.
+- Validation: `npm run check -- --pretty false` passed.

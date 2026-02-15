@@ -65,6 +65,23 @@ describe("Menu", () => {
     expect(wrapper.text()).toContain("Bleh");
   });
 
+  it("does not warn when using slot-defined items", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const wrapper = renderMenu();
+      await nextTick();
+      expect(wrapper.findAll('[role="menuitem"]')).toHaveLength(5);
+      expect(
+        warnSpy.mock.calls.some((entry) =>
+          String(entry[0]).includes('Slot "default" invoked outside of the render function')
+        )
+      ).toBe(false);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("supports single selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderMenu({
@@ -130,6 +147,7 @@ describe("Menu", () => {
     const menu = wrapper.get('[role="menu"]');
     const items = wrapper.findAll('[role="menuitem"]');
     expect(items).toHaveLength(5);
+    await nextTick();
     expect(document.activeElement).toBe(items[0]?.element);
 
     (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
@@ -155,6 +173,7 @@ describe("Menu", () => {
 
       const menu = wrapper.get('[role="menu"]');
       const items = wrapper.findAll('[role="menuitem"]');
+      await nextTick();
       expect(document.activeElement).toBe(items[0]?.element);
 
       (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
@@ -181,6 +200,7 @@ describe("Menu", () => {
 
       const menu = wrapper.get('[role="menu"]');
       const items = wrapper.findAll('[role="menuitem"]');
+      await nextTick();
       expect(document.activeElement).toBe(items[0]?.element);
 
       (menu.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));

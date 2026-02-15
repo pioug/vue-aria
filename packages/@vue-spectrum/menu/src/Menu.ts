@@ -1,6 +1,6 @@
 import { useMenu } from "@vue-aria/menu";
 import { ListCollection, useListState, type ListState } from "@vue-aria/list-state";
-import { defineComponent, h, ref, type PropType, type VNode } from "vue";
+import { defineComponent, h, nextTick, ref, type PropType, type VNode } from "vue";
 import { createMenuCollection } from "./collection";
 import { provideMenuStateContext } from "./context";
 import { MenuItem } from "./MenuItem";
@@ -12,6 +12,29 @@ type OnCloseValue = OnCloseHandler | OnCloseHandler[] | undefined;
 
 function isRenderableNode(node: VNode): boolean {
   return typeof node.type !== "symbol";
+}
+
+function syncListCollection(target: any, source: any): void {
+  target.keyMap = source.keyMap;
+  target.iterable = source.iterable;
+  target.firstKey = source.firstKey;
+  target.lastKey = source.lastKey;
+  target._size = source._size;
+}
+
+function getCollectionSignature(nodes: Array<any>): string {
+  const parts: string[] = [];
+  const visit = (items: Array<any>) => {
+    for (const item of items) {
+      parts.push(`${String(item.key)}:${item.type}:${item.textValue ?? ""}`);
+      if (Array.isArray(item.childNodes) && item.childNodes.length > 0) {
+        visit(item.childNodes as Array<any>);
+      }
+    }
+  };
+
+  visit(nodes);
+  return parts.join("|");
 }
 
 function createOnCloseHandler(value: OnCloseValue): OnCloseHandler | undefined {
@@ -158,18 +181,110 @@ export const Menu = defineComponent({
       },
     };
 
-    const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-    const collectionNodes = createMenuCollection(props.items, slotChildren);
-    const collection = new ListCollection(collectionNodes as any);
+    const initialCollectionNodes = createMenuCollection(props.items, []);
+    const collection = new ListCollection(initialCollectionNodes as any);
+    const collectionSignature = ref(getCollectionSignature(initialCollectionNodes as any[]));
     const state = useListState<object>({
       collection: collection as any,
-      disabledKeys: props.disabledKeys,
-      selectionMode: props.selectionMode,
-      disallowEmptySelection: props.disallowEmptySelection,
-      selectedKeys: props.selectedKeys,
-      defaultSelectedKeys: props.defaultSelectedKeys,
-      onSelectionChange: props.onSelectionChange,
+      get disabledKeys() {
+        return props.disabledKeys;
+      },
+      get selectionMode() {
+        return props.selectionMode;
+      },
+      get disallowEmptySelection() {
+        return props.disallowEmptySelection;
+      },
+      get selectedKeys() {
+        return props.selectedKeys;
+      },
+      get defaultSelectedKeys() {
+        return props.defaultSelectedKeys;
+      },
+      get onSelectionChange() {
+        return props.onSelectionChange;
+      },
     });
+
+    const syncFocusedKeyAfterCollectionUpdate = () => {
+      const manager = state.selectionManager as any;
+      const collectionValue = state.collection as any;
+      if (!manager || !collectionValue) {
+        return;
+      }
+
+      if (manager.focusedKey != null && collectionValue.getItem(manager.focusedKey) != null) {
+        return;
+      }
+
+      const canFocusKey = (key: unknown): boolean => {
+        const item = collectionValue.getItem?.(key);
+        if (!item || item.type !== "item") {
+          return false;
+        }
+
+        if (item.props?.isDisabled) {
+          return false;
+        }
+
+        return !(manager.disabledKeys instanceof Set) || !manager.disabledKeys.has(key);
+      };
+
+      const getFirstSelectableKey = (): unknown => {
+        let key = collectionValue.getFirstKey?.() ?? null;
+        while (key != null) {
+          if (canFocusKey(key)) {
+            return key;
+          }
+
+          key = collectionValue.getKeyAfter?.(key) ?? null;
+        }
+
+        return null;
+      };
+
+      const getLastSelectableKey = (): unknown => {
+        let key = collectionValue.getLastKey?.() ?? null;
+        while (key != null) {
+          if (canFocusKey(key)) {
+            return key;
+          }
+
+          key = collectionValue.getKeyBefore?.(key) ?? null;
+        }
+
+        return null;
+      };
+
+      let nextFocusedKey: unknown = null;
+      if (manager.selectedKeys instanceof Set && manager.selectedKeys.size > 0) {
+        for (const key of manager.selectedKeys as Set<unknown>) {
+          if (canFocusKey(key)) {
+            nextFocusedKey = key;
+            break;
+          }
+        }
+      }
+
+      if (nextFocusedKey == null) {
+        if (props.autoFocus === "last") {
+          nextFocusedKey = getLastSelectableKey();
+        } else if (props.autoFocus === "first") {
+          nextFocusedKey = getFirstSelectableKey();
+        }
+      }
+
+      if (nextFocusedKey != null) {
+        manager.setFocused?.(true);
+        manager.setFocusedKey?.(nextFocusedKey);
+        void nextTick(() => {
+          const focusTarget = menuRef.value?.querySelector<HTMLElement>(
+            `[data-key="${String(nextFocusedKey)}"]`
+          );
+          focusTarget?.focus();
+        });
+      }
+    };
 
     const { menuProps } = useMenu(
       {
@@ -203,6 +318,17 @@ export const Menu = defineComponent({
     });
 
     return () => {
+      const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+      const collectionNodes = createMenuCollection(props.items, slotChildren);
+      const nextCollectionSignature = getCollectionSignature(collectionNodes as any[]);
+      if (nextCollectionSignature !== collectionSignature.value) {
+        collectionSignature.value = nextCollectionSignature;
+        const nextCollection = new ListCollection(collectionNodes as any);
+        syncListCollection(state.collection as any, nextCollection as any);
+        (state.selectionManager as any).collection = state.collection as any;
+        syncFocusedKeyAfterCollectionUpdate();
+      }
+
       const menuLevel = props.submenuLevel ?? -1;
       const nextMenuLevelKey = props.rootMenuTriggerState?.expandedKeysStack[menuLevel + 1];
       const hasOpenSubmenu = nextMenuLevelKey != null && state.collection.getItem(nextMenuLevelKey) != null;
