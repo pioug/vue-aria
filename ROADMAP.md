@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/menu`
+- Current focus package: `@vue-spectrum/listbox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -10265,4 +10265,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/menu/test/ActionMenu.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test/ActionMenu.test.ts` passed (1 file, 11 tests).
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 102 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` aria/data-attribute parity update:
+  - added migrated coverage for:
+    - listbox `aria-label` attribute passthrough
+    - warning behavior when no accessible label props are provided
+    - custom data attributes on listbox and items
+    - custom item `id` non-override behavior (generated option ids remain internal)
+    - section/item explicit `aria-label` semantics
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 18 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.

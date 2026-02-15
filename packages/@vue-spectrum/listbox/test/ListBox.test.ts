@@ -244,6 +244,107 @@ describe("ListBox", () => {
     expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
   });
 
+  it("supports aria-label attribute", () => {
+    const wrapper = renderListBox({
+      "aria-label": "Test",
+      ariaLabel: undefined,
+    });
+
+    expect(wrapper.get('[role="listbox"]').attributes("aria-label")).toBe("Test");
+  });
+
+  it("warns when no aria-label or aria-labelledby is provided", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      mount(ListBox as any, {
+        slots: {
+          default: () => [h(Item as any, { key: "Foo" }, { default: () => "Foo" })],
+        },
+        attachTo: document.body,
+      });
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        "If you do not provide a visible label, you must specify an aria-label or aria-labelledby attribute for accessibility"
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("supports custom data attributes on listbox", () => {
+    const wrapper = renderListBox({
+      "data-testid": "test",
+    });
+
+    expect(wrapper.get('[role="listbox"]').attributes("data-testid")).toBe("test");
+  });
+
+  it("supports custom data attributes on items", () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: 0, "data-name": "Foo" }, { default: () => "Foo" }),
+          h(Item as any, { key: 1, "data-name": "Bar" }, { default: () => "Bar" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(2);
+    expect(options[0]?.attributes("data-name")).toBe("Foo");
+  });
+
+  it("does not override generated option id with custom item id", () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: 0, id: "Foo" }, { default: () => "Foo" }),
+          h(Item as any, { key: 1, id: "Bar" }, { default: () => "Bar" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const option = wrapper.findAll('[role="option"]')[0];
+    expect(option).toBeTruthy();
+    expect(option?.attributes("id")).not.toBe("Foo");
+  });
+
+  it("supports aria-label on sections and items", () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+      },
+      slots: {
+        default: () => [
+          h(Section as any, { "aria-label": "Section" }, {
+            default: () => [
+              h(Item as any, { key: "item", "aria-label": "Item" }, {
+                default: () => h("svg"),
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const group = wrapper.get('[role="group"]');
+    expect(group.attributes("aria-label")).toBe("Section");
+
+    const option = wrapper.get('[role="option"]');
+    expect(option.attributes("aria-label")).toBe("Item");
+    expect(option.attributes("aria-labelledby")).toBeUndefined();
+    expect(option.attributes("aria-describedby")).toBeUndefined();
+  });
+
   it("renders correctly with falsy section and item keys", () => {
     const wrapper = mount(ListBox as any, {
       props: {
