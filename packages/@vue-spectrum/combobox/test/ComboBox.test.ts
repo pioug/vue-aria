@@ -1208,6 +1208,29 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("commits focused option on Shift+Tab and closes the menu", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    await input.trigger("keydown", { key: "Tab", shiftKey: true });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("1");
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("resets input value and closes the menu when pressing Escape", async () => {
     const wrapper = mount(ComboBox as any, {
       props: {
