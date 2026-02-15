@@ -448,6 +448,43 @@ describe("ComboBox", () => {
     }
   });
 
+  it("fires onLoadMore when opening an underfilled listbox", async () => {
+    const maxHeight = 200;
+    const clientHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return maxHeight;
+        }
+        return 48;
+      });
+    const scrollHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 120;
+        }
+        return 48;
+      });
+
+    try {
+      const onLoadMore = vi.fn();
+      const wrapper = renderComboBox({
+        maxHeight,
+        onLoadMore,
+      });
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+      await nextTick();
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("shows a loading-more spinner in the open listbox when loadingState is loadingMore", async () => {
     const wrapper = renderComboBox({
       loadingState: "loadingMore",
