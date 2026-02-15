@@ -1,6 +1,7 @@
 import { useDatePicker, useDateRangePicker } from "@vue-aria/datepicker";
 import { useDatePickerState, useDateRangePickerState } from "@vue-aria/datepicker-state";
 import { useLocale } from "@vue-aria/i18n";
+import { useFormReset } from "@vue-aria/utils";
 import { defineComponent, h, computed, ref, useAttrs, onMounted, nextTick, type PropType } from "vue";
 import { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
 import { Popover } from "@vue-spectrum/menu";
@@ -346,6 +347,7 @@ export const DatePicker = defineComponent({
     const rootRef = ref<HTMLElement | null>(null);
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
+    const hiddenInputRef = ref<HTMLInputElement | null>(null);
 
     const state = useDatePickerState({
       get value() {
@@ -511,6 +513,14 @@ export const DatePicker = defineComponent({
       group.refObject as any
     );
 
+    useFormReset(
+      hiddenInputRef as any,
+      state.defaultValue,
+      (value) => {
+        state.setValue(value as DateValue | null);
+      }
+    );
+
     const displayValue = computed(() => {
       if (!state.value) {
         return merged.placeholder ?? "Select date";
@@ -587,6 +597,7 @@ export const DatePicker = defineComponent({
         [
           merged.name
             ? h("input", {
+              ref: hiddenInputRef,
               type: "hidden",
               name: merged.name,
               form: merged.form,
@@ -916,6 +927,8 @@ export const DateRangePicker = defineComponent({
     const rootRef = ref<HTMLElement | null>(null);
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
+    const hiddenStartInputRef = ref<HTMLInputElement | null>(null);
+    const hiddenEndInputRef = ref<HTMLInputElement | null>(null);
 
     const state = useDateRangePickerState({
       get value() {
@@ -1090,6 +1103,21 @@ export const DateRangePicker = defineComponent({
       group.refObject as any
     );
 
+    useFormReset(
+      hiddenStartInputRef as any,
+      state.defaultValue,
+      (value) => {
+        state.setValue(value as any);
+      }
+    );
+    useFormReset(
+      hiddenEndInputRef as any,
+      state.defaultValue,
+      (value) => {
+        state.setValue(value as any);
+      }
+    );
+
     const displayValue = computed(() => {
       const range = state.formatValue(
         locale.value.locale,
@@ -1168,6 +1196,7 @@ export const DateRangePicker = defineComponent({
         [
           merged.startName
             ? h("input", {
+              ref: hiddenStartInputRef,
               type: "hidden",
               name: merged.startName,
               form: merged.form,
@@ -1176,6 +1205,7 @@ export const DateRangePicker = defineComponent({
             : null,
           merged.endName
             ? h("input", {
+              ref: hiddenEndInputRef,
               type: "hidden",
               name: merged.endName,
               form: merged.form,

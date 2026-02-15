@@ -184,6 +184,48 @@ describe("DatePicker", () => {
     expect(input.element.getAttribute("value")).toBe("2019-06-17");
   });
 
+  it("supports date picker form reset", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", null, [
+              h(DatePicker as any, {
+                "aria-label": "Date picker",
+                defaultValue: new CalendarDate(2019, 6, 5),
+                name: "eventDate",
+              }),
+              h("input", {
+                type: "reset",
+                "data-testid": "reset",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const hiddenInput = wrapper.get('input[type="hidden"][name="eventDate"]');
+    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+
+    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-17");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
+
+    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
+  });
+
   it("focuses date picker trigger when autoFocus is enabled", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {
