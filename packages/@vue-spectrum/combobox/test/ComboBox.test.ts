@@ -65,6 +65,23 @@ describe("ComboBox", () => {
     expect(wrapper.text()).toContain("Test");
   });
 
+  it("renders placeholder text and logs the deprecation warning", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const wrapper = renderComboBox({
+        placeholder: "Search options",
+      });
+
+      expect(wrapper.get('input[role="combobox"]').attributes("placeholder")).toBe("Search options");
+      expect(warnSpy).toHaveBeenCalledWith(
+        "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/ComboBox.html#help-text"
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("opens with trigger click and selects an option", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
