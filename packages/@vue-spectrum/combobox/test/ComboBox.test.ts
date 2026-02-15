@@ -666,6 +666,35 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).not.toBe("Two");
   });
 
+  it("does not select a disabled option on matching typed input", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        disabledKeys: new Set(["two"]),
+        onSelectionChange,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("Two");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(input.attributes("aria-activedescendant")).toBeUndefined();
+  });
+
   it("does not open on space key when disabled", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,

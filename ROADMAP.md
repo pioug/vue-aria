@@ -10710,3 +10710,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded docs prop/form guidance to include `validationBehavior` usage and native required semantics.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` disabled-match parity update:
+  - added migrated coverage ensuring typed input that matches a disabled option does not commit selection or assign active descendant focus.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
