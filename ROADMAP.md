@@ -10324,3 +10324,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 32 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 33 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` loading-spinner parity update:
+  - wired Spectrum listbox `isLoading` prop support to render loading options with progressbar semantics:
+    - empty list: single loading option labeled `Loading…`
+    - populated list: trailing loading-more option labeled `Loading more…`
+    - `packages/@vue-spectrum/listbox/src/types.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBox.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBoxBase.ts`
+  - added migrated coverage for both loading states, including spinner removal after loading completes.
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 34 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.

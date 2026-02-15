@@ -56,6 +56,11 @@ export const ListBoxBase = defineComponent({
       required: false,
       default: false,
     },
+    isLoading: {
+      type: Boolean as () => boolean | undefined,
+      required: false,
+      default: undefined,
+    },
     escapeKeyBehavior: {
       type: String as () => SpectrumListBoxProps<object>["escapeKeyBehavior"],
       required: false,
@@ -142,7 +147,25 @@ export const ListBoxBase = defineComponent({
             })
       );
 
-      if (children.length === 0 && props.renderEmptyState) {
+      const hasItems = children.length > 0;
+
+      if (props.isLoading) {
+        children.push(
+          h(
+            "div",
+            {
+              role: "option",
+              class: "spectrum-Menu-item",
+            },
+            [
+              h("div", {
+                role: "progressbar",
+                "aria-label": hasItems ? "Loading more…" : "Loading…",
+              }),
+            ]
+          )
+        );
+      } else if (children.length === 0 && props.renderEmptyState) {
         children.push(
           h(
             "div",

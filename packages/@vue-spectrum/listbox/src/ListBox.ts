@@ -91,6 +91,11 @@ export const ListBox = defineComponent({
       required: false,
       default: undefined,
     },
+    isLoading: {
+      type: Boolean as () => boolean | undefined,
+      required: false,
+      default: undefined,
+    },
     onAction: {
       type: Function as PropType<SpectrumListBoxProps<object>["onAction"]>,
       required: false,
@@ -147,6 +152,7 @@ export const ListBox = defineComponent({
         shouldUseVirtualFocus: props.shouldUseVirtualFocus,
         shouldSelectOnPressUp: props.shouldSelectOnPressUp,
         shouldFocusOnHover: props.shouldFocusOnHover,
+        isLoading: props.isLoading,
         escapeKeyBehavior: props.escapeKeyBehavior,
         onAction: props.onAction,
         onFocus: props.onFocus,

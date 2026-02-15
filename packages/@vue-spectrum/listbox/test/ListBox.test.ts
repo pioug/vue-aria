@@ -642,6 +642,62 @@ describe("ListBox", () => {
     }
   });
 
+  it("shows a loading spinner when listbox is loading without items", async () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+        isLoading: true,
+      },
+      attachTo: document.body,
+    });
+
+    const listbox = wrapper.get('[role="listbox"]');
+    let options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(1);
+
+    let progressbar = options[0]?.find('[role="progressbar"]');
+    expect(progressbar?.exists()).toBe(true);
+    expect(progressbar?.attributes("aria-label")).toBe("Loading…");
+    expect(progressbar?.attributes("aria-valuenow")).toBeUndefined();
+
+    await wrapper.setProps({ isLoading: false });
+    await nextTick();
+
+    options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(0);
+    expect(listbox.find('[role="progressbar"]').exists()).toBe(false);
+  });
+
+  it("shows a loading-more spinner when listbox is loading with existing items", async () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+        isLoading: true,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+          h(Item as any, { key: "Bar" }, { default: () => "Bar" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    let options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    let progressbar = options[2]?.find('[role="progressbar"]');
+    expect(progressbar?.exists()).toBe(true);
+    expect(progressbar?.attributes("aria-label")).toBe("Loading more…");
+    expect(progressbar?.attributes("aria-valuenow")).toBeUndefined();
+
+    await wrapper.setProps({ isLoading: false });
+    await nextTick();
+
+    options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(2);
+    expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
+  });
+
   it("supports aria-label attribute", () => {
     const wrapper = renderListBox({
       "aria-label": "Test",
