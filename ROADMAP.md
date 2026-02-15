@@ -10516,3 +10516,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 14 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` keyboard-open focus parity update:
+  - aligned popup autofocus wiring to use live combobox `focusStrategy` values (`first`/`last`) when opening with directional keys.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - synchronized input `aria-activedescendant`/`aria-controls` rendering with live focused/open state.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage for:
+    - `ArrowDown` opening the menu and focusing the first option
+    - `ArrowUp` opening the menu and focusing the last option
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 16 tests).
+- Validation: `npm run check -- --pretty false` passed.

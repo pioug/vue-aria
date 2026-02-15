@@ -233,6 +233,36 @@ describe("ComboBox", () => {
     expect(wrapper.text()).toContain("Numbers");
   });
 
+  it("opens with ArrowDown and focuses the first option", async () => {
+    const wrapper = renderComboBox();
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(input.attributes("aria-activedescendant")).toBe(options[0]?.attributes("id"));
+  });
+
+  it("opens with ArrowUp and focuses the last option", async () => {
+    const wrapper = renderComboBox();
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowUp" });
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(input.attributes("aria-activedescendant")).toBe(options[2]?.attributes("id"));
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,

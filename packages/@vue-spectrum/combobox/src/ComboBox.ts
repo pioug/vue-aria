@@ -1,5 +1,6 @@
 import { useComboBox } from "@vue-aria/combobox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
+import { getItemId } from "@vue-aria/listbox";
 import { defineComponent, h, onMounted, ref, watch, type PropType, type VNode } from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { createComboBoxCollection, getComboBoxDisabledKeys } from "./collection";
@@ -334,6 +335,9 @@ export const ComboBox = defineComponent({
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
       const resolvedErrorMessage = props.errorMessage ?? validationErrors.join(", ");
+      const focusedKey = state.selectionManager.focusedKey as ComboBoxKey | null;
+      const activeDescendant =
+        focusedKey != null ? getItemId(state as any, focusedKey) : undefined;
 
       return h(
         "div",
@@ -384,6 +388,8 @@ export const ComboBox = defineComponent({
                 readonly: props.isReadOnly || undefined,
                 placeholder: props.placeholder,
                 "aria-invalid": isInvalid && !props.isDisabled ? "true" : undefined,
+                "aria-controls": state.isOpen ? (listBoxProps.id as string | undefined) : undefined,
+                "aria-activedescendant": activeDescendant,
               }),
               h(
                 "button",
@@ -421,7 +427,7 @@ export const ComboBox = defineComponent({
                     id: listBoxProps.id,
                     ariaLabel: listBoxProps["aria-label"],
                     ariaLabelledby: listBoxProps["aria-labelledby"],
-                    autoFocus: listBoxProps.autoFocus as boolean | "first" | "last" | undefined,
+                    autoFocus: (state.focusStrategy ?? true) as boolean | "first" | "last" | undefined,
                     shouldUseVirtualFocus: listBoxProps.shouldUseVirtualFocus as boolean | undefined,
                     shouldSelectOnPressUp: listBoxProps.shouldSelectOnPressUp as boolean | undefined,
                     shouldFocusOnHover: listBoxProps.shouldFocusOnHover as boolean | undefined,
