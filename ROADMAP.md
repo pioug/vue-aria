@@ -12041,6 +12041,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 186 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 242 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` pointer range-selection coverage expansion:
+  - added reverse-direction checkbox `Shift+click` range-selection coverage (selecting from a lower row back to an earlier row).
+  - verifies contiguous multi-row accumulation is symmetric regardless of pointer range direction.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 187 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 243 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` keyboard range-selection depth expansion:
   - strengthened `Shift+ArrowUp` checkbox-selection coverage to validate multi-step accumulation across successive upward range-extension key presses.
   - assertions now verify full three-row selection after two consecutive upward range-extension steps starting from the last row.
