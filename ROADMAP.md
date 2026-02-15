@@ -12314,3 +12314,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 49 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 303 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` drag-column structural parity expansion:
+  - wired `showDragButtons` through `TableView` collection/state plumbing so drag-button columns are included in `TableCollection` and row cell construction for both flat and expandable tables.
+  - added drag-column rendering parity in header/body cells (`react-spectrum-Table-dragButtonHeadCell` and `react-spectrum-Table-cell--dragButtonCell`) with hidden localized header text.
+  - aligned width accounting for synthetic columns by reserving drag-column width during default column distribution and sizing drag cells to fixed width.
+  - added migrated regression coverage for:
+    - drag-column structural rendering and `aria-colindex` shifts.
+    - drag + selection column coexistence in checkbox-multiple mode.
+    - drag-column width accounting in default-width distribution.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/src/intlMessages.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 250 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 306 tests).
+- Validation: `npm run check -- --pretty false` passed.

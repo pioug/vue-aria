@@ -46,6 +46,9 @@ import {
 } from "./types";
 import { intlMessages } from "./intlMessages";
 
+const SELECTION_CELL_WIDTH = 38;
+const DRAG_BUTTON_CELL_WIDTH = 16;
+
 export interface SpectrumTableViewProps {
   id?: string | undefined;
   columns?: SpectrumTableColumnData[] | undefined;
@@ -62,6 +65,7 @@ export interface SpectrumTableViewProps {
   disallowTypeAhead?: boolean | undefined;
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   shouldSelectOnPressUp?: boolean | undefined;
+  showDragButtons?: boolean | undefined;
   density?: "compact" | "regular" | "spacious" | undefined;
   overflowMode?: "wrap" | "truncate" | undefined;
   isQuiet?: boolean | undefined;
@@ -288,7 +292,11 @@ function resolveColumnSizingStyles(
   let minWidth = toColumnSizeStyleValue(columnProps?.minWidth);
   let maxWidth = toColumnSizeStyleValue(columnProps?.maxWidth);
   if (columnProps?.isSelectionCell) {
-    width = "38px";
+    width = `${SELECTION_CELL_WIDTH}px`;
+    minWidth = width;
+    maxWidth = width;
+  } else if (columnProps?.isDragButtonCell) {
+    width = `${DRAG_BUTTON_CELL_WIDTH}px`;
     minWidth = width;
     maxWidth = width;
   }
@@ -317,7 +325,8 @@ function createRowCellNodes(
   row: NormalizedSpectrumTableRow,
   rowIndex: number,
   columns: NormalizedSpectrumTableColumn[],
-  showSelectionCheckboxes: boolean
+  showSelectionCheckboxes: boolean,
+  showDragButtons: boolean
 ): GridNode<NormalizedSpectrumTableRow>[] {
   const normalizedRowCells: NormalizedSpectrumTableCell[] = row.cells.length > 0
     ? row.cells
@@ -329,10 +338,10 @@ function createRowCellNodes(
   const cells: GridNode<NormalizedSpectrumTableRow>[] = [];
   let columnCursor = 0;
 
-  if (showSelectionCheckboxes) {
+  if (showDragButtons) {
     cells.push({
       type: "cell",
-      key: `selection-${String(row.key)}`,
+      key: `drag-${String(row.key)}`,
       value: row,
       rendered: null,
       textValue: "",
@@ -346,12 +355,37 @@ function createRowCellNodes(
       firstChildKey: null,
       lastChildKey: null,
       props: {
-        isSelectionCell: true,
+        isDragButtonCell: true,
       },
       colSpan: 1,
       colIndex: 0,
     });
     columnCursor = 1;
+  }
+
+  if (showSelectionCheckboxes) {
+    cells.push({
+      type: "cell",
+      key: `selection-${String(row.key)}`,
+      value: row,
+      rendered: null,
+      textValue: "",
+      level: 2,
+      index: cells.length,
+      hasChildNodes: false,
+      childNodes: [],
+      parentKey: row.key,
+      prevKey: null,
+      nextKey: null,
+      firstChildKey: null,
+      lastChildKey: null,
+      props: {
+        isSelectionCell: true,
+      },
+      colSpan: 1,
+      colIndex: columnCursor,
+    });
+    columnCursor += 1;
   }
 
   for (let cellIndex = 0; cellIndex < normalizedRowCells.length; cellIndex += 1) {
@@ -368,7 +402,7 @@ function createRowCellNodes(
       rendered,
       textValue: cell.textValue ?? "",
       level: 2,
-      index: cellIndex + (showSelectionCheckboxes ? 1 : 0),
+      index: cellIndex + (showSelectionCheckboxes ? 1 : 0) + (showDragButtons ? 1 : 0),
       hasChildNodes: false,
       childNodes: [],
       parentKey: row.key,
@@ -395,10 +429,12 @@ function createRowCellNodes(
 interface CreateCollectionOptions {
   allowsExpandableRows?: boolean;
   showSelectionCheckboxes?: boolean;
+  showDragButtons?: boolean;
 }
 
 interface ResolveColumnWidthsOptions {
   showSelectionCheckboxes?: boolean;
+  showDragButtons?: boolean;
   tableWidth?: number;
 }
 
@@ -414,10 +450,11 @@ function createRowNodes(
   parentKey: TableKey,
   level: number,
   allowsExpandableRows: boolean,
-  showSelectionCheckboxes: boolean
+  showSelectionCheckboxes: boolean,
+  showDragButtons: boolean
 ): GridNode<NormalizedSpectrumTableRow>[] {
   const rowNodes = rows.map((row, rowIndex) => {
-    const cells = createRowCellNodes(row, rowIndex, columns, showSelectionCheckboxes);
+    const cells = createRowCellNodes(row, rowIndex, columns, showSelectionCheckboxes, showDragButtons);
     for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
       if (cellIndex < cells.length - 1) {
         cells[cellIndex]!.nextKey = cells[cellIndex + 1]!.key;
@@ -425,7 +462,7 @@ function createRowNodes(
     }
 
     const childRows = allowsExpandableRows
-      ? createRowNodes(row.childRows, columns, row.key, level + 1, allowsExpandableRows, showSelectionCheckboxes)
+      ? createRowNodes(row.childRows, columns, row.key, level + 1, allowsExpandableRows, showSelectionCheckboxes, showDragButtons)
       : [];
     const childNodes = allowsExpandableRows ? [...cells, ...childRows] : cells;
     const childItems = row.childRows.map((childRow) => childRow.value ?? childRow);
@@ -487,7 +524,8 @@ function createCollection(
     "body",
     1,
     Boolean(options.allowsExpandableRows),
-    Boolean(options.showSelectionCheckboxes)
+    Boolean(options.showSelectionCheckboxes),
+    Boolean(options.showDragButtons)
   );
 
   const bodyNode: GridNode<NormalizedSpectrumTableRow> = {
@@ -515,6 +553,7 @@ function createCollection(
       ? undefined
       : {
         showSelectionCheckboxes: Boolean(options.showSelectionCheckboxes),
+        showDragButtons: Boolean(options.showDragButtons),
       }
   );
 }
@@ -571,8 +610,9 @@ function resolveColumnWidths(
   options: ResolveColumnWidthsOptions = {}
 ): NormalizedSpectrumTableDefinition {
   const tableWidth = Math.max(0, options.tableWidth ?? 1000);
-  const selectionWidth = options.showSelectionCheckboxes ? 38 : 0;
-  const sizingBaseWidth = Math.max(0, tableWidth - selectionWidth);
+  const selectionWidth = options.showSelectionCheckboxes ? SELECTION_CELL_WIDTH : 0;
+  const dragButtonWidth = options.showDragButtons ? DRAG_BUTTON_CELL_WIDTH : 0;
+  const sizingBaseWidth = Math.max(0, tableWidth - selectionWidth - dragButtonWidth);
   let remainingWidth = sizingBaseWidth;
   const columns = definition.columns.map((column) => ({ ...column }));
   const unresolvedEntries: UnresolvedWidthEntry[] = [];
@@ -929,6 +969,7 @@ const TableHeaderCell = defineComponent({
     const alignment = computed(() => resolveCellAlignment(props.node));
     const columnProps = computed(() => (props.node.props ?? {}) as Record<string, unknown>);
     const isSelectionCell = computed(() => Boolean(columnProps.value.isSelectionCell));
+    const isDragButtonCell = computed(() => Boolean(columnProps.value.isDragButtonCell));
     const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
     const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
     const stringFormatter = useLocalizedStringFormatter(
@@ -936,7 +977,11 @@ const TableHeaderCell = defineComponent({
       "@react-spectrum/table"
     );
     const isResizable = computed(
-      () => Boolean(columnProps.value.allowsResizing) && !isSelectionCell.value && !Boolean(columnProps.value.hideHeader)
+      () =>
+        Boolean(columnProps.value.allowsResizing)
+        && !isSelectionCell.value
+        && !isDragButtonCell.value
+        && !Boolean(columnProps.value.hideHeader)
     );
     const { inputProps: resizerInputProps, resizerProps } = useTableColumnResize(
       {
@@ -1032,6 +1077,8 @@ const TableHeaderCell = defineComponent({
             "react-spectrum-Table-cell",
             {
               "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
+              "react-spectrum-Table-cell--dragButtonCell": isDragButtonCell.value,
+              "react-spectrum-Table-dragButtonHeadCell": isDragButtonCell.value,
               "is-sortable": Boolean(columnProps.value.allowsSorting),
               "is-resizable": isResizable.value,
               "is-resizing": isResizable.value && isColumnResizing.value,
@@ -1049,6 +1096,8 @@ const TableHeaderCell = defineComponent({
         },
         isSelectionCell.value
           ? h(TableSelectionCheckbox, { checkboxProps: selectAllCheckboxProps.value })
+          : isDragButtonCell.value
+            ? h("span", { class: "spectrum-Table-visuallyHidden" }, stringFormatter.format("drag"))
           : Boolean(columnProps.value.hideHeader)
             ? h("span", { class: "spectrum-Table-visuallyHidden" }, props.node.rendered as any)
             : [
@@ -1131,6 +1180,11 @@ const TableBodyCell = defineComponent({
       () =>
         Boolean((props.node.props as Record<string, unknown> | undefined)?.isSelectionCell)
         || Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.isSelectionCell)
+    );
+    const isDragButtonCell = computed(
+      () =>
+        Boolean((props.node.props as Record<string, unknown> | undefined)?.isDragButtonCell)
+        || Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.isDragButtonCell)
     );
     const firstRowHeaderKey = computed(() => Array.from(props.state.collection.rowHeaderColumnKeys)[0]);
     const isPrimaryRowHeaderCell = computed(
@@ -1262,6 +1316,7 @@ const TableBodyCell = defineComponent({
             "react-spectrum-Table-cell",
             {
               "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
+              "react-spectrum-Table-cell--dragButtonCell": isDragButtonCell.value,
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
@@ -1277,6 +1332,8 @@ const TableBodyCell = defineComponent({
         },
         isSelectionCell.value
           ? h(TableSelectionCheckbox, { checkboxProps: selectionCheckboxProps })
+          : isDragButtonCell.value
+            ? h("div", { class: "spectrum-Table-cellContents" })
           : h("div", { class: "spectrum-Table-cellContents" }, [
             canRenderExpander.value
               ? h(
@@ -1733,6 +1790,10 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    showDragButtons: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
     density: {
       type: String as PropType<"compact" | "regular" | "spacious" | undefined>,
       default: undefined,
@@ -1940,6 +2001,7 @@ export const TableView = defineComponent({
     const showSelectionCheckboxes = computed(
       () => props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none"
     );
+    const showDragButtons = computed(() => Boolean(props.showDragButtons));
     const tableLayoutWidth = computed(() => {
       const measuredWidth = tableElementRef.value?.clientWidth ?? 0;
       return measuredWidth > 0 ? measuredWidth : 1000;
@@ -1958,6 +2020,7 @@ export const TableView = defineComponent({
 
       return resolveColumnWidths(sorted, {
         showSelectionCheckboxes: showSelectionCheckboxes.value,
+        showDragButtons: showDragButtons.value,
         tableWidth: tableLayoutWidth.value,
       });
     });
@@ -1974,6 +2037,7 @@ export const TableView = defineComponent({
       createCollection(normalizedDefinition.value, {
         allowsExpandableRows,
         showSelectionCheckboxes: showSelectionCheckboxes.value,
+        showDragButtons: showDragButtons.value,
       })
     );
     const resolvedDisabledKeys = computed(() => {
@@ -2081,6 +2145,9 @@ export const TableView = defineComponent({
       },
       get showSelectionCheckboxes() {
         return showSelectionCheckboxes.value;
+      },
+      get showDragButtons() {
+        return showDragButtons.value;
       },
       get selectedKeys() {
         return resolvedSelectedKeys.value as any;

@@ -479,6 +479,64 @@ export function tableTests() {
     expect(bodyCells[0]!.classes()).toContain("spectrum-Table-cell");
   });
 
+  it("renders a drag-button column when showDragButtons is enabled", () => {
+    const wrapper = renderTable({ showDragButtons: true });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("4");
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(4);
+    expect(headers[0]!.attributes("aria-colindex")).toBe("1");
+    expect(headers[0]!.classes()).toContain("react-spectrum-Table-dragButtonHeadCell");
+    expect(headers[1]!.text()).toContain("Foo");
+
+    const firstBodyRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeader = firstBodyRow.get('[role="rowheader"]');
+    const bodyCells = firstBodyRow.findAll('[role="gridcell"]');
+    expect(rowHeader.attributes("aria-colindex")).toBe("2");
+    expect(bodyCells).toHaveLength(3);
+    expect(bodyCells[0]!.attributes("aria-colindex")).toBe("1");
+    expect(bodyCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+  });
+
+  it("renders drag and selection columns together when both are enabled", () => {
+    const wrapper = renderTable({
+      showDragButtons: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("5");
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(5);
+    expect(headers[0]!.classes()).toContain("react-spectrum-Table-dragButtonHeadCell");
+    expect(headers[1]!.classes()).toContain("react-spectrum-Table-cell--selectionCell");
+
+    const firstBodyRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeader = firstBodyRow.get('[role="rowheader"]');
+    const bodyCells = firstBodyRow.findAll('[role="gridcell"]');
+    expect(rowHeader.attributes("aria-colindex")).toBe("3");
+    expect(bodyCells).toHaveLength(4);
+    expect(bodyCells[0]!.attributes("aria-colindex")).toBe("1");
+    expect(bodyCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(bodyCells[1]!.attributes("aria-colindex")).toBe("2");
+    expect(bodyCells[1]!.classes()).toContain("react-spectrum-Table-cell--selectionCell");
+  });
+
+  it("accounts for drag-column width when distributing default column widths", () => {
+    const wrapper = renderTable({ showDragButtons: true });
+    const headers = wrapper.findAll('[role="columnheader"]');
+
+    expect(headers).toHaveLength(4);
+    expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(16, 3);
+    expect(parseFloat((headers[1]!.element as HTMLElement).style.width)).toBeCloseTo(328, 3);
+    expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(328, 3);
+    expect(parseFloat((headers[3]!.element as HTMLElement).style.width)).toBeCloseTo(328, 3);
+  });
+
   it("supports removing columns via reactive prop updates", async () => {
     const wrapper = renderTable();
 
