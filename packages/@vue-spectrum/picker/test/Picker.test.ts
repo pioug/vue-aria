@@ -1246,6 +1246,15 @@ describe("Picker", () => {
     expect(select.attributes("autocomplete")).toBe("address-level1");
   });
 
+  it("supports labeling via aria-label", () => {
+    const wrapper = renderPicker({
+      ariaLabel: "Test label",
+    });
+
+    const trigger = wrapper.get("button");
+    expect(trigger.attributes("aria-label")).toBe("Test label");
+  });
+
   it("supports labeling via aria-labelledby", () => {
     const wrapper = mount(
       defineComponent({
