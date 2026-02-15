@@ -151,6 +151,54 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Three");
   });
 
+  it("keeps input text controlled when inputValue is provided", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      inputValue: "Two",
+      defaultSelectedKey: "2",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    expect(onInputChange).toHaveBeenCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+  });
+
+  it("does not fire onSelectionChange when inputValue and selectedKey are controlled", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      inputValue: "Two",
+      selectedKey: "2",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    expect(onInputChange).toHaveBeenCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    await wrapper.setProps({
+      inputValue: "",
+      selectedKey: null,
+    });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("sets aria-invalid semantics when validationState is invalid", () => {
     const wrapper = renderComboBox({
       validationState: "invalid",

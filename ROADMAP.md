@@ -10756,3 +10756,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded keyboard guidance to document Enter/Tab commit behavior for focused options in open combobox menus.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-value parity update:
+  - restored controlled `selectedKey` synchronization without emitting prop-driven `onSelectionChange` callbacks.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added controlled input DOM reconciliation on change events so controlled `inputValue` remains authoritative after user edits.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage for controlled input/selection callback behavior:
+    - keeps controlled `inputValue` visible after clearing attempts
+    - avoids spurious `onSelectionChange` when both `inputValue` and `selectedKey` are controlled
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 48 tests).
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -250,6 +250,7 @@ export const ComboBox = defineComponent({
       ...getComboBoxDisabledKeys(initialCollectionNodes),
       ...(props.disabledKeys ?? []),
     ]);
+    const isSyncingSelectedKeyRef = ref(false);
 
     const state = useComboBoxState<object>({
       ...(props.items != null
@@ -257,7 +258,11 @@ export const ComboBox = defineComponent({
         : { defaultItems: initialCollectionNodes as any }),
       disabledKeys: initialDisabledKeys,
       defaultSelectedKey: props.selectedKey ?? props.defaultSelectedKey,
-      onSelectionChange: props.onSelectionChange,
+      onSelectionChange: (key: ComboBoxKey | null) => {
+        if (!isSyncingSelectedKeyRef.value) {
+          props.onSelectionChange?.(key);
+        }
+      },
       get inputValue() {
         return props.inputValue;
       },
@@ -313,11 +318,29 @@ export const ComboBox = defineComponent({
         }
 
         if (currentSelectedKey !== selectedKey) {
+          isSyncingSelectedKeyRef.value = true;
           state.setSelectedKey(selectedKey ?? null);
+          isSyncingSelectedKeyRef.value = false;
         }
       },
       { immediate: true }
     );
+
+    const syncControlledInputValue = (event: Event) => {
+      if (props.inputValue === undefined) {
+        return;
+      }
+
+      const target = event.target as HTMLInputElement | null;
+      if (!target) {
+        return;
+      }
+
+      const controlledValue = state.inputValue;
+      if (target.value !== controlledValue) {
+        target.value = controlledValue;
+      }
+    };
 
     const {
       labelProps,
@@ -425,6 +448,10 @@ export const ComboBox = defineComponent({
                 ref: inputRef,
                 class: "spectrum-Textfield-input",
                 value: state.inputValue,
+                onChange: (event: Event) => {
+                  (inputProps.onChange as ((event: Event) => void) | undefined)?.(event);
+                  syncControlledInputValue(event);
+                },
                 disabled: props.isDisabled || undefined,
                 readonly: props.isReadOnly || undefined,
                 placeholder: props.placeholder,
