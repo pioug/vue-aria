@@ -463,4 +463,28 @@ describe("ComboBox", () => {
     expect(options).toHaveLength(3);
     expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
   });
+
+  it("shows a loading placeholder in the open listbox when loadingState is loading with no items", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Async",
+        items: [],
+        loadingState: "loading",
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const listbox = wrapper.find('[role="listbox"]');
+    expect(listbox.exists()).toBe(true);
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(1);
+
+    const progressbar = options[0]?.find('[role="progressbar"]');
+    expect(progressbar?.exists()).toBe(true);
+    expect(progressbar?.attributes("aria-label")).toBe("Loading…");
+  });
 });

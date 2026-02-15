@@ -251,7 +251,7 @@ export const ComboBox = defineComponent({
         return props.menuTrigger;
       },
       get allowsEmptyCollection() {
-        return props.allowsEmptyCollection;
+        return props.allowsEmptyCollection || props.loadingState != null;
       },
       get allowsCustomValue() {
         return props.allowsCustomValue;
@@ -415,7 +415,7 @@ export const ComboBox = defineComponent({
               ),
             ]
           ),
-          state.isOpen && collectionNodes.length > 0
+          state.isOpen && (collectionNodes.length > 0 || props.loadingState === "loading" || props.loadingState === "loadingMore")
             ? h(
                 "div",
                 {
