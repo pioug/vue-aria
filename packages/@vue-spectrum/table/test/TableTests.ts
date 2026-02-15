@@ -1056,6 +1056,26 @@ export function tableTests() {
     }
   });
 
+  it("renders nested headers with drag and selection synthetic columns", () => {
+    const wrapper = renderTable({
+      columns: columnsWithNestedHeaders,
+      items: itemsWithNestedColumns,
+      showDragButtons: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("7");
+
+    const firstBodyCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(firstBodyCells).toHaveLength(7);
+    expect(firstBodyCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(firstBodyCells[1]!.classes()).toContain("react-spectrum-Table-cell--selectionCell");
+    expect(firstBodyCells[2]!.text()).toContain("Test 1");
+    expect(firstBodyCells[6]!.text()).toContain("Baz 1");
+  });
+
   it("applies column alignment classes to headers and cells", () => {
     const wrapper = renderTable({
       columns: columnsWithAlignment,

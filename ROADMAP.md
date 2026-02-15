@@ -12463,3 +12463,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 271 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 327 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` nested-header drag/selection structural parity expansion:
+  - added regression coverage for grouped nested headers combined with drag and checkbox-selection synthetic columns.
+  - assertions validate expanded `aria-colcount` and row-cell structural ordering/class wiring across drag/selection synthetic columns plus nested leaf data columns.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 272 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 328 tests).
+- Validation: `npm run check -- --pretty false` passed.
