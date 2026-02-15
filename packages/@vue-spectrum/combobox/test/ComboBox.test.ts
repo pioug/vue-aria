@@ -233,6 +233,30 @@ describe("ComboBox", () => {
     expect(wrapper.text()).toContain("Numbers");
   });
 
+  it("opens when typing by default", async () => {
+    const wrapper = renderComboBox();
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("T");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+  });
+
+  it("does not open when typing with menuTrigger manual", async () => {
+    const wrapper = renderComboBox({
+      menuTrigger: "manual",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("T");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("opens with ArrowDown and focuses the first option", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');
