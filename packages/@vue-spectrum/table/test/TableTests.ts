@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { expect, it, vi } from "vitest";
+import { Provider } from "@vue-spectrum/provider";
+import { theme } from "@vue-spectrum/theme";
 import {
   Cell,
   Column,
@@ -207,6 +209,11 @@ const itemsWithRowLinks: SpectrumTableRowData[] = [
   { key: "row-2", foo: "Guides", bar: "Bar 2", baz: "Baz 2", href: "https://example.com/guides" },
 ];
 
+const itemsWithRouterLinks: SpectrumTableRowData[] = [
+  { key: "row-1", foo: "Docs", bar: "Bar 1", baz: "Baz 1", href: "/docs", routerOptions: { from: "table" } },
+  { key: "row-2", foo: "Guides", bar: "Bar 2", baz: "Baz 2", href: "https://example.com/guides" },
+];
+
 const itemsWithDisabledFlag: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
@@ -323,6 +330,20 @@ async function press(
   });
   await target.trigger("click", { button: 0, ...options });
   await nextTick();
+}
+
+function preventLinkNavigation(): () => void {
+  const clickHandler = (event: Event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("a")) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("click", clickHandler, true);
+  return () => {
+    document.removeEventListener("click", clickHandler, true);
+  };
 }
 
 function readDescriptionText(ids: string | undefined): string {
@@ -3693,6 +3714,48 @@ export function tableTests() {
     bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
     expect(bodyRows[0]!.attributes("data-href")).toBe("https://example.com/docs");
+  });
+
+  it("supports row links with Provider router integration", async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const navigate = vi.fn();
+      const useHref = (href: string) => (href.startsWith("http") ? href : `/base${href}`);
+      const wrapper = mount(
+        defineComponent({
+          setup() {
+            return () =>
+              h(
+                Provider as any,
+                {
+                  theme,
+                  router: { navigate, useHref },
+                },
+                () =>
+                  h(TableView as any, {
+                    "aria-label": "Router table",
+                    selectionMode: "none",
+                    items: itemsWithRouterLinks,
+                    columns,
+                  })
+              );
+          },
+        }),
+        {
+          attachTo: document.body,
+        }
+      );
+
+      const bodyRows = wrapper.findAll('tbody [role="row"]');
+      expect(bodyRows).toHaveLength(2);
+      expect(bodyRows[0]!.attributes("data-href")).toBe("/base/docs");
+      expect(bodyRows[1]!.attributes("data-href")).toBe("https://example.com/guides");
+
+      await bodyRows[0]!.trigger("click");
+      expect(navigate).toHaveBeenCalledWith("/docs", { from: "table" });
+    } finally {
+      restoreNavigation();
+    }
   });
 
   it("allows disabled-row actions when disabledBehavior is selection", async () => {
