@@ -80,6 +80,18 @@ const columnsWithClampedExplicitWidth: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithClampedMaxExplicitWidth: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 500, maxWidth: 300 },
+  { key: "bar", title: "Bar" },
+  { key: "baz", title: "Baz" },
+];
+
+const columnsWithWithinMaxExplicitWidth: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 200, maxWidth: 500 },
+  { key: "bar", title: "Bar" },
+  { key: "baz", title: "Baz" },
+];
+
 const columnsWithDefaultWidthMetadata: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true, defaultWidth: 200 },
   { key: "bar", title: "Bar" },
@@ -482,6 +494,30 @@ export function tableTests() {
   it("clamps explicit widths to minWidth constraints", () => {
     const wrapper = renderTable({
       columns: columnsWithClampedExplicitWidth,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
+  });
+
+  it("clamps explicit widths to maxWidth constraints", () => {
+    const wrapper = renderTable({
+      columns: columnsWithClampedMaxExplicitWidth,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(350, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(350, 3);
+  });
+
+  it("keeps explicit widths when they are within maxWidth constraints", () => {
+    const wrapper = renderTable({
+      columns: columnsWithWithinMaxExplicitWidth,
     });
 
     const headerCells = wrapper.findAll('thead [role="columnheader"]');

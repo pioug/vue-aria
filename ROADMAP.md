@@ -11857,3 +11857,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 157 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 213 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` explicit max-width parity coverage expansion:
+  - added constraint-branch regression tests for explicit width + maxWidth combinations:
+    - explicit widths clamp down when exceeding maxWidth.
+    - explicit widths remain unchanged when already within maxWidth bounds.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 159 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 215 tests).
+- Validation: `npm run check -- --pretty false` passed.
