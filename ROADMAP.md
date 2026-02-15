@@ -11928,3 +11928,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 168 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 224 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` resizable-width distribution parity refinement:
+  - updated width-style sourcing so resizable tables use `useTableColumnResizeState` width maps for header/body cell rendering, while non-resizable tables keep existing metadata-driven sizing style resolution.
+    - preserves static sizing metadata behavior (`rem`, `ch`, etc.) outside resize flows.
+    - keeps selection checkbox columns fixed at `38px` even when resize-state maps are active.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - refined resizable-table normalization path:
+    - skip static pre-resolution for tables containing resizable columns so `fr`/default token semantics remain available to resize-state redistribution.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded resize integration coverage:
+    - added regression test ensuring fractional sibling columns redistribute when a resizable column width increases.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 169 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 225 tests).
+- Validation: `npm run check -- --pretty false` passed.

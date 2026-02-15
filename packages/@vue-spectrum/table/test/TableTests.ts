@@ -128,6 +128,12 @@ const columnsWithResizableConstraints: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", defaultWidth: 390 },
 ];
 
+const columnsWithResizableFractionalWidths: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, defaultWidth: "1fr" },
+  { key: "bar", title: "Bar", defaultWidth: "1fr" },
+  { key: "baz", title: "Baz", defaultWidth: "2fr" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -756,6 +762,36 @@ export function tableTests() {
 
     width = parseFloat((header().element as HTMLElement).style.width);
     expect(width).toBeCloseTo(210, 3);
+  });
+
+  it("redistributes fractional sibling widths when a resizable column changes", async () => {
+    const wrapper = renderTable({
+      columns: columnsWithResizableFractionalWidths,
+    });
+
+    const getHeaders = () => wrapper.findAll('[role="columnheader"]');
+    const getResizer = () => getHeaders()[0]!.get(".spectrum-Table-columnResizer");
+
+    const initialHeaders = getHeaders();
+    const initialFooWidth = parseFloat((initialHeaders[0]!.element as HTMLElement).style.width);
+    const initialBarWidth = parseFloat((initialHeaders[1]!.element as HTMLElement).style.width);
+    const initialBazWidth = parseFloat((initialHeaders[2]!.element as HTMLElement).style.width);
+
+    await getResizer().trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await getResizer().trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    await getResizer().trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    const nextHeaders = getHeaders();
+    const nextFooWidth = parseFloat((nextHeaders[0]!.element as HTMLElement).style.width);
+    const nextBarWidth = parseFloat((nextHeaders[1]!.element as HTMLElement).style.width);
+    const nextBazWidth = parseFloat((nextHeaders[2]!.element as HTMLElement).style.width);
+
+    expect(nextFooWidth).toBeGreaterThan(initialFooWidth);
+    expect(nextBarWidth).toBeLessThan(initialBarWidth);
+    expect(nextBazWidth).toBeLessThan(initialBazWidth);
   });
 
   it("supports static slot table syntax", async () => {

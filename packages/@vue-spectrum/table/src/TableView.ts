@@ -283,9 +283,9 @@ function resolveColumnSizingStyles(
   let minWidth = toColumnSizeStyleValue(columnProps?.minWidth);
   let maxWidth = toColumnSizeStyleValue(columnProps?.maxWidth);
   if (columnProps?.isSelectionCell) {
-    width = width ?? "38px";
-    minWidth = minWidth ?? width;
-    maxWidth = maxWidth ?? width;
+    width = "38px";
+    minWidth = width;
+    maxWidth = width;
   }
 
   if (!width && !minWidth && !maxWidth) {
@@ -856,6 +856,10 @@ const TableHeaderCell = defineComponent({
       type: Object as PropType<TableColumnResizeState<NormalizedSpectrumTableRow>>,
       required: true,
     },
+    useResizeColumnWidths: {
+      type: Boolean,
+      required: true,
+    },
     isDisabled: {
       type: Boolean as PropType<boolean | undefined>,
       required: false,
@@ -936,7 +940,7 @@ const TableHeaderCell = defineComponent({
     );
     const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
     const resolvedColumnWidth = computed(() => {
-      if (!Boolean(columnProps.value.allowsResizing)) {
+      if (!props.useResizeColumnWidths) {
         return undefined;
       }
 
@@ -1050,6 +1054,10 @@ const TableBodyCell = defineComponent({
       type: Object as PropType<TableColumnResizeState<NormalizedSpectrumTableRow>>,
       required: true,
     },
+    useResizeColumnWidths: {
+      type: Boolean,
+      required: true,
+    },
   },
   setup(props) {
     const refObject = ref<HTMLElement | null>(null);
@@ -1129,9 +1137,12 @@ const TableBodyCell = defineComponent({
     );
     const alignment = computed(() => resolveCellAlignment(props.node));
     const resolvedColumnWidth = computed(() => {
+      if (!props.useResizeColumnWidths) {
+        return undefined;
+      }
+
       const columnKey = props.node.column?.key;
-      const columnProps = props.node.column?.props as Record<string, unknown> | undefined;
-      if (columnKey == null || !Boolean(columnProps?.allowsResizing)) {
+      if (columnKey == null) {
         return undefined;
       }
 
@@ -1244,6 +1255,10 @@ const TableBodyRow = defineComponent({
     },
     columnResizeState: {
       type: Object as PropType<TableColumnResizeState<NormalizedSpectrumTableRow>>,
+      required: true,
+    },
+    useResizeColumnWidths: {
+      type: Boolean,
       required: true,
     },
     rowIndex: {
@@ -1363,6 +1378,7 @@ const TableBodyRow = defineComponent({
             node: childNode,
             state: props.state,
             columnResizeState: props.columnResizeState,
+            useResizeColumnWidths: props.useResizeColumnWidths,
           })
         )
       );
@@ -1784,11 +1800,19 @@ export const TableView = defineComponent({
         slotDefinition: slotDefinition.value,
       });
       const sorted = sortDefinition(normalized, resolvedSortDescriptor.value);
+      const hasResizableColumns = sorted.columns.some((column) => Boolean(column.allowsResizing));
+      if (hasResizableColumns) {
+        return sorted;
+      }
+
       return resolveColumnWidths(sorted, {
         showSelectionCheckboxes: showSelectionCheckboxes.value,
         tableWidth: tableLayoutWidth.value,
       });
     });
+    const useResizeColumnWidths = computed(() =>
+      normalizedDefinition.value.columns.some((column) => Boolean(column.allowsResizing))
+    );
 
     const allRows = computed(() => flattenNormalizedRows(normalizedDefinition.value.rows));
     const allowsExpandableRows = Boolean(props.UNSTABLE_allowsExpandableRows && tableNestedRows());
@@ -2036,6 +2060,7 @@ export const TableView = defineComponent({
                     node: headerCellNode as GridNode<NormalizedSpectrumTableRow>,
                     state,
                     columnResizeState,
+                    useResizeColumnWidths: useResizeColumnWidths.value,
                     isDisabled: props.isDisabled,
                     onResizeStart: props.onResizeStart,
                     onResize: props.onResize,
@@ -2063,6 +2088,7 @@ export const TableView = defineComponent({
                   onAction: props.onAction,
                   selectedKeys: resolvedSelectedKeys.value,
                   columnResizeState,
+                  useResizeColumnWidths: useResizeColumnWidths.value,
                 })
               )
               : [
