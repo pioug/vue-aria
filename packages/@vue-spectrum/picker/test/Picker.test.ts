@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { FormValidationContext } from "@vue-aria/form-state";
+import { setInteractionModality } from "@vue-aria/interactions";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
@@ -1694,5 +1695,29 @@ describe("Picker", () => {
     const options = Array.from(document.body.querySelectorAll('[role="option"]'));
     expect(options).toHaveLength(3);
     expect(document.body.textContent).toContain("Numbers");
+  });
+
+  it("focuses options on hover when open", async () => {
+    const wrapper = renderPicker();
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(listbox).toBeTruthy();
+    expect(options).toHaveLength(3);
+
+    setInteractionModality("pointer");
+    options[1]?.dispatchEvent(
+      new MouseEvent("mouseenter", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    setInteractionModality("keyboard");
+
+    expect(document.activeElement).toBe(options[1]);
   });
 });

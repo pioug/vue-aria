@@ -11236,3 +11236,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 61 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` hover-focus parity refinement:
+  - added migrated coverage asserting open picker options receive focus on hover when pointer modality is active.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 62 tests).
+- Validation: `npm run check -- --pretty false` passed.
