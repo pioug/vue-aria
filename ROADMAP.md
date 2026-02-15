@@ -10825,3 +10825,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 60 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` allowsCustomValue active-descendant parity update:
+  - added migrated coverage asserting no option remains actively focused when freeform text diverges from an exact match while `allowsCustomValue` is enabled.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 61 tests).
+- Validation: `npm run check -- --pretty false` passed.

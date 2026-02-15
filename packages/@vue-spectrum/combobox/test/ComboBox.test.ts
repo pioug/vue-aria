@@ -912,6 +912,45 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
   });
 
+  it("clears active option when input no longer exactly matches with allowsCustomValue", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        allowsCustomValue: true,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("Two");
+    await nextTick();
+    await nextTick();
+
+    let options = wrapper.findAll('[role="option"]');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(options).toHaveLength(1);
+    expect(options[0]?.text()).toBe("Two");
+    expect(input.attributes("aria-activedescendant")).toBeUndefined();
+
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    options = wrapper.findAll('[role="option"]');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(options).toHaveLength(1);
+    expect(options[0]?.text()).toBe("Two");
+    expect(input.attributes("aria-activedescendant")).toBeUndefined();
+  });
+
   it("does not apply default filtering when controlled items are provided", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');
