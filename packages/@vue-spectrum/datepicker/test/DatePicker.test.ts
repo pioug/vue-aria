@@ -226,6 +226,52 @@ describe("DatePicker", () => {
     expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
   });
 
+  it("supports controlled date picker form reset", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const value = ref<CalendarDate | null>(new CalendarDate(2020, 2, 3));
+          return () =>
+            h("form", null, [
+              h(DatePicker as any, {
+                "aria-label": "Date picker",
+                value: value.value,
+                onChange: (next: CalendarDate | null) => {
+                  value.value = next;
+                },
+                name: "eventDate",
+              }),
+              h("input", {
+                type: "reset",
+                "data-testid": "reset",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const hiddenInput = wrapper.get('input[type="hidden"][name="eventDate"]');
+    expect(hiddenInput.element.getAttribute("value")).toBe("2020-02-03");
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+
+    expect(hiddenInput.element.getAttribute("value")).toBe("2020-02-17");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
+
+    expect(hiddenInput.element.getAttribute("value")).toBe("2020-02-03");
+  });
+
   it("updates date picker defaultValue after form submit action", async () => {
     const wrapper = mount(
       defineComponent({
