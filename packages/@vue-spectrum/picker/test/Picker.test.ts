@@ -576,6 +576,38 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Two");
   });
 
+  it("does not emit selection changes when selecting an already selected option", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      defaultSelectedKey: "2",
+      onSelectionChange,
+    });
+
+    const trigger = wrapper.get("button");
+    expect(trigger.text()).toContain("Two");
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(options).toHaveLength(3);
+    expect(options[1]?.getAttribute("aria-selected")).toBe("true");
+    expect(options[1]?.getAttribute("tabindex")).toBe("0");
+
+    options[1]?.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.text()).toContain("Two");
+  });
+
   it("supports controlled open state", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderPicker({

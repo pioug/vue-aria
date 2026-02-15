@@ -7,6 +7,8 @@ export interface SingleSelectListProps<T> {
   selectedKey?: Key | null;
   defaultSelectedKey?: Key | null;
   onSelectionChange?: (key: Key | null) => void;
+  onSelectionAction?: (key: Key | null, isDuplicate: boolean) => void;
+  allowDuplicateSelectionEvents?: boolean;
   collection?: ListState<T>["collection"];
   items?: Iterable<T | Node<T>>;
   getKey?: (item: T) => Key;
@@ -51,7 +53,13 @@ export function useSingleSelectListState<T extends object>(
     },
     onSelectionChange: (keys: any) => {
       const key = keys.values().next().value ?? null;
-      if (key === selectedKeyRef.value && props.onSelectionChange) {
+      const isDuplicate = key === selectedKeyRef.value;
+      props.onSelectionAction?.(key, isDuplicate);
+      if (
+        props.allowDuplicateSelectionEvents !== false
+        && isDuplicate
+        && props.onSelectionChange
+      ) {
         props.onSelectionChange(key);
       }
 

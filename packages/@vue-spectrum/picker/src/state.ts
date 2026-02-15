@@ -90,6 +90,10 @@ export function usePickerState(
     disabledKeys,
     selectedKey: props.selectedKey,
     defaultSelectedKey: props.defaultSelectedKey,
+    allowDuplicateSelectionEvents: false,
+    onSelectionAction: () => {
+      overlayState.close();
+    },
     onSelectionChange: (key) => {
       props.onSelectionChange?.(key);
       overlayState.close();

@@ -451,6 +451,9 @@ export const Picker = defineComponent({
                       onAction: (key: PickerKey) => {
                         (menuProps.onAction as ((key: PickerKey) => void) | undefined)?.(key);
                         state.close();
+                        Promise.resolve().then(() => {
+                          triggerRef.value?.focus();
+                        });
                       },
                       maxHeight: props.maxHeight,
                       onLoadMore: props.onLoadMore,

@@ -11256,3 +11256,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 65 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` duplicate-selection parity refinement:
+  - added migrated coverage asserting selecting an already selected option closes the menu without re-emitting `onSelectionChange`.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - updated picker selection-state wiring to suppress duplicate selection-change callbacks while still closing on selection actions.
+    - `packages/@vue-spectrum/picker/src/state.ts`
+    - `packages/@vue-aria/list-state/src/useSingleSelectListState.ts`
+  - restored trigger focus after listbox `onAction`-driven close paths.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 66 tests).
+- Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/picker/test` passed (5 files, 73 tests).
+- Validation: `npm run check -- --pretty false` passed.
