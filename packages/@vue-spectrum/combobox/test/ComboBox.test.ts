@@ -842,6 +842,49 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).value).toBe("Three");
   });
 
+  it("supports form reset", async () => {
+    const wrapper = mount(defineComponent({
+      setup() {
+        return () =>
+          h("form", [
+            h(ComboBox as any, {
+              label: "Test",
+              name: "test",
+              items,
+            }),
+            h("input", {
+              type: "reset",
+              "data-test": "reset",
+            }),
+          ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("name")).toBe("test");
+
+    await input.trigger("focus");
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    const targetOption = options.find((option) => option.text().includes("Two"));
+    expect(targetOption).toBeTruthy();
+    await targetOption?.trigger("click");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await wrapper.get('[data-test="reset"]').trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+  });
+
   it("forces text form submission when allowsCustomValue is true", () => {
     const wrapper = renderComboBox({
       name: "framework",
