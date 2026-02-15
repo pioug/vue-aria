@@ -610,9 +610,10 @@ export const ComboBox = defineComponent({
                     maxHeight: props.maxHeight,
                     onLoadMore: props.onLoadMore,
                     isLoading: props.loadingState === "loading" || props.loadingState === "loadingMore",
+                    showLoadingSpinner: props.loadingState === "loadingMore",
                     renderEmptyState:
                       props.loadingState != null
-                        ? () => "No results"
+                        ? () => (props.loadingState === "loading" ? "Loading…" : "No results")
                         : undefined,
                     state,
                     ref: (value: unknown) => {

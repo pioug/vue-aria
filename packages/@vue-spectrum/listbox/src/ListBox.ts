@@ -128,6 +128,11 @@ export const ListBox = defineComponent({
       required: false,
       default: undefined,
     },
+    showLoadingSpinner: {
+      type: Boolean as () => boolean | undefined,
+      required: false,
+      default: undefined,
+    },
     onAction: {
       type: Function as PropType<SpectrumListBoxProps<object>["onAction"]>,
       required: false,
@@ -206,6 +211,7 @@ export const ListBox = defineComponent({
         maxHeight: props.maxHeight,
         onLoadMore: props.onLoadMore,
         isLoading: props.isLoading,
+        showLoadingSpinner: props.showLoadingSpinner,
         escapeKeyBehavior: props.escapeKeyBehavior,
         onAction: props.onAction,
         onFocus: props.onFocus,

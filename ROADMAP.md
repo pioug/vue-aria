@@ -11460,6 +11460,21 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 136 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 152 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` listbox-loading parity refinement:
+  - aligned combobox/listbox loading presentation with upstream semantics:
+    - introduced `showLoadingSpinner` control in listbox primitives so loading spinners can be rendered conditionally when collections are non-empty.
+    - wired combobox to show listbox spinners only for `loadingMore`, while `loading`/`filtering` rely on delayed input-field indicators.
+    - switched async-empty `loading` listbox state to render `"Loading…"` empty-state text rather than an option spinner.
+    - `packages/@vue-spectrum/listbox/src/types.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBox.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBoxBase.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - expanded combobox loading matrix coverage for `loading`/`filtering` × valid/invalid states, including input-spinner placement versus listbox spinner absence.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 140 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test packages/@vue-spectrum/combobox/test` passed (4 files, 181 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 156 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.

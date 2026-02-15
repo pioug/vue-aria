@@ -3681,6 +3681,50 @@ describe("ComboBox", () => {
     }
   });
 
+  it.each([
+    { loadingState: "loading" as const, validationState: undefined },
+    { loadingState: "filtering" as const, validationState: undefined },
+    { loadingState: "loading" as const, validationState: "invalid" as const },
+    { loadingState: "filtering" as const, validationState: "invalid" as const },
+  ])(
+    "shows delayed input loading spinner for loadingState=$loadingState validationState=$validationState",
+    async ({ loadingState, validationState }) => {
+      vi.useFakeTimers();
+      try {
+        const wrapper = renderComboBox({
+          loadingState,
+          validationState,
+        });
+        const input = wrapper.get('input[role="combobox"]');
+        const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+        vi.advanceTimersByTime(500);
+        await nextTick();
+
+        if (validationState === "invalid") {
+          expect(input.attributes("aria-invalid")).toBe("true");
+        }
+
+        if (loadingState === "loading") {
+          expect(findInputSpinner().exists()).toBe(true);
+        } else {
+          expect(findInputSpinner().exists()).toBe(false);
+        }
+
+        await wrapper.get("button").trigger("click");
+        await nextTick();
+        await nextTick();
+
+        expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+        expect(findInputSpinner().exists()).toBe(true);
+        expect(wrapper.find('[role="listbox"] [role="progressbar"]').exists()).toBe(false);
+      } finally {
+        vi.runOnlyPendingTimers();
+        vi.useRealTimers();
+      }
+    }
+  );
+
   it("shows a loading-more spinner in the open listbox when loadingState is loadingMore", async () => {
     const wrapper = renderComboBox({
       loadingState: "loadingMore",
@@ -3724,10 +3768,8 @@ describe("ComboBox", () => {
 
     const options = wrapper.findAll('[role="option"]');
     expect(options).toHaveLength(1);
-
-    const progressbar = options[0]?.find('[role="progressbar"]');
-    expect(progressbar?.exists()).toBe(true);
-    expect(progressbar?.attributes("aria-label")).toBe("Loading…");
+    expect(options[0]?.text()).toContain("Loading…");
+    expect(options[0]?.find('[role="progressbar"]').exists()).toBe(false);
   });
 
   it("shows a no-results placeholder for async empty lists when not loading", async () => {

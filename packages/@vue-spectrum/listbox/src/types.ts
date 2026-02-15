@@ -35,6 +35,7 @@ export interface SpectrumListBoxProps<T extends object> {
   maxHeight?: number;
   onLoadMore?: () => void;
   isLoading?: boolean;
+  showLoadingSpinner?: boolean;
   "aria-label"?: string;
   "aria-labelledby"?: string;
   onAction?: (key: Key) => void;

@@ -72,6 +72,11 @@ export const ListBoxBase = defineComponent({
       required: false,
       default: undefined,
     },
+    showLoadingSpinner: {
+      type: Boolean as () => boolean | undefined,
+      required: false,
+      default: undefined,
+    },
     escapeKeyBehavior: {
       type: String as () => SpectrumListBoxProps<object>["escapeKeyBehavior"],
       required: false,
@@ -225,8 +230,9 @@ export const ListBoxBase = defineComponent({
       );
 
       const hasItems = children.length > 0;
+      const shouldShowLoadingSpinner = props.showLoadingSpinner ?? true;
 
-      if (props.isLoading) {
+      if (props.isLoading && shouldShowLoadingSpinner) {
         children.push(
           h(
             "div",
