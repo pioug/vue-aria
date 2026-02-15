@@ -12157,3 +12157,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 207 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 263 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` select-all checkbox breadth coverage:
+  - added direct select-all checkbox regression coverage for selecting all rows and validating checkbox checked-state synchronization.
+  - added empty-table guard coverage ensuring the select-all checkbox renders disabled when no rows are available.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 209 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 265 tests).
+- Validation: `npm run check -- --pretty false` passed.

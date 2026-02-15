@@ -2962,6 +2962,44 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("supports selecting all rows via the select-all checkbox", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    expect(selectAll.attributes("aria-checked")).toBe("false");
+
+    await selectAll.setValue(true);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-2", "row-3"]));
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+
+    const updatedSelectAll = wrapper.get('thead input[role="checkbox"]');
+    expect(updatedSelectAll.attributes("aria-checked")).toBe("true");
+  });
+
+  it("disables the select-all checkbox when the table is empty", () => {
+    const wrapper = renderTable({
+      items: [],
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    expect(selectAll.attributes("disabled")).toBeDefined();
+    expect(selectAll.attributes("aria-checked")).toBe("false");
+  });
+
   it("supports deselecting an item after selecting all rows", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
