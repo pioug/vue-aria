@@ -234,16 +234,20 @@ export const NumberField = defineComponent({
       if (showStepper.value) {
         children.push(
           h(StepButton as any, {
+            key: `step-up-${state.canIncrement ? "enabled" : "disabled"}`,
             direction: "up",
             isQuiet: merged.isQuiet,
             ...result.incrementButtonProps,
+            isDisabled: !state.canIncrement,
           })
         );
         children.push(
           h(StepButton as any, {
+            key: `step-down-${state.canDecrement ? "enabled" : "disabled"}`,
             direction: "down",
             isQuiet: merged.isQuiet,
             ...result.decrementButtonProps,
+            isDisabled: !state.canDecrement,
           })
         );
       }

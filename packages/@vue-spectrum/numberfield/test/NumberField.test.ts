@@ -613,4 +613,141 @@ describe("NumberField", () => {
     await input.trigger("blur");
     expect(onChange).toHaveBeenCalledWith(expectedValue);
   });
+
+  it("re-enables steppers when a max-limited typed value is cleared", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      onChange,
+      defaultValue: 1,
+      maxValue: 1,
+    });
+    const input = wrapper.get('input[type="text"]');
+    const incrementAriaDisabled = () => wrapper.findAll('[role="button"]')[0].attributes("aria-disabled");
+    const decrementAriaDisabled = () => wrapper.findAll('[role="button"]')[1].attributes("aria-disabled");
+
+    expect((input.element as HTMLInputElement).value).toBe("1");
+    expect(incrementAriaDisabled()).toBeDefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("");
+    await nextTick();
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    await input.trigger("blur");
+    expect(onChange).toHaveBeenCalledWith(NaN);
+  });
+
+  it("disables increment stepper when typed value exceeds max", async () => {
+    const wrapper = renderNumberField({
+      onChange: vi.fn(),
+      maxValue: 15,
+    });
+    const input = wrapper.get('input[type="text"]');
+    const incrementAriaDisabled = () => wrapper.findAll('[role="button"]')[0].attributes("aria-disabled");
+    const decrementAriaDisabled = () => wrapper.findAll('[role="button"]')[1].attributes("aria-disabled");
+
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+
+    await input.setValue("10");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    await input.setValue("100");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeDefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+  });
+
+  it("disables decrement stepper when typed value goes below min", async () => {
+    const wrapper = renderNumberField({
+      onChange: vi.fn(),
+      minValue: -15,
+    });
+    const input = wrapper.get('input[type="text"]');
+    const incrementAriaDisabled = () => wrapper.findAll('[role="button"]')[0].attributes("aria-disabled");
+    const decrementAriaDisabled = () => wrapper.findAll('[role="button"]')[1].attributes("aria-disabled");
+
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+
+    await input.setValue("-10");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    await input.setValue("-100");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeDefined();
+  });
+
+  it("disables increment stepper when typed value is above max step boundary", async () => {
+    const wrapper = renderNumberField({
+      onChange: vi.fn(),
+      minValue: 2,
+      maxValue: 21,
+      step: 3,
+    });
+    const input = wrapper.get('input[type="text"]');
+    const incrementAriaDisabled = () => wrapper.findAll('[role="button"]')[0].attributes("aria-disabled");
+    const decrementAriaDisabled = () => wrapper.findAll('[role="button"]')[1].attributes("aria-disabled");
+
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+
+    await input.setValue("19");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    await input.setValue("20");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeDefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+  });
+
+  it("disables decrement stepper when typed value reaches min step boundary", async () => {
+    const wrapper = renderNumberField({
+      onChange: vi.fn(),
+      minValue: 2,
+      maxValue: 21,
+      step: 3,
+    });
+    const input = wrapper.get('input[type="text"]');
+    const incrementAriaDisabled = () => wrapper.findAll('[role="button"]')[0].attributes("aria-disabled");
+    const decrementAriaDisabled = () => wrapper.findAll('[role="button"]')[1].attributes("aria-disabled");
+
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+
+    await input.setValue("3");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeUndefined();
+
+    await input.setValue("2");
+    await nextTick();
+    expect(incrementAriaDisabled()).toBeUndefined();
+    expect(decrementAriaDisabled()).toBeDefined();
+  });
 });

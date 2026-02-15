@@ -3,7 +3,6 @@ import { useLocalizedStringFormatter, useNumberFormatter } from "@vue-aria/i18n"
 import { useFocus, useFocusWithin } from "@vue-aria/interactions";
 import { useSpinButton } from "@vue-aria/spinbutton";
 import { useFormattedTextField } from "@vue-aria/textfield";
-import { useFormValidation } from "@vue-aria/form";
 import { privateValidationStateProp } from "@vue-aria/form-state";
 import {
   chain,
@@ -96,6 +95,7 @@ export function useNumberField(
     onFocusChange,
     onKeyDown,
     onKeyUp,
+    onInput,
     description,
     errorMessage,
     ...otherProps
@@ -106,8 +106,6 @@ export function useNumberField(
     incrementToMax,
     decrement,
     decrementToMin,
-    numberValue,
-    inputValue,
     commit,
     commitValidation,
   } = state;
@@ -132,7 +130,6 @@ export function useNumberField(
   const numberFormatter = useNumberFormatter(formatOptions);
   const intlOptions = numberFormatter.resolvedOptions();
   const textValueFormatter = useNumberFormatter({ ...formatOptions, currencySign: undefined });
-  const textValue = Number.isNaN(numberValue) ? "" : textValueFormatter.format(numberValue);
 
   const {
     spinButtonProps,
@@ -148,8 +145,12 @@ export function useNumberField(
     onIncrementToMax: incrementToMax,
     onDecrement: decrement,
     onDecrementToMin: decrementToMin,
-    value: numberValue,
-    textValue,
+    get value() {
+      return state.numberValue;
+    },
+    get textValue() {
+      return Number.isNaN(state.numberValue) ? "" : textValueFormatter.format(state.numberValue);
+    },
   });
 
   const focusWithin = ref(false);
@@ -189,10 +190,20 @@ export function useNumberField(
     }
   };
 
-  const onChange = (value: string) => {
+  const setInputValue = (value: string) => {
     if (state.validate(value)) {
       state.setInputValue(value);
     }
+  };
+
+  const onInputChange = (event: InputEvent) => {
+    const inputElement = (event.target as HTMLInputElement | null)
+      ?? (event.currentTarget as HTMLInputElement | null)
+      ?? inputRef.current;
+    if (inputElement) {
+      setInputValue(inputElement.value);
+    }
+    onInput?.(event);
   };
 
   const onPaste = (event: ClipboardEvent) => {
@@ -223,46 +234,54 @@ export function useNumberField(
     }
   };
 
-  const { isInvalid, validationErrors, validationDetails } = state.displayValidation;
+  const textFieldPropsOptions = {
+    ...otherProps,
+    ...domProps,
+    name: undefined,
+    form: undefined,
+    label,
+    autoFocus,
+    isDisabled,
+    isReadOnly,
+    isRequired,
+    validate: undefined,
+    [privateValidationStateProp]: state,
+    get value() {
+      return state.inputValue;
+    },
+    defaultValue: "!",
+    autoComplete: "off",
+    "aria-label": props["aria-label"] || undefined,
+    "aria-labelledby": props["aria-labelledby"] || undefined,
+    id: inputId,
+    type: "text",
+    inputMode,
+    onChange: setInputValue,
+    onBlur,
+    onFocus,
+    onFocusChange,
+    onInput: onInputChange,
+    onKeyDown: chain(onKeyDownEnter, onKeyDown),
+    onKeyUp,
+    onPaste,
+    description,
+    errorMessage,
+  };
   const {
     labelProps,
     inputProps: textFieldProps,
     descriptionProps,
     errorMessageProps,
   } = useFormattedTextField(
-    {
-      ...otherProps,
-      ...domProps,
-      name: undefined,
-      form: undefined,
-      label,
-      autoFocus,
-      isDisabled,
-      isReadOnly,
-      isRequired,
-      validate: undefined,
-      [privateValidationStateProp]: state,
-      value: inputValue,
-      defaultValue: "!",
-      autoComplete: "off",
-      "aria-label": props["aria-label"] || undefined,
-      "aria-labelledby": props["aria-labelledby"] || undefined,
-      id: inputId,
-      type: "text",
-      inputMode,
-      onChange,
-      onBlur,
-      onFocus,
-      onFocusChange,
-      onKeyDown: chain(onKeyDownEnter, onKeyDown),
-      onKeyUp,
-      onPaste,
-      description,
-      errorMessage,
-    },
+    textFieldPropsOptions,
     state as any,
     inputRef
   );
+  Object.defineProperty(textFieldProps, "value", {
+    configurable: true,
+    enumerable: true,
+    get: () => state.inputValue,
+  });
 
   const inputElementRef = {
     get value() {
@@ -277,14 +296,6 @@ export function useNumberField(
     inputElementRef as any,
     state.defaultNumberValue as any,
     (value: number) => state.setNumberValue?.(value)
-  );
-  useFormValidation(
-    {
-      validationBehavior: props.validationBehavior,
-      focus: () => inputRef.current?.focus(),
-    },
-    state as any,
-    inputElementRef
   );
 
   const inputProps = mergeProps(spinButtonProps, focusProps, textFieldProps, {
@@ -311,6 +322,11 @@ export function useNumberField(
   if (props.validationBehavior === "native") {
     (inputProps as Record<string, unknown>)["aria-required"] = undefined;
   }
+  Object.defineProperty(inputProps, "value", {
+    configurable: true,
+    enumerable: true,
+    get: () => state.inputValue,
+  });
 
   const fieldLabel = props["aria-label"] || (typeof props.label === "string" ? props.label : "");
   let ariaLabelledby: string | undefined;
@@ -329,7 +345,6 @@ export function useNumberField(
     excludeFromTabOrder: true,
     preventFocusOnPress: true,
     allowFocusWhenDisabled: true,
-    isDisabled: state.canIncrement === undefined ? false : !state.canIncrement,
     onPressStart: (event: { pointerType: string; target: HTMLElement }) => {
       if (document.activeElement === inputRef.current) {
         return;
@@ -340,6 +355,11 @@ export function useNumberField(
         event.target.focus();
       }
     },
+  });
+  Object.defineProperty(incrementButtonProps, "isDisabled", {
+    configurable: true,
+    enumerable: true,
+    get: () => state.canIncrement === undefined ? false : !state.canIncrement,
   });
 
   const decrementButtonProps = mergeProps(decButtonProps, {
@@ -350,7 +370,6 @@ export function useNumberField(
     excludeFromTabOrder: true,
     preventFocusOnPress: true,
     allowFocusWhenDisabled: true,
-    isDisabled: state.canDecrement === undefined ? false : !state.canDecrement,
     onPressStart: (event: { pointerType: string; target: HTMLElement }) => {
       if (document.activeElement === inputRef.current) {
         return;
@@ -362,13 +381,20 @@ export function useNumberField(
       }
     },
   });
+  Object.defineProperty(decrementButtonProps, "isDisabled", {
+    configurable: true,
+    enumerable: true,
+    get: () => state.canDecrement === undefined ? false : !state.canDecrement,
+  });
 
   return {
     groupProps: {
       ...focusWithinProps,
       role: "group",
       "aria-disabled": isDisabled,
-      "aria-invalid": isInvalid ? "true" : undefined,
+      get "aria-invalid"() {
+        return state.displayValidation.isInvalid ? "true" : undefined;
+      },
     },
     labelProps,
     inputProps,
@@ -376,8 +402,14 @@ export function useNumberField(
     decrementButtonProps,
     errorMessageProps,
     descriptionProps,
-    isInvalid,
-    validationErrors,
-    validationDetails,
+    get isInvalid() {
+      return state.displayValidation.isInvalid;
+    },
+    get validationErrors() {
+      return state.displayValidation.validationErrors;
+    },
+    get validationDetails() {
+      return state.displayValidation.validationDetails;
+    },
   };
 }

@@ -10065,3 +10065,21 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 43 tests).
 - Validation: `npm test -- packages/@vue-aria/textfield/test` passed (1 file, 9 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` typed stepper-disable parity update:
+  - added migrated coverage asserting steppers re-enable/disable against in-progress typed values for:
+    - clearing max-bound values
+    - values above `maxValue`
+    - values below `minValue`
+    - step-constrained max/min boundary values
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - fixed numberfield hook reactivity for typed-value control flow by:
+    - wiring `useFormattedTextField`/merged input props to read `state.inputValue` reactively
+    - exposing reactive spinbutton value/text getters from state
+    - using safe input-target fallback handling for synthetic `onInput` event paths
+    - keeping `useFormReset` number-state wiring while avoiding duplicate native reset-validation subscriptions
+    - `packages/@vue-aria/numberfield/src/useNumberField.ts`
+  - ensured Spectrum `StepButton` disabled state updates reflect typed-value state transitions in NumberField rendering.
+    - `packages/@vue-spectrum/numberfield/src/NumberField.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 48 tests).
+- Validation: `npm test -- packages/@vue-aria/numberfield/test` passed (6 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
