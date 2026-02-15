@@ -10889,3 +10889,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 76 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` allowsCustomValue Enter parity update:
+  - added migrated coverage asserting Enter closes the menu and commits `null` selection when `allowsCustomValue` is enabled and no option is focused.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 77 tests).
+- Validation: `npm run check -- --pretty false` passed.

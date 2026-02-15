@@ -1185,6 +1185,43 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("closes the menu on Enter with allowsCustomValue when no option is focused", async () => {
+    const onSelectionChange = vi.fn();
+    const onOpenChange = vi.fn();
+    const onKeyDown = vi.fn();
+    const wrapper = renderComboBox({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+      onOpenChange,
+      onKeyDown,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("On");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    await input.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    await nextTick();
+
+    expect(input.attributes("aria-activedescendant")).toBeUndefined();
+
+    await input.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(onKeyDown).toHaveBeenCalled();
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith(null);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
   it("commits focused option on Tab and closes the menu", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
