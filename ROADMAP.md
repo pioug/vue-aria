@@ -10402,3 +10402,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 18 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` trigger-loading parity update:
+  - added trigger-level loading progressbar behavior for `isLoading` when no picker items are present, including `aria-describedby` wiring to the spinner id.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for trigger loading spinner rendering/removal.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 19 tests).
+- Validation: `npm run check -- --pretty false` passed.

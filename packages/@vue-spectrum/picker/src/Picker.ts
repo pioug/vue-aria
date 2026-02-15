@@ -1,5 +1,6 @@
 import { HiddenSelect, useSelect } from "@vue-aria/select";
 import { ListCollection } from "@vue-aria/list-state";
+import { useId } from "@vue-aria/utils";
 import { computed, defineComponent, h, nextTick, onMounted, ref, type PropType, type VNode } from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { Popover } from "@vue-spectrum/menu";
@@ -135,6 +136,21 @@ export const Picker = defineComponent({
       state as any,
       triggerRefObject
     );
+    const loadingId = useId();
+    const shouldShowTriggerSpinner = computed(() => Boolean(props.isLoading) && collectionNodes.length === 0);
+    const triggerAriaDescribedby = computed(() => {
+      const ids: string[] = [];
+      const existingDescription = triggerProps["aria-describedby"];
+      if (typeof existingDescription === "string" && existingDescription.length > 0) {
+        ids.push(existingDescription);
+      }
+
+      if (shouldShowTriggerSpinner.value) {
+        ids.push(loadingId);
+      }
+
+      return ids.length > 0 ? ids.join(" ") : undefined;
+    });
 
     const selectedText = computed(() => {
       const selectedItem = state.selectedItem;
@@ -209,6 +225,7 @@ export const Picker = defineComponent({
               id: props.id ?? (triggerProps.id as string | undefined),
               "aria-expanded": state.isOpen ? "true" : "false",
               "aria-controls": state.isOpen ? (menuProps.id as string | undefined) : undefined,
+              "aria-describedby": triggerAriaDescribedby.value,
               ref: triggerRef,
               type: "button",
               class: "spectrum-Dropdown-trigger",
@@ -232,6 +249,13 @@ export const Picker = defineComponent({
                 class: "spectrum-Dropdown-icon",
                 "aria-hidden": "true",
               }),
+              shouldShowTriggerSpinner.value
+                ? h("span", {
+                    id: loadingId,
+                    role: "progressbar",
+                    "aria-label": "Loading…",
+                  })
+                : null,
             ]
           ),
           collectionNodes.length > 0

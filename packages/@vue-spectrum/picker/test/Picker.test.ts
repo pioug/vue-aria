@@ -375,6 +375,32 @@ describe("Picker", () => {
     expect(trigger.attributes("aria-expanded")).toBe("false");
   });
 
+  it("shows a loading spinner on the trigger when loading with no items", async () => {
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+        items: [],
+        isLoading: true,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get("button");
+    const progressbar = trigger.get('[role="progressbar"]');
+
+    expect(progressbar.attributes("aria-label")).toBe("Loading…");
+    expect(progressbar.attributes("aria-valuenow")).toBeUndefined();
+    expect(trigger.attributes("aria-describedby")).toBe(progressbar.attributes("id"));
+
+    await wrapper.setProps({
+      isLoading: false,
+    });
+    await nextTick();
+
+    expect(trigger.find('[role="progressbar"]').exists()).toBe(false);
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+  });
+
   it("shows a loading-more spinner in the open listbox when isLoading is true", async () => {
     const wrapper = renderPicker({
       isLoading: true,
