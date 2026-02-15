@@ -10394,3 +10394,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - accessibility guidance for listbox labeling and complex option label/description content
     - `docs/packages/spectrum-listbox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` loading-more parity update:
+  - added `isLoading` prop support on picker and forwarded it to popup listbox rendering so loading-more progress rows render in open menus.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for loading-more spinner rendering/removal in an open picker listbox.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.

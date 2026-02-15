@@ -375,6 +375,32 @@ describe("Picker", () => {
     expect(trigger.attributes("aria-expanded")).toBe("false");
   });
 
+  it("shows a loading-more spinner in the open listbox when isLoading is true", async () => {
+    const wrapper = renderPicker({
+      isLoading: true,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    let options = Array.from(document.body.querySelectorAll('[role="option"]'));
+    expect(options).toHaveLength(4);
+
+    let progressbar = options[3]?.querySelector('[role="progressbar"]') as HTMLElement | null;
+    expect(progressbar).toBeTruthy();
+    expect(progressbar?.getAttribute("aria-label")).toBe("Loading more…");
+    expect(progressbar?.getAttribute("aria-valuenow")).toBeNull();
+
+    await wrapper.setProps({
+      isLoading: false,
+    });
+    await nextTick();
+
+    options = Array.from(document.body.querySelectorAll('[role="option"]'));
+    expect(options).toHaveLength(3);
+    expect(document.body.querySelector('[role="progressbar"]')).toBeNull();
+  });
+
   it("supports slot-defined items and sections", async () => {
     const wrapper = mount(Picker as any, {
       props: {

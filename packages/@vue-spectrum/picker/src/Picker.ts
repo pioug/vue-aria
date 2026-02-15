@@ -60,6 +60,11 @@ export const Picker = defineComponent({
       required: false,
       default: undefined,
     },
+    isLoading: {
+      type: Boolean,
+      required: false,
+      default: undefined,
+    },
     isRequired: {
       type: Boolean,
       required: false,
@@ -257,6 +262,7 @@ export const Picker = defineComponent({
                         (menuProps.onAction as ((key: PickerKey) => void) | undefined)?.(key);
                         state.close();
                       },
+                      isLoading: props.isLoading,
                       state,
                     }),
                   ],
