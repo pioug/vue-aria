@@ -799,6 +799,7 @@ describe("ComboBox", () => {
     await options[0]?.trigger("click");
     await nextTick();
     await nextTick();
+    expect(input.attributes("aria-describedby")).toBeDefined();
     expect((input.element as HTMLInputElement).value).toBe("One");
     await input.trigger("blur");
     await nextTick();
@@ -869,6 +870,7 @@ describe("ComboBox", () => {
     await options[0]?.trigger("click");
     await nextTick();
     await nextTick();
+    expect(input.attributes("aria-describedby")).toBeDefined();
 
     await input.trigger("blur");
     await nextTick();

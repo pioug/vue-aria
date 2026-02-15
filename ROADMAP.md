@@ -11112,3 +11112,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded docs with a dedicated validation section covering `validate`, native vs aria validation behavior, and functional `errorMessage` usage.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` native validation blur-link refinement:
+  - strengthened native required/validate clear coverage to assert invalid help-text linkage persists until blur commit, then clears.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 115 tests).
+- Validation: `npm run check -- --pretty false` passed.
