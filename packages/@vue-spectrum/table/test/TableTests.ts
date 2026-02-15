@@ -169,6 +169,11 @@ const columnsWithControlledResizableWidth: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", defaultWidth: "1fr" },
 ];
 
+const columnsWithResizablePair: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, defaultWidth: "1fr" },
+  { key: "bar", title: "Bar", defaultWidth: "1fr" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -494,6 +499,63 @@ export function tableTests() {
     expect(widths).toHaveLength(2);
     expect(widths[0]!).toBeCloseTo(500, 3);
     expect(widths[1]!).toBeCloseTo(500, 3);
+  });
+
+  it("resets uncontrolled resize widths when resizable columns are removed and added", async () => {
+    const wrapper = renderTable({
+      columns: columnsWithResizableFractionalWidths,
+    });
+
+    const readWidths = () =>
+      wrapper
+        .findAll('thead [role="columnheader"]')
+        .map((header) => parseFloat((header.element as HTMLElement).style.width));
+
+    const resizeFirstColumn = async () => {
+      const resizer = wrapper.findAll('[role="columnheader"]')[0]!.get(".spectrum-Table-columnResizer");
+      await resizer.trigger("keydown", { key: "Enter" });
+      await nextTick();
+      await resizer.trigger("keydown", { key: "ArrowRight" });
+      await nextTick();
+      await resizer.trigger("keydown", { key: "Escape" });
+      await nextTick();
+    };
+
+    let widths = readWidths();
+    expect(widths).toHaveLength(3);
+    expect(widths[0]!).toBeCloseTo(250, 3);
+    expect(widths[1]!).toBeCloseTo(250, 3);
+    expect(widths[2]!).toBeCloseTo(500, 3);
+
+    await resizeFirstColumn();
+    widths = readWidths();
+    expect(widths[0]!).toBeGreaterThan(250);
+
+    await wrapper.setProps({
+      columns: columnsWithResizablePair,
+      items: [
+        { key: "row-1", foo: "Foo 1", bar: "Bar 1" },
+        { key: "row-2", foo: "Foo 2", bar: "Bar 2" },
+      ],
+    });
+    await nextTick();
+
+    widths = readWidths();
+    expect(widths).toHaveLength(2);
+    expect(widths[0]!).toBeCloseTo(500, 3);
+    expect(widths[1]!).toBeCloseTo(500, 3);
+
+    await wrapper.setProps({
+      columns: columnsWithResizableFractionalWidths,
+      items,
+    });
+    await nextTick();
+
+    widths = readWidths();
+    expect(widths).toHaveLength(3);
+    expect(widths[0]!).toBeCloseTo(250, 3);
+    expect(widths[1]!).toBeCloseTo(250, 3);
+    expect(widths[2]!).toBeCloseTo(500, 3);
   });
 
   it("supports multiple row header columns", () => {
