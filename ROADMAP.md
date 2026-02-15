@@ -12273,3 +12273,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 40 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 294 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid action/loading parity coverage expansion:
+  - added migrated nested-row keyboard action coverage ensuring Enter on a focused nested row checkbox triggers `onAction` (without selection mutation), while Space performs checkbox selection.
+  - added migrated treegrid loading-state coverage asserting spinner-row ARIA semantics (`aria-level`, `aria-posinset`, `aria-setsize`, rowheader spinner cell colspan) in expandable mode.
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 42 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 296 tests).
+- Validation: `npm run check -- --pretty false` passed.

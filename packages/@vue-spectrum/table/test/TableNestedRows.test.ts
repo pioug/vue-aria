@@ -1050,6 +1050,41 @@ describe("TableView nested rows", () => {
     );
   });
 
+  it("triggers onAction with Enter on a focused nested row checkbox and selects with Space", async () => {
+    enableTableNestedRows();
+    const onAction = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows action table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onAction,
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedRow = getRowByText(wrapper, "Row 1, Lvl 3, Foo");
+    const nestedCheckbox = nestedRow.get('[role="checkbox"]');
+    (nestedCheckbox.element as HTMLElement).focus();
+    await nestedCheckbox.trigger("focus");
+
+    await moveFocus(nestedCheckbox, "Enter");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onAction).toHaveBeenLastCalledWith("row-1-level-3");
+
+    await moveFocus(nestedCheckbox, " ");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]).toEqual(new Set(["row-1-level-3"]));
+    expect(onAction).toHaveBeenCalledTimes(1);
+  });
+
   it("moves row focus down through nested rows with ArrowDown", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
@@ -1329,5 +1364,35 @@ describe("TableView nested rows", () => {
 
     const emptyCell = wrapper.get('tbody [role="row"] [role="rowheader"]');
     expect(emptyCell.attributes("aria-colspan")).toBe("4");
+  });
+
+  it("renders treegrid loading state with rowheader spinner semantics", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Loading nested table",
+        columns,
+        items: [],
+        loadingState: "loading",
+        UNSTABLE_allowsExpandableRows: true,
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(1);
+    const row = rows[0]!;
+    expect(row.attributes("aria-expanded")).toBeUndefined();
+    expect(row.attributes("aria-level")).toBe("1");
+    expect(row.attributes("aria-posinset")).toBe("1");
+    expect(row.attributes("aria-setsize")).toBe("1");
+
+    const loadingCell = row.get('[role="rowheader"]');
+    const grid = wrapper.get('[role="treegrid"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe(grid.attributes("aria-colcount"));
+
+    const spinner = loadingCell.get('[role="progressbar"]');
+    expect(spinner.attributes("aria-label")).toBe("Loading…");
+    expect(spinner.attributes("aria-valuenow")).toBeUndefined();
   });
 });
