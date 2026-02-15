@@ -1165,6 +1165,32 @@ describe("ComboBox", () => {
     expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
   });
 
+  it("shows all options on focus-open when menuTrigger is focus and defaultInputValue is set", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        menuTrigger: "focus",
+        defaultInputValue: "Tw",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+  });
+
   it("calls onFocus and onBlur for outside focus transitions", async () => {
     const onFocus = vi.fn();
     const onBlur = vi.fn();
