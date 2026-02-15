@@ -12394,3 +12394,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 260 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 316 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid loading colspan drag parity expansion:
+  - added nested-row loading-state regression coverage verifying spinner row `aria-colspan` accounts for both drag and selection synthetic columns.
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 53 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 261 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 317 tests).
+- Validation: `npm run check -- --pretty false` passed.

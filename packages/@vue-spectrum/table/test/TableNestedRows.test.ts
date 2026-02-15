@@ -1691,4 +1691,24 @@ describe("TableView nested rows", () => {
     expect(spinner.attributes("aria-label")).toBe("Loading…");
     expect(spinner.attributes("aria-valuenow")).toBeUndefined();
   });
+
+  it("uses drag and selection aware colspan for treegrid loading state", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Loading nested drag table",
+        columns,
+        items: [],
+        loadingState: "loading",
+        showDragButtons: true,
+        selectionMode: "multiple",
+        UNSTABLE_allowsExpandableRows: true,
+      },
+      attachTo: document.body,
+    });
+
+    const loadingCell = wrapper.get('tbody [role="row"] [role="rowheader"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe("5");
+    expect(loadingCell.find('[role="progressbar"]').exists()).toBe(true);
+  });
 });
