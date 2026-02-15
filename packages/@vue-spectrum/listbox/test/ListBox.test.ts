@@ -249,6 +249,67 @@ describe("ListBox", () => {
     expect((document.activeElement as HTMLElement | null)?.getAttribute("data-key")).toBe("Foo");
   });
 
+  it("allows keyboard focus changes with ArrowDown and ArrowUp", async () => {
+    const wrapper = renderListBox({
+      autoFocus: "first",
+    });
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(document.activeElement).toBe(options[0]?.element);
+
+    (options[0]?.element as HTMLElement | undefined)?.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+    );
+    await nextTick();
+    expect(document.activeElement).toBe(options[1]?.element);
+
+    (options[1]?.element as HTMLElement | undefined)?.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true })
+    );
+    await nextTick();
+    expect(document.activeElement).toBe(options[0]?.element);
+  });
+
+  it("supports single-selection activation with Space key", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderListBox({
+      selectionMode: "single",
+      onSelectionChange,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[4]?.trigger("keydown", { key: " " });
+    await options[4]?.trigger("keyup", { key: " " });
+
+    expect(options[4]?.attributes("aria-selected")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(1);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]?.has("Bleh")).toBe(true);
+  });
+
+  it("supports deselection in multiple selection mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderListBox({
+      selectionMode: "multiple",
+      defaultSelectedKeys: ["Foo", "Bar"],
+      onSelectionChange,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options[0]?.attributes("aria-selected")).toBe("true");
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(2);
+
+    await options[0]?.trigger("click");
+
+    expect(options[0]?.attributes("aria-selected")).toBe("false");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(1);
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]?.has("Foo")).toBe(false);
+    expect(onSelectionChange.mock.calls[0]?.[0]?.has("Bar")).toBe(true);
+  });
+
   it("does not render selection checkmarks when selectionMode is not set", () => {
     const wrapper = renderListBox({
       selectedKeys: ["Foo"],

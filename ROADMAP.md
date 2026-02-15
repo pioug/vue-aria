@@ -10297,3 +10297,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 26 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 27 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` keyboard-selection parity update:
+  - added migrated coverage for:
+    - ArrowDown/ArrowUp focus transitions with `autoFocus="first"`
+    - single-selection activation via `Space`
+    - deselection behavior in `selectionMode="multiple"` with uncontrolled defaults
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 29 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 30 tests).
+- Validation: `npm run check -- --pretty false` passed.
