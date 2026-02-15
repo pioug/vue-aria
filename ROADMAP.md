@@ -10316,3 +10316,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 30 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 31 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` typeahead-space parity update:
+  - added migrated coverage for:
+    - typeahead matching across space-separated labels (`Foo Bar`/`Foo Baz`)
+    - `Space` key selection after typeahead timeout in single-selection mode
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 32 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 33 tests).
+- Validation: `npm run check -- --pretty false` passed.

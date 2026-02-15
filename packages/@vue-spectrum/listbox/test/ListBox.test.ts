@@ -32,6 +32,39 @@ function renderListBox(props: Record<string, unknown> = {}) {
   });
 }
 
+function renderTypeaheadListBox(props: Record<string, unknown> = {}) {
+  return mount(ListBox as any, {
+    props: {
+      ariaLabel: "ListBox",
+      ...props,
+    },
+    slots: {
+      default: () => [
+        h(Section as any, { title: "Heading 1" }, {
+          default: () => [
+            h(Item as any, { key: "Foo" }, { default: () => "Foo" }),
+            h(Item as any, { key: "Bar" }, { default: () => "Bar" }),
+            h(Item as any, { key: "Baz" }, { default: () => "Baz" }),
+          ],
+        }),
+        h(Section as any, { title: "Heading 2" }, {
+          default: () => [
+            h(Item as any, { key: "Blah" }, { default: () => "Blah" }),
+            h(Item as any, { key: "Bleh" }, { default: () => "Bleh" }),
+          ],
+        }),
+        h(Section as any, { title: "Heading 3" }, {
+          default: () => [
+            h(Item as any, { key: "Foo Bar" }, { default: () => "Foo Bar" }),
+            h(Item as any, { key: "Foo Baz" }, { default: () => "Foo Baz" }),
+          ],
+        }),
+      ],
+    },
+    attachTo: document.body,
+  });
+}
+
 function preventLinkNavigation(): () => void {
   const clickHandler = (event: Event) => {
     const target = event.target as HTMLElement | null;
@@ -436,6 +469,83 @@ describe("ListBox", () => {
       (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
       await nextTick();
       expect(document.activeElement).toBe(options[4]?.element);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("supports the space character in typeahead search", async () => {
+    const wrapper = renderTypeaheadListBox({
+      autoFocus: "first",
+    });
+    await nextTick();
+
+    const listbox = wrapper.get('[role="listbox"]');
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(7);
+    expect(document.activeElement).toBe(options[0]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "F", bubbles: true }));
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "O", bubbles: true }));
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "O", bubbles: true }));
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[5]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[5]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "A", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[5]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "Z", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[6]?.element);
+  });
+
+  it("supports Space selection after typeahead search times out", async () => {
+    vi.useFakeTimers();
+    try {
+      const onSelectionChange = vi.fn();
+      const wrapper = renderTypeaheadListBox({
+        autoFocus: "first",
+        selectionMode: "single",
+        onSelectionChange,
+      });
+      await nextTick();
+
+      const listbox = wrapper.get('[role="listbox"]');
+      const options = wrapper.findAll('[role="option"]');
+      expect(options).toHaveLength(7);
+      expect(document.activeElement).toBe(options[0]?.element);
+
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "F", bubbles: true }));
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "O", bubbles: true }));
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "O", bubbles: true }));
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+
+      expect(document.activeElement).toBe(options[5]?.element);
+      expect((document.activeElement as HTMLElement | null)?.getAttribute("aria-selected")).toBe("false");
+      expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
+      expect(onSelectionChange).toHaveBeenCalledTimes(0);
+
+      vi.runAllTimers();
+      await nextTick();
+
+      const activeElement = document.activeElement as HTMLElement | null;
+      activeElement?.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+      activeElement?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
+      await nextTick();
+
+      expect((document.activeElement as HTMLElement | null)?.getAttribute("aria-selected")).toBe("true");
+      expect(wrapper.findAll('[role="img"]')).toHaveLength(1);
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange.mock.calls[0]?.[0]?.has("Foo Bar")).toBe(true);
     } finally {
       vi.runOnlyPendingTimers();
       vi.useRealTimers();
