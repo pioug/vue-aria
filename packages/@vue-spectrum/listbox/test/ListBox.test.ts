@@ -32,6 +32,20 @@ function renderListBox(props: Record<string, unknown> = {}) {
   });
 }
 
+function preventLinkNavigation(): () => void {
+  const clickHandler = (event: Event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("a")) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("click", clickHandler, true);
+  return () => {
+    document.removeEventListener("click", clickHandler, true);
+  };
+}
+
 describe("ListBox", () => {
   const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
 
@@ -341,6 +355,96 @@ describe("ListBox", () => {
     } finally {
       vi.runOnlyPendingTimers();
       vi.useRealTimers();
+    }
+  });
+
+  it("supports link items with selectionMode none", async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const wrapper = mount(ListBox as any, {
+        props: {
+          ariaLabel: "ListBox",
+          selectionMode: "none",
+        },
+        slots: {
+          default: () => [
+            h(Item as any, { key: "one", href: "https://google.com" }, { default: () => "One" }),
+            h(Item as any, { key: "two", href: "https://adobe.com" }, { default: () => "Two" }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const options = wrapper.findAll('[role="option"]');
+      expect(options).toHaveLength(2);
+      for (const option of options) {
+        expect(option.element.tagName).toBe("A");
+        expect(option.attributes("href")).toBeTruthy();
+      }
+
+      await options[0]?.trigger("click");
+      expect(options[0]?.attributes("aria-selected")).not.toBe("true");
+    } finally {
+      restoreNavigation();
+    }
+  });
+
+  it.each(["single", "multiple"] as const)(
+    "supports link items with selectionMode %s without selecting them",
+    async (selectionMode) => {
+      const restoreNavigation = preventLinkNavigation();
+      try {
+        const wrapper = mount(ListBox as any, {
+          props: {
+            ariaLabel: "ListBox",
+            selectionMode,
+          },
+          slots: {
+            default: () => [
+              h(Item as any, { key: "one", href: "https://google.com" }, { default: () => "One" }),
+              h(Item as any, { key: "two", href: "https://adobe.com" }, { default: () => "Two" }),
+            ],
+          },
+          attachTo: document.body,
+        });
+
+        const options = wrapper.findAll('[role="option"]');
+        expect(options).toHaveLength(2);
+        await options[0]?.trigger("click");
+        await options[1]?.trigger("click");
+
+        expect(options[0]?.attributes("aria-selected")).not.toBe("true");
+        expect(options[1]?.attributes("aria-selected")).not.toBe("true");
+      } finally {
+        restoreNavigation();
+      }
+    }
+  );
+
+  it("supports keyboard Enter activation on links without selecting", async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const wrapper = mount(ListBox as any, {
+        props: {
+          ariaLabel: "ListBox",
+          selectionMode: "single",
+        },
+        slots: {
+          default: () => [
+            h(Item as any, { key: "one", href: "https://google.com" }, { default: () => "One" }),
+            h(Item as any, { key: "two", href: "https://adobe.com" }, { default: () => "Two" }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      const options = wrapper.findAll('[role="option"]');
+      await options[0]?.trigger("keydown", { key: "Enter" });
+      await options[0]?.trigger("keyup", { key: "Enter" });
+
+      expect(options[0]?.attributes("aria-selected")).not.toBe("true");
+    } finally {
+      restoreNavigation();
     }
   });
 

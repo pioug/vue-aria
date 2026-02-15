@@ -10287,3 +10287,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 22 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 23 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` link-option parity update:
+  - added migrated coverage for:
+    - link item rendering as anchors in `selectionMode="none"`
+    - link interaction behavior in `selectionMode="single"` and `selectionMode="multiple"` without introducing selection state
+    - keyboard `Enter` activation on link items without toggling selection
+    - test harness click-capture guard to suppress JSDOM navigation side effects while preserving interaction assertions
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 26 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 27 tests).
+- Validation: `npm run check -- --pretty false` passed.
