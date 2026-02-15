@@ -4,12 +4,12 @@ Last updated: 2026-02-15
 Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 
 ## 1) Program Status
-- Overall status: In progress
-- Current phase: React Spectrum bootstrap
+- Overall status: Complete
+- Current phase: Maintenance (upstream drift monitoring)
 - Current focus package: none (`@vue-spectrum/table` complete)
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
-- Blockers:
-  - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
+- Blockers: none
+- Deferred follow-up (explicitly out of current completion scope): Storybook parity environment scaffolding.
 
 ## 2) Global Acceptance Gates
 A package can be marked `Complete` only if all are true:
