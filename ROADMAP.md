@@ -10414,3 +10414,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 20 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` closed-typeahead parity update:
+  - added migrated coverage for closed-state typeahead selection, ensuring typed character matching updates selection without opening the picker menu.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 21 tests).
+- Validation: `npm run check -- --pretty false` passed.

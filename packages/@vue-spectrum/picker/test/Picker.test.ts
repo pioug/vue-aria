@@ -167,6 +167,23 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Empty");
   });
 
+  it("supports closed type-to-select without opening the menu", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      onSelectionChange,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("keydown", { key: "T" });
+    await trigger.trigger("keyup", { key: "T" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect(wrapper.text()).toContain("Two");
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+  });
+
   it("closes when trigger is pressed while open", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderPicker({
