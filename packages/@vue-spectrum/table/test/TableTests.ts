@@ -2546,6 +2546,37 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("extends checkbox-style keyboard selection with Ctrl+Shift+Home", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+
+    (bodyRows[2]!.element as HTMLElement).focus();
+    await bodyRows[2]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    let lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-3"]));
+
+    await bodyRows[2]!.trigger("keydown", { key: "Home", shiftKey: true, ctrlKey: true });
+    await nextTick();
+
+    lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-2", "row-3"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("supports checkbox-style multiple selection via Enter key", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

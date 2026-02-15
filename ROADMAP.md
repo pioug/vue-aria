@@ -12020,3 +12020,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 183 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 239 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` keyboard range-selection coverage expansion:
+  - added regression coverage for modifier-extended range selection via `Ctrl+Shift+Home` in checkbox-style multiple-selection tables.
+  - verifies full-range accumulation from a lower focused row back to the first row using keyboard-only interaction.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 184 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 240 tests).
+- Validation: `npm run check -- --pretty false` passed.
