@@ -424,6 +424,7 @@ function createRowNodes(
       : [];
     const childNodes = allowsExpandableRows ? [...cells, ...childRows] : cells;
     const childItems = row.childRows.map((childRow) => childRow.value ?? childRow);
+    const rowValue = (row.value ?? {}) as Record<string, unknown>;
 
     return {
       type: "item",
@@ -442,6 +443,13 @@ function createRowNodes(
       lastChildKey: childNodes[childNodes.length - 1]?.key ?? null,
       props: {
         isDisabled: row.isDisabled,
+        href: rowValue.href,
+        target: rowValue.target,
+        rel: rowValue.rel,
+        download: rowValue.download,
+        ping: rowValue.ping,
+        referrerPolicy: rowValue.referrerPolicy,
+        routerOptions: rowValue.routerOptions,
         children: childNodes,
         UNSTABLE_childItems: childItems.length > 0 ? childItems : undefined,
       },

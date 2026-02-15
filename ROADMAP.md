@@ -12178,3 +12178,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 213 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 269 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` row-link parity refinement:
+  - propagated row link metadata (`href`, target/rel/download/ping/referrerPolicy, router options) into table row collection node props.
+  - added regression coverage for:
+    - row links in `selectionMode="none"`.
+    - row links coexisting with checkbox selection mode and row-checkbox selection interactions.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 215 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 271 tests).
+- Validation: `npm run check -- --pretty false` passed.

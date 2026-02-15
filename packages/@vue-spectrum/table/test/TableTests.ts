@@ -202,6 +202,11 @@ const itemsWithThreeRowsEdited: SpectrumTableRowData[] = [
   itemsWithThreeRows[2]!,
 ];
 
+const itemsWithRowLinks: SpectrumTableRowData[] = [
+  { key: "row-1", foo: "Docs", bar: "Bar 1", baz: "Baz 1", href: "https://example.com/docs" },
+  { key: "row-2", foo: "Guides", bar: "Bar 2", baz: "Baz 2", href: "https://example.com/guides" },
+];
+
 const itemsWithDisabledFlag: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
@@ -3653,6 +3658,41 @@ export function tableTests() {
     const nextRows = wrapper.findAll('tbody [role="row"]');
     expect(nextRows[0]!.attributes("aria-selected")).toBe("false");
     expect(nextRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it('supports row links when selectionMode is "none"', () => {
+    const wrapper = renderTable({
+      items: itemsWithRowLinks,
+      selectionMode: "none",
+    });
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.attributes("data-href")).toBe("https://example.com/docs");
+    expect(bodyRows[1]!.attributes("data-href")).toBe("https://example.com/guides");
+    expect(bodyRows[0]!.attributes("aria-selected")).toBeUndefined();
+    expect(bodyRows[1]!.attributes("aria-selected")).toBeUndefined();
+  });
+
+  it("retains row links in checkbox selection mode", async () => {
+    const wrapper = renderTable({
+      items: itemsWithRowLinks,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.attributes("data-href")).toBe("https://example.com/docs");
+    expect(bodyRows[1]!.attributes("data-href")).toBe("https://example.com/guides");
+    expect(bodyRows[0]!.find('input[type="checkbox"]').exists()).toBe(true);
+
+    await bodyRows[0]!.get('input[type="checkbox"]').setValue(true);
+    await nextTick();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[0]!.attributes("data-href")).toBe("https://example.com/docs");
   });
 
   it("allows disabled-row actions when disabledBehavior is selection", async () => {
