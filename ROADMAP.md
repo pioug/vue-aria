@@ -10972,3 +10972,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 92 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-input clear-selection parity update:
+  - added migrated coverage asserting controlled `inputValue` clears selected-key state only after the controlling prop is updated.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 93 tests).
+- Validation: `npm run check -- --pretty false` passed.

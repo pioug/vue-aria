@@ -171,6 +171,42 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).value).toBe("Two");
   });
 
+  it("clears selection only after controlled inputValue is updated", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      inputValue: "Two",
+      defaultSelectedKey: "2",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    expect(onInputChange).toHaveBeenCalledWith("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await wrapper.setProps({
+      inputValue: "",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(onSelectionChange).toHaveBeenCalledWith(null);
+    expect(wrapper.findAll('[role="option"]')[0]?.attributes("aria-selected")).toBe("false");
+  });
+
   it("does not fire onSelectionChange when inputValue and selectedKey are controlled", async () => {
     const onInputChange = vi.fn();
     const onSelectionChange = vi.fn();
