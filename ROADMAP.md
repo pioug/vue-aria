@@ -11844,3 +11844,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 154 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 210 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` default-width parity expansion:
+  - added `defaultWidth` column metadata support across data and slot definitions (including kebab-case parsing through slot normalization paths).
+    - `packages/@vue-spectrum/table/src/types.ts`
+  - updated width resolution pipeline to treat `defaultWidth` as the fallback explicit width source when `width` is absent.
+    - supports numeric and percentage `defaultWidth` values in the same sizing distribution flow.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded sizing tests for `defaultWidth` behavior:
+    - prop-driven numeric and percentage `defaultWidth`.
+    - static slot `defaultWidth` metadata.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 157 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 213 tests).
+- Validation: `npm run check -- --pretty false` passed.

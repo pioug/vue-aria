@@ -184,6 +184,7 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
         column.textValue ?? "",
         column.align ?? "",
         column.colSpan ?? "",
+        column.defaultWidth ?? "",
         column.width ?? "",
         column.minWidth ?? "",
         column.maxWidth ?? "",
@@ -237,6 +238,7 @@ function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridN
       hideHeader: column.hideHeader,
       showDivider: column.showDivider,
       colSpan: column.colSpan,
+      defaultWidth: column.defaultWidth,
       width: column.width,
       minWidth: column.minWidth,
       maxWidth: column.maxWidth,
@@ -529,12 +531,13 @@ function resolveColumnWidths(
     const column = columns[index]!;
     const minWidth = parseNumericColumnSize(column.minWidth, sizingBaseWidth);
     const maxWidth = parseNumericColumnSize(column.maxWidth, sizingBaseWidth);
+    const widthValue = column.width ?? column.defaultWidth;
     const hasExplicitWidth =
-      column.width !== undefined
-      && column.width !== null
-      && String(column.width).trim().length > 0;
+      widthValue !== undefined
+      && widthValue !== null
+      && String(widthValue).trim().length > 0;
     if (hasExplicitWidth) {
-      const numericWidth = parseNumericColumnSize(column.width, sizingBaseWidth);
+      const numericWidth = parseNumericColumnSize(widthValue, sizingBaseWidth);
       if (numericWidth != null) {
         let resolvedWidth = numericWidth;
         if (minWidth != null && resolvedWidth < minWidth) {
@@ -547,6 +550,8 @@ function resolveColumnWidths(
 
         column.width = resolvedWidth;
         remainingWidth -= resolvedWidth;
+      } else if (typeof widthValue === "string" && widthValue.trim().length > 0) {
+        column.width = widthValue.trim();
       }
       continue;
     }
@@ -1194,6 +1199,10 @@ export const Column = createStaticTableComponent("Column", {
   },
   colSpan: {
     type: Number as PropType<number | undefined>,
+    default: undefined,
+  },
+  defaultWidth: {
+    type: [Number, String] as PropType<SpectrumTableColumnSize | undefined>,
     default: undefined,
   },
   width: {

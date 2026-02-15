@@ -22,6 +22,7 @@ export interface SpectrumTableColumnData {
   hideHeader?: boolean | undefined;
   showDivider?: boolean | undefined;
   colSpan?: number | undefined;
+  defaultWidth?: SpectrumTableColumnSize | undefined;
   width?: SpectrumTableColumnSize | undefined;
   minWidth?: SpectrumTableColumnSize | undefined;
   maxWidth?: SpectrumTableColumnSize | undefined;
@@ -54,6 +55,7 @@ export interface ParsedSpectrumTableColumn {
   hideHeader?: boolean | undefined;
   showDivider?: boolean | undefined;
   colSpan?: number | undefined;
+  defaultWidth?: SpectrumTableColumnSize | undefined;
   width?: SpectrumTableColumnSize | undefined;
   minWidth?: SpectrumTableColumnSize | undefined;
   maxWidth?: SpectrumTableColumnSize | undefined;
@@ -97,6 +99,7 @@ export interface NormalizedSpectrumTableColumn {
   hideHeader?: boolean | undefined;
   showDivider?: boolean | undefined;
   colSpan?: number | undefined;
+  defaultWidth?: SpectrumTableColumnSize | undefined;
   width?: SpectrumTableColumnSize | undefined;
   minWidth?: SpectrumTableColumnSize | undefined;
   maxWidth?: SpectrumTableColumnSize | undefined;
@@ -328,6 +331,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
   const hideHeader = props.hideHeader ?? props["hide-header"];
   const showDivider = props.showDivider ?? props["show-divider"];
   const colSpan = props.colSpan ?? props["col-span"];
+  const defaultWidth = props.defaultWidth ?? props["default-width"];
   const width = props.width;
   const minWidth = props.minWidth ?? props["min-width"];
   const maxWidth = props.maxWidth ?? props["max-width"];
@@ -343,6 +347,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     hideHeader: normalizeBooleanProp(hideHeader),
     showDivider: normalizeBooleanProp(showDivider),
     colSpan: normalizeNumberProp(colSpan),
+    defaultWidth: normalizeColumnSizeProp(defaultWidth),
     width: normalizeColumnSizeProp(width),
     minWidth: normalizeColumnSizeProp(minWidth),
     maxWidth: normalizeColumnSizeProp(maxWidth),
@@ -464,6 +469,7 @@ function normalizeColumnsFromSlot(
         hideHeader: column.hideHeader,
         showDivider: column.showDivider,
         colSpan: column.colSpan,
+        defaultWidth: column.defaultWidth,
         width: column.width,
         minWidth: column.minWidth,
         maxWidth: column.maxWidth,
@@ -550,6 +556,7 @@ function normalizeColumnsFromProps(
         hideHeader: column.hideHeader,
         showDivider: column.showDivider,
         colSpan: normalizeNumberProp(column.colSpan),
+        defaultWidth: normalizeColumnSizeProp(column.defaultWidth),
         width: normalizeColumnSizeProp(column.width),
         minWidth: normalizeColumnSizeProp(column.minWidth),
         maxWidth: normalizeColumnSizeProp(column.maxWidth),

@@ -80,6 +80,18 @@ const columnsWithClampedExplicitWidth: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithDefaultWidthMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, defaultWidth: 200 },
+  { key: "bar", title: "Bar" },
+  { key: "baz", title: "Baz" },
+];
+
+const columnsWithPercentageDefaultWidthMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, defaultWidth: "20%" },
+  { key: "bar", title: "Bar", defaultWidth: 300 },
+  { key: "baz", title: "Baz" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -479,6 +491,30 @@ export function tableTests() {
     expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
   });
 
+  it("uses defaultWidth when width is not provided", () => {
+    const wrapper = renderTable({
+      columns: columnsWithDefaultWidthMetadata,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
+  });
+
+  it("resolves percentage defaultWidth and distributes remaining width", () => {
+    const wrapper = renderTable({
+      columns: columnsWithPercentageDefaultWidthMetadata,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+  });
+
   it("supports static slot table syntax", async () => {
     const onAction = vi.fn();
 
@@ -700,6 +736,42 @@ export function tableTests() {
     expect((rowHeader.element as HTMLElement).style.width).toBe("220px");
     expect((bodyCells[0]!.element as HTMLElement).style.minWidth).toBe("180px");
     expect((bodyCells[1]!.element as HTMLElement).style.maxWidth).toBe("280px");
+  });
+
+  it("supports static slot default-width metadata", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot default-width table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true, defaultWidth: 220 }, () => "Foo"),
+              h(Column as any, { id: "bar" }, () => "Bar"),
+              h(Column as any, { id: "baz" }, () => "Baz"),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                  h(Cell as any, () => "Baz 1"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(220, 3);
+    expect(parseFloat((headers[1]!.element as HTMLElement).style.width)).toBeCloseTo(390, 3);
+    expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(390, 3);
   });
 
   it("supports kebab-case static slot column sizing metadata", () => {
