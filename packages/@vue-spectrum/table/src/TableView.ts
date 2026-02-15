@@ -1,4 +1,11 @@
-import { useTable, useTableCell, useTableColumnHeader, useTableRow } from "@vue-aria/table";
+import {
+  useTable,
+  useTableCell,
+  useTableColumnHeader,
+  useTableRow,
+  useTableSelectAllCheckbox,
+  useTableSelectionCheckbox,
+} from "@vue-aria/table";
 import { tableNestedRows } from "@vue-aria/flags";
 import {
   TableCollection,
@@ -238,7 +245,8 @@ function resolveCellAlignment(node: GridNode<NormalizedSpectrumTableRow>): "star
 function createRowCellNodes(
   row: NormalizedSpectrumTableRow,
   rowIndex: number,
-  columns: NormalizedSpectrumTableColumn[]
+  columns: NormalizedSpectrumTableColumn[],
+  showSelectionCheckboxes: boolean
 ): GridNode<NormalizedSpectrumTableRow>[] {
   const normalizedRowCells: NormalizedSpectrumTableCell[] = row.cells.length > 0
     ? row.cells
@@ -249,6 +257,31 @@ function createRowCellNodes(
     }));
   const cells: GridNode<NormalizedSpectrumTableRow>[] = [];
   let columnCursor = 0;
+
+  if (showSelectionCheckboxes) {
+    cells.push({
+      type: "cell",
+      key: `selection-${String(row.key)}`,
+      value: row,
+      rendered: null,
+      textValue: "",
+      level: 2,
+      index: 0,
+      hasChildNodes: false,
+      childNodes: [],
+      parentKey: row.key,
+      prevKey: null,
+      nextKey: null,
+      firstChildKey: null,
+      lastChildKey: null,
+      props: {
+        isSelectionCell: true,
+      },
+      colSpan: 1,
+      colIndex: 0,
+    });
+    columnCursor = 1;
+  }
 
   for (let cellIndex = 0; cellIndex < normalizedRowCells.length; cellIndex += 1) {
     const cell = normalizedRowCells[cellIndex]!;
@@ -264,11 +297,11 @@ function createRowCellNodes(
       rendered,
       textValue: cell.textValue ?? "",
       level: 2,
-      index: cellIndex,
+      index: cellIndex + (showSelectionCheckboxes ? 1 : 0),
       hasChildNodes: false,
       childNodes: [],
       parentKey: row.key,
-      prevKey: cellIndex > 0 ? cells[cellIndex - 1]?.key ?? null : null,
+      prevKey: cells.length > 0 ? cells[cells.length - 1]?.key ?? null : null,
       nextKey: null,
       firstChildKey: null,
       lastChildKey: null,
@@ -290,6 +323,7 @@ function createRowCellNodes(
 
 interface CreateCollectionOptions {
   allowsExpandableRows?: boolean;
+  showSelectionCheckboxes?: boolean;
 }
 
 function createRowNodes(
@@ -297,10 +331,11 @@ function createRowNodes(
   columns: NormalizedSpectrumTableColumn[],
   parentKey: TableKey,
   level: number,
-  allowsExpandableRows: boolean
+  allowsExpandableRows: boolean,
+  showSelectionCheckboxes: boolean
 ): GridNode<NormalizedSpectrumTableRow>[] {
   const rowNodes = rows.map((row, rowIndex) => {
-    const cells = createRowCellNodes(row, rowIndex, columns);
+    const cells = createRowCellNodes(row, rowIndex, columns, showSelectionCheckboxes);
     for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
       if (cellIndex < cells.length - 1) {
         cells[cellIndex]!.nextKey = cells[cellIndex + 1]!.key;
@@ -308,7 +343,7 @@ function createRowNodes(
     }
 
     const childRows = allowsExpandableRows
-      ? createRowNodes(row.childRows, columns, row.key, level + 1, allowsExpandableRows)
+      ? createRowNodes(row.childRows, columns, row.key, level + 1, allowsExpandableRows, showSelectionCheckboxes)
       : [];
     const childNodes = allowsExpandableRows ? [...cells, ...childRows] : cells;
     const childItems = row.childRows.map((childRow) => childRow.value ?? childRow);
@@ -361,7 +396,8 @@ function createCollection(
     definition.columns,
     "body",
     1,
-    Boolean(options.allowsExpandableRows)
+    Boolean(options.allowsExpandableRows),
+    Boolean(options.showSelectionCheckboxes)
   );
 
   const bodyNode: GridNode<NormalizedSpectrumTableRow> = {
@@ -382,7 +418,15 @@ function createCollection(
   };
 
   const topLevelNodes = [...columnNodes, bodyNode];
-  return new TableCollection<NormalizedSpectrumTableRow>(topLevelNodes, null);
+  return new TableCollection<NormalizedSpectrumTableRow>(
+    topLevelNodes,
+    null,
+    options.allowsExpandableRows
+      ? undefined
+      : {
+        showSelectionCheckboxes: Boolean(options.showSelectionCheckboxes),
+      }
+  );
 }
 
 function sortDefinition(
@@ -410,6 +454,50 @@ function sortDefinition(
     rows: sortedRows,
   };
 }
+
+const TableSelectionCheckbox = defineComponent({
+  name: "SpectrumTableSelectionCheckbox",
+  props: {
+    checkboxProps: {
+      type: Object as PropType<Record<string, unknown>>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const inputRef = ref<HTMLInputElement | null>(null);
+
+    watchEffect(() => {
+      if (inputRef.value) {
+        inputRef.value.indeterminate = Boolean(props.checkboxProps.isIndeterminate);
+      }
+    });
+
+    return () => {
+      const checkboxProps = props.checkboxProps as Record<string, unknown>;
+      const isSelected = Boolean(checkboxProps.isSelected);
+      const isIndeterminate = Boolean(checkboxProps.isIndeterminate);
+      const isDisabled = Boolean(checkboxProps.isDisabled);
+      const ariaChecked = isIndeterminate ? "mixed" : isSelected ? "true" : "false";
+
+      return h("input", {
+        ref: inputRef,
+        type: "checkbox",
+        role: "checkbox",
+        class: "react-spectrum-Table-selectionCheckbox",
+        id: checkboxProps.id as string | undefined,
+        "aria-label": checkboxProps["aria-label"] as string | undefined,
+        "aria-labelledby": checkboxProps["aria-labelledby"] as string | undefined,
+        "aria-checked": ariaChecked,
+        checked: isSelected,
+        disabled: isDisabled,
+        onChange: () => {
+          const onChange = checkboxProps.onChange as ((value?: boolean) => void) | undefined;
+          onChange?.(!isSelected);
+        },
+      });
+    };
+  },
+});
 
 const TableHeaderCell = defineComponent({
   name: "SpectrumTableHeaderCell",
@@ -453,8 +541,10 @@ const TableHeaderCell = defineComponent({
     );
     const alignment = computed(() => resolveCellAlignment(props.node));
     const columnProps = computed(() => (props.node.props ?? {}) as Record<string, unknown>);
+    const isSelectionCell = computed(() => Boolean(columnProps.value.isSelectionCell));
     const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
     const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
+    const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
 
     return () =>
       h(
@@ -467,6 +557,7 @@ const TableHeaderCell = defineComponent({
             "react-spectrum-Table-headCell",
             "react-spectrum-Table-cell",
             {
+              "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
               "is-sortable": Boolean(columnProps.value.allowsSorting),
               "is-sorted-asc": sortDirection.value === "ascending",
               "is-sorted-desc": sortDirection.value === "descending",
@@ -479,9 +570,11 @@ const TableHeaderCell = defineComponent({
           "aria-colindex":
             props.node.colIndex != null ? props.node.colIndex + 1 : props.node.index + 1,
         },
-        Boolean(columnProps.value.hideHeader)
-          ? h("span", { class: "spectrum-Table-visuallyHidden" }, props.node.rendered as any)
-          : h("div", { class: "spectrum-Table-headCellContents" }, props.node.rendered as any)
+        isSelectionCell.value
+          ? h(TableSelectionCheckbox, { checkboxProps: selectAllCheckboxProps })
+          : Boolean(columnProps.value.hideHeader)
+            ? h("span", { class: "spectrum-Table-visuallyHidden" }, props.node.rendered as any)
+            : h("div", { class: "spectrum-Table-headCellContents" }, props.node.rendered as any)
       );
   },
 });
@@ -522,7 +615,20 @@ const TableBodyCell = defineComponent({
     const resolvedColSpan = computed(() =>
       props.node.colSpan != null && props.node.colSpan > 1 ? props.node.colSpan : undefined
     );
+    const isSelectionCell = computed(
+      () =>
+        Boolean((props.node.props as Record<string, unknown> | undefined)?.isSelectionCell)
+        || Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.isSelectionCell)
+    );
     const alignment = computed(() => resolveCellAlignment(props.node));
+    const { checkboxProps: selectionCheckboxProps } = useTableSelectionCheckbox(
+      {
+        get key() {
+          return props.node.parentKey as TableKey;
+        },
+      } as any,
+      props.state
+    );
 
     return () =>
       h(
@@ -534,6 +640,7 @@ const TableBodyCell = defineComponent({
             "spectrum-Table-cell",
             "react-spectrum-Table-cell",
             {
+              "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
               "react-spectrum-Table-cell--alignCenter": alignment.value === "center",
               "react-spectrum-Table-cell--alignEnd": alignment.value === "end",
@@ -546,7 +653,9 @@ const TableBodyCell = defineComponent({
           colSpan: resolvedColSpan.value,
           "aria-colspan": resolvedColSpan.value,
         },
-        h("div", { class: "spectrum-Table-cellContents" }, props.node.rendered as any)
+        isSelectionCell.value
+          ? h(TableSelectionCheckbox, { checkboxProps: selectionCheckboxProps })
+          : h("div", { class: "spectrum-Table-cellContents" }, props.node.rendered as any)
       );
   },
 });
@@ -1028,9 +1137,13 @@ export const TableView = defineComponent({
 
     const allRows = computed(() => flattenNormalizedRows(normalizedDefinition.value.rows));
     const allowsExpandableRows = Boolean(props.UNSTABLE_allowsExpandableRows && tableNestedRows());
+    const showSelectionCheckboxes = computed(
+      () => props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none"
+    );
     const collection = computed(() =>
       createCollection(normalizedDefinition.value, {
         allowsExpandableRows,
+        showSelectionCheckboxes: showSelectionCheckboxes.value,
       })
     );
     const resolvedDisabledKeys = computed(() => {
@@ -1055,7 +1168,7 @@ export const TableView = defineComponent({
         return props.selectionStyle === "highlight" ? "replace" : "toggle";
       },
       get showSelectionCheckboxes() {
-        return props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none";
+        return showSelectionCheckboxes.value;
       },
       get selectedKeys() {
         return resolvedSelectedKeys.value as any;

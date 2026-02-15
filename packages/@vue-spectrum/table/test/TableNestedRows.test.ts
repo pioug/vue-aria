@@ -163,6 +163,8 @@ describe("TableView nested rows", () => {
     const headerCells = wrapper.findAll('thead [role="columnheader"]');
     expect(headerCells).toHaveLength(4);
     expect(headerCells[0]!.attributes("aria-colindex")).toBe("1");
+    expect(headerCells[0]!.find('[role="checkbox"]').exists()).toBe(true);
+    expect(headerCells[0]!.find('[role="checkbox"]').attributes("aria-label")).toBe("Select All");
 
     const rows = wrapper.findAll('tbody [role="row"]');
     expect(rows).toHaveLength(3);
