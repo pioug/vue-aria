@@ -815,6 +815,24 @@ describe("Picker", () => {
     expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
+  it("does not call onBlur when selecting an item", async () => {
+    const onBlur = vi.fn();
+    const wrapper = renderPicker({
+      onBlur,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const select = wrapper.get("select");
+    (select.element as HTMLSelectElement).value = "2";
+    await select.trigger("change");
+    await nextTick();
+
+    expect(wrapper.text()).toContain("Two");
+    expect(onBlur).toHaveBeenCalledTimes(0);
+  });
+
   it("focuses the trigger when autoFocus is true", async () => {
     const wrapper = renderPicker({
       autoFocus: true,
