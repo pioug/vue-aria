@@ -275,7 +275,7 @@ export const Picker = defineComponent({
                       id: menuProps.id,
                       ariaLabel: menuProps["aria-label"],
                       ariaLabelledby: menuProps["aria-labelledby"],
-                      autoFocus: menuProps.autoFocus as boolean | "first" | "last" | undefined,
+                      autoFocus: (state.focusStrategy || true) as boolean | "first" | "last",
                       shouldUseVirtualFocus: menuProps.shouldUseVirtualFocus as boolean | undefined,
                       shouldSelectOnPressUp: menuProps.shouldSelectOnPressUp as boolean | undefined,
                       shouldFocusOnHover: menuProps.shouldFocusOnHover as boolean | undefined,

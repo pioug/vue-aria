@@ -10424,3 +10424,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 23 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` keyboard-open focus parity update:
+  - aligned picker popup listbox autofocus wiring to use picker `focusStrategy` (`first`/`last`) when opening from keyboard directional keys, with `true` fallback behavior.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for:
+    - `ArrowDown` opening the menu and focusing the first option
+    - `ArrowUp` opening the menu and focusing the last option
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 25 tests).
+- Validation: `npm run check -- --pretty false` passed.

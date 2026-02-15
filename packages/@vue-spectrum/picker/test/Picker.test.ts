@@ -112,6 +112,34 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Two");
   });
 
+  it("opens on ArrowDown and focuses the first option", async () => {
+    const wrapper = renderPicker();
+    const trigger = wrapper.get("button");
+
+    await trigger.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    const options = Array.from(document.body.querySelectorAll('[role="option"]'));
+    expect(listbox).toBeTruthy();
+    expect(options).toHaveLength(3);
+    expect(document.activeElement).toBe(options[0]);
+  });
+
+  it("opens on ArrowUp and focuses the last option", async () => {
+    const wrapper = renderPicker();
+    const trigger = wrapper.get("button");
+
+    await trigger.trigger("keydown", { key: "ArrowUp" });
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    const options = Array.from(document.body.querySelectorAll('[role="option"]'));
+    expect(listbox).toBeTruthy();
+    expect(options).toHaveLength(3);
+    expect(document.activeElement).toBe(options[2]);
+  });
+
   it("supports selecting items with falsy keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = mount(Picker as any, {
