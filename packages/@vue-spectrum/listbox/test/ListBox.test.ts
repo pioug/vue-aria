@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import { Item } from "../src/Item";
@@ -949,6 +949,59 @@ describe("ListBox", () => {
     expect(groups).toHaveLength(2);
     expect(groups[0]?.text()).not.toContain("Foo 1");
     expect(groups[1]?.text()).toContain("Foo 1");
+  });
+
+  it("moves focus to the next enabled option when the focused option is removed", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const items = ref([
+            { key: "one", name: "One" },
+            { key: "two", name: "Two" },
+            { key: "three", name: "Three", isDisabled: true },
+            { key: "four", name: "Four" },
+          ]);
+
+          return () =>
+            h("div", null, [
+              h(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => {
+                    items.value = items.value.filter((item) => item.key !== "two");
+                  },
+                },
+                "Remove"
+              ),
+              h(ListBox as any, {
+                ariaLabel: "ListBox",
+                items: items.value,
+                selectionMode: "single",
+                disabledKeys: ["three"],
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(4);
+    (options[1]?.element as HTMLElement).focus();
+    await nextTick();
+
+    expect(document.activeElement).toBe(options[1]?.element);
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const updatedOptions = wrapper.findAll('[role="option"]');
+    expect(updatedOptions).toHaveLength(3);
+    expect((document.activeElement as HTMLElement | null)?.textContent).toContain("Four");
   });
 
   it("warns when no aria-label or aria-labelledby is provided", () => {

@@ -10380,3 +10380,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 39 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 40 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` focus-removal parity update:
+  - added migrated regression coverage ensuring focus moves to the next enabled option when the currently focused option is removed from the list.
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 40 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
