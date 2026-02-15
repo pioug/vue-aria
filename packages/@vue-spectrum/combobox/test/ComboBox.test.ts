@@ -495,6 +495,20 @@ describe("ComboBox", () => {
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
+  it("does not apply default filtering when controlled items are provided", async () => {
+    const wrapper = renderComboBox();
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("One");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(options).toHaveLength(3);
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",

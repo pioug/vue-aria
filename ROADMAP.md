@@ -10677,3 +10677,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 37 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-items filtering parity update:
+  - added migrated coverage asserting default filtering is not applied when combobox items are controlled via `items` prop (all controlled options remain visible until consumer updates `items`).
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 38 tests).
+- Validation: `npm run check -- --pretty false` passed.
