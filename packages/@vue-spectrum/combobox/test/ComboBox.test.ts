@@ -532,6 +532,19 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("opens all options on button press when menuTrigger is manual", async () => {
+    const wrapper = renderComboBox({
+      menuTrigger: "manual",
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(options).toHaveLength(3);
+  });
+
   it("opens when focused with menuTrigger focus", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderComboBox({
