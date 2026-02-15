@@ -698,6 +698,106 @@ describe("ListBox", () => {
     expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
   });
 
+  it("fires onLoadMore when scrolling near the bottom", async () => {
+    const maxHeight = 200;
+    const clientHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return maxHeight;
+        }
+        return 48;
+      });
+    const scrollHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 4800;
+        }
+        return 48;
+      });
+
+    try {
+      const onLoadMore = vi.fn();
+      const items = Array.from({ length: 100 }, (_, index) => ({
+        key: `item-${index + 1}`,
+        name: `Test ${index + 1}`,
+      }));
+
+      const wrapper = mount(ListBox as any, {
+        props: {
+          ariaLabel: "ListBox",
+          items,
+          maxHeight,
+          onLoadMore,
+        },
+        attachTo: document.body,
+      });
+      await nextTick();
+
+      const listbox = wrapper.get('[role="listbox"]');
+      const element = listbox.element as HTMLElement;
+      element.scrollTop = 250;
+      await listbox.trigger("scroll");
+      element.scrollTop = 1500;
+      await listbox.trigger("scroll");
+      element.scrollTop = 5000;
+      await listbox.trigger("scroll");
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
+  it("fires onLoadMore when there are not enough items to fill the listbox", async () => {
+    const maxHeight = 300;
+    const clientHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return maxHeight;
+        }
+        return 40;
+      });
+    const scrollHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 300;
+        }
+        return 40;
+      });
+
+    try {
+      const onLoadMore = vi.fn();
+      const items = [
+        { key: "one", name: "Test 1" },
+        { key: "two", name: "Test 2" },
+        { key: "three", name: "Test 3" },
+      ];
+
+      mount(ListBox as any, {
+        props: {
+          ariaLabel: "ListBox",
+          items,
+          maxHeight,
+          onLoadMore,
+        },
+        attachTo: document.body,
+      });
+
+      await nextTick();
+      await nextTick();
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("supports aria-label attribute", () => {
     const wrapper = renderListBox({
       "aria-label": "Test",

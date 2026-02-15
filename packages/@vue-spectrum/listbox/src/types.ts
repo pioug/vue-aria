@@ -32,6 +32,8 @@ export interface SpectrumListBoxProps<T extends object> {
   shouldUseVirtualFocus?: boolean;
   shouldSelectOnPressUp?: boolean;
   shouldFocusOnHover?: boolean;
+  maxHeight?: number;
+  onLoadMore?: () => void;
   isLoading?: boolean;
   "aria-label"?: string;
   "aria-labelledby"?: string;

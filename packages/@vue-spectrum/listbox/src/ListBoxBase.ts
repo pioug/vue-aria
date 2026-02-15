@@ -1,5 +1,5 @@
 import { useListBox } from "@vue-aria/listbox";
-import { defineComponent, h, type PropType, type VNode } from "vue";
+import { defineComponent, h, nextTick, onMounted, watch, type PropType, type VNode } from "vue";
 import { ListBoxOption } from "./ListBoxOption";
 import { ListBoxSection } from "./ListBoxSection";
 import { provideListBoxContext } from "./context";
@@ -56,6 +56,15 @@ export const ListBoxBase = defineComponent({
       required: false,
       default: false,
     },
+    maxHeight: {
+      type: Number as () => number | undefined,
+      required: false,
+      default: undefined,
+    },
+    onLoadMore: {
+      type: Function as PropType<SpectrumListBoxProps<object>["onLoadMore"]>,
+      required: false,
+    },
     isLoading: {
       type: Boolean as () => boolean | undefined,
       required: false,
@@ -104,6 +113,50 @@ export const ListBoxBase = defineComponent({
     const listRef = {
       current: null as HTMLElement | null,
     };
+    let lastLoadMoreScrollHeight: number | null = null;
+
+    const maybeLoadMore = () => {
+      if (!props.onLoadMore || props.isLoading) {
+        return;
+      }
+
+      const element = listRef.current;
+      if (!element) {
+        return;
+      }
+
+      const { clientHeight, scrollHeight, scrollTop } = element;
+      const nearBottom =
+        scrollHeight <= clientHeight ||
+        scrollTop + clientHeight >= scrollHeight - 40;
+
+      if (!nearBottom) {
+        return;
+      }
+
+      if (lastLoadMoreScrollHeight === scrollHeight) {
+        return;
+      }
+
+      lastLoadMoreScrollHeight = scrollHeight;
+      props.onLoadMore();
+    };
+
+    onMounted(() => {
+      void nextTick().then(() => {
+        maybeLoadMore();
+      });
+    });
+
+    watch(
+      () => [props.isLoading, props.maxHeight, (props.state.collection as { size?: number }).size],
+      () => {
+        void nextTick().then(() => {
+          maybeLoadMore();
+        });
+      },
+      { flush: "post" }
+    );
 
     const { listBoxProps } = useListBox(
       {
@@ -192,7 +245,20 @@ export const ListBoxBase = defineComponent({
           }) as any,
           style: {
             ...(listBoxProps.style as Record<string, unknown> | undefined),
+            ...(props.maxHeight != null
+              ? {
+                  maxHeight: `${props.maxHeight}px`,
+                  overflow: "auto",
+                }
+              : {}),
             ...(props.UNSAFE_style ?? {}),
+          },
+          onScroll: (event: Event) => {
+            const listBoxOnScroll = (listBoxProps as Record<string, unknown>).onScroll;
+            if (typeof listBoxOnScroll === "function") {
+              (listBoxOnScroll as (event: Event) => void)(event);
+            }
+            maybeLoadMore();
           },
           class: ["spectrum-Menu", props.UNSAFE_className],
         },

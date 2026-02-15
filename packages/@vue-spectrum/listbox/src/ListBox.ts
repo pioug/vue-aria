@@ -114,6 +114,15 @@ export const ListBox = defineComponent({
       required: false,
       default: undefined,
     },
+    maxHeight: {
+      type: Number as () => number | undefined,
+      required: false,
+      default: undefined,
+    },
+    onLoadMore: {
+      type: Function as PropType<SpectrumListBoxProps<object>["onLoadMore"]>,
+      required: false,
+    },
     isLoading: {
       type: Boolean as () => boolean | undefined,
       required: false,
@@ -194,6 +203,8 @@ export const ListBox = defineComponent({
         shouldUseVirtualFocus: props.shouldUseVirtualFocus,
         shouldSelectOnPressUp: props.shouldSelectOnPressUp,
         shouldFocusOnHover: props.shouldFocusOnHover,
+        maxHeight: props.maxHeight,
+        onLoadMore: props.onLoadMore,
         isLoading: props.isLoading,
         escapeKeyBehavior: props.escapeKeyBehavior,
         onAction: props.onAction,
