@@ -655,8 +655,9 @@ describe("ComboBox", () => {
     await nextTick();
     await nextTick();
 
-    const options = wrapper.findAll('[role="option"]');
-    await options[0]?.trigger("click");
+    const oneOption = wrapper.findAll('[role="option"]').find((option) => option.text() === "One");
+    expect(oneOption).toBeDefined();
+    await oneOption!.trigger("click");
     await nextTick();
     await nextTick();
 
@@ -756,6 +757,55 @@ describe("ComboBox", () => {
     await nextTick();
 
     expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+  });
+
+  it("clears native validate-function errors after selecting a valid option and blurring", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-test": "form" }, [
+              h(ComboBox as any, {
+                label: "Test",
+                items,
+                validationBehavior: "native",
+                validate: ({ selectedKey }: { inputValue: string; selectedKey: string | number | null }) =>
+                  selectedKey == null ? "Invalid value" : null,
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const form = wrapper.get('[data-test="form"]').element as HTMLFormElement;
+    const input = wrapper.get('input[role="combobox"]');
+    await nextTick();
+
+    form.checkValidity();
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect(input.attributes("aria-describedby")).toBeDefined();
+    const describedBy = input.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Invalid value");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    await input.trigger("blur");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+    expect(input.attributes("aria-describedby")).toBeUndefined();
   });
 
   it("supports server validation in native mode", async () => {
