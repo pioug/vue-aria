@@ -39,6 +39,7 @@ export interface SpectrumComboBoxProps {
   shouldCloseOnBlur?: boolean;
   maxHeight?: number;
   onLoadMore?: () => void;
+  loadingState?: SpectrumComboBoxLoadingState;
   isDisabled?: boolean;
   isReadOnly?: boolean;
   isRequired?: boolean;
@@ -74,6 +75,11 @@ export type SpectrumComboBoxCompletionMode = "none" | "list" | "both";
 export type SpectrumComboBoxMenuTrigger = "focus" | "input" | "manual";
 export type SpectrumComboBoxMenuTriggerAction = MenuTriggerAction;
 export type SpectrumComboBoxFilterFn = (textValue: string, inputValue: string) => boolean;
+export type SpectrumComboBoxLoadingState =
+  | "idle"
+  | "loading"
+  | "filtering"
+  | "loadingMore";
 
 export interface ComboBoxCollectionNode<T extends object = object> extends Node<T> {
   wrapper?: (node: VNode) => VNode;

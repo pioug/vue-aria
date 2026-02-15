@@ -128,6 +128,11 @@ export const ComboBox = defineComponent({
       type: Function as PropType<SpectrumComboBoxProps["onLoadMore"]>,
       required: false,
     },
+    loadingState: {
+      type: String as PropType<SpectrumComboBoxProps["loadingState"]>,
+      required: false,
+      default: undefined,
+    },
     isDisabled: {
       type: Boolean as PropType<SpectrumComboBoxProps["isDisabled"]>,
       required: false,
@@ -437,6 +442,7 @@ export const ComboBox = defineComponent({
                     onAction: listBoxProps.onAction as ((key: ComboBoxKey) => void) | undefined,
                     maxHeight: props.maxHeight,
                     onLoadMore: props.onLoadMore,
+                    isLoading: props.loadingState === "loading" || props.loadingState === "loadingMore",
                     state,
                     ref: (value: unknown) => {
                       listBoxRef.value = resolveElement(value);

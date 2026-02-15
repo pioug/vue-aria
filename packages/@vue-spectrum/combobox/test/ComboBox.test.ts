@@ -438,4 +438,29 @@ describe("ComboBox", () => {
       clientHeightSpy.mockRestore();
     }
   });
+
+  it("shows a loading-more spinner in the open listbox when loadingState is loadingMore", async () => {
+    const wrapper = renderComboBox({
+      loadingState: "loadingMore",
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    let options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(4);
+
+    let progressbar = options[3]?.find('[role="progressbar"]');
+    expect(progressbar?.exists()).toBe(true);
+    expect(progressbar?.attributes("aria-label")).toBe("Loading more…");
+
+    await wrapper.setProps({
+      loadingState: "idle",
+    });
+    await nextTick();
+
+    options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
+  });
 });
