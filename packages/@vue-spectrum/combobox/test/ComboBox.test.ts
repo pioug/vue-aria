@@ -313,6 +313,59 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("resets input text when reselecting the selected option with click", async () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    const selectedOption = wrapper
+      .findAll('[role="option"]')
+      .find((option) => option.attributes("aria-selected") === "true");
+    expect(selectedOption).toBeDefined();
+
+    await selectedOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it("resets input text when reselecting the selected option with Enter", async () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    const selectedOption = wrapper
+      .findAll('[role="option"]')
+      .find((option) => option.attributes("aria-selected") === "true");
+    expect(selectedOption).toBeDefined();
+
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+    expect(input.attributes("aria-activedescendant")).toBe(selectedOption?.attributes("id"));
+
+    await input.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("updates when selectedKey and inputValue controlled props change together", async () => {
     const wrapper = renderComboBox({
       selectedKey: "2",
