@@ -14,6 +14,12 @@ const columns: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const multiRowHeaderColumns: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true },
+  { key: "bar", title: "Bar", isRowHeader: true },
+  { key: "baz", title: "Baz" },
+];
+
 const nestedItems: SpectrumTableRowData[] = [
   {
     key: "row-1",
@@ -34,6 +40,31 @@ const nestedItems: SpectrumTableRowData[] = [
     foo: "Lvl 1 Foo 2",
     bar: "Lvl 1 Bar 2",
     baz: "Lvl 1 Baz 2",
+  },
+];
+
+const deepNestedItems: SpectrumTableRowData[] = [
+  {
+    key: "row-1",
+    foo: "Lvl 1 Foo 1",
+    bar: "Lvl 1 Bar 1",
+    baz: "Lvl 1 Baz 1",
+    childRows: [
+      {
+        key: "row-1-1",
+        foo: "Lvl 2 Foo 1",
+        bar: "Lvl 2 Bar 1",
+        baz: "Lvl 2 Baz 1",
+        childRows: [
+          {
+            key: "row-1-1-1",
+            foo: "Lvl 3 Foo 1",
+            bar: "Lvl 3 Bar 1",
+            baz: "Lvl 3 Baz 1",
+          },
+        ],
+      },
+    ],
   },
 ];
 
@@ -253,5 +284,58 @@ describe("TableView nested rows", () => {
     expect(rows).toHaveLength(3);
     expect(rows[0]!.find('[role="rowheader"]').attributes("aria-colindex")).toBe("2");
     expect(rows[1]!.attributes("aria-level")).toBe("2");
+  });
+
+  it("does not render child rows if parent keys are not expanded", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Deep nested table",
+        columns,
+        items: deepNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: new Set(["row-1-1"]),
+      },
+      attachTo: document.body,
+    });
+
+    let rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.text()).toContain("Lvl 1 Foo 1");
+
+    await wrapper.setProps({
+      UNSTABLE_expandedKeys: new Set(["row-1", "row-1-1"]),
+    });
+
+    rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(3);
+    expect(rows[1]!.text()).toContain("Lvl 2 Foo 1");
+    expect(rows[2]!.text()).toContain("Lvl 3 Foo 1");
+  });
+
+  it("places the expander on the first row header when multiple row headers exist", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Multi-row-header nested table",
+        columns: multiRowHeaderColumns,
+        items: nestedItems,
+        selectionMode: "multiple",
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+
+    for (const row of rows.slice(0, 2)) {
+      const rowHeaders = row.findAll('[role="rowheader"]');
+      expect(rowHeaders).toHaveLength(2);
+      expect(rowHeaders[0]!.find('[data-table-expander="true"]').exists()).toBe(true);
+      expect(rowHeaders[1]!.find('[data-table-expander="true"]').exists()).toBe(false);
+      expect(rowHeaders[0]!.attributes("aria-colindex")).toBe("2");
+    }
   });
 });
