@@ -10409,3 +10409,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` router-link parity update:
+  - added migrated RouterProvider link-item coverage for picker popup options, including router `useHref` mapping and `navigate` dispatch with `routerOptions`.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 20 tests).
+- Validation: `npm run check -- --pretty false` passed.
