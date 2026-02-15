@@ -11681,6 +11681,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 178 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1369 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid interaction parity coverage expansion:
+  - expanded nested-row regression coverage for:
+    - expander visibility scoping (only rows with nested children render expanders).
+    - selectable-table interaction parity where expander clicks preserve row selection behavior while toggling expansion.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 124 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 180 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1371 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` selection-checkbox parity refinement:
   - wired dedicated table selection checkbox rendering for header/body selection cells:
     - `TableHeaderCell` now renders select-all checkbox semantics via `useTableSelectAllCheckbox`.

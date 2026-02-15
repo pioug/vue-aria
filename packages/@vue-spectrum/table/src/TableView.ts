@@ -715,9 +715,7 @@ const TableBodyCell = defineComponent({
                   "data-table-expander": "true",
                   "aria-label": isExpanded.value ? "Collapse row" : "Expand row",
                   "aria-expanded": isExpanded.value ? "true" : "false",
-                  onClick: (event: MouseEvent) => {
-                    event.preventDefault();
-                    event.stopPropagation();
+                  onClick: () => {
                     toggleExpanded();
                   },
                 },

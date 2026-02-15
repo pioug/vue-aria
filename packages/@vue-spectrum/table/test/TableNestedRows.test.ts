@@ -145,6 +145,55 @@ describe("TableView nested rows", () => {
     expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(2);
   });
 
+  it("renders row expanders only for rows that have nested children", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows table",
+        columns,
+        items: nestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(3);
+    expect(rows[0]!.find('[data-table-expander="true"]').exists()).toBe(true);
+    expect(rows[1]!.find('[data-table-expander="true"]').exists()).toBe(false);
+    expect(rows[2]!.find('[data-table-expander="true"]').exists()).toBe(false);
+  });
+
+  it("preserves row selection behavior when pressing the expander", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows table",
+        columns,
+        items: nestedItems,
+        selectionMode: "single",
+        selectionStyle: "highlight",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+      },
+      attachTo: document.body,
+    });
+
+    const firstRowExpander = wrapper
+      .findAll('tbody [role="row"]')[0]!
+      .get('[data-table-expander="true"]');
+    await firstRowExpander.trigger("click");
+    await nextTick();
+
+    expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(3);
+    const firstRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    expect(firstRow.attributes("aria-selected")).toBe("true");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange.mock.calls[0]?.[0]).toEqual(new Set(["row-1"]));
+  });
+
   it("supports controlled expanded keys callbacks", async () => {
     enableTableNestedRows();
     const onExpandedChange = vi.fn();
