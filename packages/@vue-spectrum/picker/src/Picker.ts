@@ -138,6 +138,7 @@ export const Picker = defineComponent({
   setup(props, { attrs, slots, expose }) {
     const triggerRef = ref<HTMLElement | null>(null);
     const openedFromPressStart = ref(false);
+    const pendingTouchOpen = ref(false);
     const triggerRefObject = {
       get current() {
         return triggerRef.value;
@@ -273,20 +274,52 @@ export const Picker = defineComponent({
       const onTriggerPressStart = (event: MouseEvent | PointerEvent) => {
         if (props.isDisabled) {
           openedFromPressStart.value = false;
+          pendingTouchOpen.value = false;
+          return;
+        }
+
+        const isTouchPointerEvent =
+          "pointerType" in event
+          && (event as PointerEvent).pointerType === "touch";
+
+        if (isTouchPointerEvent) {
+          openedFromPressStart.value = false;
+          pendingTouchOpen.value = true;
           return;
         }
 
         if ("button" in event && event.button !== 0) {
           openedFromPressStart.value = false;
+          pendingTouchOpen.value = false;
           return;
         }
 
         if (state.isOpen) {
           openedFromPressStart.value = false;
+          pendingTouchOpen.value = false;
           return;
         }
 
         openedFromPressStart.value = true;
+        pendingTouchOpen.value = false;
+        state.open(null);
+      };
+      const onTriggerTouchStart = () => {
+        if (props.isDisabled) {
+          pendingTouchOpen.value = false;
+          return;
+        }
+
+        pendingTouchOpen.value = true;
+      };
+      const onTriggerTouchEnd = () => {
+        if (props.isDisabled || state.isOpen || !pendingTouchOpen.value) {
+          pendingTouchOpen.value = false;
+          return;
+        }
+
+        openedFromPressStart.value = true;
+        pendingTouchOpen.value = false;
         state.open(null);
       };
       const onTriggerKeyDown = (event: KeyboardEvent) => {
@@ -420,6 +453,10 @@ export const Picker = defineComponent({
               onPointerDown: onTriggerPressStart,
               onMousedown: onTriggerPressStart,
               onMouseDown: onTriggerPressStart,
+              onTouchstart: onTriggerTouchStart,
+              onTouchStart: onTriggerTouchStart,
+              onTouchend: onTriggerTouchEnd,
+              onTouchEnd: onTriggerTouchEnd,
               onKeydown: onTriggerKeyDown,
               onKeyDown: onTriggerKeyDown,
               onBlur: onTriggerBlur,

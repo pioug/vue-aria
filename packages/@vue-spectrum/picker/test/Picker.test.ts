@@ -15,6 +15,12 @@ const items = [
   { key: "3", label: "Three" },
 ];
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 function renderPicker(props: Record<string, unknown> = {}) {
   return mount(Picker as any, {
     props: {
@@ -93,6 +99,37 @@ describe("Picker", () => {
 
     expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
     expect(trigger.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("opens on touch end", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      onOpenChange,
+    });
+    const trigger = wrapper.get("button");
+
+    await trigger.trigger("touchstart", {
+      targetTouches: [{ identifier: 1 }],
+    });
+    await nextTick();
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+
+    await trigger.trigger("touchend", {
+      changedTouches: [{ identifier: 1, clientX: 0, clientY: 0 }],
+    });
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(listbox?.id);
+
+    // Touch interactions set a short global mouse suppression window in useHover.
+    // Wait it out so subsequent hover tests are not order-dependent.
+    await delay(60);
+    setInteractionModality("keyboard");
   });
 
   it("opens on trigger press and selects an option", async () => {

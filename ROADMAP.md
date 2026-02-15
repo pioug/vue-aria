@@ -11295,3 +11295,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 71 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` touch-open parity refinement:
+  - aligned trigger press-start behavior to defer touch interactions until `touchend`, so picker menus open on touch-up and still avoid click double-toggle paths.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage asserting touchstart does not open, touchend opens, and trigger/listbox open-state wiring updates correctly.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - stabilized touch/hover suite ordering by waiting out emulated-mouse suppression in the new touch test before restoring keyboard modality.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 72 tests).
+- Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test` passed (7 files, 120 tests).
+- Validation: `npm run check -- --pretty false` passed.
