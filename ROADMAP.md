@@ -11145,3 +11145,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/src/Picker.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 39 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` pointer-open parity update:
+  - added migrated coverage asserting picker opens on primary-button `mousedown`.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - aligned picker trigger press-start handling to open on pointer/mouse down and avoid click double-toggle by tracking press-open state.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.

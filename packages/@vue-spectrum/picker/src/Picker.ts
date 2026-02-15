@@ -121,6 +121,7 @@ export const Picker = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const triggerRef = ref<HTMLElement | null>(null);
+    const openedFromPressStart = ref(false);
     const triggerRefObject = {
       get current() {
         return triggerRef.value;
@@ -228,9 +229,36 @@ export const Picker = defineComponent({
       };
       const onTriggerClick = (event: MouseEvent) => {
         (triggerProps.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
-        if (!props.isDisabled) {
-          state.toggle();
+
+        if (props.isDisabled) {
+          return;
         }
+
+        if (openedFromPressStart.value) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        state.toggle();
+      };
+      const onTriggerPressStart = (event: MouseEvent | PointerEvent) => {
+        if (props.isDisabled) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        if ("button" in event && event.button !== 0) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        if (state.isOpen) {
+          openedFromPressStart.value = false;
+          return;
+        }
+
+        openedFromPressStart.value = true;
+        state.open(null);
       };
       const onTriggerKeyDown = (event: KeyboardEvent) => {
         const triggerKeyDown =
@@ -316,6 +344,10 @@ export const Picker = defineComponent({
               class: "spectrum-Dropdown-trigger",
               disabled: props.isDisabled || undefined,
               onClick: onTriggerClick,
+              onPointerdown: onTriggerPressStart,
+              onPointerDown: onTriggerPressStart,
+              onMousedown: onTriggerPressStart,
+              onMouseDown: onTriggerPressStart,
               onKeydown: onTriggerKeyDown,
               onKeyDown: onTriggerKeyDown,
               onBlur: onTriggerBlur,

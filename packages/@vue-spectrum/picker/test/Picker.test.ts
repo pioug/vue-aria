@@ -82,6 +82,17 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Select…");
   });
 
+  it("opens on mouse down", async () => {
+    const wrapper = renderPicker();
+    const trigger = wrapper.get("button");
+
+    await trigger.trigger("mousedown", { button: 0 });
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+  });
+
   it("opens on trigger press and selects an option", async () => {
     const onSelectionChange = vi.fn();
     const onOpenChange = vi.fn();
