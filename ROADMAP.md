@@ -10650,3 +10650,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 32 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` default-input parity update:
+  - added migrated coverage asserting `defaultInputValue` remains source-of-truth when it differs from `defaultSelectedKey` text.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 33 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -160,6 +160,15 @@ describe("ComboBox", () => {
     expect(wrapper.classes()).toContain("is-invalid");
   });
 
+  it("keeps defaultInputValue when it differs from defaultSelectedKey text", () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+      defaultInputValue: "Custom value",
+    });
+
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Custom value");
+  });
+
   it("keeps controlled selectedKey value on selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
