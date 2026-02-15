@@ -266,6 +266,32 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("calls onOpenChange when selecting an already-selected item in selectedKey-controlled mode", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      onOpenChange,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, "manual");
+
+    const selectedOption = wrapper
+      .findAll('[role="option"]')
+      .find((option) => option.attributes("aria-selected") === "true");
+    expect(selectedOption).toBeDefined();
+    await selectedOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
   it("updates when selectedKey and inputValue controlled props change together", async () => {
     const wrapper = renderComboBox({
       selectedKey: "2",

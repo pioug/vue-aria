@@ -10805,3 +10805,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 56 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` selected-item open-change parity update:
+  - added migrated coverage asserting selectedKey-controlled comboboxes emit close callbacks when users select the currently selected option.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 57 tests).
+- Validation: `npm run check -- --pretty false` passed.
