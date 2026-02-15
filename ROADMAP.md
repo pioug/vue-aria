@@ -12034,6 +12034,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 185 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 241 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` pointer range-selection coverage expansion:
+  - extended the shared test press helper to forward keyboard-modifier options through pointer/click event sequences.
+  - added checkbox-style `Shift+click` range-selection integration coverage to assert contiguous multi-row selection accumulation.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 186 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 242 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` keyboard range-selection depth expansion:
   - strengthened `Shift+ArrowUp` checkbox-selection coverage to validate multi-step accumulation across successive upward range-extension key presses.
   - assertions now verify full three-row selection after two consecutive upward range-extension steps starting from the last row.

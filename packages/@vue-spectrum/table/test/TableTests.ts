@@ -277,18 +277,23 @@ function renderTable(props: Record<string, unknown> = {}) {
   });
 }
 
-async function press(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }) {
+async function press(
+  target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> },
+  options: Record<string, unknown> = {}
+) {
   await target.trigger("pointerdown", {
     button: 0,
     pointerId: 1,
     pointerType: "mouse",
+    ...options,
   });
   await target.trigger("pointerup", {
     button: 0,
     pointerId: 1,
     pointerType: "mouse",
+    ...options,
   });
-  await target.trigger("click", { button: 0 });
+  await target.trigger("click", { button: 0, ...options });
   await nextTick();
 }
 
@@ -2340,6 +2345,33 @@ export function tableTests() {
     expect(lastSelection).toBeInstanceOf(Set);
     expect(lastSelection?.size).toBe(1);
     expect(lastSelection?.has("row-2")).toBe(true);
+  });
+
+  it("supports shift-click pointer range selection", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+
+    await press(bodyRows[0]!);
+    onSelectionChange.mockClear();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[2]!, { shiftKey: true });
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-2", "row-3"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
   it("supports multiple checkbox-style selection callbacks", async () => {
