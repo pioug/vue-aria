@@ -11,6 +11,7 @@ export {
 
 export type {
   SpectrumTableViewProps,
+  SpectrumTableDragAndDropHooks,
   SpectrumColumnProps,
   SpectrumTableHeaderProps,
   SpectrumTableBodyProps,

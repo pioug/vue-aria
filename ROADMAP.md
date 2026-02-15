@@ -12356,3 +12356,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 254 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 310 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` drag-hook/docs parity follow-up:
+  - exported `SpectrumTableDragAndDropHooks` from package public types.
+  - expanded table docs key-prop guidance to include `showDragButtons`, `dragAndDropHooks`, and drag-column behavior notes.
+  - added migrated nested-row coverage ensuring `dragAndDropHooks.useDraggableCollectionState` enables treegrid drag columns and row drag-handle rendering.
+  - `packages/@vue-spectrum/table/src/index.ts`
+  - `docs/packages/spectrum-table.md`
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 255 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 311 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -94,6 +94,8 @@ Column resizing is supported via `columns[].allowsResizing` (or `allows-resizing
 - `allowDuplicateSelectionEvents`: emits `onSelectionChange` even when the next selected-key set is equal to the current controlled selection.
 - `escapeKeyBehavior`: `"clearSelection" | "none"` to control Escape-key clearing behavior in selectable tables.
 - `shouldSelectOnPressUp`: defers pointer-driven selection from press-start to press-up/click handling.
+- `showDragButtons`: forces drag-column rendering (drag header + row drag-handle cells) for structural parity flows.
+- `dragAndDropHooks`: drag-column rendering also auto-enables when `dragAndDropHooks.useDraggableCollectionState` is provided (matching upstream activation semantics).
 - `sortDescriptor` / `defaultSortDescriptor` with `onSortChange`.
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
 - `onResizeStart`, `onResize`, and `onResizeEnd` receive a `Map` of column widths during resize interactions.
@@ -139,6 +141,14 @@ Pass `renderEmptyState` to render custom body content when the collection has no
 ## Unsafe Passthrough Props
 
 Use `UNSAFE_className` and `UNSAFE_style` to append custom classes/styles to the underlying grid element.
+
+## Drag Column Notes
+
+When drag columns are enabled, the table prepends:
+- a drag header cell (`react-spectrum-Table-dragButtonHeadCell`)
+- per-row drag cells (`react-spectrum-Table-cell--dragButtonCell`) with localized drag-handle labels.
+
+Drag handles are suppressed for rows that are fully disabled under `disabledBehavior="all"`.
 
 ## Related
 

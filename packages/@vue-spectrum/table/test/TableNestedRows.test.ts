@@ -530,6 +530,37 @@ describe("TableView nested rows", () => {
     expect(rowCells[1]!.classes()).toContain("react-spectrum-Table-cell--selectionCell");
   });
 
+  it("renders treegrid drag columns when draggable hooks are provided", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows drag hooks table",
+        columns,
+        items: nestedItems,
+        dragAndDropHooks: {
+          useDraggableCollectionState: vi.fn(),
+        },
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const treegrid = wrapper.get('[role="treegrid"]');
+    expect(treegrid.attributes("aria-colcount")).toBe("4");
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(4);
+    expect(headerCells[0]!.classes()).toContain("react-spectrum-Table-dragButtonHeadCell");
+
+    const firstRow = wrapper.findAll('tbody [role="row"]')[0]!;
+    const rowHeader = firstRow.get('[role="rowheader"]');
+    const rowCells = firstRow.findAll('[role="gridcell"]');
+    expect(rowHeader.attributes("aria-colindex")).toBe("2");
+    expect(rowCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(rowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
+  });
+
   it("supports selecting nested rows through row checkboxes", async () => {
     enableTableNestedRows();
     const onSelectionChange = vi.fn();
