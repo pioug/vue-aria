@@ -844,6 +844,32 @@ describe("ComboBox", () => {
     expect(options).toHaveLength(3);
   });
 
+  it("shows all options on ArrowDown-open when defaultInputValue is set", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        defaultInputValue: "Tw",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+  });
+
   it("opens when typing by default", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');
