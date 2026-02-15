@@ -1155,6 +1155,39 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("resets input value and closes the menu when pressing Escape", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        defaultSelectedKey: "two",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("Th");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect((input.element as HTMLInputElement).value).toBe("Th");
+
+    await input.trigger("keydown", { key: "Escape" });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
