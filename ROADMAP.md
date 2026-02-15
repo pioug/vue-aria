@@ -11131,3 +11131,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 117 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` open-tab focus-containment parity update:
+  - added migrated coverage asserting Tab on an open picker trigger keeps the overlay open and moves focus into the listbox.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - updated picker trigger keydown wiring to hand off focus to the open listbox on Tab for parity with upstream tab-containment behavior.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 38 tests).
+- Validation: `npm run check -- --pretty false` passed.

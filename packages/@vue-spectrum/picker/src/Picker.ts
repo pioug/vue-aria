@@ -215,6 +215,20 @@ export const Picker = defineComponent({
           state.toggle();
         }
       };
+      const onTriggerKeyDown = (event: KeyboardEvent) => {
+        const triggerKeyDown =
+          (triggerProps.onKeyDown ??
+            triggerProps.onKeydown) as ((event: KeyboardEvent) => void) | undefined;
+        triggerKeyDown?.(event);
+
+        if (!event.defaultPrevented && event.key === "Tab" && state.isOpen) {
+          event.preventDefault();
+          const listboxId = menuProps.id as string | undefined;
+          if (listboxId) {
+            document.getElementById(listboxId)?.focus();
+          }
+        }
+      };
 
       return h(
         "div",
@@ -261,10 +275,8 @@ export const Picker = defineComponent({
               class: "spectrum-Dropdown-trigger",
               disabled: props.isDisabled || undefined,
               onClick: onTriggerClick,
-              onKeydown: (triggerProps.onKeyDown ??
-                triggerProps.onKeydown) as ((event: KeyboardEvent) => void) | undefined,
-              onKeyDown: (triggerProps.onKeyDown ??
-                triggerProps.onKeydown) as ((event: KeyboardEvent) => void) | undefined,
+              onKeydown: onTriggerKeyDown,
+              onKeyDown: onTriggerKeyDown,
             },
             [
               h(

@@ -451,6 +451,71 @@ describe("Picker", () => {
     expect(trigger.attributes("aria-expanded")).toBe("false");
   });
 
+  it("keeps focus in the picker overlay when tabbing while open", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(Provider as any, { theme }, () => [
+              h("input", {
+                "data-testid": "before-input",
+              }),
+              h(Picker as any, {
+                label: "Test",
+                onOpenChange,
+              }, {
+                default: () => [
+                  h(Item as any, { id: "one" }, { default: () => "One" }),
+                  h(Item as any, { id: "two" }, { default: () => "Two" }),
+                  h(Item as any, { id: "three" }, { default: () => "Three" }),
+                ],
+              }),
+              h("input", {
+                "data-testid": "after-input",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get('button[aria-haspopup="listbox"]');
+    (trigger.element as HTMLElement).focus();
+    await nextTick();
+    await trigger.trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    expect(listbox).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(listbox?.id);
+
+    (trigger.element as HTMLElement).dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+      })
+    );
+    (trigger.element as HTMLElement).dispatchEvent(
+      new KeyboardEvent("keyup", {
+        key: "Tab",
+        bubbles: true,
+      })
+    );
+    await nextTick();
+
+    const openListbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    expect(openListbox).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(trigger.attributes("aria-controls")).toBe(openListbox?.id);
+    expect(document.activeElement).toBe(openListbox);
+  });
+
   it("supports hidden select form attributes and default value", () => {
     const wrapper = renderPicker({
       name: "picker",
