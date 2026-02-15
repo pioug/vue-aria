@@ -41,6 +41,7 @@ import { ComboBox, Item, Section } from "@vue-spectrum/combobox";
 ## Key Props
 
 - `items` for data-driven suggestions.
+- `disabledKeys` for externally disabling specific option keys.
 - `selectedKey` / `defaultSelectedKey` for selection state.
 - `inputValue` / `defaultInputValue` for text input control.
 - `isOpen` / `defaultOpen` for popup state control.
