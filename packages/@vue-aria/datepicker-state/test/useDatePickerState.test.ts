@@ -1,5 +1,5 @@
 import { CalendarDate, Time } from "@internationalized/date";
-import { effectScope } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
 import { useDatePickerState } from "../src/useDatePickerState";
 import { useDateRangePickerState } from "../src/useDateRangePickerState";
@@ -44,6 +44,29 @@ describe("useDatePickerState", () => {
     expect(state.value?.toString()).toBe("2024-07-04T09:30:00");
     expect(state.dateValue).toBeNull();
     expect(state.timeValue).toBeNull();
+
+    scope.stop();
+  });
+
+  it("syncs uncontrolled value when defaultValue changes", async () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useDatePickerState>;
+    const defaultValue = ref<CalendarDate | null>(new CalendarDate(2024, 3, 1));
+
+    scope.run(() => {
+      state = useDatePickerState({
+        get defaultValue() {
+          return defaultValue.value;
+        },
+      } as any);
+    });
+
+    expect(state.value?.toString()).toBe("2024-03-01");
+
+    defaultValue.value = new CalendarDate(2024, 3, 10);
+    await nextTick();
+
+    expect(state.value?.toString()).toBe("2024-03-10");
 
     scope.stop();
   });
@@ -116,6 +139,37 @@ describe("useDateRangePickerState", () => {
     });
 
     expect(state.isInvalid).toBe(true);
+
+    scope.stop();
+  });
+
+  it("syncs uncontrolled range when defaultValue changes", async () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useDateRangePickerState>;
+    const defaultValue = ref({
+      start: new CalendarDate(2024, 9, 1),
+      end: new CalendarDate(2024, 9, 5),
+    });
+
+    scope.run(() => {
+      state = useDateRangePickerState({
+        get defaultValue() {
+          return defaultValue.value;
+        },
+      } as any);
+    });
+
+    expect(state.value.start?.toString()).toBe("2024-09-01");
+    expect(state.value.end?.toString()).toBe("2024-09-05");
+
+    defaultValue.value = {
+      start: new CalendarDate(2024, 9, 10),
+      end: new CalendarDate(2024, 9, 15),
+    };
+    await nextTick();
+
+    expect(state.value.start?.toString()).toBe("2024-09-10");
+    expect(state.value.end?.toString()).toBe("2024-09-15");
 
     scope.stop();
   });

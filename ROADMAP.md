@@ -11361,3 +11361,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 141 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/datepicker-state` defaultValue-sync regression coverage:
+  - added state-hook tests asserting uncontrolled date picker and range picker values synchronize when reactive `defaultValue` props change.
+    - `packages/@vue-aria/datepicker-state/test/useDatePickerState.test.ts`
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 157 tests).
+- Validation: `npm run check -- --pretty false` passed.
