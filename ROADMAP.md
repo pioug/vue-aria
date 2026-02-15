@@ -11629,3 +11629,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/menu/test` passed (6 files, 103 tests).
 - Validation: `npm test -- packages/@vue-spectrum/menu/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test packages/@vue-spectrum/tabs/test packages/@vue-spectrum/calendar/test packages/@vue-spectrum/datepicker/test` passed (15 files, 462 tests) with no Vue default-slot-outside-render warnings.
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/breadcrumbs` slot-collection warning stabilization:
+  - moved breadcrumb slot-child collection from setup-time computed evaluation to render-time signature synchronization, eliminating setup-time default-slot reads while preserving overflow/menu behavior.
+    - `packages/@vue-spectrum/breadcrumbs/src/Breadcrumbs.ts`
+  - added explicit regression coverage asserting slot-defined breadcrumb items do not emit Vue's default-slot-outside-render warning.
+    - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 25 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (111 files, 1226 tests) with no Vue default-slot-outside-render warnings.
+- Validation: `npm run check -- --pretty false` passed.

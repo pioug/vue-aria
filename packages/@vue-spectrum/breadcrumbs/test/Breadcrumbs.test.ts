@@ -83,6 +83,30 @@ describe("Breadcrumbs", () => {
     expect(breadcrumbs.attributes("id")).toBe("breadcrumbs-id");
   });
 
+  it("does not warn when using slot-defined items", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const wrapper = renderBreadcrumbs(
+        {},
+        [
+          { key: "folder-1", label: "Folder 1" },
+          { key: "folder-2", label: "Folder 2" },
+          { key: "folder-3", label: "Folder 3" },
+        ]
+      );
+      await flushOverflow();
+      expect(wrapper.get("ul").findAll("li").length).toBeGreaterThan(0);
+      expect(
+        warnSpy.mock.calls.some((entry) =>
+          String(entry[0]).includes('Slot "default" invoked outside of the render function')
+        )
+      ).toBe(false);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("handles UNSAFE_className", async () => {
     const wrapper = renderBreadcrumbs({ UNSAFE_className: "test-class" });
     await flushOverflow();

@@ -3,7 +3,7 @@ import { ActionButton } from "@vue-spectrum/button";
 import { Menu, MenuTrigger, Item as MenuItemNode } from "@vue-spectrum/menu";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { useResizeObserver, useStyleProps, useValueEffect } from "@vue-spectrum/utils";
-import { computed, defineComponent, h, nextTick, onMounted, ref, watch, type PropType, type VNode } from "vue";
+import { defineComponent, h, nextTick, onMounted, ref, shallowRef, watch, type PropType, type VNode } from "vue";
 import { BreadcrumbItem } from "./BreadcrumbItem";
 import { Item } from "./Item";
 import type { SpectrumBreadcrumbsProps, SpectrumItemProps } from "./types";
@@ -37,6 +37,23 @@ function resolveActionKey(key: unknown, fallback: number): string | number {
   }
 
   return fallback;
+}
+
+function resolveChildContent(child: VNode): unknown {
+  if (typeof child.children === "object" && child.children && "default" in child.children) {
+    return (child.children as { default?: () => unknown }).default?.();
+  }
+
+  return child.children;
+}
+
+function getChildArraySignature(children: VNode[]): string {
+  return children.map((child, index) => {
+    const key = resolveActionKey(child.key, index);
+    const props = (child.props ?? {}) as Record<string, unknown>;
+    const textValue = resolveContentText(resolveChildContent(child)).trim();
+    return [String(key), String(props.href ?? ""), textValue].join(":");
+  }).join("|");
 }
 
 /**
@@ -98,20 +115,9 @@ export const Breadcrumbs = defineComponent({
     const { navProps } = useBreadcrumbs(merged);
     const { styleProps } = useStyleProps(merged);
 
-    const childArray = computed(() => {
-      const nodes = slots.default?.() ?? [];
-      const valid = nodes.filter((child): child is VNode => isRenderableNode(child));
-      return valid;
-    });
+    const childArray = shallowRef<VNode[]>([]);
+    const childArraySignature = ref("");
     const [visibleItems, setVisibleItems] = useValueEffect<number>(() => childArray.value.length);
-
-    const resolveChildContent = (child: VNode): unknown => {
-      if (typeof child.children === "object" && child.children && "default" in child.children) {
-        return (child.children as { default?: () => unknown }).default?.();
-      }
-
-      return child.children;
-    };
 
     const computeVisibleItems = (currentVisibleItems: number): number => {
       const currentListRef = listRef.value;
@@ -221,6 +227,13 @@ export const Breadcrumbs = defineComponent({
     });
 
     return () => {
+      const slotChildren = (slots.default?.() ?? []).filter((child): child is VNode => isRenderableNode(child));
+      const nextChildSignature = getChildArraySignature(slotChildren);
+      if (nextChildSignature !== childArraySignature.value) {
+        childArraySignature.value = nextChildSignature;
+        childArray.value = slotChildren;
+      }
+
       let contents = childArray.value;
       if (childArray.value.length > visibleItems.value) {
         const selectedItem = childArray.value[childArray.value.length - 1];
