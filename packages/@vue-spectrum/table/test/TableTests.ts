@@ -134,6 +134,12 @@ const columnsWithResizableFractionalWidths: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", defaultWidth: "2fr" },
 ];
 
+const columnsWithControlledResizableWidth: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, width: 220 },
+  { key: "bar", title: "Bar", defaultWidth: "1fr" },
+  { key: "baz", title: "Baz", defaultWidth: "1fr" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -792,6 +798,36 @@ export function tableTests() {
     expect(nextFooWidth).toBeGreaterThan(initialFooWidth);
     expect(nextBarWidth).toBeLessThan(initialBarWidth);
     expect(nextBazWidth).toBeLessThan(initialBazWidth);
+  });
+
+  it("keeps controlled column widths stable while emitting resize callbacks", async () => {
+    const onResize = vi.fn();
+    const onResizeEnd = vi.fn();
+    const wrapper = renderTable({
+      columns: columnsWithControlledResizableWidth,
+      onResize,
+      onResizeEnd,
+    });
+
+    const getHeader = () => wrapper.findAll('[role="columnheader"]')[0]!;
+    const getResizer = () => getHeader().get(".spectrum-Table-columnResizer");
+    const initialWidth = parseFloat((getHeader().element as HTMLElement).style.width);
+
+    await getResizer().trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await getResizer().trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    await getResizer().trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    const nextWidth = parseFloat((getHeader().element as HTMLElement).style.width);
+    expect(nextWidth).toBeCloseTo(initialWidth, 3);
+    expect(onResize).toHaveBeenCalled();
+    expect(onResizeEnd).toHaveBeenCalledTimes(1);
+
+    const resizeMap = onResize.mock.calls.at(-1)?.[0] as Map<TableKey, number | string> | undefined;
+    expect(resizeMap).toBeInstanceOf(Map);
+    expect((resizeMap?.get("foo") as number)).toBeGreaterThan(initialWidth);
   });
 
   it("supports static slot table syntax", async () => {
