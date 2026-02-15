@@ -135,6 +135,10 @@ When loading:
 - empty list renders a `Loading…` option with a progressbar
 - populated list renders a trailing `Loading more…` option
 
+Optional loading control:
+- `showLoadingSpinner` defaults to `true`.
+- set `:show-loading-spinner="false"` to suppress the spinner row while `isLoading` is true (useful when a parent component renders loading UI elsewhere).
+
 ## Link Items
 
 `Item` can render links with `href`. Internal navigation can be routed through `Provider` router config.
