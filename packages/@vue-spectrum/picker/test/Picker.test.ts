@@ -765,6 +765,17 @@ describe("Picker", () => {
     await nextTick();
 
     expect(navigate).toHaveBeenCalledWith("/one", { foo: "bar" });
+
+    navigate.mockReset();
+    options[1]?.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it.each(["mouse", "keyboard"] as const)(
