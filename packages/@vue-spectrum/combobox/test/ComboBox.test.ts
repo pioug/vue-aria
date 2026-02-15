@@ -823,6 +823,30 @@ describe("ComboBox", () => {
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
+  it("does not match any items when input is only a space", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue(" ");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("does not apply default filtering when controlled items are provided", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');

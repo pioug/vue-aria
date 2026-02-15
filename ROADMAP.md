@@ -10810,3 +10810,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 57 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` whitespace-filter parity update:
+  - added migrated coverage asserting whitespace-only input does not produce matches or open suggestions in uncontrolled filtering mode.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 58 tests).
+- Validation: `npm run check -- --pretty false` passed.
