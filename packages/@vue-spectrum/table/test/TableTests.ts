@@ -2510,9 +2510,16 @@ export function tableTests() {
     expect(lastSelection).toEqual(new Set(["row-1", "row-2"]));
 
     bodyRows = wrapper.findAll('tbody [role="row"]');
+    await bodyRows[1]!.trigger("keydown", { key: "ArrowDown", shiftKey: true });
+    await nextTick();
+
+    lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-2", "row-3"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
-    expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
   it("extends checkbox-style keyboard selection with Shift+ArrowUp", async () => {
