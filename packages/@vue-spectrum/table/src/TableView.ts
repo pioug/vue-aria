@@ -22,7 +22,7 @@ import {
 } from "@vue-aria/table-state";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { mergeProps } from "@vue-aria/utils";
-import { defineComponent, h, ref, shallowRef, computed, watchEffect, type PropType, type VNode, type VNodeChild } from "vue";
+import { defineComponent, h, ref, shallowRef, computed, watchEffect, nextTick, type PropType, type VNode, type VNodeChild } from "vue";
 import type {
   NormalizedSpectrumTableCell,
   NormalizedSpectrumTableColumn,
@@ -80,6 +80,7 @@ export interface SpectrumTableViewProps {
   onResize?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
   onResizeEnd?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
   onAction?: ((key: TableKey) => void) | undefined;
+  onLoadMore?: (() => void) | undefined;
   loadingState?: "idle" | "loading" | "loadingMore" | "filtering" | undefined;
   renderEmptyState?: (() => unknown) | undefined;
   ariaLabel?: string | undefined;
@@ -107,6 +108,7 @@ export interface SpectrumTableHeaderProps {
 
 export interface SpectrumTableBodyProps {
   items?: SpectrumTableRowData[] | undefined;
+  onLoadMore?: (() => void) | undefined;
   loadingState?: "idle" | "loading" | "loadingMore" | "filtering" | undefined;
 }
 
@@ -1768,6 +1770,10 @@ export const TableView = defineComponent({
       type: Function as PropType<((key: TableKey) => void) | undefined>,
       default: undefined,
     },
+    onLoadMore: {
+      type: Function as PropType<(() => void) | undefined>,
+      default: undefined,
+    },
     loadingState: {
       type: String as PropType<"idle" | "loading" | "loadingMore" | "filtering" | undefined>,
       default: undefined,
@@ -1851,6 +1857,8 @@ export const TableView = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const tableElementRef = ref<HTMLElement | null>(null);
+    const loadMoreRequested = ref(false);
+    const previousRowCount = ref(0);
     const tableRefObject = {
       get current() {
         return tableElementRef.value;
@@ -1917,6 +1925,9 @@ export const TableView = defineComponent({
     );
 
     const allRows = computed(() => flattenNormalizedRows(normalizedDefinition.value.rows));
+    const isLoadingState = computed(
+      () => props.loadingState === "loading" || props.loadingState === "loadingMore"
+    );
     const allowsExpandableRows = Boolean(props.UNSTABLE_allowsExpandableRows && tableNestedRows());
     const collection = computed(() =>
       createCollection(normalizedDefinition.value, {
@@ -1933,6 +1944,67 @@ export const TableView = defineComponent({
       }
 
       return disabledKeys;
+    });
+
+    const requestLoadMore = () => {
+      if (!props.onLoadMore || isLoadingState.value || loadMoreRequested.value) {
+        return;
+      }
+
+      loadMoreRequested.value = true;
+      props.onLoadMore();
+    };
+
+    const maybeLoadMoreByScrollPosition = () => {
+      const tableElement = tableElementRef.value;
+      if (!tableElement) {
+        return;
+      }
+
+      const scrollDistance = tableElement.scrollHeight - (tableElement.scrollTop + tableElement.clientHeight);
+      if (scrollDistance <= 1) {
+        requestLoadMore();
+      }
+    };
+
+    const maybeLoadMoreByTableHeight = () => {
+      const tableElement = tableElementRef.value;
+      if (!tableElement) {
+        return;
+      }
+
+      if (tableElement.scrollHeight <= tableElement.clientHeight + 1) {
+        requestLoadMore();
+      }
+    };
+
+    watchEffect(() => {
+      const nextRowCount = allRows.value.length;
+      if (nextRowCount !== previousRowCount.value) {
+        previousRowCount.value = nextRowCount;
+        loadMoreRequested.value = false;
+      }
+    });
+
+    watchEffect(() => {
+      if (isLoadingState.value) {
+        loadMoreRequested.value = false;
+      }
+    });
+
+    watchEffect(() => {
+      const hasLoadMore = Boolean(props.onLoadMore);
+      const isLoading = isLoadingState.value;
+      const rowCount = allRows.value.length;
+      const tableElement = tableElementRef.value;
+      if (!hasLoadMore || isLoading || !tableElement) {
+        return;
+      }
+
+      void rowCount;
+      nextTick(() => {
+        maybeLoadMoreByTableHeight();
+      });
     });
     const selectableRowKeys = computed(() => {
       const keys = new Set<TableKey>();
@@ -2125,11 +2197,15 @@ export const TableView = defineComponent({
       const isLoading = props.loadingState === "loading";
       const isLoadingMore = props.loadingState === "loadingMore";
       const loadingLabel = isLoadingMore ? "Loading more…" : "Loading…";
+      const handleTableScroll = () => {
+        maybeLoadMoreByScrollPosition();
+      };
 
       const tableProps = mergeProps(gridProps, attrsWithoutClassStyle, {
         role: (gridProps as Record<string, unknown>).role ?? "grid",
         "aria-colcount": state.collection.columnCount,
         "aria-rowcount": state.collection.size + headerRows.length,
+        onScroll: handleTableScroll,
         class: [
           attrsClass,
           "spectrum-Table",

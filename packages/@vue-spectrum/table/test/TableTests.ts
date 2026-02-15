@@ -4692,6 +4692,85 @@ export function tableTests() {
     expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
   });
 
+  it("fires onLoadMore when scrolling near the bottom", async () => {
+    const onLoadMore = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithFourRows,
+      onLoadMore,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    const element = grid.element as HTMLElement;
+    Object.defineProperty(element, "scrollHeight", {
+      configurable: true,
+      value: 4100,
+    });
+    Object.defineProperty(element, "clientHeight", {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(element, "scrollTop", {
+      configurable: true,
+      writable: true,
+      value: 250,
+    });
+
+    await grid.trigger("scroll");
+    expect(onLoadMore).not.toHaveBeenCalled();
+
+    element.scrollTop = 3200;
+    await grid.trigger("scroll");
+    expect(onLoadMore).toHaveBeenCalledTimes(1);
+  });
+
+  it("automatically fires onLoadMore when rows do not fill the table", async () => {
+    const scrollHeightSpy = vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(1000);
+    const clientHeightSpy = vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(1000);
+    try {
+      const onLoadMore = vi.fn();
+      renderTable({
+        items: [items[0]!],
+        onLoadMore,
+      });
+
+      await nextTick();
+      await nextTick();
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
+  it("does not fire onLoadMore while loading more rows", async () => {
+    const onLoadMore = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithFourRows,
+      loadingState: "loadingMore",
+      onLoadMore,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    const element = grid.element as HTMLElement;
+    Object.defineProperty(element, "scrollHeight", {
+      configurable: true,
+      value: 3000,
+    });
+    Object.defineProperty(element, "clientHeight", {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(element, "scrollTop", {
+      configurable: true,
+      writable: true,
+      value: 2200,
+    });
+
+    await grid.trigger("scroll");
+    expect(onLoadMore).not.toHaveBeenCalled();
+  });
+
   it("does not emit select-all callbacks for an empty checkbox table", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

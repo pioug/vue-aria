@@ -12222,3 +12222,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 222 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 278 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` async-load-more parity expansion:
+  - added `onLoadMore` support for:
+    - triggering near bottom scroll position.
+    - auto-triggering when rendered content height does not exceed table viewport height.
+    - suppressing load-more callbacks while `loadingState` is active (`loading`/`loadingMore`).
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 225 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 281 tests).
+- Validation: `npm run check -- --pretty false` passed.
