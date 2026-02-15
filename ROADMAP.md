@@ -11376,3 +11376,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 157 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` server-validation parity refinement:
+  - added migrated server-validation coverage for both picker variants across native and aria validation modes, including post-selection server-error clear behavior:
+    - `DatePicker`: native + aria server validation flows.
+    - `DateRangePicker`: native + aria server validation flows.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+  - fixed spectrum wrapper state wiring so form validation context lookup keys are forwarded to stately hooks:
+    - forwarded `name` into date picker state options.
+    - forwarded `startName`/`endName` into range picker state options.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 145 tests).
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 163 tests).
+- Validation: `npm run check -- --pretty false` passed.

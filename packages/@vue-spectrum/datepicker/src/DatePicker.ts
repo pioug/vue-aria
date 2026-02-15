@@ -416,6 +416,9 @@ export const DatePicker = defineComponent({
       get shouldCloseOnSelect() {
         return merged.shouldCloseOnSelect;
       },
+      get name() {
+        return merged.name;
+      },
     } as any);
 
     const pickerAria = useDatePicker(
@@ -999,6 +1002,12 @@ export const DateRangePicker = defineComponent({
       },
       get allowsNonContiguousRanges() {
         return merged.allowsNonContiguousRanges;
+      },
+      get startName() {
+        return merged.startName;
+      },
+      get endName() {
+        return merged.endName;
       },
     } as any);
 
