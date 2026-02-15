@@ -10472,3 +10472,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 34 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` docs parity update:
+  - expanded `docs/packages/spectrum-picker.md` coverage with:
+    - async loading behavior (`isLoading`) for trigger and menu states
+    - link-item and Provider-router usage patterns
+    - hidden-select form/autocomplete guidance (`name`, `form`, `autoComplete`)
+    - `docs/packages/spectrum-picker.md`
+- Validation: `npm run check -- --pretty false` passed.

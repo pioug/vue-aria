@@ -43,8 +43,9 @@ import { Item, Picker, Section } from "@vue-spectrum/picker";
 - `items` for data-driven options.
 - `selectedKey` / `defaultSelectedKey` for controlled or uncontrolled selection.
 - `isOpen` / `defaultOpen` for controlled or uncontrolled menu state.
+- `isLoading` for trigger and menu loading indicators.
 - `onSelectionChange` and `onOpenChange` callbacks.
-- `name` and `form` for hidden native select form integration.
+- `name`, `form`, and `autoComplete` for hidden native select form/autofill integration.
 
 ## Controlled And Uncontrolled Selection
 
@@ -122,6 +123,80 @@ const handleOpenChange = (next: boolean) => {
 ## Falsy Keys
 
 Picker supports string/number keys including falsy values such as `""` and `0`.
+
+## Async Loading
+
+Picker renders loading indicators for both initial and incremental loading states.
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { Picker } from "@vue-spectrum/picker";
+
+const items = ref<{ key: string; label: string }[]>([]);
+const isLoading = ref(true);
+
+setTimeout(() => {
+  items.value = [
+    { key: "one", label: "One" },
+    { key: "two", label: "Two" },
+  ];
+  isLoading.value = false;
+}, 500);
+</script>
+
+<template>
+  <Picker
+    aria-label="Async picker"
+    :items="items"
+    :is-loading="isLoading"
+  />
+</template>
+```
+
+- no items + `isLoading`: trigger-level spinner (`Loading…`)
+- with items + `isLoading`: loading-more spinner row inside the popup listbox (`Loading more…`)
+
+## Link Items And Routing
+
+Picker options can render as links using slot items.
+
+```vue
+<script setup lang="ts">
+import { Item, Picker } from "@vue-spectrum/picker";
+</script>
+
+<template>
+  <Picker aria-label="Navigation">
+    <Item id="home" href="/home" :router-options="{ from: 'picker' }">Home</Item>
+    <Item id="docs" href="https://adobe.com">Docs</Item>
+  </Picker>
+</template>
+```
+
+When used inside `@vue-spectrum/provider`, internal links can be resolved and navigated through the provided router.
+
+## Form Integration
+
+Picker includes a hidden native `<select>` so standard form submission and browser autofill continue to work.
+
+```vue
+<template>
+  <form id="profile">
+    <Picker
+      aria-label="State"
+      name="state"
+      form="profile"
+      auto-complete="address-level1"
+      :items="[
+        { key: 'ca', label: 'California' },
+        { key: 'ny', label: 'New York' }
+      ]"
+      default-selected-key="ca"
+    />
+  </form>
+</template>
+```
 
 ## Accessibility
 
