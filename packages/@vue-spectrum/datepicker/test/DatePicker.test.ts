@@ -1402,6 +1402,45 @@ describe("DatePicker", () => {
     expect((input.element as HTMLInputElement).validationMessage).toContain("Constraints not satisfied");
   });
 
+  it("supports custom native date error messages", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(DatePicker as any, {
+                "aria-label": "Date picker",
+                name: "eventDate",
+                placeholderValue: new CalendarDate(2019, 6, 5),
+                isRequired: true,
+                validationBehavior: "native",
+                errorMessage: (validation: { validationDetails: ValidityState | null }) =>
+                  validation.validationDetails?.valueMissing ? "Please enter a value" : null,
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[name="eventDate"]');
+    expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
+
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).checkValidity()).toBe(false);
+    (input.element as HTMLInputElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DatePicker-error").text()).toContain("Please enter a value");
+  });
+
   it("clears native date required validation after selecting a date", async () => {
     const wrapper = mount(
       defineComponent({
@@ -3221,6 +3260,46 @@ describe("DateRangePicker", () => {
     expect((startInput.element as HTMLInputElement).checkValidity()).toBe(false);
     expect((startInput.element as HTMLInputElement).validity.valid).toBe(false);
     expect((startInput.element as HTMLInputElement).validationMessage).toContain("Constraints not satisfied");
+  });
+
+  it("supports custom native range error messages", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(DateRangePicker as any, {
+                "aria-label": "Date range picker",
+                startName: "rangeStart",
+                endName: "rangeEnd",
+                placeholderValue: new CalendarDate(2019, 6, 5),
+                isRequired: true,
+                validationBehavior: "native",
+                errorMessage: (validation: { validationDetails: ValidityState | null }) =>
+                  validation.validationDetails?.valueMissing ? "Please enter a value" : null,
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const startInput = wrapper.get('input[name="rangeStart"]');
+    expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
+
+    await nextTick();
+    await nextTick();
+    expect((startInput.element as HTMLInputElement).checkValidity()).toBe(false);
+    (startInput.element as HTMLInputElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.get(".react-spectrum-DateRangePicker-error").text()).toContain("Please enter a value");
   });
 
   it("clears native range required validation after selecting a date range", async () => {

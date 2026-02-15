@@ -11412,3 +11412,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 151 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 169 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` native custom-error parity refinement:
+  - added migrated native-validation coverage asserting custom `errorMessage` callbacks surface required-value messages for both picker variants after native validity commit events.
+    - `DatePicker`: custom native required error message flow.
+    - `DateRangePicker`: custom native required error message flow.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+  - aligned native-validation test timing to Vue lifecycle so `useFormValidation` native snapshots are committed before invalid-event assertions.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
+- Validation: `npm run check -- --pretty false` passed.
