@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/combobox`
+- Current focus package: `@vue-spectrum/table`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -11647,4 +11647,25 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - closed remaining button-slice completion items and aligned execution queue status with completed package state.
 - Validation: `npm test -- packages/@vue-spectrum/button/test` passed (5 files, 62 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (111 files, 1226 tests) with no Vue default-slot-outside-render warnings.
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` expandable-rows treegrid parity refinement:
+  - wired expandable treegrid props and state flow in `TableView`:
+    - added `UNSTABLE_allowsExpandableRows`, `UNSTABLE_expandedKeys`, `UNSTABLE_defaultExpandedKeys`, and `UNSTABLE_onExpandedChange` support.
+    - switched to `UNSTABLE_useTreeGridState` when expandable rows are enabled with the nested-rows feature flag.
+    - preserved regular table behavior when expandable rows are disabled.
+    - updated table rendering to respect treegrid role/row-index semantics (header/body rows no explicit `aria-rowindex` in treegrid mode).
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - extended table row normalization for nested data parity:
+    - added nested row parsing/normalization for both slot and prop data (`childRows` / `UNSTABLE_childItems`) and collection generation for nested rows.
+    - `packages/@vue-spectrum/table/src/types.ts`
+  - aligned treegrid collection metadata so flattened rows retain `indexOfType`, restoring correct `aria-setsize` semantics for top-level rows in treegrid mode.
+    - `packages/@vue-aria/table-state/src/useTreeGridState.ts`
+  - added migrated nested-row coverage:
+    - treegrid rendering semantics with expanded rows.
+    - keyboard collapse/expand toggles with ArrowLeft/ArrowRight.
+    - controlled expanded-key callback flow.
+    - treegrid selection-column semantics with nested rows.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 177 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1368 tests).
 - Validation: `npm run check -- --pretty false` passed.

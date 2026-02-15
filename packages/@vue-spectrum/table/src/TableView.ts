@@ -1,5 +1,14 @@
 import { useTable, useTableCell, useTableColumnHeader, useTableRow } from "@vue-aria/table";
-import { TableCollection, useTableState, type GridNode, type SortDescriptor, type TableState } from "@vue-aria/table-state";
+import { tableNestedRows } from "@vue-aria/flags";
+import {
+  TableCollection,
+  UNSTABLE_useTreeGridState,
+  useTableState,
+  type GridNode,
+  type SortDescriptor,
+  type TableState,
+  type TreeGridState,
+} from "@vue-aria/table-state";
 import { mergeProps } from "@vue-aria/utils";
 import { defineComponent, h, ref, shallowRef, computed, watchEffect, type PropType, type VNode, type VNodeChild } from "vue";
 import type {
@@ -47,6 +56,10 @@ export interface SpectrumTableViewProps {
   autoFocus?: true | "first" | "last" | undefined;
   sortDescriptor?: SpectrumSortDescriptor | null | undefined;
   defaultSortDescriptor?: SpectrumSortDescriptor | null | undefined;
+  UNSTABLE_allowsExpandableRows?: boolean | undefined;
+  UNSTABLE_expandedKeys?: "all" | Iterable<TableKey> | undefined;
+  UNSTABLE_defaultExpandedKeys?: "all" | Iterable<TableKey> | undefined;
+  UNSTABLE_onExpandedChange?: ((keys: Set<TableKey>) => void) | undefined;
   onSortChange?: ((descriptor: SpectrumSortDescriptor) => void) | undefined;
   onSelectionChange?: ((keys: Set<TableKey>) => void) | undefined;
   onAction?: ((key: TableKey) => void) | undefined;
@@ -88,6 +101,7 @@ export interface SpectrumRowProps {
   id?: TableKey | undefined;
   textValue?: string | undefined;
   isDisabled?: boolean | undefined;
+  UNSTABLE_childItems?: Iterable<SpectrumTableRowData> | undefined;
 }
 
 export interface SpectrumCellProps extends SpectrumTableCellData {
@@ -128,6 +142,22 @@ function setsEqual(left: Set<TableKey>, right: Set<TableKey>): boolean {
   return true;
 }
 
+function flattenNormalizedRows(rows: NormalizedSpectrumTableRow[]): NormalizedSpectrumTableRow[] {
+  const flattened: NormalizedSpectrumTableRow[] = [];
+  const visit = (row: NormalizedSpectrumTableRow) => {
+    flattened.push(row);
+    for (const childRow of row.childRows) {
+      visit(childRow);
+    }
+  };
+
+  for (const row of rows) {
+    visit(row);
+  }
+
+  return flattened;
+}
+
 function isRenderableNode(node: VNode): boolean {
   return typeof node.type !== "symbol";
 }
@@ -151,14 +181,22 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
       ].join(":")
     )
     .join("|");
-  const rowSignature = definition.rows
-    .map((row) => {
-      const cells = row.cells
-        .map((cell) => [String(cell.key ?? ""), cell.textValue ?? "", cell.colSpan ?? ""].join(":"))
-        .join(",");
-      return [String(row.key ?? ""), row.textValue ?? "", row.isDisabled ? "1" : "0", cells].join(":");
-    })
-    .join("|");
+  const createRowSignature = (row: NormalizedSpectrumTableRow | ParsedSpectrumTableDefinition["rows"][number]): string => {
+    const cells = row.cells
+      .map((cell) => [String(cell.key ?? ""), cell.textValue ?? "", cell.colSpan ?? ""].join(":"))
+      .join(",");
+    const childRows = "childRows" in row && Array.isArray(row.childRows)
+      ? row.childRows.map((childRow) => createRowSignature(childRow as any)).join(";")
+      : "";
+    return [
+      String(row.key ?? ""),
+      row.textValue ?? "",
+      row.isDisabled ? "1" : "0",
+      cells,
+      childRows,
+    ].join(":");
+  };
+  const rowSignature = definition.rows.map((row) => createRowSignature(row as any)).join("|");
 
   return `${columnSignature}__${rowSignature}`;
 }
@@ -250,21 +288,30 @@ function createRowCellNodes(
   return cells;
 }
 
-function createCollection(definition: NormalizedSpectrumTableDefinition): TableCollection<NormalizedSpectrumTableRow> {
-  const columnNodes = createColumnNodes(definition);
-  for (let index = 0; index < columnNodes.length; index += 1) {
-    if (index < columnNodes.length - 1) {
-      columnNodes[index]!.nextKey = columnNodes[index + 1]!.key;
-    }
-  }
+interface CreateCollectionOptions {
+  allowsExpandableRows?: boolean;
+}
 
-  const bodyRows = definition.rows.map((row, rowIndex) => {
-    const cells = createRowCellNodes(row, rowIndex, definition.columns);
+function createRowNodes(
+  rows: NormalizedSpectrumTableRow[],
+  columns: NormalizedSpectrumTableColumn[],
+  parentKey: TableKey,
+  level: number,
+  allowsExpandableRows: boolean
+): GridNode<NormalizedSpectrumTableRow>[] {
+  const rowNodes = rows.map((row, rowIndex) => {
+    const cells = createRowCellNodes(row, rowIndex, columns);
     for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
       if (cellIndex < cells.length - 1) {
         cells[cellIndex]!.nextKey = cells[cellIndex + 1]!.key;
       }
     }
+
+    const childRows = allowsExpandableRows
+      ? createRowNodes(row.childRows, columns, row.key, level + 1, allowsExpandableRows)
+      : [];
+    const childNodes = allowsExpandableRows ? [...cells, ...childRows] : cells;
+    const childItems = row.childRows.map((childRow) => childRow.value ?? childRow);
 
     return {
       type: "item",
@@ -272,26 +319,50 @@ function createCollection(definition: NormalizedSpectrumTableDefinition): TableC
       value: row,
       rendered: null,
       textValue: row.textValue,
-      level: 1,
+      level,
       index: rowIndex,
-      hasChildNodes: true,
-      childNodes: cells,
-      parentKey: "body",
-      prevKey: rowIndex > 0 ? definition.rows[rowIndex - 1]?.key ?? null : null,
+      hasChildNodes: childNodes.length > 0,
+      childNodes,
+      parentKey,
+      prevKey: rowIndex > 0 ? rows[rowIndex - 1]?.key ?? null : null,
       nextKey: null,
-      firstChildKey: cells[0]?.key ?? null,
-      lastChildKey: cells[cells.length - 1]?.key ?? null,
+      firstChildKey: childNodes[0]?.key ?? null,
+      lastChildKey: childNodes[childNodes.length - 1]?.key ?? null,
       props: {
         isDisabled: row.isDisabled,
+        children: childNodes,
+        UNSTABLE_childItems: childItems.length > 0 ? childItems : undefined,
       },
     } as GridNode<NormalizedSpectrumTableRow>;
   });
 
-  for (let rowIndex = 0; rowIndex < bodyRows.length; rowIndex += 1) {
-    if (rowIndex < bodyRows.length - 1) {
-      bodyRows[rowIndex]!.nextKey = bodyRows[rowIndex + 1]!.key;
+  for (let rowIndex = 0; rowIndex < rowNodes.length; rowIndex += 1) {
+    if (rowIndex < rowNodes.length - 1) {
+      rowNodes[rowIndex]!.nextKey = rowNodes[rowIndex + 1]!.key;
     }
   }
+
+  return rowNodes;
+}
+
+function createCollection(
+  definition: NormalizedSpectrumTableDefinition,
+  options: CreateCollectionOptions = {}
+): TableCollection<NormalizedSpectrumTableRow> {
+  const columnNodes = createColumnNodes(definition);
+  for (let index = 0; index < columnNodes.length; index += 1) {
+    if (index < columnNodes.length - 1) {
+      columnNodes[index]!.nextKey = columnNodes[index + 1]!.key;
+    }
+  }
+
+  const bodyRows = createRowNodes(
+    definition.rows,
+    definition.columns,
+    "body",
+    1,
+    Boolean(options.allowsExpandableRows)
+  );
 
   const bodyNode: GridNode<NormalizedSpectrumTableRow> = {
     type: "body",
@@ -542,6 +613,7 @@ const TableBodyRow = defineComponent({
         && props.selectedKeys.has(props.node.key);
       const ariaDisabled = (rowProps as Record<string, unknown>)["aria-disabled"];
       const isDisabled = ariaDisabled === true || ariaDisabled === "true";
+      const isTreeGridRow = "expandedKeys" in props.state;
 
       return h(
         "tr",
@@ -559,7 +631,7 @@ const TableBodyRow = defineComponent({
               "is-disabled": isDisabled,
             },
           ],
-          "aria-rowindex": props.rowOffset + props.rowIndex + 1,
+          "aria-rowindex": isTreeGridRow ? undefined : props.rowOffset + props.rowIndex + 1,
           "aria-selected":
             props.state.selectionManager.selectionMode !== "none"
               ? (isSelected ? "true" : "false")
@@ -664,6 +736,10 @@ export const Row = createStaticTableComponent("Row", {
   },
   isDisabled: {
     type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  UNSTABLE_childItems: {
+    type: [Array, Object] as PropType<Iterable<SpectrumTableRowData> | undefined>,
     default: undefined,
   },
 });
@@ -795,6 +871,22 @@ export const TableView = defineComponent({
     },
     defaultSortDescriptor: {
       type: Object as PropType<SpectrumSortDescriptor | null | undefined>,
+      default: undefined,
+    },
+    UNSTABLE_allowsExpandableRows: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    UNSTABLE_expandedKeys: {
+      type: [String, Object, Array, Set] as PropType<"all" | Iterable<TableKey> | undefined>,
+      default: undefined,
+    },
+    UNSTABLE_defaultExpandedKeys: {
+      type: [String, Object, Array, Set] as PropType<"all" | Iterable<TableKey> | undefined>,
+      default: undefined,
+    },
+    UNSTABLE_onExpandedChange: {
+      type: Function as PropType<((keys: Set<TableKey>) => void) | undefined>,
       default: undefined,
     },
     onSortChange: {
@@ -934,11 +1026,17 @@ export const TableView = defineComponent({
       return sortDefinition(normalized, resolvedSortDescriptor.value);
     });
 
-    const collection = computed(() => createCollection(normalizedDefinition.value));
+    const allRows = computed(() => flattenNormalizedRows(normalizedDefinition.value.rows));
+    const allowsExpandableRows = Boolean(props.UNSTABLE_allowsExpandableRows && tableNestedRows());
+    const collection = computed(() =>
+      createCollection(normalizedDefinition.value, {
+        allowsExpandableRows,
+      })
+    );
     const resolvedDisabledKeys = computed(() => {
       const disabledKeys = new Set((props.disabledKeys ?? []) as Iterable<TableKey>);
       if (props.isDisabled) {
-        for (const row of normalizedDefinition.value.rows) {
+        for (const row of allRows.value) {
           disabledKeys.add(row.key);
         }
       }
@@ -946,7 +1044,7 @@ export const TableView = defineComponent({
       return disabledKeys;
     });
 
-    const state = useTableState<NormalizedSpectrumTableRow>({
+    const stateProps = {
       get collection() {
         return collection.value;
       },
@@ -980,22 +1078,31 @@ export const TableView = defineComponent({
       get sortDescriptor() {
         return resolvedSortDescriptor.value ?? undefined;
       },
-      onSortChange(descriptor) {
+      get UNSTABLE_expandedKeys() {
+        return props.UNSTABLE_expandedKeys;
+      },
+      get UNSTABLE_defaultExpandedKeys() {
+        return props.UNSTABLE_defaultExpandedKeys;
+      },
+      get UNSTABLE_onExpandedChange() {
+        return props.UNSTABLE_onExpandedChange;
+      },
+      onSortChange(descriptor: SortDescriptor) {
         if (props.sortDescriptor == null) {
           resolvedSortDescriptor.value = descriptor;
         }
         props.onSortChange?.(descriptor as SpectrumSortDescriptor);
       },
-      onSelectionChange(keys) {
+      onSelectionChange(keys: Set<TableKey> | "all") {
         if (keys === "all") {
           const disabledKeys = new Set((props.disabledKeys ?? []) as Iterable<TableKey>);
           if (props.isDisabled) {
-            for (const row of normalizedDefinition.value.rows) {
+            for (const row of allRows.value) {
               disabledKeys.add(row.key);
             }
           }
           const allKeys = new Set<TableKey>();
-          for (const row of normalizedDefinition.value.rows) {
+          for (const row of allRows.value) {
             if (row.isDisabled || disabledKeys.has(row.key)) {
               continue;
             }
@@ -1022,7 +1129,12 @@ export const TableView = defineComponent({
         }
         props.onSelectionChange?.(nextKeys);
       },
-    });
+    };
+
+    const state: TableState<NormalizedSpectrumTableRow> | TreeGridState<NormalizedSpectrumTableRow> =
+      allowsExpandableRows
+        ? UNSTABLE_useTreeGridState<NormalizedSpectrumTableRow>(stateProps as any)
+        : useTableState<NormalizedSpectrumTableRow>(stateProps as any);
 
     watchEffect(() => {
       state.setKeyboardNavigationDisabled(Boolean(props.isKeyboardNavigationDisabled));
@@ -1100,9 +1212,10 @@ export const TableView = defineComponent({
       const headerRows = state.collection.headerRows;
       const bodyRows = Array.from(state.collection.body.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
       const rowOffset = headerRows.length;
+      const isTreeGridState = "expandedKeys" in state;
 
       const tableProps = mergeProps(gridProps, attrsWithoutClassStyle, {
-        role: "grid",
+        role: (gridProps as Record<string, unknown>).role ?? "grid",
         "aria-colcount": state.collection.columnCount,
         "aria-rowcount": state.collection.size + headerRows.length,
         class: [
@@ -1142,7 +1255,7 @@ export const TableView = defineComponent({
                   key: String(headerRow.key),
                   role: "row",
                   class: "spectrum-Table-headRow react-spectrum-Table-headRow",
-                  "aria-rowindex": headerRowIndex + 1,
+                  "aria-rowindex": isTreeGridState ? undefined : headerRowIndex + 1,
                 },
                 Array.from(headerRow.childNodes).map((headerCellNode) =>
                   h(TableHeaderCell, {
@@ -1180,7 +1293,7 @@ export const TableView = defineComponent({
                   {
                     role: "row",
                     class: "spectrum-Table-row spectrum-Table-row--firstRow spectrum-Table-row--lastRow react-spectrum-Table-row",
-                    "aria-rowindex": rowOffset + 1,
+                    "aria-rowindex": isTreeGridState ? undefined : rowOffset + 1,
                   },
                   [
                     h(

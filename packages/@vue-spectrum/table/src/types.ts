@@ -36,6 +36,8 @@ export interface SpectrumTableRowData {
   textValue?: string | undefined;
   isDisabled?: boolean | undefined;
   cells?: SpectrumTableCellData[] | undefined;
+  childRows?: SpectrumTableRowData[] | undefined;
+  UNSTABLE_childItems?: SpectrumTableRowData[] | undefined;
   [key: string]: unknown;
 }
 
@@ -63,6 +65,7 @@ export interface ParsedSpectrumTableRow {
   textValue?: string | undefined;
   isDisabled?: boolean | undefined;
   cells: ParsedSpectrumTableCell[];
+  childRows: ParsedSpectrumTableRow[];
 }
 
 export interface ParsedSpectrumTableDefinition {
@@ -102,6 +105,7 @@ export interface NormalizedSpectrumTableRow {
   value?: SpectrumTableRowData | undefined;
   isDisabled?: boolean | undefined;
   cells: NormalizedSpectrumTableCell[];
+  childRows: NormalizedSpectrumTableRow[];
 }
 
 export interface NormalizedSpectrumTableDefinition {
@@ -323,15 +327,27 @@ function parseCellNode(node: VNode, index: number): ParsedSpectrumTableCell {
 function parseRowNode(node: VNode, index: number): ParsedSpectrumTableRow {
   const props = (node.props ?? {}) as Record<string, unknown>;
   const children = getSlotChildren(node);
-  const cells = children
-    .filter((child) => isCellNodeType(getTableNodeType(child)))
-    .map((child, cellIndex) => parseCellNode(child, cellIndex));
+  const cells: ParsedSpectrumTableCell[] = [];
+  const childRows: ParsedSpectrumTableRow[] = [];
+
+  for (const child of children) {
+    const childType = getTableNodeType(child);
+    if (isCellNodeType(childType)) {
+      cells.push(parseCellNode(child, cells.length));
+      continue;
+    }
+
+    if (childType === "row" || childType === "Row") {
+      childRows.push(parseRowNode(child, childRows.length));
+    }
+  }
 
   return {
     key: normalizeKey(node.key ?? props.id ?? props.key, `row-${index}`),
     textValue: toStringValue(props.textValue ?? props["text-value"]),
     isDisabled: normalizeBooleanProp(props.isDisabled ?? props["is-disabled"]),
     cells,
+    childRows,
   };
 }
 
@@ -420,48 +436,57 @@ function normalizeColumnsFromSlot(
   }));
 }
 
+function normalizeRowFromSlot(
+  row: ParsedSpectrumTableRow,
+  columns: NormalizedSpectrumTableColumn[],
+  fallbackKey: TableKey
+): NormalizedSpectrumTableRow {
+  const rowKey = normalizeKey(row.key, fallbackKey);
+  const normalizedCells: NormalizedSpectrumTableCell[] = [];
+  let columnCursor = 0;
+
+  for (const cell of row.cells) {
+    const column = columns[Math.min(columnCursor, Math.max(columns.length - 1, 0))];
+    const fallbackCellKey = column?.key ?? `column-${columnCursor}`;
+    const textValue = cell.textValue ?? extractTextContent(cell.content);
+    normalizedCells.push({
+      key: normalizeKey(cell.key, fallbackCellKey),
+      textValue,
+      value: cell.content,
+      colSpan: cell.colSpan,
+    });
+    columnCursor += Math.max(1, cell.colSpan ?? 1);
+  }
+
+  if (columnCursor !== columns.length) {
+    throw new Error(
+      `Table row "${String(rowKey)}" cell span count (${columnCursor}) does not match column count (${columns.length}).`
+    );
+  }
+
+  const textValue =
+    row.textValue
+    || normalizedCells
+      .map((cell) => cell.textValue)
+      .filter((value): value is string => value.length > 0)
+      .join(" ");
+
+  return {
+    key: rowKey,
+    textValue,
+    isDisabled: row.isDisabled,
+    cells: normalizedCells,
+    childRows: row.childRows.map((childRow, childIndex) =>
+      normalizeRowFromSlot(childRow, columns, `${String(rowKey)}-child-${childIndex}`)
+    ),
+  };
+}
+
 function normalizeRowsFromSlot(
   rows: ParsedSpectrumTableRow[],
   columns: NormalizedSpectrumTableColumn[]
 ): NormalizedSpectrumTableRow[] {
-  return rows.map((row, rowIndex) => {
-    const rowKey = normalizeKey(row.key, rowIndex);
-    const normalizedCells: NormalizedSpectrumTableCell[] = [];
-    let columnCursor = 0;
-
-    for (const cell of row.cells) {
-      const column = columns[Math.min(columnCursor, Math.max(columns.length - 1, 0))];
-      const fallbackKey = column?.key ?? `column-${columnCursor}`;
-      const textValue = cell.textValue ?? extractTextContent(cell.content);
-      normalizedCells.push({
-        key: normalizeKey(cell.key, fallbackKey),
-        textValue,
-        value: cell.content,
-        colSpan: cell.colSpan,
-      });
-      columnCursor += Math.max(1, cell.colSpan ?? 1);
-    }
-
-    if (columnCursor !== columns.length) {
-      throw new Error(
-        `Table row "${String(rowKey)}" cell span count (${columnCursor}) does not match column count (${columns.length}).`
-      );
-    }
-
-    const textValue =
-      row.textValue
-      || normalizedCells
-        .map((cell) => cell.textValue)
-        .filter((value): value is string => value.length > 0)
-        .join(" ");
-
-    return {
-      key: rowKey,
-      textValue,
-      isDisabled: row.isDisabled,
-      cells: normalizedCells,
-    };
-  });
+  return rows.map((row, rowIndex) => normalizeRowFromSlot(row, columns, rowIndex));
 }
 
 function normalizeColumnsFromProps(
@@ -521,6 +546,72 @@ function readItemCellValue(
   };
 }
 
+function normalizeRowFromProps(
+  item: SpectrumTableRowData,
+  columns: NormalizedSpectrumTableColumn[],
+  fallbackKey: TableKey
+): NormalizedSpectrumTableRow {
+  let cells: NormalizedSpectrumTableCell[] = [];
+  if (Array.isArray(item.cells) && item.cells.length > 0) {
+    let columnCursor = 0;
+    for (const cell of item.cells) {
+      const column = columns[Math.min(columnCursor, Math.max(columns.length - 1, 0))];
+      const fallbackCellKey = column?.key ?? `column-${columnCursor}`;
+      cells.push({
+        key: normalizeKey(cell.key, fallbackCellKey),
+        textValue: cell.textValue ?? extractTextContent(cell.value),
+        value: cell.value,
+        colSpan: normalizeNumberProp(cell.colSpan),
+      });
+      columnCursor += Math.max(1, normalizeNumberProp(cell.colSpan) ?? 1);
+    }
+
+    while (columnCursor < columns.length) {
+      const column = columns[columnCursor]!;
+      cells.push({
+        key: column.key,
+        textValue: "",
+        value: "",
+      });
+      columnCursor += 1;
+    }
+  } else {
+    cells = columns.map((column, columnIndex) => {
+      const cell = readItemCellValue(item, column, columnIndex);
+      return {
+        key: normalizeKey(cell.key, column.key),
+        textValue: cell.textValue ?? extractTextContent(cell.value),
+        value: cell.value,
+        colSpan: normalizeNumberProp(cell.colSpan),
+      };
+    });
+  }
+
+  const rowKey = normalizeKey(item.key ?? item.id, fallbackKey);
+  const childItems = item.UNSTABLE_childItems ?? item.childRows;
+  const childRows = Array.isArray(childItems)
+    ? childItems.map((childItem, childIndex) =>
+      normalizeRowFromProps(childItem, columns, `${String(rowKey)}-child-${childIndex}`)
+    )
+    : [];
+
+  const textValue =
+    item.textValue
+    || cells
+      .map((cell) => cell.textValue)
+      .filter((value): value is string => value.length > 0)
+      .join(" ");
+
+  return {
+    key: rowKey,
+    textValue,
+    value: item,
+    isDisabled: item.isDisabled,
+    cells,
+    childRows,
+  };
+}
+
 function normalizeRowsFromProps(
   items: SpectrumTableRowData[] | undefined,
   columns: NormalizedSpectrumTableColumn[]
@@ -529,58 +620,7 @@ function normalizeRowsFromProps(
     return [];
   }
 
-  return items.map((item, rowIndex) => {
-    let cells: NormalizedSpectrumTableCell[] = [];
-    if (Array.isArray(item.cells) && item.cells.length > 0) {
-      let columnCursor = 0;
-      for (const cell of item.cells) {
-        const column = columns[Math.min(columnCursor, Math.max(columns.length - 1, 0))];
-        const fallbackKey = column?.key ?? `column-${columnCursor}`;
-        cells.push({
-          key: normalizeKey(cell.key, fallbackKey),
-          textValue: cell.textValue ?? extractTextContent(cell.value),
-          value: cell.value,
-          colSpan: normalizeNumberProp(cell.colSpan),
-        });
-        columnCursor += Math.max(1, normalizeNumberProp(cell.colSpan) ?? 1);
-      }
-
-      while (columnCursor < columns.length) {
-        const column = columns[columnCursor]!;
-        cells.push({
-          key: column.key,
-          textValue: "",
-          value: "",
-        });
-        columnCursor += 1;
-      }
-    } else {
-      cells = columns.map((column, columnIndex) => {
-        const cell = readItemCellValue(item, column, columnIndex);
-        return {
-          key: normalizeKey(cell.key, column.key),
-          textValue: cell.textValue ?? extractTextContent(cell.value),
-          value: cell.value,
-          colSpan: normalizeNumberProp(cell.colSpan),
-        };
-      });
-    }
-
-    const textValue =
-      item.textValue
-      || cells
-        .map((cell) => cell.textValue)
-        .filter((value): value is string => value.length > 0)
-        .join(" ");
-
-    return {
-      key: normalizeKey(item.key ?? item.id, rowIndex),
-      textValue,
-      value: item,
-      isDisabled: item.isDisabled,
-      cells,
-    };
-  });
+  return items.map((item, rowIndex) => normalizeRowFromProps(item, columns, rowIndex));
 }
 
 export function normalizeTableDefinition(

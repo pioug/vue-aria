@@ -278,6 +278,7 @@ function generateTreeGridCollection<T>(
         parentKey: bodyNode.key,
         level: 1,
         index: globalRowCount,
+        indexOfType: i,
       };
       globalRowCount += 1;
       flattenedRows.push(clone);
