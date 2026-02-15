@@ -1416,6 +1416,50 @@ describe("ComboBox", () => {
     expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
+  it("propagates blur transitions to parent focus handlers", async () => {
+    const onBlur = vi.fn();
+    const outerFocusOut = vi.fn();
+    const wrapper = mount(defineComponent({
+      setup() {
+        return () =>
+          h("div", { onFocusout: outerFocusOut }, [
+            h(
+              ComboBox as any,
+              {
+                label: "Test",
+                autoFocus: true,
+                onBlur,
+              },
+              {
+                default: () => [
+                  h(Item as any, { id: "1" }, { default: () => "One" }),
+                  h(Item as any, { id: "2" }, { default: () => "Two" }),
+                  h(Item as any, { id: "3" }, { default: () => "Three" }),
+                ],
+              }
+            ),
+            h("button", { "data-test": "outside" }, "Second focus"),
+          ]);
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = wrapper.get('[data-test="outside"]');
+    await nextTick();
+
+    expect(document.activeElement).toBe(input.element);
+    expect(onBlur).toHaveBeenCalledTimes(0);
+    expect(outerFocusOut).toHaveBeenCalledTimes(0);
+
+    (outside.element as HTMLButtonElement).focus();
+    await nextTick();
+
+    expect(onBlur).toHaveBeenCalledTimes(1);
+    expect(outerFocusOut).toHaveBeenCalledTimes(1);
+  });
+
   it("does not call onBlur when moving focus to the trigger button", async () => {
     const onBlur = vi.fn();
     const wrapper = renderComboBox({
