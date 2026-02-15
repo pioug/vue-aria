@@ -1294,6 +1294,24 @@ describe("ComboBox", () => {
     expect((hiddenInput.element as HTMLInputElement).value).toBe("2");
   });
 
+  it("updates hidden key submission when selectedKey changes in key formValue mode", async () => {
+    const wrapper = renderComboBox({
+      name: "framework",
+      formValue: "key",
+      selectedKey: "2",
+    });
+
+    expect((wrapper.get('input[type="hidden"][name="framework"]').element as HTMLInputElement).value).toBe("2");
+
+    await wrapper.setProps({
+      selectedKey: "1",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((wrapper.get('input[type="hidden"][name="framework"]').element as HTMLInputElement).value).toBe("1");
+  });
+
   it("supports controlled open state", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderComboBox({

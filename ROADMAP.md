@@ -11121,3 +11121,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added hook-level coverage asserting native validity snapshots refresh on `change` and on reactive programmatic value updates.
     - `packages/@vue-aria/form/test/useFormValidation.test.ts`
 - Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 19 tests).
+- Additional `@vue-spectrum/combobox` key-form controlled update parity update:
+  - added migrated coverage asserting hidden key-form submission input stays in sync with controlled `selectedKey` updates in `formValue=\"key\"` mode.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 116 tests).
+- Validation: `npm run check -- --pretty false` passed.
