@@ -953,6 +953,35 @@ export function tableTests() {
     expect((resizeMap?.get("foo") as number)).toBeGreaterThan(initialWidth);
   });
 
+  it("ends keyboard resizing on Tab and Shift+Tab", async () => {
+    const onResizeEnd = vi.fn();
+    const wrapper = renderTable({
+      columns: columnsWithResizableMetadata,
+      onResizeEnd,
+    });
+
+    const getFirstHeader = () => wrapper.findAll('[role="columnheader"]')[0]!;
+    const getResizer = () => getFirstHeader().get(".spectrum-Table-columnResizer");
+
+    await getResizer().trigger("keydown", { key: "Enter" });
+    await nextTick();
+    expect(getFirstHeader().classes()).toContain("is-resizing");
+
+    await getResizer().trigger("keydown", { key: "Tab" });
+    await nextTick();
+    expect(getFirstHeader().classes()).not.toContain("is-resizing");
+    expect(onResizeEnd).toHaveBeenCalledTimes(1);
+
+    await getResizer().trigger("keydown", { key: "Enter" });
+    await nextTick();
+    expect(getFirstHeader().classes()).toContain("is-resizing");
+
+    await getResizer().trigger("keydown", { key: "Tab", shiftKey: true });
+    await nextTick();
+    expect(getFirstHeader().classes()).not.toContain("is-resizing");
+    expect(onResizeEnd).toHaveBeenCalledTimes(2);
+  });
+
   it("supports static slot table syntax", async () => {
     const onAction = vi.fn();
 

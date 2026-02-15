@@ -925,7 +925,7 @@ const TableHeaderCell = defineComponent({
     const isResizable = computed(
       () => Boolean(columnProps.value.allowsResizing) && !isSelectionCell.value && !Boolean(columnProps.value.hideHeader)
     );
-    const { inputProps: resizerInputProps, resizerProps, isResizing } = useTableColumnResize(
+    const { inputProps: resizerInputProps, resizerProps } = useTableColumnResize(
       {
         column: props.node,
         "aria-label": stringFormatter.format("columnResizer"),
@@ -938,6 +938,7 @@ const TableHeaderCell = defineComponent({
       props.columnResizeState,
       resizerRef
     );
+    const isColumnResizing = computed(() => props.columnResizeState.resizingColumn === props.node.key);
     const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
     const resolvedColumnWidth = computed(() => {
       if (!props.useResizeColumnWidths) {
@@ -991,7 +992,7 @@ const TableHeaderCell = defineComponent({
               "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
               "is-sortable": Boolean(columnProps.value.allowsSorting),
               "is-resizable": isResizable.value,
-              "is-resizing": isResizable.value && isResizing,
+              "is-resizing": isResizable.value && isColumnResizing.value,
               "is-sorted-asc": sortDirection.value === "ascending",
               "is-sorted-desc": sortDirection.value === "descending",
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",

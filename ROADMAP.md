@@ -11958,3 +11958,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 173 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 229 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` resize-exit keyboard parity coverage:
+  - added integration coverage for ending keyboard resize mode via `Tab` and `Shift+Tab`.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - fixed header resize-state class wiring so `is-resizing` reflects reactive resize state (`columnResizeState.resizingColumn`) during keyboard/pointer flows.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 174 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 230 tests).
+- Validation: `npm run check -- --pretty false` passed.
