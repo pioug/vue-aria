@@ -784,6 +784,49 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).validationMessage).toContain("Invalid option.");
   });
 
+  it("clears server validation in native mode after a valid blur commit", async () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      framework: "Invalid option.",
+    });
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(ComboBox as any, {
+              label: "Test",
+              name: "framework",
+              items,
+              validationBehavior: "native",
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[role="combobox"]');
+    await nextTick();
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect((input.element as HTMLInputElement).validationMessage).toContain("Invalid option.");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    await input.trigger("blur");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+    expect((input.element as HTMLInputElement).validationMessage).toBe("");
+  });
+
   it("supports custom native error messages", async () => {
     const wrapper = mount(
       defineComponent({
