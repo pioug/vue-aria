@@ -4643,6 +4643,55 @@ export function tableTests() {
     expect(rows[0]!.classes()).toContain("spectrum-Table-row--lastRow");
   });
 
+  it("renders a spinner row when loading with no items", () => {
+    const wrapper = renderTable({
+      items: [],
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      loadingState: "loading",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(1);
+    expect(bodyRows[0]!.attributes("aria-rowindex")).toBe("2");
+
+    const loadingCell = bodyRows[0]!.get('[role="rowheader"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe(grid.attributes("aria-colcount"));
+
+    const spinner = bodyRows[0]!.get('[role="progressbar"]');
+    expect(spinner.attributes("aria-label")).toBe("Loading…");
+    expect(spinner.attributes("aria-valuenow")).toBeUndefined();
+  });
+
+  it("renders a spinner row at the bottom when loading more", () => {
+    const wrapper = renderTable({
+      loadingState: "loadingMore",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.classes()).toContain("spectrum-Table--loadingMore");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+    expect(bodyRows[2]!.attributes("aria-rowindex")).toBe("4");
+
+    const loadingCell = bodyRows[2]!.get('[role="rowheader"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe(grid.attributes("aria-colcount"));
+
+    const spinner = bodyRows[2]!.get('[role="progressbar"]');
+    expect(spinner.attributes("aria-label")).toBe("Loading more…");
+    expect(spinner.attributes("aria-valuenow")).toBeUndefined();
+  });
+
+  it("does not render a spinner when loadingState is filtering", () => {
+    const wrapper = renderTable({
+      loadingState: "filtering",
+    });
+
+    expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
+  });
+
   it("does not emit select-all callbacks for an empty checkbox table", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

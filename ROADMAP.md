@@ -12211,3 +12211,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 219 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 275 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` async-loading spinner parity baseline:
+  - added `loadingState` support for rendering:
+    - loading spinner row when no items are present and `loadingState="loading"`.
+    - bottom loading-more spinner row when `loadingState="loadingMore"`.
+    - spinner suppression when `loadingState="filtering"`.
+  - added loading-more table class-state parity (`spectrum-Table--loadingMore`).
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 222 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 278 tests).
+- Validation: `npm run check -- --pretty false` passed.

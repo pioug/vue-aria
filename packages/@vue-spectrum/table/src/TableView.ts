@@ -80,6 +80,7 @@ export interface SpectrumTableViewProps {
   onResize?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
   onResizeEnd?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
   onAction?: ((key: TableKey) => void) | undefined;
+  loadingState?: "idle" | "loading" | "loadingMore" | "filtering" | undefined;
   renderEmptyState?: (() => unknown) | undefined;
   ariaLabel?: string | undefined;
   ariaLabelledby?: string | undefined;
@@ -106,6 +107,7 @@ export interface SpectrumTableHeaderProps {
 
 export interface SpectrumTableBodyProps {
   items?: SpectrumTableRowData[] | undefined;
+  loadingState?: "idle" | "loading" | "loadingMore" | "filtering" | undefined;
 }
 
 export interface SpectrumSectionProps {
@@ -1766,6 +1768,10 @@ export const TableView = defineComponent({
       type: Function as PropType<((key: TableKey) => void) | undefined>,
       default: undefined,
     },
+    loadingState: {
+      type: String as PropType<"idle" | "loading" | "loadingMore" | "filtering" | undefined>,
+      default: undefined,
+    },
     renderEmptyState: {
       type: Function as PropType<(() => unknown) | undefined>,
       default: undefined,
@@ -2116,6 +2122,9 @@ export const TableView = defineComponent({
       const bodyRows = Array.from(state.collection.body.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
       const rowOffset = headerRows.length;
       const isTreeGridState = "expandedKeys" in state;
+      const isLoading = props.loadingState === "loading";
+      const isLoadingMore = props.loadingState === "loadingMore";
+      const loadingLabel = isLoadingMore ? "Loading more…" : "Loading…";
 
       const tableProps = mergeProps(gridProps, attrsWithoutClassStyle, {
         role: (gridProps as Record<string, unknown>).role ?? "grid",
@@ -2130,6 +2139,7 @@ export const TableView = defineComponent({
           {
             "spectrum-Table--quiet": props.isQuiet,
             "spectrum-Table--wrap": (props.overflowMode ?? "truncate") === "wrap",
+            "spectrum-Table--loadingMore": isLoadingMore,
             "is-disabled": props.isDisabled,
             "is-hidden": props.isHidden,
           },
@@ -2137,6 +2147,92 @@ export const TableView = defineComponent({
         ],
         style: [attrsStyle, props.UNSAFE_style],
       }) as Record<string, unknown>;
+
+      const renderLoadingRow = (rowIndex: number, rowCount: number) =>
+        h(
+          "tr",
+          {
+            role: "row",
+            class: [
+              "spectrum-Table-row",
+              "react-spectrum-Table-row",
+              "react-spectrum-Table-loadingRow",
+              {
+                "spectrum-Table-row--firstRow": rowIndex === 0,
+                "spectrum-Table-row--lastRow": rowIndex === rowCount - 1,
+              },
+            ],
+            "aria-rowindex": isTreeGridState ? undefined : rowOffset + rowIndex + 1,
+            "aria-level": isTreeGridState ? 1 : undefined,
+            "aria-posinset": isTreeGridState ? rowIndex + 1 : undefined,
+            "aria-setsize": isTreeGridState ? rowCount : undefined,
+          },
+          [
+            h(
+              "td",
+              {
+                role: "rowheader",
+                colSpan: Math.max(1, state.collection.columnCount),
+                "aria-colspan": Math.max(1, state.collection.columnCount),
+                class: "spectrum-Table-cell react-spectrum-Table-cell react-spectrum-Table-loadingCell",
+              },
+              [
+                h("div", {
+                  role: "progressbar",
+                  "aria-label": loadingLabel,
+                  class: "spectrum-Table-loadingIndicator react-spectrum-Table-loadingIndicator",
+                }),
+              ]
+            ),
+          ]
+        );
+
+      const renderedBodyRows =
+        bodyRows.length > 0
+          ? [
+            ...bodyRows.map((rowNode, rowIndex) =>
+              h(TableBodyRow, {
+                key: `${String(rowNode.key)}:${disabledKeysVersion.value}`,
+                node: rowNode,
+                state,
+                rowIndex,
+                rowOffset,
+                rowCount: bodyRows.length + (isLoadingMore ? 1 : 0),
+                onAction: props.onAction,
+                selectedKeys: resolvedSelectedKeySet.value,
+                columnResizeState,
+                useResizeColumnWidths: useResizeColumnWidths.value,
+              })
+            ),
+            ...(isLoadingMore ? [renderLoadingRow(bodyRows.length, bodyRows.length + 1)] : []),
+          ]
+          : isLoading
+            ? [renderLoadingRow(0, 1)]
+            : [
+              h(
+                "tr",
+                {
+                  role: "row",
+                  class: "spectrum-Table-row spectrum-Table-row--firstRow spectrum-Table-row--lastRow react-spectrum-Table-row",
+                  "aria-rowindex": isTreeGridState ? undefined : rowOffset + 1,
+                  "aria-level": isTreeGridState ? 1 : undefined,
+                  "aria-posinset": isTreeGridState ? 1 : undefined,
+                  "aria-setsize": isTreeGridState ? 1 : undefined,
+                },
+                [
+                  h(
+                    "td",
+                    {
+                      role: isTreeGridState ? "rowheader" : "gridcell",
+                      colSpan: Math.max(1, state.collection.columnCount),
+                      "aria-colspan": Math.max(1, state.collection.columnCount),
+                      class: "spectrum-Table-cell react-spectrum-Table-cell react-spectrum-Table-empty",
+                    },
+                    props.renderEmptyState ? (props.renderEmptyState() as any) : null
+                  ),
+                ]
+              ),
+            ];
 
       return h(
         "table",
@@ -2182,46 +2278,7 @@ export const TableView = defineComponent({
               role: "rowgroup",
               class: "spectrum-Table-body",
             },
-            bodyRows.length > 0
-              ? bodyRows.map((rowNode, rowIndex) =>
-                h(TableBodyRow, {
-                  key: `${String(rowNode.key)}:${disabledKeysVersion.value}`,
-                  node: rowNode,
-                  state,
-                  rowIndex,
-                  rowOffset,
-                  rowCount: bodyRows.length,
-                  onAction: props.onAction,
-                  selectedKeys: resolvedSelectedKeySet.value,
-                  columnResizeState,
-                  useResizeColumnWidths: useResizeColumnWidths.value,
-                })
-              )
-              : [
-                h(
-                  "tr",
-                  {
-                    role: "row",
-                    class: "spectrum-Table-row spectrum-Table-row--firstRow spectrum-Table-row--lastRow react-spectrum-Table-row",
-                    "aria-rowindex": isTreeGridState ? undefined : rowOffset + 1,
-                    "aria-level": isTreeGridState ? 1 : undefined,
-                    "aria-posinset": isTreeGridState ? 1 : undefined,
-                    "aria-setsize": isTreeGridState ? 1 : undefined,
-                  },
-                  [
-                    h(
-                      "td",
-                      {
-                        role: isTreeGridState ? "rowheader" : "gridcell",
-                        colSpan: Math.max(1, state.collection.columnCount),
-                        "aria-colspan": Math.max(1, state.collection.columnCount),
-                        class: "spectrum-Table-cell react-spectrum-Table-cell react-spectrum-Table-empty",
-                      },
-                      props.renderEmptyState ? (props.renderEmptyState() as any) : null
-                    ),
-                  ]
-                ),
-              ]
+            renderedBodyRows
           ),
         ]
       );
