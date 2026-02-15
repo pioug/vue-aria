@@ -11719,6 +11719,19 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 187 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1378 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid empty-state parity refinement:
+  - aligned treegrid empty-row semantics to render as a rowheader row in expandable mode:
+    - empty row now exposes `aria-level=1`, `aria-posinset=1`, `aria-setsize=1`.
+    - empty cell role switches to `rowheader` with explicit `aria-colspan` based on live collection column count.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded treegrid nested-row coverage:
+    - empty-state rowheader semantics assertions.
+    - selection-aware empty-state colspan assertions.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 133 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 189 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1380 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` selection-checkbox parity refinement:
   - wired dedicated table selection checkbox rendering for header/body selection cells:
     - `TableHeaderCell` now renders select-all checkbox semantics via `useTableSelectAllCheckbox`.

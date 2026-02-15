@@ -437,4 +437,49 @@ describe("TableView nested rows", () => {
       expect(rowHeaders[0]!.attributes("aria-colindex")).toBe("2");
     }
   });
+
+  it("renders treegrid empty state with rowheader semantics", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Empty nested table",
+        columns,
+        items: [],
+        UNSTABLE_allowsExpandableRows: true,
+        renderEmptyState: () => h("h3", "No results"),
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(1);
+    const row = rows[0]!;
+    expect(row.attributes("aria-level")).toBe("1");
+    expect(row.attributes("aria-posinset")).toBe("1");
+    expect(row.attributes("aria-setsize")).toBe("1");
+    expect(row.attributes("aria-expanded")).toBeUndefined();
+
+    const emptyCell = row.get('[role="rowheader"]');
+    expect(emptyCell.attributes("aria-colspan")).toBe("3");
+    expect(emptyCell.find("h3").exists()).toBe(true);
+    expect(emptyCell.text()).toContain("No results");
+  });
+
+  it("uses selection-aware colspan for treegrid empty state", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Empty selectable nested table",
+        columns,
+        items: [],
+        selectionMode: "multiple",
+        UNSTABLE_allowsExpandableRows: true,
+        renderEmptyState: () => "No rows",
+      },
+      attachTo: document.body,
+    });
+
+    const emptyCell = wrapper.get('tbody [role="row"] [role="rowheader"]');
+    expect(emptyCell.attributes("aria-colspan")).toBe("4");
+  });
 });

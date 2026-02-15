@@ -1481,13 +1481,17 @@ export const TableView = defineComponent({
                     role: "row",
                     class: "spectrum-Table-row spectrum-Table-row--firstRow spectrum-Table-row--lastRow react-spectrum-Table-row",
                     "aria-rowindex": isTreeGridState ? undefined : rowOffset + 1,
+                    "aria-level": isTreeGridState ? 1 : undefined,
+                    "aria-posinset": isTreeGridState ? 1 : undefined,
+                    "aria-setsize": isTreeGridState ? 1 : undefined,
                   },
                   [
                     h(
                       "td",
                       {
-                        role: "gridcell",
-                        colSpan: Math.max(1, normalizedDefinition.value.columns.length),
+                        role: isTreeGridState ? "rowheader" : "gridcell",
+                        colSpan: Math.max(1, state.collection.columnCount),
+                        "aria-colspan": Math.max(1, state.collection.columnCount),
                         class: "spectrum-Table-cell react-spectrum-Table-cell react-spectrum-Table-empty",
                       },
                       props.renderEmptyState ? (props.renderEmptyState() as any) : null
