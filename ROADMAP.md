@@ -10527,3 +10527,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 16 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` read-only interaction parity update:
+  - added migrated coverage ensuring read-only combobox inputs:
+    - render `readonly` input semantics
+    - disable the trigger button
+    - do not open menus from `ArrowDown` input interaction or trigger clicks
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 17 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -279,6 +279,25 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("respects read-only state", async () => {
+    const wrapper = renderComboBox({
+      isReadOnly: true,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    const button = wrapper.get("button");
+    expect(input.attributes("readonly")).toBeDefined();
+    expect(button.attributes("disabled")).toBeDefined();
+
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+
+    await button.trigger("click");
+    await nextTick();
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("does not open on space key when disabled", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
