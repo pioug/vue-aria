@@ -11819,3 +11819,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 150 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 206 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` sizing constraint parity refinement:
+  - improved width distribution to satisfy numeric `minWidth`/`maxWidth` constraints during auto-width allocation:
+    - constrained columns are fixed first, remaining width is redistributed across unresolved columns.
+    - explicit numeric widths now clamp against `minWidth`/`maxWidth`.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded sizing tests for constraint behavior:
+    - min-width constrained distribution in checkbox-selection tables.
+    - max-width constrained distribution in non-selection tables.
+    - explicit-width clamping against min-width constraints.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 153 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 209 tests).
+- Validation: `npm run check -- --pretty false` passed.

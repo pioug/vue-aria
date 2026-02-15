@@ -56,6 +56,24 @@ const columnsWithPartialSizingMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithMinWidthConstraint: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 200 },
+  { key: "bar", title: "Bar", minWidth: 500 },
+  { key: "baz", title: "Baz" },
+];
+
+const columnsWithMaxWidthConstraint: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 200 },
+  { key: "bar", title: "Bar", maxWidth: 300 },
+  { key: "baz", title: "Baz" },
+];
+
+const columnsWithClampedExplicitWidth: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: 100, minWidth: 200 },
+  { key: "bar", title: "Bar" },
+  { key: "baz", title: "Baz" },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -402,6 +420,45 @@ export function tableTests() {
     expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
     expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38 - 200) / 2, 3);
     expect(parseFloat((headerCells[3]!.element as HTMLElement).style.width)).toBeCloseTo((1000 - 38 - 200) / 2, 3);
+  });
+
+  it("respects minWidth constraints while distributing remaining width", () => {
+    const wrapper = renderTable({
+      columns: columnsWithMinWidthConstraint,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(4);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(38, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+    expect(parseFloat((headerCells[3]!.element as HTMLElement).style.width)).toBeCloseTo(262, 3);
+  });
+
+  it("respects maxWidth constraints while distributing remaining width", () => {
+    const wrapper = renderTable({
+      columns: columnsWithMaxWidthConstraint,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+  });
+
+  it("clamps explicit widths to minWidth constraints", () => {
+    const wrapper = renderTable({
+      columns: columnsWithClampedExplicitWidth,
+    });
+
+    const headerCells = wrapper.findAll('thead [role="columnheader"]');
+    expect(headerCells).toHaveLength(3);
+    expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
+    expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
+    expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
   });
 
   it("supports static slot table syntax", async () => {

@@ -516,6 +516,8 @@ function resolveColumnWidths(
 
   for (let index = 0; index < columns.length; index += 1) {
     const column = columns[index]!;
+    const minWidth = parseNumericColumnSize(column.minWidth);
+    const maxWidth = parseNumericColumnSize(column.maxWidth);
     const hasExplicitWidth =
       column.width !== undefined
       && column.width !== null
@@ -523,8 +525,17 @@ function resolveColumnWidths(
     if (hasExplicitWidth) {
       const numericWidth = parseNumericColumnSize(column.width);
       if (numericWidth != null) {
-        column.width = numericWidth;
-        remainingWidth -= numericWidth;
+        let resolvedWidth = numericWidth;
+        if (minWidth != null && resolvedWidth < minWidth) {
+          resolvedWidth = minWidth;
+        }
+
+        if (maxWidth != null && resolvedWidth > maxWidth) {
+          resolvedWidth = maxWidth;
+        }
+
+        column.width = resolvedWidth;
+        remainingWidth -= resolvedWidth;
       }
       continue;
     }
@@ -533,21 +544,37 @@ function resolveColumnWidths(
   }
 
   if (autoIndices.length > 0) {
-    const baseWidth = Math.max(0, remainingWidth / autoIndices.length);
-    for (const index of autoIndices) {
-      const column = columns[index]!;
-      let width = baseWidth;
-      const minWidth = parseNumericColumnSize(column.minWidth);
-      const maxWidth = parseNumericColumnSize(column.maxWidth);
-      if (minWidth != null && width < minWidth) {
-        width = minWidth;
+    const unresolved = new Set(autoIndices);
+    while (unresolved.size > 0) {
+      const share = Math.max(0, remainingWidth / unresolved.size);
+      let constrainedInPass = false;
+      for (const index of Array.from(unresolved)) {
+        const column = columns[index]!;
+        const minWidth = parseNumericColumnSize(column.minWidth);
+        const maxWidth = parseNumericColumnSize(column.maxWidth);
+        if (minWidth != null && share < minWidth) {
+          column.width = minWidth;
+          remainingWidth -= minWidth;
+          unresolved.delete(index);
+          constrainedInPass = true;
+          continue;
+        }
+
+        if (maxWidth != null && share > maxWidth) {
+          column.width = maxWidth;
+          remainingWidth -= maxWidth;
+          unresolved.delete(index);
+          constrainedInPass = true;
+        }
       }
 
-      if (maxWidth != null && width > maxWidth) {
-        width = maxWidth;
+      if (!constrainedInPass) {
+        const finalShare = Math.max(0, remainingWidth / unresolved.size);
+        for (const index of unresolved) {
+          columns[index]!.width = finalShare;
+        }
+        break;
       }
-
-      column.width = width;
     }
   }
 
