@@ -798,6 +798,35 @@ describe("ListBox", () => {
     }
   });
 
+  it("supports complex options with aria-labelledby and aria-describedby", async () => {
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { key: "label", textValue: "Label" }, {
+            default: () => [
+              h("span", { "aria-hidden": "true" }, "icon"),
+              h("span", null, "Label"),
+              h("span", { slot: "description" }, "Description"),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+
+    const option = wrapper.get('[role="option"]');
+    const label = wrapper.get(".spectrum-Menu-itemLabel");
+    const description = wrapper.get(".spectrum-Menu-description");
+
+    expect(option.attributes("aria-labelledby")).toBe(label.attributes("id"));
+    expect(option.attributes("aria-describedby")).toBe(description.attributes("id"));
+  });
+
   it("supports aria-label attribute", () => {
     const wrapper = renderListBox({
       "aria-label": "Test",

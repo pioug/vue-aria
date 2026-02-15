@@ -10360,3 +10360,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 37 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 38 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` complex-option labeling parity update:
+  - aligned option label/description slot wiring for non-string item content by:
+    - mapping `labelProps` to the primary rendered content node
+    - mapping `descriptionProps` to `slot="description"` rendered nodes
+  - ensured option `aria-labelledby`/`aria-describedby` references the mapped ids unless an explicit item `aria-label` is provided.
+    - `packages/@vue-spectrum/listbox/src/ListBoxOption.ts`
+  - added migrated coverage for complex option content with label and description nodes.
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 38 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.
