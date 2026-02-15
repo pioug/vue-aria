@@ -7,7 +7,7 @@ import {
 import { useFormValidationState } from "@vue-aria/form-state";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 import { useControlledState } from "@vue-aria/utils-state";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import type { DateValue, ValidationState } from "@vue-aria/calendar-state";
 import {
   getFormatOptions,
@@ -44,8 +44,37 @@ export function useDatePickerState<T extends DateValue = DateValue>(
 
   const initialValue = valueRef.value;
 
+  const isSameDateValue = (
+    left: DateValue | null | undefined,
+    right: DateValue | null | undefined
+  ): boolean => {
+    if (left === right) {
+      return true;
+    }
+
+    if (!left || !right) {
+      return false;
+    }
+
+    return left.toString() === right.toString();
+  };
+
   const selectedDateRef = ref<DateValue | null>(null);
   const selectedTimeRef = ref<TimeValue | null>(null);
+
+  watch(
+    () => props.defaultValue as DateValue | null | undefined,
+    (nextDefault, previousDefault) => {
+      if (
+        props.value !== undefined
+        || isSameDateValue(nextDefault, previousDefault)
+      ) {
+        return;
+      }
+
+      setControlledValue((nextDefault ?? null) as MappedDateValue<T> | null);
+    }
+  );
 
   watchEffect(() => {
     const value = valueRef.value;

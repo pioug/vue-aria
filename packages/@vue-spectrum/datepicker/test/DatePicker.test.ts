@@ -226,6 +226,44 @@ describe("DatePicker", () => {
     expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
   });
 
+  it("updates date picker defaultValue after form submit action", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const defaultDate = ref(new CalendarDate(2019, 6, 5));
+          const onSubmit = (event: Event) => {
+            event.preventDefault();
+            defaultDate.value = new CalendarDate(2019, 6, 17);
+          };
+
+          return () =>
+            h("form", { onSubmit }, [
+              h(DatePicker as any, {
+                "aria-label": "Date picker",
+                defaultValue: defaultDate.value,
+                name: "eventDate",
+              }),
+              h("button", {
+                type: "submit",
+                "data-testid": "submit",
+              }, "submit"),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const hiddenInput = wrapper.get('input[type="hidden"][name="eventDate"]');
+    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
+
+    await wrapper.get('[data-testid="submit"]').trigger("click");
+    await nextTick();
+
+    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-17");
+  });
+
   it("focuses date picker trigger when autoFocus is enabled", async () => {
     const wrapper = mount(DatePicker as any, {
       props: {

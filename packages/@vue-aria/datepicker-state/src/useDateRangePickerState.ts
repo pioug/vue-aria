@@ -2,7 +2,7 @@ import { DateFormatter, toCalendarDate, toCalendarDateTime } from "@internationa
 import { useFormValidationState } from "@vue-aria/form-state";
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 import { useControlledState } from "@vue-aria/utils-state";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import type { DateValue, RangeValue, ValidationState } from "@vue-aria/calendar-state";
 import type {
   DateRange,
@@ -42,6 +42,37 @@ export function useDateRangePickerState<T extends DateValue = DateValue>(
   );
 
   const initialValue = controlledValueRef.value;
+  const isSameDateValue = (
+    left: DateValue | null | undefined,
+    right: DateValue | null | undefined
+  ): boolean => {
+    if (left === right) {
+      return true;
+    }
+
+    if (!left || !right) {
+      return false;
+    }
+
+    return left.toString() === right.toString();
+  };
+  const isSameRangeValue = (
+    left: DateRange | null | undefined,
+    right: DateRange | null | undefined
+  ): boolean => {
+    if (left === right) {
+      return true;
+    }
+
+    if (!left || !right) {
+      return false;
+    }
+
+    return (
+      isSameDateValue(left.start, right.start)
+      && isSameDateValue(left.end, right.end)
+    );
+  };
   const placeholderValueRef = ref<RangeValue<DateValue | null>>(
     controlledValueRef.value || { start: null, end: null }
   );
@@ -70,6 +101,20 @@ export function useDateRangePickerState<T extends DateValue = DateValue>(
       setControlledValue(null);
     }
   };
+
+  watch(
+    () => props.defaultValue as DateRange | null | undefined,
+    (nextDefault, previousDefault) => {
+      if (
+        props.value !== undefined
+        || isSameRangeValue(nextDefault, previousDefault)
+      ) {
+        return;
+      }
+
+      setValue(nextDefault ?? null);
+    }
+  );
 
   const currentValue = computed(
     () => value.value?.start || value.value?.end || props.placeholderValue || null
