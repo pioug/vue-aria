@@ -12254,3 +12254,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 35 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 289 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid page-range keyboard parity expansion:
+  - added migrated nested-row coverage for keyboard range extension with:
+    - Shift+PageDown extending from the anchor row through the last visible nested row.
+    - Shift+PageUp extending from the anchor row through the first visible nested row.
+  - expanded treegrid row key handling to apply checkbox-multiple Shift+PageUp/PageDown range fallback in expandable-table mode (matching the existing visible-row page-range behavior already used in non-treegrid tables).
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 37 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 291 tests).
+- Validation: `npm run check -- --pretty false` passed.

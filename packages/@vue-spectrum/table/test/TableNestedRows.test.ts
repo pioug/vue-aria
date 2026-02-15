@@ -869,6 +869,64 @@ describe("TableView nested rows", () => {
     );
   });
 
+  it("extends nested selection with Shift+PageDown", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows keyboard selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startRow = getRowByText(wrapper, "Row 2, Lvl 1, Foo");
+    (startRow.element as HTMLElement).focus();
+    await startRow.trigger("focus");
+    await moveFocus(startRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(startRow, "PageDown", { shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-2-level-1", "row-3-level-1", "row-3-level-2"])
+    );
+  });
+
+  it("extends nested selection with Shift+PageUp", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows keyboard selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startRow = getRowByText(wrapper, "Row 2, Lvl 1, Foo");
+    (startRow.element as HTMLElement).focus();
+    await startRow.trigger("focus");
+    await moveFocus(startRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(startRow, "PageUp", { shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2", "row-1-level-3", "row-2-level-1"])
+    );
+  });
+
   it("skips disabled nested rows while extending selection with Shift+ArrowDown", async () => {
     enableTableNestedRows();
     const onSelectionChange = vi.fn();

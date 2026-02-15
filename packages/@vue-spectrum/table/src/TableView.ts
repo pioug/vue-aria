@@ -1356,35 +1356,37 @@ const TableBodyRow = defineComponent({
         ...merged,
         onKeydown: (event: KeyboardEvent) => {
           baseOnKeydown?.(event);
-          if (!("expandedKeys" in props.state)) {
-            const selectionManager = props.state.selectionManager;
-            const isCheckboxMultipleSelection =
-              selectionManager.selectionMode === "multiple"
-              && selectionManager.selectionBehavior === "toggle";
-            if (
-              event.target === refObject.value
-              && !event.altKey
-              && !event.ctrlKey
-              && !event.metaKey
-              && event.shiftKey
-              && isCheckboxMultipleSelection
-              && (event.key === "PageDown" || event.key === "PageUp")
-            ) {
-              const rows = getTableBodyRows(refObject.value);
-              const rowNodes = Array.from(props.state.collection.body.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
-              const targetRowNode = event.key === "PageDown"
-                ? rowNodes[rowNodes.length - 1] ?? null
-                : rowNodes[0] ?? null;
-              const targetRowElement = event.key === "PageDown"
-                ? rows[rows.length - 1] ?? null
-                : rows[0] ?? null;
-              if (targetRowNode && targetRowElement) {
-                selectionManager.setFocusedKey(targetRowNode.key);
-                selectionManager.extendSelection(targetRowNode.key);
-                targetRowElement.focus();
-                event.preventDefault();
-              }
+          const selectionManager = props.state.selectionManager;
+          const isCheckboxMultipleSelection =
+            selectionManager.selectionMode === "multiple"
+            && selectionManager.selectionBehavior === "toggle";
+          if (
+            event.target === refObject.value
+            && !event.altKey
+            && !event.ctrlKey
+            && !event.metaKey
+            && event.shiftKey
+            && isCheckboxMultipleSelection
+            && (event.key === "PageDown" || event.key === "PageUp")
+          ) {
+            const rows = getTableBodyRows(refObject.value);
+            const rowNodes = Array.from(props.state.collection.body.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
+            const targetRowNode = event.key === "PageDown"
+              ? rowNodes[rowNodes.length - 1] ?? null
+              : rowNodes[0] ?? null;
+            const targetRowElement = event.key === "PageDown"
+              ? rows[rows.length - 1] ?? null
+              : rows[0] ?? null;
+            if (targetRowNode && targetRowElement) {
+              selectionManager.setFocusedKey(targetRowNode.key);
+              selectionManager.extendSelection(targetRowNode.key);
+              targetRowElement.focus();
+              event.preventDefault();
             }
+            return;
+          }
+
+          if (!("expandedKeys" in props.state)) {
             return;
           }
 
