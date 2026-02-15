@@ -28,6 +28,7 @@ export interface SpectrumTableColumnData {
   width?: SpectrumTableColumnSize | undefined;
   minWidth?: SpectrumTableColumnSize | undefined;
   maxWidth?: SpectrumTableColumnSize | undefined;
+  childColumns?: SpectrumTableColumnData[] | undefined;
 }
 
 export interface SpectrumTableCellData {
@@ -63,6 +64,7 @@ export interface ParsedSpectrumTableColumn {
   minWidth?: SpectrumTableColumnSize | undefined;
   maxWidth?: SpectrumTableColumnSize | undefined;
   content?: VNodeChild;
+  childColumns?: ParsedSpectrumTableColumn[] | undefined;
 }
 
 export interface ParsedSpectrumTableCell {
@@ -109,6 +111,7 @@ export interface NormalizedSpectrumTableColumn {
   width?: SpectrumTableColumnSize | undefined;
   minWidth?: SpectrumTableColumnSize | undefined;
   maxWidth?: SpectrumTableColumnSize | undefined;
+  childColumns?: NormalizedSpectrumTableColumn[] | undefined;
 }
 
 export interface NormalizedSpectrumTableCell {
@@ -128,6 +131,7 @@ export interface NormalizedSpectrumTableRow {
 }
 
 export interface NormalizedSpectrumTableDefinition {
+  headerColumns: NormalizedSpectrumTableColumn[];
   columns: NormalizedSpectrumTableColumn[];
   rows: NormalizedSpectrumTableRow[];
 }
@@ -336,9 +340,19 @@ function isCellNodeType(nodeType: string | undefined): boolean {
   return nodeType === "cell" || nodeType === "editable-cell" || nodeType === "Cell" || nodeType === "EditableCell";
 }
 
-function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn {
+function isColumnNodeType(nodeType: string | undefined): boolean {
+  return nodeType === "column" || nodeType === "Column";
+}
+
+function parseColumnNode(node: VNode, fallbackKey: TableKey): ParsedSpectrumTableColumn {
   const props = (node.props ?? {}) as Record<string, unknown>;
-  const content = getSlotContent(node);
+  const slotChildren = getSlotChildren(node);
+  const childColumnNodes = slotChildren.filter((child) => isColumnNodeType(getTableNodeType(child)));
+  const nonColumnChildren = slotChildren.filter((child) => !isColumnNodeType(getTableNodeType(child)));
+  const explicitTitle = toStringValue(props.title ?? props.name);
+  const content: VNodeChild = childColumnNodes.length > 0
+    ? (explicitTitle || (nonColumnChildren.length > 0 ? nonColumnChildren : ""))
+    : getSlotContent(node);
   const allowsSorting = props.allowsSorting ?? props["allows-sorting"];
   const allowsResizing = props.allowsResizing ?? props["allows-resizing"];
   const isRowHeader = props.isRowHeader ?? props["is-row-header"];
@@ -352,9 +366,12 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
   const maxWidth = props.maxWidth ?? props["max-width"];
   const textValue =
     toStringValue(props.textValue ?? props.title ?? props.name) || extractTextContent(content);
+  const childColumns = childColumnNodes.map((childNode, index) =>
+    parseColumnNode(childNode, `${String(fallbackKey)}-${index}`)
+  );
 
   return {
-    key: normalizeKey(node.key ?? props.id ?? props.key, `column-${index}`),
+    key: normalizeKey(node.key ?? props.id ?? props.key, fallbackKey),
     textValue,
     allowsSorting: normalizeBooleanProp(allowsSorting),
     allowsResizing: normalizeBooleanProp(allowsResizing),
@@ -368,6 +385,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     minWidth: normalizeColumnSizeProp(minWidth),
     maxWidth: normalizeColumnSizeProp(maxWidth),
     content,
+    childColumns: childColumns.length > 0 ? childColumns : undefined,
   };
 }
 
@@ -432,11 +450,8 @@ export function parseTableSlotDefinition(nodes: VNode[] | undefined): ParsedSpec
   }
 
   const columns = (headerNode ? getSlotChildren(headerNode) : [])
-    .filter((node) => {
-      const type = getTableNodeType(node);
-      return type === "column" || type === "Column";
-    })
-    .map((node, index) => parseColumnNode(node, index));
+    .filter((node) => isColumnNodeType(getTableNodeType(node)))
+    .map((node, index) => parseColumnNode(node, `column-${index}`));
 
   const rows: ParsedSpectrumTableRow[] = [];
   if (bodyNode) {
@@ -473,40 +488,87 @@ export function parseTableSlotDefinition(nodes: VNode[] | undefined): ParsedSpec
   };
 }
 
+interface NormalizedColumnsResult {
+  headerColumns: NormalizedSpectrumTableColumn[];
+  leafColumns: NormalizedSpectrumTableColumn[];
+}
+
+function collectLeafColumns(
+  columns: NormalizedSpectrumTableColumn[],
+  leafColumns: NormalizedSpectrumTableColumn[]
+): void {
+  for (const column of columns) {
+    if (column.childColumns && column.childColumns.length > 0) {
+      collectLeafColumns(column.childColumns, leafColumns);
+      continue;
+    }
+
+    leafColumns.push(column);
+  }
+}
+
+function normalizeParsedColumn(
+  column: ParsedSpectrumTableColumn,
+  fallbackKey: TableKey,
+  fallbackTitle: string
+): NormalizedSpectrumTableColumn {
+  const key = normalizeKey(column.key, fallbackKey);
+  const title = column.textValue && column.textValue.length > 0 ? column.textValue : fallbackTitle;
+  const childColumns = (column.childColumns ?? []).map((childColumn, childIndex) =>
+    normalizeParsedColumn(
+      childColumn,
+      `${String(key)}-${childIndex}`,
+      `${title} ${childIndex + 1}`
+    )
+  );
+
+  return {
+    key,
+    textValue: title,
+    title,
+    content: column.content,
+    allowsSorting: column.allowsSorting,
+    allowsResizing: column.allowsResizing,
+    isRowHeader: column.isRowHeader,
+    align: column.align,
+    hideHeader: column.hideHeader,
+    showDivider: column.showDivider,
+    colSpan: column.colSpan,
+    defaultWidth: column.defaultWidth,
+    width: column.width,
+    minWidth: column.minWidth,
+    maxWidth: column.maxWidth,
+    childColumns: childColumns.length > 0 ? childColumns : undefined,
+  };
+}
+
 function normalizeColumnsFromSlot(
   columns: ParsedSpectrumTableColumn[],
   rows: ParsedSpectrumTableRow[]
-): NormalizedSpectrumTableColumn[] {
+): NormalizedColumnsResult {
   if (columns.length > 0) {
-    return columns.map((column, index) => {
-      const key = normalizeKey(column.key, `column-${index}`);
-      const title = column.textValue && column.textValue.length > 0 ? column.textValue : `Column ${index + 1}`;
-      return {
-        key,
-        textValue: title,
-        title,
-        content: column.content,
-        allowsSorting: column.allowsSorting,
-        allowsResizing: column.allowsResizing,
-        isRowHeader: column.isRowHeader,
-        align: column.align,
-        hideHeader: column.hideHeader,
-        showDivider: column.showDivider,
-        colSpan: column.colSpan,
-        defaultWidth: column.defaultWidth,
-        width: column.width,
-        minWidth: column.minWidth,
-        maxWidth: column.maxWidth,
-      };
-    });
+    const headerColumns = columns.map((column, index) =>
+      normalizeParsedColumn(column, `column-${index}`, `Column ${index + 1}`)
+    );
+    const leafColumns: NormalizedSpectrumTableColumn[] = [];
+    collectLeafColumns(headerColumns, leafColumns);
+    return {
+      headerColumns,
+      leafColumns,
+    };
   }
 
   const maxCellCount = rows.reduce((count, row) => Math.max(count, row.cells.length), 0);
-  return Array.from({ length: maxCellCount }, (_, index) => ({
+  const fallbackColumns = Array.from({ length: maxCellCount }, (_, index) => ({
     key: `column-${index}`,
     textValue: `Column ${index + 1}`,
     title: `Column ${index + 1}`,
   }));
+
+  return {
+    headerColumns: fallbackColumns,
+    leafColumns: fallbackColumns,
+  };
 }
 
 function normalizeRowFromSlot(
@@ -562,31 +624,54 @@ function normalizeRowsFromSlot(
   return rows.map((row, rowIndex) => normalizeRowFromSlot(row, columns, rowIndex));
 }
 
+function normalizePropColumn(
+  column: SpectrumTableColumnData,
+  fallbackKey: TableKey,
+  fallbackTitle: string
+): NormalizedSpectrumTableColumn {
+  const key = normalizeKey(column.key ?? column.id, fallbackKey);
+  const title = column.title ?? column.name ?? column.textValue ?? fallbackTitle;
+  const childColumns = (column.childColumns ?? []).map((childColumn, childIndex) =>
+    normalizePropColumn(
+      childColumn,
+      `${String(key)}-${childIndex}`,
+      `${title} ${childIndex + 1}`
+    )
+  );
+
+  return {
+    key,
+    textValue: column.textValue ?? title,
+    title,
+    allowsSorting: column.allowsSorting,
+    allowsResizing: column.allowsResizing,
+    isRowHeader: column.isRowHeader,
+    align: normalizeColumnAlign(column.align),
+    hideHeader: column.hideHeader,
+    showDivider: column.showDivider,
+    colSpan: normalizeNumberProp(column.colSpan),
+    defaultWidth: normalizeColumnSizeProp(column.defaultWidth),
+    width: normalizeColumnSizeProp(column.width),
+    minWidth: normalizeColumnSizeProp(column.minWidth),
+    maxWidth: normalizeColumnSizeProp(column.maxWidth),
+    childColumns: childColumns.length > 0 ? childColumns : undefined,
+  };
+}
+
 function normalizeColumnsFromProps(
   columns: SpectrumTableColumnData[] | undefined,
   items: SpectrumTableRowData[] | undefined
-): NormalizedSpectrumTableColumn[] {
+): NormalizedColumnsResult {
   if (columns && columns.length > 0) {
-    return columns.map((column, index) => {
-      const key = normalizeKey(column.key ?? column.id, `column-${index}`);
-      const title = column.title ?? column.name ?? column.textValue ?? `Column ${index + 1}`;
-      return {
-        key,
-        textValue: column.textValue ?? title,
-        title,
-        allowsSorting: column.allowsSorting,
-        allowsResizing: column.allowsResizing,
-        isRowHeader: column.isRowHeader,
-        align: normalizeColumnAlign(column.align),
-        hideHeader: column.hideHeader,
-        showDivider: column.showDivider,
-        colSpan: normalizeNumberProp(column.colSpan),
-        defaultWidth: normalizeColumnSizeProp(column.defaultWidth),
-        width: normalizeColumnSizeProp(column.width),
-        minWidth: normalizeColumnSizeProp(column.minWidth),
-        maxWidth: normalizeColumnSizeProp(column.maxWidth),
-      };
-    });
+    const headerColumns = columns.map((column, index) =>
+      normalizePropColumn(column, `column-${index}`, `Column ${index + 1}`)
+    );
+    const leafColumns: NormalizedSpectrumTableColumn[] = [];
+    collectLeafColumns(headerColumns, leafColumns);
+    return {
+      headerColumns,
+      leafColumns,
+    };
   }
 
   const maxCellCount = (items ?? []).reduce((count, item) => {
@@ -595,12 +680,16 @@ function normalizeColumnsFromProps(
     }
     return count;
   }, 0);
-
-  return Array.from({ length: maxCellCount }, (_, index) => ({
+  const fallbackColumns = Array.from({ length: maxCellCount }, (_, index) => ({
     key: `column-${index}`,
     textValue: `Column ${index + 1}`,
     title: `Column ${index + 1}`,
   }));
+
+  return {
+    headerColumns: fallbackColumns,
+    leafColumns: fallbackColumns,
+  };
 }
 
 function readItemCellValue(
@@ -708,18 +797,20 @@ export function normalizeTableDefinition(
     options.slotDefinition
     && (options.slotDefinition.rows.length > 0 || options.slotDefinition.columns.length > 0)
   ) {
-    const columns = normalizeColumnsFromSlot(options.slotDefinition.columns, options.slotDefinition.rows);
-    const rows = normalizeRowsFromSlot(options.slotDefinition.rows, columns);
+    const normalizedColumns = normalizeColumnsFromSlot(options.slotDefinition.columns, options.slotDefinition.rows);
+    const rows = normalizeRowsFromSlot(options.slotDefinition.rows, normalizedColumns.leafColumns);
     return {
-      columns,
+      headerColumns: normalizedColumns.headerColumns,
+      columns: normalizedColumns.leafColumns,
       rows,
     };
   }
 
-  const columns = normalizeColumnsFromProps(options.columns, options.items);
-  const rows = normalizeRowsFromProps(options.items, columns);
+  const normalizedColumns = normalizeColumnsFromProps(options.columns, options.items);
+  const rows = normalizeRowsFromProps(options.items, normalizedColumns.leafColumns);
   return {
-    columns,
+    headerColumns: normalizedColumns.headerColumns,
+    columns: normalizedColumns.leafColumns,
     rows,
   };
 }

@@ -12436,3 +12436,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 266 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 322 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` nested-column header parity expansion:
+  - extended table-definition normalization to support nested `childColumns` in both data-driven props and static-slot column trees while preserving flat leaf-column semantics for sizing, sorting, and row-cell mapping.
+  - updated table header rendering/collection wiring to handle grouped header structures, including placeholder header cells, grouped `colSpan` output, and parent-header resize suppression when child columns are present.
+  - added regression coverage for:
+    - data-driven nested header rendering and leaf-column body alignment.
+    - parent nested-header resizer suppression with leaf-header resize affordances preserved.
+    - static-slot nested header rendering parity.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 269 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 325 tests).
+- Validation: `npm run check -- --pretty false` passed.

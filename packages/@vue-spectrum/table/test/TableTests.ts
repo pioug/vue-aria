@@ -46,6 +46,45 @@ const columnsWithMultipleRowHeaders: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithNestedHeaders: SpectrumTableColumnData[] = [
+  { key: "test", title: "Test", isRowHeader: true },
+  {
+    key: "tier-1",
+    title: "Tiered One Header",
+    childColumns: [
+      {
+        key: "tier-2a",
+        title: "Tier Two Header A",
+        childColumns: [
+          { key: "foo", title: "Foo" },
+          { key: "bar", title: "Bar" },
+        ],
+      },
+      { key: "yay", title: "Yay" },
+      {
+        key: "tier-2b",
+        title: "Tier Two Header B",
+        childColumns: [
+          { key: "baz", title: "Baz" },
+        ],
+      },
+    ],
+  },
+];
+
+const columnsWithNestedResizableHeaders: SpectrumTableColumnData[] = [
+  {
+    key: "group",
+    title: "Group",
+    allowsResizing: true,
+    childColumns: [
+      { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true },
+      { key: "bar", title: "Bar" },
+    ],
+  },
+  { key: "baz", title: "Baz" },
+];
+
 const columnsWithAlignment: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true },
   { key: "bar", title: "Bar", align: "center" },
@@ -180,6 +219,25 @@ const columnsWithResizablePair: SpectrumTableColumnData[] = [
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
+];
+
+const itemsWithNestedColumns: SpectrumTableRowData[] = [
+  {
+    key: "row-1",
+    test: "Test 1",
+    foo: "Foo 1",
+    bar: "Bar 1",
+    yay: "Yay 1",
+    baz: "Baz 1",
+  },
+  {
+    key: "row-2",
+    test: "Test 2",
+    foo: "Foo 2",
+    bar: "Bar 2",
+    yay: "Yay 2",
+    baz: "Baz 2",
+  },
 ];
 
 const itemsWithThreeRows: SpectrumTableRowData[] = [
@@ -883,6 +941,59 @@ export function tableTests() {
     expect(firstRowCells[0]!.attributes("aria-colindex")).toBe("3");
   });
 
+  it("renders nested column headers in data-driven tables", () => {
+    const wrapper = renderTable({
+      columns: columnsWithNestedHeaders,
+      items: itemsWithNestedColumns,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("5");
+
+    const headerRows = wrapper.findAll("thead tr[role='row']");
+    expect(headerRows).toHaveLength(3);
+
+    const firstHeaderRowCells = headerRows[0]!.findAll('[role="columnheader"]');
+    expect(firstHeaderRowCells).toHaveLength(1);
+    expect(firstHeaderRowCells[0]!.text()).toContain("Tiered One Header");
+    expect(firstHeaderRowCells[0]!.attributes("colspan")).toBe("4");
+
+    const secondHeaderRowCells = headerRows[1]!.findAll('[role="columnheader"]');
+    expect(secondHeaderRowCells).toHaveLength(2);
+    expect(secondHeaderRowCells[0]!.text()).toContain("Tier Two Header A");
+    expect(secondHeaderRowCells[1]!.text()).toContain("Tier Two Header B");
+
+    const thirdHeaderRowCells = headerRows[2]!.findAll('[role="columnheader"]');
+    expect(thirdHeaderRowCells).toHaveLength(5);
+    expect(thirdHeaderRowCells.map((cell) => cell.text())).toEqual(["Test", "Foo", "Bar", "Yay", "Baz"]);
+
+    const firstBodyCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(firstBodyCells).toHaveLength(5);
+    expect(firstBodyCells[0]!.text()).toContain("Test 1");
+    expect(firstBodyCells[4]!.text()).toContain("Baz 1");
+  });
+
+  it("does not render column resizers on parent nested headers", () => {
+    const wrapper = renderTable({
+      columns: columnsWithNestedResizableHeaders,
+      items,
+    });
+
+    const headerRows = wrapper.findAll("thead tr[role='row']");
+    expect(headerRows).toHaveLength(2);
+
+    const parentHeader = headerRows[0]!.findAll('[role="columnheader"]')[0]!;
+    expect(parentHeader.text()).toContain("Group");
+    expect(parentHeader.classes()).not.toContain("is-resizable");
+    expect(parentHeader.find(".spectrum-Table-columnResizer").exists()).toBe(false);
+
+    const secondHeaderRowCells = headerRows[1]!.findAll('[role="columnheader"]');
+    const fooHeader = secondHeaderRowCells.find((cell) => cell.text().includes("Foo"));
+    expect(fooHeader).toBeTruthy();
+    expect(fooHeader!.classes()).toContain("is-resizable");
+    expect(fooHeader!.find(".spectrum-Table-columnResizer").exists()).toBe(true);
+  });
+
   it("applies column alignment classes to headers and cells", () => {
     const wrapper = renderTable({
       columns: columnsWithAlignment,
@@ -1499,6 +1610,61 @@ export function tableTests() {
     await bodyRows[1]!.trigger("dblclick");
     await nextTick();
     expect(onAction).toHaveBeenCalledWith("row-2");
+  });
+
+  it("supports nested static slot column headers", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested slot header table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "test", isRowHeader: true }, () => "Test"),
+              h(Column as any, { id: "tier-1", title: "Tiered One Header" }, {
+                default: () => [
+                  h(Column as any, { id: "tier-2a", title: "Tier Two Header A" }, {
+                    default: () => [
+                      h(Column as any, { id: "foo" }, () => "Foo"),
+                      h(Column as any, { id: "bar" }, () => "Bar"),
+                    ],
+                  }),
+                  h(Column as any, { id: "yay" }, () => "Yay"),
+                  h(Column as any, { id: "tier-2b", title: "Tier Two Header B" }, {
+                    default: () => [
+                      h(Column as any, { id: "baz" }, () => "Baz"),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Test 1"),
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                  h(Cell as any, () => "Yay 1"),
+                  h(Cell as any, () => "Baz 1"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("5");
+
+    const headerRows = wrapper.findAll("thead tr[role='row']");
+    expect(headerRows).toHaveLength(3);
+    expect(headerRows[0]!.findAll('[role="columnheader"]')[0]!.attributes("colspan")).toBe("4");
+    expect(headerRows[2]!.findAll('[role="columnheader"]').map((cell) => cell.text())).toEqual(["Test", "Foo", "Bar", "Yay", "Baz"]);
   });
 
   it("renders drag columns in static slot syntax when draggable hooks are provided", () => {

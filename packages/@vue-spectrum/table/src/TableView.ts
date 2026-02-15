@@ -198,24 +198,27 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
     return "";
   }
 
+  const createColumnSignature = (column: ParsedSpectrumTableDefinition["columns"][number]): string => {
+    const childColumns = (column.childColumns ?? []).map((childColumn) => createColumnSignature(childColumn)).join(",");
+    return [
+      String(column.key ?? ""),
+      column.textValue ?? "",
+      column.align ?? "",
+      column.colSpan ?? "",
+      column.defaultWidth ?? "",
+      column.width ?? "",
+      column.minWidth ?? "",
+      column.maxWidth ?? "",
+      column.allowsSorting ? "1" : "0",
+      column.allowsResizing ? "1" : "0",
+      column.isRowHeader ? "1" : "0",
+      column.hideHeader ? "1" : "0",
+      column.showDivider ? "1" : "0",
+      childColumns,
+    ].join(":");
+  };
   const columnSignature = definition.columns
-    .map((column) =>
-      [
-        String(column.key ?? ""),
-        column.textValue ?? "",
-        column.align ?? "",
-        column.colSpan ?? "",
-        column.defaultWidth ?? "",
-        column.width ?? "",
-        column.minWidth ?? "",
-        column.maxWidth ?? "",
-        column.allowsSorting ? "1" : "0",
-        column.allowsResizing ? "1" : "0",
-        column.isRowHeader ? "1" : "0",
-        column.hideHeader ? "1" : "0",
-        column.showDivider ? "1" : "0",
-      ].join(":")
-    )
+    .map((column) => createColumnSignature(column))
     .join("|");
   const createRowSignature = (row: NormalizedSpectrumTableRow | ParsedSpectrumTableDefinition["rows"][number]): string => {
     const cells = row.cells
@@ -238,36 +241,53 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
   return `${columnSignature}__${rowSignature}__${loadingSignature}`;
 }
 
-function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridNode<NormalizedSpectrumTableRow>[] {
-  return definition.columns.map((column, index) => ({
-    type: "column",
-    key: column.key,
-    value: null,
-    rendered: column.content ?? column.title ?? column.textValue,
-    textValue: column.textValue,
-    level: 0,
-    index,
-    hasChildNodes: false,
-    childNodes: [],
-    parentKey: null,
-    prevKey: index > 0 ? definition.columns[index - 1]?.key ?? null : null,
-    nextKey: null,
-    firstChildKey: null,
-    lastChildKey: null,
-    props: {
-      allowsSorting: column.allowsSorting,
-      allowsResizing: column.allowsResizing,
-      isRowHeader: column.isRowHeader,
-      align: column.align,
-      hideHeader: column.hideHeader,
-      showDivider: column.showDivider,
-      colSpan: column.colSpan,
-      defaultWidth: column.defaultWidth,
-      width: column.width,
-      minWidth: column.minWidth,
-      maxWidth: column.maxWidth,
-    },
-  }));
+function createColumnNodes(
+  columns: NormalizedSpectrumTableColumn[],
+  parentKey: TableKey | null = null
+): GridNode<NormalizedSpectrumTableRow>[] {
+  const nodes: GridNode<NormalizedSpectrumTableRow>[] = columns.map((column, index) => {
+    const childColumnNodes = createColumnNodes(column.childColumns ?? [], column.key);
+    for (let childIndex = 0; childIndex < childColumnNodes.length - 1; childIndex += 1) {
+      childColumnNodes[childIndex]!.nextKey = childColumnNodes[childIndex + 1]!.key;
+    }
+
+    return {
+      type: "column",
+      key: column.key,
+      value: null,
+      rendered: column.content ?? column.title ?? column.textValue,
+      textValue: column.textValue,
+      level: 0,
+      index,
+      hasChildNodes: childColumnNodes.length > 0,
+      childNodes: childColumnNodes,
+      parentKey,
+      prevKey: null,
+      nextKey: null,
+      firstChildKey: childColumnNodes[0]?.key ?? null,
+      lastChildKey: childColumnNodes[childColumnNodes.length - 1]?.key ?? null,
+      props: {
+        allowsSorting: column.allowsSorting,
+        allowsResizing: column.allowsResizing,
+        isRowHeader: column.isRowHeader,
+        align: column.align,
+        hideHeader: column.hideHeader,
+        showDivider: column.showDivider,
+        colSpan: column.colSpan,
+        defaultWidth: column.defaultWidth,
+        width: column.width,
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth,
+      },
+    } as GridNode<NormalizedSpectrumTableRow>;
+  });
+
+  for (let index = 0; index < nodes.length - 1; index += 1) {
+    nodes[index]!.nextKey = nodes[index + 1]!.key;
+    nodes[index + 1]!.prevKey = nodes[index]!.key;
+  }
+
+  return nodes;
 }
 
 function resolveCellAlignment(node: GridNode<NormalizedSpectrumTableRow>): "start" | "center" | "end" | undefined {
@@ -450,6 +470,33 @@ interface UnresolvedWidthEntry {
   target: "width" | "defaultWidth";
 }
 
+function cloneColumnTree(columns: NormalizedSpectrumTableColumn[]): NormalizedSpectrumTableColumn[] {
+  return columns.map((column) => ({
+    ...column,
+    childColumns: column.childColumns ? cloneColumnTree(column.childColumns) : undefined,
+  }));
+}
+
+function flattenLeafColumns(columns: NormalizedSpectrumTableColumn[]): NormalizedSpectrumTableColumn[] {
+  const leaves: NormalizedSpectrumTableColumn[] = [];
+  const visit = (entry: NormalizedSpectrumTableColumn) => {
+    if (entry.childColumns && entry.childColumns.length > 0) {
+      for (const childColumn of entry.childColumns) {
+        visit(childColumn);
+      }
+      return;
+    }
+
+    leaves.push(entry);
+  };
+
+  for (const column of columns) {
+    visit(column);
+  }
+
+  return leaves;
+}
+
 function createRowNodes(
   rows: NormalizedSpectrumTableRow[],
   columns: NormalizedSpectrumTableColumn[],
@@ -517,12 +564,7 @@ function createCollection(
   definition: NormalizedSpectrumTableDefinition,
   options: CreateCollectionOptions = {}
 ): TableCollection<NormalizedSpectrumTableRow> {
-  const columnNodes = createColumnNodes(definition);
-  for (let index = 0; index < columnNodes.length; index += 1) {
-    if (index < columnNodes.length - 1) {
-      columnNodes[index]!.nextKey = columnNodes[index + 1]!.key;
-    }
-  }
+  const columnNodes = createColumnNodes(definition.headerColumns);
 
   const bodyRows = createRowNodes(
     definition.rows,
@@ -620,7 +662,8 @@ function resolveColumnWidths(
   const dragButtonWidth = options.showDragButtons ? DRAG_BUTTON_CELL_WIDTH : 0;
   const sizingBaseWidth = Math.max(0, tableWidth - selectionWidth - dragButtonWidth);
   let remainingWidth = sizingBaseWidth;
-  const columns = definition.columns.map((column) => ({ ...column }));
+  const headerColumns = cloneColumnTree(definition.headerColumns);
+  const columns = flattenLeafColumns(headerColumns);
   const unresolvedEntries: UnresolvedWidthEntry[] = [];
   const setResolvedColumnWidth = (
     column: NormalizedSpectrumTableColumn,
@@ -758,6 +801,7 @@ function resolveColumnWidths(
   }
 
   return {
+    headerColumns,
     columns,
     rows: definition.rows,
   };
@@ -784,6 +828,7 @@ function sortDefinition(
   });
 
   return {
+    headerColumns: definition.headerColumns,
     columns: definition.columns,
     rows: sortedRows,
   };
@@ -941,6 +986,20 @@ const TableHeaderCell = defineComponent({
     },
   },
   setup(props) {
+    if (props.node.type === "placeholder") {
+      return () =>
+        h("th", {
+          role: "presentation",
+          "aria-hidden": "true",
+          class: [
+            "spectrum-Table-headCell",
+            "react-spectrum-Table-headCell",
+            "react-spectrum-Table-cell",
+          ],
+          colSpan: props.node.colSpan ?? props.node.colspan ?? 1,
+        });
+    }
+
     const refObject = ref<HTMLElement | null>(null);
     const resizerInputRef = ref<HTMLInputElement | null>(null);
     const domRef = {
@@ -987,6 +1046,7 @@ const TableHeaderCell = defineComponent({
         Boolean(columnProps.value.allowsResizing)
         && !isSelectionCell.value
         && !isDragButtonCell.value
+        && !props.node.hasChildNodes
         && !Boolean(columnProps.value.hideHeader)
     );
     const { inputProps: resizerInputProps, resizerProps } = useTableColumnResize(
@@ -1098,6 +1158,9 @@ const TableHeaderCell = defineComponent({
           ],
           "aria-colindex":
             props.node.colIndex != null ? props.node.colIndex + 1 : props.node.index + 1,
+          colSpan: props.node.colSpan ?? props.node.colspan ?? undefined,
+          "aria-colspan":
+            props.node.colSpan != null ? String(props.node.colSpan) : props.node.colspan != null ? String(props.node.colspan) : undefined,
           style: columnSizingStyles.value,
         },
         isSelectionCell.value
