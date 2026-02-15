@@ -12366,3 +12366,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 255 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 311 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` static-slot drag parity expansion:
+  - added migrated static-slot composition coverage ensuring drag columns render when `dragAndDropHooks.useDraggableCollectionState` is provided.
+  - assertions validate static-slot header/body drag-cell classes, drag-handle rendering, and `aria-colindex` shifts.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 256 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 312 tests).
+- Validation: `npm run check -- --pretty false` passed.

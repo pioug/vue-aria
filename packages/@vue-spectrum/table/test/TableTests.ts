@@ -1443,6 +1443,55 @@ export function tableTests() {
     expect(onAction).toHaveBeenCalledWith("row-2");
   });
 
+  it("renders drag columns in static slot syntax when draggable hooks are provided", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Static slot drag table",
+        dragAndDropHooks: {
+          useDraggableCollectionState: vi.fn(),
+        },
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+              h(Column as any, { id: "bar" }, () => "Bar"),
+              h(Column as any, { id: "baz" }, () => "Baz"),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                  h(Cell as any, () => "Baz 1"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("4");
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(4);
+    expect(headers[0]!.classes()).toContain("react-spectrum-Table-dragButtonHeadCell");
+
+    const row = wrapper.find('tbody [role="row"]');
+    const rowHeader = row.get('[role="rowheader"]');
+    const cells = row.findAll('[role="gridcell"]');
+    expect(rowHeader.attributes("aria-colindex")).toBe("2");
+    expect(cells[0]!.attributes("aria-colindex")).toBe("1");
+    expect(cells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(cells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
+  });
+
   it("does not warn about invoking default slots outside render", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
