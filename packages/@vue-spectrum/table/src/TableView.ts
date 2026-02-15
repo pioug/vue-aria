@@ -939,7 +939,20 @@ const TableHeaderCell = defineComponent({
       resizerRef
     );
     const isColumnResizing = computed(() => props.columnResizeState.resizingColumn === props.node.key);
-    const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
+    const { checkboxProps: baseSelectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
+    const selectAllCheckboxProps = computed<Record<string, unknown>>(() => {
+      const selectionManager = props.state.selectionManager;
+      return {
+        ...baseSelectAllCheckboxProps,
+        isSelected: selectionManager.isSelectAll,
+        isDisabled:
+          selectionManager.selectionMode !== "multiple"
+          || props.state.collection.size === 0
+          || (props.state.collection.rows.length === 1
+            && props.state.collection.rows[0]?.type === "loader"),
+        isIndeterminate: !selectionManager.isEmpty && !selectionManager.isSelectAll,
+      };
+    });
     const resolvedColumnWidth = computed(() => {
       if (!props.useResizeColumnWidths) {
         return undefined;
@@ -1006,7 +1019,7 @@ const TableHeaderCell = defineComponent({
           style: columnSizingStyles.value,
         },
         isSelectionCell.value
-          ? h(TableSelectionCheckbox, { checkboxProps: selectAllCheckboxProps })
+          ? h(TableSelectionCheckbox, { checkboxProps: selectAllCheckboxProps.value })
           : Boolean(columnProps.value.hideHeader)
             ? h("span", { class: "spectrum-Table-visuallyHidden" }, props.node.rendered as any)
             : [

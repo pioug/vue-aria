@@ -2849,6 +2849,47 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("supports clearing all rows via the select-all checkbox", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    await selectAll.setValue(true);
+
+    onSelectionChange.mockClear();
+    await selectAll.setValue(false);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set());
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("marks the select-all checkbox as mixed when some rows are selected", async () => {
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    let selectAll = wrapper.get('thead input[role="checkbox"]');
+    expect(selectAll.attributes("aria-checked")).toBe("false");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+
+    selectAll = wrapper.get('thead input[role="checkbox"]');
+    expect(selectAll.attributes("aria-checked")).toBe("mixed");
+  });
+
   it("does not select all rows via Ctrl+A when disallowSelectAll is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

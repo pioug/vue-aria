@@ -12111,3 +12111,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 196 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 252 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` select-all checkbox state parity refinement:
+  - fixed header select-all checkbox state wiring so `isSelected`, `isIndeterminate`, and disabled-state semantics are derived from live table selection state on each render.
+  - added regression coverage for:
+    - clearing all selected rows via the select-all checkbox.
+    - mixed (`aria-checked="mixed"`) select-all checkbox state when partial selection is active.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 198 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 254 tests).
+- Validation: `npm run check -- --pretty false` passed.
