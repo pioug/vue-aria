@@ -8,6 +8,29 @@ function isRenderableNode(node: VNode): boolean {
   return typeof node.type !== "symbol";
 }
 
+function syncListCollection(target: any, source: any): void {
+  target.keyMap = source.keyMap;
+  target.iterable = source.iterable;
+  target.firstKey = source.firstKey;
+  target.lastKey = source.lastKey;
+  target._size = source._size;
+}
+
+function getCollectionSignature(nodes: Array<any>): string {
+  const parts: string[] = [];
+  const visit = (items: Array<any>) => {
+    for (const item of items) {
+      parts.push(`${String(item.key)}:${item.type}:${item.textValue ?? ""}`);
+      if (Array.isArray(item.childNodes) && item.childNodes.length > 0) {
+        visit(item.childNodes as Array<any>);
+      }
+    }
+  };
+
+  visit(nodes);
+  return parts.join("|");
+}
+
 /**
  * A list of options that can allow selection of one or more.
  */
@@ -126,23 +149,42 @@ export const ListBox = defineComponent({
     },
   },
   setup(props, { attrs, slots }) {
-    const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-    const collectionNodes = createListBoxCollection(props.items, slotChildren);
-    const collection = new ListCollection(collectionNodes as any);
+    const initialSlotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+    const initialCollectionNodes = createListBoxCollection(props.items, initialSlotChildren);
+    const collection = new ListCollection(initialCollectionNodes as any);
     const state = useListState<object>({
       collection: collection as any,
-      disabledKeys: props.disabledKeys,
-      selectionMode: props.selectionMode,
-      disallowEmptySelection: props.disallowEmptySelection,
-      selectedKeys: props.selectedKeys,
-      defaultSelectedKeys: props.defaultSelectedKeys,
-      onSelectionChange: props.onSelectionChange,
+      get disabledKeys() {
+        return props.disabledKeys;
+      },
+      get selectionMode() {
+        return props.selectionMode;
+      },
+      get disallowEmptySelection() {
+        return props.disallowEmptySelection;
+      },
+      get selectedKeys() {
+        return props.selectedKeys;
+      },
+      get defaultSelectedKeys() {
+        return props.defaultSelectedKeys;
+      },
+      get onSelectionChange() {
+        return props.onSelectionChange;
+      },
     });
 
     const layout = useListBoxLayout<object>();
 
-    return () =>
-      h(ListBoxBase as any, {
+    return () => {
+      const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+      const collectionNodes = createListBoxCollection(props.items, slotChildren);
+      const nextCollection = new ListCollection(collectionNodes as any);
+      const collectionSignature = getCollectionSignature(collectionNodes as any[]);
+      syncListCollection(state.collection as any, nextCollection as any);
+      (state.selectionManager as any).collection = state.collection as any;
+
+      return h(ListBoxBase as any, {
         ...(attrs as Record<string, unknown>),
         id: props.id,
         ariaLabel: props.ariaLabel,
@@ -159,10 +201,12 @@ export const ListBox = defineComponent({
         onBlur: props.onBlur,
         onFocusChange: props.onFocusChange,
         renderEmptyState: props.renderEmptyState,
+        collectionSignature,
         state,
         layout,
         UNSAFE_className: props.UNSAFE_className,
         UNSAFE_style: props.UNSAFE_style,
       });
+    };
   },
 });

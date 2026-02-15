@@ -10336,3 +10336,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 34 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 35 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` dynamic-section-update parity fix:
+  - made listbox collection synchronization reactive to `items`/slot updates by syncing collection internals and updating the live selection manager collection reference each render.
+    - `packages/@vue-spectrum/listbox/src/ListBox.ts`
+  - added a collection-signature prop pass-through to ensure `ListBoxBase` re-renders when collection ordering/content changes while preserving component instance semantics.
+    - `packages/@vue-spectrum/listbox/src/ListBoxBase.ts`
+  - added migrated coverage asserting items can move between sections after `items` prop updates.
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 35 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 36 tests).
+- Validation: `npm run check -- --pretty false` passed.

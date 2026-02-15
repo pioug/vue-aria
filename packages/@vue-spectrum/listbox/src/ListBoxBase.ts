@@ -86,6 +86,11 @@ export const ListBoxBase = defineComponent({
       type: Function as PropType<SpectrumListBoxProps<object>["renderEmptyState"]>,
       required: false,
     },
+    collectionSignature: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
     UNSAFE_className: {
       type: String,
       required: false,

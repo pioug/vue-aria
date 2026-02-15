@@ -707,6 +707,64 @@ describe("ListBox", () => {
     expect(wrapper.get('[role="listbox"]').attributes("aria-label")).toBe("Test");
   });
 
+  it("handles moving an item between sections when items prop updates", async () => {
+    const sections = [
+      {
+        key: "sect1",
+        type: "section",
+        title: "Section 1",
+        children: [
+          { key: "foo-1", name: "Foo 1" },
+          { key: "foo-2", name: "Foo 2" },
+        ],
+      },
+      {
+        key: "sect2",
+        type: "section",
+        title: "Section 2",
+        children: [
+          { key: "bar-1", name: "Bar 1" },
+          { key: "bar-2", name: "Bar 2" },
+        ],
+      },
+    ];
+
+    const wrapper = mount(ListBox as any, {
+      props: {
+        ariaLabel: "ListBox",
+        items: sections as any,
+      },
+      attachTo: document.body,
+    });
+
+    let groups = wrapper.findAll('[role="group"]');
+    expect(groups).toHaveLength(2);
+    expect(groups[0]?.text()).toContain("Foo 1");
+    expect(groups[1]?.text()).not.toContain("Foo 1");
+
+    const updatedSections = [
+      {
+        ...sections[0],
+        children: [sections[0].children[1]],
+      },
+      {
+        ...sections[1],
+        children: [...sections[1].children, sections[0].children[0]],
+      },
+    ];
+
+    await wrapper.setProps({
+      items: updatedSections as any,
+    });
+    await nextTick();
+    await nextTick();
+
+    groups = wrapper.findAll('[role="group"]');
+    expect(groups).toHaveLength(2);
+    expect(groups[0]?.text()).not.toContain("Foo 1");
+    expect(groups[1]?.text()).toContain("Foo 1");
+  });
+
   it("warns when no aria-label or aria-labelledby is provided", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
