@@ -366,6 +366,22 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("closes the menu when the page scrolls", async () => {
+    const wrapper = renderComboBox();
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    document.body.dispatchEvent(new Event("scroll", { bubbles: true }));
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("updates when selectedKey and inputValue controlled props change together", async () => {
     const wrapper = renderComboBox({
       selectedKey: "2",

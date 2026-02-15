@@ -10894,3 +10894,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 77 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` scroll-dismiss parity update:
+  - added outside-scroll dismissal handling in combobox aria wiring so open menus close when the page scrolls, while preserving in-popover scrolling behavior.
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+  - added migrated coverage asserting open combobox menus close on document/body scroll.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 78 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-spectrum/combobox/test` passed (4 files, 87 tests).
+- Validation: `npm run check -- --pretty false` passed.

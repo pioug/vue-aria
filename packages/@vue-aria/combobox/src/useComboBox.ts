@@ -305,6 +305,32 @@ export function useComboBox<T>(
     });
   });
 
+  watchEffect((onCleanup) => {
+    if (!state.isOpen) {
+      return;
+    }
+
+    const document = getOwnerDocument(inputRef.current);
+    const onScroll = (event: Event) => {
+      const target = event.target as Node | null;
+      if (
+        target
+        && (nodeContains(popoverRef.current as Node | null, target)
+          || nodeContains(inputRef.current, target)
+          || nodeContains(buttonRef.current as Node | null, target))
+      ) {
+        return;
+      }
+
+      state.close();
+    };
+
+    document.addEventListener("scroll", onScroll, true);
+    onCleanup(() => {
+      document.removeEventListener("scroll", onScroll, true);
+    });
+  });
+
   watchEffect(() => {
     const focusedKey = state.selectionManager.focusedKey;
     if (
