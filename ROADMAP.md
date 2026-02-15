@@ -10094,3 +10094,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 50 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` locale-format parity update:
+  - added adapted coverage asserting default currency values format using active `I18nProvider` locale (`fr-FR`) rather than fallback locale formatting.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 51 tests).
+- Validation: `npm run check -- --pretty false` passed.

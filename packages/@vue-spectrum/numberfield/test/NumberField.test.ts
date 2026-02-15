@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { FormValidationContext } from "@vue-aria/form-state";
+import { I18nProvider } from "@vue-aria/i18n";
 import { NumberField } from "../src/NumberField";
 
 function renderNumberField(
@@ -798,5 +799,35 @@ describe("NumberField", () => {
     await input.trigger("blur");
     expect((input.element as HTMLInputElement).value).toBe(expected);
     expect(onChange).toHaveBeenCalledWith(21);
+  });
+
+  it("formats default values using provider locale", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              I18nProvider as any,
+              { locale: "fr-FR" },
+              {
+                default: () =>
+                  h(NumberField as any, {
+                    "aria-label": "labelled",
+                    defaultValue: -52,
+                    formatOptions: { style: "currency", currency: "USD" },
+                  }),
+              }
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[type="text"]');
+    const expected = new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: "USD",
+    }).format(-52);
+    expect((input.element as HTMLInputElement).value).toBe(expected);
   });
 });
