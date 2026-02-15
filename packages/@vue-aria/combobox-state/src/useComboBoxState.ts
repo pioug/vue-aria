@@ -7,7 +7,7 @@ import {
   useFormValidationState,
   type FormValidationState,
 } from "@vue-aria/form-state";
-import { computed, ref, toValue, watchEffect } from "vue";
+import { computed, ref, toValue, watch, watchEffect } from "vue";
 
 type FilterFn = (textValue: string, inputValue: string) => boolean;
 
@@ -262,6 +262,28 @@ export function useComboBoxState<T extends object>(
     listState.selectedKey != null
       ? listState.collection.getItem(listState.selectedKey)?.textValue ?? ""
       : ""
+  );
+
+  watch(
+    () => props.defaultSelectedKey,
+    (nextDefaultSelectedKey, previousDefaultSelectedKey) => {
+      if (props.selectedKey !== undefined) {
+        return;
+      }
+
+      if (Object.is(nextDefaultSelectedKey, previousDefaultSelectedKey)) {
+        return;
+      }
+
+      if (nextDefaultSelectedKey == null) {
+        listState.setSelectedKey(null);
+        return;
+      }
+
+      if (nextDefaultSelectedKey !== listState.selectedKey) {
+        listState.setSelectedKey(nextDefaultSelectedKey);
+      }
+    }
   );
 
   watchEffect(() => {

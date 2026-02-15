@@ -1289,6 +1289,62 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).value).toBe("");
   });
 
+  it("resets to defaultSelectedKey when submitting a form action", async () => {
+    const renderFormActionHarness = (comboProps: Record<string, unknown> = {}) =>
+      mount(
+        defineComponent({
+          setup() {
+            const defaultSelectedKey = ref("1");
+            const handleSubmit = (event: Event) => {
+              event.preventDefault();
+              defaultSelectedKey.value = "2";
+            };
+
+            return () =>
+              h("form", {
+                "data-testid": "form",
+                onSubmit: handleSubmit,
+              }, [
+                h(ComboBox as any, {
+                  label: "Test",
+                  name: "combobox",
+                  items,
+                  defaultSelectedKey: defaultSelectedKey.value,
+                  ...comboProps,
+                }),
+                h("input", {
+                  type: "submit",
+                  "data-testid": "submit",
+                }),
+              ]);
+          },
+        }),
+        { attachTo: document.body }
+      );
+
+    const textWrapper = renderFormActionHarness();
+    const textInput = textWrapper.get('input[role="combobox"]');
+    expect((textInput.element as HTMLInputElement).value).toBe("One");
+
+    await textWrapper.get('[data-testid="form"]').trigger("submit");
+    await nextTick();
+    await nextTick();
+
+    expect((textInput.element as HTMLInputElement).value).toBe("Two");
+    textWrapper.unmount();
+
+    const keyWrapper = renderFormActionHarness({ formValue: "key" });
+    const keyHiddenInput = () =>
+      keyWrapper.get('input[type="hidden"][name="combobox"]').element as HTMLInputElement;
+    expect(keyHiddenInput().value).toBe("1");
+
+    await keyWrapper.get('[data-testid="form"]').trigger("submit");
+    await nextTick();
+    await nextTick();
+
+    expect(keyHiddenInput().value).toBe("2");
+  });
+
   it("forces text form submission when allowsCustomValue is true", () => {
     const wrapper = renderComboBox({
       name: "framework",

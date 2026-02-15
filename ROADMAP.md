@@ -11422,6 +11422,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` form-action default-key parity refinement:
+  - added migrated coverage asserting uncontrolled comboboxes react to post-submit `defaultSelectedKey` updates and reset displayed/serialized form values accordingly:
+    - text submission mode updates visible combobox input from `"One"` to `"Two"` after submit-driven `defaultSelectedKey` change.
+    - `formValue="key"` mode updates hidden serialized input from `"1"` to `"2"` after the same submit-driven default change.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - synchronized uncontrolled combobox state with reactive `defaultSelectedKey` prop updates by watching default-key changes in `@vue-aria/combobox-state` and applying them when `selectedKey` is not controlled.
+    - `packages/@vue-aria/combobox-state/src/useComboBoxState.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 118 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 130 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` native server-description parity refinement:
   - expanded native server-validation coverage for both picker variants to assert group `aria-describedby` description content includes server errors and clears those server messages after calendar selection resolves validation.
     - `DatePicker`: native server error description presence/clear behavior.
