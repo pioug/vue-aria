@@ -153,6 +153,18 @@ describe("TableView nested rows", () => {
     return match;
   }
 
+  function getRowByText(wrapper: any, text: string) {
+    const match = wrapper
+      .findAll('tbody [role="row"]')
+      .find((row: any) => row.text().includes(text));
+
+    if (!match) {
+      throw new Error(`Unable to find table row containing "${text}"`);
+    }
+
+    return match;
+  }
+
   async function moveFocus(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }, key: string) {
     await target.trigger("keydown", { key });
     await target.trigger("keyup", { key });
@@ -452,6 +464,108 @@ describe("TableView nested rows", () => {
     expect(rows).toHaveLength(3);
     expect(rows[0]!.find('[role="rowheader"]').attributes("aria-colindex")).toBe("2");
     expect(rows[1]!.attributes("aria-level")).toBe("2");
+  });
+
+  it("supports selecting nested rows through row checkboxes", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedRow = getRowByText(wrapper, "Row 1, Lvl 2, Foo");
+    const nestedRowCheckbox = nestedRow.get('[role="checkbox"]');
+    await nestedRowCheckbox.setValue(true);
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(new Set(["row-1-level-2"]));
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("true");
+  });
+
+  it("select-all selects nested descendants", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const selectAll = wrapper.get('thead [role="checkbox"]');
+    await selectAll.setValue(true);
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set([
+        "row-1-level-1",
+        "row-1-level-2",
+        "row-1-level-3",
+        "row-2-level-1",
+        "row-3-level-1",
+        "row-3-level-2",
+      ])
+    );
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    for (const row of rows) {
+      expect(row.attributes("aria-selected")).toBe("true");
+    }
+  });
+
+  it("select-all excludes disabled nested rows", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        disabledKeys: ["row-1-level-2"],
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const selectAll = wrapper.get('thead [role="checkbox"]');
+    await selectAll.setValue(true);
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set([
+        "row-1-level-1",
+        "row-1-level-3",
+        "row-2-level-1",
+        "row-3-level-1",
+        "row-3-level-2",
+      ])
+    );
+
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("false");
   });
 
   it("moves row focus down through nested rows with ArrowDown", async () => {

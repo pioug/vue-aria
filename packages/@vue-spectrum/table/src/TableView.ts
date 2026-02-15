@@ -614,30 +614,32 @@ const TableHeaderCell = defineComponent({
     const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
     const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
     const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
+    const handleHeaderArrowDown = (event: KeyboardEvent) => {
+      if (!("expandedKeys" in props.state)) {
+        return;
+      }
+
+      if (event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+
+      if (event.key !== "ArrowDown") {
+        return;
+      }
+
+      const firstBodyRow = getTableBodyRows(refObject.value)[0] ?? null;
+      if (!firstBodyRow) {
+        return;
+      }
+
+      if (focusCellInRowByColIndex(firstBodyRow, refObject.value?.getAttribute("aria-colindex") ?? null)) {
+        event.preventDefault();
+      }
+    };
     const headerCellProps = computed(() =>
       mergeProps(columnHeaderProps, {
-        onKeydown: (event: KeyboardEvent) => {
-          if (!("expandedKeys" in props.state)) {
-            return;
-          }
-
-          if (event.altKey || event.ctrlKey || event.metaKey) {
-            return;
-          }
-
-          if (event.key !== "ArrowDown") {
-            return;
-          }
-
-          const firstBodyRow = getTableBodyRows(refObject.value)[0] ?? null;
-          if (!firstBodyRow) {
-            return;
-          }
-
-          if (focusCellInRowByColIndex(firstBodyRow, refObject.value?.getAttribute("aria-colindex") ?? null)) {
-            event.preventDefault();
-          }
-        },
+        onKeydown: handleHeaderArrowDown,
+        onKeyDown: handleHeaderArrowDown,
       }) as Record<string, unknown>
     );
 

@@ -11762,3 +11762,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 137 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 193 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid selection breadth expansion:
+  - expanded nested-row selection coverage for checkbox-mode treegrids:
+    - selecting a nested descendant row via its row checkbox updates selection state with the nested row key.
+    - select-all includes expanded nested descendants (top-level, child, and grandchild rows).
+    - select-all excludes disabled nested descendants while preserving selection on enabled rows.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+  - hardened header-key handler interop for treegrid keyboard focus wiring in `TableView` by binding the header ArrowDown handler for both `onKeydown` and `onKeyDown` listener keys used across merged aria props.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 23 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 140 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 196 tests).
+- Validation: `npm run check -- --pretty false` passed.
