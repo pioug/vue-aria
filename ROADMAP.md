@@ -11422,6 +11422,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
+  - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
+    - `defaultInputValue` updates input text in uncontrolled mode.
+    - `defaultSelectedKey` updates input text and key-form hidden input value in uncontrolled mode.
+    - `defaultSelectedKey: null` clears uncontrolled input text.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - added controlled-mode guard coverage asserting reactive default prop updates do not override controlled `inputValue` or `selectedKey` flows.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 123 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 139 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` form-action default-key parity refinement:
   - added migrated coverage asserting uncontrolled comboboxes react to post-submit `defaultSelectedKey` updates and reset displayed/serialized form values accordingly:
     - text submission mode updates visible combobox input from `"One"` to `"Two"` after submit-driven `defaultSelectedKey` change.

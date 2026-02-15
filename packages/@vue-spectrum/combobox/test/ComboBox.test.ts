@@ -1071,6 +1071,114 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
   });
 
+  it("syncs uncontrolled defaultInputValue prop updates", async () => {
+    const wrapper = renderComboBox({
+      defaultInputValue: "One",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.setProps({
+      defaultInputValue: "Three",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Three");
+  });
+
+  it("does not override controlled inputValue when defaultInputValue changes", async () => {
+    const wrapper = renderComboBox({
+      inputValue: "One",
+      defaultInputValue: "One",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.setProps({
+      defaultInputValue: "Three",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+  });
+
+  it("syncs uncontrolled defaultSelectedKey prop updates in text form mode", async () => {
+    const wrapper = renderComboBox({
+      name: "combo",
+      defaultSelectedKey: "1",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.setProps({
+      defaultSelectedKey: "3",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Three");
+
+    await wrapper.setProps({
+      defaultSelectedKey: null,
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+  });
+
+  it("syncs uncontrolled defaultSelectedKey prop updates in key form mode", async () => {
+    const wrapper = renderComboBox({
+      name: "combo",
+      formValue: "key",
+      defaultSelectedKey: "1",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const hiddenInput = () =>
+      wrapper.get('input[type="hidden"][name="combo"]').element as HTMLInputElement;
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(hiddenInput().value).toBe("1");
+
+    await wrapper.setProps({
+      defaultSelectedKey: "3",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Three");
+    expect(hiddenInput().value).toBe("3");
+  });
+
+  it("does not override controlled selectedKey when defaultSelectedKey changes", async () => {
+    const wrapper = renderComboBox({
+      selectedKey: "1",
+      defaultSelectedKey: "1",
+      formValue: "key",
+      name: "combo",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const hiddenInput = () =>
+      wrapper.get('input[type="hidden"][name="combo"]').element as HTMLInputElement;
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(hiddenInput().value).toBe("1");
+
+    await wrapper.setProps({
+      defaultSelectedKey: "3",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(hiddenInput().value).toBe("1");
+  });
+
   it("keeps controlled selectedKey value on selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
