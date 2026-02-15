@@ -10800,3 +10800,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 55 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` fully-controlled close parity update:
+  - added migrated coverage asserting the menu closes after option selection once parent-controlled `selectedKey`/`inputValue` props are updated.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 56 tests).
+- Validation: `npm run check -- --pretty false` passed.

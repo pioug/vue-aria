@@ -237,6 +237,35 @@ describe("ComboBox", () => {
     expect(onInputChange).toHaveBeenCalledTimes(1);
   });
 
+  it("closes after selection when selectedKey and inputValue are controlled", async () => {
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      inputValue: "T",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    const threeOption = wrapper.findAll('[role="option"]').find((option) => option.text() === "Three");
+    expect(threeOption).toBeDefined();
+    await threeOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    await wrapper.setProps({
+      selectedKey: "3",
+      inputValue: "Three",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Three");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("updates when selectedKey and inputValue controlled props change together", async () => {
     const wrapper = renderComboBox({
       selectedKey: "2",
