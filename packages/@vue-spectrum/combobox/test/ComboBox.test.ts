@@ -958,6 +958,34 @@ describe("ComboBox", () => {
     expect(wrapper.get(`#${describedBy}`).text()).toContain("Constraints not satisfied");
   });
 
+  it("focuses the combobox input on failed native form validation", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-test": "form" }, [
+              h(ComboBox as any, {
+                label: "Test",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const form = wrapper.get('[data-test="form"]').element as HTMLFormElement;
+    const input = wrapper.get('input[role="combobox"]').element as HTMLInputElement;
+
+    await nextTick();
+    form.checkValidity();
+    await nextTick();
+
+    expect(document.activeElement).toBe(input);
+  });
+
   it("clears native required validation after selecting a valid option and blurring", async () => {
     const wrapper = mount(
       defineComponent({
