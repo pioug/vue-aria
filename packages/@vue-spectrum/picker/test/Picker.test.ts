@@ -162,6 +162,37 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Two");
   });
 
+  it("selects options on press when open", async () => {
+    const onSelectionChange = vi.fn();
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      onSelectionChange,
+      onOpenChange,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("click");
+    await nextTick();
+
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(options).toHaveLength(3);
+
+    options[1]?.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect(onOpenChange).toHaveBeenNthCalledWith(1, true);
+    expect(onOpenChange).toHaveBeenNthCalledWith(2, false);
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(wrapper.text()).toContain("Two");
+  });
+
   it("opens on ArrowDown and focuses the first option", async () => {
     const wrapper = renderPicker();
     const trigger = wrapper.get("button");

@@ -11315,3 +11315,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 73 tests).
 - Validation: `npm test -- packages/@vue-aria/select/test packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/combobox/test packages/@vue-spectrum/picker/test` passed (12 files, 280 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` option-press selection parity refinement:
+  - added migrated coverage asserting mouse press on an open picker option selects the item, closes the overlay, and emits open/selection callbacks in order.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 74 tests).
+- Validation: `npm run check -- --pretty false` passed.
