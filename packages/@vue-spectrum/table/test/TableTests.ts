@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { expect, it, vi } from "vitest";
+import { I18nProvider } from "@vue-aria/i18n";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import {
@@ -573,6 +574,28 @@ export function tableTests() {
     const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
     expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
     expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
+  });
+
+  it("localizes drag button labels through I18nProvider locale overrides", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(I18nProvider, { locale: "ar-AE" }, () =>
+              h(TableView as any, {
+                "aria-label": "Localized drag table",
+                columns,
+                items,
+                showDragButtons: true,
+              }));
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const dragButton = wrapper.find("tbody .react-spectrum-Table-dragButton");
+    expect(dragButton.exists()).toBe(true);
+    expect(dragButton.attributes("aria-label")).toBe("سحب");
   });
 
   it("renders drag and selection columns together when both are enabled", () => {
