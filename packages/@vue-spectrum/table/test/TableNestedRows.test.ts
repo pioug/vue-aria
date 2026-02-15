@@ -761,6 +761,97 @@ describe("TableView nested rows", () => {
     );
   });
 
+  it("supports selecting a range from a top-level row to a descendant nested row with Shift+click", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startCell = getCellByText(wrapper, "Row 1, Lvl 1, Foo");
+    await press(startCell);
+    onSelectionChange.mockReset();
+
+    const endCell = getCellByText(wrapper, "Row 1, Lvl 3, Foo");
+    await press(endCell, { shiftKey: true });
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2", "row-1-level-3"])
+    );
+  });
+
+  it("supports selecting a range from a descendant nested row to a top-level row with Shift+click", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startCell = getCellByText(wrapper, "Row 1, Lvl 3, Foo");
+    await press(startCell);
+    onSelectionChange.mockReset();
+
+    const endCell = getCellByText(wrapper, "Row 2, Lvl 1, Foo");
+    await press(endCell, { shiftKey: true });
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-3", "row-2-level-1"])
+    );
+  });
+
+  it("skips disabled nested rows when selecting pointer ranges with Shift+click", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        disabledKeys: ["row-1-level-2"],
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startCell = getCellByText(wrapper, "Row 1, Lvl 1, Foo");
+    await press(startCell);
+    onSelectionChange.mockReset();
+
+    const endCell = getCellByText(wrapper, "Row 2, Lvl 1, Foo");
+    await press(endCell, { shiftKey: true });
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-3", "row-2-level-1"])
+    );
+  });
+
   it("extends nested selection with Shift+ArrowDown through visible descendants", async () => {
     enableTableNestedRows();
     const onSelectionChange = vi.fn();
