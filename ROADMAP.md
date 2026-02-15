@@ -10581,3 +10581,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 26 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` docs parity update:
+  - expanded `docs/packages/spectrum-combobox.md` coverage with:
+    - `menuTrigger` behavior notes
+    - async loading usage (`loadingState`, `maxHeight`, `onLoadMore`)
+    - keyboard open/focus behavior guidance (`ArrowDown`/`ArrowUp`)
+    - focus callback and validation-state prop guidance
+    - `docs/packages/spectrum-combobox.md`
+- Validation: `npm run check -- --pretty false` passed.
