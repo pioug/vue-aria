@@ -165,9 +165,13 @@ describe("TableView nested rows", () => {
     return match;
   }
 
-  async function moveFocus(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }, key: string) {
-    await target.trigger("keydown", { key });
-    await target.trigger("keyup", { key });
+  async function moveFocus(
+    target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> },
+    key: string,
+    options: Record<string, unknown> = {}
+  ) {
+    await target.trigger("keydown", { key, ...options });
+    await target.trigger("keyup", { key, ...options });
     await nextTick();
   }
 
@@ -695,6 +699,206 @@ describe("TableView nested rows", () => {
 
     expect(onSelectionChange).not.toHaveBeenCalled();
     expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("false");
+  });
+
+  it("supports selecting a range from a top-level row to a nested row with Shift+click", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startCell = getCellByText(wrapper, "Row 1, Lvl 1, Foo");
+    await press(startCell);
+    onSelectionChange.mockReset();
+
+    const endCell = getCellByText(wrapper, "Row 2, Lvl 1, Foo");
+    await press(endCell, { shiftKey: true });
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2", "row-1-level-3", "row-2-level-1"])
+    );
+  });
+
+  it("supports selecting a range from a nested row to its top-level ancestor with Shift+click", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startCell = getCellByText(wrapper, "Row 1, Lvl 3, Foo");
+    await press(startCell);
+    onSelectionChange.mockReset();
+
+    const endCell = getCellByText(wrapper, "Row 1, Lvl 1, Foo");
+    await press(endCell, { shiftKey: true });
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2", "row-1-level-3"])
+    );
+  });
+
+  it("extends nested selection with Shift+ArrowDown through visible descendants", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows keyboard selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const firstRow = getRowByText(wrapper, "Row 1, Lvl 1, Foo");
+    (firstRow.element as HTMLElement).focus();
+    await firstRow.trigger("focus");
+    await moveFocus(firstRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(firstRow, "ArrowDown", { shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2"])
+    );
+
+    const secondRow = getRowByText(wrapper, "Row 1, Lvl 2, Foo");
+    await moveFocus(secondRow, "ArrowDown", { shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2", "row-1-level-3"])
+    );
+  });
+
+  it("extends nested selection with Shift+ArrowUp through visible ancestors", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows keyboard selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startRow = getRowByText(wrapper, "Row 2, Lvl 1, Foo");
+    (startRow.element as HTMLElement).focus();
+    await startRow.trigger("focus");
+    await moveFocus(startRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(startRow, "ArrowUp", { shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-2-level-1", "row-1-level-3"])
+    );
+
+    const thirdRow = getRowByText(wrapper, "Row 1, Lvl 3, Foo");
+    await moveFocus(thirdRow, "ArrowUp", { shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-2-level-1", "row-1-level-3", "row-1-level-2"])
+    );
+  });
+
+  it("extends nested selection with Ctrl+Shift+Home and Ctrl+Shift+End", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows keyboard selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const startRow = getRowByText(wrapper, "Row 2, Lvl 1, Foo");
+    (startRow.element as HTMLElement).focus();
+    await startRow.trigger("focus");
+    await moveFocus(startRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(startRow, "Home", { ctrlKey: true, shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-2", "row-1-level-3", "row-2-level-1"])
+    );
+
+    const resetAnchorRow = getRowByText(wrapper, "Row 2, Lvl 1, Foo");
+    await moveFocus(resetAnchorRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(resetAnchorRow, "End", { ctrlKey: true, shiftKey: true });
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-2-level-1", "row-3-level-1", "row-3-level-2"])
+    );
+  });
+
+  it("skips disabled nested rows while extending selection with Shift+ArrowDown", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows keyboard selection table",
+        columns,
+        items: manyNestedItems,
+        disabledKeys: ["row-1-level-2"],
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const firstRow = getRowByText(wrapper, "Row 1, Lvl 1, Foo");
+    (firstRow.element as HTMLElement).focus();
+    await firstRow.trigger("focus");
+    await moveFocus(firstRow, "Enter");
+    onSelectionChange.mockReset();
+
+    await moveFocus(firstRow, "ArrowDown", { shiftKey: true });
+    await moveFocus(getRowByText(wrapper, "Row 1, Lvl 2, Foo"), "ArrowDown", { shiftKey: true });
+
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(
+      new Set(["row-1-level-1", "row-1-level-3"])
+    );
   });
 
   it("moves row focus down through nested rows with ArrowDown", async () => {

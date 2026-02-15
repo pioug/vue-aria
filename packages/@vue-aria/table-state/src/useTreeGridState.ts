@@ -104,12 +104,17 @@ export function UNSTABLE_useTreeGridState<T extends object>(
       })
   );
 
-  const tableState = useTableState({
-    ...props,
-    get collection() {
-      return collectionRef.value;
+  const tableStateProps = Object.create(props, {
+    collection: {
+      get() {
+        return collectionRef.value;
+      },
+      enumerable: true,
+      configurable: true,
     },
-  } as TableStateProps<T>);
+  }) as TableStateProps<T>;
+
+  const tableState = useTableState(tableStateProps);
 
   const toggle = (key: Key) => {
     setExpandedKeys(

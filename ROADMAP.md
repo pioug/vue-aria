@@ -12242,3 +12242,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 227 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 283 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` nested-range selection parity expansion:
+  - added migrated `TreeGridTable` nested range-selection coverage for:
+    - Shift+click range selection across top-level and descendant rows.
+    - Shift+ArrowDown / Shift+ArrowUp keyboard range extension through visible nested rows.
+    - Ctrl+Shift+Home / Ctrl+Shift+End keyboard range extension anchors.
+    - disabled-row exclusion during nested keyboard range extension.
+  - fixed `@vue-aria/table-state` treegrid selection-state wiring so getter-backed state props stay live when composing `useTableState` from `UNSTABLE_useTreeGridState` (avoids stale controlled selection snapshots that dropped range anchors).
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+  - `packages/@vue-aria/table-state/src/useTreeGridState.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 35 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 289 tests).
+- Validation: `npm run check -- --pretty false` passed.
