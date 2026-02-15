@@ -500,6 +500,34 @@ export function tableTests() {
     expect(bodyCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
   });
 
+  it("renders a drag-button column when draggable hooks are provided", () => {
+    const wrapper = renderTable({
+      dragAndDropHooks: {
+        useDraggableCollectionState: vi.fn(),
+      },
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("4");
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(4);
+    expect(headers[0]!.classes()).toContain("react-spectrum-Table-dragButtonHeadCell");
+  });
+
+  it("does not render a drag-button column when draggable hooks are omitted", () => {
+    const wrapper = renderTable({
+      dragAndDropHooks: {},
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("3");
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(headers.some((header) => header.classes().includes("react-spectrum-Table-dragButtonHeadCell"))).toBe(false);
+  });
+
   it("renders drag and selection columns together when both are enabled", () => {
     const wrapper = renderTable({
       showDragButtons: true,

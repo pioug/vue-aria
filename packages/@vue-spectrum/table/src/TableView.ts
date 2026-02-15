@@ -66,6 +66,7 @@ export interface SpectrumTableViewProps {
   escapeKeyBehavior?: "clearSelection" | "none" | undefined;
   shouldSelectOnPressUp?: boolean | undefined;
   showDragButtons?: boolean | undefined;
+  dragAndDropHooks?: SpectrumTableDragAndDropHooks | undefined;
   density?: "compact" | "regular" | "spacious" | undefined;
   overflowMode?: "wrap" | "truncate" | undefined;
   isQuiet?: boolean | undefined;
@@ -102,6 +103,11 @@ export interface SpectrumTableViewProps {
   isHidden?: boolean | undefined;
   UNSAFE_className?: string | undefined;
   UNSAFE_style?: Record<string, string | number> | undefined;
+}
+
+export interface SpectrumTableDragAndDropHooks {
+  useDraggableCollectionState?: unknown;
+  [key: string]: unknown;
 }
 
 export interface SpectrumColumnProps extends SpectrumTableColumnData {}
@@ -1794,6 +1800,10 @@ export const TableView = defineComponent({
       type: Boolean as PropType<boolean | undefined>,
       default: undefined,
     },
+    dragAndDropHooks: {
+      type: Object as PropType<SpectrumTableDragAndDropHooks | undefined>,
+      default: undefined,
+    },
     density: {
       type: String as PropType<"compact" | "regular" | "spacious" | undefined>,
       default: undefined,
@@ -2001,7 +2011,12 @@ export const TableView = defineComponent({
     const showSelectionCheckboxes = computed(
       () => props.selectionStyle !== "highlight" && (props.selectionMode ?? "none") !== "none"
     );
-    const showDragButtons = computed(() => Boolean(props.showDragButtons));
+    const resolvedShowDragButtons = computed(() =>
+      Boolean(
+        props.showDragButtons
+        || (props.dragAndDropHooks as SpectrumTableDragAndDropHooks | undefined)?.useDraggableCollectionState
+      )
+    );
     const tableLayoutWidth = computed(() => {
       const measuredWidth = tableElementRef.value?.clientWidth ?? 0;
       return measuredWidth > 0 ? measuredWidth : 1000;
@@ -2020,7 +2035,7 @@ export const TableView = defineComponent({
 
       return resolveColumnWidths(sorted, {
         showSelectionCheckboxes: showSelectionCheckboxes.value,
-        showDragButtons: showDragButtons.value,
+        showDragButtons: resolvedShowDragButtons.value,
         tableWidth: tableLayoutWidth.value,
       });
     });
@@ -2037,7 +2052,7 @@ export const TableView = defineComponent({
       createCollection(normalizedDefinition.value, {
         allowsExpandableRows,
         showSelectionCheckboxes: showSelectionCheckboxes.value,
-        showDragButtons: showDragButtons.value,
+        showDragButtons: resolvedShowDragButtons.value,
       })
     );
     const resolvedDisabledKeys = computed(() => {
@@ -2147,7 +2162,7 @@ export const TableView = defineComponent({
         return showSelectionCheckboxes.value;
       },
       get showDragButtons() {
-        return showDragButtons.value;
+        return resolvedShowDragButtons.value;
       },
       get selectedKeys() {
         return resolvedSelectedKeys.value as any;

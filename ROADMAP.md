@@ -12336,3 +12336,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 251 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 307 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` drag-hook activation parity expansion:
+  - added `dragAndDropHooks` prop plumbing and aligned drag-column activation behavior with upstream by deriving drag-button column visibility from `dragAndDropHooks.useDraggableCollectionState`.
+  - preserved explicit `showDragButtons` override as a local parity escape hatch while hook-driven activation is in progress.
+  - added regression coverage for:
+    - rendering drag columns when draggable hooks are provided.
+    - suppressing drag columns when draggable hooks are omitted.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 253 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 309 tests).
+- Validation: `npm run check -- --pretty false` passed.
