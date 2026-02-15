@@ -12137,3 +12137,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 201 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 257 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` page-range keyboard parity refinement:
+  - added fallback handling for checkbox-style multiple selection so `Shift+PageDown` and `Shift+PageUp` extend to the last/first visible row when page geometry resolution yields no movement.
+  - added regression coverage for:
+    - `Shift+PageDown` checkbox range extension.
+    - `Shift+PageUp` checkbox range extension.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 203 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 259 tests).
+- Validation: `npm run check -- --pretty false` passed.

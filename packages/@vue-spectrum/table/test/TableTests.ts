@@ -2716,6 +2716,66 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("extends checkbox-style keyboard selection with Shift+PageDown", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithFourRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(4);
+
+    (bodyRows[1]!.element as HTMLElement).focus();
+    await bodyRows[1]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    onSelectionChange.mockClear();
+    await bodyRows[1]!.trigger("keydown", { key: "PageDown", shiftKey: true });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-2", "row-3", "row-4"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[3]!.attributes("aria-selected")).toBe("true");
+  });
+
+  it("extends checkbox-style keyboard selection with Shift+PageUp", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithFourRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(4);
+
+    (bodyRows[2]!.element as HTMLElement).focus();
+    await bodyRows[2]!.trigger("keydown", { key: " " });
+    await nextTick();
+
+    onSelectionChange.mockClear();
+    await bodyRows[2]!.trigger("keydown", { key: "PageUp", shiftKey: true });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-2", "row-3"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[3]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("supports checkbox-style multiple selection via Enter key", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
