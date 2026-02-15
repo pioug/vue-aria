@@ -1482,6 +1482,32 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("commits focused option on Tab while focus moves to the next control", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    document.body.append(nextButton);
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    await input.trigger("keydown", { key: "Tab" });
+    nextButton.focus();
+    await nextTick();
+    await nextTick();
+
+    expect(document.activeElement).toBe(nextButton);
+    expect(onSelectionChange).toHaveBeenCalledWith("1");
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("commits focused option on Shift+Tab and closes the menu", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
