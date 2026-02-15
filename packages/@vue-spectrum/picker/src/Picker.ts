@@ -298,6 +298,31 @@ export const Picker = defineComponent({
           triggerRef.value?.focus();
         });
       };
+      const dismissButtonStyle = {
+        border: "0",
+        clipPath: "inset(50%)",
+        height: "1px",
+        margin: "-1px",
+        overflow: "hidden",
+        padding: "0",
+        position: "absolute",
+        whiteSpace: "nowrap",
+        width: "1px",
+      } as const;
+      const onDismiss = () => {
+        state.close();
+        Promise.resolve().then(() => {
+          triggerRef.value?.focus();
+        });
+      };
+      const renderDismissButton = (key: string) =>
+        h("button", {
+          key,
+          type: "button",
+          "aria-label": "Dismiss",
+          style: dismissButtonStyle,
+          onClick: onDismiss,
+        });
 
       return h(
         "div",
@@ -387,6 +412,7 @@ export const Picker = defineComponent({
                 },
                 {
                   default: () => [
+                    renderDismissButton("dismiss-start"),
                     h(ListBoxBase as any, {
                       id: menuProps.id,
                       ariaLabel: menuProps["aria-label"],
@@ -407,6 +433,7 @@ export const Picker = defineComponent({
                       isLoading: props.isLoading,
                       state,
                     }),
+                    renderDismissButton("dismiss-end"),
                   ],
                 }
               )

@@ -11152,3 +11152,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/src/Picker.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 40 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` dismiss-button parity update:
+  - added migrated coverage asserting open picker popovers expose screen-reader dismiss controls that close the overlay.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - rendered hidden dismiss buttons at the start/end of picker popovers and wired them to close and restore focus to the trigger.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

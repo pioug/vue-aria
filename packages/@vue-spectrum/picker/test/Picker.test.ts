@@ -490,6 +490,39 @@ describe("Picker", () => {
     expect(document.activeElement).toBe(trigger.element);
   });
 
+  it("renders hidden dismiss controls and closes when activated", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      label: "Test",
+      onOpenChange,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    const dismissButtons = Array.from(
+      document.body.querySelectorAll('button[aria-label="Dismiss"]')
+    ) as HTMLButtonElement[];
+    expect(dismissButtons).toHaveLength(2);
+
+    dismissButtons[0]?.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it("keeps focus in the picker overlay when tabbing while open", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mount(
