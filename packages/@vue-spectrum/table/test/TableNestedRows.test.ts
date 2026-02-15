@@ -21,6 +21,12 @@ const multiRowHeaderColumns: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const userSetRowHeaderColumns: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo" },
+  { key: "bar", title: "Bar", isRowHeader: true },
+  { key: "baz", title: "Baz", isRowHeader: true },
+];
+
 const nestedItems: SpectrumTableRowData[] = [
   {
     key: "row-1",
@@ -69,6 +75,51 @@ const deepNestedItems: SpectrumTableRowData[] = [
   },
 ];
 
+const manyNestedItems: SpectrumTableRowData[] = [
+  {
+    key: "row-1-level-1",
+    foo: "Row 1, Lvl 1, Foo",
+    bar: "Row 1, Lvl 1, Bar",
+    baz: "Row 1, Lvl 1, Baz",
+    childRows: [
+      {
+        key: "row-1-level-2",
+        foo: "Row 1, Lvl 2, Foo",
+        bar: "Row 1, Lvl 2, Bar",
+        baz: "Row 1, Lvl 2, Baz",
+        childRows: [
+          {
+            key: "row-1-level-3",
+            foo: "Row 1, Lvl 3, Foo",
+            bar: "Row 1, Lvl 3, Bar",
+            baz: "Row 1, Lvl 3, Baz",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: "row-2-level-1",
+    foo: "Row 2, Lvl 1, Foo",
+    bar: "Row 2, Lvl 1, Bar",
+    baz: "Row 2, Lvl 1, Baz",
+  },
+  {
+    key: "row-3-level-1",
+    foo: "Row 3, Lvl 1, Foo",
+    bar: "Row 3, Lvl 1, Bar",
+    baz: "Row 3, Lvl 1, Baz",
+    childRows: [
+      {
+        key: "row-3-level-2",
+        foo: "Row 3, Lvl 2, Foo",
+        bar: "Row 3, Lvl 2, Bar",
+        baz: "Row 3, Lvl 2, Baz",
+      },
+    ],
+  },
+];
+
 afterEach(() => {
   disableTableNestedRows();
 });
@@ -88,6 +139,24 @@ describe("TableView nested rows", () => {
       }),
       { attachTo: document.body }
     );
+  }
+
+  function getCellByText(wrapper: any, text: string) {
+    const match = wrapper
+      .findAll('[role="columnheader"], [role="rowheader"], [role="gridcell"]')
+      .find((cell: any) => cell.text().includes(text));
+
+    if (!match) {
+      throw new Error(`Unable to find table cell containing "${text}"`);
+    }
+
+    return match;
+  }
+
+  async function moveFocus(target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> }, key: string) {
+    await target.trigger("keydown", { key });
+    await target.trigger("keyup", { key });
+    await nextTick();
   }
 
   it("renders treegrid semantics when expandable rows are enabled", async () => {
@@ -385,6 +454,112 @@ describe("TableView nested rows", () => {
     expect(rows[1]!.attributes("aria-level")).toBe("2");
   });
 
+  it("moves row focus down through nested rows with ArrowDown", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(6);
+
+    (rows[0]!.element as HTMLElement).focus();
+    await rows[0]!.trigger("focus");
+
+    await moveFocus(rows[0]!, "ArrowDown");
+    let currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[1]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 2, Foo");
+
+    await moveFocus(currentRows[1]!, "ArrowDown");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[2]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 3, Foo");
+
+    await moveFocus(currentRows[2]!, "ArrowDown");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[3]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 2, Lvl 1, Foo");
+  });
+
+  it("moves row focus up through nested rows with ArrowUp", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(6);
+
+    (rows[5]!.element as HTMLElement).focus();
+    await rows[5]!.trigger("focus");
+
+    await moveFocus(rows[5]!, "ArrowUp");
+    let currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[4]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 3, Lvl 1, Foo");
+
+    await moveFocus(currentRows[4]!, "ArrowUp");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[3]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 2, Lvl 1, Foo");
+
+    await moveFocus(currentRows[3]!, "ArrowUp");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[2]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 3, Foo");
+  });
+
+  it("skips collapsed child rows while navigating with ArrowDown", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: new Set(["row-1-level-1", "row-3-level-1"]),
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(5);
+    expect(rows.some((row) => row.text().includes("Row 1, Lvl 3, Foo"))).toBe(false);
+
+    (rows[0]!.element as HTMLElement).focus();
+    await rows[0]!.trigger("focus");
+
+    await moveFocus(rows[0]!, "ArrowDown");
+    let currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[1]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 2, Foo");
+
+    await moveFocus(currentRows[1]!, "ArrowDown");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[2]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 2, Lvl 1, Foo");
+
+    await moveFocus(currentRows[2]!, "ArrowDown");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[3]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 3, Lvl 1, Foo");
+  });
+
   it("does not render child rows if parent keys are not expanded", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
@@ -420,6 +595,31 @@ describe("TableView nested rows", () => {
         columns: multiRowHeaderColumns,
         items: nestedItems,
         selectionMode: "multiple",
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows.length).toBeGreaterThan(0);
+
+    for (const row of rows.slice(0, 2)) {
+      const rowHeaders = row.findAll('[role="rowheader"]');
+      expect(rowHeaders).toHaveLength(2);
+      expect(rowHeaders[0]!.find('[data-table-expander="true"]').exists()).toBe(true);
+      expect(rowHeaders[1]!.find('[data-table-expander="true"]').exists()).toBe(false);
+      expect(rowHeaders[0]!.attributes("aria-colindex")).toBe("2");
+    }
+  });
+
+  it("places the expander on the first user-defined row header column", () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "User row-header nested table",
+        columns: userSetRowHeaderColumns,
+        items: deepNestedItems,
         UNSTABLE_allowsExpandableRows: true,
         UNSTABLE_expandedKeys: "all",
       },

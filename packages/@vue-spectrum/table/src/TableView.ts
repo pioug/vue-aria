@@ -457,6 +457,73 @@ function sortDefinition(
   };
 }
 
+function getTableBodyRows(referenceElement: HTMLElement | null): HTMLElement[] {
+  if (!referenceElement) {
+    return [];
+  }
+
+  const tableElement = referenceElement.closest("table");
+  if (!tableElement) {
+    return [];
+  }
+
+  const bodyElement = tableElement.querySelector("tbody");
+  if (!bodyElement) {
+    return [];
+  }
+
+  return Array.from(bodyElement.querySelectorAll('[role="row"]')) as HTMLElement[];
+}
+
+function focusCellInRowByColIndex(rowElement: HTMLElement | null, colIndex: string | null): boolean {
+  if (!rowElement) {
+    return false;
+  }
+
+  const safeColIndex = colIndex?.trim() ?? "";
+  let nextCell: HTMLElement | null = null;
+  if (safeColIndex.length > 0) {
+    nextCell = rowElement.querySelector(
+      `[role="rowheader"][aria-colindex="${safeColIndex}"],[role="gridcell"][aria-colindex="${safeColIndex}"]`
+    ) as HTMLElement | null;
+  }
+
+  if (!nextCell) {
+    nextCell = rowElement.querySelector('[role="rowheader"],[role="gridcell"]') as HTMLElement | null;
+  }
+
+  if (!nextCell) {
+    return false;
+  }
+
+  nextCell.focus();
+  return true;
+}
+
+function focusCellInAdjacentBodyRow(cellElement: HTMLElement | null, direction: 1 | -1): boolean {
+  if (!cellElement) {
+    return false;
+  }
+
+  const rowElement = cellElement.closest('[role="row"]') as HTMLElement | null;
+  if (!rowElement) {
+    return false;
+  }
+
+  const rows = getTableBodyRows(cellElement);
+  const currentRowIndex = rows.indexOf(rowElement);
+  if (currentRowIndex < 0) {
+    return false;
+  }
+
+  const nextRow = rows[currentRowIndex + direction] ?? null;
+  if (!nextRow) {
+    return false;
+  }
+
+  return focusCellInRowByColIndex(nextRow, cellElement.getAttribute("aria-colindex"));
+}
+
 const TableSelectionCheckbox = defineComponent({
   name: "SpectrumTableSelectionCheckbox",
   props: {
@@ -547,12 +614,38 @@ const TableHeaderCell = defineComponent({
     const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
     const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
     const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
+    const headerCellProps = computed(() =>
+      mergeProps(columnHeaderProps, {
+        onKeydown: (event: KeyboardEvent) => {
+          if (!("expandedKeys" in props.state)) {
+            return;
+          }
+
+          if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+          }
+
+          if (event.key !== "ArrowDown") {
+            return;
+          }
+
+          const firstBodyRow = getTableBodyRows(refObject.value)[0] ?? null;
+          if (!firstBodyRow) {
+            return;
+          }
+
+          if (focusCellInRowByColIndex(firstBodyRow, refObject.value?.getAttribute("aria-colindex") ?? null)) {
+            event.preventDefault();
+          }
+        },
+      }) as Record<string, unknown>
+    );
 
     return () =>
       h(
         "th",
         {
-          ...columnHeaderProps,
+          ...headerCellProps.value,
           ref: refObject,
           class: [
             "spectrum-Table-headCell",
@@ -685,12 +778,34 @@ const TableBodyCell = defineComponent({
 
       (props.state as TreeGridState<NormalizedSpectrumTableRow>).toggleKey(treeGridRowNode.value.key);
     };
+    const bodyCellProps = computed(() =>
+      mergeProps(gridCellProps, {
+        onKeydown: (event: KeyboardEvent) => {
+          if (!isTreeGridState.value) {
+            return;
+          }
+
+          if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+          }
+
+          if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+            return;
+          }
+
+          const direction = event.key === "ArrowDown" ? 1 : -1;
+          if (focusCellInAdjacentBodyRow(refObject.value, direction)) {
+            event.preventDefault();
+          }
+        },
+      }) as Record<string, unknown>
+    );
 
     return () =>
       h(
         "td",
         {
-          ...gridCellProps,
+          ...bodyCellProps.value,
           ref: refObject,
           class: [
             "spectrum-Table-cell",
@@ -788,6 +903,42 @@ const TableBodyRow = defineComponent({
       props.state,
       domRef
     );
+    const mergedRowProps = computed(() =>
+      mergeProps(rowProps, {
+        onKeydown: (event: KeyboardEvent) => {
+          if (!("expandedKeys" in props.state)) {
+            return;
+          }
+
+          if (event.target !== refObject.value) {
+            return;
+          }
+
+          if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+          }
+
+          if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+            return;
+          }
+
+          const rows = getTableBodyRows(refObject.value);
+          const currentRowIndex = refObject.value ? rows.indexOf(refObject.value) : -1;
+          if (currentRowIndex < 0) {
+            return;
+          }
+
+          const direction = event.key === "ArrowDown" ? 1 : -1;
+          const nextRow = rows[currentRowIndex + direction] ?? null;
+          if (!nextRow) {
+            return;
+          }
+
+          nextRow.focus();
+          event.preventDefault();
+        },
+      }) as Record<string, unknown>
+    );
 
     return () => {
       const childNodes = Array.from(props.node.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
@@ -801,7 +952,7 @@ const TableBodyRow = defineComponent({
       return h(
         "tr",
         {
-          ...rowProps,
+          ...mergedRowProps.value,
           ref: refObject,
           class: [
             "react-spectrum-Table-row",

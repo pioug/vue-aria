@@ -11745,3 +11745,20 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 177 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1368 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid keyboard focus parity refinement:
+  - expanded nested-row coverage for user-defined row-header metadata:
+    - validated expander placement on the first user-defined row-header column when the leading data column is not a row header.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+  - added treegrid keyboard traversal coverage for visible nested hierarchy:
+    - ArrowDown row focus progression through expanded descendants.
+    - ArrowUp row focus progression back through expanded descendants.
+    - ArrowDown traversal skips collapsed descendants when ancestor expansion keys omit child branches.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+  - aligned `TableView` treegrid keyboard behavior with the new coverage:
+    - implemented explicit ArrowUp/ArrowDown row-level focus movement between visible treegrid rows.
+    - implemented ArrowUp/ArrowDown cell-level focus movement by `aria-colindex` across adjacent visible treegrid rows.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 20 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 137 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 193 tests).
+- Validation: `npm run check -- --pretty false` passed.
