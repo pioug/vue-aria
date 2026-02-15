@@ -11672,6 +11672,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Queue-status alignment update:
   - marked `@vue-spectrum/menu`, `@vue-spectrum/listbox`, `@vue-spectrum/picker`, `@vue-spectrum/combobox`, `@vue-spectrum/tabs`, `@vue-spectrum/calendar`, and `@vue-spectrum/datepicker` as `Complete` in the execution queue based on passing parity suites and previously logged docs/behavioral coverage.
   - kept `@vue-spectrum/table` as `In progress` pending remaining upstream table slices (DnD/sizing/tree-grid breadth).
+- Additional `@vue-spectrum/table` treegrid expander parity refinement:
+  - added explicit row-expander button rendering on the primary row-header cell for expandable treegrid rows, including pointer-driven expand/collapse behavior and ARIA state (`aria-expanded`, labeled expand/collapse controls).
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded nested-row coverage with pointer-toggle assertions for the expander control.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 5 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 178 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1369 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` selection-checkbox parity refinement:
   - wired dedicated table selection checkbox rendering for header/body selection cells:
     - `TableHeaderCell` now renders select-all checkbox semantics via `useTableSelectAllCheckbox`.

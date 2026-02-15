@@ -111,6 +111,40 @@ describe("TableView nested rows", () => {
     expect(rows[1]!.text()).toContain("Lvl 2 Foo 1");
   });
 
+  it("toggles nested rows by pressing the row expander button", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows table",
+        columns,
+        items: nestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(2);
+
+    const firstRowExpander = wrapper
+      .findAll('tbody [role="row"]')[0]!
+      .get('[data-table-expander="true"]');
+    expect(firstRowExpander.attributes("aria-label")).toBe("Expand row");
+
+    await firstRowExpander.trigger("click");
+    await nextTick();
+
+    expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(3);
+    const expandedExpander = wrapper
+      .findAll('tbody [role="row"]')[0]!
+      .get('[data-table-expander="true"]');
+    expect(expandedExpander.attributes("aria-label")).toBe("Collapse row");
+
+    await expandedExpander.trigger("click");
+    await nextTick();
+
+    expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(2);
+  });
+
   it("supports controlled expanded keys callbacks", async () => {
     enableTableNestedRows();
     const onExpandedChange = vi.fn();

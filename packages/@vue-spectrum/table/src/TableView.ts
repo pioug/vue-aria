@@ -615,10 +615,53 @@ const TableBodyCell = defineComponent({
     const resolvedColSpan = computed(() =>
       props.node.colSpan != null && props.node.colSpan > 1 ? props.node.colSpan : undefined
     );
+    const isTreeGridState = computed(() => "expandedKeys" in props.state);
     const isSelectionCell = computed(
       () =>
         Boolean((props.node.props as Record<string, unknown> | undefined)?.isSelectionCell)
         || Boolean((props.node.column?.props as Record<string, unknown> | undefined)?.isSelectionCell)
+    );
+    const firstRowHeaderKey = computed(() => Array.from(props.state.collection.rowHeaderColumnKeys)[0]);
+    const isPrimaryRowHeaderCell = computed(
+      () =>
+        props.node.column != null
+        && props.node.column.key === firstRowHeaderKey.value
+        && props.state.collection.rowHeaderColumnKeys.has(props.node.column.key)
+    );
+    const treeGridRowNode = computed(() => {
+      if (!isTreeGridState.value) {
+        return null;
+      }
+
+      const rowKey = props.node.parentKey;
+      if (rowKey == null) {
+        return null;
+      }
+
+      return (props.state as TreeGridState<NormalizedSpectrumTableRow>).keyMap.get(rowKey) ?? null;
+    });
+    const hasExpandableChildren = computed(() => {
+      const treeNode = treeGridRowNode.value;
+      if (!treeNode) {
+        return false;
+      }
+
+      return (
+        !!(treeNode.props as { UNSTABLE_childItems?: Iterable<unknown> } | undefined)?.UNSTABLE_childItems
+        || ((treeNode.props as { children?: unknown[] } | undefined)?.children?.length ?? 0)
+          > (props.state as TreeGridState<NormalizedSpectrumTableRow>).userColumnCount
+      );
+    });
+    const isExpanded = computed(() => {
+      if (!isTreeGridState.value || !treeGridRowNode.value) {
+        return false;
+      }
+
+      const expandedKeys = (props.state as TreeGridState<NormalizedSpectrumTableRow>).expandedKeys;
+      return expandedKeys === "all" || expandedKeys.has(treeGridRowNode.value.key);
+    });
+    const canRenderExpander = computed(
+      () => isTreeGridState.value && isPrimaryRowHeaderCell.value && hasExpandableChildren.value
     );
     const alignment = computed(() => resolveCellAlignment(props.node));
     const { checkboxProps: selectionCheckboxProps } = useTableSelectionCheckbox(
@@ -629,6 +672,13 @@ const TableBodyCell = defineComponent({
       } as any,
       props.state
     );
+    const toggleExpanded = () => {
+      if (!canRenderExpander.value || !treeGridRowNode.value) {
+        return;
+      }
+
+      (props.state as TreeGridState<NormalizedSpectrumTableRow>).toggleKey(treeGridRowNode.value.key);
+    };
 
     return () =>
       h(
@@ -655,7 +705,27 @@ const TableBodyCell = defineComponent({
         },
         isSelectionCell.value
           ? h(TableSelectionCheckbox, { checkboxProps: selectionCheckboxProps })
-          : h("div", { class: "spectrum-Table-cellContents" }, props.node.rendered as any)
+          : h("div", { class: "spectrum-Table-cellContents" }, [
+            canRenderExpander.value
+              ? h(
+                "button",
+                {
+                  type: "button",
+                  class: "react-spectrum-Table-expander",
+                  "data-table-expander": "true",
+                  "aria-label": isExpanded.value ? "Collapse row" : "Expand row",
+                  "aria-expanded": isExpanded.value ? "true" : "false",
+                  onClick: (event: MouseEvent) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    toggleExpanded();
+                  },
+                },
+                isExpanded.value ? "▼" : "▶"
+              )
+              : null,
+            props.node.rendered as any,
+          ])
       );
   },
 });
