@@ -75,8 +75,12 @@ describe("ComboBox", () => {
 
   it("renders input, trigger button, and label", () => {
     const wrapper = renderComboBox();
+    const input = wrapper.get('input[role="combobox"]');
 
-    expect(wrapper.get('input[role="combobox"]')).toBeTruthy();
+    expect(input).toBeTruthy();
+    expect(input.attributes("autocorrect")).toBe("off");
+    expect(input.attributes("spellcheck")).toBe("false");
+    expect(input.attributes("autocomplete")).toBe("off");
     expect(wrapper.get("button")).toBeTruthy();
     expect(wrapper.text()).toContain("Test");
   });
