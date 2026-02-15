@@ -47,7 +47,11 @@ export const ComboBox = defineComponent({
     id: String,
     label: String,
     description: String,
-    errorMessage: String,
+    errorMessage: {
+      type: [String, Function] as PropType<SpectrumComboBoxProps["errorMessage"]>,
+      required: false,
+      default: undefined,
+    },
     items: {
       type: Array as PropType<Array<SpectrumComboBoxNodeData>>,
       required: false,
@@ -367,6 +371,7 @@ export const ComboBox = defineComponent({
         popoverRef: popoverRefObject,
         buttonRef: buttonRefObject,
         label: props.label,
+        errorMessage: props.errorMessage,
         name: (props.allowsCustomValue ? "text" : (props.formValue ?? "text")) === "text" ? props.name : undefined,
         form:
           (props.allowsCustomValue ? "text" : (props.formValue ?? "text")) === "text"
@@ -406,7 +411,10 @@ export const ComboBox = defineComponent({
 
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
-      const resolvedErrorMessage = props.errorMessage ?? validationErrors.join(", ");
+      const resolvedErrorMessage =
+        typeof props.errorMessage === "string"
+          ? props.errorMessage
+          : validationErrors.join(", ");
       const focusedKey = state.selectionManager.focusedKey as ComboBoxKey | null;
       const activeDescendant =
         focusedKey != null ? getItemId(state as any, focusedKey) : undefined;

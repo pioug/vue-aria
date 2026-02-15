@@ -11052,3 +11052,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 108 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` native custom-error parity update:
+  - added migrated coverage asserting `errorMessage` validation callbacks override native browser messages for required combobox submission.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - wired functional `errorMessage` support through combobox validation-state plumbing so native/aria validation flows surface custom messages consistently.
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+    - `packages/@vue-spectrum/combobox/src/types.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 109 tests).
+- Validation: `npm run check -- --pretty false` passed.

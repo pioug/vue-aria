@@ -718,6 +718,38 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).validationMessage).toContain("Invalid option.");
   });
 
+  it("supports custom native error messages", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-test": "form" }, [
+              h(ComboBox as any, {
+                label: "Test",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+                errorMessage: (validation: { validationDetails: ValidityState | null }) =>
+                  validation.validationDetails?.valueMissing ? "Please enter a value" : null,
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const form = wrapper.get('[data-test="form"]').element as HTMLFormElement;
+    const input = wrapper.get('input[role="combobox"]');
+    await nextTick();
+
+    expect(input.attributes("aria-describedby")).toBeUndefined();
+    form.checkValidity();
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect((input.element as HTMLInputElement).validationMessage).toContain("Please enter a value");
+  });
+
   it("supports matching defaultSelectedKey and defaultInputValue", () => {
     const wrapper = renderComboBox({
       defaultSelectedKey: "2",

@@ -37,6 +37,13 @@ export interface AriaComboBoxOptions<T> {
   label?: string;
   name?: string;
   form?: string;
+  errorMessage?:
+    | string
+    | ((validation: {
+      isInvalid: boolean;
+      validationErrors: string[];
+      validationDetails: ValidityState | null;
+    }) => string | null | undefined);
   [key: string]: unknown;
 }
 
@@ -190,7 +197,39 @@ export function useComboBox<T>(
     state.setFocused(true);
   };
 
-  const { isInvalid, validationErrors, validationDetails } = state.displayValidation;
+  const resolveValidation = (validation: {
+    isInvalid: boolean;
+    validationErrors: string[];
+    validationDetails: ValidityState | null;
+  }) => {
+    if (typeof props.errorMessage !== "function") {
+      return validation;
+    }
+
+    const customError = props.errorMessage(validation);
+    if (!customError) {
+      return validation;
+    }
+
+    return {
+      ...validation,
+      isInvalid: true,
+      validationErrors: [customError],
+    };
+  };
+
+  const fieldValidationState = {
+    get realtimeValidation() {
+      return resolveValidation(state.realtimeValidation);
+    },
+    get displayValidation() {
+      return resolveValidation(state.displayValidation);
+    },
+    updateValidation: state.updateValidation,
+    resetValidation: state.resetValidation,
+    commitValidation: state.commitValidation,
+  };
+  const { isInvalid, validationErrors, validationDetails } = fieldValidationState.displayValidation;
   const { labelProps, inputProps, descriptionProps, errorMessageProps } = useTextField(
     {
       ...props,
@@ -208,7 +247,14 @@ export function useComboBox<T>(
       onFocus,
       autoComplete: "off",
       validate: undefined,
-      [privateValidationStateProp]: state,
+      get errorMessage() {
+        if (typeof props.errorMessage === "function") {
+          return props.errorMessage(resolveValidation(state.displayValidation)) ?? undefined;
+        }
+
+        return props.errorMessage as string | undefined;
+      },
+      [privateValidationStateProp]: fieldValidationState,
     },
     inputRef
   );

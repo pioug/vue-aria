@@ -20,7 +20,13 @@ export interface SpectrumComboBoxProps {
   id?: string;
   label?: string;
   description?: string;
-  errorMessage?: string;
+  errorMessage?:
+    | string
+    | ((validation: {
+      isInvalid: boolean;
+      validationErrors: string[];
+      validationDetails: ValidityState | null;
+    }) => string | null | undefined);
   items?: Iterable<SpectrumComboBoxNodeData>;
   disabledKeys?: Iterable<ComboBoxKey>;
   selectedKey?: ComboBoxKey | null;
