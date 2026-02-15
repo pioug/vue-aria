@@ -1,4 +1,5 @@
 import { ariaHideOutside } from "@vue-aria/overlays";
+import { announce } from "@vue-aria/live-announcer";
 import { useMenuTrigger } from "@vue-aria/menu";
 import { useTextField } from "@vue-aria/textfield";
 import { privateValidationStateProp } from "@vue-aria/form-state";
@@ -387,6 +388,22 @@ export function useComboBox<T>(
     ) {
       dispatchVirtualFocus(inputRef.current, null);
     }
+  });
+
+  const lastOptionCount = ref(getItemCount(state.collection as any));
+  const lastOpenState = ref(state.isOpen);
+  watchEffect(() => {
+    const optionCount = getItemCount(state.collection as any);
+    const didOpenWithoutFocusedItem =
+      state.isOpen !== lastOpenState.value
+      && (state.selectionManager.focusedKey == null || isAppleDevice());
+
+    if (state.isOpen && (didOpenWithoutFocusedItem || optionCount !== lastOptionCount.value)) {
+      announce(getComboBoxCountAnnouncement(state as any, stringFormatter as any));
+    }
+
+    lastOptionCount.value = optionCount;
+    lastOpenState.value = state.isOpen;
   });
 
   return {

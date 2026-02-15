@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { effectScope } from "vue";
+import { effectScope, nextTick } from "vue";
 
-const { ariaHideCleanupMock, ariaHideOutsideMock } = vi.hoisted(() => ({
+const { announceMock, ariaHideCleanupMock, ariaHideOutsideMock } = vi.hoisted(() => ({
+  announceMock: vi.fn(),
   ariaHideCleanupMock: vi.fn(),
   ariaHideOutsideMock: vi.fn(() => ariaHideCleanupMock),
 }));
@@ -15,6 +16,12 @@ vi.mock("@vue-aria/overlays", async () => {
     ariaHideOutside: ariaHideOutsideMock,
   };
 });
+
+vi.mock("@vue-aria/live-announcer", () => ({
+  announce: announceMock,
+  clearAnnouncer: vi.fn(),
+  destroyAnnouncer: vi.fn(),
+}));
 
 import { useComboBox } from "../src/useComboBox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
@@ -85,6 +92,7 @@ function createScopedComboBox(
 
 describe("useComboBox", () => {
   beforeEach(() => {
+    announceMock.mockClear();
     ariaHideCleanupMock.mockClear();
     ariaHideOutsideMock.mockClear();
   });
@@ -208,5 +216,28 @@ describe("useComboBox", () => {
 
     stop();
     expect(ariaHideCleanupMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("announces option count when the menu opens and when available options change", async () => {
+    const items = [
+      { id: 1, name: "one" },
+      { id: 2, name: "two" },
+      { id: 3, name: "three" },
+    ];
+    const { state, stop } = createScopedComboBox({
+      items,
+    });
+
+    state.open();
+    await nextTick();
+    expect(announceMock).toHaveBeenCalledTimes(1);
+
+    state.close();
+    await nextTick();
+    state.open();
+    await nextTick();
+    expect(announceMock).toHaveBeenCalledTimes(2);
+
+    stop();
   });
 });

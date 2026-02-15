@@ -11504,6 +11504,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test packages/@vue-spectrum/combobox/test` passed (4 files, 183 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 157 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/combobox` count-announcement parity refinement:
+  - wired live-announcer count announcements in `useComboBox` so option-count messaging is announced when the menu opens/reopens without a focused option (matching upstream count-announcement effect behavior).
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+  - added hook-level regression coverage asserting announcement emission on combobox open/reopen cycles.
+    - `packages/@vue-aria/combobox/test/useComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-aria/combobox/test` passed (2 files, 10 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (5 files, 167 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.
