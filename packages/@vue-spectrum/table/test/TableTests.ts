@@ -498,6 +498,9 @@ export function tableTests() {
     expect(bodyCells).toHaveLength(3);
     expect(bodyCells[0]!.attributes("aria-colindex")).toBe("1");
     expect(bodyCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    const dragButton = bodyCells[0]!.find(".react-spectrum-Table-dragButton");
+    expect(dragButton.exists()).toBe(true);
+    expect(dragButton.attributes("aria-label")).toBe("Drag");
   });
 
   it("renders a drag-button column when draggable hooks are provided", () => {
@@ -526,6 +529,21 @@ export function tableTests() {
     const headers = wrapper.findAll('[role="columnheader"]');
     expect(headers).toHaveLength(3);
     expect(headers.some((header) => header.classes().includes("react-spectrum-Table-dragButtonHeadCell"))).toBe(false);
+  });
+
+  it("suppresses drag-button handles for disabled rows in disabledBehavior all mode", () => {
+    const wrapper = renderTable({
+      showDragButtons: true,
+      selectionMode: "multiple",
+      disabledBehavior: "all",
+      disabledKeys: new Set(["row-1"]),
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    const firstRowCells = rows[0]!.findAll('[role="gridcell"]');
+    const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
+    expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
   });
 
   it("renders drag and selection columns together when both are enabled", () => {

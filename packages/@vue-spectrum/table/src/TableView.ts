@@ -1266,6 +1266,18 @@ const TableBodyCell = defineComponent({
       } as any,
       props.state
     );
+    const isDragButtonDisabled = computed(() => {
+      if (!isDragButtonCell.value) {
+        return false;
+      }
+
+      const rowKey = props.node.parentKey;
+      if (rowKey == null) {
+        return true;
+      }
+
+      return props.state.selectionManager.isDisabled(rowKey);
+    });
     const toggleExpanded = () => {
       if (!canRenderExpander.value || !treeGridRowNode.value) {
         return;
@@ -1339,7 +1351,17 @@ const TableBodyCell = defineComponent({
         isSelectionCell.value
           ? h(TableSelectionCheckbox, { checkboxProps: selectionCheckboxProps })
           : isDragButtonCell.value
-            ? h("div", { class: "spectrum-Table-cellContents" })
+            ? h("div", { class: "spectrum-Table-cellContents" }, [
+              isDragButtonDisabled.value
+                ? null
+                : h("div", {
+                  class: "react-spectrum-Table-dragButton",
+                  role: "button",
+                  tabindex: "-1",
+                  draggable: "true",
+                  "aria-label": stringFormatter.format("drag"),
+                }),
+            ])
           : h("div", { class: "spectrum-Table-cellContents" }, [
             canRenderExpander.value
               ? h(

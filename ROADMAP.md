@@ -12347,3 +12347,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 253 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 309 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` drag-cell handle parity refinement:
+  - updated drag-cell rendering to include a semantic drag-handle element (`react-spectrum-Table-dragButton`) with localized `aria-label` when drag columns are active.
+  - aligned disabled-row behavior by suppressing drag-handle rendering when row interactivity is disabled under `disabledBehavior="all"`.
+  - expanded regression coverage for drag-handle presence and disabled-row suppression.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 254 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 310 tests).
+- Validation: `npm run check -- --pretty false` passed.
