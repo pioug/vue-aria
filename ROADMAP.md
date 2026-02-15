@@ -12078,6 +12078,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 192 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 248 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` escape-clear breadth coverage:
+  - added larger-collection (`3` rows) regression coverage ensuring checkbox multi-selection clear-on-Escape behavior resets all selected rows.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 193 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 249 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` keyboard range-selection depth expansion:
   - strengthened `Shift+ArrowUp` checkbox-selection coverage to validate multi-step accumulation across successive upward range-extension key presses.
   - assertions now verify full three-row selection after two consecutive upward range-extension steps starting from the last row.

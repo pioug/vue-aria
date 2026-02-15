@@ -3011,6 +3011,36 @@ export function tableTests() {
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
   });
 
+  it("clears checkbox-style multiple selection via Escape in larger collections", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+    await press(bodyRows[1]!);
+    await press(bodyRows[2]!);
+
+    onSelectionChange.mockClear();
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set());
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("false");
+  });
+
   it("preserves selection on Escape when escapeKeyBehavior is none", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
