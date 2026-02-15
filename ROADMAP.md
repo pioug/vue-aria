@@ -11832,3 +11832,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 153 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 209 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` percentage-sizing parity refinement:
+  - extended numeric sizing parser to resolve percentage widths relative to table layout width.
+  - kept non-numeric CSS sizing tokens (`rem`, `ch`, etc.) as style passthrough while still participating in min/max styling.
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded sizing tests to verify:
+    - percentage width resolution to pixel widths.
+    - mixed percentage + explicit pixel + auto column width distribution.
+    - updated string-sizing expectations for resolved percentage widths.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 154 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 210 tests).
+- Validation: `npm run check -- --pretty false` passed.

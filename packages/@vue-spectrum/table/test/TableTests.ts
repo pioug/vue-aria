@@ -50,6 +50,12 @@ const columnsWithStringSizingMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", maxWidth: "40ch" },
 ];
 
+const columnsWithPercentageSizingMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, width: "10%" },
+  { key: "bar", title: "Bar", width: 500 },
+  { key: "baz", title: "Baz" },
+];
+
 const columnsWithPartialSizingMetadata: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true, width: 200 },
   { key: "bar", title: "Bar" },
@@ -374,16 +380,28 @@ export function tableTests() {
 
     const headers = wrapper.findAll('[role="columnheader"]');
     expect(headers).toHaveLength(3);
-    expect((headers[0]!.element as HTMLElement).style.width).toBe("25%");
+    expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(250, 3);
     expect((headers[1]!.element as HTMLElement).style.minWidth).toBe("12rem");
     expect((headers[2]!.element as HTMLElement).style.maxWidth).toBe("40ch");
 
     const firstRow = wrapper.findAll('tbody [role="row"]')[0]!;
     const rowHeader = firstRow.get('[role="rowheader"]');
     const bodyCells = firstRow.findAll('[role="gridcell"]');
-    expect((rowHeader.element as HTMLElement).style.width).toBe("25%");
+    expect(parseFloat((rowHeader.element as HTMLElement).style.width)).toBeCloseTo(250, 3);
     expect((bodyCells[0]!.element as HTMLElement).style.minWidth).toBe("12rem");
     expect((bodyCells[1]!.element as HTMLElement).style.maxWidth).toBe("40ch");
+  });
+
+  it("resolves percentage widths and distributes remaining width", () => {
+    const wrapper = renderTable({
+      columns: columnsWithPercentageSizingMetadata,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(parseFloat((headers[0]!.element as HTMLElement).style.width)).toBeCloseTo(100, 3);
+    expect(parseFloat((headers[1]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+    expect(parseFloat((headers[2]!.element as HTMLElement).style.width)).toBeCloseTo(400, 3);
   });
 
   it("distributes default widths for unsized columns in selectable tables", () => {

@@ -486,13 +486,23 @@ function createCollection(
   );
 }
 
-function parseNumericColumnSize(value: SpectrumTableColumnSize | undefined): number | undefined {
+function parseNumericColumnSize(
+  value: SpectrumTableColumnSize | undefined,
+  baseWidth: number
+): number | undefined {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
   }
 
   if (typeof value === "string") {
     const trimmed = value.trim();
+    if (trimmed.endsWith("%")) {
+      const percentage = Number(trimmed.slice(0, -1));
+      if (Number.isFinite(percentage)) {
+        return (baseWidth * percentage) / 100;
+      }
+    }
+
     if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
       const parsed = Number(trimmed);
       if (Number.isFinite(parsed)) {
@@ -510,20 +520,21 @@ function resolveColumnWidths(
 ): NormalizedSpectrumTableDefinition {
   const tableWidth = Math.max(0, options.tableWidth ?? 1000);
   const selectionWidth = options.showSelectionCheckboxes ? 38 : 0;
-  let remainingWidth = Math.max(0, tableWidth - selectionWidth);
+  const sizingBaseWidth = Math.max(0, tableWidth - selectionWidth);
+  let remainingWidth = sizingBaseWidth;
   const columns = definition.columns.map((column) => ({ ...column }));
   const autoIndices: number[] = [];
 
   for (let index = 0; index < columns.length; index += 1) {
     const column = columns[index]!;
-    const minWidth = parseNumericColumnSize(column.minWidth);
-    const maxWidth = parseNumericColumnSize(column.maxWidth);
+    const minWidth = parseNumericColumnSize(column.minWidth, sizingBaseWidth);
+    const maxWidth = parseNumericColumnSize(column.maxWidth, sizingBaseWidth);
     const hasExplicitWidth =
       column.width !== undefined
       && column.width !== null
       && String(column.width).trim().length > 0;
     if (hasExplicitWidth) {
-      const numericWidth = parseNumericColumnSize(column.width);
+      const numericWidth = parseNumericColumnSize(column.width, sizingBaseWidth);
       if (numericWidth != null) {
         let resolvedWidth = numericWidth;
         if (minWidth != null && resolvedWidth < minWidth) {
@@ -550,8 +561,8 @@ function resolveColumnWidths(
       let constrainedInPass = false;
       for (const index of Array.from(unresolved)) {
         const column = columns[index]!;
-        const minWidth = parseNumericColumnSize(column.minWidth);
-        const maxWidth = parseNumericColumnSize(column.maxWidth);
+        const minWidth = parseNumericColumnSize(column.minWidth, sizingBaseWidth);
+        const maxWidth = parseNumericColumnSize(column.maxWidth, sizingBaseWidth);
         if (minWidth != null && share < minWidth) {
           column.width = minWidth;
           remainingWidth -= minWidth;
