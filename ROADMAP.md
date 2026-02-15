@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/listbox`
+- Current focus package: `@vue-spectrum/combobox`
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -10507,4 +10507,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added migrated coverage for required hidden-select semantics in `validationBehavior="native"` mode.
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` load-more parity update:
+  - added `maxHeight` and `onLoadMore` combobox prop support and forwarded both through popup listbox rendering.
+    - `packages/@vue-spectrum/combobox/src/types.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage for scroll-near-end `onLoadMore` callback dispatch from open combobox listboxes.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 14 tests).
 - Validation: `npm run check -- --pretty false` passed.

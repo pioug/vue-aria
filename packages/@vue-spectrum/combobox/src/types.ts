@@ -37,6 +37,8 @@ export interface SpectrumComboBoxProps {
   allowsEmptyCollection?: boolean;
   allowsCustomValue?: boolean;
   shouldCloseOnBlur?: boolean;
+  maxHeight?: number;
+  onLoadMore?: () => void;
   isDisabled?: boolean;
   isReadOnly?: boolean;
   isRequired?: boolean;

@@ -118,6 +118,15 @@ export const ComboBox = defineComponent({
       required: false,
       default: undefined,
     },
+    maxHeight: {
+      type: Number as PropType<SpectrumComboBoxProps["maxHeight"]>,
+      required: false,
+      default: undefined,
+    },
+    onLoadMore: {
+      type: Function as PropType<SpectrumComboBoxProps["onLoadMore"]>,
+      required: false,
+    },
     isDisabled: {
       type: Boolean as PropType<SpectrumComboBoxProps["isDisabled"]>,
       required: false,
@@ -420,6 +429,8 @@ export const ComboBox = defineComponent({
                     onFocus: listBoxProps.onFocus as ((event: FocusEvent) => void) | undefined,
                     onFocusChange: listBoxProps.onFocusChange as ((isFocused: boolean) => void) | undefined,
                     onAction: listBoxProps.onAction as ((key: ComboBoxKey) => void) | undefined,
+                    maxHeight: props.maxHeight,
+                    onLoadMore: props.onLoadMore,
                     state,
                     ref: (value: unknown) => {
                       listBoxRef.value = resolveElement(value);
