@@ -17,6 +17,7 @@ export interface SpectrumTableColumnData {
   title?: string | undefined;
   textValue?: string | undefined;
   allowsSorting?: boolean | undefined;
+  allowsResizing?: boolean | undefined;
   isRowHeader?: boolean | undefined;
   align?: SpectrumTableColumnAlign | undefined;
   hideHeader?: boolean | undefined;
@@ -50,6 +51,7 @@ export interface ParsedSpectrumTableColumn {
   key?: TableKey | undefined;
   textValue?: string | undefined;
   allowsSorting?: boolean | undefined;
+  allowsResizing?: boolean | undefined;
   isRowHeader?: boolean | undefined;
   align?: SpectrumTableColumnAlign | undefined;
   hideHeader?: boolean | undefined;
@@ -94,6 +96,7 @@ export interface NormalizedSpectrumTableColumn {
   title?: string | undefined;
   content?: VNodeChild;
   allowsSorting?: boolean | undefined;
+  allowsResizing?: boolean | undefined;
   isRowHeader?: boolean | undefined;
   align?: SpectrumTableColumnAlign | undefined;
   hideHeader?: boolean | undefined;
@@ -326,6 +329,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
   const props = (node.props ?? {}) as Record<string, unknown>;
   const content = getSlotContent(node);
   const allowsSorting = props.allowsSorting ?? props["allows-sorting"];
+  const allowsResizing = props.allowsResizing ?? props["allows-resizing"];
   const isRowHeader = props.isRowHeader ?? props["is-row-header"];
   const align = props.align;
   const hideHeader = props.hideHeader ?? props["hide-header"];
@@ -342,6 +346,7 @@ function parseColumnNode(node: VNode, index: number): ParsedSpectrumTableColumn 
     key: normalizeKey(node.key ?? props.id ?? props.key, `column-${index}`),
     textValue,
     allowsSorting: normalizeBooleanProp(allowsSorting),
+    allowsResizing: normalizeBooleanProp(allowsResizing),
     isRowHeader: normalizeBooleanProp(isRowHeader),
     align: normalizeColumnAlign(align),
     hideHeader: normalizeBooleanProp(hideHeader),
@@ -464,6 +469,7 @@ function normalizeColumnsFromSlot(
         title,
         content: column.content,
         allowsSorting: column.allowsSorting,
+        allowsResizing: column.allowsResizing,
         isRowHeader: column.isRowHeader,
         align: column.align,
         hideHeader: column.hideHeader,
@@ -551,6 +557,7 @@ function normalizeColumnsFromProps(
         textValue: column.textValue ?? title,
         title,
         allowsSorting: column.allowsSorting,
+        allowsResizing: column.allowsResizing,
         isRowHeader: column.isRowHeader,
         align: normalizeColumnAlign(column.align),
         hideHeader: column.hideHeader,

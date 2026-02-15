@@ -104,6 +104,12 @@ const columnsWithPercentageDefaultWidthMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithResizableMetadata: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, defaultWidth: 220 },
+  { key: "bar", title: "Bar", defaultWidth: 390 },
+  { key: "baz", title: "Baz", allowsResizing: true, hideHeader: true, defaultWidth: 390 },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -549,6 +555,59 @@ export function tableTests() {
     expect(parseFloat((headerCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(200, 3);
     expect(parseFloat((headerCells[1]!.element as HTMLElement).style.width)).toBeCloseTo(300, 3);
     expect(parseFloat((headerCells[2]!.element as HTMLElement).style.width)).toBeCloseTo(500, 3);
+  });
+
+  it("renders column resizer affordances for resizable headers", () => {
+    const wrapper = renderTable({
+      columns: columnsWithResizableMetadata,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(headers[0]!.classes()).toContain("is-resizable");
+    expect(headers[0]!.find(".spectrum-Table-columnResizer").exists()).toBe(true);
+    expect(headers[0]!.find('input[type="range"]').exists()).toBe(true);
+    expect(headers[0]!.find(".spectrum-Table-columnResizerPlaceholder").exists()).toBe(true);
+
+    expect(headers[1]!.classes()).not.toContain("is-resizable");
+    expect(headers[1]!.find(".spectrum-Table-columnResizer").exists()).toBe(false);
+
+    expect(headers[2]!.classes()).not.toContain("is-resizable");
+    expect(headers[2]!.find(".spectrum-Table-columnResizer").exists()).toBe(false);
+  });
+
+  it("updates column width and emits callbacks during keyboard resizing", async () => {
+    const onResizeStart = vi.fn();
+    const onResize = vi.fn();
+    const onResizeEnd = vi.fn();
+    const wrapper = renderTable({
+      columns: columnsWithResizableMetadata,
+      onResizeStart,
+      onResize,
+      onResizeEnd,
+    });
+
+    const firstHeader = wrapper.findAll('[role="columnheader"]')[0]!;
+    const resizer = firstHeader.get(".spectrum-Table-columnResizer");
+    const initialWidth = parseFloat((firstHeader.element as HTMLElement).style.width);
+
+    await resizer.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await resizer.trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    await resizer.trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    const updatedFirstHeader = wrapper.findAll('[role="columnheader"]')[0]!;
+    const nextWidth = parseFloat((updatedFirstHeader.element as HTMLElement).style.width);
+    expect(nextWidth).toBeGreaterThan(initialWidth);
+    expect(onResizeStart).toHaveBeenCalledTimes(1);
+    expect(onResize).toHaveBeenCalled();
+    expect(onResizeEnd).toHaveBeenCalledTimes(1);
+
+    const resizeMap = onResize.mock.calls.at(-1)?.[0] as Map<TableKey, number | string> | undefined;
+    expect(resizeMap).toBeInstanceOf(Map);
+    expect(typeof resizeMap?.get("foo")).toBe("number");
   });
 
   it("supports static slot table syntax", async () => {
@@ -1112,6 +1171,46 @@ export function tableTests() {
     expect(sortedRows[0]!.text()).toContain("Foo 1");
     expect(sortedRows[1]!.text()).toContain("Foo 2");
     expect(wrapper.findAll('[role="columnheader"]')[0]!.attributes("aria-sort")).toBe("ascending");
+  });
+
+  it("supports kebab-case static slot allows-resizing metadata", () => {
+    const TemplateHarness = defineComponent({
+      components: {
+        TableView,
+        TableHeader,
+        TableBody,
+        Column,
+        Row,
+        Cell,
+      },
+      template: `
+        <TableView aria-label="Slot kebab resizable table">
+          <TableHeader>
+            <Column id="foo" is-row-header allows-resizing default-width="220">Foo</Column>
+            <Column id="bar" default-width="390">Bar</Column>
+            <Column id="baz" hide-header allows-resizing default-width="390">Baz</Column>
+          </TableHeader>
+          <TableBody>
+            <Row id="row-1">
+              <Cell>Foo 1</Cell>
+              <Cell>Bar 1</Cell>
+              <Cell>Baz 1</Cell>
+            </Row>
+          </TableBody>
+        </TableView>
+      `,
+    });
+    const wrapper = mount(TemplateHarness as any, {
+      attachTo: document.body,
+    });
+
+    const headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers[0]!.classes()).toContain("is-resizable");
+    expect(headers[0]!.find(".spectrum-Table-columnResizer").exists()).toBe(true);
+    expect(headers[1]!.classes()).not.toContain("is-resizable");
+    expect(headers[1]!.find(".spectrum-Table-columnResizer").exists()).toBe(false);
+    expect(headers[2]!.classes()).not.toContain("is-resizable");
+    expect(headers[2]!.find(".spectrum-Table-columnResizer").exists()).toBe(false);
   });
 
   it("supports data-driven table cells with colSpan", () => {

@@ -75,6 +75,8 @@ Numeric values are treated as pixel widths. Numeric strings are normalized to pi
 Percentage values are resolved against the table width.
 In templates, kebab-case sizing props are supported (for example: `default-width`, `min-width`, `max-width`).
 
+Column resizing is supported via `columns[].allowsResizing` (or `allows-resizing` in static slot syntax). Resizers are rendered for non-hidden header columns only.
+
 ## Key Props
 
 - `selectionMode`: `"none" | "single" | "multiple"`.
@@ -93,10 +95,12 @@ In templates, kebab-case sizing props are supported (for example: `default-width
 - `shouldSelectOnPressUp`: defers pointer-driven selection from press-start to press-up/click handling.
 - `sortDescriptor` / `defaultSortDescriptor` with `onSortChange`.
 - `selectedKeys` / `defaultSelectedKeys` with `onSelectionChange`.
+- `onResizeStart`, `onResize`, and `onResizeEnd` receive a `Map` of column widths during resize interactions.
 - `columns` + `items` for data-driven rendering.
   `items[].cells` supports `colSpan` for spanned body cells.
   `columns[].align` supports `"start" | "center" | "end"` alignment classes for matching header/body cells.
   `columns[].hideHeader` and `columns[].showDivider` map to Spectrum header/divider class variants.
+  `columns[].allowsResizing` enables per-column resize affordances on visible headers.
   `columns[].width`, `columns[].defaultWidth`, `columns[].minWidth`, and `columns[].maxWidth` control per-column sizing.
   Set `isRowHeader` on one or more columns to expose row-header semantics.
 

@@ -11877,3 +11877,29 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - documented numeric/numeric-string/percentage sizing normalization and kebab-case slot metadata (`default-width`, `min-width`, `max-width`).
     - `docs/packages/spectrum-table.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` column-resizing baseline parity implementation:
+  - completed `allowsResizing` metadata plumbing for both prop-driven and static-slot tables:
+    - added `allowsResizing` to table column type surfaces and slot parsing/normalization (including kebab-case `allows-resizing`).
+    - added `allowsResizing` to slot-definition signatures and collection column props.
+    - `packages/@vue-spectrum/table/src/types.ts`
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - integrated resize-state-backed header resizer rendering:
+    - wired `useTableColumnResizeState` into `TableView`.
+    - wired `useTableColumnResize` into header cells and rendered `spectrum-Table-columnResizer` + placeholder affordances for visible resizable headers.
+    - added `is-resizable` header class support and resizer slider labeling via localized `columnResizer` strings.
+    - added `onResizeStart`, `onResize`, and `onResizeEnd` callback props on `TableView`.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+    - `packages/@vue-spectrum/table/src/intlMessages.ts`
+  - refined sizing resolution for resize-state interop:
+    - preserved explicit `width` as controlled sizing.
+    - resolved `defaultWidth` and auto-distributed widths through uncontrolled `defaultWidth` paths for resize-state compatibility.
+    - `packages/@vue-spectrum/table/src/TableView.ts`
+  - expanded resizing coverage:
+    - resizer affordance rendering for data-driven and static-slot (kebab-case) `allows-resizing` metadata.
+    - keyboard resize interaction coverage with callback-map assertions and width updates.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+  - updated docs for resizing metadata/callback usage and `allowsResizing` guidance.
+    - `docs/packages/spectrum-table.md`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 163 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 219 tests).
+- Validation: `npm run check -- --pretty false` passed.

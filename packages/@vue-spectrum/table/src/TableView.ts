@@ -2,6 +2,7 @@ import {
   useTable,
   useTableCell,
   useTableColumnHeader,
+  useTableColumnResize,
   useTableRow,
   useTableSelectAllCheckbox,
   useTableSelectionCheckbox,
@@ -10,9 +11,12 @@ import { tableNestedRows } from "@vue-aria/flags";
 import {
   TableCollection,
   UNSTABLE_useTreeGridState,
+  useTableColumnResizeState,
   useTableState,
+  type ColumnSize,
   type GridNode,
   type SortDescriptor,
+  type TableColumnResizeState,
   type TableState,
   type TreeGridState,
 } from "@vue-aria/table-state";
@@ -72,6 +76,9 @@ export interface SpectrumTableViewProps {
   UNSTABLE_onExpandedChange?: ((keys: Set<TableKey>) => void) | undefined;
   onSortChange?: ((descriptor: SpectrumSortDescriptor) => void) | undefined;
   onSelectionChange?: ((keys: Set<TableKey>) => void) | undefined;
+  onResizeStart?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
+  onResize?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
+  onResizeEnd?: ((widths: Map<TableKey, ColumnSize>) => void) | undefined;
   onAction?: ((key: TableKey) => void) | undefined;
   renderEmptyState?: (() => unknown) | undefined;
   ariaLabel?: string | undefined;
@@ -189,6 +196,7 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
         column.minWidth ?? "",
         column.maxWidth ?? "",
         column.allowsSorting ? "1" : "0",
+        column.allowsResizing ? "1" : "0",
         column.isRowHeader ? "1" : "0",
         column.hideHeader ? "1" : "0",
         column.showDivider ? "1" : "0",
@@ -233,6 +241,7 @@ function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridN
     lastChildKey: null,
     props: {
       allowsSorting: column.allowsSorting,
+      allowsResizing: column.allowsResizing,
       isRowHeader: column.isRowHeader,
       align: column.align,
       hideHeader: column.hideHeader,
@@ -266,8 +275,11 @@ function toColumnSizeStyleValue(value: SpectrumTableColumnSize | unknown): strin
   return undefined;
 }
 
-function resolveColumnSizingStyles(columnProps: Record<string, unknown> | undefined): Record<string, string> | undefined {
-  let width = toColumnSizeStyleValue(columnProps?.width);
+function resolveColumnSizingStyles(
+  columnProps: Record<string, unknown> | undefined,
+  resolvedWidth?: number
+): Record<string, string> | undefined {
+  let width = resolvedWidth != null ? `${resolvedWidth}px` : toColumnSizeStyleValue(columnProps?.width ?? columnProps?.defaultWidth);
   let minWidth = toColumnSizeStyleValue(columnProps?.minWidth);
   let maxWidth = toColumnSizeStyleValue(columnProps?.maxWidth);
   if (columnProps?.isSelectionCell) {
@@ -531,12 +543,13 @@ function resolveColumnWidths(
     const column = columns[index]!;
     const minWidth = parseNumericColumnSize(column.minWidth, sizingBaseWidth);
     const maxWidth = parseNumericColumnSize(column.maxWidth, sizingBaseWidth);
-    const widthValue = column.width ?? column.defaultWidth;
-    const hasExplicitWidth =
+    const widthValue = column.width;
+    const defaultWidthValue = column.defaultWidth;
+    const hasControlledWidth =
       widthValue !== undefined
       && widthValue !== null
       && String(widthValue).trim().length > 0;
-    if (hasExplicitWidth) {
+    if (hasControlledWidth) {
       const numericWidth = parseNumericColumnSize(widthValue, sizingBaseWidth);
       if (numericWidth != null) {
         let resolvedWidth = numericWidth;
@@ -556,6 +569,30 @@ function resolveColumnWidths(
       continue;
     }
 
+    const hasDefaultWidth =
+      defaultWidthValue !== undefined
+      && defaultWidthValue !== null
+      && String(defaultWidthValue).trim().length > 0;
+    if (hasDefaultWidth) {
+      const numericWidth = parseNumericColumnSize(defaultWidthValue, sizingBaseWidth);
+      if (numericWidth != null) {
+        let resolvedWidth = numericWidth;
+        if (minWidth != null && resolvedWidth < minWidth) {
+          resolvedWidth = minWidth;
+        }
+
+        if (maxWidth != null && resolvedWidth > maxWidth) {
+          resolvedWidth = maxWidth;
+        }
+
+        column.defaultWidth = resolvedWidth;
+        remainingWidth -= resolvedWidth;
+      } else if (typeof defaultWidthValue === "string" && defaultWidthValue.trim().length > 0) {
+        column.defaultWidth = defaultWidthValue.trim();
+      }
+      continue;
+    }
+
     autoIndices.push(index);
   }
 
@@ -569,7 +606,7 @@ function resolveColumnWidths(
         const minWidth = parseNumericColumnSize(column.minWidth, sizingBaseWidth);
         const maxWidth = parseNumericColumnSize(column.maxWidth, sizingBaseWidth);
         if (minWidth != null && share < minWidth) {
-          column.width = minWidth;
+          column.defaultWidth = minWidth;
           remainingWidth -= minWidth;
           unresolved.delete(index);
           constrainedInPass = true;
@@ -577,7 +614,7 @@ function resolveColumnWidths(
         }
 
         if (maxWidth != null && share > maxWidth) {
-          column.width = maxWidth;
+          column.defaultWidth = maxWidth;
           remainingWidth -= maxWidth;
           unresolved.delete(index);
           constrainedInPass = true;
@@ -587,7 +624,7 @@ function resolveColumnWidths(
       if (!constrainedInPass) {
         const finalShare = Math.max(0, remainingWidth / unresolved.size);
         for (const index of unresolved) {
-          columns[index]!.width = finalShare;
+          columns[index]!.defaultWidth = finalShare;
         }
         break;
       }
@@ -748,20 +785,48 @@ const TableHeaderCell = defineComponent({
       type: Object as PropType<TableState<NormalizedSpectrumTableRow>>,
       required: true,
     },
+    columnResizeState: {
+      type: Object as PropType<TableColumnResizeState<NormalizedSpectrumTableRow>>,
+      required: true,
+    },
     isDisabled: {
       type: Boolean as PropType<boolean | undefined>,
+      required: false,
+      default: undefined,
+    },
+    onResizeStart: {
+      type: Function as PropType<((widths: Map<TableKey, ColumnSize>) => void) | undefined>,
+      required: false,
+      default: undefined,
+    },
+    onResize: {
+      type: Function as PropType<((widths: Map<TableKey, ColumnSize>) => void) | undefined>,
+      required: false,
+      default: undefined,
+    },
+    onResizeEnd: {
+      type: Function as PropType<((widths: Map<TableKey, ColumnSize>) => void) | undefined>,
       required: false,
       default: undefined,
     },
   },
   setup(props) {
     const refObject = ref<HTMLElement | null>(null);
+    const resizerInputRef = ref<HTMLInputElement | null>(null);
     const domRef = {
       get current() {
         return refObject.value;
       },
       set current(value: HTMLElement | null) {
         refObject.value = value;
+      },
+    };
+    const resizerRef = {
+      get current() {
+        return resizerInputRef.value;
+      },
+      set current(value: HTMLInputElement | null) {
+        resizerInputRef.value = value;
       },
     };
 
@@ -782,8 +847,36 @@ const TableHeaderCell = defineComponent({
     const isSelectionCell = computed(() => Boolean(columnProps.value.isSelectionCell));
     const isSorted = computed(() => props.state.sortDescriptor?.column === props.node.key);
     const sortDirection = computed(() => (isSorted.value ? props.state.sortDescriptor?.direction : undefined));
+    const stringFormatter = useLocalizedStringFormatter(
+      intlMessages as any,
+      "@react-spectrum/table"
+    );
+    const isResizable = computed(
+      () => Boolean(columnProps.value.allowsResizing) && !isSelectionCell.value && !Boolean(columnProps.value.hideHeader)
+    );
+    const { inputProps: resizerInputProps, resizerProps, isResizing } = useTableColumnResize(
+      {
+        column: props.node,
+        "aria-label": stringFormatter.format("columnResizer"),
+        triggerRef: domRef as { current: HTMLElement | null },
+        isDisabled: Boolean(props.isDisabled) || !isResizable.value,
+        onResizeStart: props.onResizeStart,
+        onResize: props.onResize,
+        onResizeEnd: props.onResizeEnd,
+      },
+      props.columnResizeState,
+      resizerRef
+    );
     const { checkboxProps: selectAllCheckboxProps } = useTableSelectAllCheckbox(props.state);
-    const columnSizingStyles = computed(() => resolveColumnSizingStyles(columnProps.value));
+    const resolvedColumnWidth = computed(() => {
+      if (!Boolean(columnProps.value.allowsResizing)) {
+        return undefined;
+      }
+
+      const width = props.columnResizeState.columnWidths.get(props.node.key);
+      return typeof width === "number" && Number.isFinite(width) ? width : undefined;
+    });
+    const columnSizingStyles = computed(() => resolveColumnSizingStyles(columnProps.value, resolvedColumnWidth.value));
     const handleHeaderArrowDown = (event: KeyboardEvent) => {
       if (!("expandedKeys" in props.state)) {
         return;
@@ -826,6 +919,8 @@ const TableHeaderCell = defineComponent({
             {
               "react-spectrum-Table-cell--selectionCell": isSelectionCell.value,
               "is-sortable": Boolean(columnProps.value.allowsSorting),
+              "is-resizable": isResizable.value,
+              "is-resizing": isResizable.value && isResizing,
               "is-sorted-asc": sortDirection.value === "ascending",
               "is-sorted-desc": sortDirection.value === "descending",
               "react-spectrum-Table-cell--alignStart": alignment.value === "start",
@@ -842,7 +937,33 @@ const TableHeaderCell = defineComponent({
           ? h(TableSelectionCheckbox, { checkboxProps: selectAllCheckboxProps })
           : Boolean(columnProps.value.hideHeader)
             ? h("span", { class: "spectrum-Table-visuallyHidden" }, props.node.rendered as any)
-            : h("div", { class: "spectrum-Table-headCellContents" }, props.node.rendered as any)
+            : [
+              h("div", { class: "spectrum-Table-headCellContents" }, props.node.rendered as any),
+              isResizable.value
+                ? h(
+                  "div",
+                  {
+                    ...(resizerProps as Record<string, unknown>),
+                    role: "presentation",
+                    class: "spectrum-Table-columnResizer",
+                  },
+                  [
+                    h("input", {
+                      ...(resizerInputProps as Record<string, unknown>),
+                      ref: resizerInputRef,
+                      role: "slider",
+                    }),
+                  ]
+                )
+                : null,
+              isResizable.value
+                ? h("div", {
+                  "aria-hidden": "true",
+                  role: "presentation",
+                  class: "spectrum-Table-columnResizerPlaceholder",
+                })
+                : null,
+            ]
       );
   },
 });
@@ -856,6 +977,10 @@ const TableBodyCell = defineComponent({
     },
     state: {
       type: Object as PropType<TableState<NormalizedSpectrumTableRow>>,
+      required: true,
+    },
+    columnResizeState: {
+      type: Object as PropType<TableColumnResizeState<NormalizedSpectrumTableRow>>,
       required: true,
     },
   },
@@ -936,8 +1061,21 @@ const TableBodyCell = defineComponent({
       "@react-spectrum/table"
     );
     const alignment = computed(() => resolveCellAlignment(props.node));
+    const resolvedColumnWidth = computed(() => {
+      const columnKey = props.node.column?.key;
+      const columnProps = props.node.column?.props as Record<string, unknown> | undefined;
+      if (columnKey == null || !Boolean(columnProps?.allowsResizing)) {
+        return undefined;
+      }
+
+      const width = props.columnResizeState.columnWidths.get(columnKey);
+      return typeof width === "number" && Number.isFinite(width) ? width : undefined;
+    });
     const columnSizingStyles = computed(() =>
-      resolveColumnSizingStyles((props.node.column?.props as Record<string, unknown> | undefined))
+      resolveColumnSizingStyles(
+        (props.node.column?.props as Record<string, unknown> | undefined),
+        resolvedColumnWidth.value
+      )
     );
     const { checkboxProps: selectionCheckboxProps } = useTableSelectionCheckbox(
       {
@@ -1035,6 +1173,10 @@ const TableBodyRow = defineComponent({
     },
     state: {
       type: Object as PropType<TableState<NormalizedSpectrumTableRow>>,
+      required: true,
+    },
+    columnResizeState: {
+      type: Object as PropType<TableColumnResizeState<NormalizedSpectrumTableRow>>,
       required: true,
     },
     rowIndex: {
@@ -1153,6 +1295,7 @@ const TableBodyRow = defineComponent({
             key: String(childNode.key),
             node: childNode,
             state: props.state,
+            columnResizeState: props.columnResizeState,
           })
         )
       );
@@ -1178,6 +1321,10 @@ export const Column = createStaticTableComponent("Column", {
     default: undefined,
   },
   allowsSorting: {
+    type: Boolean as PropType<boolean | undefined>,
+    default: undefined,
+  },
+  allowsResizing: {
     type: Boolean as PropType<boolean | undefined>,
     default: undefined,
   },
@@ -1422,6 +1569,18 @@ export const TableView = defineComponent({
     },
     onSelectionChange: {
       type: Function as PropType<((keys: Set<TableKey>) => void) | undefined>,
+      default: undefined,
+    },
+    onResizeStart: {
+      type: Function as PropType<((widths: Map<TableKey, ColumnSize>) => void) | undefined>,
+      default: undefined,
+    },
+    onResize: {
+      type: Function as PropType<((widths: Map<TableKey, ColumnSize>) => void) | undefined>,
+      default: undefined,
+    },
+    onResizeEnd: {
+      type: Function as PropType<((widths: Map<TableKey, ColumnSize>) => void) | undefined>,
       default: undefined,
     },
     onAction: {
@@ -1674,6 +1833,14 @@ export const TableView = defineComponent({
       allowsExpandableRows
         ? UNSTABLE_useTreeGridState<NormalizedSpectrumTableRow>(stateProps as any)
         : useTableState<NormalizedSpectrumTableRow>(stateProps as any);
+    const columnResizeState = useTableColumnResizeState<NormalizedSpectrumTableRow>(
+      {
+        get tableWidth() {
+          return tableLayoutWidth.value;
+        },
+      },
+      state as TableState<NormalizedSpectrumTableRow>
+    );
 
     watchEffect(() => {
       state.setKeyboardNavigationDisabled(Boolean(props.isKeyboardNavigationDisabled));
@@ -1801,7 +1968,11 @@ export const TableView = defineComponent({
                     key: String(headerCellNode.key),
                     node: headerCellNode as GridNode<NormalizedSpectrumTableRow>,
                     state,
+                    columnResizeState,
                     isDisabled: props.isDisabled,
+                    onResizeStart: props.onResizeStart,
+                    onResize: props.onResize,
+                    onResizeEnd: props.onResizeEnd,
                   })
                 )
               )
@@ -1824,6 +1995,7 @@ export const TableView = defineComponent({
                   rowCount: bodyRows.length,
                   onAction: props.onAction,
                   selectedKeys: resolvedSelectedKeys.value,
+                  columnResizeState,
                 })
               )
               : [
