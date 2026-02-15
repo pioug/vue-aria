@@ -164,6 +164,11 @@ export const ComboBox = defineComponent({
       required: false,
       default: undefined,
     },
+    validationBehavior: {
+      type: String as PropType<SpectrumComboBoxProps["validationBehavior"]>,
+      required: false,
+      default: undefined,
+    },
     placeholder: {
       type: String,
       required: false,
@@ -291,6 +296,9 @@ export const ComboBox = defineComponent({
       get validationState() {
         return props.validationState;
       },
+      get validationBehavior() {
+        return props.validationBehavior;
+      },
     } as any);
 
     watch(
@@ -330,6 +338,8 @@ export const ComboBox = defineComponent({
             : undefined,
         isDisabled: props.isDisabled,
         isReadOnly: props.isReadOnly,
+        isRequired: props.isRequired,
+        validationBehavior: props.validationBehavior,
         allowsCustomValue: props.allowsCustomValue,
         onFocus: props.onFocus,
         onBlur: props.onBlur,

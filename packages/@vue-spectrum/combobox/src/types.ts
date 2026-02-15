@@ -47,6 +47,7 @@ export interface SpectrumComboBoxProps {
   isRequired?: boolean;
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";
+  validationBehavior?: "aria" | "native";
   placeholder?: string;
   name?: string;
   form?: string;

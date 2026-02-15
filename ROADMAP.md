@@ -10698,3 +10698,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded key-prop docs to include `disabledKeys` usage guidance.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` native-validation parity update:
+  - added `validationBehavior` combobox prop support and forwarded required/validation behavior through combobox aria wiring and state validation handling.
+    - `packages/@vue-spectrum/combobox/src/types.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage asserting native-required semantics on the combobox input for `validationBehavior="native"`.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 40 tests).
+- Validation: `npm run check -- --pretty false` passed.

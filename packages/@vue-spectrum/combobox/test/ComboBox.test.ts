@@ -160,6 +160,16 @@ describe("ComboBox", () => {
     expect(wrapper.classes()).toContain("is-invalid");
   });
 
+  it("supports native required semantics with validationBehavior native", () => {
+    const wrapper = renderComboBox({
+      isRequired: true,
+      validationBehavior: "native",
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("required")).toBeDefined();
+  });
+
   it("keeps defaultInputValue when it differs from defaultSelectedKey text", () => {
     const wrapper = renderComboBox({
       defaultSelectedKey: "2",
