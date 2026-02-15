@@ -10617,3 +10617,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 28 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` async empty-state parity update:
+  - kept async combobox menus renderable while open for non-loading states when `loadingState` is present and the item collection is empty.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added async empty-state rendering through listbox `renderEmptyState` integration (`No results` placeholder).
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage for async empty-list no-results placeholder rendering.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 29 tests).
+- Validation: `npm run check -- --pretty false` passed.

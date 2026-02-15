@@ -431,7 +431,7 @@ export const ComboBox = defineComponent({
                 value: state.selectedKey == null ? "" : String(state.selectedKey),
               })
             : null,
-          state.isOpen && (collectionNodes.length > 0 || props.loadingState === "loading" || props.loadingState === "loadingMore")
+          state.isOpen && (collectionNodes.length > 0 || props.loadingState != null)
             ? h(
                 "div",
                 {
@@ -459,6 +459,10 @@ export const ComboBox = defineComponent({
                     maxHeight: props.maxHeight,
                     onLoadMore: props.onLoadMore,
                     isLoading: props.loadingState === "loading" || props.loadingState === "loadingMore",
+                    renderEmptyState:
+                      props.loadingState != null
+                        ? () => "No results"
+                        : undefined,
                     state,
                     ref: (value: unknown) => {
                       listBoxRef.value = resolveElement(value);

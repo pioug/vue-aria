@@ -639,4 +639,26 @@ describe("ComboBox", () => {
     expect(progressbar?.exists()).toBe(true);
     expect(progressbar?.attributes("aria-label")).toBe("Loading…");
   });
+
+  it("shows a no-results placeholder for async empty lists when not loading", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Async",
+        items: [],
+        loadingState: "idle",
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const listbox = wrapper.find('[role="listbox"]');
+    expect(listbox.exists()).toBe(true);
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(1);
+    expect(options[0]?.text()).toContain("No results");
+    expect(options[0]?.find('[role="progressbar"]').exists()).toBe(false);
+  });
 });
