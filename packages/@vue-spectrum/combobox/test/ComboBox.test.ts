@@ -627,6 +627,18 @@ describe("ComboBox", () => {
     expect(input.attributes("required")).toBeDefined();
   });
 
+  it("supports matching defaultSelectedKey and defaultInputValue", () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+      defaultInputValue: "Two",
+      formValue: "key",
+      name: "selection",
+    });
+
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
+    expect((wrapper.get('input[type=\"hidden\"]').element as HTMLInputElement).value).toBe("2");
+  });
+
   it("keeps defaultInputValue when it differs from defaultSelectedKey text", () => {
     const wrapper = renderComboBox({
       defaultSelectedKey: "2",
