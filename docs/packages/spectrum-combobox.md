@@ -147,7 +147,10 @@ const validateSelection = ({ selectedKey }: { inputValue: string; selectedKey: s
 
 Use `loadingState` to expose loading UI and `onLoadMore` for incremental loading when the listbox scroll reaches the end.
 
-- `loadingState="loading"` renders a loading placeholder in the open menu.
+- `loadingState="loading"` and `loadingState="filtering"` show a delayed (`500ms`) input loading spinner.
+- `loadingState="filtering"` shows the spinner while the menu is open (or while closed when `menuTrigger="manual"`).
+- `loadingState="loading"` renders a `"Loading…"` placeholder in the open menu when no items are available.
+- `loadingState="loadingMore"` renders a trailing listbox spinner row while additional items stream in.
 - Async comboboxes with no items in non-loading states render a `No results` menu placeholder.
 
 ```vue
@@ -160,7 +163,7 @@ const items = ref(Array.from({ length: 30 }, (_, index) => ({
   label: `Item ${index + 1}`,
 })));
 
-const loadingState = ref<"idle" | "loadingMore">("idle");
+const loadingState = ref<"idle" | "loading" | "filtering" | "loadingMore">("idle");
 
 const onLoadMore = async () => {
   if (loadingState.value !== "idle") {

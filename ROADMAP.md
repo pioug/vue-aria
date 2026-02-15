@@ -11475,6 +11475,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test packages/@vue-spectrum/combobox/test` passed (4 files, 181 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 156 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` async-loading docs parity update:
+  - updated combobox docs async-loading guidance to match implemented loading semantics:
+    - clarified delayed input spinner behavior for `loading`/`filtering` states.
+    - documented `menuTrigger="manual"` closed-menu filtering spinner behavior.
+    - documented listbox spinner behavior reserved for `loadingMore`.
+    - updated example typing to include full async `loadingState` union.
+    - `docs/packages/spectrum-combobox.md`
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.
