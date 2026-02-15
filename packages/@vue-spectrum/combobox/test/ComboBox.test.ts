@@ -292,6 +292,27 @@ describe("ComboBox", () => {
     expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
+  it("closes the menu when clicking an already-selected option in uncontrolled mode", async () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const selectedOption = wrapper
+      .findAll('[role="option"]')
+      .find((option) => option.attributes("aria-selected") === "true");
+    expect(selectedOption).toBeDefined();
+
+    await selectedOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("updates when selectedKey and inputValue controlled props change together", async () => {
     const wrapper = renderComboBox({
       selectedKey: "2",
