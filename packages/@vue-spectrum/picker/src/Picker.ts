@@ -66,6 +66,15 @@ export const Picker = defineComponent({
       required: false,
       default: undefined,
     },
+    maxHeight: {
+      type: Number as () => number | undefined,
+      required: false,
+      default: undefined,
+    },
+    onLoadMore: {
+      type: Function as PropType<SpectrumPickerProps["onLoadMore"]>,
+      required: false,
+    },
     isRequired: {
       type: Boolean,
       required: false,
@@ -299,6 +308,8 @@ export const Picker = defineComponent({
                         (menuProps.onAction as ((key: PickerKey) => void) | undefined)?.(key);
                         state.close();
                       },
+                      maxHeight: props.maxHeight,
+                      onLoadMore: props.onLoadMore,
                       isLoading: props.isLoading,
                       state,
                     }),

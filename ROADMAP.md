@@ -10487,3 +10487,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 35 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` load-more parity update:
+  - added `maxHeight` and `onLoadMore` picker prop support and forwarded both to popup listbox rendering.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for scroll-near-end `onLoadMore` callback dispatch from open picker listboxes.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 36 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -29,6 +29,8 @@ export interface SpectrumPickerProps {
   onOpenChange?: (isOpen: boolean) => void;
   isDisabled?: boolean;
   isLoading?: boolean;
+  maxHeight?: number;
+  onLoadMore?: () => void;
   isRequired?: boolean;
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";

@@ -655,6 +655,61 @@ describe("Picker", () => {
     expect(document.body.querySelector('[role="progressbar"]')).toBeNull();
   });
 
+  it("fires onLoadMore when scrolling near the end of an open listbox", async () => {
+    const maxHeight = 200;
+    const clientHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "clientHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return maxHeight;
+        }
+        return 48;
+      });
+    const scrollHeightSpy = vi
+      .spyOn(window.HTMLElement.prototype, "scrollHeight", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") === "listbox") {
+          return 4800;
+        }
+        return 48;
+      });
+
+    try {
+      const onLoadMore = vi.fn();
+      const wrapper = mount(Picker as any, {
+        props: {
+          ariaLabel: "Picker",
+          maxHeight,
+          onLoadMore,
+          items: Array.from({ length: 100 }, (_, index) => ({
+            key: `item-${index + 1}`,
+            label: `Item ${index + 1}`,
+          })),
+        },
+        attachTo: document.body,
+      });
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+
+      const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+      expect(listbox).toBeTruthy();
+
+      if (listbox) {
+        listbox.scrollTop = 1500;
+        listbox.dispatchEvent(new Event("scroll", { bubbles: true }));
+        listbox.scrollTop = 5000;
+        listbox.dispatchEvent(new Event("scroll", { bubbles: true }));
+      }
+      await nextTick();
+
+      expect(onLoadMore).toHaveBeenCalledTimes(1);
+    } finally {
+      scrollHeightSpy.mockRestore();
+      clientHeightSpy.mockRestore();
+    }
+  });
+
   it("supports RouterProvider links on items", async () => {
     const navigate = vi.fn();
     const useHref = (href: string) => (href.startsWith("http") ? href : `/base${href}`);
