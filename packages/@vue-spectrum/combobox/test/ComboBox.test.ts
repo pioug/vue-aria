@@ -896,6 +896,35 @@ describe("ComboBox", () => {
     expect(options).toHaveLength(3);
   });
 
+  it("shows a filtered list when input value changes after opening", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        defaultInputValue: "Tw",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(3);
+
+    await input.setValue("o");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
+  });
+
   it("opens when typing by default", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');
