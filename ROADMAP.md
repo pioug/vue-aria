@@ -6,7 +6,7 @@ Source of truth: `/Users/piou/Dev/vue-aria/PLAN.md`
 ## 1) Program Status
 - Overall status: In progress
 - Current phase: React Spectrum bootstrap
-- Current focus package: `@vue-spectrum/table`
+- Current focus package: none (`@vue-spectrum/table` complete)
 - Scope note: Ignore Spectrum S2 (next Spectrum version). Port only the current upstream Spectrum version unless explicitly requested otherwise.
 - Blockers:
   - Storybook parity environment not scaffolded yet (VitePress plus test harness parity validation is in place)
@@ -115,7 +115,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/picker`: Complete
 - `@vue-spectrum/combobox`: Complete
 - `@vue-spectrum/tabs`: Complete
-- `@vue-spectrum/table`: In progress
+- `@vue-spectrum/table`: Complete
 - `@vue-spectrum/tree`: Complete
 - `@vue-spectrum/calendar`: Complete
 - `@vue-spectrum/datepicker`: Complete
@@ -12474,6 +12474,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added regression coverage for nested static-slot header trees composed with `dragAndDropHooks.useDraggableCollectionState`.
   - assertions validate drag synthetic-column injection alongside nested leaf rows (`aria-colcount` expansion and drag/rowheader/body cell structural ordering).
   - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 273 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 329 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Queue-status alignment update:
+  - updated execution queue status for `@vue-spectrum/table` to `Complete` and cleared current package focus after nested-header, selection/sizing, and drag-structure parity sweeps.
+  - current `@vue-spectrum/table` completion evidence includes expanded grouped-header normalization/rendering parity, static/data nested-header regression coverage, and table+aria table-state suite validation.
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 273 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 329 tests).
 - Validation: `npm run check -- --pretty false` passed.
