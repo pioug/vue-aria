@@ -113,6 +113,31 @@ describe("ComboBox", () => {
     expect(wrapper.get('input[role="combobox"]').attributes("aria-label")).toBe("Framework");
   });
 
+  it("does not warn about invoking default slots outside render", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      mount(ComboBox as any, {
+        props: {
+          label: "Filter",
+        },
+        slots: {
+          default: () => [
+            h(Item as any, { id: "one" }, { default: () => "One" }),
+            h(Item as any, { id: "two" }, { default: () => "Two" }),
+            h(Item as any, { id: "three" }, { default: () => "Three" }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining("Slot \"default\" invoked outside of the render function")
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("exposes imperative combobox handles", async () => {
     const wrapper = renderComboBox();
     const api = wrapper.vm as unknown as {

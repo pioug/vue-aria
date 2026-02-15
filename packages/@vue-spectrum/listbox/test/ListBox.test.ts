@@ -106,6 +106,18 @@ describe("ListBox", () => {
     expect(wrapper.findAll('[role="presentation"].spectrum-Menu-divider')).toHaveLength(1);
   });
 
+  it("does not warn about invoking default slots outside render", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      renderListBox();
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining("Slot \"default\" invoked outside of the render function")
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("supports single selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderListBox({
