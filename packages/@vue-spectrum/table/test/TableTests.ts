@@ -2407,6 +2407,30 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("skips disabled rows when shift-click selecting a pointer range", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRowsMiddleDisabled,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(3);
+
+    await press(bodyRows[0]!);
+    await press(bodyRows[2]!, { shiftKey: true });
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-3"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("supports multiple checkbox-style selection callbacks", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
@@ -2800,6 +2824,31 @@ export function tableTests() {
     expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
+  it("supports deselecting an item after selecting all rows", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const selectAll = wrapper.get('thead input[role="checkbox"]');
+    await selectAll.setValue(true);
+
+    onSelectionChange.mockClear();
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[1]!);
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-3"]));
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
+  });
+
   it("does not select all rows via Ctrl+A when disallowSelectAll is true", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
@@ -3065,6 +3114,35 @@ export function tableTests() {
     bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("preserves selection on Escape when escapeKeyBehavior is none in larger collections", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRows,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      escapeKeyBehavior: "none",
+      onSelectionChange,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    await press(bodyRows[0]!);
+    await press(bodyRows[2]!);
+
+    onSelectionChange.mockClear();
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
   it("does not emit selection changes on Escape when nothing is selected", async () => {

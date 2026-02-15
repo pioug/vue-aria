@@ -12084,6 +12084,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 193 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 249 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` escape-none breadth coverage:
+  - added larger-collection (`3` rows) regression coverage ensuring `escapeKeyBehavior="none"` preserves checkbox multi-selection state and suppresses escape callbacks.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 194 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 250 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` keyboard range-selection depth expansion:
   - strengthened `Shift+ArrowUp` checkbox-selection coverage to validate multi-step accumulation across successive upward range-extension key presses.
   - assertions now verify full three-row selection after two consecutive upward range-extension steps starting from the last row.
@@ -12097,4 +12103,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - `packages/@vue-spectrum/table/test/TableTests.ts`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 185 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 241 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` range/select-all guard coverage expansion:
+  - added regression coverage ensuring shift-click pointer range selection excludes disabled rows inside the selected span.
+  - added regression coverage ensuring deselecting a row after full select-all updates selection to the remaining rows.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 196 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 252 tests).
 - Validation: `npm run check -- --pretty false` passed.
