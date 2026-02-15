@@ -285,6 +285,42 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Zero");
   });
 
+  it("selects falsy-key options on press", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+        items: [
+          { key: "", label: "Empty" },
+          { key: 0, label: "Zero" },
+          { key: "three", label: "Three" },
+        ],
+        onSelectionChange,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("click");
+    await nextTick();
+
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(options).toHaveLength(3);
+
+    options[1]?.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(String(onSelectionChange.mock.calls[0]?.[0])).toBe("0");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.text()).toContain("Zero");
+  });
+
   it("supports closed arrow-key navigation to falsy keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = mount(Picker as any, {

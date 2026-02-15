@@ -11320,3 +11320,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 74 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` falsy-key press-selection parity refinement:
+  - added migrated coverage asserting open-list option press selection works for falsy item keys and still closes/updates trigger text correctly.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 75 tests).
+- Validation: `npm run check -- --pretty false` passed.
