@@ -1442,6 +1442,79 @@ describe("ComboBox", () => {
     expect(options[2]?.text()).toContain("Item 3");
   });
 
+  it("updates mapped slot items when list props change", async () => {
+    const initialItems = [
+      { id: "1", name: "Aardvark" },
+      { id: "2", name: "Kangaroo" },
+      { id: "3", name: "Snake" },
+    ];
+    const updatedItems = [
+      { id: "1", name: "New Text" },
+      { id: "2", name: "Item 2" },
+      { id: "3", name: "Item 3" },
+    ];
+
+    const wrapper = mount(defineComponent({
+      props: {
+        listItems: {
+          type: Array,
+          required: false,
+          default: () => initialItems,
+        },
+      },
+      setup(componentProps) {
+        return () =>
+          h(ComboBox as any, { label: "Combobox" }, {
+            default: () =>
+              (componentProps.listItems as Array<{ id: string; name: string }>).map((item) =>
+                h(Item as any, { id: item.id }, { default: () => item.name })
+              ),
+          });
+      },
+    }), {
+      attachTo: document.body,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    let options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[0]?.text()).toContain("Aardvark");
+    expect(options[1]?.text()).toContain("Kangaroo");
+    expect(options[2]?.text()).toContain("Snake");
+
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Aardvark");
+
+    const outside = document.createElement("button");
+    document.body.append(outside);
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+
+    await wrapper.setProps({
+      listItems: updatedItems,
+    });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("New Text");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[0]?.text()).toContain("New Text");
+    expect(options[1]?.text()).toContain("Item 2");
+    expect(options[2]?.text()).toContain("Item 3");
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",
