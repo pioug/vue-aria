@@ -561,6 +561,33 @@ describe("TableView nested rows", () => {
     expect(rowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
   });
 
+  it("suppresses treegrid drag handles for disabled rows in disabledBehavior all mode", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows disabled drag table",
+        columns,
+        items: manyNestedItems,
+        showDragButtons: true,
+        selectionMode: "multiple",
+        disabledBehavior: "all",
+        disabledKeys: ["row-1-level-2"],
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const disabledRow = getRowByText(wrapper, "Row 1, Lvl 2, Foo");
+    const enabledRow = getRowByText(wrapper, "Row 2, Lvl 1, Foo");
+    const disabledDragCell = disabledRow.findAll('[role="gridcell"]')[0]!;
+    const enabledDragCell = enabledRow.findAll('[role="gridcell"]')[0]!;
+
+    expect(disabledDragCell.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(disabledDragCell.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
+    expect(enabledDragCell.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
+  });
+
   it("supports selecting nested rows through row checkboxes", async () => {
     enableTableNestedRows();
     const onSelectionChange = vi.fn();

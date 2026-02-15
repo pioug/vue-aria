@@ -12381,3 +12381,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 258 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 314 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid drag-handle disabled coverage expansion:
+  - added migrated nested-row regression coverage ensuring `disabledBehavior="all"` suppresses drag-handle rendering for disabled treegrid rows while keeping enabled-row drag handles intact.
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 52 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 259 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 315 tests).
+- Validation: `npm run check -- --pretty false` passed.
