@@ -407,6 +407,26 @@ describe("Picker", () => {
     expect(wrapper.get("button").attributes("aria-controls")).toBeUndefined();
   });
 
+  it("does not close on escape in controlled open state", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      isOpen: true,
+      onOpenChange,
+    });
+
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    expect(listbox).toBeTruthy();
+
+    listbox?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    listbox?.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it("closes when clicking outside", async () => {
     const wrapper = renderPicker();
 

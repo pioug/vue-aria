@@ -10467,3 +10467,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 33 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` controlled-escape parity update:
+  - added migrated coverage for Escape handling in controlled open state, asserting close requests are emitted while menu visibility remains prop-controlled.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 34 tests).
+- Validation: `npm run check -- --pretty false` passed.
