@@ -1241,6 +1241,35 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("retains selected key on blur when input value matches the selected item", async () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+      formValue: "key",
+      name: "selection",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const hiddenInput = wrapper.get('input[type="hidden"][name="selection"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    expect((hiddenInput.element as HTMLInputElement).value).toBe("2");
+
+    await input.trigger("focus");
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    await input.setValue("Two");
+    await nextTick();
+    await nextTick();
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect((hiddenInput.element as HTMLInputElement).value).toBe("2");
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
