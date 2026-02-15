@@ -443,6 +443,55 @@ describe("Picker", () => {
     expect((select.element as HTMLSelectElement).value).toBe("2");
   });
 
+  it("submits empty option value by default", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { id: "picker-form" }, [
+              h(Picker as any, {
+                ariaLabel: "Picker",
+                name: "picker",
+                items,
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const form = wrapper.get("form").element as HTMLFormElement;
+    const data = new FormData(form);
+    expect(data.get("picker")).toBe("");
+  });
+
+  it("submits default selected option value", () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { id: "picker-form" }, [
+              h(Picker as any, {
+                ariaLabel: "Picker",
+                name: "picker",
+                items,
+                defaultSelectedKey: "2",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const form = wrapper.get("form").element as HTMLFormElement;
+    const data = new FormData(form);
+    expect(data.get("picker")).toBe("2");
+  });
+
   it("supports hidden select autocomplete attribute", () => {
     const wrapper = renderPicker({
       label: "Test",

@@ -10460,3 +10460,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 31 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` form-submit parity update:
+  - added migrated coverage asserting hidden-select form serialization parity for:
+    - default empty-option submission
+    - default selected-key submission
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 33 tests).
+- Validation: `npm run check -- --pretty false` passed.
