@@ -12449,3 +12449,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 269 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 325 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` nested-header sorting parity expansion:
+  - added regression coverage for sorting interactions initiated from nested leaf column headers, including ascending/descending toggles and row-order updates.
+  - validated nested grouped-header structures still sort by the targeted leaf-column key while preserving grouped header rendering.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 270 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 326 tests).
+- Validation: `npm run check -- --pretty false` passed.

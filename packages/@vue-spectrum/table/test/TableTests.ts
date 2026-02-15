@@ -85,6 +85,18 @@ const columnsWithNestedResizableHeaders: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithSortableNestedHeaders: SpectrumTableColumnData[] = [
+  { key: "test", title: "Test", isRowHeader: true },
+  {
+    key: "group",
+    title: "Group",
+    childColumns: [
+      { key: "foo", title: "Foo", allowsSorting: true },
+      { key: "bar", title: "Bar" },
+    ],
+  },
+];
+
 const columnsWithAlignment: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true },
   { key: "bar", title: "Bar", align: "center" },
@@ -238,6 +250,11 @@ const itemsWithNestedColumns: SpectrumTableRowData[] = [
     yay: "Yay 2",
     baz: "Baz 2",
   },
+];
+
+const itemsWithSortableNestedColumns: SpectrumTableRowData[] = [
+  { key: "row-1", test: "Test 1", foo: "Zulu", bar: "Bar 1" },
+  { key: "row-2", test: "Test 2", foo: "Alpha", bar: "Bar 2" },
 ];
 
 const itemsWithThreeRows: SpectrumTableRowData[] = [
@@ -992,6 +1009,30 @@ export function tableTests() {
     expect(fooHeader).toBeTruthy();
     expect(fooHeader!.classes()).toContain("is-resizable");
     expect(fooHeader!.find(".spectrum-Table-columnResizer").exists()).toBe(true);
+  });
+
+  it("sorts rows from nested leaf column headers", async () => {
+    const wrapper = renderTable({
+      columns: columnsWithSortableNestedHeaders,
+      items: itemsWithSortableNestedColumns,
+    });
+
+    let bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.text()).toContain("Zulu");
+    expect(bodyRows[1]!.text()).toContain("Alpha");
+
+    const leafHeaders = wrapper.findAll('[role="columnheader"]').filter((header) => header.text().includes("Foo"));
+    expect(leafHeaders).toHaveLength(1);
+
+    await press(leafHeaders[0]!);
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.text()).toContain("Alpha");
+    expect(bodyRows[1]!.text()).toContain("Zulu");
+
+    await press(leafHeaders[0]!);
+    bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.text()).toContain("Zulu");
+    expect(bodyRows[1]!.text()).toContain("Alpha");
   });
 
   it("applies column alignment classes to headers and cells", () => {
