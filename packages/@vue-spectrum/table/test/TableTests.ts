@@ -4771,6 +4771,86 @@ export function tableTests() {
     expect(onLoadMore).not.toHaveBeenCalled();
   });
 
+  it("renders loading spinner state from TableBody slot props", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot loading table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+              h(Column as any, { id: "bar" }, () => "Bar"),
+            ],
+          }),
+          h(TableBody as any, { loadingState: "loading" }, {
+            default: () => [],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const spinner = wrapper.get('[role="progressbar"]');
+    expect(spinner.attributes("aria-label")).toBe("Loading…");
+  });
+
+  it("fires onLoadMore from TableBody slot props when scrolling near the bottom", async () => {
+    const onLoadMore = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot load-more table",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+              h(Column as any, { id: "bar" }, () => "Bar"),
+            ],
+          }),
+          h(TableBody as any, { onLoadMore }, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                ],
+              }),
+              h(Row as any, { id: "row-2" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 2"),
+                  h(Cell as any, () => "Bar 2"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    const element = grid.element as HTMLElement;
+    Object.defineProperty(element, "scrollHeight", {
+      configurable: true,
+      value: 3000,
+    });
+    Object.defineProperty(element, "clientHeight", {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(element, "scrollTop", {
+      configurable: true,
+      writable: true,
+      value: 2200,
+    });
+
+    await grid.trigger("scroll");
+    expect(onLoadMore).toHaveBeenCalledTimes(1);
+  });
+
   it("does not emit select-all callbacks for an empty checkbox table", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({

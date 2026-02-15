@@ -223,8 +223,9 @@ function getTableSlotDefinitionSignature(definition: ParsedSpectrumTableDefiniti
     ].join(":");
   };
   const rowSignature = definition.rows.map((row) => createRowSignature(row as any)).join("|");
+  const loadingSignature = `${definition.loadingState ?? ""}:${definition.onLoadMore ? "1" : "0"}`;
 
-  return `${columnSignature}__${rowSignature}`;
+  return `${columnSignature}__${rowSignature}__${loadingSignature}`;
 }
 
 function createColumnNodes(definition: NormalizedSpectrumTableDefinition): GridNode<NormalizedSpectrumTableRow>[] {
@@ -1889,6 +1890,12 @@ export const TableView = defineComponent({
 
     const slotDefinition = shallowRef<ParsedSpectrumTableDefinition | null>(null);
     const slotDefinitionSignature = ref("");
+    const resolvedLoadingState = computed(
+      () => slotDefinition.value?.loadingState ?? props.loadingState
+    );
+    const resolvedOnLoadMore = computed(
+      () => slotDefinition.value?.onLoadMore ?? props.onLoadMore
+    );
     const disabledKeysVersion = computed(() => {
       const keySegment = props.disabledKeys
         ? Array.from(props.disabledKeys).map((key) => String(key)).sort().join("|")
@@ -1926,7 +1933,7 @@ export const TableView = defineComponent({
 
     const allRows = computed(() => flattenNormalizedRows(normalizedDefinition.value.rows));
     const isLoadingState = computed(
-      () => props.loadingState === "loading" || props.loadingState === "loadingMore"
+      () => resolvedLoadingState.value === "loading" || resolvedLoadingState.value === "loadingMore"
     );
     const allowsExpandableRows = Boolean(props.UNSTABLE_allowsExpandableRows && tableNestedRows());
     const collection = computed(() =>
@@ -1947,12 +1954,13 @@ export const TableView = defineComponent({
     });
 
     const requestLoadMore = () => {
-      if (!props.onLoadMore || isLoadingState.value || loadMoreRequested.value) {
+      const onLoadMore = resolvedOnLoadMore.value;
+      if (!onLoadMore || isLoadingState.value || loadMoreRequested.value) {
         return;
       }
 
       loadMoreRequested.value = true;
-      props.onLoadMore();
+      onLoadMore();
     };
 
     const maybeLoadMoreByScrollPosition = () => {
@@ -1993,7 +2001,7 @@ export const TableView = defineComponent({
     });
 
     watchEffect(() => {
-      const hasLoadMore = Boolean(props.onLoadMore);
+      const hasLoadMore = Boolean(resolvedOnLoadMore.value);
       const isLoading = isLoadingState.value;
       const rowCount = allRows.value.length;
       const tableElement = tableElementRef.value;
@@ -2194,8 +2202,9 @@ export const TableView = defineComponent({
       const bodyRows = Array.from(state.collection.body.childNodes) as GridNode<NormalizedSpectrumTableRow>[];
       const rowOffset = headerRows.length;
       const isTreeGridState = "expandedKeys" in state;
-      const isLoading = props.loadingState === "loading";
-      const isLoadingMore = props.loadingState === "loadingMore";
+      const loadingState = resolvedLoadingState.value;
+      const isLoading = loadingState === "loading";
+      const isLoadingMore = loadingState === "loadingMore";
       const loadingLabel = isLoadingMore ? "Loading more…" : "Loading…";
       const handleTableScroll = () => {
         maybeLoadMoreByScrollPosition();

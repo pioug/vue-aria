@@ -7,6 +7,7 @@ export type SpectrumTableSelectionMode = "none" | "single" | "multiple";
 export type SpectrumTableSelectionStyle = "highlight" | "checkbox";
 export type SpectrumTableColumnAlign = "start" | "center" | "end";
 export type SpectrumTableColumnSize = number | string;
+export type SpectrumTableLoadingState = "idle" | "loading" | "loadingMore" | "filtering";
 export type SpectrumSortDirection = SortDirection;
 export type SpectrumSortDescriptor = SortDescriptor;
 
@@ -82,6 +83,8 @@ export interface ParsedSpectrumTableRow {
 export interface ParsedSpectrumTableDefinition {
   columns: ParsedSpectrumTableColumn[];
   rows: ParsedSpectrumTableRow[];
+  loadingState?: SpectrumTableLoadingState | undefined;
+  onLoadMore?: (() => void) | undefined;
 }
 
 export interface NormalizeTableDefinitionOptions {
@@ -188,6 +191,14 @@ function normalizeColumnSizeProp(value: unknown): SpectrumTableColumnSize | unde
     }
 
     return trimmed;
+  }
+
+  return undefined;
+}
+
+function normalizeLoadingState(value: unknown): SpectrumTableLoadingState | undefined {
+  if (value === "idle" || value === "loading" || value === "loadingMore" || value === "filtering") {
+    return value;
   }
 
   return undefined;
@@ -449,9 +460,16 @@ export function parseTableSlotDefinition(nodes: VNode[] | undefined): ParsedSpec
     }
   }
 
+  const bodyProps = (bodyNode?.props ?? {}) as Record<string, unknown>;
+  const loadingState = normalizeLoadingState(bodyProps.loadingState ?? bodyProps["loading-state"]);
+  const onLoadMoreValue = bodyProps.onLoadMore ?? bodyProps["on-load-more"];
+  const onLoadMore = typeof onLoadMoreValue === "function" ? (onLoadMoreValue as () => void) : undefined;
+
   return {
     columns,
     rows,
+    loadingState,
+    onLoadMore,
   };
 }
 

@@ -12232,3 +12232,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 225 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 281 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` TableBody slot loading-prop parity:
+  - extended slot-definition parsing to include `TableBody` `loadingState` and `onLoadMore` props.
+  - wired slot-sourced loading/load-more props into `TableView` loading-state rendering and load-more triggering logic.
+  - added regression coverage for slot-driven loading spinner rendering and scroll-triggered slot `onLoadMore` callbacks.
+  - `packages/@vue-spectrum/table/src/types.ts`
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 227 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 283 tests).
+- Validation: `npm run check -- --pretty false` passed.
