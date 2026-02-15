@@ -1375,6 +1375,80 @@ describe("DatePicker", () => {
     expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
   });
 
+  it("supports native date required validity", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(DatePicker as any, {
+                "aria-label": "Date picker",
+                name: "eventDate",
+                placeholderValue: new CalendarDate(2019, 6, 5),
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[name="eventDate"]');
+    expect((input.element as HTMLInputElement).required).toBe(true);
+
+    expect((input.element as HTMLInputElement).checkValidity()).toBe(false);
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect((input.element as HTMLInputElement).validationMessage).toContain("Constraints not satisfied");
+  });
+
+  it("clears native date required validation after selecting a date", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(DatePicker as any, {
+                "aria-label": "Date picker",
+                name: "eventDate",
+                placeholderValue: new CalendarDate(2019, 6, 5),
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[name="eventDate"]');
+    expect((input.element as HTMLInputElement).required).toBe(true);
+    expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
+
+    (input.element as HTMLInputElement).checkValidity();
+    (input.element as HTMLInputElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+
+    await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
+    await nextTick();
+    const day17 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "17");
+    expect(day17).toBeTruthy();
+    pressElement(day17!);
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+    expect((input.element as HTMLInputElement).validationMessage).toBe("");
+  });
+
   it("clears native date validation state on form reset", async () => {
     const wrapper = mount(
       defineComponent({
@@ -1410,7 +1484,7 @@ describe("DatePicker", () => {
 
     expect(wrapper.get(".react-spectrum-DatePicker-error").text()).toContain("Invalid date.");
     const getHiddenValue = () =>
-      wrapper.get('input[type="hidden"][name="eventDate"]').element.getAttribute("value");
+      wrapper.get('input[name="eventDate"]').element.getAttribute("value");
     expect(getHiddenValue()).toBe("2019-06-17");
 
     await wrapper.get('[data-testid="reset"]').trigger("click");
@@ -3119,6 +3193,90 @@ describe("DateRangePicker", () => {
     expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
   });
 
+  it("supports native range required validity", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(DateRangePicker as any, {
+                "aria-label": "Date range picker",
+                startName: "rangeStart",
+                endName: "rangeEnd",
+                placeholderValue: new CalendarDate(2019, 6, 5),
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const startInput = wrapper.get('input[name="rangeStart"]');
+    const endInput = wrapper.get('input[name="rangeEnd"]');
+    expect((startInput.element as HTMLInputElement).required).toBe(true);
+    expect((endInput.element as HTMLInputElement).required).toBe(true);
+
+    expect((startInput.element as HTMLInputElement).checkValidity()).toBe(false);
+    expect((startInput.element as HTMLInputElement).validity.valid).toBe(false);
+    expect((startInput.element as HTMLInputElement).validationMessage).toContain("Constraints not satisfied");
+  });
+
+  it("clears native range required validation after selecting a date range", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(DateRangePicker as any, {
+                "aria-label": "Date range picker",
+                startName: "rangeStart",
+                endName: "rangeEnd",
+                placeholderValue: new CalendarDate(2019, 6, 5),
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const startInput = wrapper.get('input[name="rangeStart"]');
+    const endInput = wrapper.get('input[name="rangeEnd"]');
+    expect((startInput.element as HTMLInputElement).required).toBe(true);
+    expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
+
+    (startInput.element as HTMLInputElement).checkValidity();
+    (startInput.element as HTMLInputElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    expect((startInput.element as HTMLInputElement).validity.valid).toBe(false);
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+    await nextTick();
+
+    expect((startInput.element as HTMLInputElement).validity.valid).toBe(true);
+    expect((endInput.element as HTMLInputElement).validity.valid).toBe(true);
+    expect((startInput.element as HTMLInputElement).validationMessage).toBe("");
+    expect((endInput.element as HTMLInputElement).validationMessage).toBe("");
+  });
+
   it("clears native range validation state on form reset", async () => {
     const wrapper = mount(
       defineComponent({
@@ -3159,9 +3317,9 @@ describe("DateRangePicker", () => {
 
     expect(wrapper.get(".react-spectrum-DateRangePicker-error").text()).toContain("Invalid range.");
     const getStartValue = () =>
-      wrapper.get('input[type="hidden"][name="rangeStart"]').element.getAttribute("value");
+      wrapper.get('input[name="rangeStart"]').element.getAttribute("value");
     const getEndValue = () =>
-      wrapper.get('input[type="hidden"][name="rangeEnd"]').element.getAttribute("value");
+      wrapper.get('input[name="rangeEnd"]').element.getAttribute("value");
     expect(getStartValue()).toBe("2019-06-10");
     expect(getEndValue()).toBe("2019-06-12");
 

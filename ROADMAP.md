@@ -11398,3 +11398,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 147 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 165 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` native required-validation parity refinement:
+  - aligned native form-input behavior with upstream validation expectations by rendering native-validatable hidden text inputs in `validationBehavior="native"` mode while preserving hidden serialization for non-native flows.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - wired native form validation lifecycle handling for date and range hidden inputs so native `checkValidity`/`invalid` flows commit validation state and selection updates clear native validity.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - added migrated native required-validation coverage for both picker variants:
+    - `DatePicker`: required native validity is invalid by default and clears after calendar selection.
+    - `DateRangePicker`: required native start/end validity is invalid by default and clears after selecting a complete range.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+  - updated native reset coverage selectors to query serialized inputs by `name` across native/non-native input modes.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 151 tests).
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 169 tests).
+- Validation: `npm run check -- --pretty false` passed.

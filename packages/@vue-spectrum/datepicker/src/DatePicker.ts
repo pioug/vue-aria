@@ -1,5 +1,6 @@
 import { useDatePicker, useDateRangePicker } from "@vue-aria/datepicker";
 import { useDatePickerState, useDateRangePickerState } from "@vue-aria/datepicker-state";
+import { useFormValidation } from "@vue-aria/form";
 import { useLocale } from "@vue-aria/i18n";
 import { useFormReset } from "@vue-aria/utils";
 import { defineComponent, h, computed, ref, useAttrs, onMounted, nextTick, type PropType } from "vue";
@@ -524,6 +525,17 @@ export const DatePicker = defineComponent({
         state.resetValidation();
       }
     );
+    useFormValidation(
+      {
+        get validationBehavior() {
+          return merged.validationBehavior;
+        },
+        value: () => state.value,
+        focus: () => triggerRef.value?.focus(),
+      },
+      state as any,
+      hiddenInputRef as any
+    );
 
     const displayValue = computed(() => {
       if (!state.value) {
@@ -578,6 +590,7 @@ export const DatePicker = defineComponent({
       const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
       const isButtonDisabled = Boolean(buttonProps.isDisabled);
+      const useNativeValidationInput = merged.validationBehavior === "native";
 
       return h(
         "div",
@@ -602,9 +615,12 @@ export const DatePicker = defineComponent({
           merged.name
             ? h("input", {
               ref: hiddenInputRef,
-              type: "hidden",
+              type: useNativeValidationInput ? "text" : "hidden",
+              hidden: useNativeValidationInput ? true : undefined,
               name: merged.name,
               form: merged.form,
+              required: useNativeValidationInput ? merged.isRequired : undefined,
+              disabled: merged.isDisabled || undefined,
               value: state.value ? state.value.toString() : "",
             })
             : null,
@@ -1121,6 +1137,17 @@ export const DateRangePicker = defineComponent({
         state.resetValidation();
       }
     );
+    useFormValidation(
+      {
+        get validationBehavior() {
+          return merged.validationBehavior;
+        },
+        value: () => state.value.start,
+        focus: () => triggerRef.value?.focus(),
+      },
+      state as any,
+      hiddenStartInputRef as any
+    );
     useFormReset(
       hiddenEndInputRef as any,
       state.defaultValue,
@@ -1128,6 +1155,17 @@ export const DateRangePicker = defineComponent({
         state.setValue(value as any);
         state.resetValidation();
       }
+    );
+    useFormValidation(
+      {
+        get validationBehavior() {
+          return merged.validationBehavior;
+        },
+        value: () => state.value.end,
+        focus: () => triggerRef.value?.focus(),
+      },
+      state as any,
+      hiddenEndInputRef as any
     );
 
     const displayValue = computed(() => {
@@ -1185,6 +1223,7 @@ export const DateRangePicker = defineComponent({
       const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Range calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
       const isButtonDisabled = Boolean(buttonProps.isDisabled);
+      const useNativeValidationInput = merged.validationBehavior === "native";
 
       return h(
         "div",
@@ -1209,18 +1248,24 @@ export const DateRangePicker = defineComponent({
           merged.startName
             ? h("input", {
               ref: hiddenStartInputRef,
-              type: "hidden",
+              type: useNativeValidationInput ? "text" : "hidden",
+              hidden: useNativeValidationInput ? true : undefined,
               name: merged.startName,
               form: merged.form,
+              required: useNativeValidationInput ? merged.isRequired : undefined,
+              disabled: merged.isDisabled || undefined,
               value: state.value.start ? state.value.start.toString() : "",
             })
             : null,
           merged.endName
             ? h("input", {
               ref: hiddenEndInputRef,
-              type: "hidden",
+              type: useNativeValidationInput ? "text" : "hidden",
+              hidden: useNativeValidationInput ? true : undefined,
               name: merged.endName,
               form: merged.form,
+              required: useNativeValidationInput ? merged.isRequired : undefined,
+              disabled: merged.isDisabled || undefined,
               value: state.value.end ? state.value.end.toString() : "",
             })
             : null,
