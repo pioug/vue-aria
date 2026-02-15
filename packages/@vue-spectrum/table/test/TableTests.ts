@@ -1749,6 +1749,65 @@ export function tableTests() {
     expect(headerRows[2]!.findAll('[role="columnheader"]').map((cell) => cell.text())).toEqual(["Test", "Foo", "Bar", "Yay", "Baz"]);
   });
 
+  it("renders nested static slot headers with drag-hook synthetic columns", () => {
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested slot drag table",
+        dragAndDropHooks: {
+          useDraggableCollectionState: vi.fn(),
+        },
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "test", isRowHeader: true }, () => "Test"),
+              h(Column as any, { id: "tier-1", title: "Tiered One Header" }, {
+                default: () => [
+                  h(Column as any, { id: "tier-2a", title: "Tier Two Header A" }, {
+                    default: () => [
+                      h(Column as any, { id: "foo" }, () => "Foo"),
+                      h(Column as any, { id: "bar" }, () => "Bar"),
+                    ],
+                  }),
+                  h(Column as any, { id: "yay" }, () => "Yay"),
+                  h(Column as any, { id: "tier-2b", title: "Tier Two Header B" }, {
+                    default: () => [
+                      h(Column as any, { id: "baz" }, () => "Baz"),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+          h(TableBody as any, null, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Test 1"),
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                  h(Cell as any, () => "Yay 1"),
+                  h(Cell as any, () => "Baz 1"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("6");
+
+    const bodyCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(bodyCells).toHaveLength(6);
+    expect(bodyCells[0]!.classes()).toContain("react-spectrum-Table-cell--dragButtonCell");
+    expect(bodyCells[1]!.text()).toContain("Test 1");
+    expect(bodyCells[5]!.text()).toContain("Baz 1");
+  });
+
   it("renders drag columns in static slot syntax when draggable hooks are provided", () => {
     const wrapper = mount(TableView as any, {
       props: {

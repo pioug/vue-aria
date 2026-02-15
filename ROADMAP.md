@@ -12470,3 +12470,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 272 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 328 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` nested-slot drag-hook parity expansion:
+  - added regression coverage for nested static-slot header trees composed with `dragAndDropHooks.useDraggableCollectionState`.
+  - assertions validate drag synthetic-column injection alongside nested leaf rows (`aria-colcount` expansion and drag/rowheader/body cell structural ordering).
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 273 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 329 tests).
+- Validation: `npm run check -- --pretty false` passed.
