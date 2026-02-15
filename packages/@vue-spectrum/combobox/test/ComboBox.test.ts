@@ -1432,6 +1432,33 @@ describe("ComboBox", () => {
     expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
+  it("closes the menu on Enter for an already-selected option without emitting selection change", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    await input.trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("commits focused option on Tab and closes the menu", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({
