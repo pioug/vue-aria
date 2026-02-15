@@ -113,6 +113,108 @@ describe("ComboBox", () => {
     expect(wrapper.get('input[role="combobox"]').attributes("aria-label")).toBe("Framework");
   });
 
+  it("exposes imperative combobox handles", async () => {
+    const wrapper = renderComboBox();
+    const api = wrapper.vm as unknown as {
+      focus: () => void;
+      blur: () => void;
+      getInputElement: () => HTMLInputElement | null;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    };
+    const input = wrapper.get('input[role="combobox"]').element as HTMLInputElement;
+
+    expect(api.getInputElement()).toBe(input);
+    expect(api.UNSAFE_getDOMNode()).toBe(wrapper.element);
+
+    api.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(input);
+
+    api.blur();
+    await nextTick();
+    expect(document.activeElement).not.toBe(input);
+  });
+
+  it("attaches a user-provided ref to the labeled combobox wrapper", async () => {
+    const comboBoxRef = ref<{
+      focus: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    } | null>(null);
+    mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(ComboBox as any, {
+              ref: comboBoxRef,
+              label: "Test",
+              items,
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+    await nextTick();
+
+    const input = document.body.querySelector('input[role="combobox"]') as HTMLInputElement | null;
+    expect(input).toBeTruthy();
+    expect(comboBoxRef.value?.UNSAFE_getDOMNode()).toBe(input?.closest(".spectrum-ComboBox"));
+  });
+
+  it("attaches a user-provided ref to the combobox wrapper when no label is shown", async () => {
+    const comboBoxRef = ref<{
+      focus: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    } | null>(null);
+    mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(ComboBox as any, {
+              ref: comboBoxRef,
+              label: undefined,
+              ariaLabel: "Framework",
+              items,
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+    await nextTick();
+
+    const input = document.body.querySelector('input[role="combobox"]') as HTMLInputElement | null;
+    expect(input).toBeTruthy();
+    expect(comboBoxRef.value?.UNSAFE_getDOMNode()).toBe(input?.closest(".spectrum-ComboBox"));
+  });
+
+  it("focuses the input field when calling focus on a user-provided ref", async () => {
+    const comboBoxRef = ref<{
+      focus: () => void;
+      UNSAFE_getDOMNode: () => HTMLElement | null;
+    } | null>(null);
+    mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(ComboBox as any, {
+              ref: comboBoxRef,
+              label: "Test",
+              items,
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+    await nextTick();
+
+    const input = document.body.querySelector('input[role="combobox"]') as HTMLInputElement | null;
+    expect(input).toBeTruthy();
+
+    comboBoxRef.value?.focus();
+    await nextTick();
+
+    expect(document.activeElement).toBe(input);
+  });
+
   it("opens with trigger click and selects an option", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({

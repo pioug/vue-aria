@@ -216,6 +216,7 @@ export const ComboBox = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const { contains } = useFilter({ sensitivity: "base" });
+    const rootRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
     const buttonRef = ref<HTMLElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
@@ -400,7 +401,7 @@ export const ComboBox = defineComponent({
       focus: () => inputRef.value?.focus(),
       blur: () => inputRef.value?.blur(),
       getInputElement: () => inputRef.value,
-      UNSAFE_getDOMNode: () => inputRef.value,
+      UNSAFE_getDOMNode: () => rootRef.value,
     });
 
     return () => {
@@ -427,6 +428,7 @@ export const ComboBox = defineComponent({
       return h(
         "div",
         {
+          ref: rootRef,
           ...attrsRecord,
           class: [
             attrsRecord.class,

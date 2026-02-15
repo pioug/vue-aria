@@ -11422,6 +11422,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` ref-handle parity refinement:
+  - aligned exposed combobox DOM handle to return the component wrapper element instead of the text input, matching upstream ref semantics for labeled and unlabeled wrappers.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated ref/imperative-handle coverage asserting:
+    - exposed `getInputElement`, `focus`, `blur`, and `UNSAFE_getDOMNode` handles work on mounted combobox instances.
+    - user-provided refs attach to the combobox wrapper for both labeled and unlabeled variants.
+    - calling `focus()` on a user-provided ref focuses the combobox input.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 127 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 143 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.
