@@ -10099,3 +10099,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 51 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` latin-numeral locale parity update:
+  - added adapted coverage asserting latin numeral entry remains supported under arab locale (`ar-AE`) and commits with locale-aware latn formatting (`ar-AE-u-nu-latn`).
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 52 tests).
+- Validation: `npm run check -- --pretty false` passed.
