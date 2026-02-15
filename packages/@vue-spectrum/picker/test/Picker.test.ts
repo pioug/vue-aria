@@ -1528,6 +1528,35 @@ describe("Picker", () => {
     expect(listbox?.getAttribute("aria-labelledby")).toContain(labelId ?? "");
   });
 
+  it("supports required visible labels with a necessity indicator", async () => {
+    const wrapper = renderPicker({
+      label: "Test 2",
+      isRequired: true,
+      necessityIndicator: "label",
+    });
+
+    const trigger = wrapper.get("button");
+    const label = wrapper.get(".spectrum-FieldLabel");
+    const value = wrapper.get(".spectrum-Dropdown-label");
+    const indicator = wrapper.get(".spectrum-FieldLabel-necessity");
+    const labelId = label.attributes("id");
+    const valueId = value.attributes("id");
+
+    expect(indicator.text()).toBe("(required)");
+    expect(indicator.attributes("aria-hidden")).toBeUndefined();
+    expect(labelId).toBeTruthy();
+    expect(valueId).toBeTruthy();
+    expect(trigger.attributes("aria-labelledby")).toContain(labelId ?? "");
+    expect(trigger.attributes("aria-labelledby")).toContain(valueId ?? "");
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]');
+    expect(listbox).toBeTruthy();
+    expect(listbox?.getAttribute("aria-labelledby")).toContain(labelId ?? "");
+  });
+
   it("supports labeling via aria-labelledby", () => {
     const wrapper = mount(
       defineComponent({

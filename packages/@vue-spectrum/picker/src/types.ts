@@ -40,6 +40,7 @@ export interface SpectrumPickerProps {
   maxHeight?: number;
   onLoadMore?: () => void;
   isRequired?: boolean;
+  necessityIndicator?: "icon" | "label";
   validationBehavior?: "native" | "aria";
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";

@@ -86,6 +86,11 @@ export const Picker = defineComponent({
       required: false,
       default: undefined,
     },
+    necessityIndicator: {
+      type: String as PropType<SpectrumPickerProps["necessityIndicator"]>,
+      required: false,
+      default: undefined,
+    },
     isInvalid: {
       type: Boolean,
       required: false,
@@ -383,14 +388,20 @@ export const Picker = defineComponent({
             required: props.isRequired || undefined,
           }),
           props.label
-            ? h(
-                "span",
-                {
-                  ...labelProps,
-                  class: "spectrum-FieldLabel",
-                },
-                props.label
-              )
+            ? h("span", {
+                ...labelProps,
+                class: "spectrum-FieldLabel",
+              }, [
+                props.label,
+                props.isRequired && props.necessityIndicator === "label"
+                  ? [
+                      " ",
+                      h("span", {
+                        class: "spectrum-FieldLabel-necessity",
+                      }, "(required)"),
+                    ]
+                  : null,
+              ])
             : null,
           h(
             "button",

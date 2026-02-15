@@ -11287,3 +11287,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 70 tests).
 - Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test` passed (7 files, 118 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` required-label necessity-indicator parity refinement:
+  - added `necessityIndicator` picker prop support and rendered visible `(required)` label text when `isRequired` and `necessityIndicator="label"` are set.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for required visible-label accessibility wiring and popup listbox label association.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 71 tests).
+- Validation: `npm run check -- --pretty false` passed.
