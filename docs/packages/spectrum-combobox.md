@@ -52,6 +52,10 @@ import { ComboBox, Item, Section } from "@vue-spectrum/combobox";
 - `name` / `form` for form participation when used inside or alongside native forms.
 - `validationState` for invalid semantics and styling.
 
+Filtering behavior:
+- uncontrolled item collections (for example slot-defined items) use default locale-aware `contains` filtering.
+- controlled `items` collections are not auto-filtered; update `items` in `onInputChange` for fully controlled filtering.
+
 ## Controlled Selection
 
 When `selectedKey` is provided, selection is controlled by parent state. User selection emits `onSelectionChange`, and the rendered value follows the controlled prop.
