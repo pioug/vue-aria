@@ -1870,6 +1870,42 @@ describe("ComboBox", () => {
     expect(input.attributes("aria-activedescendant")).toBeUndefined();
   });
 
+  it("clears input on blur when value matches a disabled option", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        disabledKeys: new Set(["two"]),
+        onSelectionChange,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    await input.trigger("focus");
+    await input.setValue("Two");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("does not open on space key when disabled", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
