@@ -546,6 +546,35 @@ export function tableTests() {
     expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
   });
 
+  it("keeps drag-button handles for disabled rows in disabledBehavior selection mode", () => {
+    const wrapper = renderTable({
+      showDragButtons: true,
+      selectionMode: "multiple",
+      disabledBehavior: "selection",
+      disabledKeys: new Set(["row-1"]),
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    const firstRowCells = rows[0]!.findAll('[role="gridcell"]');
+    const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
+    expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(true);
+  });
+
+  it("suppresses drag-button handles when table is globally disabled", () => {
+    const wrapper = renderTable({
+      showDragButtons: true,
+      selectionMode: "multiple",
+      isDisabled: true,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    const firstRowCells = rows[0]!.findAll('[role="gridcell"]');
+    const secondRowCells = rows[1]!.findAll('[role="gridcell"]');
+    expect(firstRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
+    expect(secondRowCells[0]!.find(".react-spectrum-Table-dragButton").exists()).toBe(false);
+  });
+
   it("renders drag and selection columns together when both are enabled", () => {
     const wrapper = renderTable({
       showDragButtons: true,

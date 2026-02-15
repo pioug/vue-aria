@@ -12373,3 +12373,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 256 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 312 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` drag-handle disabled-behavior matrix expansion:
+  - added regression coverage for drag-handle visibility semantics across disabled modes:
+    - drag handles remain visible for disabled rows when `disabledBehavior="selection"`.
+    - drag handles are suppressed for all rows when table `isDisabled` is true.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 258 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 314 tests).
+- Validation: `npm run check -- --pretty false` passed.
