@@ -10604,3 +10604,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded `docs/packages/spectrum-combobox.md` form guidance with explicit `formValue="text"` vs `formValue="key"` behavior and custom-value submission note.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` router-link parity update:
+  - added migrated RouterProvider integration coverage for combobox link options, including:
+    - router `useHref` mapping for internal links
+    - router `navigate` dispatch with `routerOptions`
+    - external link clicks bypassing router navigation
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 28 tests).
+- Validation: `npm run check -- --pretty false` passed.

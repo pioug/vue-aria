@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { h, nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
+import { Provider } from "@vue-spectrum/provider";
+import { theme } from "@vue-spectrum/theme";
 import { ComboBox } from "../src/ComboBox";
 import { Item } from "../src/Item";
 import { Section } from "../src/Section";
@@ -20,6 +22,20 @@ function renderComboBox(props: Record<string, unknown> = {}) {
     },
     attachTo: document.body,
   });
+}
+
+function preventLinkNavigation(): () => void {
+  const clickHandler = (event: Event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("a")) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("click", clickHandler, true);
+  return () => {
+    document.removeEventListener("click", clickHandler, true);
+  };
 }
 
 let restoreScrollIntoView: (() => void) | null = null;
@@ -285,6 +301,64 @@ describe("ComboBox", () => {
 
     expect(wrapper.findAll('[role="option"]')).toHaveLength(3);
     expect(wrapper.text()).toContain("Numbers");
+  });
+
+  it("supports RouterProvider links on items", async () => {
+    const navigate = vi.fn();
+    const useHref = (href: string) => (href.startsWith("http") ? href : `/base${href}`);
+    const restoreNavigation = preventLinkNavigation();
+
+    try {
+      const wrapper = mount(
+        defineComponent({
+          setup() {
+            return () =>
+              h(
+                Provider as any,
+                {
+                  theme,
+                  router: { navigate, useHref },
+                },
+                () =>
+                  h(
+                    ComboBox as any,
+                    {
+                      label: "Links",
+                    },
+                    {
+                      default: () => [
+                        h(Item as any, { id: "one", href: "/one", routerOptions: { foo: "bar" } }, { default: () => "One" }),
+                        h(Item as any, { id: "two", href: "https://adobe.com" }, { default: () => "Two" }),
+                      ],
+                    }
+                  )
+              );
+          },
+        }),
+        {
+          attachTo: document.body,
+        }
+      );
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+
+      const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+      expect(options).toHaveLength(2);
+      expect(options[0]?.tagName).toBe("A");
+      expect(options[0]?.getAttribute("href")).toBe("/base/one");
+
+      options[0]?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      await nextTick();
+      expect(navigate).toHaveBeenCalledWith("/one", { foo: "bar" });
+
+      navigate.mockReset();
+      options[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      await nextTick();
+      expect(navigate).not.toHaveBeenCalled();
+    } finally {
+      restoreNavigation();
+    }
   });
 
   it("opens when typing by default", async () => {
