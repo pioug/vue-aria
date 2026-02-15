@@ -406,6 +406,34 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
   });
 
+  it("reports manual trigger on button-open via onOpenChange", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderComboBox({
+      onOpenChange,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, "manual");
+  });
+
+  it("reports input trigger on typing-open via onOpenChange", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderComboBox({
+      onOpenChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("T");
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, "input");
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",
@@ -420,8 +448,10 @@ describe("ComboBox", () => {
   });
 
   it("opens when focused with menuTrigger focus", async () => {
+    const onOpenChange = vi.fn();
     const wrapper = renderComboBox({
       menuTrigger: "focus",
+      onOpenChange,
     });
     const input = wrapper.get('input[role="combobox"]');
 
@@ -429,6 +459,7 @@ describe("ComboBox", () => {
     await nextTick();
 
     expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, "focus");
   });
 
   it("calls onFocus and onBlur for outside focus transitions", async () => {

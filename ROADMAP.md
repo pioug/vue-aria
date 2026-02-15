@@ -10655,3 +10655,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 33 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` open-trigger callback parity update:
+  - added migrated coverage asserting `onOpenChange` open-trigger semantics for:
+    - button-triggered open (`manual`)
+    - typing-triggered open (`input`)
+    - focus-triggered open with `menuTrigger="focus"` (`focus`)
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.
