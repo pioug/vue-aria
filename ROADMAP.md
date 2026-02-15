@@ -10795,3 +10795,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` fully-controlled interaction parity update:
+  - added migrated coverage asserting user input and option selection do not mutate displayed state when both `selectedKey` and `inputValue` are controlled, while still emitting the correct callbacks.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 55 tests).
+- Validation: `npm run check -- --pretty false` passed.

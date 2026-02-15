@@ -199,6 +199,44 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("does not update combobox state when inputValue and selectedKey are controlled", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      inputValue: "T",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+    expect(onInputChange).toHaveBeenCalledTimes(1);
+    expect(onInputChange).toHaveBeenLastCalledWith("Tw");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const threeOption = wrapper.findAll('[role="option"]').find((option) => option.text() === "Three");
+    expect(threeOption).toBeDefined();
+    await threeOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith("3");
+    expect(onInputChange).toHaveBeenCalledTimes(1);
+  });
+
   it("updates when selectedKey and inputValue controlled props change together", async () => {
     const wrapper = renderComboBox({
       selectedKey: "2",
