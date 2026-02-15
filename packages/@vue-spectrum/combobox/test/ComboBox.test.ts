@@ -1703,6 +1703,41 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("clears unmatched input on blur when menuTrigger is manual", async () => {
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        menuTrigger: "manual",
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    await input.trigger("focus");
+    await input.setValue("z");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("z");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
   it("does not select the focused option on blur", async () => {
     const onInputChange = vi.fn();
     const onSelectionChange = vi.fn();
