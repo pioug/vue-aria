@@ -110,6 +110,12 @@ const columnsWithResizableMetadata: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz", allowsResizing: true, hideHeader: true, defaultWidth: 390 },
 ];
 
+const columnsWithResizableConstraints: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true, allowsResizing: true, defaultWidth: 220, minWidth: 210, maxWidth: 225 },
+  { key: "bar", title: "Bar", defaultWidth: 390 },
+  { key: "baz", title: "Baz", defaultWidth: 390 },
+];
+
 const items: SpectrumTableRowData[] = [
   { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2" },
@@ -608,6 +614,112 @@ export function tableTests() {
     const resizeMap = onResize.mock.calls.at(-1)?.[0] as Map<TableKey, number | string> | undefined;
     expect(resizeMap).toBeInstanceOf(Map);
     expect(typeof resizeMap?.get("foo")).toBe("number");
+  });
+
+  it("resizes columns through pointer drag interactions", async () => {
+    const onResize = vi.fn();
+    const onResizeEnd = vi.fn();
+    const wrapper = renderTable({
+      columns: columnsWithResizableMetadata,
+      onResize,
+      onResizeEnd,
+    });
+
+    const firstHeader = wrapper.findAll('[role="columnheader"]')[0]!;
+    const resizer = firstHeader.get(".spectrum-Table-columnResizer");
+    const initialWidth = parseFloat((firstHeader.element as HTMLElement).style.width);
+
+    if (typeof PointerEvent !== "undefined") {
+      await resizer.trigger("pointerdown", {
+        button: 0,
+        pointerId: 1,
+        pointerType: "mouse",
+        clientX: initialWidth,
+        pageX: initialWidth,
+        clientY: 0,
+      });
+      window.dispatchEvent(
+        new PointerEvent("pointermove", {
+          pointerId: 1,
+          pointerType: "mouse",
+          clientX: initialWidth + 25,
+          clientY: 0,
+          bubbles: true,
+        })
+      );
+      window.dispatchEvent(
+        new PointerEvent("pointerup", {
+          button: 0,
+          pointerId: 1,
+          pointerType: "mouse",
+          clientX: initialWidth + 25,
+          clientY: 0,
+          bubbles: true,
+        })
+      );
+    } else {
+      await resizer.trigger("mousedown", {
+        button: 0,
+        clientX: initialWidth,
+        pageX: initialWidth,
+        pageY: 0,
+      });
+      window.dispatchEvent(
+        new MouseEvent("mousemove", {
+          button: 0,
+          clientX: initialWidth + 25,
+          bubbles: true,
+        })
+      );
+      window.dispatchEvent(
+        new MouseEvent("mouseup", {
+          button: 0,
+          clientX: initialWidth + 25,
+          bubbles: true,
+        })
+      );
+    }
+
+    await nextTick();
+
+    const updatedFirstHeader = wrapper.findAll('[role="columnheader"]')[0]!;
+    const nextWidth = parseFloat((updatedFirstHeader.element as HTMLElement).style.width);
+    expect(nextWidth).toBeGreaterThan(initialWidth);
+    expect(onResize).toHaveBeenCalled();
+    expect(onResizeEnd).toHaveBeenCalled();
+  });
+
+  it("clamps resizing interactions to minWidth and maxWidth", async () => {
+    const wrapper = renderTable({
+      columns: columnsWithResizableConstraints,
+    });
+
+    const header = () => wrapper.findAll('[role="columnheader"]')[0]!;
+    const resizer = () => header().get(".spectrum-Table-columnResizer");
+
+    await resizer().trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await resizer().trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    await resizer().trigger("keydown", { key: "ArrowRight" });
+    await nextTick();
+    await resizer().trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    let width = parseFloat((header().element as HTMLElement).style.width);
+    expect(width).toBeCloseTo(225, 3);
+
+    await resizer().trigger("keydown", { key: "Enter" });
+    await nextTick();
+    await resizer().trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    await resizer().trigger("keydown", { key: "ArrowLeft" });
+    await nextTick();
+    await resizer().trigger("keydown", { key: "Escape" });
+    await nextTick();
+
+    width = parseFloat((header().element as HTMLElement).style.width);
+    expect(width).toBeCloseTo(210, 3);
   });
 
   it("supports static slot table syntax", async () => {

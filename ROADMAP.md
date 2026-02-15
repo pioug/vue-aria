@@ -11903,3 +11903,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 163 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 219 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` resize-interaction parity coverage expansion:
+  - added integration-style resize interaction tests in `TableTests` for:
+    - pointer drag resizing flow (pointer down/move/up) with width updates.
+    - resize callback assertions during pointer interactions.
+    - min/max constraint clamping during keyboard-driven resize adjustments.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 165 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 221 tests).
+- Validation: `npm run check -- --pretty false` passed.
