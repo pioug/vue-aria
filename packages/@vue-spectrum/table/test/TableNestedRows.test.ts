@@ -74,6 +74,22 @@ afterEach(() => {
 });
 
 describe("TableView nested rows", () => {
+  function renderWithLocale(locale: string, props: Record<string, unknown>) {
+    return mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              I18nProvider,
+              { locale },
+              () => h(TableView as any, props)
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+  }
+
   it("renders treegrid semantics when expandable rows are enabled", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
@@ -228,25 +244,12 @@ describe("TableView nested rows", () => {
 
   it("localizes expander labels with locale provider", async () => {
     enableTableNestedRows();
-    const wrapper = mount(
-      defineComponent({
-        setup() {
-          return () =>
-            h(
-              I18nProvider,
-              { locale: "ar-AE" },
-              () =>
-                h(TableView as any, {
-                  "aria-label": "Nested rows table",
-                  columns,
-                  items: nestedItems,
-                  UNSTABLE_allowsExpandableRows: true,
-                })
-            );
-        },
-      }),
-      { attachTo: document.body }
-    );
+    const wrapper = renderWithLocale("ar-AE", {
+      "aria-label": "Nested rows table",
+      columns,
+      items: nestedItems,
+      UNSTABLE_allowsExpandableRows: true,
+    });
 
     const firstRowExpander = wrapper
       .findAll('tbody [role="row"]')[0]!
@@ -261,6 +264,65 @@ describe("TableView nested rows", () => {
       .get('[data-table-expander="true"]');
     expect(expandedExpander.attributes("aria-label")).toBe("طي");
   });
+
+  it.each([
+    { locale: "en-US", expandKey: "ArrowRight", collapseKey: "ArrowLeft" },
+    { locale: "ar-AE", expandKey: "ArrowLeft", collapseKey: "ArrowRight" },
+  ])(
+    "supports locale-aware keyboard expansion on focused rows ($locale)",
+    async ({ locale, expandKey, collapseKey }) => {
+      enableTableNestedRows();
+      const onExpandedChange = vi.fn();
+      const wrapper = renderWithLocale(locale, {
+        "aria-label": "Nested rows table",
+        columns,
+        items: nestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_defaultExpandedKeys: ["row-1"],
+        UNSTABLE_onExpandedChange: onExpandedChange,
+      });
+
+      const row = wrapper.findAll('tbody [role="row"]')[0]!;
+      (row.element as HTMLElement).focus();
+      await row.trigger("focus");
+
+      await row.trigger("keydown", { key: collapseKey });
+      await nextTick();
+      expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(2);
+      expect(onExpandedChange).toHaveBeenCalledWith(new Set());
+
+      await row.trigger("keydown", { key: expandKey });
+      await nextTick();
+      expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(3);
+    }
+  );
+
+  it.each([
+    { locale: "en-US", expandKey: "ArrowRight" },
+    { locale: "ar-AE", expandKey: "ArrowLeft" },
+  ])(
+    "does not expand when arrow key is pressed from a focused row cell ($locale)",
+    async ({ locale, expandKey }) => {
+      enableTableNestedRows();
+      const onExpandedChange = vi.fn();
+      const wrapper = renderWithLocale(locale, {
+        "aria-label": "Nested rows table",
+        columns,
+        items: nestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_onExpandedChange: onExpandedChange,
+      });
+
+      const firstCell = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"]')[0]!;
+      (firstCell.element as HTMLElement).focus();
+      await firstCell.trigger("focus");
+      await firstCell.trigger("keydown", { key: expandKey });
+      await nextTick();
+
+      expect(wrapper.findAll('tbody [role="row"]')).toHaveLength(2);
+      expect(onExpandedChange).not.toHaveBeenCalled();
+    }
+  );
 
   it("supports controlled expanded keys callbacks", async () => {
     enableTableNestedRows();

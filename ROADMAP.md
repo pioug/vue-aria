@@ -11710,6 +11710,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 183 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1374 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid keyboard parity coverage expansion:
+  - added locale-aware keyboard expansion/collapse coverage for focused rows in both LTR (`en-US`) and RTL (`ar-AE`) directions.
+  - added regression coverage asserting row-level expansion does not trigger when expansion keys are pressed from a focused row-header cell.
+  - refactored nested-row locale harness setup for `I18nProvider`-backed table renders.
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 131 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 187 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (84 files, 1378 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` selection-checkbox parity refinement:
   - wired dedicated table selection checkbox rendering for header/body selection cells:
     - `TableHeaderCell` now renders select-all checkbox semantics via `useTableSelectAllCheckbox`.
