@@ -18,6 +18,14 @@ export interface SpectrumPickerNodeData {
 export interface SpectrumPickerProps {
   id?: string;
   label?: string;
+  description?: string;
+  errorMessage?:
+    | string
+    | ((validation: {
+      isInvalid: boolean;
+      validationErrors: string[];
+      validationDetails: ValidityState | null;
+    }) => string | null | undefined);
   ariaLabel?: string;
   ariaLabelledby?: string;
   items?: Iterable<SpectrumPickerNodeData>;
@@ -35,6 +43,7 @@ export interface SpectrumPickerProps {
   validationBehavior?: "native" | "aria";
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";
+  validate?: (value: string | null) => boolean | string | string[] | null | undefined;
   placeholder?: string;
   name?: string;
   form?: string;

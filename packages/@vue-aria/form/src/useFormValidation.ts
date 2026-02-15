@@ -129,6 +129,8 @@ export function useFormValidation(
   const onChange = useEffectEvent(() => {
     const input = ref?.value;
     if (validationBehavior === "native" && input && !input.disabled) {
+      // Reset custom validity before reading built-in validity so stale error messages don't persist.
+      input.setCustomValidity("");
       state.updateValidation?.(getNativeValidity(input));
     }
 

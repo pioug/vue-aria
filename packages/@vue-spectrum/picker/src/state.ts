@@ -1,5 +1,6 @@
 import { useOverlayTriggerState } from "@vue-aria/overlays-state";
 import { useSingleSelectListState } from "@vue-aria/list-state";
+import { useFormValidationState, type ValidationResult } from "@vue-aria/form-state";
 import { ref } from "vue";
 import type { Key } from "@vue-aria/collections";
 import type { SpectrumPickerProps } from "./types";
@@ -34,6 +35,15 @@ export interface PickerState extends ReturnType<typeof useSingleSelectListState<
   }): void;
   setSelectedKey(key: Key | null): void;
 }
+
+type PickerValidationErrorMessage =
+  | string
+  | ((validation: {
+    isInvalid: boolean;
+    validationErrors: string[];
+    validationDetails: ValidityState | null;
+  }) => string | null | undefined)
+  | undefined;
 
 function keyToString(key: Key | null | undefined): string | null {
   if (key == null) {
@@ -72,11 +82,6 @@ export function usePickerState(
 
   const focusStrategyRef = ref<"first" | "last" | null>(null);
   const isFocusedRef = ref(false);
-  const realtimeValidationRef = ref<{
-    isInvalid: boolean;
-    validationErrors: string[];
-    validationDetails: ValidityState | null;
-  } | null>(null);
 
   const defaultValue = keyToString(props.defaultSelectedKey);
 
@@ -90,6 +95,37 @@ export function usePickerState(
       overlayState.close();
     },
   });
+
+  const validation = useFormValidationState<string | null>({
+    ...props,
+    value: () => keyToString(singleState.selectedKey),
+  });
+
+  const resolveValidation = (
+    value: ValidationResult,
+    errorMessage: PickerValidationErrorMessage
+  ): ValidationResult => {
+    if (!value.isInvalid) {
+      return value;
+    }
+
+    if (typeof errorMessage === "function") {
+      const customMessage = errorMessage(value);
+      if (customMessage != null) {
+        return {
+          ...value,
+          validationErrors: [customMessage],
+        };
+      }
+    } else if (typeof errorMessage === "string" && errorMessage.length > 0) {
+      return {
+        ...value,
+        validationErrors: [errorMessage],
+      };
+    }
+
+    return value;
+  };
 
   return {
     get collection() {
@@ -132,19 +168,10 @@ export function usePickerState(
       isFocusedRef.value = isFocused;
     },
     get displayValidation() {
-      if (realtimeValidationRef.value) {
-        return realtimeValidationRef.value;
-      }
-
-      const isInvalid = Boolean(props.isInvalid || props.validationState === "invalid");
-      return {
-        isInvalid,
-        validationErrors: isInvalid ? ["Invalid selection."] : [],
-        validationDetails: null,
-      };
+      return resolveValidation(validation.displayValidation, props.errorMessage);
     },
     get realtimeValidation() {
-      return realtimeValidationRef.value ?? this.displayValidation;
+      return resolveValidation(validation.realtimeValidation, props.errorMessage);
     },
     get value() {
       return keyToString(singleState.selectedKey);
@@ -167,12 +194,14 @@ export function usePickerState(
 
       singleState.setSelectedKey(resolveCollectionKey(singleState.collection, candidate));
     },
-    commitValidation() {},
-    resetValidation() {
-      realtimeValidationRef.value = null;
+    commitValidation() {
+      validation.commitValidation();
     },
-    updateValidation(validation) {
-      realtimeValidationRef.value = validation;
+    resetValidation() {
+      validation.resetValidation();
+    },
+    updateValidation(nextValidation) {
+      validation.updateValidation(nextValidation);
     },
     setSelectedKey(key: Key | null) {
       singleState.setSelectedKey(key);

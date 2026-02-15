@@ -11184,3 +11184,20 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 46 tests).
 - Validation: `npm test -- packages/@vue-aria/select/test packages/@vue-spectrum/combobox/test packages/@vue-spectrum/picker/test packages/@vue-spectrum/numberfield/test packages/@vue-spectrum/textfield/test` passed (13 files, 319 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` validation parity update:
+  - added migrated coverage for picker help text and validation flows:
+    - native: `isRequired`, `validate`, server validation, and custom native `errorMessage`.
+    - aria: `validate` and server validation clear flows.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - wired picker validation state to `useFormValidationState` and exposed picker-level `description`/`errorMessage`/`validate` props.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/state.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - fixed picker validation reactivity by deriving invalid/error UI from live picker state and computing dynamic `aria-describedby` ids for description/error help text.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - fixed native form-validation change handling so stale custom validity does not persist after value changes.
+    - `packages/@vue-aria/form/src/useFormValidation.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 54 tests).
+- Validation: `npm test -- packages/@vue-aria/select/test packages/@vue-spectrum/combobox/test packages/@vue-spectrum/picker/test packages/@vue-spectrum/numberfield/test packages/@vue-spectrum/textfield/test` passed (13 files, 327 tests).
+- Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 19 tests).
+- Validation: `npm run check -- --pretty false` passed.

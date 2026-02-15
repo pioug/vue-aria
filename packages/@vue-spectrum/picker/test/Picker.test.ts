@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
+import { FormValidationContext } from "@vue-aria/form-state";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import { Item } from "../src/Item";
@@ -770,6 +771,298 @@ describe("Picker", () => {
 
     const select = wrapper.get('select[name="picker"]');
     expect(select.attributes("required")).toBeDefined();
+  });
+
+  it("supports help text description", () => {
+    const wrapper = renderPicker({
+      label: "Test",
+      description: "Please select an item.",
+    });
+    const trigger = wrapper.get("button");
+    const description = wrapper.get(".spectrum-HelpText");
+
+    expect(description.text()).toContain("Please select an item.");
+    expect(trigger.attributes("aria-describedby")).toBe(description.attributes("id"));
+  });
+
+  it("supports controlled invalid error messages", () => {
+    const wrapper = renderPicker({
+      label: "Test",
+      isInvalid: true,
+      errorMessage: "Please select a valid item.",
+    });
+    const trigger = wrapper.get("button");
+    const error = wrapper.get(".spectrum-HelpText.is-invalid");
+
+    expect(error.text()).toContain("Please select a valid item.");
+    expect(trigger.attributes("aria-describedby")).toBe(error.attributes("id"));
+  });
+
+  it("supports native required validation flow", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(Picker as any, {
+                label: "Test",
+                name: "picker",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+
+    expect(select.attributes("required")).toBeDefined();
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+    expect((select.element as HTMLSelectElement).validity.valid).toBe(false);
+
+    await nextTick();
+    await nextTick();
+    (select.element as HTMLSelectElement).checkValidity();
+    (select.element as HTMLSelectElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    const describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Constraints not satisfied");
+    expect(document.activeElement).toBe(trigger.element);
+
+    await trigger.trigger("click");
+    await nextTick();
+    (select.element as HTMLSelectElement).value = "1";
+    await select.trigger("change");
+    await nextTick();
+    await nextTick();
+    await trigger.trigger("blur");
+    await nextTick();
+    await nextTick();
+
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+  });
+
+  it("supports native validate callback flow", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(Picker as any, {
+                label: "Test",
+                name: "picker",
+                items,
+                defaultSelectedKey: "2",
+                validationBehavior: "native",
+                validate: (value: string | null) => (value === "2" ? "Invalid value" : null),
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+    await nextTick();
+    await nextTick();
+
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+    expect((select.element as HTMLSelectElement).validity.valid).toBe(false);
+
+    (select.element as HTMLSelectElement).checkValidity();
+    (select.element as HTMLSelectElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    const describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Invalid value");
+    expect(document.activeElement).toBe(trigger.element);
+
+    await trigger.trigger("click");
+    await nextTick();
+    (select.element as HTMLSelectElement).value = "1";
+    await select.trigger("change");
+    await nextTick();
+    await nextTick();
+    await trigger.trigger("blur");
+    await nextTick();
+    await nextTick();
+
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+  });
+
+  it("supports native server validation", async () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      picker: "Invalid value.",
+    });
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(Picker as any, {
+              label: "Test",
+              name: "picker",
+              items,
+              validationBehavior: "native",
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+    await nextTick();
+    await nextTick();
+
+    let describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Invalid value.");
+    expect((select.element as HTMLSelectElement).validity.valid).toBe(false);
+
+    await trigger.trigger("click");
+    await nextTick();
+    (select.element as HTMLSelectElement).value = "1";
+    await select.trigger("change");
+    await nextTick();
+    await nextTick();
+    await trigger.trigger("blur");
+    await nextTick();
+    await nextTick();
+
+    describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeUndefined();
+    expect((select.element as HTMLSelectElement).validity.valid).toBe(true);
+  });
+
+  it("supports custom native error messages", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-testid": "form" }, [
+              h(Picker as any, {
+                label: "Test",
+                name: "picker",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+                errorMessage: (validation: { validationDetails: ValidityState | null }) =>
+                  validation.validationDetails?.valueMissing ? "Please enter a value" : null,
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+    await nextTick();
+    await nextTick();
+    (select.element as HTMLSelectElement).checkValidity();
+    (select.element as HTMLSelectElement).dispatchEvent(
+      new Event("invalid", {
+        bubbles: false,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+    await nextTick();
+
+    const describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Please enter a value");
+    expect((select.element as HTMLSelectElement).validity.valid).toBe(false);
+    expect((select.element as HTMLSelectElement).validationMessage).toContain("Please enter a value");
+  });
+
+  it("supports aria validate callback flow", async () => {
+    const wrapper = renderPicker({
+      name: "picker",
+      defaultSelectedKey: "2",
+      validate: (value: string | null) => (value === "2" ? "Invalid value" : null),
+    });
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+    const error = wrapper.get(".spectrum-HelpText.is-invalid");
+
+    expect(trigger.attributes("aria-describedby")).toBe(error.attributes("id"));
+    expect(error.text()).toContain("Invalid value");
+    expect((select.element as HTMLSelectElement).validity.valid).toBe(true);
+
+    await trigger.trigger("click");
+    await nextTick();
+    (select.element as HTMLSelectElement).value = "1";
+    await select.trigger("change");
+    await nextTick();
+    await nextTick();
+
+    expect(trigger.attributes("aria-describedby")).toBeUndefined();
+    expect(wrapper.find(".spectrum-HelpText.is-invalid").exists()).toBe(false);
+  });
+
+  it("supports aria server validation", async () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      picker: "Invalid value",
+    });
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(Picker as any, {
+              label: "Test",
+              name: "picker",
+              items,
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const trigger = wrapper.get("button");
+    let describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Invalid value");
+
+    await trigger.trigger("click");
+    await nextTick();
+    const select = wrapper.get('select[name="picker"]');
+    (select.element as HTMLSelectElement).value = "1";
+    await select.trigger("change");
+    await nextTick();
+    await nextTick();
+
+    describedBy = trigger.attributes("aria-describedby");
+    expect(describedBy).toBeUndefined();
+    expect(wrapper.find(".spectrum-HelpText.is-invalid").exists()).toBe(false);
   });
 
   it("supports hidden select autocomplete attribute", () => {

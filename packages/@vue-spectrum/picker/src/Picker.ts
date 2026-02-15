@@ -21,6 +21,12 @@ export const Picker = defineComponent({
   props: {
     id: String,
     label: String,
+    description: String,
+    errorMessage: {
+      type: [String, Function] as PropType<SpectrumPickerProps["errorMessage"]>,
+      required: false,
+      default: undefined,
+    },
     ariaLabel: String,
     ariaLabelledby: String,
     items: {
@@ -95,6 +101,11 @@ export const Picker = defineComponent({
       required: false,
       default: undefined,
     },
+    validate: {
+      type: Function as PropType<SpectrumPickerProps["validate"]>,
+      required: false,
+      default: undefined,
+    },
     placeholder: {
       type: String,
       required: false,
@@ -145,17 +156,18 @@ export const Picker = defineComponent({
       hiddenSelectProps,
       descriptionProps,
       errorMessageProps,
-      isInvalid,
-      validationErrors,
     } = useSelect(
       {
         label: props.label,
+        description: props.description,
         name: props.name,
         form: props.form,
         autoComplete: props.autoComplete,
         isDisabled: props.isDisabled,
         isRequired: props.isRequired,
         validationBehavior: props.validationBehavior,
+        errorMessage:
+          typeof props.errorMessage === "string" ? props.errorMessage : undefined,
         onFocus: props.onFocus,
         onBlur: props.onBlur,
         "aria-label": props.ariaLabel,
@@ -165,16 +177,28 @@ export const Picker = defineComponent({
       triggerRefObject
     );
     const loadingId = useId();
+    const descriptionId = useId();
+    const errorMessageId = useId();
+    const isInvalid = computed(() => state.displayValidation.isInvalid);
+    const validationErrors = computed(() => state.displayValidation.validationErrors);
     const shouldShowTriggerSpinner = computed(() => Boolean(props.isLoading) && collectionNodes.length === 0);
     const triggerAriaDescribedby = computed(() => {
       const ids: string[] = [];
-      const existingDescription = triggerProps["aria-describedby"];
-      if (typeof existingDescription === "string" && existingDescription.length > 0) {
-        ids.push(existingDescription);
+      const externalDescription = attrs["aria-describedby"];
+      if (typeof externalDescription === "string" && externalDescription.length > 0) {
+        ids.push(externalDescription);
       }
 
       if (shouldShowTriggerSpinner.value) {
         ids.push(loadingId);
+      }
+
+      if (props.description) {
+        ids.push(descriptionId);
+      }
+
+      if (validationErrors.value.length > 0) {
+        ids.push(errorMessageId);
       }
 
       return ids.length > 0 ? ids.join(" ") : undefined;
@@ -332,7 +356,7 @@ export const Picker = defineComponent({
             attrsRecord.class,
             "spectrum-Dropdown",
             {
-              "is-invalid": isInvalid && !props.isDisabled,
+              "is-invalid": isInvalid.value && !props.isDisabled,
               "is-disabled": props.isDisabled,
             },
             props.UNSAFE_className,
@@ -438,20 +462,28 @@ export const Picker = defineComponent({
                 }
               )
             : null,
-          validationErrors.length > 0
+          validationErrors.value.length > 0
             ? h(
                 "div",
                 {
                   ...errorMessageProps,
+                  id: errorMessageId,
                   class: "spectrum-HelpText is-invalid",
                 },
-                validationErrors.join(", ")
+                validationErrors.value.join(", ")
               )
             : null,
-          h("div", {
-            ...descriptionProps,
-            style: { display: "none" },
-          }),
+          props.description
+            ? h(
+                "div",
+                {
+                  ...descriptionProps,
+                  id: descriptionId,
+                  class: "spectrum-HelpText",
+                },
+                props.description
+              )
+            : null,
         ]
       );
     };
