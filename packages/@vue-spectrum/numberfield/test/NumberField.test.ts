@@ -775,4 +775,28 @@ describe("NumberField", () => {
     expect((input.element as HTMLInputElement).value).toBe("56");
     expect(onChange).toHaveBeenCalledWith(56);
   });
+
+  it("parses currency input with arbitrary whitespace on commit", async () => {
+    const onChange = vi.fn();
+    const wrapper = renderNumberField({
+      onChange,
+      formatOptions: { style: "currency", currency: "SAR" },
+    });
+    const input = wrapper.get('input[type="text"]');
+    const expected = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "SAR",
+    }).format(21);
+
+    expect((input.element as HTMLInputElement).value).toBe("");
+
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue(" 21 . 00 ");
+    expect((input.element as HTMLInputElement).value).toBe(" 21 . 00 ");
+
+    await input.trigger("blur");
+    expect((input.element as HTMLInputElement).value).toBe(expected);
+    expect(onChange).toHaveBeenCalledWith(21);
+  });
 });
