@@ -244,6 +244,42 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Empty");
   });
 
+  it("skips disabled options during open keyboard navigation", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+        items: [
+          { key: "1", label: "One" },
+          { key: "2", label: "Two", isDisabled: true },
+          { key: "3", label: "Three" },
+        ],
+        onSelectionChange,
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("keydown", { key: "ArrowDown" });
+    await trigger.trigger("keyup", { key: "ArrowDown" });
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(listbox).toBeTruthy();
+    expect(options).toHaveLength(3);
+    expect(options[1]?.getAttribute("aria-disabled")).toBe("true");
+    expect(document.activeElement).toBe(options[0]);
+
+    listbox?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    listbox?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+
+    expect(document.activeElement).toBe(options[2]);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+  });
+
   it("moves selection with closed ArrowLeft and ArrowRight keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderPicker({
