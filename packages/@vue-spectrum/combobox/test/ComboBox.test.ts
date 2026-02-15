@@ -855,6 +855,10 @@ describe("ComboBox", () => {
     form.checkValidity();
     await nextTick();
     await nextTick();
+    expect(input.attributes("aria-describedby")).toBeDefined();
+    const describedBy = input.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Please enter a value");
     expect((input.element as HTMLInputElement).validity.valid).toBe(false);
     expect((input.element as HTMLInputElement).validationMessage).toContain("Please enter a value");
   });

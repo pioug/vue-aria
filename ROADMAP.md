@@ -11079,3 +11079,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 112 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` native describedby parity refinement:
+  - strengthened native custom-error coverage to assert `aria-describedby` linkage and rendered invalid help text after form validation.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - updated combobox render wiring to compute dynamic `aria-describedby` ids for description/error text so native validation messages are correctly linked.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 112 tests).
+- Validation: `npm run check -- --pretty false` passed.

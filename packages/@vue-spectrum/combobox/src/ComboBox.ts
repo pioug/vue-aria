@@ -2,6 +2,7 @@ import { useComboBox } from "@vue-aria/combobox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
 import { useFilter } from "@vue-aria/i18n";
 import { getItemId } from "@vue-aria/listbox";
+import { useId } from "@vue-aria/utils";
 import { computed, defineComponent, h, onMounted, ref, type PropType, type VNode } from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { createComboBoxCollection, getComboBoxDisabledKeys } from "./collection";
@@ -219,6 +220,8 @@ export const ComboBox = defineComponent({
     const buttonRef = ref<HTMLElement | null>(null);
     const popoverRef = ref<HTMLElement | null>(null);
     const listBoxRef = ref<HTMLElement | null>(null);
+    const descriptionId = useId();
+    const errorMessageId = useId();
 
     const inputRefObject = {
       get current() {
@@ -409,6 +412,12 @@ export const ComboBox = defineComponent({
         typeof props.errorMessage === "string"
           ? props.errorMessage
           : validationErrors.join(", ");
+      const describedBy = [
+        isInvalid && resolvedErrorMessage ? errorMessageId : props.description ? descriptionId : undefined,
+        props.ariaDescribedby,
+      ]
+        .filter(Boolean)
+        .join(" ") || undefined;
       const focusedKey = state.selectionManager.focusedKey as ComboBoxKey | null;
       const activeDescendant =
         focusedKey != null ? getItemId(state as any, focusedKey) : undefined;
@@ -470,6 +479,7 @@ export const ComboBox = defineComponent({
                 readonly: props.isReadOnly || undefined,
                 placeholder: props.placeholder,
                 "aria-invalid": isInvalid && !props.isDisabled ? "true" : undefined,
+                "aria-describedby": describedBy,
                 "aria-controls": state.isOpen ? (listBoxProps.id as string | undefined) : undefined,
                 "aria-activedescendant": activeDescendant,
               }),
@@ -545,6 +555,7 @@ export const ComboBox = defineComponent({
                 "div",
                 {
                   ...errorMessageProps,
+                  id: errorMessageId,
                   class: "spectrum-HelpText is-invalid",
                 },
                 resolvedErrorMessage
@@ -554,6 +565,7 @@ export const ComboBox = defineComponent({
                   "div",
                   {
                     ...descriptionProps,
+                    id: descriptionId,
                     class: "spectrum-HelpText",
                   },
                   props.description
