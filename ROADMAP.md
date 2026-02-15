@@ -10820,3 +10820,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 59 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` input-trigger clear-input parity update:
+  - added migrated coverage asserting clearing typed input with default (`menuTrigger=\"input\"`) behavior keeps the menu open.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 60 tests).
+- Validation: `npm run check -- --pretty false` passed.
