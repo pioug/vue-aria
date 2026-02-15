@@ -11871,3 +11871,9 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 160 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 216 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` docs parity update:
+  - expanded package docs to cover column sizing metadata:
+    - documented `width`, `defaultWidth`, `minWidth`, `maxWidth` support for data and slot composition.
+    - documented numeric/numeric-string/percentage sizing normalization and kebab-case slot metadata (`default-width`, `min-width`, `max-width`).
+    - `docs/packages/spectrum-table.md`
+- Validation: `npm run check -- --pretty false` passed.

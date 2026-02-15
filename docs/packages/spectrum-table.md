@@ -65,6 +65,16 @@ In static slot composition, each row's total cell span must match the declared c
 When using template syntax, static metadata props are supported in kebab-case (for example: `is-row-header`, `allows-sorting`, `hide-header`, `show-divider`, `text-value`, `col-span`, `is-disabled`).
 Numeric string values for `col-span` are normalized (for example `col-span="2"`).
 
+Column sizing metadata is supported in both data and slot composition:
+- `width`
+- `defaultWidth`
+- `minWidth`
+- `maxWidth`
+
+Numeric values are treated as pixel widths. Numeric strings are normalized to pixel widths.
+Percentage values are resolved against the table width.
+In templates, kebab-case sizing props are supported (for example: `default-width`, `min-width`, `max-width`).
+
 ## Key Props
 
 - `selectionMode`: `"none" | "single" | "multiple"`.
@@ -87,6 +97,7 @@ Numeric string values for `col-span` are normalized (for example `col-span="2"`)
   `items[].cells` supports `colSpan` for spanned body cells.
   `columns[].align` supports `"start" | "center" | "end"` alignment classes for matching header/body cells.
   `columns[].hideHeader` and `columns[].showDivider` map to Spectrum header/divider class variants.
+  `columns[].width`, `columns[].defaultWidth`, `columns[].minWidth`, and `columns[].maxWidth` control per-column sizing.
   Set `isRowHeader` on one or more columns to expose row-header semantics.
 
 ## Selection Callbacks
