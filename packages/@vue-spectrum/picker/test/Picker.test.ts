@@ -555,6 +555,34 @@ describe("Picker", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("scrolls the selected option into view when opening", async () => {
+    const scrollIntoViewMock = (window.HTMLElement.prototype.scrollIntoView as unknown as ReturnType<typeof vi.fn>);
+    scrollIntoViewMock.mockClear();
+
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+        selectedKey: "4",
+        items: [
+          { key: "1", label: "One" },
+          { key: "2", label: "Two" },
+          { key: "3", label: "Three" },
+          { key: "4", label: "Four" },
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("click");
+    await nextTick();
+
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(options).toHaveLength(4);
+    expect(options[3]?.getAttribute("aria-selected")).toBe("true");
+    expect(scrollIntoViewMock).toHaveBeenCalled();
+  });
+
   it("closes default open state on escape", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderPicker({

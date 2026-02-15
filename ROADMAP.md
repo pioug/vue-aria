@@ -11216,3 +11216,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 58 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` selected-option open parity refinement:
+  - added migrated coverage asserting opening a picker with a controlled selection preserves selected option state and triggers selected-option scroll handling.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 59 tests).
+- Validation: `npm run check -- --pretty false` passed.
