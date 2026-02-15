@@ -52,6 +52,7 @@ import { ComboBox, Item, Section } from "@vue-spectrum/combobox";
 - `formValue` (`"text" | "key"`) for native form submission payload strategy.
 - `name` / `form` for form participation when used inside or alongside native forms.
 - `validationState` for invalid semantics and styling.
+- `validationBehavior` (`"aria" | "native"`) for ARIA-only vs native validation behavior.
 
 Filtering behavior:
 - uncontrolled item collections (for example slot-defined items) use default locale-aware `contains` filtering.
@@ -99,6 +100,7 @@ Set `name` and optional `form` to attach the combobox input to form submission, 
 - `formValue="text"` (default) submits the typed input text.
 - `formValue="key"` submits the selected option key through a hidden input.
 - `allowsCustomValue` always uses text submission semantics.
+- `validationBehavior="native"` enables native required semantics on the input when `isRequired` is set.
 
 ## Async Loading
 
