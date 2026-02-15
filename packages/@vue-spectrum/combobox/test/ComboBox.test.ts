@@ -3571,6 +3571,116 @@ describe("ComboBox", () => {
     }
   });
 
+  it("hides delayed filtering input loading when the menu closes", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "filtering",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      vi.advanceTimersByTime(500);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+      expect(findInputSpinner().exists()).toBe(true);
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+      await nextTick();
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+      expect(findInputSpinner().exists()).toBe(false);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("cancels delayed input loading when loading finishes before timeout", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "loading",
+        menuTrigger: "manual",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      await wrapper.setProps({
+        loadingState: "idle",
+      });
+      await nextTick();
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("does not reset delayed input loading timer when loading changes to filtering", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "loading",
+        menuTrigger: "manual",
+      });
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      await wrapper.setProps({
+        loadingState: "filtering",
+      });
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      vi.advanceTimersByTime(250);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(true);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("shows delayed filtering input loading while preserving invalid state", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderComboBox({
+        loadingState: "filtering",
+        validationState: "invalid",
+      });
+      const input = wrapper.get('input[role="combobox"]');
+      const findInputSpinner = () => wrapper.find('span.spectrum-Textfield-circleLoader[role="progressbar"]');
+
+      expect(input.attributes("aria-invalid")).toBe("true");
+      vi.advanceTimersByTime(500);
+      await nextTick();
+      expect(findInputSpinner().exists()).toBe(false);
+
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+      expect(findInputSpinner().exists()).toBe(true);
+      expect(wrapper.find('[role="listbox"] [role="progressbar"]').exists()).toBe(false);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("shows a loading-more spinner in the open listbox when loadingState is loadingMore", async () => {
     const wrapper = renderComboBox({
       loadingState: "loadingMore",

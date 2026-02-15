@@ -11450,6 +11450,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 132 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 148 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` loading-state timer parity coverage:
+  - expanded migrated loading-state tests to cover additional upstream timer and visibility semantics:
+    - filtering spinner hides when the menu closes.
+    - delayed spinner timer is canceled when loading finishes before 500ms.
+    - delayed spinner timer is not reset when `loadingState` transitions from `loading` to `filtering`.
+    - filtering spinner behavior coexists with invalid-state rendering without introducing listbox loading spinners for filtering mode.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 136 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 152 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.
