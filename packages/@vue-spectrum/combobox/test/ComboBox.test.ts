@@ -231,6 +231,17 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).value).toBe("Three");
   });
 
+  it("forces text form submission when allowsCustomValue is true", () => {
+    const wrapper = renderComboBox({
+      name: "framework",
+      formValue: "key",
+      allowsCustomValue: true,
+    });
+
+    expect(wrapper.get('input[role="combobox"]').attributes("name")).toBe("framework");
+    expect(wrapper.find('input[type="hidden"][name="framework"]').exists()).toBe(false);
+  });
+
   it("supports controlled open state", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderComboBox({

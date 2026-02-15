@@ -10635,3 +10635,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 30 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` form-value custom-input parity update:
+  - added migrated coverage asserting `allowsCustomValue` forces text-form submission semantics even when `formValue="key"` is specified.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 31 tests).
+- Validation: `npm run check -- --pretty false` passed.
