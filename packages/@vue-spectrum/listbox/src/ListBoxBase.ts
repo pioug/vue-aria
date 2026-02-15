@@ -93,6 +93,14 @@ export const ListBoxBase = defineComponent({
       type: Function as PropType<SpectrumListBoxProps<object>["onFocusChange"]>,
       required: false,
     },
+    onKeyDown: {
+      type: Function as PropType<(event: KeyboardEvent) => void>,
+      required: false,
+    },
+    onKeyUp: {
+      type: Function as PropType<(event: KeyboardEvent) => void>,
+      required: false,
+    },
     renderEmptyState: {
       type: Function as PropType<SpectrumListBoxProps<object>["renderEmptyState"]>,
       required: false,
@@ -182,6 +190,8 @@ export const ListBoxBase = defineComponent({
         onFocus: props.onFocus,
         onBlur: props.onBlur,
         onFocusChange: props.onFocusChange,
+        onKeyDown: props.onKeyDown,
+        onKeyUp: props.onKeyUp,
         isVirtualized: true,
       } as any,
       props.state as any,
@@ -268,6 +278,42 @@ export const ListBoxBase = defineComponent({
               (listBoxOnScroll as (event: Event) => void)(event);
             }
             maybeLoadMore();
+          },
+          onKeydown: (event: KeyboardEvent) => {
+            const listBoxOnKeyDown =
+              (listBoxProps as Record<string, unknown>).onKeydown
+              ?? (listBoxProps as Record<string, unknown>).onKeyDown;
+            if (typeof listBoxOnKeyDown === "function") {
+              (listBoxOnKeyDown as (event: KeyboardEvent) => void)(event);
+            }
+            props.onKeyDown?.(event);
+          },
+          onKeyDown: (event: KeyboardEvent) => {
+            const listBoxOnKeyDown =
+              (listBoxProps as Record<string, unknown>).onKeyDown
+              ?? (listBoxProps as Record<string, unknown>).onKeydown;
+            if (typeof listBoxOnKeyDown === "function") {
+              (listBoxOnKeyDown as (event: KeyboardEvent) => void)(event);
+            }
+            props.onKeyDown?.(event);
+          },
+          onKeyup: (event: KeyboardEvent) => {
+            const listBoxOnKeyUp =
+              (listBoxProps as Record<string, unknown>).onKeyup
+              ?? (listBoxProps as Record<string, unknown>).onKeyUp;
+            if (typeof listBoxOnKeyUp === "function") {
+              (listBoxOnKeyUp as (event: KeyboardEvent) => void)(event);
+            }
+            props.onKeyUp?.(event);
+          },
+          onKeyUp: (event: KeyboardEvent) => {
+            const listBoxOnKeyUp =
+              (listBoxProps as Record<string, unknown>).onKeyUp
+              ?? (listBoxProps as Record<string, unknown>).onKeyup;
+            if (typeof listBoxOnKeyUp === "function") {
+              (listBoxOnKeyUp as (event: KeyboardEvent) => void)(event);
+            }
+            props.onKeyUp?.(event);
           },
           class: ["spectrum-Menu", props.UNSAFE_className],
         },

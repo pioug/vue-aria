@@ -731,6 +731,50 @@ describe("Picker", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("does not clear selection when closing with Escape", async () => {
+    const onSelectionChange = vi.fn();
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      label: "Test",
+      onSelectionChange,
+      onOpenChange,
+    });
+
+    const trigger = wrapper.get("button");
+    expect(trigger.text()).toContain("Select…");
+    expect(onOpenChange).toHaveBeenCalledTimes(0);
+
+    await trigger.trigger("click");
+    await nextTick();
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+
+    const select = wrapper.get("select");
+    (select.element as HTMLSelectElement).value = "3";
+    await select.trigger("change");
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith("3");
+    expect(onOpenChange).toHaveBeenCalledTimes(2);
+    expect(trigger.text()).toContain("Three");
+
+    await trigger.trigger("click");
+    await nextTick();
+    expect(onOpenChange).toHaveBeenCalledTimes(3);
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    listbox?.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    listbox?.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledTimes(4);
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.text()).toContain("Three");
+  });
+
   it("closes when clicking outside", async () => {
     const wrapper = renderPicker();
 

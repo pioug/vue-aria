@@ -11267,3 +11267,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 66 tests).
 - Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/picker/test` passed (5 files, 73 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` escape-close selection-retention parity refinement:
+  - added migrated coverage asserting Escape closes an open picker menu after prior selection without clearing selected value, and still emits close callbacks.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - wired listbox key-handler chaining so picker-level Escape handling runs alongside listbox internal key processing.
+    - `packages/@vue-spectrum/listbox/src/ListBoxBase.ts`
+  - added picker listbox Escape handling to close and restore focus to the trigger.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 67 tests).
+- Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test` passed (7 files, 115 tests).
+- Validation: `npm run check -- --pretty false` passed.

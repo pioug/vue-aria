@@ -322,6 +322,18 @@ export const Picker = defineComponent({
           triggerRef.value?.focus();
         });
       };
+      const onListboxKeyDown = (event: KeyboardEvent) => {
+        (menuProps.onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(event);
+
+        if (event.defaultPrevented || event.key !== "Escape") {
+          return;
+        }
+
+        state.close();
+        Promise.resolve().then(() => {
+          triggerRef.value?.focus();
+        });
+      };
       const dismissButtonStyle = {
         border: "0",
         clipPath: "inset(50%)",
@@ -445,6 +457,8 @@ export const Picker = defineComponent({
                       shouldUseVirtualFocus: menuProps.shouldUseVirtualFocus as boolean | undefined,
                       shouldSelectOnPressUp: menuProps.shouldSelectOnPressUp as boolean | undefined,
                       shouldFocusOnHover: menuProps.shouldFocusOnHover as boolean | undefined,
+                      onKeyDown: onListboxKeyDown,
+                      onKeydown: onListboxKeyDown,
                       onBlur: onListboxBlur,
                       onFocus: menuProps.onFocus as ((event: FocusEvent) => void) | undefined,
                       onFocusChange: menuProps.onFocusChange as ((isFocused: boolean) => void) | undefined,
