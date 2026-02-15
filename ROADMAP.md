@@ -11047,3 +11047,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 106 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` native-validation parity update:
+  - added migrated coverage for `validate` callback and server-provided validation errors in `validationBehavior="native"` flows.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 108 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -665,6 +665,59 @@ describe("ComboBox", () => {
     expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid option.");
   });
 
+  it("supports validate function in native mode", async () => {
+    const wrapper = renderComboBox({
+      validationBehavior: "native",
+      validate: ({ selectedKey }: { inputValue: string; selectedKey: string | number | null }) =>
+        selectedKey === "1" ? null : "Invalid option",
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect((input.element as HTMLInputElement).validationMessage).toContain("Invalid option");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).validity.valid).toBe(true);
+  });
+
+  it("supports server validation in native mode", async () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      framework: "Invalid option.",
+    });
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(ComboBox as any, {
+              label: "Test",
+              name: "framework",
+              items,
+              validationBehavior: "native",
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[role="combobox"]');
+    await nextTick();
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+    expect((input.element as HTMLInputElement).validationMessage).toContain("Invalid option.");
+  });
+
   it("supports matching defaultSelectedKey and defaultInputValue", () => {
     const wrapper = renderComboBox({
       defaultSelectedKey: "2",
