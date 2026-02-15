@@ -207,8 +207,9 @@ describe("DatePicker", () => {
       }
     );
 
-    const hiddenInput = wrapper.get('input[type="hidden"][name="eventDate"]');
-    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
+    const getHiddenValue = () =>
+      wrapper.get('input[type="hidden"][name="eventDate"]').element.getAttribute("value");
+    expect(getHiddenValue()).toBe("2019-06-05");
 
     await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
     await nextTick();
@@ -218,12 +219,12 @@ describe("DatePicker", () => {
     pressElement(day17!);
     await nextTick();
 
-    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-17");
+    expect(getHiddenValue()).toBe("2019-06-17");
 
     await wrapper.get('[data-testid="reset"]').trigger("click");
     await nextTick();
 
-    expect(hiddenInput.element.getAttribute("value")).toBe("2019-06-05");
+    expect(getHiddenValue()).toBe("2019-06-05");
   });
 
   it("supports controlled date picker form reset", async () => {

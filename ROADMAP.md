@@ -11366,3 +11366,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/datepicker-state/test/useDatePickerState.test.ts`
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 157 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` form-reset test-harness stabilization:
+  - updated date picker form-reset assertions to re-query hidden inputs after rerenders, avoiding stale-node reads while preserving behavioral expectations.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 157 tests).
+- Validation: `npm run check -- --pretty false` passed.
