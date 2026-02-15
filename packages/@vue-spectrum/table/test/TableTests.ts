@@ -380,6 +380,30 @@ export function tableTests() {
     expect(grid.classes()).toContain("spectrum-Table--wrap");
   });
 
+  it("does not throw when selection mode changes in wrap overflow with controlled selection", async () => {
+    const wrapper = renderTable({
+      overflowMode: "wrap",
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      selectedKeys: new Set(["row-1"]),
+    });
+
+    await wrapper.setProps({
+      selectionMode: "single",
+      selectionStyle: "highlight",
+      selectedKeys: new Set(["row-1"]),
+    });
+    await nextTick();
+
+    await wrapper.setProps({
+      selectionMode: "none",
+      selectedKeys: new Set(),
+    });
+    await nextTick();
+
+    expect(wrapper.get('[role="grid"]').classes()).toContain("spectrum-Table--wrap");
+  });
+
   it("applies spectrum header and body cell classes", () => {
     const wrapper = renderTable();
 
