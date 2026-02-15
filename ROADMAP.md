@@ -12013,3 +12013,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 182 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 238 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` keyboard range-selection coverage expansion:
+  - added inverse-direction regression coverage for checkbox-style keyboard range extension (`Shift+ArrowUp`) in regular tables.
+  - validated range anchor behavior from a non-first focused row to ensure selected-set accumulation mirrors upward navigation semantics.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 183 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 239 tests).
+- Validation: `npm run check -- --pretty false` passed.
