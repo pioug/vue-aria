@@ -10645,3 +10645,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 32 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` slot-collection parity refinement:
+  - moved slot-driven collection parsing into render-time sync to avoid invoking slots outside render and to keep combobox collection internals aligned with current slot output.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 32 tests).
+- Validation: `npm run check -- --pretty false` passed.
