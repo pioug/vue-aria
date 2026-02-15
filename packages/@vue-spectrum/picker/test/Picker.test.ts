@@ -140,6 +140,28 @@ describe("Picker", () => {
     expect(document.activeElement).toBe(options[2]);
   });
 
+  it("opens on Space keydown", async () => {
+    const wrapper = renderPicker();
+    const trigger = wrapper.get("button");
+
+    await trigger.trigger("keydown", { key: " " });
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("opens on Enter keydown", async () => {
+    const wrapper = renderPicker();
+    const trigger = wrapper.get("button");
+
+    await trigger.trigger("keydown", { key: "Enter" });
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+  });
+
   it("supports selecting items with falsy keys", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = mount(Picker as any, {

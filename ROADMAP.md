@@ -10448,3 +10448,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 28 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` keyboard-open parity update:
+  - added migrated coverage for opening picker menus with trigger keyboard interactions:
+    - `Space` keydown
+    - `Enter` keydown
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 30 tests).
+- Validation: `npm run check -- --pretty false` passed.
