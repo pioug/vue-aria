@@ -45,6 +45,21 @@ function resolveElement(value: unknown): HTMLElement | null {
   return null;
 }
 
+function getCollectionSignature(nodes: Array<any>): string {
+  const parts: string[] = [];
+  const visit = (items: Array<any>) => {
+    for (const item of items) {
+      parts.push(`${String(item.key)}:${item.type}:${item.textValue ?? ""}`);
+      if (Array.isArray(item.childNodes) && item.childNodes.length > 0) {
+        visit(item.childNodes as Array<any>);
+      }
+    }
+  };
+
+  visit(nodes);
+  return parts.join("|");
+}
+
 const PLACEHOLDER_DEPRECATION_WARNING =
   "Placeholders are deprecated due to accessibility issues. Please use help text instead. See the docs for details: https://react-spectrum.adobe.com/react-spectrum/ComboBox.html#help-text";
 
@@ -267,28 +282,38 @@ export const ComboBox = defineComponent({
       },
     };
 
-    const collectionNodes = computed(() => {
+    const itemCollectionNodes = computed(() =>
+      props.items != null ? createComboBoxCollection(props.items, []) : undefined
+    );
+    const slotCollectionNodes = ref(createComboBoxCollection(undefined, []));
+    const slotCollectionSignature = ref("");
+    const syncSlotCollectionNodes = () => {
       if (props.items != null) {
-        return createComboBoxCollection(props.items, []);
+        return;
       }
 
       const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-      return createComboBoxCollection(undefined, slotChildren);
-    });
+      const nextCollection = createComboBoxCollection(undefined, slotChildren);
+      const nextSignature = getCollectionSignature(nextCollection as any[]);
+      if (nextSignature !== slotCollectionSignature.value) {
+        slotCollectionSignature.value = nextSignature;
+        slotCollectionNodes.value = nextCollection;
+      }
+    };
     const resolvedDisabledKeys = computed(
       () =>
         new Set<ComboBoxKey>([
-          ...getComboBoxDisabledKeys(collectionNodes.value),
+          ...getComboBoxDisabledKeys(itemCollectionNodes.value ?? slotCollectionNodes.value),
           ...(props.disabledKeys ?? []),
         ])
     );
 
     const state = useComboBoxState<object>({
       get items() {
-        return props.items != null ? (collectionNodes.value as any) : undefined;
+        return itemCollectionNodes.value as any;
       },
       get defaultItems() {
-        return props.items == null ? (collectionNodes.value as any) : undefined;
+        return props.items == null ? (slotCollectionNodes.value as any) : undefined;
       },
       get disabledKeys() {
         return resolvedDisabledKeys.value;
@@ -465,6 +490,7 @@ export const ComboBox = defineComponent({
     });
 
     return () => {
+      syncSlotCollectionNodes();
       const attrsRecord = attrs as Record<string, unknown>;
       const { labelProps, inputProps, listBoxProps, buttonProps, descriptionProps, errorMessageProps } = comboBoxAria;
       const isInvalid = comboBoxAria.isInvalid;

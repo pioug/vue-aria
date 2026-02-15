@@ -11483,6 +11483,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - updated example typing to include full async `loadingState` union.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` and `@vue-spectrum/listbox` slot-collection warning stabilization:
+  - eliminated Vue runtime slot-invocation warnings by avoiding slot collection reads during setup/computed evaluation outside render:
+    - combobox now syncs slot-derived collection nodes inside render with signature-based updates.
+    - listbox initializes state without eagerly invoking default slots during setup.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+    - `packages/@vue-spectrum/listbox/src/ListBox.ts`
+  - preserved behavior parity across combobox/listbox interactions while removing warning noise from test runs.
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test packages/@vue-spectrum/combobox/test` passed (4 files, 181 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 156 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.

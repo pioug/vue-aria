@@ -163,8 +163,7 @@ export const ListBox = defineComponent({
     },
   },
   setup(props, { attrs, slots }) {
-    const initialSlotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-    const initialCollectionNodes = createListBoxCollection(props.items, initialSlotChildren);
+    const initialCollectionNodes = createListBoxCollection(props.items, []);
     const collection = new ListCollection(initialCollectionNodes as any);
     const state = useListState<object>({
       collection: collection as any,
