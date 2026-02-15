@@ -1181,6 +1181,37 @@ describe("TableView nested rows", () => {
     expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 3, Foo");
   });
 
+  it("allows focusing disabled nested rows while navigating with ArrowUp", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        disabledKeys: ["row-1-level-2"],
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(6);
+
+    (rows[3]!.element as HTMLElement).focus();
+    await rows[3]!.trigger("focus");
+    await moveFocus(rows[3]!, "ArrowUp");
+
+    let currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[2]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 3, Foo");
+
+    await moveFocus(currentRows[2]!, "ArrowUp");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[1]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 2, Foo");
+  });
+
   it("focuses the last nested row with End", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
@@ -1321,6 +1352,42 @@ describe("TableView nested rows", () => {
     currentRows = wrapper.findAll('tbody [role="row"]');
     expect(document.activeElement).toBe(currentRows[3]!.element);
     expect((document.activeElement as HTMLElement).textContent).toContain("Row 3, Lvl 1, Foo");
+  });
+
+  it("skips collapsed child rows while navigating with ArrowUp", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: new Set(["row-1-level-1", "row-3-level-1"]),
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(5);
+    expect(rows.some((row) => row.text().includes("Row 1, Lvl 3, Foo"))).toBe(false);
+
+    (rows[4]!.element as HTMLElement).focus();
+    await rows[4]!.trigger("focus");
+
+    await moveFocus(rows[4]!, "ArrowUp");
+    let currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[3]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 3, Lvl 1, Foo");
+
+    await moveFocus(currentRows[3]!, "ArrowUp");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[2]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 2, Lvl 1, Foo");
+
+    await moveFocus(currentRows[2]!, "ArrowUp");
+    currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[1]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 2, Foo");
   });
 
   it("does not render child rows if parent keys are not expanded", async () => {
