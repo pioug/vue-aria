@@ -10672,3 +10672,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` unmatched-input parity update:
+  - added migrated coverage asserting unmatched typing in uncontrolled combobox mode does not open suggestions and does not emit open-change callbacks.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
