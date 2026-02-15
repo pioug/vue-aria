@@ -235,6 +235,31 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("emits null selection when controlled selectedKey input is cleared", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await nextTick();
+    await nextTick();
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith(null);
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[1]?.attributes("aria-selected")).toBe("true");
+  });
+
   it("does not update combobox state when inputValue and selectedKey are controlled", async () => {
     const onInputChange = vi.fn();
     const onSelectionChange = vi.fn();
