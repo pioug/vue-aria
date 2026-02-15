@@ -24,6 +24,20 @@ function renderPicker(props: Record<string, unknown> = {}) {
   });
 }
 
+function preventLinkNavigation(): () => void {
+  const clickHandler = (event: Event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("a")) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("click", clickHandler, true);
+  return () => {
+    document.removeEventListener("click", clickHandler, true);
+  };
+}
+
 let restoreScrollIntoView: (() => void) | null = null;
 
 describe("Picker", () => {
@@ -502,6 +516,67 @@ describe("Picker", () => {
 
     expect(navigate).toHaveBeenCalledWith("/one", { foo: "bar" });
   });
+
+  it.each(["mouse", "keyboard"] as const)(
+    "supports plain link items with %s interaction without selecting",
+    async (interactionType) => {
+      const restoreNavigation = preventLinkNavigation();
+      try {
+        const onSelectionChange = vi.fn();
+        const wrapper = mount(Picker as any, {
+          props: {
+            ariaLabel: "Picker",
+            onSelectionChange,
+          },
+          slots: {
+            default: () => [
+              h(Item as any, { id: "one", href: "https://google.com" }, { default: () => "One" }),
+              h(Item as any, { id: "two", href: "https://adobe.com" }, { default: () => "Two" }),
+            ],
+          },
+          attachTo: document.body,
+        });
+
+        await wrapper.get("button").trigger("click");
+        await nextTick();
+
+        const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+        expect(options).toHaveLength(2);
+        expect(options[0]?.tagName).toBe("A");
+        expect(options[1]?.tagName).toBe("A");
+
+        if (interactionType === "mouse") {
+          options[0]?.dispatchEvent(
+            new MouseEvent("click", {
+              bubbles: true,
+              cancelable: true,
+            })
+          );
+        } else {
+          options[0]?.dispatchEvent(
+            new KeyboardEvent("keydown", {
+              key: "Enter",
+              bubbles: true,
+              cancelable: true,
+            })
+          );
+          options[0]?.dispatchEvent(
+            new KeyboardEvent("keyup", {
+              key: "Enter",
+              bubbles: true,
+              cancelable: true,
+            })
+          );
+        }
+        await nextTick();
+
+        expect(onSelectionChange).not.toHaveBeenCalled();
+        expect(wrapper.get("button").text()).toContain("Select…");
+      } finally {
+        restoreNavigation();
+      }
+    }
+  );
 
   it("supports slot-defined items and sections", async () => {
     const wrapper = mount(Picker as any, {

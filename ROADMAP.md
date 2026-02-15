@@ -10419,3 +10419,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 21 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` plain-link interaction parity update:
+  - added migrated coverage for mouse and keyboard activation of link items in picker popup lists, asserting links activate without selecting picker values.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 23 tests).
+- Validation: `npm run check -- --pretty false` passed.
