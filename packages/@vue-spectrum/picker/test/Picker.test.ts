@@ -492,6 +492,72 @@ describe("Picker", () => {
     expect(document.activeElement).toBe(options[2]);
   });
 
+  it("selects the focused option with Space when open", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      onSelectionChange,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("keydown", { key: "ArrowDown" });
+    await trigger.trigger("keyup", { key: "ArrowDown" });
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(listbox).toBeTruthy();
+    expect(options).toHaveLength(3);
+    expect(document.activeElement).toBe(options[0]);
+
+    listbox?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    listbox?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[1]);
+
+    options[1]?.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    options[1]?.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.text()).toContain("Two");
+  });
+
+  it("selects the focused option with Enter when open", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      onSelectionChange,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("keydown", { key: "ArrowDown" });
+    await trigger.trigger("keyup", { key: "ArrowDown" });
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(listbox).toBeTruthy();
+    expect(options).toHaveLength(3);
+    expect(document.activeElement).toBe(options[0]);
+
+    listbox?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    listbox?.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowDown", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[1]);
+
+    options[1]?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    options[1]?.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true }));
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.text()).toContain("Two");
+  });
+
   it("closes when trigger is pressed while open", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderPicker({

@@ -11277,3 +11277,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 67 tests).
 - Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test` passed (7 files, 115 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` keyboard-selection parity refinement:
+  - added migrated coverage asserting open picker options can be selected with both `Space` and `Enter` keyboard activation.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - refined listbox option action wiring so generic listbox `onAction` handlers are treated as item actions only for link/custom-action items, preserving Enter-to-select behavior for standard selectable options.
+    - `packages/@vue-aria/listbox/src/useOption.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 69 tests).
+- Validation: `npm test -- packages/@vue-aria/list-state/test packages/@vue-spectrum/listbox/test packages/@vue-spectrum/picker/test` passed (7 files, 117 tests).
+- Validation: `npm run check -- --pretty false` passed.

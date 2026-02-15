@@ -61,8 +61,13 @@ export function useOption<T>(
     optionProps["aria-setsize"] = getItemCount(state.collection);
   }
 
-  const onAction = data?.onAction ? () => data.onAction?.(key) : undefined;
   const id = getItemId(state, key);
+  const itemHasLink = Boolean((item?.props as Record<string, unknown> | undefined)?.href);
+  const itemHasAction = typeof (item?.props as Record<string, unknown> | undefined)?.onAction === "function";
+  const onAction =
+    data?.onAction && (itemHasAction || itemHasLink)
+      ? () => data.onAction?.(key)
+      : undefined;
   const { itemProps, isPressed, isFocused, hasAction, allowsSelection } = useSelectableItem({
     selectionManager: state.selectionManager,
     key,
