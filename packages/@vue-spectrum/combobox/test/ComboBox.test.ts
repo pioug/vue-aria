@@ -1270,6 +1270,52 @@ describe("ComboBox", () => {
     expect((hiddenInput.element as HTMLInputElement).value).toBe("2");
   });
 
+  it("commits custom value on blur when allowsCustomValue and selectedKey are controlled", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    await input.trigger("focus");
+    await input.setValue("Twx");
+    await nextTick();
+    await nextTick();
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith(null);
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it("does not change selected key on blur when allowsCustomValue and input still matches", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      allowsCustomValue: true,
+      selectedKey: "2",
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    await input.trigger("focus");
+    await nextTick();
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,

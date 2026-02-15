@@ -10857,3 +10857,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 68 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-custom blur parity update:
+  - added migrated coverage for `allowsCustomValue` with controlled `selectedKey` blur flows:
+    - custom text on blur commits `onSelectionChange(null)`
+    - unchanged matching value on blur does not emit `onSelectionChange`
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 70 tests).
+- Validation: `npm run check -- --pretty false` passed.
