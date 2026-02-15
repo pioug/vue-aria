@@ -45,6 +45,10 @@ type PickerValidationErrorMessage =
   }) => string | null | undefined)
   | undefined;
 
+type PickerCollection = ReturnType<typeof useSingleSelectListState<object>>["collection"];
+type PickerCollectionResolver = PickerCollection | (() => PickerCollection);
+type PickerDisabledKeysResolver = Iterable<Key> | (() => Iterable<Key> | undefined) | undefined;
+
 function keyToString(key: Key | null | undefined): string | null {
   if (key == null) {
     return null;
@@ -71,9 +75,16 @@ function resolveCollectionKey(
 
 export function usePickerState(
   props: SpectrumPickerProps,
-  collection: ReturnType<typeof useSingleSelectListState<object>>["collection"],
-  disabledKeys?: Iterable<Key>
+  collection: PickerCollectionResolver,
+  disabledKeys?: PickerDisabledKeysResolver
 ): PickerState {
+  const resolveCollection = () => (typeof collection === "function"
+    ? (collection as () => PickerCollection)()
+    : collection);
+  const resolveDisabledKeys = () => (typeof disabledKeys === "function"
+    ? (disabledKeys as () => Iterable<Key> | undefined)()
+    : disabledKeys);
+
   const overlayState = useOverlayTriggerState({
     isOpen: props.isOpen,
     defaultOpen: props.defaultOpen,
@@ -84,8 +95,12 @@ export function usePickerState(
   const isFocusedRef = ref(false);
 
   const singleState = useSingleSelectListState<object>({
-    collection,
-    disabledKeys,
+    get collection() {
+      return resolveCollection();
+    },
+    get disabledKeys() {
+      return resolveDisabledKeys();
+    },
     selectedKey: props.selectedKey,
     defaultSelectedKey: props.defaultSelectedKey,
     allowDuplicateSelectionEvents: false,

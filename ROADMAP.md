@@ -11605,3 +11605,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (3 files, 117 tests).
 - Validation: `npm test -- packages/@vue-spectrum/tree/test` passed (2 files, 81 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/tabs` slot-collection warning stabilization:
+  - finalized static-slot tab parsing in render-time synchronization, avoiding setup-time slot invocation and reusing the same rendered slot children to prevent duplicate slot evaluation.
+    - `packages/@vue-spectrum/tabs/src/Tabs.ts`
+  - added explicit regression coverage asserting static slot-composed tabs do not emit Vue's default-slot-outside-render warning.
+    - `packages/@vue-spectrum/tabs/test/Tabs.test.ts`
+- Additional `@vue-spectrum/picker` slot-collection warning stabilization:
+  - moved picker slot/data collection normalization from setup-time slot evaluation to render-time signature-based synchronization.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - updated picker state wiring to support reactive collection and disabled-key resolvers so render-time collection updates propagate without recreating state.
+    - `packages/@vue-spectrum/picker/src/state.ts`
+  - expanded slot-composition coverage to assert slot-defined picker items/sections do not emit Vue's default-slot-outside-render warning.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/tabs/test packages/@vue-spectrum/picker/test` passed (4 files, 91 tests).
+- Validation: `npm run check -- --pretty false` passed.

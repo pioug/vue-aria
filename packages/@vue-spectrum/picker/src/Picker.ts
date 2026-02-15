@@ -1,7 +1,17 @@
 import { HiddenSelect, useSelect } from "@vue-aria/select";
 import { ListCollection } from "@vue-aria/list-state";
 import { useId } from "@vue-aria/utils";
-import { computed, defineComponent, h, nextTick, onMounted, ref, type PropType, type VNode } from "vue";
+import {
+  computed,
+  defineComponent,
+  h,
+  nextTick,
+  onMounted,
+  ref,
+  shallowRef,
+  type PropType,
+  type VNode,
+} from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { Popover } from "@vue-spectrum/menu";
 import { createPickerCollection, getPickerDisabledKeys } from "./collection";
@@ -10,6 +20,21 @@ import type { PickerKey, SpectrumPickerNodeData, SpectrumPickerProps } from "./t
 
 function isRenderableNode(node: VNode): boolean {
   return typeof node.type !== "symbol";
+}
+
+function getCollectionSignature(nodes: Array<any>): string {
+  const parts: string[] = [];
+  const visit = (items: Array<any>) => {
+    for (const item of items) {
+      parts.push(`${String(item.key)}:${item.type}:${item.textValue ?? ""}`);
+      if (Array.isArray(item.childNodes) && item.childNodes.length > 0) {
+        visit(item.childNodes as Array<any>);
+      }
+    }
+  };
+
+  visit(nodes);
+  return parts.join("|");
 }
 
 /**
@@ -148,11 +173,15 @@ export const Picker = defineComponent({
       },
     };
 
-    const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-    const collectionNodes = createPickerCollection(props.items, slotChildren);
-    const collection = new ListCollection(collectionNodes as any);
-    const disabledKeys = getPickerDisabledKeys(collectionNodes);
-    const state = usePickerState(props as SpectrumPickerProps, collection as any, disabledKeys);
+    const collectionNodes = shallowRef(createPickerCollection(props.items, []));
+    const collectionNodesSignature = ref(getCollectionSignature(collectionNodes.value as any[]));
+    const collection = shallowRef(new ListCollection(collectionNodes.value as any));
+    const disabledKeys = computed(() => getPickerDisabledKeys(collectionNodes.value));
+    const state = usePickerState(
+      props as SpectrumPickerProps,
+      () => collection.value as any,
+      () => disabledKeys.value
+    );
 
     const {
       labelProps,
@@ -187,7 +216,7 @@ export const Picker = defineComponent({
     const errorMessageId = useId();
     const isInvalid = computed(() => state.displayValidation.isInvalid);
     const validationErrors = computed(() => state.displayValidation.validationErrors);
-    const shouldShowTriggerSpinner = computed(() => Boolean(props.isLoading) && collectionNodes.length === 0);
+    const shouldShowTriggerSpinner = computed(() => Boolean(props.isLoading) && collectionNodes.value.length === 0);
     const triggerAriaDescribedby = computed(() => {
       const ids: string[] = [];
       const externalDescription = attrs["aria-describedby"];
@@ -239,6 +268,15 @@ export const Picker = defineComponent({
     });
 
     return () => {
+      const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+      const nextCollectionNodes = createPickerCollection(props.items, slotChildren);
+      const nextCollectionSignature = getCollectionSignature(nextCollectionNodes as any[]);
+      if (nextCollectionSignature !== collectionNodesSignature.value) {
+        collectionNodesSignature.value = nextCollectionSignature;
+        collectionNodes.value = nextCollectionNodes;
+        collection.value = new ListCollection(nextCollectionNodes as any);
+      }
+
       const attrsRecord = attrs as Record<string, unknown>;
       const isWithinPickerOverlay = (target: EventTarget | null): boolean => {
         if (!(target instanceof Node)) {
@@ -483,7 +521,7 @@ export const Picker = defineComponent({
                 : null,
             ]
           ),
-          collectionNodes.length > 0
+          collectionNodes.value.length > 0
             ? h(
                 Popover as any,
                 {

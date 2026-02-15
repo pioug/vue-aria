@@ -303,4 +303,43 @@ describe("Tabs", () => {
     expect(tabs).toHaveLength(2);
     expect(wrapper.get('[role="tabpanel"]').text()).toContain("Panel A");
   });
+
+  it("does not warn when using static slot composition", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      mount(Tabs as any, {
+        props: {
+          ariaLabel: "Tab sample",
+        },
+        slots: {
+          default: () => [
+            h(TabList as any, null, {
+              default: () => [
+                h(Item as any, { id: "a", title: "A" }),
+                h(Item as any, { id: "b", title: "B" }),
+              ],
+            }),
+            h(TabPanels as any, null, {
+              default: () => [
+                h(Item as any, { id: "a" }, { default: () => "Panel A" }),
+                h(Item as any, { id: "b" }, { default: () => "Panel B" }),
+              ],
+            }),
+          ],
+        },
+        attachTo: document.body,
+      });
+
+      await nextTick();
+
+      expect(
+        warnSpy.mock.calls.some((entry) =>
+          String(entry[0]).includes('Slot "default" invoked outside of the render function')
+        )
+      ).toBe(false);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
 });

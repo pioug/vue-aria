@@ -7,6 +7,8 @@ import {
   isVNode,
   provide,
   ref,
+  shallowRef,
+  watchEffect,
   type ComputedRef,
   type InjectionKey,
   type PropType,
@@ -261,6 +263,28 @@ function parseStaticItems(nodes: VNode[]): SpectrumTabItem[] {
     ...tab,
     children: panels.find((panel) => panel.key === tab.key)?.children ?? panels[index]?.children,
   }));
+}
+
+function getTabItemsSignature(items: SpectrumTabItem[]): string {
+  return items
+    .map((item) => {
+      const childrenToken = Array.isArray(item.children)
+        ? `array:${item.children.length}`
+        : typeof item.children === "string" || typeof item.children === "number"
+          ? `text:${String(item.children)}`
+          : item.children == null
+            ? "none"
+            : "node";
+      return [
+        String(item.key ?? ""),
+        item.title ?? "",
+        item.isDisabled ? "1" : "0",
+        item.href ?? "",
+        item["aria-label"] ?? "",
+        childrenToken,
+      ].join(":");
+    })
+    .join("|");
 }
 
 function findTabIndexByKey(items: SpectrumTabItem[], key: Key | null): number {
@@ -563,22 +587,38 @@ export const Tabs = defineComponent({
   },
   setup(props, { attrs, slots, expose }) {
     const rootRef = ref<HTMLElement | null>(null);
-    const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-    const staticItems = parseStaticItems(slotChildren);
-    const items = staticItems.length > 0 ? staticItems : normalizeItems(props.items);
-    const disabledKeys = new Set(props.disabledKeys ?? []);
-    const defaultSelectedKey = props.defaultSelectedKey ?? firstEnabledKey(items, disabledKeys);
-    const uncontrolledSelectedKey = ref<Key | null>(props.selectedKey ?? defaultSelectedKey ?? null);
+    const staticItems = shallowRef<SpectrumTabItem[]>([]);
+    const staticItemsSignature = ref("");
+    const items = computed(() =>
+      staticItems.value.length > 0 ? staticItems.value : normalizeItems(props.items)
+    );
+    const disabledKeys = computed(() => new Set(props.disabledKeys ?? []));
+    const defaultSelectedKey = computed(
+      () => props.defaultSelectedKey ?? firstEnabledKey(items.value, disabledKeys.value)
+    );
+    const uncontrolledSelectedKey = ref<Key | null>(props.selectedKey ?? defaultSelectedKey.value ?? null);
     const selectedKey = computed<Key | null>(() => props.selectedKey ?? uncontrolledSelectedKey.value ?? null);
     const idBase = `tabs-${Math.random().toString(36).slice(2, 10)}`;
 
+    watchEffect(() => {
+      if (props.selectedKey !== undefined) {
+        return;
+      }
+
+      const currentKey = uncontrolledSelectedKey.value;
+      const hasCurrentKey = currentKey != null && items.value.some((item) => item.key === currentKey);
+      if (currentKey == null || !hasCurrentKey) {
+        uncontrolledSelectedKey.value = defaultSelectedKey.value ?? null;
+      }
+    });
+
     const setSelectedKey = (key: Key) => {
-      const item = items.find((entry) => entry.key === key);
+      const item = items.value.find((entry) => entry.key === key);
       if (!item) {
         return;
       }
 
-      if (props.isDisabled || item.isDisabled || disabledKeys.has(key)) {
+      if (props.isDisabled || item.isDisabled || disabledKeys.value.has(key)) {
         return;
       }
 
@@ -590,7 +630,9 @@ export const Tabs = defineComponent({
     };
 
     provide(tabsContextKey, {
-      items,
+      get items() {
+        return items.value;
+      },
       selectedKey,
       setSelectedKey,
       orientation: props.orientation ?? "horizontal",
@@ -599,7 +641,9 @@ export const Tabs = defineComponent({
       isEmphasized: Boolean(props.isEmphasized),
       density: props.density ?? "regular",
       isDisabled: Boolean(props.isDisabled),
-      disabledKeys,
+      get disabledKeys() {
+        return disabledKeys.value;
+      },
       tabId: (key: Key) => `${idBase}-tab-${String(key)}`,
       panelId: (key: Key) => `${idBase}-panel-${String(key)}`,
     });
@@ -617,7 +661,18 @@ export const Tabs = defineComponent({
           class: ["spectrum-TabsPanel", props.UNSAFE_className],
           style: props.UNSAFE_style,
         },
-        slots.default ? slots.default() : [h(TabList), h(TabPanels)]
+        (() => {
+          const renderedChildren = slots.default?.() ?? [h(TabList), h(TabPanels)];
+          const slotChildren = renderedChildren.filter((node): node is VNode => isRenderableNode(node));
+          const nextStaticItems = parseStaticItems(slotChildren);
+          const nextSignature = getTabItemsSignature(nextStaticItems);
+          if (nextSignature !== staticItemsSignature.value) {
+            staticItemsSignature.value = nextSignature;
+            staticItems.value = nextStaticItems;
+          }
+
+          return renderedChildren;
+        })()
       );
   },
 });

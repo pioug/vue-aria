@@ -2095,30 +2095,41 @@ describe("Picker", () => {
   );
 
   it("supports slot-defined items and sections", async () => {
-    const wrapper = mount(Picker as any, {
-      props: {
-        ariaLabel: "Picker",
-      },
-      slots: {
-        default: () => [
-          h(Section as any, { title: "Numbers" }, {
-            default: () => [
-              h(Item as any, { id: "one" }, { default: () => "One" }),
-              h(Item as any, { id: "two" }, { default: () => "Two" }),
-            ],
-          }),
-          h(Item as any, { id: "three" }, { default: () => "Three" }),
-        ],
-      },
-      attachTo: document.body,
-    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    await wrapper.get("button").trigger("click");
-    await nextTick();
+    try {
+      const wrapper = mount(Picker as any, {
+        props: {
+          ariaLabel: "Picker",
+        },
+        slots: {
+          default: () => [
+            h(Section as any, { title: "Numbers" }, {
+              default: () => [
+                h(Item as any, { id: "one" }, { default: () => "One" }),
+                h(Item as any, { id: "two" }, { default: () => "Two" }),
+              ],
+            }),
+            h(Item as any, { id: "three" }, { default: () => "Three" }),
+          ],
+        },
+        attachTo: document.body,
+      });
 
-    const options = Array.from(document.body.querySelectorAll('[role="option"]'));
-    expect(options).toHaveLength(3);
-    expect(document.body.textContent).toContain("Numbers");
+      await wrapper.get("button").trigger("click");
+      await nextTick();
+
+      const options = Array.from(document.body.querySelectorAll('[role="option"]'));
+      expect(options).toHaveLength(3);
+      expect(document.body.textContent).toContain("Numbers");
+      expect(
+        warnSpy.mock.calls.some((entry) =>
+          String(entry[0]).includes('Slot "default" invoked outside of the render function')
+        )
+      ).toBe(false);
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 
   it("supports complex section labeling and option descriptions", async () => {
