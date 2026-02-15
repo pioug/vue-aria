@@ -355,16 +355,7 @@ export const ComboBox = defineComponent({
       }
     };
 
-    const {
-      labelProps,
-      inputProps,
-      listBoxProps,
-      buttonProps,
-      descriptionProps,
-      errorMessageProps,
-      isInvalid,
-      validationErrors,
-    } = useComboBox(
+    const comboBoxAria = useComboBox(
       {
         inputRef: inputRefObject,
         listBoxRef: listBoxRefObject,
@@ -411,6 +402,9 @@ export const ComboBox = defineComponent({
 
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
+      const { labelProps, inputProps, listBoxProps, buttonProps, descriptionProps, errorMessageProps } = comboBoxAria;
+      const isInvalid = comboBoxAria.isInvalid;
+      const validationErrors = comboBoxAria.validationErrors;
       const resolvedErrorMessage =
         typeof props.errorMessage === "string"
           ? props.errorMessage

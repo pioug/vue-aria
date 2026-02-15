@@ -640,6 +640,31 @@ describe("ComboBox", () => {
     expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid option");
   });
 
+  it("clears aria validate errors after selecting a valid option", async () => {
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+      validate: ({ selectedKey }: { inputValue: string; selectedKey: string | number | null }) =>
+        selectedKey === "2" ? "Invalid option" : null,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect(input.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid option");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[0]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(input.attributes("aria-invalid")).toBeUndefined();
+    expect(wrapper.find(".spectrum-HelpText.is-invalid").exists()).toBe(false);
+  });
+
   it("supports server validation in aria mode", () => {
     const serverErrors = ref<Record<string, string | undefined>>({
       framework: "Invalid option.",

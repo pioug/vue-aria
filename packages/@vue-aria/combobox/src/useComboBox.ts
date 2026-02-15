@@ -229,7 +229,6 @@ export function useComboBox<T>(
     resetValidation: state.resetValidation,
     commitValidation: state.commitValidation,
   };
-  const { isInvalid, validationErrors, validationDetails } = fieldValidationState.displayValidation;
   const { labelProps, inputProps, descriptionProps, errorMessageProps } = useTextField(
     {
       ...props,
@@ -422,9 +421,15 @@ export function useComboBox<T>(
     }) as any,
     descriptionProps,
     errorMessageProps,
-    isInvalid,
-    validationErrors,
-    validationDetails: (validationDetails ?? null) as ValidityState | null,
+    get isInvalid() {
+      return fieldValidationState.displayValidation.isInvalid;
+    },
+    get validationErrors() {
+      return fieldValidationState.displayValidation.validationErrors;
+    },
+    get validationDetails() {
+      return (fieldValidationState.displayValidation.validationDetails ?? null) as ValidityState | null;
+    },
   };
 }
 
