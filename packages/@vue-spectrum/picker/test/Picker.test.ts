@@ -512,6 +512,17 @@ describe("Picker", () => {
     expect(data.get("picker")).toBe("2");
   });
 
+  it("supports required hidden select semantics", () => {
+    const wrapper = renderPicker({
+      name: "picker",
+      isRequired: true,
+      validationBehavior: "native",
+    });
+
+    const select = wrapper.get('select[name="picker"]');
+    expect(select.attributes("required")).toBeDefined();
+  });
+
   it("supports hidden select autocomplete attribute", () => {
     const wrapper = renderPicker({
       label: "Test",

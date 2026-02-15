@@ -32,6 +32,7 @@ export interface SpectrumPickerProps {
   maxHeight?: number;
   onLoadMore?: () => void;
   isRequired?: boolean;
+  validationBehavior?: "native" | "aria";
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";
   placeholder?: string;

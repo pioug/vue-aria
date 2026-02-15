@@ -85,6 +85,11 @@ export const Picker = defineComponent({
       required: false,
       default: undefined,
     },
+    validationBehavior: {
+      type: String as PropType<SpectrumPickerProps["validationBehavior"]>,
+      required: false,
+      default: undefined,
+    },
     validationState: {
       type: String as PropType<SpectrumPickerProps["validationState"]>,
       required: false,
@@ -149,6 +154,7 @@ export const Picker = defineComponent({
         autoComplete: props.autoComplete,
         isDisabled: props.isDisabled,
         isRequired: props.isRequired,
+        validationBehavior: props.validationBehavior,
         onFocus: props.onFocus,
         onBlur: props.onBlur,
         "aria-label": props.ariaLabel,
@@ -229,6 +235,8 @@ export const Picker = defineComponent({
           h(HiddenSelect as any, {
             ...hiddenSelectProps,
             autoComplete: props.autoComplete,
+            isRequired: props.isRequired,
+            required: props.isRequired || undefined,
           }),
           props.label
             ? h(

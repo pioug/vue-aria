@@ -10500,3 +10500,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 36 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` native-required parity update:
+  - added `validationBehavior` picker prop support and forwarded it through select wiring so native required semantics can be emitted by hidden select integration.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for required hidden-select semantics in `validationBehavior="native"` mode.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
+- Validation: `npm run check -- --pretty false` passed.
