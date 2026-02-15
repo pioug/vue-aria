@@ -12164,3 +12164,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 209 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 265 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` select-all checkbox disabled-row guard expansion:
+  - added regression coverage ensuring select-all checkbox interaction excludes `disabledKeys` rows.
+  - added regression coverage ensuring select-all checkbox interaction excludes item-level disabled rows (`isDisabled`).
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 211 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 267 tests).
+- Validation: `npm run check -- --pretty false` passed.
