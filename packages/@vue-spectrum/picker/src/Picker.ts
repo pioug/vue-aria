@@ -209,6 +209,23 @@ export const Picker = defineComponent({
 
     return () => {
       const attrsRecord = attrs as Record<string, unknown>;
+      const isWithinPickerOverlay = (target: EventTarget | null): boolean => {
+        if (!(target instanceof Node)) {
+          return false;
+        }
+
+        if (triggerRef.value?.contains(target)) {
+          return true;
+        }
+
+        const listboxId = menuProps.id as string | undefined;
+        if (!listboxId) {
+          return false;
+        }
+
+        const listboxElement = document.getElementById(listboxId);
+        return Boolean(listboxElement?.contains(target));
+      };
       const onTriggerClick = (event: MouseEvent) => {
         (triggerProps.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
         if (!props.isDisabled) {
@@ -228,6 +245,30 @@ export const Picker = defineComponent({
             document.getElementById(listboxId)?.focus();
           }
         }
+      };
+      const onTriggerBlur = (event: FocusEvent) => {
+        (triggerProps.onBlur as ((event: FocusEvent) => void) | undefined)?.(event);
+
+        if (!state.isOpen || isWithinPickerOverlay(event.relatedTarget)) {
+          return;
+        }
+
+        state.close();
+        Promise.resolve().then(() => {
+          triggerRef.value?.focus();
+        });
+      };
+      const onListboxBlur = (event: FocusEvent) => {
+        (menuProps.onBlur as ((event: FocusEvent) => void) | undefined)?.(event);
+
+        if (!state.isOpen || isWithinPickerOverlay(event.relatedTarget)) {
+          return;
+        }
+
+        state.close();
+        Promise.resolve().then(() => {
+          triggerRef.value?.focus();
+        });
       };
 
       return h(
@@ -277,6 +318,7 @@ export const Picker = defineComponent({
               onClick: onTriggerClick,
               onKeydown: onTriggerKeyDown,
               onKeyDown: onTriggerKeyDown,
+              onBlur: onTriggerBlur,
             },
             [
               h(
@@ -321,7 +363,7 @@ export const Picker = defineComponent({
                       shouldUseVirtualFocus: menuProps.shouldUseVirtualFocus as boolean | undefined,
                       shouldSelectOnPressUp: menuProps.shouldSelectOnPressUp as boolean | undefined,
                       shouldFocusOnHover: menuProps.shouldFocusOnHover as boolean | undefined,
-                      onBlur: menuProps.onBlur as ((event: FocusEvent) => void) | undefined,
+                      onBlur: onListboxBlur,
                       onFocus: menuProps.onFocus as ((event: FocusEvent) => void) | undefined,
                       onFocusChange: menuProps.onFocusChange as ((isFocused: boolean) => void) | undefined,
                       onAction: (key: PickerKey) => {

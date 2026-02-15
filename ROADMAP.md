@@ -11138,3 +11138,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/src/Picker.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 38 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` blur-close parity update:
+  - added migrated coverage asserting open picker popovers close when focus blurs away and restore focus to the trigger.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - updated picker trigger/listbox blur handling to close the open overlay when focus leaves both trigger and listbox scopes.
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -451,6 +451,34 @@ describe("Picker", () => {
     expect(trigger.attributes("aria-expanded")).toBe("false");
   });
 
+  it("closes when focus blurs away while open", async () => {
+    const onOpenChange = vi.fn();
+    const wrapper = renderPicker({
+      onOpenChange,
+    });
+
+    const trigger = wrapper.get("button");
+    (trigger.element as HTMLElement).focus();
+    await nextTick();
+
+    await trigger.trigger("click");
+    await nextTick();
+
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement | null;
+    expect(listbox).toBeTruthy();
+    expect(trigger.attributes("aria-expanded")).toBe("true");
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    (document.activeElement as HTMLElement | null)?.blur();
+    await nextTick();
+    await nextTick();
+
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+    expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(document.activeElement).toBe(trigger.element);
+  });
+
   it("keeps focus in the picker overlay when tabbing while open", async () => {
     const onOpenChange = vi.fn();
     const wrapper = mount(
