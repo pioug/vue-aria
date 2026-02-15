@@ -11388,3 +11388,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 145 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 163 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` native reset-validation parity refinement:
+  - added migrated native-validation coverage asserting form reset clears committed validation UI for both picker variants after invalid selections:
+    - `DatePicker`: reset clears native validation state and hidden-input value.
+    - `DateRangePicker`: reset clears native validation state and both hidden-input values.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+  - updated hidden-input `useFormReset` handlers to reset validation state alongside resetting picker values to default baselines:
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 147 tests).
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 165 tests).
+- Validation: `npm run check -- --pretty false` passed.

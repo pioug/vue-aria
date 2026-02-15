@@ -521,6 +521,7 @@ export const DatePicker = defineComponent({
       state.defaultValue,
       (value) => {
         state.setValue(value as DateValue | null);
+        state.resetValidation();
       }
     );
 
@@ -1117,6 +1118,7 @@ export const DateRangePicker = defineComponent({
       state.defaultValue,
       (value) => {
         state.setValue(value as any);
+        state.resetValidation();
       }
     );
     useFormReset(
@@ -1124,6 +1126,7 @@ export const DateRangePicker = defineComponent({
       state.defaultValue,
       (value) => {
         state.setValue(value as any);
+        state.resetValidation();
       }
     );
 
