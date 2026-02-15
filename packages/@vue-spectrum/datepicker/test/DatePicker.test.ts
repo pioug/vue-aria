@@ -1592,6 +1592,59 @@ describe("DateRangePicker", () => {
     expect(endInput.element.getAttribute("value")).toBe("2019-06-12");
   });
 
+  it("supports range picker form reset", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", null, [
+              h(DateRangePicker as any, {
+                "aria-label": "Date range picker",
+                defaultValue: {
+                  start: new CalendarDate(2019, 6, 5),
+                  end: new CalendarDate(2019, 6, 8),
+                },
+                startName: "rangeStart",
+                endName: "rangeEnd",
+              }),
+              h("input", {
+                type: "reset",
+                "data-testid": "reset",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const startInput = wrapper.get('input[type="hidden"][name="rangeStart"]');
+    const endInput = wrapper.get('input[type="hidden"][name="rangeEnd"]');
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-05");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
+
+    await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
+    await nextTick();
+
+    const day10 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "10");
+    const day12 = Array.from(document.body.querySelectorAll(".react-spectrum-Calendar-date")).find((node) => node.textContent === "12");
+    expect(day10).toBeTruthy();
+    expect(day12).toBeTruthy();
+    pressElement(day10!);
+    pressElement(day12!);
+    await nextTick();
+
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-10");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-12");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
+
+    expect(startInput.element.getAttribute("value")).toBe("2019-06-05");
+    expect(endInput.element.getAttribute("value")).toBe("2019-06-08");
+  });
+
   it("focuses range picker trigger when autoFocus is enabled", async () => {
     const wrapper = mount(DateRangePicker as any, {
       props: {

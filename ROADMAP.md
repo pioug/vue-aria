@@ -11332,3 +11332,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 136 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` range form-reset parity refinement:
+  - added migrated coverage asserting range picker form reset restores start/end hidden-input serialization back to the configured default range after calendar selection changes.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 137 tests).
+- Validation: `npm run check -- --pretty false` passed.
