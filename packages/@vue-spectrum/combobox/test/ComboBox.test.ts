@@ -636,6 +636,54 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Two");
   });
 
+  it("clears selection when all input text is deleted in uncontrolled mode", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        onSelectionChange,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.setValue("o");
+    await nextTick();
+    await nextTick();
+
+    const initialOptions = wrapper.findAll('[role="option"]');
+    expect(initialOptions.length).toBeGreaterThan(0);
+    await initialOptions[0]!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenLastCalledWith("one");
+    expect((input.element as HTMLInputElement).value).toBe("One");
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    await input.setValue("");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(onSelectionChange).toHaveBeenLastCalledWith(null);
+    expect((input.element as HTMLInputElement).value).toBe("");
+  });
+
   it("propagates name and form attributes to the input", () => {
     const wrapper = renderComboBox({
       name: "combobox-name",

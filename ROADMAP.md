@@ -10967,3 +10967,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 91 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` uncontrolled clear-selection parity update:
+  - added migrated coverage asserting deleting all text after selection clears the uncontrolled selected key (`onSelectionChange(null)`).
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 92 tests).
+- Validation: `npm run check -- --pretty false` passed.
