@@ -69,19 +69,37 @@ export function useFormValidation(
   useLayoutEffect(() => {
     const input = ref?.value;
     if (validationBehavior === "native" && input && !input.disabled) {
-      const errors = state.realtimeValidation?.validationErrors ?? [];
-      const isInvalid = state.realtimeValidation?.isInvalid ?? false;
-      input.setCustomValidity(isInvalid ? errors.join(" ") || "Invalid value." : "");
+      input.setCustomValidity("");
+      const nativeValidity = getNativeValidity(input);
+      const realtimeValidation = state.realtimeValidation;
+      const displayValidation = state.displayValidation;
+      const useDisplayMessage =
+        !realtimeValidation?.isInvalid
+        && nativeValidity.isInvalid
+        && !!displayValidation?.isInvalid
+        && (displayValidation.validationErrors?.length ?? 0) > 0;
+      const errors = useDisplayMessage
+        ? displayValidation?.validationErrors ?? []
+        : realtimeValidation?.validationErrors ?? [];
+      const hasError = useDisplayMessage || !!realtimeValidation?.isInvalid;
+      input.setCustomValidity(hasError ? errors.join(" ") || "Invalid value." : "");
 
       if (!input.hasAttribute("title")) {
         input.title = "";
       }
 
-      if (!isInvalid) {
-        state.updateValidation?.(getNativeValidity(input));
+      if (!realtimeValidation?.isInvalid) {
+        state.updateValidation?.(nativeValidity);
       }
     }
-  }, [() => validationBehavior, () => ref?.value]);
+  }, [
+    () => validationBehavior,
+    () => ref?.value,
+    () => state.realtimeValidation?.isInvalid,
+    () => (state.realtimeValidation?.validationErrors ?? []).join("\n"),
+    () => state.displayValidation?.isInvalid,
+    () => (state.displayValidation?.validationErrors ?? []).join("\n"),
+  ]);
 
   const onReset = useEffectEvent(() => {
     state.resetValidation?.();

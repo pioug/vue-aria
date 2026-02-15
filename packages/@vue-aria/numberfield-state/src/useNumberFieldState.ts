@@ -184,14 +184,14 @@ export function useNumberFieldState(props: NumberFieldStateOptions): NumberField
 
   const increment = () => {
     const newValue = safeNextStep("+", minValue);
-    inputValueRef.value = format(newValue);
+    inputValueRef.value = format(!isControlled.value ? newValue : controlledValue.value);
     setControlledValue(newValue);
     validation.commitValidation();
   };
 
   const decrement = () => {
     const newValue = safeNextStep("-", maxValue);
-    inputValueRef.value = format(newValue);
+    inputValueRef.value = format(!isControlled.value ? newValue : controlledValue.value);
     setControlledValue(newValue);
     validation.commitValidation();
   };

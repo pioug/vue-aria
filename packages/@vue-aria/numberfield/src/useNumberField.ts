@@ -51,7 +51,9 @@ export interface AriaNumberFieldProps {
   onBeforeInput?: (event: InputEvent) => void;
   onInput?: (event: InputEvent) => void;
   description?: string;
-  errorMessage?: string;
+  errorMessage?:
+    | string
+    | ((validation: ValidationResult) => string | null | undefined);
   name?: string;
   form?: string;
   validate?: (value: number) => boolean | string | string[] | null | undefined;
@@ -118,6 +120,35 @@ export function useNumberField(
     if (inputRef.current?.value !== oldValue) {
       announce(inputRef.current?.value ?? "", "assertive");
     }
+  };
+
+  const resolveValidation = (validation: ValidationResult): ValidationResult => {
+    if (typeof errorMessage !== "function") {
+      return validation;
+    }
+
+    const customError = errorMessage(validation);
+    if (!customError) {
+      return validation;
+    }
+
+    return {
+      ...validation,
+      isInvalid: true,
+      validationErrors: [customError],
+    };
+  };
+
+  const fieldValidationState = {
+    get realtimeValidation() {
+      return resolveValidation(state.realtimeValidation);
+    },
+    get displayValidation() {
+      return resolveValidation(state.displayValidation);
+    },
+    updateValidation: state.updateValidation,
+    resetValidation: state.resetValidation,
+    commitValidation: state.commitValidation,
   };
 
   const inputId = useId(id);
@@ -193,6 +224,11 @@ export function useNumberField(
   const setInputValue = (value: string) => {
     if (state.validate(value)) {
       state.setInputValue(value);
+      return;
+    }
+
+    if (inputRef.current && inputRef.current.value !== state.inputValue) {
+      inputRef.current.value = state.inputValue;
     }
   };
 
@@ -245,7 +281,7 @@ export function useNumberField(
     isReadOnly,
     isRequired,
     validate: undefined,
-    [privateValidationStateProp]: state,
+    [privateValidationStateProp]: fieldValidationState,
     get value() {
       return state.inputValue;
     },
@@ -265,7 +301,12 @@ export function useNumberField(
     onKeyUp,
     onPaste,
     description,
-    errorMessage,
+    get errorMessage() {
+      const resolved = typeof errorMessage === "function"
+        ? errorMessage(resolveValidation(state.displayValidation))
+        : errorMessage;
+      return resolved ?? undefined;
+    },
   };
   const {
     labelProps,
@@ -403,13 +444,13 @@ export function useNumberField(
     errorMessageProps,
     descriptionProps,
     get isInvalid() {
-      return state.displayValidation.isInvalid;
+      return resolveValidation(state.displayValidation).isInvalid;
     },
     get validationErrors() {
-      return state.displayValidation.validationErrors;
+      return resolveValidation(state.displayValidation).validationErrors;
     },
     get validationDetails() {
-      return state.displayValidation.validationDetails;
+      return resolveValidation(state.displayValidation).validationDetails;
     },
   };
 }

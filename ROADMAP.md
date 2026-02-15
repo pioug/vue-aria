@@ -10129,3 +10129,132 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 57 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` reset/label/native-stepper parity update:
+  - added migrated coverage asserting controlled numberfields can be externally reset to blank by setting `value` to `null`.
+  - added migrated coverage for controlled form reset behavior via native `type="reset"` input.
+  - added migrated coverage for custom `incrementAriaLabel`/`decrementAriaLabel` passthrough and external `aria-labelledby` wiring across textbox and stepper controls.
+  - added adapted coverage asserting native required validity transitions from invalid to valid after increment stepper activation.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 62 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` native validate-function parity update:
+  - added adapted migrated coverage asserting native-mode `validate` callbacks set custom validity from initial render and clear after committing a valid value.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - fixed shared native validation reactivity so `setCustomValidity` updates when realtime validation errors change (not only on mount/ref changes).
+    - `packages/@vue-aria/form/src/useFormValidation.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 63 tests).
+- Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` native server-validation parity update:
+  - added adapted migrated coverage asserting server-provided form validation errors (`FormValidationContext`) map to native custom validity and invalid `validationMessage` in `validationBehavior="native"` mode.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 64 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` es-ES grouping-symbol parity update:
+  - added adapted migrated coverage asserting grouped numeral text entry (`123.456.789`) commits and formats correctly in `es-ES` locale.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 65 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` error-message wiring alignment:
+  - broadened NumberField error-message handling to support callback-based resolution internally while normalizing nullable callback output for textfield integration.
+    - `packages/@vue-aria/numberfield/src/useNumberField.ts`
+  - aligned Spectrum NumberField rendering to pass resolved error-message text and computed validation errors into `TextFieldBase`.
+    - `packages/@vue-spectrum/numberfield/src/NumberField.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 65 tests).
+- Validation: `npm test -- packages/@vue-aria/numberfield/test` passed (6 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` stepper-repeat undefined/bounds parity update:
+  - added adapted migrated coverage for mouse-hold stepper repeat behavior starting from undefined values:
+    - increment path repeats as `0 -> 1 -> 2`
+    - increment path with `minValue: 20` repeats as `20 -> 21 -> 22`
+    - decrement path repeats as `0 -> -1 -> -2`
+  - added adapted migrated coverage asserting long-press stepping clamps at range bounds and does not overshoot (`10 -> 20` and `20 -> 0` with `minValue: 0`, `maxValue: 20`).
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 69 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` stepper-repeat timing parity update:
+  - added adapted migrated coverage for held-arrow repeat timing progression from `defaultValue: 10`, asserting immediate step, 400ms initial delay, and subsequent 60ms repeats for both increment and decrement paths.
+    - increment sequence: `11 -> 12 -> 13 -> 14 -> 15 -> 16`
+    - decrement sequence: `15 -> 14 -> 13 -> 12 -> 11 -> 10`
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 70 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` invalid-character currency parity update:
+  - added adapted migrated coverage asserting invalid currency characters (`@!`) are rejected and do not mutate field value or emit `onChange`.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - updated numberfield input handling to immediately restore the last valid input string when invalid input text is received.
+    - `packages/@vue-aria/numberfield/src/useNumberField.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 71 tests).
+- Validation: `npm test -- packages/@vue-aria/numberfield/test` passed (6 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` native blur-commit parity update:
+  - added adapted migrated coverage asserting native-mode numberfield blur commits only when the value changes:
+    - blur without edits does not emit `onChange`
+    - typed value emits once on blur commit
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 72 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` decimal-step increment parity update:
+  - added adapted migrated coverage asserting repeated increment-button presses apply custom fractional steps (`step: 0.001`) without precision drift from typed input (`1 -> 1.001 -> 1.002 -> 1.003 -> 1.004`).
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 73 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` labeling matrix parity update:
+  - added adapted migrated coverage for label-driven stepper labeling semantics:
+    - string `label` path: textbox uses `aria-labelledby`, steppers expose `Increase/Decrease <Label>` via `aria-label` without generated `id`/`aria-labelledby`
+    - explicit `aria-label` path: textbox and steppers use `aria-label` only
+    - external `aria-labelledby` path: steppers expose generic `Increase/Decrease` labels with generated `id` plus composed `aria-labelledby`
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 75 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` readonly/disabled aria-parity update:
+  - added adapted migrated coverage for readonly+disabled+required numberfield semantics with explicit `id`:
+    - textbox omits spinbutton value-range ARIA attrs (`aria-valuenow`/`aria-valuetext`/`aria-valuemin`/`aria-valuemax`) and role
+    - textbox exposes `aria-readonly`, `aria-required`, `aria-disabled`, and provided `id`
+    - stepper buttons reference textbox via `aria-controls`
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 76 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` controlled-value interaction parity update:
+  - added adapted migrated coverage for controlled numberfield behavior:
+    - stepper presses emit `onChange` payloads while textbox value remains pinned when parent does not update `value`
+    - typed-text blur commit emits `onChange` while textbox reverts to controlled `value` if parent does not update
+    - fully controlled parent flow updates textbox when parent updates `value` from `onChange`
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - fixed controlled-mode stepper display handling so increment/decrement operations do not mutate visible input text unless the controlled prop updates.
+    - `packages/@vue-aria/numberfield-state/src/useNumberFieldState.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 79 tests).
+- Validation: `npm test -- packages/@vue-aria/numberfield-state/test` passed (1 file, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` zero-value and label-association parity update:
+  - added adapted migrated coverage asserting explicit `0` renders for both uncontrolled (`defaultValue: 0`) and controlled (`value: 0`) paths.
+  - added adapted migrated coverage asserting string-label association and textbox `aria-roledescription` (`Number field`) exposure.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 82 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` aria-validate commit parity update:
+  - added adapted migrated coverage asserting `validationBehavior="aria"` validate-callback invalid state clears after entering a valid value and committing on blur.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 83 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` aria-server-validation clear parity update:
+  - added adapted migrated coverage asserting aria-mode server validation errors clear after user entry and blur commit while server error context remains unchanged.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 84 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` partial custom-stepper-label parity update:
+  - added adapted migrated coverage for one-sided custom stepper labels:
+    - custom `incrementAriaLabel` with default-derived decrement label (`Decrease Width`)
+    - custom `decrementAriaLabel` with default-derived increment label (`Increase Width`)
+    - verified no generated `id`/`aria-labelledby` when explicit per-button `aria-label` is used.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 86 tests).
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/numberfield` native custom-error-message parity update:
+  - added adapted migrated coverage asserting native-mode custom `errorMessage` callback output is reflected in textbox native validation messaging.
+    - `packages/@vue-spectrum/numberfield/test/NumberField.test.ts`
+  - updated native form-validation synchronization to consider both realtime and display validation message sources while preserving native-validation commit behavior.
+    - `packages/@vue-aria/form/src/useFormValidation.ts`
+- Validation: `npm test -- packages/@vue-spectrum/numberfield/test` passed (2 files, 87 tests).
+- Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 18 tests).
+- Validation: `npm run check -- --pretty false` passed.

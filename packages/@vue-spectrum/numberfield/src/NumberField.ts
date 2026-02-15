@@ -112,7 +112,9 @@ export const NumberField = defineComponent({
       required: false,
     },
     errorMessage: {
-      type: String,
+      type: [String, Function] as PropType<
+        string | ((validation: { validationDetails: ValidityState | null }) => string | null | undefined)
+      >,
       required: false,
     },
     validationBehavior: {
@@ -227,6 +229,18 @@ export const NumberField = defineComponent({
     const validationState = computed(
       () => merged.validationState || (result.isInvalid ? "invalid" : undefined)
     );
+    const resolvedErrorMessage = computed(() => {
+      const rawErrorMessage = merged.errorMessage;
+      if (typeof rawErrorMessage === "function") {
+        return rawErrorMessage({
+          isInvalid: result.isInvalid,
+          validationErrors: result.validationErrors,
+          validationDetails: result.validationDetails,
+        });
+      }
+
+      return rawErrorMessage as string | undefined;
+    });
     const showStepper = computed(() => !merged.hideStepper);
     const groupProps = computed(() => mergeProps(result.groupProps, hoverProps));
     const wrapperChildren = computed(() => {
@@ -324,7 +338,8 @@ export const NumberField = defineComponent({
                     h(TextFieldBase as any, {
                       label: merged.label,
                       description: merged.description,
-                      errorMessage: merged.errorMessage,
+                      errorMessage: resolvedErrorMessage.value,
+                      validationErrors: result.validationErrors,
                       labelProps: result.labelProps,
                       descriptionProps: result.descriptionProps,
                       errorMessageProps: result.errorMessageProps,
