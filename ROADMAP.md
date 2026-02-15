@@ -10777,3 +10777,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 51 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-input selection parity update:
+  - added migrated coverage asserting controlled `inputValue` keeps input text stable while still emitting selection and input callbacks when an option is chosen.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 52 tests).
+- Validation: `npm run check -- --pretty false` passed.

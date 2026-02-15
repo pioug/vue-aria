@@ -267,6 +267,42 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).value).toBe("Tw");
   });
 
+  it("updates selectedKey but not inputValue when inputValue is controlled", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "3",
+      inputValue: "T",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+
+    await input.setValue("Tw");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+    expect(onInputChange).toHaveBeenLastCalledWith("Tw");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const twoOption = wrapper.findAll('[role="option"]').find((option) => option.text() === "Two");
+    expect(twoOption).toBeDefined();
+    await twoOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("T");
+    expect(onSelectionChange).toHaveBeenCalledWith("2");
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+  });
+
   it("sets aria-invalid semantics when validationState is invalid", () => {
     const wrapper = renderComboBox({
       validationState: "invalid",
