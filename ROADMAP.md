@@ -12054,6 +12054,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 188 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 244 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` select-all guard coverage expansion:
+  - added larger-collection (`3` rows) regression coverage ensuring `disallowSelectAll` continues to block `Ctrl+A` select-all keyboard interaction.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 189 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 245 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/table` keyboard range-selection depth expansion:
   - strengthened `Shift+ArrowUp` checkbox-selection coverage to validate multi-step accumulation across successive upward range-extension key presses.
   - assertions now verify full three-row selection after two consecutive upward range-extension steps starting from the last row.
