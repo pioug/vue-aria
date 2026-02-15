@@ -863,6 +863,48 @@ describe("ComboBox", () => {
     expect((input.element as HTMLInputElement).validationMessage).toContain("Please enter a value");
   });
 
+  it("only commits native validation on blur when the value changed", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", { "data-test": "form" }, [
+              h(ComboBox as any, {
+                label: "Test",
+                items,
+                isRequired: true,
+                validationBehavior: "native",
+              }),
+            ]);
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const form = wrapper.get('[data-test="form"]').element as HTMLFormElement;
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect(input.attributes("required")).toBeDefined();
+    expect(input.attributes("aria-required")).toBeUndefined();
+    expect(input.attributes("aria-describedby")).toBeUndefined();
+    expect((input.element as HTMLInputElement).validity.valid).toBe(false);
+
+    await input.trigger("focus");
+    await input.trigger("blur");
+    await nextTick();
+
+    expect(input.attributes("aria-describedby")).toBeUndefined();
+
+    form.checkValidity();
+    await nextTick();
+    await nextTick();
+
+    expect(input.attributes("aria-describedby")).toBeDefined();
+    const describedBy = input.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Constraints not satisfied");
+  });
+
   it("supports matching defaultSelectedKey and defaultInputValue", () => {
     const wrapper = renderComboBox({
       defaultSelectedKey: "2",
