@@ -11512,6 +11512,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-aria/combobox/test` passed (2 files, 10 tests).
 - Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (5 files, 167 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/combobox` Apple selection-announcement parity refinement:
+  - wired selected-option live announcements in `useComboBox` for Apple-platform focused combobox interactions when `selectedKey` changes.
+    - `packages/@vue-aria/combobox/src/useComboBox.ts`
+  - added hook-level regression coverage with mocked Apple platform detection to assert selection-change announcement emission.
+    - `packages/@vue-aria/combobox/test/useComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-aria/combobox/test` passed (2 files, 11 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox/test packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (5 files, 168 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/combobox` reactive default-prop parity coverage:
   - added wrapper-level regression coverage asserting reactive default prop updates are reflected consistently in uncontrolled combobox rendering/serialization:
     - `defaultInputValue` updates input text in uncontrolled mode.

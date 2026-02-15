@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { effectScope, nextTick } from "vue";
 
-const { announceMock, ariaHideCleanupMock, ariaHideOutsideMock } = vi.hoisted(() => ({
+const { announceMock, ariaHideCleanupMock, ariaHideOutsideMock, isAppleDeviceMock } = vi.hoisted(() => ({
   announceMock: vi.fn(),
   ariaHideCleanupMock: vi.fn(),
   ariaHideOutsideMock: vi.fn(() => ariaHideCleanupMock),
+  isAppleDeviceMock: vi.fn(),
 }));
 
 vi.mock("@vue-aria/overlays", async () => {
@@ -22,6 +23,16 @@ vi.mock("@vue-aria/live-announcer", () => ({
   clearAnnouncer: vi.fn(),
   destroyAnnouncer: vi.fn(),
 }));
+
+vi.mock("@vue-aria/utils", async () => {
+  const actual = await vi.importActual<typeof import("@vue-aria/utils")>(
+    "@vue-aria/utils"
+  );
+  return {
+    ...actual,
+    isAppleDevice: isAppleDeviceMock,
+  };
+});
 
 import { useComboBox } from "../src/useComboBox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
@@ -95,6 +106,8 @@ describe("useComboBox", () => {
     announceMock.mockClear();
     ariaHideCleanupMock.mockClear();
     ariaHideOutsideMock.mockClear();
+    isAppleDeviceMock.mockReset();
+    isAppleDeviceMock.mockReturnValue(false);
   });
 
   it("returns default aria props", () => {
@@ -238,6 +251,26 @@ describe("useComboBox", () => {
     await nextTick();
     expect(announceMock).toHaveBeenCalledTimes(2);
 
+    stop();
+  });
+
+  it("announces selected option changes on Apple devices when focused", async () => {
+    isAppleDeviceMock.mockReturnValue(true);
+    const items = [
+      { id: 1, name: "one" },
+      { id: 2, name: "two" },
+    ];
+    const { state, stop } = createScopedComboBox({
+      items,
+    });
+
+    (state as any).setFocused(true);
+    announceMock.mockClear();
+
+    state.setSelectedKey(2);
+    await nextTick();
+
+    expect(announceMock).toHaveBeenCalledTimes(1);
     stop();
   });
 });

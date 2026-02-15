@@ -406,6 +406,22 @@ export function useComboBox<T>(
     lastOpenState.value = state.isOpen;
   });
 
+  const lastSelectedKey = ref(state.selectedKey);
+  watchEffect(() => {
+    if (shouldAnnounceAppleSelection() && state.isFocused && state.selectedItem && state.selectedKey !== lastSelectedKey.value) {
+      const optionText = (state.selectedItem as { "aria-label"?: string; textValue?: string })["aria-label"]
+        ?? (state.selectedItem as { textValue?: string }).textValue
+        ?? "";
+      announce(
+        stringFormatter.format("selectedAnnouncement", {
+          optionText,
+        } as any)
+      );
+    }
+
+    lastSelectedKey.value = state.selectedKey;
+  });
+
   return {
     labelProps,
     buttonProps: {
