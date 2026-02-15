@@ -10626,3 +10626,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 29 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` async docs parity update:
+  - expanded async-loading docs guidance with explicit loading and empty-state placeholder behavior (`Loading…` / `No results`).
+    - `docs/packages/spectrum-combobox.md`
+- Validation: `npm run check -- --pretty false` passed.

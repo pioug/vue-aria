@@ -99,6 +99,9 @@ Set `name` and optional `form` to attach the combobox input to form submission, 
 
 Use `loadingState` to expose loading UI and `onLoadMore` for incremental loading when the listbox scroll reaches the end.
 
+- `loadingState="loading"` renders a loading placeholder in the open menu.
+- Async comboboxes with no items in non-loading states render a `No results` menu placeholder.
+
 ```vue
 <script setup lang="ts">
 import { ref } from "vue";
