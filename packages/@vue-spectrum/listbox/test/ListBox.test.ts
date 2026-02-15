@@ -244,6 +244,106 @@ describe("ListBox", () => {
     expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
   });
 
+  it("prevents selection when selectionMode is none", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderListBox({
+      selectionMode: "none",
+      onSelectionChange,
+    });
+
+    const options = wrapper.findAll('[role="option"]');
+    await options[3]?.trigger("click");
+    await options[4]?.trigger("keydown", { key: " " });
+    await options[1]?.trigger("keydown", { key: "Enter" });
+
+    expect(options[3]?.attributes("aria-selected")).not.toBe("true");
+    expect(options[4]?.attributes("aria-selected")).not.toBe("true");
+    expect(options[1]?.attributes("aria-selected")).not.toBe("true");
+    expect(wrapper.findAll('[role="img"]')).toHaveLength(0);
+    expect(onSelectionChange).toHaveBeenCalledTimes(0);
+  });
+
+  it("supports typeahead focus by typing letters in rapid succession", async () => {
+    const wrapper = renderListBox({
+      autoFocus: "first",
+    });
+    await nextTick();
+
+    const listbox = wrapper.get('[role="listbox"]');
+    const options = wrapper.findAll('[role="option"]');
+    expect(document.activeElement).toBe(options[0]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[1]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "L", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[3]?.element);
+
+    (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "E", bubbles: true }));
+    await nextTick();
+    expect(document.activeElement).toBe(options[4]?.element);
+  });
+
+  it("resets typeahead search text after a timeout", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderListBox({
+        autoFocus: "first",
+      });
+      await nextTick();
+
+      const listbox = wrapper.get('[role="listbox"]');
+      const options = wrapper.findAll('[role="option"]');
+      expect(document.activeElement).toBe(options[0]?.element);
+
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(options[1]?.element);
+
+      vi.runAllTimers();
+      await nextTick();
+
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(options[1]?.element);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
+  it("wraps typeahead search when no later match exists", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = renderListBox({
+        autoFocus: "first",
+      });
+      await nextTick();
+
+      const listbox = wrapper.get('[role="listbox"]');
+      const options = wrapper.findAll('[role="option"]');
+      expect(document.activeElement).toBe(options[0]?.element);
+
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "L", bubbles: true }));
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "E", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(options[4]?.element);
+
+      vi.runAllTimers();
+      await nextTick();
+
+      (listbox.element as HTMLElement).dispatchEvent(new KeyboardEvent("keydown", { key: "B", bubbles: true }));
+      await nextTick();
+      expect(document.activeElement).toBe(options[4]?.element);
+    } finally {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    }
+  });
+
   it("supports aria-label attribute", () => {
     const wrapper = renderListBox({
       "aria-label": "Test",

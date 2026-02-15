@@ -10277,3 +10277,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 18 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/listbox` no-selection/typeahead parity update:
+  - added migrated coverage for:
+    - `selectionMode="none"` interaction guard across click, `Space`, and `Enter`
+    - typeahead focus movement (`B` -> `Bar`, `BL` -> `Blah`, `BLE` -> `Bleh`)
+    - typeahead reset timeout behavior
+    - typeahead wrap behavior when no later match exists
+    - `packages/@vue-spectrum/listbox/test/ListBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test/ListBox.test.ts` passed (1 file, 22 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 23 tests).
+- Validation: `npm run check -- --pretty false` passed.
