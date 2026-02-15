@@ -320,6 +320,54 @@ describe("Button", () => {
     expect(enterDown.defaultPrevented).toBe(false);
   });
 
+  it("maps docs visual variants and icon-only affordances to expected attributes/classes", async () => {
+    const ctaWrapper = mount(Button as any, {
+      props: {
+        variant: "cta",
+      },
+      slots: {
+        default: () => "Save",
+      },
+    });
+    const ctaButton = getControl(ctaWrapper);
+    await nextTick();
+    expect(ctaButton.attributes("data-variant")).toBe("accent");
+    expect(ctaButton.attributes("data-style")).toBe("fill");
+
+    const overBackgroundWrapper = mount(Button as any, {
+      props: {
+        variant: "overBackground",
+      },
+      attrs: {
+        "aria-label": "Notifications",
+      },
+      slots: {
+        default: () => h("span", { class: "spectrum-Icon", "aria-hidden": "true" }, "🔔"),
+      },
+    });
+    const overBackgroundButton = getControl(overBackgroundWrapper);
+    await nextTick();
+    expect(overBackgroundButton.attributes("data-variant")).toBe("primary");
+    expect(overBackgroundButton.attributes("data-style")).toBe("outline");
+    expect(overBackgroundButton.attributes("data-static-color")).toBe("white");
+
+    const staticColorWrapper = mount(Button as any, {
+      props: {
+        variant: "primary",
+        style: "fill",
+        staticColor: "black",
+      },
+      slots: {
+        default: () => "Save",
+      },
+    });
+    const staticColorButton = getControl(staticColorWrapper);
+    await nextTick();
+    expect(staticColorButton.attributes("data-variant")).toBe("primary");
+    expect(staticColorButton.attributes("data-style")).toBe("fill");
+    expect(staticColorButton.attributes("data-static-color")).toBe("black");
+  });
+
   it("displays a spinner after delay when isPending becomes true", async () => {
     vi.useFakeTimers();
     const onPress = vi.fn();

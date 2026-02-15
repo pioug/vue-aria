@@ -95,4 +95,26 @@ describe("ToggleButton", () => {
 
     expect(wrapper.get("button").attributes("data-foo")).toBe("bar");
   });
+
+  it("applies quiet, emphasized, static color, and selected classes", () => {
+    const wrapper = mount(ToggleButton as any, {
+      props: {
+        isQuiet: true,
+        isEmphasized: true,
+        staticColor: "black",
+        defaultSelected: true,
+      },
+      slots: {
+        default: () => "Pin",
+      },
+    });
+
+    const button = wrapper.get("button");
+    expect(button.attributes("aria-pressed")).toBe("true");
+    expect(button.classes()).toContain("spectrum-ActionButton--quiet");
+    expect(button.classes()).toContain("spectrum-ActionButton--emphasized");
+    expect(button.classes()).toContain("spectrum-ActionButton--staticColor");
+    expect(button.classes()).toContain("spectrum-ActionButton--staticBlack");
+    expect(button.classes()).toContain("is-selected");
+  });
 });

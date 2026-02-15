@@ -101,7 +101,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - `@vue-spectrum/utils`: Complete
 - `@vue-spectrum/provider`: Complete
 - `@vue-spectrum/theme`: Complete
-- `@vue-spectrum/button`: In progress
+- `@vue-spectrum/button`: Complete
 - `@vue-spectrum/checkbox`: Complete
 - `@vue-spectrum/radio`: Complete
 - `@vue-spectrum/switch`: Complete
@@ -171,8 +171,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - path aliases added in `tsconfig.json` and `vitest.config.ts` for `@vue-spectrum/button`.
 
 ### Remaining for completion
-- Validate visual parity against upstream docs examples and add parity notes/screenshots.
-- Finalize package completion gate once all migrated tests pass and no React dependencies remain in package surface.
+- None currently tracked in this slice.
 
 ## 4b) Active Package Slice: @vue-spectrum/checkbox
 - Upstream source path(s):
@@ -11635,5 +11634,17 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - added explicit regression coverage asserting slot-defined breadcrumb items do not emit Vue's default-slot-outside-render warning.
     - `packages/@vue-spectrum/breadcrumbs/test/Breadcrumbs.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/breadcrumbs/test` passed (2 files, 25 tests).
+- Validation: `npm test -- packages/@vue-spectrum/*/test` passed (111 files, 1226 tests) with no Vue default-slot-outside-render warnings.
+- Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/button` visual-parity docs coverage refinement:
+  - added migrated visual-option coverage across button variants documented in Spectrum docs:
+    - `Button` verifies `cta`/`overBackground` variant mapping and explicit style/static-color data attributes.
+    - `ActionButton` verifies quiet/static-color class composition and hold-affordance rendering.
+    - `ToggleButton` verifies quiet/emphasized/static-color/selected class composition.
+    - `packages/@vue-spectrum/button/test/Button.test.ts`
+    - `packages/@vue-spectrum/button/test/ActionButton.test.ts`
+    - `packages/@vue-spectrum/button/test/ToggleButton.test.ts`
+  - closed remaining button-slice completion items and aligned execution queue status with completed package state.
+- Validation: `npm test -- packages/@vue-spectrum/button/test` passed (5 files, 62 tests).
 - Validation: `npm test -- packages/@vue-spectrum/*/test` passed (111 files, 1226 tests) with no Vue default-slot-outside-render warnings.
 - Validation: `npm run check -- --pretty false` passed.
