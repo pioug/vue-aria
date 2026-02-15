@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { nextTick, reactive } from "vue";
 import { useComboBoxState, type ComboBoxStateOptions } from "../src/useComboBoxState";
 
 interface Item {
@@ -113,6 +114,35 @@ describe("useComboBoxState", () => {
     state.selectionManager.replaceSelection(targetKey);
     expect(state.selectedKey).toBe(targetKey);
     expect(onSelectionChange).toHaveBeenCalledWith(targetKey);
+  });
+
+  it("syncs uncontrolled selected key when defaultSelectedKey changes", async () => {
+    const props = reactive(createProps({ defaultSelectedKey: "0" }));
+    const state = useComboBoxState(props as ComboBoxStateOptions<Item>);
+
+    expect(state.selectedKey).toBe("0");
+
+    props.defaultSelectedKey = "1";
+    await nextTick();
+
+    expect(state.selectedKey).toBe("1");
+  });
+
+  it("does not sync defaultSelectedKey changes when selectedKey is controlled", async () => {
+    const props = reactive(
+      createProps({
+        selectedKey: "0",
+        defaultSelectedKey: "0",
+      })
+    );
+    const state = useComboBoxState(props as ComboBoxStateOptions<Item>);
+
+    expect(state.selectedKey).toBe("0");
+
+    props.defaultSelectedKey = "1";
+    await nextTick();
+
+    expect(state.selectedKey).toBe("0");
   });
 
   it("supports default empty selection", () => {
