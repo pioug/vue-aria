@@ -286,6 +286,32 @@ export function useComboBoxState<T extends object>(
     }
   );
 
+  watch(
+    () => props.defaultInputValue,
+    (nextDefaultInputValue, previousDefaultInputValue) => {
+      if (props.inputValue !== undefined) {
+        return;
+      }
+
+      if (Object.is(nextDefaultInputValue, previousDefaultInputValue)) {
+        return;
+      }
+
+      const nextInputValue =
+        getDefaultInputValue(
+          nextDefaultInputValue,
+          listState.selectedKey,
+          listState.collection
+        ) ?? "";
+      if (nextInputValue === inputValueRef.value) {
+        return;
+      }
+
+      lastValue.value = nextInputValue;
+      setInputValue(nextInputValue);
+    }
+  );
+
   watchEffect(() => {
     if (
       isFocusedRef.value

@@ -80,6 +80,35 @@ describe("useComboBoxState", () => {
     expect(onInputChange).toHaveBeenCalledWith("hellow");
   });
 
+  it("syncs uncontrolled input value when defaultInputValue changes", async () => {
+    const props = reactive(createProps({ defaultInputValue: "hello" }));
+    const state = useComboBoxState(props as ComboBoxStateOptions<Item>);
+
+    expect(state.inputValue).toBe("hello");
+
+    props.defaultInputValue = "updated";
+    await nextTick();
+
+    expect(state.inputValue).toBe("updated");
+  });
+
+  it("does not sync defaultInputValue changes when inputValue is controlled", async () => {
+    const props = reactive(
+      createProps({
+        inputValue: "hello",
+        defaultInputValue: "hello",
+      })
+    );
+    const state = useComboBoxState(props as ComboBoxStateOptions<Item>);
+
+    expect(state.inputValue).toBe("hello");
+
+    props.defaultInputValue = "updated";
+    await nextTick();
+
+    expect(state.inputValue).toBe("hello");
+  });
+
   it("does not change selection when closing", () => {
     const state = useComboBoxState(createProps());
 

@@ -11439,6 +11439,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-aria/combobox-state/test/useComboBoxState.test.ts`
 - Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 132 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/combobox-state` default-input sync parity refinement:
+  - synchronized uncontrolled combobox input state with reactive `defaultInputValue` prop updates while preserving controlled `inputValue` precedence.
+    - `packages/@vue-aria/combobox-state/src/useComboBoxState.ts`
+  - added state-hook regression coverage asserting:
+    - uncontrolled state updates when `defaultInputValue` changes after mount.
+    - controlled `inputValue` mode ignores `defaultInputValue` updates.
+    - `packages/@vue-aria/combobox-state/test/useComboBoxState.test.ts`
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test packages/@vue-spectrum/combobox/test` passed (3 files, 134 tests).
+- Validation: `npm run check -- --pretty false` passed.
 - Additional `@vue-spectrum/datepicker` native server-description parity refinement:
   - expanded native server-validation coverage for both picker variants to assert group `aria-describedby` description content includes server errors and clears those server messages after calendar selection resolves validation.
     - `DatePicker`: native server error description presence/clear behavior.
