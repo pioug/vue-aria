@@ -10947,3 +10947,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 87 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` option-mousedown focus parity update:
+  - added migrated coverage asserting combobox input focus is retained when mousing down on an open menu option.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 88 tests).
+- Validation: `npm run check -- --pretty false` passed.

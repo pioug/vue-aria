@@ -1784,6 +1784,51 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("keeps input focus when mousing down on an option", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(ComboBox as any, {
+      props: {
+        label: "Filter",
+        onSelectionChange,
+      },
+      slots: {
+        default: () => [
+          h(Item as any, { id: "one" }, { default: () => "One" }),
+          h(Item as any, { id: "two" }, { default: () => "Two" }),
+          h(Item as any, { id: "three" }, { default: () => "Three" }),
+        ],
+      },
+      attachTo: document.body,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    (input.element as HTMLInputElement).focus();
+    await input.trigger("focus");
+    await nextTick();
+
+    expect(document.activeElement).toBe(input.element);
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    const firstOption = wrapper.findAll('[role="option"]')[0];
+    expect(firstOption).toBeDefined();
+
+    const mouseDown = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+    });
+    firstOption!.element.dispatchEvent(mouseDown);
+    await nextTick();
+
+    expect(document.activeElement).toBe(input.element);
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
