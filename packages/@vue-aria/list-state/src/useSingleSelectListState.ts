@@ -1,6 +1,7 @@
 import { useControlledState } from "@vue-aria/utils-state";
 import type { Key, Node } from "@vue-aria/collections";
 import { useListState, type ListState } from "./useListState";
+import { computed } from "vue";
 
 export interface SingleSelectListProps<T> {
   selectedKey?: Key | null;
@@ -28,13 +29,26 @@ export function useSingleSelectListState<T extends object>(
     props.onSelectionChange
   );
 
-  const selectedKeys = selectedKeyRef.value != null ? new Set<Key>([selectedKeyRef.value]) : new Set<Key>();
-  const { collection, disabledKeys, selectionManager } = useListState({
+  const selectedKeys = computed(() =>
+    selectedKeyRef.value != null ? new Set<Key>([selectedKeyRef.value]) : new Set<Key>()
+  );
+  const listState = useListState({
     ...props,
+    get collection() {
+      return props.collection;
+    },
+    get items() {
+      return props.items;
+    },
+    get disabledKeys() {
+      return props.disabledKeys;
+    },
     selectionMode: "single",
     disallowEmptySelection: true,
     allowDuplicateSelectionEvents: true,
-    selectedKeys,
+    get selectedKeys() {
+      return selectedKeys.value;
+    },
     onSelectionChange: (keys: any) => {
       const key = keys.values().next().value ?? null;
       if (key === selectedKeyRef.value && props.onSelectionChange) {
@@ -46,15 +60,21 @@ export function useSingleSelectListState<T extends object>(
   });
 
   return {
-    collection,
-    disabledKeys,
-    selectionManager,
+    get collection() {
+      return listState.collection;
+    },
+    get disabledKeys() {
+      return listState.disabledKeys;
+    },
+    get selectionManager() {
+      return listState.selectionManager;
+    },
     get selectedKey() {
       return selectedKeyRef.value;
     },
     setSelectedKey,
     get selectedItem() {
-      return selectedKeyRef.value != null ? collection.getItem(selectedKeyRef.value) : null;
+      return selectedKeyRef.value != null ? listState.collection.getItem(selectedKeyRef.value) : null;
     },
   };
 }

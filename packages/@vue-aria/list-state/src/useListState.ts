@@ -3,6 +3,7 @@ import type { Key, Node } from "@vue-aria/collections";
 import type { LayoutDelegate } from "@vue-aria/selection";
 import type { Collection } from "@vue-aria/selection-state";
 import { ListCollection } from "./ListCollection";
+import { computed } from "vue";
 
 export interface ListProps<T> extends MultipleSelectionStateProps {
   collection?: Collection<Node<T>>;
@@ -94,21 +95,28 @@ function normalizeItems<T extends object>(props: ListProps<T>): Iterable<Node<T>
 export function useListState<T extends object>(props: ListProps<T>): ListState<T> {
   const { filter, layoutDelegate } = props;
   const selectionState = useMultipleSelectionState(props);
-  const disabledKeys = props.disabledKeys ? new Set(props.disabledKeys) : new Set<Key>();
-
-  const baseCollection = props.collection ?? new ListCollection<T>(normalizeItems(props));
-  const collection = filter
-    ? new ListCollection<T>(filter(baseCollection as unknown as Iterable<Node<T>>))
-    : baseCollection;
-
-  const selectionManager = new SelectionManager(collection as Collection<Node<unknown>>, selectionState, {
-    layoutDelegate: layoutDelegate as any,
+  const collectionRef = computed<Collection<Node<T>>>(() => {
+    const baseCollection = props.collection ?? new ListCollection<T>(normalizeItems(props));
+    return filter
+      ? new ListCollection<T>(filter(baseCollection as unknown as Iterable<Node<T>>))
+      : (baseCollection as Collection<Node<T>>);
   });
+  const selectionManagerRef = computed(() =>
+    new SelectionManager(collectionRef.value as Collection<Node<unknown>>, selectionState, {
+      layoutDelegate: layoutDelegate as any,
+    })
+  );
 
   return {
-    collection,
-    disabledKeys,
-    selectionManager,
+    get collection() {
+      return collectionRef.value;
+    },
+    get disabledKeys() {
+      return selectionState.disabledKeys;
+    },
+    get selectionManager() {
+      return selectionManagerRef.value;
+    },
   };
 }
 

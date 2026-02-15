@@ -2,7 +2,7 @@ import { useComboBox } from "@vue-aria/combobox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
 import { useFilter } from "@vue-aria/i18n";
 import { getItemId } from "@vue-aria/listbox";
-import { defineComponent, h, onMounted, ref, type PropType, type VNode } from "vue";
+import { computed, defineComponent, h, onMounted, ref, type PropType, type VNode } from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { createComboBoxCollection, getComboBoxDisabledKeys } from "./collection";
 import type { ComboBoxKey, SpectrumComboBoxNodeData, SpectrumComboBoxProps } from "./types";
@@ -244,18 +244,32 @@ export const ComboBox = defineComponent({
       },
     };
 
-    const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
-    const initialCollectionNodes = createComboBoxCollection(props.items, slotChildren);
-    const initialDisabledKeys = new Set<ComboBoxKey>([
-      ...getComboBoxDisabledKeys(initialCollectionNodes),
-      ...(props.disabledKeys ?? []),
-    ]);
+    const collectionNodes = computed(() => {
+      if (props.items != null) {
+        return createComboBoxCollection(props.items, []);
+      }
+
+      const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
+      return createComboBoxCollection(undefined, slotChildren);
+    });
+    const resolvedDisabledKeys = computed(
+      () =>
+        new Set<ComboBoxKey>([
+          ...getComboBoxDisabledKeys(collectionNodes.value),
+          ...(props.disabledKeys ?? []),
+        ])
+    );
 
     const state = useComboBoxState<object>({
-      ...(props.items != null
-        ? { items: initialCollectionNodes as any }
-        : { defaultItems: initialCollectionNodes as any }),
-      disabledKeys: initialDisabledKeys,
+      get items() {
+        return props.items != null ? (collectionNodes.value as any) : undefined;
+      },
+      get defaultItems() {
+        return props.items == null ? (collectionNodes.value as any) : undefined;
+      },
+      get disabledKeys() {
+        return resolvedDisabledKeys.value;
+      },
       get selectedKey() {
         return props.selectedKey;
       },

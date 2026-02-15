@@ -109,9 +109,11 @@ export function useComboBoxState<T extends object>(
         closeMenu();
       }
     },
-    items: (props.items ?? props.defaultItems ?? undefined) as
-      | Iterable<T | Node<T>>
-      | undefined,
+    get items() {
+      return (props.items ?? props.defaultItems ?? undefined) as
+        | Iterable<T | Node<T>>
+        | undefined;
+    },
   });
 
   const [inputValueRef, setInputValue] = useControlledState<string, string>(

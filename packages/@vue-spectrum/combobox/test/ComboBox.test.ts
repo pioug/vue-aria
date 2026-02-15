@@ -1343,6 +1343,49 @@ describe("ComboBox", () => {
     expect(options).toHaveLength(3);
   });
 
+  it("updates controlled items with custom filtering on input change", async () => {
+    const sourceItems = [
+      { id: "1", name: "The first item" },
+      { id: "2", name: "The second item" },
+      { id: "3", name: "The third item" },
+    ];
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const filteredItems = ref(sourceItems);
+
+          const onInputChange = (value: string) => {
+            filteredItems.value = sourceItems.filter((item) =>
+              item.name.includes(value)
+            );
+          };
+
+          return () =>
+            h(ComboBox as any, {
+              label: "Combobox",
+              items: filteredItems.value,
+              onInputChange,
+            });
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const input = wrapper.get('input[role="combobox"]');
+    await input.trigger("focus");
+    await input.setValue("second");
+    await nextTick();
+    await nextTick();
+
+    const listbox = wrapper.get('[role="listbox"]');
+    const options = listbox.findAll('[role="option"]');
+    expect(options).toHaveLength(1);
+    expect(options[0]?.text()).toContain("The second item");
+  });
+
   it("does not open when typing with menuTrigger manual", async () => {
     const wrapper = renderComboBox({
       menuTrigger: "manual",

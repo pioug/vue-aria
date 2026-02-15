@@ -10992,3 +10992,18 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 96 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` controlled-items custom-filter parity update:
+  - added migrated coverage asserting controlled `items` update correctly through `onInputChange` custom filtering.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - made collection state wiring reactive for controlled item updates by preserving live item/collection getters through list and combobox state layers.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+    - `packages/@vue-aria/combobox-state/src/useComboBoxState.ts`
+    - `packages/@vue-aria/list-state/src/useListState.ts`
+    - `packages/@vue-aria/list-state/src/useSingleSelectListState.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 97 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test` passed (1 file, 12 tests).
+- Validation: `npm test -- packages/@vue-aria/list-state/test` passed (3 files, 7 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
+- Validation: `npm test -- packages/@vue-aria/select/test` passed (3 files, 42 tests).
+- Validation: `npm run check -- --pretty false` passed.
