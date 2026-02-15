@@ -11159,3 +11159,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/src/Picker.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` closed-arrow selection parity update:
+  - added migrated coverage for closed-picker `ArrowLeft`/`ArrowRight` selection movement boundaries and callback behavior.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - fixed picker state reactivity by preserving live `selectedKey`/`selectedItem` getters when composing `usePickerState`.
+    - `packages/@vue-spectrum/picker/src/state.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 42 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -242,6 +242,75 @@ describe("Picker", () => {
     expect(wrapper.text()).toContain("Empty");
   });
 
+  it("moves selection with closed ArrowLeft and ArrowRight keys", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderPicker({
+      onSelectionChange,
+    });
+
+    const trigger = wrapper.get("button");
+    (trigger.element as HTMLElement).focus();
+    await nextTick();
+
+    expect(wrapper.text()).toContain("Select…");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: "ArrowLeft" });
+    await trigger.trigger("keyup", { key: "ArrowLeft" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledWith("1");
+    expect(wrapper.text()).toContain("One");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: "ArrowLeft" });
+    await trigger.trigger("keyup", { key: "ArrowLeft" });
+    await nextTick();
+
+    expect(wrapper.text()).toContain("One");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+
+    await trigger.trigger("keydown", { key: "ArrowRight" });
+    await trigger.trigger("keyup", { key: "ArrowRight" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+    expect(onSelectionChange).toHaveBeenCalledTimes(2);
+    expect(wrapper.text()).toContain("Two");
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+
+    await trigger.trigger("keydown", { key: "ArrowRight" });
+    await trigger.trigger("keyup", { key: "ArrowRight" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith("3");
+    expect(onSelectionChange).toHaveBeenCalledTimes(3);
+    expect(wrapper.text()).toContain("Three");
+
+    await trigger.trigger("keydown", { key: "ArrowRight" });
+    await trigger.trigger("keyup", { key: "ArrowRight" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(3);
+    expect(wrapper.text()).toContain("Three");
+
+    await trigger.trigger("keydown", { key: "ArrowLeft" });
+    await trigger.trigger("keyup", { key: "ArrowLeft" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith("2");
+    expect(onSelectionChange).toHaveBeenCalledTimes(4);
+    expect(wrapper.text()).toContain("Two");
+
+    await trigger.trigger("keydown", { key: "ArrowLeft" });
+    await trigger.trigger("keyup", { key: "ArrowLeft" });
+    await nextTick();
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith("1");
+    expect(onSelectionChange).toHaveBeenCalledTimes(5);
+    expect(wrapper.text()).toContain("One");
+  });
+
   it("supports closed type-to-select without opening the menu", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderPicker({

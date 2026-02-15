@@ -92,7 +92,21 @@ export function usePickerState(
   });
 
   return {
-    ...singleState,
+    get collection() {
+      return singleState.collection;
+    },
+    get disabledKeys() {
+      return singleState.disabledKeys;
+    },
+    get selectionManager() {
+      return singleState.selectionManager;
+    },
+    get selectedKey() {
+      return singleState.selectedKey;
+    },
+    get selectedItem() {
+      return singleState.selectedItem;
+    },
     get isOpen() {
       return overlayState.isOpen;
     },
