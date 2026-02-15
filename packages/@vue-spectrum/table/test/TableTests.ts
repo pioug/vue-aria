@@ -5145,6 +5145,69 @@ export function tableTests() {
     expect(onLoadMore).toHaveBeenCalledTimes(1);
   });
 
+  it("fires slot onLoadMore when drag and selection columns are enabled", async () => {
+    const onLoadMore = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Slot load-more drag table",
+        showDragButtons: true,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+      },
+      slots: {
+        default: () => [
+          h(TableHeader as any, null, {
+            default: () => [
+              h(Column as any, { id: "foo", isRowHeader: true }, () => "Foo"),
+              h(Column as any, { id: "bar" }, () => "Bar"),
+            ],
+          }),
+          h(TableBody as any, { onLoadMore }, {
+            default: () => [
+              h(Row as any, { id: "row-1" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 1"),
+                  h(Cell as any, () => "Bar 1"),
+                ],
+              }),
+              h(Row as any, { id: "row-2" }, {
+                default: () => [
+                  h(Cell as any, () => "Foo 2"),
+                  h(Cell as any, () => "Bar 2"),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    await nextTick();
+    await nextTick();
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("4");
+
+    const element = grid.element as HTMLElement;
+    Object.defineProperty(element, "scrollHeight", {
+      configurable: true,
+      value: 3000,
+    });
+    Object.defineProperty(element, "clientHeight", {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(element, "scrollTop", {
+      configurable: true,
+      writable: true,
+      value: 2100,
+    });
+
+    await grid.trigger("scroll");
+    expect(onLoadMore).toHaveBeenCalledTimes(1);
+  });
+
   it("does not emit select-all callbacks for an empty checkbox table", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderTable({
