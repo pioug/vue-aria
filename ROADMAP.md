@@ -11176,3 +11176,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 45 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` form-reset parity update:
+  - added migrated coverage asserting picker form reset restores the default selected option.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+  - aligned hidden-select option rendering so native form reset restores the configured default picker value.
+    - `packages/@vue-aria/select/src/HiddenSelect.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 46 tests).
+- Validation: `npm test -- packages/@vue-aria/select/test packages/@vue-spectrum/combobox/test packages/@vue-spectrum/picker/test packages/@vue-spectrum/numberfield/test packages/@vue-spectrum/textfield/test` passed (13 files, 319 tests).
+- Validation: `npm run check -- --pretty false` passed.

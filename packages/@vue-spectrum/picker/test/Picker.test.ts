@@ -718,6 +718,49 @@ describe("Picker", () => {
     expect(data.get("picker")).toBe("2");
   });
 
+  it("supports form reset to default selected option", async () => {
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h("form", null, [
+              h(Picker as any, {
+                ariaLabel: "Picker",
+                name: "picker",
+                items,
+                defaultSelectedKey: "1",
+              }),
+              h("input", {
+                type: "reset",
+                "data-testid": "reset",
+              }),
+            ]);
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    const trigger = wrapper.get("button");
+    const select = wrapper.get('select[name="picker"]');
+    expect(trigger.text()).toContain("One");
+    expect((select.element as HTMLSelectElement).value).toBe("1");
+
+    await trigger.trigger("click");
+    await nextTick();
+    (select.element as HTMLSelectElement).value = "2";
+    await select.trigger("change");
+    await nextTick();
+    expect(trigger.text()).toContain("Two");
+
+    await wrapper.get('[data-testid="reset"]').trigger("click");
+    await nextTick();
+
+    expect((select.element as HTMLSelectElement).value).toBe("1");
+    expect(trigger.text()).toContain("One");
+  });
+
   it("supports required hidden select semantics", () => {
     const wrapper = renderPicker({
       name: "picker",

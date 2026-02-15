@@ -89,6 +89,7 @@ export function useHiddenSelect(
       required: validationBehavior === "native" && isRequired,
       name,
       form,
+      defaultValue: (state.defaultValue as string | string[] | null) ?? "",
       value: (state.value as string | string[]) ?? "",
       onChange,
       onInput: onChange,
@@ -136,11 +137,25 @@ export const HiddenSelect = defineComponent({
 
       if (props.state.collection?.size <= 300) {
         const optionNodes: any[] = [];
-        optionNodes.push(h("option"));
+        const defaultValue =
+          props.state.defaultValue != null && !Array.isArray(props.state.defaultValue)
+            ? String(props.state.defaultValue)
+            : null;
+        optionNodes.push(h("option", { selected: defaultValue == null }));
         for (const key of props.state.collection?.getKeys?.() ?? []) {
           const item = props.state.collection.getItem(key);
           if (item && item.type === "item") {
-            optionNodes.push(h("option", { value: String(item.key) }, String(item.textValue)));
+            const value = String(item.key);
+            optionNodes.push(
+              h(
+                "option",
+                {
+                  value,
+                  selected: defaultValue != null && value === defaultValue,
+                },
+                String(item.textValue)
+              )
+            );
           }
         }
 
