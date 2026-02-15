@@ -1,4 +1,4 @@
-import { effectScope, ref } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useFormValidation } from "../src/useFormValidation";
 
@@ -91,6 +91,7 @@ describe("useFormValidation", () => {
 
   it("commits validation on change event", () => {
     const input = document.createElement("input");
+    input.required = true;
     const form = document.createElement("form");
     form.appendChild(input);
     document.body.appendChild(form);
@@ -98,6 +99,7 @@ describe("useFormValidation", () => {
     const state = {
       displayValidation: { isInvalid: false, validationErrors: [], validationDetails: null },
       commitValidation: vi.fn(),
+      updateValidation: vi.fn(),
     };
 
     const scope = effectScope();
@@ -107,9 +109,59 @@ describe("useFormValidation", () => {
 
     input.dispatchEvent(new Event("change", { bubbles: true }));
     expect(state.commitValidation).toHaveBeenCalledTimes(1);
+    expect(state.updateValidation).toHaveBeenCalled();
+    const [result] = state.updateValidation.mock.calls.at(-1)!;
+    expect(result.isInvalid).toBe(true);
 
     scope.stop();
     form.remove();
+  });
+
+  it("syncs native validity when reactive value changes programmatically", async () => {
+    const input = document.createElement("input");
+    input.required = true;
+    const inputRef = ref<HTMLInputElement | null>(input);
+    const value = ref("");
+    const state = {
+      realtimeValidation: {
+        isInvalid: false,
+        validationErrors: [],
+        validationDetails: null,
+      },
+      displayValidation: {
+        isInvalid: true,
+        validationErrors: ["Required"],
+        validationDetails: null,
+      },
+      updateValidation: vi.fn(),
+      commitValidation: vi.fn(),
+    };
+
+    const scope = effectScope();
+    scope.run(() => {
+      useFormValidation(
+        {
+          validationBehavior: "native",
+          value: () => value.value,
+        },
+        state as any,
+        inputRef
+      );
+    });
+
+    expect(state.updateValidation).toHaveBeenCalledTimes(1);
+    const [initial] = state.updateValidation.mock.calls[0];
+    expect(initial.isInvalid).toBe(true);
+
+    input.value = "One";
+    value.value = "One";
+    await nextTick();
+
+    expect(state.updateValidation).toHaveBeenCalledTimes(2);
+    const [updated] = state.updateValidation.mock.calls[1];
+    expect(updated.isInvalid).toBe(false);
+
+    scope.stop();
   });
 
   it("does not commit again on invalid when display validation is already invalid", () => {

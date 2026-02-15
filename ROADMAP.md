@@ -11117,3 +11117,7 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 115 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-aria/form` native validation regression coverage update:
+  - added hook-level coverage asserting native validity snapshots refresh on `change` and on reactive programmatic value updates.
+    - `packages/@vue-aria/form/test/useFormValidation.test.ts`
+- Validation: `npm test -- packages/@vue-aria/form/test` passed (2 files, 19 tests).
