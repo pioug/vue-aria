@@ -400,6 +400,7 @@ export const ComboBox = defineComponent({
       const activeDescendant =
         focusedKey != null ? getItemId(state as any, focusedKey) : undefined;
       const collectionSize = Number((state.collection as { size?: number } | null)?.size ?? 0);
+      const formValueMode = props.allowsCustomValue ? "text" : (props.formValue ?? "text");
 
       return h(
         "div",
@@ -446,6 +447,8 @@ export const ComboBox = defineComponent({
                 ref: inputRef,
                 class: "spectrum-Textfield-input",
                 value: state.inputValue,
+                name: formValueMode === "text" ? props.name : undefined,
+                form: formValueMode === "text" ? props.form : undefined,
                 onChange: (event: Event) => {
                   (inputProps.onChange as ((event: Event) => void) | undefined)?.(event);
                   syncControlledInputValue(event);
@@ -476,7 +479,7 @@ export const ComboBox = defineComponent({
               ),
             ]
           ),
-          props.name && (props.allowsCustomValue ? "text" : (props.formValue ?? "text")) === "key"
+          props.name && formValueMode === "key"
             ? h("input", {
                 type: "hidden",
                 name: props.name,

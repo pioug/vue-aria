@@ -11032,3 +11032,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 103 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` dynamic formValue parity update:
+  - added migrated coverage asserting runtime `formValue` switches between `text` and `key` update input/hidden form fields.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+  - updated combobox render wiring so input `name/form` attributes react to runtime `formValue` mode changes.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 104 tests).
+- Validation: `npm run check -- --pretty false` passed.

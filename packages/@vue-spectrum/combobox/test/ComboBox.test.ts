@@ -896,6 +896,28 @@ describe("ComboBox", () => {
     expect(wrapper.find('input[type="hidden"][name="framework"]').exists()).toBe(false);
   });
 
+  it("supports switching formValue between text and key", async () => {
+    const wrapper = renderComboBox({
+      name: "test",
+      selectedKey: "2",
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("name")).toBe("test");
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(wrapper.find('input[type="hidden"]').exists()).toBe(false);
+
+    await wrapper.setProps({
+      formValue: "key",
+    });
+    await nextTick();
+    await nextTick();
+
+    expect(input.attributes("name")).toBeUndefined();
+    const hiddenInput = wrapper.get('input[type="hidden"][name="test"]');
+    expect((hiddenInput.element as HTMLInputElement).value).toBe("2");
+  });
+
   it("supports controlled open state", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderComboBox({
