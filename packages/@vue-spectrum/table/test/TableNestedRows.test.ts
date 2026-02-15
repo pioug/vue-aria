@@ -171,6 +171,29 @@ describe("TableView nested rows", () => {
     await nextTick();
   }
 
+  async function press(
+    target: { trigger: (event: string, options?: Record<string, unknown>) => Promise<unknown> },
+    options: Record<string, unknown> = {}
+  ) {
+    await target.trigger("pointerdown", {
+      button: 0,
+      pointerId: 1,
+      pointerType: "mouse",
+      ...options,
+    });
+    await target.trigger("pointerup", {
+      button: 0,
+      pointerId: 1,
+      pointerType: "mouse",
+      ...options,
+    });
+    await target.trigger("click", {
+      button: 0,
+      ...options,
+    });
+    await nextTick();
+  }
+
   it("renders treegrid semantics when expandable rows are enabled", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
@@ -566,6 +589,31 @@ describe("TableView nested rows", () => {
     );
 
     expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("false");
+  });
+
+  it("supports selecting nested descendants by clicking row cells", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedCell = getCellByText(wrapper, "Row 1, Lvl 3, Foo");
+    await press(nestedCell);
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(new Set(["row-1-level-3"]));
+    expect(getRowByText(wrapper, "Row 1, Lvl 3, Foo").attributes("aria-selected")).toBe("true");
   });
 
   it("moves row focus down through nested rows with ArrowDown", async () => {

@@ -11774,3 +11774,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 140 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 196 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid pointer-selection parity expansion:
+  - added nested-row pointer-selection coverage for checkbox treegrids:
+    - clicking a descendant row cell selects that nested row key.
+    - selection state and `aria-selected` are asserted for a third-level descendant row.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 24 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 141 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 197 tests).
+- Validation: `npm run check -- --pretty false` passed.
