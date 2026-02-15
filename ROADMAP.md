@@ -11251,3 +11251,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 64 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` section-label/description ARIA parity refinement:
+  - added migrated coverage asserting grouped menu sections expose `aria-labelledby`, option labels are wired via `aria-labelledby`, and option descriptions are wired via `aria-describedby`.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 65 tests).
+- Validation: `npm run check -- --pretty false` passed.

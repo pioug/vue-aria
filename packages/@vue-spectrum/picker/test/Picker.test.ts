@@ -1769,6 +1769,67 @@ describe("Picker", () => {
     expect(document.body.textContent).toContain("Numbers");
   });
 
+  it("supports complex section labeling and option descriptions", async () => {
+    const wrapper = mount(Picker as any, {
+      props: {
+        ariaLabel: "Picker",
+      },
+      slots: {
+        default: () => [
+          h(Section as any, { title: "Section 1" }, {
+            default: () => [
+              h(Item as any, { id: "copy", textValue: "Copy" }, {
+                default: () => h("span", null, "Copy"),
+              }),
+              h(Item as any, { id: "cut", textValue: "Cut" }, {
+                default: () => h("span", null, "Cut"),
+              }),
+            ],
+          }),
+          h(Section as any, { title: "Section 2" }, {
+            default: () => [
+              h(Item as any, { id: "puppy", textValue: "Puppy" }, {
+                default: () => [
+                  h("span", null, "Puppy"),
+                  h("span", { slot: "description" }, "Puppy description"),
+                ],
+              }),
+              h(Item as any, { id: "doggo", textValue: "Doggo" }, {
+                default: () => h("span", null, "Doggo"),
+              }),
+            ],
+          }),
+        ],
+      },
+      attachTo: document.body,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const sections = Array.from(document.body.querySelectorAll('[role="group"]')) as HTMLElement[];
+    const headings = Array.from(document.body.querySelectorAll(".spectrum-Menu-sectionHeading")) as HTMLElement[];
+    const options = Array.from(document.body.querySelectorAll('[role="option"]')) as HTMLElement[];
+    expect(sections).toHaveLength(2);
+    expect(headings).toHaveLength(2);
+    expect(options).toHaveLength(4);
+
+    expect(headings[0]?.textContent).toContain("Section 1");
+    expect(headings[1]?.textContent).toContain("Section 2");
+    expect(sections[0]?.getAttribute("aria-labelledby")).toBe(headings[0]?.id);
+    expect(sections[1]?.getAttribute("aria-labelledby")).toBe(headings[1]?.id);
+
+    const firstLabel = options[0]?.querySelector(".spectrum-Menu-itemLabel") as HTMLElement | null;
+    expect(firstLabel).toBeTruthy();
+    expect(options[0]?.getAttribute("aria-labelledby")).toContain(firstLabel?.id ?? "");
+
+    const puppyOption = options.find((option) => option.textContent?.includes("Puppy")) as HTMLElement | undefined;
+    const puppyDescription = puppyOption?.querySelector(".spectrum-Menu-description") as HTMLElement | null;
+    expect(puppyOption).toBeTruthy();
+    expect(puppyDescription).toBeTruthy();
+    expect(puppyOption?.getAttribute("aria-describedby")).toContain(puppyDescription?.id ?? "");
+  });
+
   it("focuses options on hover when open", async () => {
     const wrapper = renderPicker();
 
