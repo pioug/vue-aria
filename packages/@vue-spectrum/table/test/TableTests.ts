@@ -190,6 +190,12 @@ const itemsWithDisabledFlag: SpectrumTableRowData[] = [
   { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
 ];
 
+const itemsWithThreeRowsMiddleDisabled: SpectrumTableRowData[] = [
+  { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
+  { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", isDisabled: true },
+  { key: "row-3", foo: "Foo 3", bar: "Bar 3", baz: "Baz 3" },
+];
+
 const itemsWithFalsyRowKey: SpectrumTableRowData[] = [
   { key: 0, foo: "Foo 0", bar: "Bar 0", baz: "Baz 0" },
   { key: 1, foo: "Foo 1", bar: "Bar 1", baz: "Baz 1" },
@@ -2910,6 +2916,29 @@ export function tableTests() {
     const bodyRows = wrapper.findAll('tbody [role="row"]');
     expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
     expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+  });
+
+  it("does not select item-level disabled rows when using Ctrl+A in larger collections", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderTable({
+      items: itemsWithThreeRowsMiddleDisabled,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      onSelectionChange,
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    (grid.element as HTMLElement).focus();
+    await grid.trigger("keydown", { key: "a", ctrlKey: true });
+    await nextTick();
+
+    const lastSelection = onSelectionChange.mock.calls.at(-1)?.[0] as Set<string> | undefined;
+    expect(lastSelection).toEqual(new Set(["row-1", "row-3"]));
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows[0]!.attributes("aria-selected")).toBe("true");
+    expect(bodyRows[1]!.attributes("aria-selected")).toBe("false");
+    expect(bodyRows[2]!.attributes("aria-selected")).toBe("true");
   });
 
   it("does not select all rows via Ctrl+A in checkbox-style single selection", async () => {
