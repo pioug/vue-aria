@@ -429,6 +429,18 @@ describe("ComboBox", () => {
     expect(onOpenChange).toHaveBeenCalledWith(true, "manual");
   });
 
+  it("calls onKeyDown for keyboard input events", async () => {
+    const onKeyDown = vi.fn();
+    const wrapper = renderComboBox({
+      onKeyDown,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("keydown", { key: "ArrowDown" });
+
+    expect(onKeyDown).toHaveBeenCalled();
+  });
+
   it("reports input trigger on typing-open via onOpenChange", async () => {
     const onOpenChange = vi.fn();
     const wrapper = renderComboBox({

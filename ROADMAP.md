@@ -10725,3 +10725,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 43 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` keydown-callback parity update:
+  - added `onKeyDown` combobox prop support and forwarded callback handling through combobox keyboard input wiring.
+    - `packages/@vue-spectrum/combobox/src/types.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage asserting keyboard events invoke `onKeyDown`.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 44 tests).
+- Validation: `npm run check -- --pretty false` passed.

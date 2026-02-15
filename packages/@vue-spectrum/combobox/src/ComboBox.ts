@@ -86,6 +86,10 @@ export const ComboBox = defineComponent({
       type: Function as PropType<SpectrumComboBoxProps["onInputChange"]>,
       required: false,
     },
+    onKeyDown: {
+      type: Function as PropType<SpectrumComboBoxProps["onKeyDown"]>,
+      required: false,
+    },
     isOpen: {
       type: Boolean,
       required: false,
@@ -343,6 +347,7 @@ export const ComboBox = defineComponent({
         allowsCustomValue: props.allowsCustomValue,
         onFocus: props.onFocus,
         onBlur: props.onBlur,
+        onKeyDown: props.onKeyDown,
         "aria-label": props.ariaLabel,
         "aria-labelledby": props.ariaLabelledby,
         "aria-describedby": props.ariaDescribedby,

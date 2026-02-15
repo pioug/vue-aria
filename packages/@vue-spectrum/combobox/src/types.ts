@@ -29,6 +29,7 @@ export interface SpectrumComboBoxProps {
   inputValue?: string;
   defaultInputValue?: string;
   onInputChange?: (value: string) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
   isOpen?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (isOpen: boolean, trigger?: MenuTriggerAction) => void;
