@@ -3803,6 +3803,51 @@ export function tableTests() {
     }
   });
 
+  it('activates row links with Enter in selectionMode "none"', async () => {
+    const restoreNavigation = preventLinkNavigation();
+    try {
+      const navigate = vi.fn();
+      const useHref = (href: string) => (href.startsWith("http") ? href : `/base${href}`);
+      const wrapper = mount(
+        defineComponent({
+          setup() {
+            return () =>
+              h(
+                Provider as any,
+                {
+                  theme,
+                  router: { navigate, useHref },
+                },
+                () =>
+                  h(TableView as any, {
+                    "aria-label": "Keyboard link table",
+                    selectionMode: "none",
+                    items: itemsWithRouterLinks,
+                    columns,
+                  })
+              );
+          },
+        }),
+        {
+          attachTo: document.body,
+        }
+      );
+
+      const bodyRows = wrapper.findAll('tbody [role="row"]');
+      expect(bodyRows).toHaveLength(2);
+      (bodyRows[0]!.element as HTMLElement).focus();
+
+      await bodyRows[0]!.trigger("keydown", { key: "Enter" });
+      await bodyRows[0]!.trigger("keyup", { key: "Enter" });
+      await nextTick();
+
+      expect(navigate).toHaveBeenCalledWith("/docs", { from: "table" });
+      expect(bodyRows[0]!.attributes("aria-selected")).toBeUndefined();
+    } finally {
+      restoreNavigation();
+    }
+  });
+
   it("allows disabled-row actions when disabledBehavior is selection", async () => {
     const onAction = vi.fn();
     const wrapper = renderTable({
