@@ -94,6 +94,14 @@ export const Picker = defineComponent({
       required: false,
       default: undefined,
     },
+    onFocus: {
+      type: Function as PropType<SpectrumPickerProps["onFocus"]>,
+      required: false,
+    },
+    onBlur: {
+      type: Function as PropType<SpectrumPickerProps["onBlur"]>,
+      required: false,
+    },
     UNSAFE_className: String,
     UNSAFE_style: Object as PropType<Record<string, unknown> | undefined>,
   },
@@ -132,6 +140,8 @@ export const Picker = defineComponent({
         autoComplete: props.autoComplete,
         isDisabled: props.isDisabled,
         isRequired: props.isRequired,
+        onFocus: props.onFocus,
+        onBlur: props.onBlur,
         "aria-label": props.ariaLabel,
         "aria-labelledby": props.ariaLabelledby,
       },

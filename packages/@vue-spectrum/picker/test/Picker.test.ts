@@ -534,6 +534,23 @@ describe("Picker", () => {
     expect(document.activeElement).toBe(wrapper.get("button").element);
   });
 
+  it("calls onFocus and onBlur for the closed trigger", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const wrapper = renderPicker({
+      onFocus,
+      onBlur,
+    });
+
+    const trigger = wrapper.get("button");
+    await trigger.trigger("focus");
+    await trigger.trigger("blur");
+    await nextTick();
+
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
   it("focuses the trigger when autoFocus is true", async () => {
     const wrapper = renderPicker({
       autoFocus: true,

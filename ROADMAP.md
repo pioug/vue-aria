@@ -10479,3 +10479,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - hidden-select form/autocomplete guidance (`name`, `form`, `autoComplete`)
     - `docs/packages/spectrum-picker.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` closed-focus-callback parity update:
+  - added picker `onFocus` and `onBlur` prop support and forwarded handlers through select trigger wiring.
+    - `packages/@vue-spectrum/picker/src/types.ts`
+    - `packages/@vue-spectrum/picker/src/Picker.ts`
+  - added migrated coverage for closed-trigger focus/blur callback dispatch.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 35 tests).
+- Validation: `npm run check -- --pretty false` passed.

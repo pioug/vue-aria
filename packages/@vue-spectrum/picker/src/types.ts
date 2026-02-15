@@ -37,6 +37,8 @@ export interface SpectrumPickerProps {
   form?: string;
   autoComplete?: string;
   autoFocus?: boolean;
+  onFocus?: (event: FocusEvent) => void;
+  onBlur?: (event: FocusEvent) => void;
   UNSAFE_className?: string;
   UNSAFE_style?: Record<string, unknown>;
 }
