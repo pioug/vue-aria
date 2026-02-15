@@ -11949,3 +11949,12 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 170 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 226 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` dynamic-column update parity coverage:
+  - added reactive column-update integration coverage for:
+    - removing columns via `columns` prop updates (header/body structure and `aria-colcount` updates).
+    - adding columns via `columns` + `items` updates.
+    - recomputing distributed widths across remove/add cycles.
+    - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 173 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 229 tests).
+- Validation: `npm run check -- --pretty false` passed.

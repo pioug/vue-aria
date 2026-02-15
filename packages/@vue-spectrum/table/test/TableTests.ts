@@ -20,6 +20,23 @@ const columns: SpectrumTableColumnData[] = [
   { key: "baz", title: "Baz" },
 ];
 
+const columnsWithoutMiddle: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", allowsSorting: true, isRowHeader: true },
+  { key: "baz", title: "Baz" },
+];
+
+const columnsWithExtra: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", allowsSorting: true, isRowHeader: true },
+  { key: "bar", title: "Bar", allowsSorting: true },
+  { key: "baz", title: "Baz" },
+  { key: "qux", title: "Qux" },
+];
+
+const columnsForDynamicWidthPair: SpectrumTableColumnData[] = [
+  { key: "foo", title: "Foo", isRowHeader: true },
+  { key: "bar", title: "Bar" },
+];
+
 const columnsWithMultipleRowHeaders: SpectrumTableColumnData[] = [
   { key: "foo", title: "Foo", isRowHeader: true },
   { key: "bar", title: "Bar", isRowHeader: true },
@@ -359,6 +376,112 @@ export function tableTests() {
     const bodyCells = firstBodyRow.findAll('[role="gridcell"]');
     expect(rowHeaderCell.classes()).toContain("spectrum-Table-cell");
     expect(bodyCells[0]!.classes()).toContain("spectrum-Table-cell");
+  });
+
+  it("supports removing columns via reactive prop updates", async () => {
+    const wrapper = renderTable();
+
+    let headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(3);
+    expect(wrapper.get('[role="grid"]').attributes("aria-colcount")).toBe("3");
+
+    await wrapper.setProps({
+      columns: columnsWithoutMiddle,
+    });
+    await nextTick();
+
+    headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(2);
+    expect(headers[0]!.text()).toContain("Foo");
+    expect(headers[1]!.text()).toContain("Baz");
+    expect(wrapper.get('[role="grid"]').attributes("aria-colcount")).toBe("2");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.findAll('[role="rowheader"]')).toHaveLength(1);
+    expect(bodyRows[0]!.findAll('[role="gridcell"]')).toHaveLength(1);
+    expect(bodyRows[0]!.text()).toContain("Foo 1");
+    expect(bodyRows[0]!.text()).toContain("Baz 1");
+    expect(bodyRows[0]!.text()).not.toContain("Bar 1");
+  });
+
+  it("supports adding columns via reactive prop updates", async () => {
+    const wrapper = renderTable({
+      columns: columnsWithoutMiddle,
+    });
+
+    let headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(2);
+    expect(wrapper.get('[role="grid"]').attributes("aria-colcount")).toBe("2");
+
+    await wrapper.setProps({
+      columns: columnsWithExtra,
+      items: [
+        { key: "row-1", foo: "Foo 1", bar: "Bar 1", baz: "Baz 1", qux: "Qux 1" },
+        { key: "row-2", foo: "Foo 2", bar: "Bar 2", baz: "Baz 2", qux: "Qux 2" },
+      ],
+    });
+    await nextTick();
+
+    headers = wrapper.findAll('[role="columnheader"]');
+    expect(headers).toHaveLength(4);
+    expect(headers[3]!.text()).toContain("Qux");
+    expect(wrapper.get('[role="grid"]').attributes("aria-colcount")).toBe("4");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    expect(bodyRows).toHaveLength(2);
+    expect(bodyRows[0]!.findAll('[role="rowheader"]')).toHaveLength(1);
+    expect(bodyRows[0]!.findAll('[role="gridcell"]')).toHaveLength(3);
+    expect(bodyRows[0]!.text()).toContain("Foo 1");
+    expect(bodyRows[0]!.text()).toContain("Bar 1");
+    expect(bodyRows[0]!.text()).toContain("Baz 1");
+    expect(bodyRows[0]!.text()).toContain("Qux 1");
+  });
+
+  it("recomputes distributed widths when columns are removed and added", async () => {
+    const wrapper = renderTable({
+      columns: columnsForDynamicWidthPair,
+      items: [
+        { key: "row-1", foo: "Foo 1", bar: "Bar 1" },
+        { key: "row-2", foo: "Foo 2", bar: "Bar 2" },
+      ],
+    });
+
+    const headerWidths = () =>
+      wrapper
+        .findAll('thead [role="columnheader"]')
+        .map((header) => parseFloat((header.element as HTMLElement).style.width));
+
+    let widths = headerWidths();
+    expect(widths).toHaveLength(2);
+    expect(widths[0]!).toBeCloseTo(500, 3);
+    expect(widths[1]!).toBeCloseTo(500, 3);
+
+    await wrapper.setProps({
+      columns,
+      items,
+    });
+    await nextTick();
+
+    widths = headerWidths();
+    expect(widths).toHaveLength(3);
+    expect(widths[0]!).toBeCloseTo(333, 0);
+    expect(widths[1]!).toBeCloseTo(333, 0);
+    expect(widths[2]!).toBeCloseTo(333, 0);
+
+    await wrapper.setProps({
+      columns: columnsForDynamicWidthPair,
+      items: [
+        { key: "row-1", foo: "Foo 1", bar: "Bar 1" },
+        { key: "row-2", foo: "Foo 2", bar: "Bar 2" },
+      ],
+    });
+    await nextTick();
+
+    widths = headerWidths();
+    expect(widths).toHaveLength(2);
+    expect(widths[0]!).toBeCloseTo(500, 3);
+    expect(widths[1]!).toBeCloseTo(500, 3);
   });
 
   it("supports multiple row header columns", () => {
