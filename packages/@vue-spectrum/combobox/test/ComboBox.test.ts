@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import { ComboBox } from "../src/ComboBox";
@@ -923,6 +923,49 @@ describe("ComboBox", () => {
     await nextTick();
 
     expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
+  });
+
+  it("keeps controlled filtered items when opened from the trigger", async () => {
+    const sourceItems = [
+      { key: "1", label: "One" },
+      { key: "2", label: "Two" },
+      { key: "3", label: "Three" },
+    ];
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          const filteredItems = ref(
+            sourceItems.filter((item) => item.label.includes("Tw"))
+          );
+
+          const onInputChange = (value: string) => {
+            filteredItems.value = sourceItems.filter((item) =>
+              item.label.includes(value)
+            );
+          };
+
+          return () =>
+            h(ComboBox as any, {
+              label: "Filter",
+              items: filteredItems.value,
+              defaultInputValue: "Tw",
+              onInputChange,
+            });
+        },
+      }),
+      {
+        attachTo: document.body,
+      }
+    );
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(1);
+    expect(options[0]?.text()).toContain("Two");
   });
 
   it("opens when typing by default", async () => {
