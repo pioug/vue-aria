@@ -1035,6 +1035,27 @@ export function tableTests() {
     expect(bodyRows[1]!.text()).toContain("Alpha");
   });
 
+  it("distributes nested leaf widths when checkbox selection is enabled", () => {
+    const wrapper = renderTable({
+      columns: columnsWithNestedHeaders,
+      items: itemsWithNestedColumns,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("6");
+
+    const firstRowCells = wrapper.findAll('tbody [role="row"]')[0]!.findAll('[role="rowheader"], [role="gridcell"]');
+    expect(firstRowCells).toHaveLength(6);
+    expect(parseFloat((firstRowCells[0]!.element as HTMLElement).style.width)).toBeCloseTo(38, 3);
+
+    const expectedLeafWidth = (1000 - 38) / 5;
+    for (const cell of firstRowCells.slice(1)) {
+      expect(parseFloat((cell.element as HTMLElement).style.width)).toBeCloseTo(expectedLeafWidth, 3);
+    }
+  });
+
   it("applies column alignment classes to headers and cells", () => {
     const wrapper = renderTable({
       columns: columnsWithAlignment,

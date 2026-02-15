@@ -12456,3 +12456,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 270 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 326 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` nested-header selection-sizing parity expansion:
+  - added regression coverage for nested grouped headers combined with checkbox selection mode to ensure synthetic selection-column width reservation and nested leaf-width distribution stay aligned.
+  - assertions validate `aria-colcount` expansion and per-cell width distribution for nested leaf columns under selection-mode layout constraints.
+  - `packages/@vue-spectrum/table/test/TableTests.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 271 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 327 tests).
+- Validation: `npm run check -- --pretty false` passed.
