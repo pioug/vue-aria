@@ -10782,3 +10782,16 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 52 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` selectedKey-control parity update:
+  - replaced manual component-level selectedKey synchronization with reactive selectedKey/defaultSelectedKey getter wiring through combobox state list-selection internals.
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+    - `packages/@vue-aria/combobox-state/src/useComboBoxState.ts`
+  - added migrated controlled-selectedKey coverage for:
+    - prop-driven selectedKey input updates
+    - selectedKey-controlled typing/selection behavior that updates input text state without mutating the controlled key
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 54 tests).
+- Validation: `npm test -- packages/@vue-aria/combobox-state/test` passed (1 file, 12 tests).
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
+- Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
+- Validation: `npm run check -- --pretty false` passed.

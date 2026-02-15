@@ -2,7 +2,7 @@ import { useComboBox } from "@vue-aria/combobox";
 import { useComboBoxState } from "@vue-aria/combobox-state";
 import { useFilter } from "@vue-aria/i18n";
 import { getItemId } from "@vue-aria/listbox";
-import { defineComponent, h, onMounted, ref, watch, type PropType, type VNode } from "vue";
+import { defineComponent, h, onMounted, ref, type PropType, type VNode } from "vue";
 import { ListBoxBase } from "@vue-spectrum/listbox";
 import { createComboBoxCollection, getComboBoxDisabledKeys } from "./collection";
 import type { ComboBoxKey, SpectrumComboBoxNodeData, SpectrumComboBoxProps } from "./types";
@@ -250,19 +250,19 @@ export const ComboBox = defineComponent({
       ...getComboBoxDisabledKeys(initialCollectionNodes),
       ...(props.disabledKeys ?? []),
     ]);
-    const isSyncingSelectedKeyRef = ref(false);
 
     const state = useComboBoxState<object>({
       ...(props.items != null
         ? { items: initialCollectionNodes as any }
         : { defaultItems: initialCollectionNodes as any }),
       disabledKeys: initialDisabledKeys,
-      defaultSelectedKey: props.selectedKey ?? props.defaultSelectedKey,
-      onSelectionChange: (key: ComboBoxKey | null) => {
-        if (!isSyncingSelectedKeyRef.value) {
-          props.onSelectionChange?.(key);
-        }
+      get selectedKey() {
+        return props.selectedKey;
       },
+      get defaultSelectedKey() {
+        return props.defaultSelectedKey;
+      },
+      onSelectionChange: props.onSelectionChange,
       get inputValue() {
         return props.inputValue;
       },
@@ -309,22 +309,6 @@ export const ComboBox = defineComponent({
         return props.validationBehavior;
       },
     } as any);
-
-    watch(
-      () => [props.selectedKey, state.selectedKey] as const,
-      ([selectedKey, currentSelectedKey]) => {
-        if (selectedKey === undefined) {
-          return;
-        }
-
-        if (currentSelectedKey !== selectedKey) {
-          isSyncingSelectedKeyRef.value = true;
-          state.setSelectedKey(selectedKey ?? null);
-          isSyncingSelectedKeyRef.value = false;
-        }
-      },
-      { immediate: true }
-    );
 
     const syncControlledInputValue = (event: Event) => {
       if (props.inputValue === undefined) {

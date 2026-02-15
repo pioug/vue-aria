@@ -95,6 +95,12 @@ export function useComboBoxState<T extends object>(
 
   const listState = useSingleSelectListState<T>({
     ...props,
+    get selectedKey() {
+      return props.selectedKey;
+    },
+    get defaultSelectedKey() {
+      return props.defaultSelectedKey;
+    },
     onSelectionChange(key) {
       props.onSelectionChange?.(key);
 

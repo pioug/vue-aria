@@ -303,6 +303,67 @@ describe("ComboBox", () => {
     expect(onInputChange).toHaveBeenLastCalledWith("Two");
   });
 
+  it("updates the input field when selectedKey prop changes", async () => {
+    const onInputChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      onInputChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await wrapper.setProps({
+      selectedKey: "1",
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("One");
+    expect(onInputChange).toHaveBeenLastCalledWith("One");
+
+    await wrapper.setProps({
+      selectedKey: null,
+    });
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("");
+    expect(onInputChange).toHaveBeenLastCalledWith("");
+  });
+
+  it("updates inputValue state but not selectedKey when selectedKey is controlled", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      selectedKey: "2",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await input.setValue("Th");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Th");
+    expect(onInputChange).toHaveBeenLastCalledWith("Th");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+
+    const threeOption = wrapper.findAll('[role="option"]').find((option) => option.text() === "Three");
+    expect(threeOption).toBeDefined();
+    await threeOption!.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Th");
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onSelectionChange).toHaveBeenCalledWith("3");
+  });
+
   it("sets aria-invalid semantics when validationState is invalid", () => {
     const wrapper = renderComboBox({
       validationState: "invalid",
