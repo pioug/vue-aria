@@ -1594,6 +1594,7 @@ describe("Picker", () => {
 
         expect(onSelectionChange).not.toHaveBeenCalled();
         expect(wrapper.get("button").text()).toContain("Select…");
+        expect(document.body.querySelector('[role="listbox"]')).toBeNull();
       } finally {
         restoreNavigation();
       }

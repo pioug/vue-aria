@@ -11211,3 +11211,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 58 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` link-dismiss parity refinement:
+  - strengthened migrated plain-link coverage to assert the picker overlay closes after mouse and keyboard link activation without selecting an item.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 58 tests).
+- Validation: `npm run check -- --pretty false` passed.
