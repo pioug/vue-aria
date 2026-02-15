@@ -11783,3 +11783,13 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 141 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 197 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid keyboard-selection parity expansion:
+  - added nested-row keyboard selection coverage in checkbox mode:
+    - Enter on a focused nested row selects the descendant key.
+    - Space on a focused nested row selects the descendant key.
+    - disabled nested rows are not selected by keyboard selection keys.
+    - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test/TableNestedRows.test.ts` passed (1 file, 27 tests).
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 144 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 200 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -616,6 +616,87 @@ describe("TableView nested rows", () => {
     expect(getRowByText(wrapper, "Row 1, Lvl 3, Foo").attributes("aria-selected")).toBe("true");
   });
 
+  it("supports selecting nested rows with Enter when a row is focused", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedRow = getRowByText(wrapper, "Row 1, Lvl 2, Foo");
+    (nestedRow.element as HTMLElement).focus();
+    await nestedRow.trigger("focus");
+    await moveFocus(nestedRow, "Enter");
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(new Set(["row-1-level-2"]));
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("true");
+  });
+
+  it("supports selecting nested rows with Space when a row is focused", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedRow = getRowByText(wrapper, "Row 1, Lvl 2, Foo");
+    (nestedRow.element as HTMLElement).focus();
+    await nestedRow.trigger("focus");
+    await moveFocus(nestedRow, " ");
+
+    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange.mock.calls.at(-1)?.[0]).toEqual(new Set(["row-1-level-2"]));
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("true");
+  });
+
+  it("does not select disabled nested rows with keyboard selection keys", async () => {
+    enableTableNestedRows();
+    const onSelectionChange = vi.fn();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Nested rows selection table",
+        columns,
+        items: manyNestedItems,
+        disabledKeys: ["row-1-level-2"],
+        selectionMode: "multiple",
+        selectionStyle: "checkbox",
+        onSelectionChange,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const nestedRow = getRowByText(wrapper, "Row 1, Lvl 2, Foo");
+    (nestedRow.element as HTMLElement).focus();
+    await nestedRow.trigger("focus");
+    await moveFocus(nestedRow, "Enter");
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(getRowByText(wrapper, "Row 1, Lvl 2, Foo").attributes("aria-selected")).toBe("false");
+  });
+
   it("moves row focus down through nested rows with ArrowDown", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
