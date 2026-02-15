@@ -12002,3 +12002,14 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 180 tests).
 - Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 236 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/table` treegrid Home/End keyboard breadth:
+  - fixed row/cell keydown composition so custom treegrid handlers preserve base ARIA keyboard handlers instead of replacing them.
+  - added explicit treegrid row-key handling for `Home`/`End` to move focus to the first/last visible row while leaving Shift-modified range-selection flows to shared delegates.
+  - added nested-row integration coverage for:
+    - focusing the last visible nested row with `End`
+    - focusing the first row from a nested row with `Home`
+  - `packages/@vue-spectrum/table/src/TableView.ts`
+  - `packages/@vue-spectrum/table/test/TableNestedRows.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/table/test` passed (4 files, 182 tests).
+- Validation: `npm test -- packages/@vue-aria/table-state/test packages/@vue-aria/table/test packages/@vue-spectrum/table/test` passed (18 files, 238 tests).
+- Validation: `npm run check -- --pretty false` passed.

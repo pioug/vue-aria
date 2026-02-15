@@ -1171,9 +1171,20 @@ const TableBodyCell = defineComponent({
 
       (props.state as TreeGridState<NormalizedSpectrumTableRow>).toggleKey(treeGridRowNode.value.key);
     };
-    const bodyCellProps = computed(() =>
-      mergeProps(gridCellProps, {
+    const bodyCellProps = computed(() => {
+      const merged = mergeProps(gridCellProps) as Record<string, unknown>;
+      const baseOnKeydown =
+        (merged.onKeydown as ((event: KeyboardEvent) => void) | undefined)
+        ?? (merged.onKeyDown as ((event: KeyboardEvent) => void) | undefined);
+
+      return {
+        ...merged,
         onKeydown: (event: KeyboardEvent) => {
+          baseOnKeydown?.(event);
+          if (event.defaultPrevented) {
+            return;
+          }
+
           if (!isTreeGridState.value) {
             return;
           }
@@ -1195,8 +1206,8 @@ const TableBodyCell = defineComponent({
             event.preventDefault();
           }
         },
-      }) as Record<string, unknown>
-    );
+      } as Record<string, unknown>;
+    });
 
     return () =>
       h(
@@ -1309,9 +1320,16 @@ const TableBodyRow = defineComponent({
       props.state,
       domRef
     );
-    const mergedRowProps = computed(() =>
-      mergeProps(rowProps, {
+    const mergedRowProps = computed(() => {
+      const merged = mergeProps(rowProps) as Record<string, unknown>;
+      const baseOnKeydown =
+        (merged.onKeydown as ((event: KeyboardEvent) => void) | undefined)
+        ?? (merged.onKeyDown as ((event: KeyboardEvent) => void) | undefined);
+
+      return {
+        ...merged,
         onKeydown: (event: KeyboardEvent) => {
+          baseOnKeydown?.(event);
           if (!("expandedKeys" in props.state)) {
             return;
           }
@@ -1325,6 +1343,26 @@ const TableBodyRow = defineComponent({
           }
 
           if (event.shiftKey) {
+            return;
+          }
+
+          if (event.key === "Home" || event.key === "End") {
+            const rows = getTableBodyRows(refObject.value);
+            if (rows.length === 0) {
+              return;
+            }
+
+            const nextRow = event.key === "Home" ? rows[0] : rows[rows.length - 1];
+            if (!nextRow || nextRow === refObject.value) {
+              return;
+            }
+
+            nextRow.focus();
+            event.preventDefault();
+            return;
+          }
+
+          if (event.defaultPrevented) {
             return;
           }
 
@@ -1347,8 +1385,8 @@ const TableBodyRow = defineComponent({
           nextRow.focus();
           event.preventDefault();
         },
-      }) as Record<string, unknown>
-    );
+      } as Record<string, unknown>;
+    });
 
     return () => {
       const childNodes = Array.from(props.node.childNodes) as GridNode<NormalizedSpectrumTableRow>[];

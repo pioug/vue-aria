@@ -767,6 +767,58 @@ describe("TableView nested rows", () => {
     expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 3, Foo");
   });
 
+  it("focuses the last nested row with End", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(6);
+
+    (rows[0]!.element as HTMLElement).focus();
+    await rows[0]!.trigger("focus");
+    await rows[0]!.trigger("keydown", { key: "End" });
+    await nextTick();
+
+    const currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[5]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 3, Lvl 2, Foo");
+  });
+
+  it("focuses the first row from a nested row with Home", async () => {
+    enableTableNestedRows();
+    const wrapper = mount(TableView as any, {
+      props: {
+        "aria-label": "Many nested rows table",
+        columns,
+        items: manyNestedItems,
+        UNSTABLE_allowsExpandableRows: true,
+        UNSTABLE_expandedKeys: "all",
+      },
+      attachTo: document.body,
+    });
+
+    const rows = wrapper.findAll('tbody [role="row"]');
+    expect(rows).toHaveLength(6);
+
+    (rows[5]!.element as HTMLElement).focus();
+    await rows[5]!.trigger("focus");
+    await rows[5]!.trigger("keydown", { key: "Home" });
+    await nextTick();
+
+    const currentRows = wrapper.findAll('tbody [role="row"]');
+    expect(document.activeElement).toBe(currentRows[0]!.element);
+    expect((document.activeElement as HTMLElement).textContent).toContain("Row 1, Lvl 1, Foo");
+  });
+
   it("skips collapsed child rows while navigating with ArrowDown", async () => {
     enableTableNestedRows();
     const wrapper = mount(TableView as any, {
