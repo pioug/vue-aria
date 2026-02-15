@@ -634,6 +634,28 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("respects disabledKeys for option interaction", async () => {
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      disabledKeys: new Set(["2"]),
+      onSelectionChange,
+    });
+
+    await wrapper.get("button").trigger("click");
+    await nextTick();
+
+    const options = wrapper.findAll('[role="option"]');
+    expect(options).toHaveLength(3);
+    expect(options[1]?.attributes("aria-disabled")).toBe("true");
+
+    await options[1]?.trigger("click");
+    await nextTick();
+    await nextTick();
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).not.toBe("Two");
+  });
+
   it("does not open on space key when disabled", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,

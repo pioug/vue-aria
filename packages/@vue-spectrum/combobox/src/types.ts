@@ -22,6 +22,7 @@ export interface SpectrumComboBoxProps {
   description?: string;
   errorMessage?: string;
   items?: Iterable<SpectrumComboBoxNodeData>;
+  disabledKeys?: Iterable<ComboBoxKey>;
   selectedKey?: ComboBoxKey | null;
   defaultSelectedKey?: ComboBoxKey | null;
   onSelectionChange?: (key: ComboBoxKey | null) => void;

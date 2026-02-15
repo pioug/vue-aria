@@ -10686,3 +10686,11 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
   - expanded `docs/packages/spectrum-combobox.md` guidance to clarify uncontrolled default filtering vs controlled `items` filtering responsibilities.
     - `docs/packages/spectrum-combobox.md`
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` disabled-keys parity update:
+  - added `disabledKeys` combobox prop support and merged explicit disabled key sets with item-level disabled flags.
+    - `packages/@vue-spectrum/combobox/src/types.ts`
+    - `packages/@vue-spectrum/combobox/src/ComboBox.ts`
+  - added migrated coverage asserting disabled-key options expose disabled semantics and cannot be selected.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 39 tests).
+- Validation: `npm run check -- --pretty false` passed.

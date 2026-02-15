@@ -53,6 +53,11 @@ export const ComboBox = defineComponent({
       required: false,
       default: undefined,
     },
+    disabledKeys: {
+      type: Object as PropType<Iterable<ComboBoxKey> | undefined>,
+      required: false,
+      default: undefined,
+    },
     selectedKey: {
       type: [String, Number] as PropType<ComboBoxKey | null | undefined>,
       required: false,
@@ -232,7 +237,10 @@ export const ComboBox = defineComponent({
 
     const slotChildren = (slots.default?.() ?? []).filter((node): node is VNode => isRenderableNode(node));
     const initialCollectionNodes = createComboBoxCollection(props.items, slotChildren);
-    const initialDisabledKeys = getComboBoxDisabledKeys(initialCollectionNodes);
+    const initialDisabledKeys = new Set<ComboBoxKey>([
+      ...getComboBoxDisabledKeys(initialCollectionNodes),
+      ...(props.disabledKeys ?? []),
+    ]);
 
     const state = useComboBoxState<object>({
       ...(props.items != null
