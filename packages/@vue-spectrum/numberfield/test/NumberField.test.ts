@@ -967,4 +967,41 @@ describe("NumberField", () => {
     expect((input.element as HTMLInputElement).value).toBe(expected);
     expect(onChange).toHaveBeenCalledWith(21);
   });
+
+  it("accepts latin numeral entry with SAR in arab locale", async () => {
+    const onChange = vi.fn();
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              I18nProvider as any,
+              { locale: "ar-AE" },
+              {
+                default: () =>
+                  h(NumberField as any, {
+                    "aria-label": "labelled",
+                    onChange,
+                    formatOptions: { style: "currency", currency: "SAR" },
+                  }),
+              }
+            );
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[type="text"]');
+    (input.element as HTMLInputElement).focus();
+    await nextTick();
+    await input.setValue("21");
+    await input.trigger("blur");
+
+    const expected = new Intl.NumberFormat("ar-AE-u-nu-latn", {
+      style: "currency",
+      currency: "SAR",
+    }).format(21);
+    expect((input.element as HTMLInputElement).value).toBe(expected);
+    expect(onChange).toHaveBeenCalledWith(21);
+  });
 });
