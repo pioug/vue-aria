@@ -1354,6 +1354,35 @@ describe("ComboBox", () => {
     expect(onSelectionChange).not.toHaveBeenCalled();
   });
 
+  it("resets to selected item text on blur when typed value no longer matches", async () => {
+    const onInputChange = vi.fn();
+    const onSelectionChange = vi.fn();
+    const wrapper = renderComboBox({
+      defaultSelectedKey: "2",
+      onInputChange,
+      onSelectionChange,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+
+    await input.trigger("focus");
+    await input.setValue("Twx");
+    await nextTick();
+    await nextTick();
+    expect((input.element as HTMLInputElement).value).toBe("Twx");
+
+    await input.trigger("blur", { relatedTarget: outside });
+    await nextTick();
+    await nextTick();
+
+    expect((input.element as HTMLInputElement).value).toBe("Two");
+    expect(onInputChange).toHaveBeenLastCalledWith("Two");
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
   it("respects disabled state", async () => {
     const wrapper = renderComboBox({
       isDisabled: true,
