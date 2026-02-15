@@ -70,6 +70,33 @@ describe("useDatePickerState", () => {
 
     scope.stop();
   });
+
+  it("does not override controlled value when defaultValue changes", async () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useDatePickerState>;
+    const value = ref<CalendarDate | null>(new CalendarDate(2024, 4, 2));
+    const defaultValue = ref<CalendarDate | null>(new CalendarDate(2024, 4, 1));
+
+    scope.run(() => {
+      state = useDatePickerState({
+        get value() {
+          return value.value;
+        },
+        get defaultValue() {
+          return defaultValue.value;
+        },
+      } as any);
+    });
+
+    expect(state.value?.toString()).toBe("2024-04-02");
+
+    defaultValue.value = new CalendarDate(2024, 4, 10);
+    await nextTick();
+
+    expect(state.value?.toString()).toBe("2024-04-02");
+
+    scope.stop();
+  });
 });
 
 describe("useDateRangePickerState", () => {
@@ -170,6 +197,44 @@ describe("useDateRangePickerState", () => {
 
     expect(state.value.start?.toString()).toBe("2024-09-10");
     expect(state.value.end?.toString()).toBe("2024-09-15");
+
+    scope.stop();
+  });
+
+  it("does not override controlled range when defaultValue changes", async () => {
+    const scope = effectScope();
+    let state!: ReturnType<typeof useDateRangePickerState>;
+    const value = ref({
+      start: new CalendarDate(2024, 10, 2),
+      end: new CalendarDate(2024, 10, 4),
+    });
+    const defaultValue = ref({
+      start: new CalendarDate(2024, 10, 1),
+      end: new CalendarDate(2024, 10, 3),
+    });
+
+    scope.run(() => {
+      state = useDateRangePickerState({
+        get value() {
+          return value.value;
+        },
+        get defaultValue() {
+          return defaultValue.value;
+        },
+      } as any);
+    });
+
+    expect(state.value.start?.toString()).toBe("2024-10-02");
+    expect(state.value.end?.toString()).toBe("2024-10-04");
+
+    defaultValue.value = {
+      start: new CalendarDate(2024, 10, 10),
+      end: new CalendarDate(2024, 10, 12),
+    };
+    await nextTick();
+
+    expect(state.value.start?.toString()).toBe("2024-10-02");
+    expect(state.value.end?.toString()).toBe("2024-10-04");
 
     scope.stop();
   });
