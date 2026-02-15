@@ -11231,3 +11231,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/picker/test/Picker.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 61 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/picker` disabled-focus parity refinement:
+  - strengthened disabled interaction coverage to assert no open-change emission and no trigger focus shift on disabled pointer/keyboard open attempts.
+    - `packages/@vue-spectrum/picker/test/Picker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 61 tests).
+- Validation: `npm run check -- --pretty false` passed.

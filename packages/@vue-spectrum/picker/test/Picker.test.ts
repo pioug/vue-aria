@@ -1398,8 +1398,10 @@ describe("Picker", () => {
   });
 
   it("does not open on mouse down when disabled", async () => {
+    const onOpenChange = vi.fn();
     const wrapper = renderPicker({
       isDisabled: true,
+      onOpenChange,
     });
 
     const trigger = wrapper.get("button");
@@ -1408,11 +1410,15 @@ describe("Picker", () => {
 
     expect(document.body.querySelector('[role="listbox"]')).toBeNull();
     expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(trigger.element);
   });
 
   it("does not open on space key when disabled", async () => {
+    const onOpenChange = vi.fn();
     const wrapper = renderPicker({
       isDisabled: true,
+      onOpenChange,
     });
 
     const trigger = wrapper.get("button");
@@ -1422,6 +1428,8 @@ describe("Picker", () => {
 
     expect(document.body.querySelector('[role="listbox"]')).toBeNull();
     expect(trigger.attributes("aria-expanded")).toBe("false");
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(trigger.element);
   });
 
   it("shows a loading spinner on the trigger when loading with no items", async () => {
