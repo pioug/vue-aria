@@ -121,6 +121,15 @@ describe("ComboBox", () => {
     expect((wrapper.get('input[role="combobox"]').element as HTMLInputElement).value).toBe("Three");
   });
 
+  it("sets aria-invalid semantics when validationState is invalid", () => {
+    const wrapper = renderComboBox({
+      validationState: "invalid",
+    });
+
+    expect(wrapper.get('input[role="combobox"]').attributes("aria-invalid")).toBe("true");
+    expect(wrapper.classes()).toContain("is-invalid");
+  });
+
   it("keeps controlled selectedKey value on selection", async () => {
     const onSelectionChange = vi.fn();
     const wrapper = renderComboBox({

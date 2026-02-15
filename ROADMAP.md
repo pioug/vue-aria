@@ -10571,3 +10571,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 24 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` invalid-state parity update:
+  - added migrated coverage asserting `validationState="invalid"` propagates `aria-invalid` semantics to the input and invalid class styling to the combobox root.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 25 tests).
+- Validation: `npm run check -- --pretty false` passed.
