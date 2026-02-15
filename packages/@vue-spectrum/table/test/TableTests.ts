@@ -4926,6 +4926,23 @@ export function tableTests() {
     expect(spinner.attributes("aria-valuenow")).toBeUndefined();
   });
 
+  it("uses drag and selection aware colspan for loadingMore spinner rows", () => {
+    const wrapper = renderTable({
+      showDragButtons: true,
+      selectionMode: "multiple",
+      selectionStyle: "checkbox",
+      loadingState: "loadingMore",
+    });
+
+    const grid = wrapper.get('[role="grid"]');
+    expect(grid.attributes("aria-colcount")).toBe("5");
+
+    const bodyRows = wrapper.findAll('tbody [role="row"]');
+    const loadingCell = bodyRows[2]!.get('[role="rowheader"]');
+    expect(loadingCell.attributes("aria-colspan")).toBe("5");
+    expect(loadingCell.find('[role="progressbar"]').exists()).toBe(true);
+  });
+
   it("does not render a spinner when loadingState is filtering", () => {
     const wrapper = renderTable({
       loadingState: "filtering",
