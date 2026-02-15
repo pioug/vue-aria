@@ -10542,3 +10542,10 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
     - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
 - Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 19 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` focus-callback parity update:
+  - added migrated focus callback coverage for:
+    - outside focus transitions invoking `onFocus`/`onBlur`
+    - blur transitions to the trigger button suppressing outer `onBlur` callback dispatch
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 21 tests).
+- Validation: `npm run check -- --pretty false` passed.

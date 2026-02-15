@@ -257,6 +257,38 @@ describe("ComboBox", () => {
     expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
   });
 
+  it("calls onFocus and onBlur for outside focus transitions", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const wrapper = renderComboBox({
+      onFocus,
+      onBlur,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const outside = document.createElement("button");
+    document.body.append(outside);
+
+    await input.trigger("focus");
+    expect(onFocus).toHaveBeenCalledTimes(1);
+
+    await input.trigger("blur", { relatedTarget: outside });
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not call onBlur when moving focus to the trigger button", async () => {
+    const onBlur = vi.fn();
+    const wrapper = renderComboBox({
+      onBlur,
+    });
+    const input = wrapper.get('input[role="combobox"]');
+    const button = wrapper.get("button");
+
+    await input.trigger("focus");
+    await input.trigger("blur", { relatedTarget: button.element });
+
+    expect(onBlur).not.toHaveBeenCalled();
+  });
+
   it("opens with ArrowDown and focuses the first option", async () => {
     const wrapper = renderComboBox();
     const input = wrapper.get('input[role="combobox"]');
