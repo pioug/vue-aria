@@ -10747,3 +10747,8 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/picker/test` passed (2 files, 37 tests).
 - Validation: `npm test -- packages/@vue-spectrum/listbox/test` passed (2 files, 41 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/combobox` tab-commit parity update:
+  - added migrated keyboard coverage asserting Tab commits the currently focused combobox option and closes the menu.
+    - `packages/@vue-spectrum/combobox/test/ComboBox.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/combobox/test` passed (2 files, 46 tests).
+- Validation: `npm run check -- --pretty false` passed.
