@@ -49,6 +49,7 @@ export interface SpectrumComboBoxProps {
   isInvalid?: boolean;
   validationState?: "valid" | "invalid";
   validationBehavior?: "aria" | "native";
+  validate?: (value: { inputValue: string; selectedKey: ComboBoxKey | null }) => boolean | string | string[] | null | undefined;
   placeholder?: string;
   name?: string;
   form?: string;

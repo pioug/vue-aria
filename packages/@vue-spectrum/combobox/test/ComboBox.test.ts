@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { defineComponent, h, nextTick, ref } from "vue";
+import { defineComponent, h, nextTick, provide, ref } from "vue";
+import { FormValidationContext } from "@vue-aria/form-state";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import { ComboBox } from "../src/ComboBox";
@@ -625,6 +626,43 @@ describe("ComboBox", () => {
 
     const input = wrapper.get('input[role="combobox"]');
     expect(input.attributes("required")).toBeDefined();
+  });
+
+  it("supports validate function in aria mode", () => {
+    const wrapper = renderComboBox({
+      defaultInputValue: "Foo",
+      validate: ({ inputValue }: { inputValue: string; selectedKey: string | number | null }) =>
+        inputValue === "Foo" ? "Invalid option" : null,
+    });
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid option");
+  });
+
+  it("supports server validation in aria mode", () => {
+    const serverErrors = ref<Record<string, string | undefined>>({
+      framework: "Invalid option.",
+    });
+
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          provide(FormValidationContext, serverErrors);
+          return () =>
+            h(ComboBox as any, {
+              label: "Test",
+              name: "framework",
+              items,
+            });
+        },
+      }),
+      { attachTo: document.body }
+    );
+
+    const input = wrapper.get('input[role="combobox"]');
+    expect(input.attributes("aria-invalid")).toBe("true");
+    expect(wrapper.get(".spectrum-HelpText.is-invalid").text()).toContain("Invalid option.");
   });
 
   it("supports matching defaultSelectedKey and defaultInputValue", () => {
