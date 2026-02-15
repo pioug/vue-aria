@@ -2,7 +2,7 @@ import { useDatePicker, useDateRangePicker } from "@vue-aria/datepicker";
 import { useDatePickerState, useDateRangePickerState } from "@vue-aria/datepicker-state";
 import { useFormValidation } from "@vue-aria/form";
 import { useLocale } from "@vue-aria/i18n";
-import { useFormReset } from "@vue-aria/utils";
+import { useFormReset, useId } from "@vue-aria/utils";
 import { defineComponent, h, computed, ref, useAttrs, onMounted, nextTick, type PropType } from "vue";
 import { Calendar, RangeCalendar } from "@vue-spectrum/calendar";
 import { Popover } from "@vue-spectrum/menu";
@@ -144,6 +144,23 @@ function getDisplayFieldOptions(granularity: string | undefined) {
   }
 
   return baseOptions;
+}
+
+function mergeDescribedByIds(...values: Array<string | undefined>): string | undefined {
+  const ids = new Set<string>();
+  for (const value of values) {
+    if (!value) {
+      continue;
+    }
+
+    for (const id of value.split(/\s+/)) {
+      if (id) {
+        ids.add(id);
+      }
+    }
+  }
+
+  return ids.size > 0 ? [...ids].join(" ") : undefined;
 }
 
 export const DatePicker = defineComponent({
@@ -349,6 +366,7 @@ export const DatePicker = defineComponent({
     const group = createDomRef<HTMLElement>();
     const triggerRef = ref<HTMLElement | null>(null);
     const hiddenInputRef = ref<HTMLInputElement | null>(null);
+    const generatedErrorId = useId();
 
     const state = useDatePickerState({
       get value() {
@@ -589,8 +607,15 @@ export const DatePicker = defineComponent({
     return () => {
       const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
+      const groupProps = pickerAria.groupProps as Record<string, unknown>;
+      const errorMessageProps = pickerAria.errorMessageProps as Record<string, unknown>;
+      const resolvedErrorId = (errorMessageProps.id as string | undefined) ?? generatedErrorId;
       const isButtonDisabled = Boolean(buttonProps.isDisabled);
       const useNativeValidationInput = merged.validationBehavior === "native";
+      const groupDescribedBy = mergeDescribedByIds(
+        groupProps["aria-describedby"] as string | undefined,
+        showError.value ? resolvedErrorId : undefined
+      );
 
       return h(
         "div",
@@ -637,9 +662,10 @@ export const DatePicker = defineComponent({
           h(
             "div",
             {
-              ...pickerAria.groupProps,
+              ...groupProps,
               ref: group.elementRef,
               class: "react-spectrum-DatePicker-group",
+              "aria-describedby": groupDescribedBy,
               "aria-required": merged.isRequired ? "true" : undefined,
               onKeydown: (event: KeyboardEvent) => {
                 if (merged.isDisabled || merged.isReadOnly) {
@@ -692,6 +718,7 @@ export const DatePicker = defineComponent({
               "div",
               {
                 ...pickerAria.errorMessageProps,
+                id: resolvedErrorId,
                 class: "react-spectrum-DatePicker-error",
               },
               errorText.value
@@ -949,6 +976,7 @@ export const DateRangePicker = defineComponent({
     const triggerRef = ref<HTMLElement | null>(null);
     const hiddenStartInputRef = ref<HTMLInputElement | null>(null);
     const hiddenEndInputRef = ref<HTMLInputElement | null>(null);
+    const generatedErrorId = useId();
 
     const state = useDateRangePickerState({
       get value() {
@@ -1222,8 +1250,15 @@ export const DateRangePicker = defineComponent({
     return () => {
       const calendarAriaLabel = merged["aria-label"] ?? merged.ariaLabel ?? merged.label ?? "Range calendar";
       const buttonProps = pickerAria.buttonProps as Record<string, unknown>;
+      const groupProps = pickerAria.groupProps as Record<string, unknown>;
+      const errorMessageProps = pickerAria.errorMessageProps as Record<string, unknown>;
+      const resolvedErrorId = (errorMessageProps.id as string | undefined) ?? generatedErrorId;
       const isButtonDisabled = Boolean(buttonProps.isDisabled);
       const useNativeValidationInput = merged.validationBehavior === "native";
+      const groupDescribedBy = mergeDescribedByIds(
+        groupProps["aria-describedby"] as string | undefined,
+        showError.value ? resolvedErrorId : undefined
+      );
 
       return h(
         "div",
@@ -1282,9 +1317,10 @@ export const DateRangePicker = defineComponent({
           h(
             "div",
             {
-              ...pickerAria.groupProps,
+              ...groupProps,
               ref: group.elementRef,
               class: "react-spectrum-DateRangePicker-group",
+              "aria-describedby": groupDescribedBy,
               "aria-required": merged.isRequired ? "true" : undefined,
               onKeydown: (event: KeyboardEvent) => {
                 if (merged.isDisabled || merged.isReadOnly) {
@@ -1337,6 +1373,7 @@ export const DateRangePicker = defineComponent({
               "div",
               {
                 ...pickerAria.errorMessageProps,
+                id: resolvedErrorId,
                 class: "react-spectrum-DateRangePicker-error",
               },
               errorText.value

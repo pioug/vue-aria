@@ -11422,3 +11422,15 @@ Status key: `Not started` | `In progress` | `Complete` | `Blocked`
 - Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
 - Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
 - Validation: `npm run check -- --pretty false` passed.
+- Additional `@vue-spectrum/datepicker` native `aria-describedby` parity refinement:
+  - added fallback generated error IDs for date picker and range picker error-message nodes and wired dynamic group-level `aria-describedby` merging so native validation errors are programmatically associated with group semantics.
+    - `packages/@vue-spectrum/datepicker/src/DatePicker.ts`
+  - expanded migrated native-validation coverage to assert:
+    - custom native error messages are discoverable through group `aria-describedby` references for date and range pickers.
+    - native required error descriptions are cleared from group `aria-describedby` after calendar selection resolves validity.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+  - stabilized native invalid-commit tests by awaiting initial validation effect ticks before firing invalid events, matching Vue lifecycle timing for hidden native-validation inputs.
+    - `packages/@vue-spectrum/datepicker/test/DatePicker.test.ts`
+- Validation: `npm test -- packages/@vue-spectrum/datepicker/test` passed (2 files, 153 tests).
+- Validation: `npm test -- packages/@vue-aria/datepicker-state/test packages/@vue-spectrum/datepicker/test` passed (6 files, 171 tests).
+- Validation: `npm run check -- --pretty false` passed.

@@ -1424,6 +1424,7 @@ describe("DatePicker", () => {
     );
 
     const input = wrapper.get('input[name="eventDate"]');
+    const group = wrapper.get(".react-spectrum-DatePicker-group");
     expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
 
     await nextTick();
@@ -1438,6 +1439,9 @@ describe("DatePicker", () => {
     await nextTick();
     await nextTick();
 
+    const describedBy = group.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Please enter a value");
     expect(wrapper.get(".react-spectrum-DatePicker-error").text()).toContain("Please enter a value");
   });
 
@@ -1461,9 +1465,12 @@ describe("DatePicker", () => {
     );
 
     const input = wrapper.get('input[name="eventDate"]');
+    const group = wrapper.get(".react-spectrum-DatePicker-group");
     expect((input.element as HTMLInputElement).required).toBe(true);
     expect(wrapper.find(".react-spectrum-DatePicker-error").exists()).toBe(false);
 
+    await nextTick();
+    await nextTick();
     (input.element as HTMLInputElement).checkValidity();
     (input.element as HTMLInputElement).dispatchEvent(
       new Event("invalid", {
@@ -1474,6 +1481,9 @@ describe("DatePicker", () => {
     await nextTick();
     await nextTick();
 
+    const describedBy = group.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Constraints not satisfied");
     expect((input.element as HTMLInputElement).validity.valid).toBe(false);
 
     await wrapper.get(".react-spectrum-DatePicker-button").trigger("click");
@@ -1486,6 +1496,7 @@ describe("DatePicker", () => {
 
     expect((input.element as HTMLInputElement).validity.valid).toBe(true);
     expect((input.element as HTMLInputElement).validationMessage).toBe("");
+    expect(group.attributes("aria-describedby")).toBeUndefined();
   });
 
   it("clears native date validation state on form reset", async () => {
@@ -3285,6 +3296,7 @@ describe("DateRangePicker", () => {
     );
 
     const startInput = wrapper.get('input[name="rangeStart"]');
+    const group = wrapper.get(".react-spectrum-DateRangePicker-group");
     expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
 
     await nextTick();
@@ -3299,6 +3311,9 @@ describe("DateRangePicker", () => {
     await nextTick();
     await nextTick();
 
+    const describedBy = group.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Please enter a value");
     expect(wrapper.get(".react-spectrum-DateRangePicker-error").text()).toContain("Please enter a value");
   });
 
@@ -3324,9 +3339,12 @@ describe("DateRangePicker", () => {
 
     const startInput = wrapper.get('input[name="rangeStart"]');
     const endInput = wrapper.get('input[name="rangeEnd"]');
+    const group = wrapper.get(".react-spectrum-DateRangePicker-group");
     expect((startInput.element as HTMLInputElement).required).toBe(true);
     expect(wrapper.find(".react-spectrum-DateRangePicker-error").exists()).toBe(false);
 
+    await nextTick();
+    await nextTick();
     (startInput.element as HTMLInputElement).checkValidity();
     (startInput.element as HTMLInputElement).dispatchEvent(
       new Event("invalid", {
@@ -3337,6 +3355,9 @@ describe("DateRangePicker", () => {
     await nextTick();
     await nextTick();
 
+    const describedBy = group.attributes("aria-describedby");
+    expect(describedBy).toBeTruthy();
+    expect(wrapper.get(`#${describedBy}`).text()).toContain("Constraints not satisfied");
     expect((startInput.element as HTMLInputElement).validity.valid).toBe(false);
 
     await wrapper.get(".react-spectrum-DateRangePicker-button").trigger("click");
@@ -3354,6 +3375,7 @@ describe("DateRangePicker", () => {
     expect((endInput.element as HTMLInputElement).validity.valid).toBe(true);
     expect((startInput.element as HTMLInputElement).validationMessage).toBe("");
     expect((endInput.element as HTMLInputElement).validationMessage).toBe("");
+    expect(group.attributes("aria-describedby")).toBeUndefined();
   });
 
   it("clears native range validation state on form reset", async () => {
