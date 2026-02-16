@@ -18,7 +18,7 @@ Close implementation and test parity gaps package-by-package across mapped `@rea
 - Local implementation inventory:
   - `@vue-aria`: 78 packages (includes `*-state` and mapped `@vue-stately/*` package names),
   - `@vue-spectrum`: 64 packages,
-  - `@vue-types`: 1 package (`@vue-types/shared`),
+  - `@vue-types`: 48 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
   - `@vue-stately`: 0 directories (implementation is currently co-located in `@vue-aria` for state-derived names).
 - Coverage status:
   - Naming/alias gaps from previous phase: closed.
@@ -29,7 +29,7 @@ Close implementation and test parity gaps package-by-package across mapped `@rea
 
 ## 3) Gap target for this pass
 
-Primary gap now: implementation + test parity for `@react-types/*` packages (7 packages remain to map/implement).
+Primary gap now: implementation + test parity for `@react-types/*` packages (`0` packages remain to map/implement).
 
 ## 4) Active queue (package-by-package)
 
