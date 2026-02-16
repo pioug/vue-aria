@@ -240,7 +240,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/tooltip/src/index.ts", import.meta.url)
       ),
       "@vue-stately/disclosure": fileURLToPath(
-        new URL("./packages/@vue-aria/disclosure-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/disclosure/src/index.ts", import.meta.url)
       ),
       "@vue-aria/disclosure": fileURLToPath(
         new URL("./packages/@vue-aria/disclosure/src/index.ts", import.meta.url)

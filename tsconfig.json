@@ -239,7 +239,7 @@
         "packages/@vue-aria/tooltip/src/index.ts"
       ],
       "@vue-stately/disclosure": [
-        "./packages/@vue-aria/disclosure-state/src/index.ts"
+        "./packages/@vue-stately/disclosure/src/index.ts"
       ],
       "@vue-aria/disclosure": [
         "packages/@vue-aria/disclosure/src/index.ts"
