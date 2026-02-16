@@ -237,6 +237,8 @@ export interface ValidationResult {
   ok: boolean;
 }
 
+export type LabelPosition = "top" | "side";
+
 export type NecessityIndicator = "icon" | "label";
 
 export type Direction = "horizontal" | "vertical";
