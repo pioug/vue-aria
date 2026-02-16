@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 33 | 31 | Open |
+| `@react-spectrum` | 64 | 37 | 27 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **115**
-- Current package-level gaps discovered: **31**
+- Local packages currently present: **119**
+- Current package-level gaps discovered: **27**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -63,6 +63,11 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-spectrum/text` compatibility package in
   `packages/@vue-spectrum/text` with placeholder `Text`, `Heading`, and
   `Keyboard` components.
+- Added `@vue-spectrum/view` compatibility package in
+  `packages/@vue-spectrum/view` with placeholder `View`, `Content`, `Footer`,
+  and `Header` components.
+- Added `@vue-spectrum/well` compatibility package in
+  `packages/@vue-spectrum/well` with placeholder `Well` component.
 
 ## 3) Remaining inconsistencies to close
 
@@ -103,8 +108,6 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/style-macro-s1`
 - `@react-spectrum/tag`
 - `@react-spectrum/test-utils`
-- `@react-spectrum/view`
-- `@react-spectrum/well`
 
 #### Missing `@react-stately` packages
 - None
@@ -119,9 +122,8 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ### Phase 2 — Add missing `@react-aria` packages
 
 ### Phase 3 — Add missing `@react-spectrum` packages
-1. `text`, `view`, `well`
-2. `avatar`, `badge`, `icon`, `image`, `inlinealert`, `card`
-3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
+1. `avatar`, `badge`, `icon`, `image`, `inlinealert`, `card`
+2. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
 No remaining `@react-stately` gaps.

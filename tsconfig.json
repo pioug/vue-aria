@@ -91,6 +91,8 @@
       "@vue-spectrum/label": ["packages/@vue-spectrum/label/src/index.ts"],
       "@vue-spectrum/statuslight": ["packages/@vue-spectrum/statuslight/src/index.ts"],
       "@vue-spectrum/text": ["packages/@vue-spectrum/text/src/index.ts"],
+      "@vue-spectrum/view": ["packages/@vue-spectrum/view/src/index.ts"],
+      "@vue-spectrum/well": ["packages/@vue-spectrum/well/src/index.ts"],
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/provider": ["packages/@vue-spectrum/provider/src/index.ts"],
       "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"],
