@@ -22,7 +22,7 @@ Close implementation and test parity gaps package-by-package, then complete the 
   - `@vue-aria`: 56 packages,
   - `@vue-spectrum`: 64 packages,
   - `@vue-types`: 48 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
-  - `@vue-stately`: 20 directories now moved out of legacy `@vue-aria/*-state`.
+- `@vue-stately`: 32 directories now moved out of legacy `@vue-aria/*-state`.
 - Coverage status:
   - Naming/alias gaps from previous phase: closed.
   - `@react-aria` logical coverage: `54 / 54`.
@@ -66,6 +66,17 @@ Status: `Todo` / `In progress` / `Done`.
 - [x] `@vue-stately/tooltip`
 - [x] `@vue-stately/tree`
 - [x] `@vue-stately/utils`
+- [x] `@vue-stately/autocomplete`
+- [x] `@vue-stately/collections`
+- [x] `@vue-stately/color`
+- [x] `@vue-stately/data`
+- [x] `@vue-stately/dnd`
+- [x] `@vue-stately/flags`
+- [x] `@vue-stately/layout`
+- [x] `@vue-stately/menu`
+- [x] `@vue-stately/select`
+- [x] `@vue-stately/steplist`
+- [x] `@vue-stately/virtualizer`
 
 ## 4b) Completed packages preserved from previous pass
 

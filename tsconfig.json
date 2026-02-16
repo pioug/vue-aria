@@ -23,16 +23,16 @@
         "packages/@vue-aria/ssr/src/index.ts"
       ],
       "@vue-aria/flags": [
-        "packages/@vue-aria/flags/src/index.ts"
+        "packages/@vue-stately/flags/src/index.ts"
       ],
       "@vue-aria/i18n": [
         "packages/@vue-aria/i18n/src/index.ts"
       ],
       "@vue-aria/collections": [
-        "packages/@vue-aria/collections/src/index.ts"
+        "packages/@vue-stately/collections/src/index.ts"
       ],
       "@vue-stately/collections": [
-        "packages/@vue-aria/collections/src/index.ts"
+        "packages/@vue-stately/collections/src/index.ts"
       ],
       "@vue-stately/toggle": [
         "./packages/@vue-stately/toggle/src/index.ts"
@@ -44,28 +44,28 @@
         "./packages/@vue-stately/selection/src/index.ts"
       ],
       "@vue-stately/autocomplete": [
-        "packages/@vue-aria/autocomplete/src/index.ts"
+        "packages/@vue-stately/autocomplete/src/index.ts"
       ],
       "@vue-stately/color": [
-        "packages/@vue-aria/color/src/index.ts"
+        "packages/@vue-stately/color/src/index.ts"
       ],
       "@vue-stately/data": [
-        "packages/@vue-aria/data/src/index.ts"
+        "packages/@vue-stately/data/src/index.ts"
       ],
       "@vue-stately/dnd": [
-        "packages/@vue-aria/dnd/src/index.ts"
+        "packages/@vue-stately/dnd/src/index.ts"
       ],
       "@vue-stately/layout": [
-        "packages/@vue-aria/layout/src/index.ts"
+        "packages/@vue-stately/layout/src/index.ts"
       ],
       "@vue-stately/steplist": [
-        "packages/@vue-aria/steplist/src/index.ts"
+        "packages/@vue-stately/steplist/src/index.ts"
       ],
       "@vue-stately/virtualizer": [
-        "packages/@vue-aria/virtualizer/src/index.ts"
+        "packages/@vue-stately/virtualizer/src/index.ts"
       ],
       "@vue-aria/selection": [
-        "packages/@vue-aria/selection/src/index.ts"
+        "packages/@vue-stately/selection/src/index.ts"
       ],
       "@vue-aria/interactions": [
         "packages/@vue-aria/interactions/src/index.ts"
@@ -170,16 +170,16 @@
         "./packages/@vue-stately/list/src/index.ts"
       ],
       "@vue-aria/select": [
-        "packages/@vue-aria/select/src/index.ts"
+        "packages/@vue-stately/select/src/index.ts"
       ],
       "@vue-stately/select": [
-        "packages/@vue-aria/select/src/index.ts"
+        "packages/@vue-stately/select/src/index.ts"
       ],
       "@vue-aria/menu": [
-        "packages/@vue-aria/menu/src/index.ts"
+        "packages/@vue-stately/menu/src/index.ts"
       ],
       "@vue-stately/menu": [
-        "packages/@vue-aria/menu/src/index.ts"
+        "packages/@vue-stately/menu/src/index.ts"
       ],
       "@vue-stately/combobox": [
         "./packages/@vue-stately/combobox/src/index.ts"
@@ -440,10 +440,10 @@
         "packages/@vue-spectrum/datepicker/src/index.ts"
       ],
       "@vue-aria/data": [
-        "packages/@vue-aria/data/src/index.ts"
+        "packages/@vue-stately/data/src/index.ts"
       ],
       "@vue-aria/layout": [
-        "packages/@vue-aria/layout/src/index.ts"
+        "packages/@vue-stately/layout/src/index.ts"
       ]
     },
     "strict": true,

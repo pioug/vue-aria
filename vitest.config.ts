@@ -18,22 +18,22 @@ export default defineConfig({
         new URL("./packages/@vue-aria/ssr/src/index.ts", import.meta.url)
       ),
       "@vue-aria/flags": fileURLToPath(
-        new URL("./packages/@vue-aria/flags/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/flags/src/index.ts", import.meta.url)
       ),
       "@vue-aria/data": fileURLToPath(
-        new URL("./packages/@vue-aria/data/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/data/src/index.ts", import.meta.url)
       ),
       "@vue-aria/layout": fileURLToPath(
-        new URL("./packages/@vue-aria/layout/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/layout/src/index.ts", import.meta.url)
       ),
       "@vue-aria/i18n": fileURLToPath(
         new URL("./packages/@vue-aria/i18n/src/index.ts", import.meta.url)
       ),
       "@vue-aria/collections": fileURLToPath(
-        new URL("./packages/@vue-aria/collections/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/collections/src/index.ts", import.meta.url)
       ),
       "@vue-stately/collections": fileURLToPath(
-        new URL("./packages/@vue-aria/collections/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/collections/src/index.ts", import.meta.url)
       ),
       "@vue-stately/toggle": fileURLToPath(
         new URL("./packages/@vue-stately/toggle/src/index.ts", import.meta.url)
@@ -45,28 +45,28 @@ export default defineConfig({
         new URL("./packages/@vue-stately/selection/src/index.ts", import.meta.url)
       ),
       "@vue-stately/autocomplete": fileURLToPath(
-        new URL("./packages/@vue-aria/autocomplete/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/autocomplete/src/index.ts", import.meta.url)
       ),
       "@vue-stately/color": fileURLToPath(
-        new URL("./packages/@vue-aria/color/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/color/src/index.ts", import.meta.url)
       ),
       "@vue-stately/data": fileURLToPath(
-        new URL("./packages/@vue-aria/data/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/data/src/index.ts", import.meta.url)
       ),
       "@vue-stately/dnd": fileURLToPath(
-        new URL("./packages/@vue-aria/dnd/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/dnd/src/index.ts", import.meta.url)
       ),
       "@vue-stately/layout": fileURLToPath(
-        new URL("./packages/@vue-aria/layout/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/layout/src/index.ts", import.meta.url)
       ),
       "@vue-stately/steplist": fileURLToPath(
-        new URL("./packages/@vue-aria/steplist/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/steplist/src/index.ts", import.meta.url)
       ),
       "@vue-stately/virtualizer": fileURLToPath(
-        new URL("./packages/@vue-aria/virtualizer/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/virtualizer/src/index.ts", import.meta.url)
       ),
       "@vue-aria/selection": fileURLToPath(
-        new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/selection/src/index.ts", import.meta.url)
       ),
       "@vue-aria/interactions": fileURLToPath(
         new URL("./packages/@vue-aria/interactions/src/index.ts", import.meta.url)
@@ -171,16 +171,16 @@ export default defineConfig({
         new URL("./packages/@vue-stately/list/src/index.ts", import.meta.url)
       ),
       "@vue-aria/select": fileURLToPath(
-        new URL("./packages/@vue-aria/select/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/select/src/index.ts", import.meta.url)
       ),
       "@vue-stately/select": fileURLToPath(
-        new URL("./packages/@vue-aria/select/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/select/src/index.ts", import.meta.url)
       ),
       "@vue-aria/menu": fileURLToPath(
-        new URL("./packages/@vue-aria/menu/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/menu/src/index.ts", import.meta.url)
       ),
       "@vue-stately/menu": fileURLToPath(
-        new URL("./packages/@vue-aria/menu/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/menu/src/index.ts", import.meta.url)
       ),
       "@vue-stately/combobox": fileURLToPath(
         new URL("./packages/@vue-stately/combobox/src/index.ts", import.meta.url)
