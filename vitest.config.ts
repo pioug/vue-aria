@@ -234,7 +234,7 @@ export default defineConfig({
         new URL("./packages/@vue-stately/toast/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tooltip": fileURLToPath(
-        new URL("./packages/@vue-aria/tooltip-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/tooltip/src/index.ts", import.meta.url)
       ),
       "@vue-aria/tooltip": fileURLToPath(
         new URL("./packages/@vue-aria/tooltip/src/index.ts", import.meta.url)
