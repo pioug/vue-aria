@@ -86,6 +86,125 @@ export interface PressEvents {
   onPressEnd?: () => void;
 }
 
+export interface AsyncLoadable {
+  isLoading?: boolean;
+  onLoadMore?: () => void;
+}
+
+export interface FocusableProps {
+  autoFocus?: boolean;
+  isDisabled?: boolean;
+}
+
+export interface FocusableDOMProps extends FocusableProps {
+  onFocus?: () => void;
+  onBlur?: () => void;
+}
+
+export interface FocusEvents {
+  onFocus?: () => void;
+  onBlur?: () => void;
+  onFocusChange?: (isFocused: boolean) => void;
+}
+
+export interface ValueBase<T = unknown> {
+  value?: T;
+  defaultValue?: T;
+  onChange?: (value: T) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
+}
+
+export type ValidationState = "valid" | "invalid";
+export type ValidationErrors = Array<string>;
+export interface Validation<T = unknown> {
+  validationState?: ValidationState;
+  isInvalid?: boolean;
+  validate?: (value?: T) => ValidationErrors;
+}
+
+export interface SpectrumHelpTextProps {
+  description?: string;
+  errorMessage?: string;
+}
+
+export interface SpectrumFieldValidation<T = unknown> extends Validation<T> {}
+
+export interface InputBase {
+  isReadOnly?: boolean;
+  isDisabled?: boolean;
+  isRequired?: boolean;
+  isInvalid?: boolean;
+}
+
+export interface InputDOMProps {
+  disabled?: boolean;
+  name?: string;
+  autoComplete?: string;
+  placeholder?: string;
+}
+
+export interface LinkDOMProps {
+  href?: Href;
+}
+
+export type Href = string | URL;
+
+export interface SpectrumLabelableProps extends DOMProps {
+  label?: string;
+  placeholder?: string;
+}
+
+export interface SpectrumTextInputBase extends DOMProps {}
+
+export interface RouterOptions {
+  navigate?: (to: string) => void;
+}
+
+export interface Sortable {
+  onSortChange?: (key: string) => void;
+}
+
+export interface ColorVersion {
+  version?: "light" | "dark";
+}
+
+export interface ViewStyleProps extends StyleProps {}
+
+export interface FlexStyleProps extends StyleProps {}
+
+export interface GridStyleProps extends StyleProps {}
+
+export type DimensionValue = number | string;
+
+export type RangeValue<T extends number = number> = {
+  start: T;
+  end: T;
+};
+
+export interface ItemProps<T> {
+  children?: ItemElement<T>;
+  title?: ItemElement<T>;
+}
+
+export interface Expandable {
+  expandedKeys?: Iterable<Key>;
+  defaultExpandedKeys?: Iterable<Key>;
+  onExpandedChange?: (keys: Set<Key>) => void;
+}
+
+export interface RefObject<T = unknown> {
+  current: T | null;
+}
+
+export interface ValidationResult {
+  ok: boolean;
+}
+
+export type NecessityIndicator = "icon" | "label";
+
+export type Direction = "horizontal" | "vertical";
+
 export interface SingleSelection extends SelectionBase {
   selectedKey?: Key | null;
   defaultSelectedKey?: Key;
