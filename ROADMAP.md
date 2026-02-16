@@ -39,7 +39,7 @@ Primary pass: definitive state-package migration.
 - Eliminate mapping dependencies and re-import/resolve all `@vue-stately/*` package references directly.
 - Keep `@react-types` package parity intact while migration runs.
 
-- State migration remaining: 1 packages.
+- State migration remaining: 0 packages.
 
 ## 4) Active queue (package-by-package)
 
@@ -65,7 +65,7 @@ Status: `Todo` / `In progress` / `Done`.
 - [x] `@vue-stately/toggle`
 - [x] `@vue-stately/tooltip`
 - [x] `@vue-stately/tree`
-- [ ] `@vue-stately/utils`
+- [x] `@vue-stately/utils`
 
 ## 4b) Completed packages preserved from previous pass
 

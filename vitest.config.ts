@@ -39,7 +39,7 @@ export default defineConfig({
         new URL("./packages/@vue-stately/toggle/src/index.ts", import.meta.url)
       ),
       "@vue-stately/utils": fileURLToPath(
-        new URL("./packages/@vue-aria/utils-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/utils/src/index.ts", import.meta.url)
       ),
       "@vue-stately/selection": fileURLToPath(
         new URL("./packages/@vue-stately/selection/src/index.ts", import.meta.url)
