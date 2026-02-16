@@ -221,7 +221,7 @@
         "packages/@vue-aria/grid/src/index.ts"
       ],
       "@vue-stately/tabs": [
-        "./packages/@vue-aria/tabs-state/src/index.ts"
+        "./packages/@vue-stately/tabs/src/index.ts"
       ],
       "@vue-aria/tabs": [
         "packages/@vue-aria/tabs/src/index.ts"

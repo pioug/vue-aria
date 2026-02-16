@@ -222,7 +222,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/grid/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tabs": fileURLToPath(
-        new URL("./packages/@vue-aria/tabs-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/tabs/src/index.ts", import.meta.url)
       ),
       "@vue-aria/tabs": fileURLToPath(
         new URL("./packages/@vue-aria/tabs/src/index.ts", import.meta.url)
