@@ -166,7 +166,7 @@ import { DatePicker, DateRangePicker } from "@vue-spectrum/datepicker";
 <script setup lang="ts">
 import { CalendarDate } from "@internationalized/date";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { DatePicker } from "@vue-spectrum/datepicker";
 </script>
 

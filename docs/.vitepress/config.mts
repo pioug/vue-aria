@@ -178,7 +178,7 @@ export default defineConfig({
           { text: "@vue-spectrum/button ActionButton", link: "/packages/spectrum-action-button" },
           { text: "@vue-spectrum/button LogicButton", link: "/packages/spectrum-logic-button" },
           { text: "@vue-spectrum/button ToggleButton", link: "/packages/spectrum-toggle-button" },
-          { text: "@vue-spectrum/theme", link: "/packages/spectrum-theme" },
+          { text: "@vue-spectrum/theme-default", link: "/packages/spectrum-theme" },
           { text: "@vue-spectrum/theme-express", link: "/packages/spectrum-theme-express" },
           { text: "@vue-spectrum/theme-light", link: "/packages/spectrum-theme-light" },
           { text: "@vue-spectrum/theme-dark", link: "/packages/spectrum-theme-dark" },

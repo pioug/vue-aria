@@ -1,6 +1,6 @@
-# @vue-spectrum/theme
+# @vue-spectrum/theme-default
 
-`@vue-spectrum/theme` provides a provider-compatible default Spectrum class-map theme for Vue ports.
+`@vue-spectrum/theme-default` provides a provider-compatible default Spectrum class-map theme for Vue ports.
 
 ## API
 
@@ -11,7 +11,7 @@
 ```vue
 <script setup lang="ts">
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 </script>
 
 <template>
@@ -23,7 +23,7 @@ import { theme } from "@vue-spectrum/theme";
 
 ## Variant Packages
 
-- `@vue-spectrum/theme` (`theme`): baseline default class-map for light/dark + scale keys.
+- `@vue-spectrum/theme-default` (`theme`): baseline default class-map for light/dark + scale keys.
 - `@vue-spectrum/theme-light` (`theme`): light-focused variant map.
 - `@vue-spectrum/theme-dark` (`theme`): dark-focused variant map.
 - `@vue-spectrum/theme-express` (`theme`): express variant map layered on Spectrum defaults.
@@ -45,7 +45,7 @@ Current bootstrap class-map values:
 
 | Package | `light["spectrum--light"]` | `dark["spectrum--dark"]` |
 | --- | --- | --- |
-| `@vue-spectrum/theme` | `spectrum--light` | `spectrum--darkest` |
+| `@vue-spectrum/theme-default` | `spectrum--light` | `spectrum--darkest` |
 | `@vue-spectrum/theme-light` | `spectrum--lightest` | `spectrum--darkest` |
 | `@vue-spectrum/theme-dark` | `spectrum--dark` | `spectrum--darkest` |
 | `@vue-spectrum/theme-express` | `spectrum--light` | `spectrum--darkest` |
@@ -56,7 +56,7 @@ Current bootstrap class-map values:
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
-import { theme as defaultTheme } from "@vue-spectrum/theme";
+import { theme as defaultTheme } from "@vue-spectrum/theme-default";
 import { theme as darkTheme } from "@vue-spectrum/theme-dark";
 
 const variant = ref<"default" | "dark">("default");

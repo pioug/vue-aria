@@ -23,7 +23,8 @@ Reference baseline: `references/react-spectrum`
 1. Resolve stately-aligned naming for in-scope `@react-*` packages (`autocomplete`, `collections`, `color`, `dnd`, `menu`, `select`, `steplist`, `virtualizer`) by mapping to `@vue-stately/*`.
 2. Remove duplicate shim directories for `color`, `steplist`, and `virtualizer` now that canonical packages are renamed.
 3. Keep package alias configuration aligned (`tsconfig.json` and `vitest.config.ts`).
-4. Re-run parity checks and keep roadmap docs synchronized.
+4. Remove legacy package `@vue-spectrum/theme` and remap docs/examples to `@vue-spectrum/theme-default`.
+5. Re-run parity checks and keep roadmap docs synchronized.
 
 ## 4) Completion criteria
 

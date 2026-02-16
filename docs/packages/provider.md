@@ -7,7 +7,7 @@
 ```vue
 <script setup lang="ts">
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 </script>
 
 <template>
@@ -24,7 +24,7 @@ A `Provider` must wrap your application root. Child Spectrum components/composab
 ### Themes
 
 You must pass `theme` on the root provider. Theme objects provide color-scheme and scale class mappings used for wrapper output and downstream visual configuration.
-For baseline usage, import `theme` from `@vue-spectrum/theme`.
+For baseline usage, import `theme` from `@vue-spectrum/theme-default`.
 
 ## Implemented modules
 
