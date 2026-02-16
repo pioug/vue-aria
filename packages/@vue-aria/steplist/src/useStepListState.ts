@@ -5,7 +5,7 @@ import type {
   Key as SharedKey,
   Node as SharedNode,
   SingleSelection,
-} from "@react-types/shared";
+} from "@vue-types/shared";
 import { useControlledState } from "@vue-stately/utils";
 import { useSingleSelectListState, type SingleSelectListState } from "@vue-aria/list-state";
 

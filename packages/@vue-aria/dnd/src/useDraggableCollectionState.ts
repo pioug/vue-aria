@@ -3,7 +3,7 @@ import type {
   Collection,
   DraggableCollectionProps,
   Node,
-} from "@react-types/shared";
+} from "@vue-types/shared";
 import { MultipleSelectionManager } from "@vue-stately/selection";
 import type {
   DragItem,

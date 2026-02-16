@@ -7,7 +7,7 @@ import type {
   ItemDropTarget,
   Key,
   Node,
-} from "@react-types/shared";
+} from "@vue-types/shared";
 import { MultipleSelectionManager } from "@vue-stately/selection";
 import type { DropOperation, DropTarget, DroppableCollectionState } from "./types";
 

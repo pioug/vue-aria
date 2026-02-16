@@ -16,9 +16,9 @@ Reference baseline: `references/react-spectrum`
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **146**
+- Local packages currently present: **148**
 - Current package-level gaps discovered: **0**
-- Namespace exceptions to close: **1** (`@vue-aria/types`)
+- Namespace exceptions to close: **0**
 
 ## 2) Closed gaps
 
@@ -140,11 +140,13 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-spectrum/test-utils` compatibility package in
   `packages/@vue-spectrum/test-utils` as a re-export layer over
   `@vue-aria/test-utils`.
+- Added `@vue-types/shared` to host shared collection/selection/dnd typing used by DnD and
+  steplist internals, removing the direct `@react-types/shared` dependency.
 
 ## 3) Remaining inconsistencies to close
 
 ### 3.1) Namespace exceptions still open
-- `@vue-aria/types` remains an internal Vue utility package that currently handles shared Vue typing for this repo. If we need strict `@react-types/*` parity, this requires a separate migration/adapter package strategy.
+None.
 
 ### 3.2) Missing upstream mirrors
 
@@ -161,7 +163,7 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ## 4) Gap-close order (next)
 
 ### Phase 1 — Close namespace exceptions
-1. Decide whether `@vue-aria/types` should remain internal-only or be formalized into a mapped `@react-types` adapter layer.
+1. Completed for this pass: remove external React-namespace typing imports (`@react-types/shared`) in favor of `@vue-types/shared`.
 
 ### Phase 2 — Add missing `@react-aria` packages
 

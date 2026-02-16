@@ -5,6 +5,7 @@
   "type": "module",
   "workspaces": [
     "packages/@vue-aria/*",
+    "packages/@vue-types/*",
     "packages/@vue-spectrum/*"
   ],
   "scripts": {

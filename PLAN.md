@@ -13,7 +13,12 @@ For this phase, parity targets are constrained to:
 - `references/react-spectrum/packages/@react-spectrum`
 - `references/react-spectrum/packages/@react-stately`
 
-Other work in `references/` (for example `@react-types`, `@adobe/*`, `@internationalized/*`, or external test tooling packages) is **out of scope for this gap pass** unless explicitly pulled into plan later.
+Other work in `references/` (for example `@adobe/*`, `@internationalized/*`, or external test tooling packages) is **out of scope for this gap pass** unless explicitly pulled in later.
+
+This pass also keeps any type-only React imports that are required by local behavior out of namespace-level parity in favor of Vue-side internal utilities (`@vue-aria/types`) where practical.
+
+This pass also introduces a namespaced Vue-side shared typing package for DnD/collection contracts:
+`@vue-types/shared`.
 
 ## 4) Package mapping convention
 - `@react-aria/<name>` maps to `@vue-aria/<name>`

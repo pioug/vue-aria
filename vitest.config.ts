@@ -14,6 +14,9 @@ export default defineConfig({
       "@vue-aria/types": fileURLToPath(
         new URL("./packages/@vue-aria/types/src/index.ts", import.meta.url)
       ),
+      "@vue-types/shared": fileURLToPath(
+        new URL("./packages/@vue-types/shared/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/ssr": fileURLToPath(
         new URL("./packages/@vue-aria/ssr/src/index.ts", import.meta.url)
       ),
