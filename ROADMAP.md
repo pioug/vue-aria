@@ -10,14 +10,14 @@ Reference baseline: `references/react-spectrum`
 
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
-| `@react-aria` | 54 | 45 | 9 | Open |
+| `@react-aria` | 54 | 46 | 8 | Open |
 | `@react-spectrum` | 64 | 30 | 34 | Open |
 | `@react-stately` | 32 | 25 | 7 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
 - Local packages currently present: **99**
-- Current package-level gaps discovered: **50**
+- Current package-level gaps discovered: **49**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -27,6 +27,7 @@ Reference baseline: `references/react-spectrum`
   `packages/@vue-spectrum/theme-default`.
 - `@vue-spectrum/theme-default` re-exports `theme` from `@vue-spectrum/theme`.
 - Added path alias so `@vue-spectrum/theme-default` resolves consistently in TS tooling.
+- Added `@vue-aria/toolbar` package scaffold and hook parity implementation.
 
 ## 3) Remaining inconsistencies to close
 
@@ -43,7 +44,6 @@ Reference baseline: `references/react-spectrum`
 - `@react-aria/steplist`
 - `@react-aria/tag`
 - `@react-aria/test-utils`
-- `@react-aria/toolbar`
 - `@react-aria/virtualizer`
 
 #### Missing `@react-spectrum` packages
@@ -97,7 +97,7 @@ Reference baseline: `references/react-spectrum`
 1. Decide whether `@vue-aria/types` should remain internal-only or be formalized into a mapped `@react-types` adapter layer.
 
 ### Phase 2 — Add missing `@react-aria` packages
-1. `@react-aria/test-utils`, `@react-aria/toolbar`, `@react-aria/virtualizer`
+1. `@react-aria/test-utils`, `@react-aria/virtualizer`
 2. `@react-aria/autocomplete`, `@react-aria/dnd`
 3. `@react-aria/color`, `@react-aria/steplist`, `@react-aria/tag`, `@react-aria/example-theme`
 
