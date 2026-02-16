@@ -89,6 +89,7 @@
       "@vue-spectrum/theme-default": ["packages/@vue-spectrum/theme-default/src/index.ts"],
       "@vue-spectrum/theme": ["packages/@vue-spectrum/theme/src/index.ts"],
       "@vue-spectrum/label": ["packages/@vue-spectrum/label/src/index.ts"],
+      "@vue-spectrum/statuslight": ["packages/@vue-spectrum/statuslight/src/index.ts"],
       "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
       "@vue-spectrum/provider": ["packages/@vue-spectrum/provider/src/index.ts"],
       "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"],

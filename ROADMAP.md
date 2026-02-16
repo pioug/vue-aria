@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 31 | 33 | Open |
+| `@react-spectrum` | 64 | 32 | 32 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **113**
-- Current package-level gaps discovered: **33**
+- Local packages currently present: **114**
+- Current package-level gaps discovered: **32**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -57,6 +57,9 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-spectrum/label` compatibility package in
   `packages/@vue-spectrum/label`, currently exporting label utilities from
   `@vue-aria/label`.
+- Added `@vue-spectrum/statuslight` compatibility package in
+  `packages/@vue-spectrum/statuslight` with a lightweight `StatusLight`
+  placeholder component.
 
 ## 3) Remaining inconsistencies to close
 
@@ -92,7 +95,6 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/list`
 - `@react-spectrum/overlays`
 - `@react-spectrum/s2`
-- `@react-spectrum/statuslight`
 - `@react-spectrum/steplist`
 - `@react-spectrum/story-utils`
 - `@react-spectrum/style-macro-s1`
@@ -115,7 +117,7 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ### Phase 2 — Add missing `@react-aria` packages
 
 ### Phase 3 — Add missing `@react-spectrum` packages
-1. `statuslight`, `text`, `view`, `well`
+1. `text`, `view`, `well`
 2. `avatar`, `badge`, `icon`, `image`, `inlinealert`, `card`
 3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
