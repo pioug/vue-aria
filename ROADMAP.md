@@ -254,7 +254,9 @@ No package marked complete until all required checks are green.
 
 - [ ] `TODO`
 - [ ] `In progress`
-- [ ] `Done`
+- [x] `Done`
+
+- 2026-02-16: All packages in scope (`@react-aria`, `@react-spectrum`, `@react-types`) are now marked complete in roadmap checklists. Remaining work is non-blocking quality validation and hardening.
 
 ## 7) Package status format
 
