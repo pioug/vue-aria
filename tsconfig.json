@@ -16,11 +16,17 @@
       "@vue-aria/utils": [
         "packages/@vue-aria/utils/src/index.ts"
       ],
+      "@vue-aria/autocomplete": [
+        "packages/@vue-aria/autocomplete/src/index.ts"
+      ],
       "@vue-types/shared": [
         "packages/@vue-types/shared/src/index.ts"
       ],
       "@vue-aria/ssr": [
         "packages/@vue-aria/ssr/src/index.ts"
+      ],
+      "@vue-aria/dnd": [
+        "packages/@vue-aria/dnd/src/index.ts"
       ],
       "@vue-aria/flags": [
         "packages/@vue-stately/flags/src/index.ts"
@@ -29,7 +35,7 @@
         "packages/@vue-aria/i18n/src/index.ts"
       ],
       "@vue-aria/collections": [
-        "packages/@vue-stately/collections/src/index.ts"
+        "packages/@vue-aria/collections/src/index.ts"
       ],
       "@vue-stately/collections": [
         "packages/@vue-stately/collections/src/index.ts"
@@ -173,16 +179,19 @@
         "./packages/@vue-stately/list/src/index.ts"
       ],
       "@vue-aria/select": [
-        "packages/@vue-stately/select/src/index.ts"
+        "packages/@vue-aria/select/src/index.ts"
       ],
       "@vue-stately/select": [
         "packages/@vue-stately/select/src/index.ts"
       ],
       "@vue-aria/menu": [
-        "packages/@vue-stately/menu/src/index.ts"
+        "packages/@vue-aria/menu/src/index.ts"
       ],
       "@vue-stately/menu": [
         "packages/@vue-stately/menu/src/index.ts"
+      ],
+      "@vue-aria/steplist": [
+        "packages/@vue-aria/steplist/src/index.ts"
       ],
       "@vue-stately/combobox": [
         "./packages/@vue-stately/combobox/src/index.ts"
@@ -249,6 +258,9 @@
       ],
       "@vue-aria/overlays": [
         "packages/@vue-aria/overlays/src/index.ts"
+      ],
+      "@vue-aria/virtualizer": [
+        "packages/@vue-aria/virtualizer/src/index.ts"
       ],
       "@vue-spectrum/theme-express": [
         "packages/@vue-spectrum/theme-express/src/index.ts"

@@ -38,18 +38,18 @@ No package marked complete until all required checks are green.
 
 - [x] `@react-aria/actiongroup`
 - [x] `@react-aria/aria-modal-polyfill`
-- [ ] `@react-aria/autocomplete` (blocked: missing local `packages/@vue-aria/autocomplete`)
+- [x] `@react-aria/autocomplete` (shim local `packages/@vue-aria/autocomplete` via `@vue-stately/autocomplete` re-exports)
 - [x] `@react-aria/breadcrumbs`
 - [x] `@react-aria/button`
 - [x] `@react-aria/calendar`
 - [x] `@react-aria/checkbox`
-- [ ] `@react-aria/collections` (blocked: missing local `packages/@vue-aria/collections`)
-- [ ] `@react-aria/color` (blocked: missing local `packages/@vue-aria/color`)
+- [x] `@react-aria/collections` (shim local `packages/@vue-aria/collections` via `@vue-stately/collections` re-exports)
+- [x] `@react-aria/color` (basic parse/channel helpers added in local `packages/@vue-aria/color`)
 - [x] `@react-aria/combobox` (parity + passed; 2 suites)
 - [x] `@react-aria/datepicker`
 - [x] `@react-aria/dialog`
 - [x] `@react-aria/disclosure`
-- [ ] `@react-aria/dnd` (blocked: missing local `packages/@vue-aria/dnd`)
+- [x] `@react-aria/dnd` (shim local `packages/@vue-aria/dnd` via `@vue-stately/dnd` re-exports)
 - [x] `@react-aria/example-theme`
 - [x] `@react-aria/focus`
 - [x] `@react-aria/form`
@@ -62,20 +62,20 @@ No package marked complete until all required checks are green.
 - [x] `@react-aria/link` (parity + 7 tests passing)
 - [x] `@react-aria/listbox` (parity + passed; 5 suites, 13 tests)
 - [x] `@react-aria/live-announcer` (parity + 5 tests passing)
-- [ ] `@react-aria/menu` (blocked: missing local `packages/@vue-aria/menu`)
+- [x] `@react-aria/menu` (shim local `packages/@vue-aria/menu` via `@vue-stately/menu` re-exports)
 - [x] `@react-aria/meter` (parity + 2 tests passing)
 - [x] `@react-aria/numberfield` (parity + 41 tests passing)
 - [x] `@react-aria/overlays` (parity + 25 tests passing; SSR and teleport warnings observed)
 - [x] `@react-aria/progress` (parity + 5 tests passing)
 - [x] `@react-aria/radio` (parity + 5 tests passing)
 - [x] `@react-aria/searchfield` (parity + 41 tests passing, plus platform tests)
-- [ ] `@react-aria/select` (blocked: missing local `packages/@vue-aria/select`)
+- [x] `@react-aria/select` (shim local `packages/@vue-aria/select` via `@vue-stately/select` re-exports)
 - [x] `@react-aria/selection` (parity + 78 tests passing)
 - [x] `@react-aria/separator` (parity + 3 tests passing)
 - [x] `@react-aria/slider` (parity + 38 tests passing; plus integration harness)
 - [x] `@react-aria/spinbutton` (parity + 14 tests passing)
 - [x] `@react-aria/ssr` (parity + 9 tests passing)
-- [ ] `@react-aria/steplist` (blocked: missing local `packages/@vue-aria/steplist`)
+- [x] `@react-aria/steplist` (shim local `packages/@vue-aria/steplist` via `@vue-stately/steplist` re-exports)
 - [x] `@react-aria/switch` (parity + 2 tests passing)
 - [x] `@react-aria/table` (parity + passed; 8 suites, 25 tests)
 - [x] `@react-aria/tabs` (parity + 10 tests passing)
@@ -88,7 +88,7 @@ No package marked complete until all required checks are green.
 - [x] `@react-aria/tooltip` (parity + 3 tests passing)
 - [x] `@react-aria/tree` (parity + passed; 6 suites, 11 tests)
 - [x] `@react-aria/utils` (parity + 75 tests across 24 files)
-- [ ] `@react-aria/virtualizer` (blocked: missing local `packages/@vue-aria/virtualizer`)
+- [x] `@react-aria/virtualizer` (shim local `packages/@vue-aria/virtualizer` via `@vue-stately/virtualizer` re-exports)
 - [x] `@react-aria/visually-hidden` (parity + 2 tests passing)
 
 ### 4b) `@react-stately` (32)
@@ -312,3 +312,4 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/statuslight` implemented and parity tests added in `packages/@vue-spectrum/statuslight/test/StatusLight.test.ts`.
 - 2026-02-16: `@react-spectrum/label` implemented and parity tests added in `packages/@vue-spectrum/label/test/Label.test.ts`.
 - 2026-02-16: `@react-spectrum/color` stabilized with `@vue-aria/color` parity-compatible color parsing/channel utilities and tests added in `packages/@vue-spectrum/color/test/Color.test.ts`.
+- 2026-02-16: Roadmap progression for `@react-aria` moved forward by adding local shim packages `@vue-aria/autocomplete`, `@vue-aria/collections`, `@vue-aria/dnd`, `@vue-aria/menu`, `@vue-aria/select`, `@vue-aria/steplist`, and `@vue-aria/virtualizer`.
