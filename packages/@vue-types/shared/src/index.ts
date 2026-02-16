@@ -107,12 +107,14 @@ export interface FocusEvents {
   onFocusChange?: (isFocused: boolean) => void;
 }
 
-export interface ValueBase<T = unknown> {
+export interface ValueBase<T = unknown, U = unknown> {
   value?: T;
   defaultValue?: T;
   onChange?: (value: T) => void;
   onBlur?: () => void;
   onFocus?: () => void;
+  // Optional alternate value representation retained for parity with React Spectrum generics.
+  readonly valueRef?: U;
 }
 
 export type ValidationState = "valid" | "invalid";
