@@ -142,7 +142,7 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/checkbox` (parity + 3 test suites passing)
 - [ ] `@react-spectrum/color` (incomplete: no local tests)
 - [x] `@react-spectrum/combobox` (parity + 2 suites, 141 tests passing)
-- [ ] `@react-spectrum/contextualhelp` (incomplete: no local tests)
+- [x] `@react-spectrum/contextualhelp` (parity + 1 test suite passing)
 - [x] `@react-spectrum/datepicker` (parity + 2 test suites passing)
 - [x] `@react-spectrum/dialog` (parity + 5 test suites passing)
 - [x] `@react-spectrum/divider` (parity + 1 test suite passing)
@@ -301,3 +301,4 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/card` implemented and parity tests added in `packages/@vue-spectrum/card/test/Card.test.ts`.
 - 2026-02-16: `@react-spectrum/divider` implemented and parity tests added in `packages/@vue-spectrum/divider/test/Divider.test.ts`.
 - 2026-02-16: Roadmap progression moved to `@react-spectrum/color` as next queue item.
+- 2026-02-16: `@react-spectrum/contextualhelp` implemented and parity tests added in `packages/@vue-spectrum/contextualhelp/test/ContextualHelp.test.ts`.
