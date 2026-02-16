@@ -27,7 +27,11 @@ export function useToolbar(
   props: AriaToolbarProps,
   refValue: { current: Element | null }
 ): ToolbarAria {
-  const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, orientation = "horizontal" as Orientation } = props;
+  const {
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    orientation = "horizontal" as Orientation,
+  } = props;
 
   const locale = useLocale();
   const shouldReverse = locale.value.direction === "rtl" && orientation === "horizontal";
@@ -70,32 +74,67 @@ export function useToolbar(
       return;
     }
 
-    event.preventDefault();
     event.stopPropagation();
+    event.preventDefault();
   };
 
   const onBlur = (event: FocusEvent & { currentTarget: EventTarget | null; relatedTarget: EventTarget | null }) => {
-    if (!nodeContains(event.currentTarget as Node | null, event.relatedTarget as Node | null) && !lastFocused.value) {
-      lastFocused.value = event.target as HTMLElement | null;
+    const currentTarget = event.currentTarget as Element | null;
+    const target = event.target as Element | null;
+    const relatedTarget = event.relatedTarget as Element | null;
+    if (!currentTarget || !target) {
+      return;
+    }
+
+    if (!nodeContains(currentTarget, relatedTarget) && !lastFocused.value) {
+      lastFocused.value = target;
     }
   };
 
   const onFocus = (event: FocusEvent & { currentTarget: EventTarget | null; relatedTarget: EventTarget | null }) => {
-    if (lastFocused.value && !nodeContains(event.currentTarget as Node | null, event.relatedTarget as Node | null) && refValue.current && nodeContains(refValue.current, event.target as Node | null)) {
+    const currentTarget = event.currentTarget as Element | null;
+    const target = event.target as Element | null;
+    const relatedTarget = event.relatedTarget as Element | null;
+    if (!currentTarget || !target || !refValue.current || !lastFocused.value) {
+      return;
+    }
+
+    if (!nodeContains(currentTarget, relatedTarget) && nodeContains(refValue.current, target)) {
       lastFocused.value?.focus();
       lastFocused.value = null;
     }
   };
 
+  const onKeydownCapture = (event: KeyboardEvent) => {
+    if (isToolbarContainer(refValue.current)) {
+      return;
+    }
+    onKeyDown(event);
+  };
+
+  const onFocusCapture = (
+    event: FocusEvent & { currentTarget: EventTarget | null; relatedTarget: EventTarget | null }
+  ) => {
+    if (isToolbarContainer(refValue.current)) {
+      return;
+    }
+    onFocus(event);
+  };
+
+  const onBlurCapture = (
+    event: FocusEvent & { currentTarget: EventTarget | null; relatedTarget: EventTarget | null }
+  ) => {
+    if (isToolbarContainer(refValue.current)) {
+      return;
+    }
+    onBlur(event);
+  };
+
   const toolbarProps: Record<string, unknown> = {
     ...filterDOMProps(props, { labelable: true }),
-    onKeydown: onKeyDown,
-    onKeyDown: onKeyDown,
-    onKeyDownCapture: onKeyDown,
-    onBlur: onBlur,
-    onBlurCapture: onBlur,
-    onFocus: onFocus,
-    onFocusCapture: onFocus,
+    onKeydownCapture,
+    onFocusCapture,
+    onBlurCapture,
     "aria-label": ariaLabel,
     "aria-orientation": orientation,
     "aria-labelledby": ariaLabel == null ? ariaLabelledBy : undefined,
@@ -105,24 +144,6 @@ export function useToolbar(
     enumerable: true,
     configurable: true,
     get: () => (isToolbarContainer(refValue.current) ? "group" : "toolbar"),
-  });
-
-  Object.defineProperty(toolbarProps, "onKeydown", {
-    enumerable: true,
-    configurable: true,
-    get: () => (isToolbarContainer(refValue.current) ? undefined : onKeyDown),
-  });
-
-  Object.defineProperty(toolbarProps, "onFocus", {
-    enumerable: true,
-    configurable: true,
-    get: () => (isToolbarContainer(refValue.current) ? undefined : onFocus),
-  });
-
-  Object.defineProperty(toolbarProps, "onBlur", {
-    enumerable: true,
-    configurable: true,
-    get: () => (isToolbarContainer(refValue.current) ? undefined : onBlur),
   });
 
   return { toolbarProps };

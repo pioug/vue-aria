@@ -65,7 +65,7 @@
         "packages/@vue-stately/virtualizer/src/index.ts"
       ],
       "@vue-aria/selection": [
-        "packages/@vue-stately/selection/src/index.ts"
+        "packages/@vue-aria/selection/src/index.ts"
       ],
       "@vue-aria/interactions": [
         "packages/@vue-aria/interactions/src/index.ts"

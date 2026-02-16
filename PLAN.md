@@ -1,65 +1,51 @@
-# Gap-Closure Plan: Package-by-Package and `@vue-stately` Migration
+# Plan: Quality Audit for All Ported Modules
 
 ## Objective
 
-Close implementation/test parity gaps package-by-package, then remove all legacy `@vue-aria/*-state` layouts by moving state packages to definitive `@vue-stately/*` directories with no mapping dependency.
+Run a complete parity-and-test audit for every ported package against the reference baseline and ensure no implementation or testing gaps remain.
 
-## Current scope
+Reference baseline: `references/react-spectrum`
 
-- Reference baseline: `references/react-spectrum`
-- Focus families: `@react-aria`, `@react-stately`, `@react-spectrum`, `@react-types`
-- Naming rule:
-  - `@react-aria/*` implementations remain in `@vue-aria/*`, with state primitives represented in canonical `@vue-stately/*` when applicable.
-  - `@react-stately/*` must be implemented in `packages/@vue-stately/*`
-  - Legacy `@vue-aria/*-state` package names are no longer expected after migration.
-  - `@react-spectrum/*` remain in `@vue-spectrum/*`
-  - `@react-types/*` remain in `@vue-types/*`
+## Scope
 
-## Migration protocol (state packages first)
+- `@react-aria` (54 packages): compare against fixed local targets `@vue-aria/*` only.
+- `@react-stately` (32 packages): compare against local `packages/@vue-stately/*`.
+- `@react-spectrum` (64 packages): compare against local `packages/@vue-spectrum/*`.
+- `@react-types` (47 packages): compare against local `packages/@vue-types/*`.
 
-1. Select next `@vue-stately/*` item from `ROADMAP.md`.
-2. Create/move package sources from legacy `packages/@vue-aria/<pkg>-state` to `packages/@vue-stately/<pkg>`.
-3. Preserve runtime and public API exports.
-4. Update all local imports/tests/docs from `@vue-aria/<pkg>-state` to `@vue-stately/<pkg>` (canonical target).
-5. Update workspace config so `packages/@vue-stately/*` are included as build/test packages.
-6. Remove any migration aliases left only for temporary compatibility.
-7. Update `ROADMAP.md` and commit a stable checkpoint.
+## Work order
 
-## Parity protocol (after migration path is clear)
+1. Freeze current state and verify mapping table from source to local package names.
+2. Build a package-by-package queue in strict order by scope:
+   1. `@react-aria`
+   2. `@react-stately`
+   3. `@react-spectrum`
+   4. `@react-types`
+3. For each package:
+   - run manual parity review against reference and local source,
+   - compare exported API surface and behavior,
+   - add/repair equivalent tests,
+   - run package-level tests.
+4. Record package status in `ROADMAP.md` as `TODO` / `In progress` / `Done`.
+5. Continue in a strict sequence: always start with the first unchecked package listed in `ROADMAP.md`, and once it is moved to `Done`, immediately start the next unchecked package until none remain.
+6. Manually move to the next unchecked package in list order.
 
-1. Select the next package from active gap queue.
-2. Compare upstream and local:
-   - Upstream source: `references/react-spectrum/packages/<scope>/<package>/`
-   - Local package: `packages/<mapped-scope>/<package>/`
-3. Resolve implementation gaps (hooks, exports, types, side effects).
-4. Resolve tests:
-   - add missing unit/integration tests where behavior is exposed.
-   - fix failing tests for parity and edge cases.
-5. Validate scoped import path stability.
-6. Update docs if signature/import surface changes.
-7. Update `ROADMAP.md` entry status.
-8. Commit + push immediately in stable state.
+## Quality gate for “Done”
 
-## Stable-state rule
+A package is `Done` only when all are true:
 
-- Implementation scope complete for the selected package
-- Targeted package-level tests pass
-- No local import/regression risk introduced
+- Upstream references show no implementation gap (or documented, approved exception).
+- Behavioral parity is evidenced by tests.
+- Equivalent or stronger tests exist for known edge cases.
+- Package-level tests pass in local equivalent of CI.
 
-## Commit convention
+## Required checks
 
-- `feat(pkg): ...`
-- `test(pkg): ...`
-- `fix(pkg): ...`
-- `chore: ...`
+- Manual mapping check against `references/react-spectrum` for package presence and API parity.
+- Scoped package test runs for each touched package.
+- Manual path-mapping validation so `@react-*` imports map to expected local packages.
 
-## Execution cadence
+## Commit rule
 
-- One package at a time.
-- Commit and push each stable checkpoint.
-- Keep `ROADMAP.md` as single source of active queue status.
-
-## Canonical gap reporting
-
-- Run `node scripts/check-parity.mjs` for strict missing/extra parity checks.
-- The checker treats `@react-aria/*` as covered when implemented as either `@vue-aria/*` or canonicalized `@vue-stately/*` variants.
+- No more than one package scope should be advanced per checkpoint.
+- Update `ROADMAP.md` and commit only after quality gates are met.

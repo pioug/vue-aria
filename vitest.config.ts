@@ -66,7 +66,7 @@ export default defineConfig({
         new URL("./packages/@vue-stately/virtualizer/src/index.ts", import.meta.url)
       ),
       "@vue-aria/selection": fileURLToPath(
-        new URL("./packages/@vue-stately/selection/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
       ),
       "@vue-aria/interactions": fileURLToPath(
         new URL("./packages/@vue-aria/interactions/src/index.ts", import.meta.url)

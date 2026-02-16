@@ -1,98 +1,113 @@
-import { useDescription } from "@vue-aria/utils";
-import { useId } from "@vue-aria/utils";
-import { useSelectableItem } from "@vue-aria/selection";
-import { mergeProps } from "@vue-aria/utils";
 import type { Node, Key } from "@vue-aria/collections";
+import { useLocalizedStringFormatter } from "@vue-aria/i18n";
+import { useGridListItem } from "@vue-aria/gridlist";
+import { useFocusable, useInteractionModality } from "@vue-aria/interactions";
+import { filterDOMProps, mergeProps, useDescription, useId, useSyntheticLinkProps } from "@vue-aria/utils";
+import type { SelectableItemStates } from "@vue-aria/selection";
+import type { ListState } from "@vue-stately/list";
 import { hookData as tagGroupData } from "./useTagGroup";
+import { intlMessages } from "./intlMessages";
 
 export interface AriaTagProps<T> {
   item: Node<T>;
 }
 
-export interface TagAria {
+export interface TagAria extends Omit<SelectableItemStates, "hasAction"> {
   rowProps: Record<string, unknown>;
   gridCellProps: Record<string, unknown>;
   removeButtonProps: Record<string, unknown>;
-  stepProps?: Record<string, unknown>;
   allowsRemoving: boolean;
-  isDisabled?: boolean;
-  isFocused?: boolean;
-  isSelected?: boolean;
-}
-
-interface TagState<T> {
-  disabledKeys?: Set<Key>;
-  selectionManager?: {
-    isSelected?: (key: Key) => boolean;
-    selectedKeys?: Iterable<Key>;
-    focusedKey?: Key;
-  };
-  [key: string]: unknown;
 }
 
 export function useTag<T>(
   props: AriaTagProps<T>,
-  state: TagState<T>,
+  state: ListState<T>,
   ref: { current: HTMLElement | null }
 ): TagAria {
   const { item } = props;
   const key = item.key as Key;
-  const nodeProps = (item as unknown as { props?: Record<string, unknown> }).props ?? {};
-  const isDisabled = Boolean(state?.disabledKeys?.has(key)) || Boolean(nodeProps.isDisabled);
-
-  const { itemProps } = useSelectableItem({
-    isDisabled,
-    key,
-    ref,
-    selectionManager: state.selectionManager as never,
-  });
-
-  const isSelected = state.selectionManager?.isSelected?.(key) ?? false;
+  const itemProps = (item.props as Record<string, unknown> | undefined) ?? {};
+  const isDisabled = state.disabledKeys.has(key) || Boolean(itemProps.isDisabled);
+  const stringFormatter = useLocalizedStringFormatter(intlMessages, "@react-aria/tag");
   const { onRemove } = tagGroupData.get(state as unknown as object) || {};
   const removeButtonId = useId();
-  const { descriptionProps } = useDescription(onRemove ? "Remove item" : undefined);
 
-  const onKeyDown = (event: KeyboardEvent) => {
-    if ((event.key === "Delete" || event.key === "Backspace") && onRemove && !isDisabled) {
-      event.preventDefault();
-      onRemove(
-        isSelected
-          ? new Set(state.selectionManager?.selectedKeys ? [...state.selectionManager.selectedKeys] : [key])
-          : new Set([key])
-      );
-    }
+  const { rowProps, gridCellProps, descriptionProps, ...itemStates } = useGridListItem(
+    {
+      node: item,
+    },
+    state,
+    ref
+  );
 
-    itemProps.onKeyDown?.(event);
+  const { hasAction: _unusedAction, ...stateWithoutDescription } = itemStates as {
+    descriptionProps: Record<string, unknown>;
+    hasAction: boolean;
+    isPressed: boolean;
+    isSelected: boolean;
+    isFocused: boolean;
+    isDisabled: boolean;
+    allowsSelection: boolean;
+    [key: string]: unknown;
   };
 
-  return {
-    rowProps: mergeProps(itemProps as Record<string, unknown>, {
-      onKeyDown,
-      role: "row",
-      "aria-disabled": isDisabled ? true : undefined,
-      "aria-current": isSelected ? "step" : undefined,
-      tabIndex: isDisabled ? undefined : 0,
-    }),
-    gridCellProps: {
-      ...descriptionProps.value,
-      role: "gridcell",
-      "aria-label": nodeProps["aria-label"] as string | undefined,
+  const isSelected = state.selectionManager.isSelected(key);
+
+  let modality = useInteractionModality();
+  if (modality === "virtual" && typeof window !== "undefined" && "ontouchstart" in window) {
+    modality = "pointer";
+  }
+
+  const description =
+    onRemove && (modality === "keyboard" || modality === "virtual")
+      ? stringFormatter.format("removeDescription")
+      : "";
+  const { descriptionProps: removeDescriptionProps } = useDescription(description);
+
+  const onKeydown = (event: KeyboardEvent) => {
+    if ((event.key === "Delete" || event.key === "Backspace") && onRemove && !isDisabled) {
+      event.preventDefault();
+      onRemove(isSelected ? new Set(state.selectionManager.selectedKeys) : new Set([key]));
+    }
+  };
+
+  const isItemFocused = key === state.selectionManager.focusedKey;
+  const hasFocusedKey = state.selectionManager.focusedKey != null;
+  const tabIndex = !isDisabled && (isItemFocused || !hasFocusedKey) ? 0 : -1;
+
+  const domProps = filterDOMProps(itemProps);
+  const linkProps = useSyntheticLinkProps(itemProps);
+  const { focusableProps } = useFocusable(
+    {
+      ...itemProps,
+      isDisabled,
     },
+    ref
+  );
+
+  const removeButtonLabelledBy = `${removeButtonId}${rowProps.id ? ` ${String(rowProps.id)}` : ""}`;
+
+  return {
+    rowProps: mergeProps(focusableProps, rowProps, domProps, linkProps, {
+      tabIndex,
+      onKeydown: onRemove ? onKeydown : undefined,
+      onKeyDown: onRemove ? onKeydown : undefined,
+      "aria-describedby": removeDescriptionProps.value["aria-describedby"],
+    }) as Record<string, unknown>,
+    gridCellProps: mergeProps(gridCellProps, {
+      "aria-errormessage": (props as { "aria-errormessage"?: string })["aria-errormessage"],
+      "aria-label": itemProps["aria-label"] as string | undefined,
+    }) as Record<string, unknown>,
     removeButtonProps: onRemove
       ? {
-          "aria-label": "Remove tag",
+          "aria-label": stringFormatter.format("removeButtonLabel"),
+          "aria-labelledby": removeButtonLabelledBy,
           id: removeButtonId,
           onPress: () => onRemove(new Set([key])),
-          onPressStart: () => {
-            ref.current?.focus();
-          },
           isDisabled,
         }
       : {},
-    stepProps: undefined,
+    ...stateWithoutDescription,
     allowsRemoving: !!onRemove,
-    isDisabled,
-    isFocused: state.selectionManager?.focusedKey === key,
-    isSelected,
   };
 }

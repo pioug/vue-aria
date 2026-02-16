@@ -1,14 +1,18 @@
+import { ref, watch } from "vue";
+import type { KeyboardDelegate } from "@vue-aria/selection";
 import type { Key } from "@vue-aria/collections";
-import { filterDOMProps, mergeProps, useId } from "@vue-aria/utils";
-import { useGridList, type AriaGridListProps } from "@vue-aria/gridlist";
-import { useLabel } from "@vue-aria/label";
+import { ListKeyboardDelegate } from "@vue-aria/selection";
+import { filterDOMProps, mergeProps } from "@vue-aria/utils";
+import { useField } from "@vue-aria/label";
 import { useFocusWithin } from "@vue-aria/interactions";
-import { useState } from "vue";
+import { useGridList, type AriaGridListProps } from "@vue-aria/gridlist";
+import { useLocale } from "@vue-aria/i18n";
+import type { ListState } from "@vue-stately/list";
 
 export interface AriaTagGroupProps<T> extends AriaGridListProps<T> {
   label?: string;
   isReadOnly?: boolean;
-  selectionBehavior?: "replace" | "toggle" | "replace";
+  selectionBehavior?: "replace" | "toggle";
   onRemove?: (keys: Set<Key>) => void;
   isVirtualized?: boolean;
   keyboardNavigationBehavior?: "arrow" | "tab";
@@ -16,7 +20,7 @@ export interface AriaTagGroupProps<T> extends AriaGridListProps<T> {
 }
 
 export interface AriaTagGroupOptions<T> extends Omit<AriaTagGroupProps<T>, "children"> {
-  keyboardDelegate?: unknown;
+  keyboardDelegate?: KeyboardDelegate;
 }
 
 export interface TagGroupAria {
@@ -28,75 +32,85 @@ export interface TagGroupAria {
 
 export const hookData = new WeakMap<object, { onRemove?: (keys: Set<Key>) => void }>();
 
-export interface TagGroupState {
-  selectionManager: {
-    selectionMode?: string;
-    isFocused?: boolean;
-    focusedKey?: Key;
-    setSelectionMode?: (mode: string) => void;
-  };
-  collection?: { size: number };
-  disabledKeys?: Set<Key>;
-  selectedKey?: Key | null;
-  [key: string]: unknown;
-}
-
 export function useTagGroup<T>(
   props: AriaTagGroupOptions<T>,
-  state: TagGroupState,
+  state: ListState<T>,
   ref: { current: HTMLElement | null }
 ): TagGroupAria {
   const {
     onRemove,
     label,
+    keyboardDelegate: providedKeyboardDelegate,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     ...otherProps
   } = props;
 
-  const { labelProps, fieldProps } = useLabel({
+  const { labelProps, fieldProps, descriptionProps, errorMessageProps } = useField({
+    ...otherProps,
     label,
-    "aria-label": ariaLabel as string | undefined,
-    "aria-labelledby": ariaLabelledBy as string | undefined,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
     labelElementType: "span",
   });
 
-  const [isFocusWithin, setFocusWithin] = useState(false);
+  const { direction } = useLocale().value;
+  const keyboardDelegate =
+    providedKeyboardDelegate ||
+    new ListKeyboardDelegate({
+      collection: state.collection,
+      ref,
+      orientation: "horizontal",
+      direction,
+      disabledKeys: state.disabledKeys,
+      disabledBehavior: state.selectionManager.disabledBehavior,
+    });
+
+  const isFocusWithin = ref(false);
   const { focusWithinProps } = useFocusWithin({
-    onFocusWithinChange: setFocusWithin,
+    onFocusWithinChange: (focused) => {
+      isFocusWithin.value = focused;
+    },
   });
 
   const { gridProps } = useGridList(
     {
       ...otherProps,
-      ...state,
+      ...fieldProps,
+      keyboardDelegate,
       shouldFocusWrap: true,
       linkBehavior: "override",
       keyboardNavigationBehavior: "tab",
-      ref,
-    } as AriaGridListProps<T>,
-    state as any,
+    },
+    state,
     ref
   );
 
-  const descriptionId = useId();
-  const role = ((state.collection?.size ?? 0) > 0 ? "grid" : "group") as string;
+  const prevCount = ref(state.collection.size);
+  watch(
+    [() => state.collection.size, isFocusWithin],
+    ([size]) => {
+      if (ref.current && prevCount.value > 0 && size === 0 && isFocusWithin.value) {
+        ref.current.focus();
+      }
+      prevCount.value = size;
+    },
+    { flush: "post" }
+  );
 
   hookData.set(state as object, { onRemove });
 
-  const domProps = filterDOMProps(props, { labelable: true });
-
   return {
-    gridProps: mergeProps(gridProps, domProps, {
-      ...focusWithinProps,
-      role,
+    gridProps: mergeProps(gridProps, filterDOMProps(props, { labelable: true }), {
+      role: state.collection.size ? "grid" : "group",
       "aria-atomic": false,
       "aria-relevant": "additions",
-      "aria-live": isFocusWithin ? "polite" : "off",
+      "aria-live": isFocusWithin.value ? "polite" : "off",
+      ...focusWithinProps,
       ...fieldProps,
     }),
     labelProps,
-    descriptionProps: { id: descriptionId },
-    errorMessageProps: {},
+    descriptionProps,
+    errorMessageProps,
   };
 }
