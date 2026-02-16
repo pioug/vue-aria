@@ -20,6 +20,7 @@ Other work in `references/` (for example `@react-types`, `@adobe/*`, `@internati
 - `@react-spectrum/<name>` maps to `@vue-spectrum/<name>`
 - `@react-stately/<name>` maps to `@vue-aria/<name>-state`, unless a local package already uses `@vue-aria/<name>`
 - Any mapping exceptions are documented explicitly in `ROADMAP.md`
+- In plan/roadmap staging, `@react-stately` entries are written with full upstream package names (for example `@react-stately/layout`) to match reference naming.
 
 ## 5) Gate for a package entering `Complete`
 1. Public API parity with upstream package surface

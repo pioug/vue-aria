@@ -105,6 +105,6 @@ Reference baseline: `references/react-spectrum`
 3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
-1. `data`, `layout`
-2. `autocomplete`, `dnd`, `steplist`
-3. `color`, `virtualizer`
+1. `@react-stately/data`, `@react-stately/layout`
+2. `@react-stately/autocomplete`, `@react-stately/dnd`, `@react-stately/steplist`
+3. `@react-stately/color`, `@react-stately/virtualizer`
