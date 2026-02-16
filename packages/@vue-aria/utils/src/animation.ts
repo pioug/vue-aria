@@ -1,5 +1,5 @@
 import { readonly, ref, watch, watchEffect, type Ref } from "vue";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 
 function useAnimation(
   elementRef: Ref<HTMLElement | null | undefined>,

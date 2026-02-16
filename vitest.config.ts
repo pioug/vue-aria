@@ -11,9 +11,6 @@ export default defineConfig({
       "@vue-aria/utils": fileURLToPath(
         new URL("./packages/@vue-aria/utils/src/index.ts", import.meta.url)
       ),
-      "@vue-aria/types": fileURLToPath(
-        new URL("./packages/@vue-aria/types/src/index.ts", import.meta.url)
-      ),
       "@vue-types/shared": fileURLToPath(
         new URL("./packages/@vue-types/shared/src/index.ts", import.meta.url)
       ),
@@ -23,6 +20,12 @@ export default defineConfig({
       "@vue-aria/flags": fileURLToPath(
         new URL("./packages/@vue-aria/flags/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/data": fileURLToPath(
+        new URL("./packages/@vue-aria/data/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/layout": fileURLToPath(
+        new URL("./packages/@vue-aria/layout/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/i18n": fileURLToPath(
         new URL("./packages/@vue-aria/i18n/src/index.ts", import.meta.url)
       ),
@@ -30,13 +33,13 @@ export default defineConfig({
         new URL("./packages/@vue-aria/collections/src/index.ts", import.meta.url)
       ),
       "@vue-stately/toggle": fileURLToPath(
-        new URL("./packages/@vue-aria/toggle/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/toggle-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/utils": fileURLToPath(
-        new URL("./packages/@vue-aria/utils/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/utils-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/selection": fileURLToPath(
-        new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/selection-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/autocomplete": fileURLToPath(
         new URL("./packages/@vue-aria/autocomplete/src/index.ts", import.meta.url)
@@ -96,13 +99,13 @@ export default defineConfig({
         new URL("./packages/@vue-aria/toggle/src/index.ts", import.meta.url)
       ),
       "@vue-stately/checkbox": fileURLToPath(
-        new URL("./packages/@vue-aria/checkbox/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/checkbox-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/checkbox": fileURLToPath(
         new URL("./packages/@vue-aria/checkbox/src/index.ts", import.meta.url)
       ),
       "@vue-stately/radio": fileURLToPath(
-        new URL("./packages/@vue-aria/radio/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/radio-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/radio": fileURLToPath(
         new URL("./packages/@vue-aria/radio/src/index.ts", import.meta.url)
@@ -114,7 +117,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/textfield/src/index.ts", import.meta.url)
       ),
       "@vue-stately/searchfield": fileURLToPath(
-        new URL("./packages/@vue-aria/searchfield/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/searchfield-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/searchfield": fileURLToPath(
         new URL("./packages/@vue-aria/searchfield/src/index.ts", import.meta.url)
@@ -123,16 +126,16 @@ export default defineConfig({
         new URL("./packages/@vue-aria/form/src/index.ts", import.meta.url)
       ),
       "@vue-stately/form": fileURLToPath(
-        new URL("./packages/@vue-aria/form/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/form-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/spinbutton": fileURLToPath(
         new URL("./packages/@vue-aria/spinbutton/src/index.ts", import.meta.url)
       ),
       "@vue-stately/numberfield": fileURLToPath(
-        new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/numberfield-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/slider": fileURLToPath(
-        new URL("./packages/@vue-aria/slider/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/slider-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/numberfield": fileURLToPath(
         new URL("./packages/@vue-aria/numberfield/src/index.ts", import.meta.url)
@@ -156,13 +159,13 @@ export default defineConfig({
         new URL("./packages/@vue-aria/separator/src/index.ts", import.meta.url)
       ),
       "@vue-stately/overlays": fileURLToPath(
-        new URL("./packages/@vue-aria/overlays/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/overlays-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/listbox": fileURLToPath(
         new URL("./packages/@vue-aria/listbox/src/index.ts", import.meta.url)
       ),
       "@vue-stately/list": fileURLToPath(
-        new URL("./packages/@vue-aria/list/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/list-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/select": fileURLToPath(
         new URL("./packages/@vue-aria/select/src/index.ts", import.meta.url)
@@ -171,25 +174,25 @@ export default defineConfig({
         new URL("./packages/@vue-aria/menu/src/index.ts", import.meta.url)
       ),
       "@vue-stately/combobox": fileURLToPath(
-        new URL("./packages/@vue-aria/combobox/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/combobox-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/combobox": fileURLToPath(
         new URL("./packages/@vue-aria/combobox/src/index.ts", import.meta.url)
       ),
       "@vue-stately/grid": fileURLToPath(
-        new URL("./packages/@vue-aria/grid/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/grid-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/table": fileURLToPath(
         new URL("./packages/@vue-aria/table-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tree": fileURLToPath(
-        new URL("./packages/@vue-aria/tree/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/tree-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/calendar": fileURLToPath(
-        new URL("./packages/@vue-aria/calendar/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/calendar-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/datepicker": fileURLToPath(
-        new URL("./packages/@vue-aria/datepicker/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/datepicker-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/datepicker": fileURLToPath(
         new URL("./packages/@vue-aria/datepicker/src/index.ts", import.meta.url)
@@ -210,7 +213,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/grid/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tabs": fileURLToPath(
-        new URL("./packages/@vue-aria/tabs/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/tabs-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/tabs": fileURLToPath(
         new URL("./packages/@vue-aria/tabs/src/index.ts", import.meta.url)
@@ -219,16 +222,16 @@ export default defineConfig({
         new URL("./packages/@vue-aria/toast/src/index.ts", import.meta.url)
       ),
       "@vue-stately/toast": fileURLToPath(
-        new URL("./packages/@vue-aria/toast/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/toast-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tooltip": fileURLToPath(
-        new URL("./packages/@vue-aria/tooltip/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/tooltip-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/tooltip": fileURLToPath(
         new URL("./packages/@vue-aria/tooltip/src/index.ts", import.meta.url)
       ),
       "@vue-stately/disclosure": fileURLToPath(
-        new URL("./packages/@vue-aria/disclosure/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/disclosure-state/src/index.ts", import.meta.url)
       ),
       "@vue-aria/disclosure": fileURLToPath(
         new URL("./packages/@vue-aria/disclosure/src/index.ts", import.meta.url)
@@ -244,9 +247,6 @@ export default defineConfig({
       ),
       "@vue-spectrum/theme-light": fileURLToPath(
         new URL("./packages/@vue-spectrum/theme-light/src/index.ts", import.meta.url)
-      ),
-      "@vue-spectrum/theme": fileURLToPath(
-        new URL("./packages/@vue-spectrum/theme/src/index.ts", import.meta.url)
       ),
       "@vue-spectrum/label": fileURLToPath(
         new URL("./packages/@vue-spectrum/label/src/index.ts", import.meta.url)

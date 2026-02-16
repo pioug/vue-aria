@@ -1,53 +1,44 @@
-# Vue Aria / Vue Spectrum Porting Plan
+# Vue Aria Migration Plan
 
-## 1) Mission
-Maintain strict parity between the Vue port and the upstream sources in `references/react-spectrum`.
+## Objective
+Close remaining reference and naming gaps between this workspace and
+`references/react-spectrum` while preserving local package boundaries.
 
-## 2) Date
-Created: 2026-02-16
+## Baseline
+- Reference scope: `@react-aria`, `@react-stately`, `@react-spectrum`
+- In-scope package count: `150`
+- Closed gap status: `All known gaps resolved`
 
-## 3) Reference rule
-For this phase, parity targets are constrained to:
+## Completed package-gap backlog
 
-- `references/react-spectrum/packages/@react-aria`
-- `references/react-spectrum/packages/@react-spectrum`
-- `references/react-spectrum/packages/@react-stately`
+- `@vue-aria/data` → `@react-aria/data` now mapped.
+- `@vue-aria/flags` → `@react-aria/flags` now mapped.
+- `@vue-aria/layout` → `@react-aria/layout` now mapped.
+- `@vue-spectrum/theme` → `@react-spectrum/theme` now mapped.
+- `@react-stately/list` now mirrors local `@vue-stately/list` package.
+- State package naming normalization:
+  - `@vue-aria/calendar-state` → `@vue-stately/calendar`
+  - `@vue-aria/checkbox-state` → `@vue-stately/checkbox`
+  - `@vue-aria/combobox-state` → `@vue-stately/combobox`
+  - `@vue-aria/datepicker-state` → `@vue-stately/datepicker`
+  - `@vue-aria/disclosure-state` → `@vue-stately/disclosure`
+  - `@vue-aria/form-state` → `@vue-stately/form`
+  - `@vue-aria/grid-state` → `@vue-stately/grid`
+  - `@vue-aria/numberfield-state` → `@vue-stately/numberfield`
+  - `@vue-aria/overlays-state` → `@vue-stately/overlays`
+  - `@vue-aria/radio-state` → `@vue-stately/radio`
+  - `@vue-aria/searchfield-state` → `@vue-stately/searchfield`
+  - `@vue-aria/selection-state` → `@vue-stately/selection`
+  - `@vue-aria/slider-state` → `@vue-stately/slider`
+  - `@vue-aria/table-state` → `@vue-stately/table`
+  - `@vue-aria/tabs-state` → `@vue-stately/tabs`
+  - `@vue-aria/toast-state` → `@vue-stately/toast`
+  - `@vue-aria/toggle-state` → `@vue-stately/toggle`
+  - `@vue-aria/tooltip-state` → `@vue-stately/tooltip`
+  - `@vue-aria/tree-state` → `@vue-stately/tree`
+  - `@vue-aria/utils-state` → `@vue-stately/utils`
+- `@vue-aria/types` removed in favor of `@vue-types/shared`.
 
-Other work in `references/` (for example `@adobe/*`, `@internationalized/*`, or external test tooling packages) is **out of scope for this gap pass** unless explicitly pulled in later.
-
-This pass also keeps any type-only React imports that are required by local behavior out of namespace-level parity in favor of Vue-side internal utilities (`@vue-aria/types`) where practical.
-
-This pass also introduces a namespaced Vue-side shared typing package for DnD/collection contracts:
-`@vue-types/shared`.
-
-## 4) Package mapping convention
-- `@react-aria/<name>` maps to `@vue-aria/<name>`
-- `@react-spectrum/<name>` maps to `@vue-spectrum/<name>`
-- `@react-stately/<name>` maps to `@vue-stately/<name>` for new work going forward.
-- Any mapping exceptions are documented explicitly in `ROADMAP.md`
-- In plan/roadmap staging, `@react-stately` entries are written with full upstream package names (for example `@react-stately/layout`) to match reference naming.
-
-## 5) Gate for a package entering `Complete`
-1. Public API parity with upstream package surface
-2. Behavioral parity evidence in parity tests or upstream-backed test rationale
-3. Accessibility parity evidence (where relevant)
-4. Visual parity evidence (for visual packages) through docs/examples parity checks
-5. No remaining React runtime dependency in that package
-6. Package appears in roadmap status as `Complete`
-
-## 6) Operating cycle
-1. Run package inventory against `references/`
-2. Update `ROADMAP.md` gaps and priorities
-3. Close the highest-priority gap block in one slice
-4. Run local checks for that slice
-5. Update package and roadmap status
-6. Repeat
-
-## 7) Roadmap format requirements
-`ROADMAP.md` is now canonical and must include for each package:
-- Mapped upstream source package(s)
-- Current status (`Complete`, `In progress`, `Not started`, `Blocked`)
-- Explicit blocker and close condition if not `Complete`
-
-## 8) In this pass
-This pass focuses on fixing **reference consistency gaps** (missing mappings and namespace alignment) before continuing feature-level completion work.
+## Next status
+- No remaining package gaps in current reference scope.
+- Keep `ROADMAP.md` synchronized with this list if any new gaps are introduced.

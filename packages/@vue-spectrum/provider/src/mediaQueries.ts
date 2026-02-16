@@ -1,5 +1,5 @@
 import { computed, onScopeDispose, ref } from "vue";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import type { ColorScheme, Scale, Theme } from "./types";
 
 export function useMediaQuery(query: string): ReadonlyRef<boolean> {

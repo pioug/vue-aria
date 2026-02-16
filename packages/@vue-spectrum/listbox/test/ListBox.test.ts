@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { Item } from "../src/Item";
 import { ListBox } from "../src/ListBox";
 import { Section } from "../src/Section";

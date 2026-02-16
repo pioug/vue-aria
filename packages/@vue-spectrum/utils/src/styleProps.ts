@@ -1,5 +1,5 @@
 import { useLocale } from "@vue-aria/i18n";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import { computed, toValue, type MaybeRefOrGetter } from "vue";
 import { useBreakpoint } from "./BreakpointProvider";
 

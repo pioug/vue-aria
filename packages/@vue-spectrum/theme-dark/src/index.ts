@@ -1,4 +1,4 @@
-import { theme as defaultTheme } from "../../theme/src";
+import { theme as defaultTheme } from "../../theme-default/src";
 import type { Theme } from "../../provider/src/types";
 
 export const theme: Theme = {

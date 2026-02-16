@@ -1,154 +1,441 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
     "module": "ES2022",
     "moduleResolution": "Bundler",
-    "types": ["node", "vitest/globals"],
+    "types": [
+      "node",
+      "vitest/globals"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@vue-aria/utils": ["packages/@vue-aria/utils/src/index.ts"],
-      "@vue-aria/types": ["packages/@vue-aria/types/src/index.ts"],
-      "@vue-types/shared": ["packages/@vue-types/shared/src/index.ts"],
-      "@vue-aria/ssr": ["packages/@vue-aria/ssr/src/index.ts"],
-      "@vue-aria/flags": ["packages/@vue-aria/flags/src/index.ts"],
-      "@vue-aria/i18n": ["packages/@vue-aria/i18n/src/index.ts"],
-      "@vue-aria/collections": ["packages/@vue-aria/collections/src/index.ts"],
-      "@vue-stately/toggle": ["packages/@vue-aria/toggle/src/index.ts"],
-      "@vue-stately/utils": ["packages/@vue-aria/utils/src/index.ts"],
-      "@vue-stately/selection": ["packages/@vue-aria/selection/src/index.ts"],
-      "@vue-stately/autocomplete": ["packages/@vue-aria/autocomplete/src/index.ts"],
-      "@vue-stately/color": ["packages/@vue-stately/color/src/index.ts"],
-      "@vue-stately/data": ["packages/@vue-aria/data/src/index.ts"],
-      "@vue-stately/dnd": ["packages/@vue-aria/dnd/src/index.ts"],
-      "@vue-stately/layout": ["packages/@vue-aria/layout/src/index.ts"],
-      "@vue-stately/steplist": ["packages/@vue-stately/steplist/src/index.ts"],
-      "@vue-stately/virtualizer": ["packages/@vue-stately/virtualizer/src/index.ts"],
-      "@vue-aria/selection": ["packages/@vue-aria/selection/src/index.ts"],
-      "@vue-aria/interactions": ["packages/@vue-aria/interactions/src/index.ts"],
-      "@vue-aria/focus": ["packages/@vue-aria/focus/src/index.ts"],
-      "@vue-aria/live-announcer": ["packages/@vue-aria/live-announcer/src/index.ts"],
-      "@vue-aria/aria-modal-polyfill": ["packages/@vue-aria/aria-modal-polyfill/src/index.ts"],
-      "@vue-aria/landmark": ["packages/@vue-aria/landmark/src/index.ts"],
-      "@vue-aria/visually-hidden": ["packages/@vue-aria/visually-hidden/src/index.ts"],
-      "@vue-aria/label": ["packages/@vue-aria/label/src/index.ts"],
-      "@vue-aria/button": ["packages/@vue-aria/button/src/index.ts"],
-      "@vue-aria/actiongroup": ["packages/@vue-aria/actiongroup/src/index.ts"],
-      "@vue-aria/link": ["packages/@vue-aria/link/src/index.ts"],
-      "@vue-aria/toggle": ["packages/@vue-aria/toggle/src/index.ts"]
-      ,
-      "@vue-stately/checkbox": ["packages/@vue-aria/checkbox/src/index.ts"],
-      "@vue-aria/checkbox": ["packages/@vue-aria/checkbox/src/index.ts"],
-      "@vue-stately/radio": ["packages/@vue-aria/radio/src/index.ts"],
-      "@vue-aria/radio": ["packages/@vue-aria/radio/src/index.ts"],
-      "@vue-aria/switch": ["packages/@vue-aria/switch/src/index.ts"],
-      "@vue-aria/textfield": ["packages/@vue-aria/textfield/src/index.ts"],
-      "@vue-stately/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
-      "@vue-aria/searchfield": ["packages/@vue-aria/searchfield/src/index.ts"],
-      "@vue-aria/form": ["packages/@vue-aria/form/src/index.ts"],
-      "@vue-stately/form": ["packages/@vue-aria/form/src/index.ts"],
-      "@vue-aria/spinbutton": ["packages/@vue-aria/spinbutton/src/index.ts"],
-      "@vue-stately/numberfield": ["packages/@vue-aria/numberfield/src/index.ts"],
-      "@vue-stately/slider": ["packages/@vue-aria/slider/src/index.ts"],
-      "@vue-aria/numberfield": ["packages/@vue-aria/numberfield/src/index.ts"],
-      "@vue-aria/slider": ["packages/@vue-aria/slider/src/index.ts"],
-      "@vue-aria/progress": ["packages/@vue-aria/progress/src/index.ts"],
-      "@vue-aria/meter": ["packages/@vue-aria/meter/src/index.ts"],
-      "@vue-aria/dialog": ["packages/@vue-aria/dialog/src/index.ts"],
-      "@vue-aria/breadcrumbs": ["packages/@vue-aria/breadcrumbs/src/index.ts"],
-      "@vue-aria/separator": ["packages/@vue-aria/separator/src/index.ts"],
-      "@vue-stately/overlays": ["packages/@vue-aria/overlays/src/index.ts"],
-      "@vue-aria/listbox": ["packages/@vue-aria/listbox/src/index.ts"],
-      "@vue-stately/list": ["packages/@vue-aria/list/src/index.ts"],
-      "@vue-aria/select": ["packages/@vue-aria/select/src/index.ts"],
-      "@vue-aria/menu": ["packages/@vue-aria/menu/src/index.ts"],
-      "@vue-stately/combobox": ["packages/@vue-aria/combobox/src/index.ts"],
-      "@vue-aria/combobox": ["packages/@vue-aria/combobox/src/index.ts"],
-      "@vue-stately/grid": ["packages/@vue-aria/grid/src/index.ts"],
-      "@vue-stately/table": ["packages/@vue-aria/table-state/src/index.ts"],
-      "@vue-stately/tree": ["packages/@vue-aria/tree/src/index.ts"],
-      "@vue-stately/calendar": ["packages/@vue-aria/calendar/src/index.ts"],
-      "@vue-stately/datepicker": ["packages/@vue-aria/datepicker/src/index.ts"],
-      "@vue-aria/datepicker": ["packages/@vue-aria/datepicker/src/index.ts"],
-      "@vue-aria/calendar": ["packages/@vue-aria/calendar/src/index.ts"],
-      "@vue-aria/table": ["packages/@vue-aria/table/src/index.ts"],
-      "@vue-aria/gridlist": ["packages/@vue-aria/gridlist/src/index.ts"],
-      "@vue-aria/tree": ["packages/@vue-aria/tree/src/index.ts"],
-      "@vue-aria/grid": ["packages/@vue-aria/grid/src/index.ts"],
-      "@vue-stately/tabs": ["packages/@vue-aria/tabs/src/index.ts"],
-      "@vue-aria/tabs": ["packages/@vue-aria/tabs/src/index.ts"],
-      "@vue-aria/toast": ["packages/@vue-aria/toast/src/index.ts"],
-      "@vue-stately/toast": ["packages/@vue-aria/toast/src/index.ts"],
-      "@vue-stately/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
-      "@vue-aria/tooltip": ["packages/@vue-aria/tooltip/src/index.ts"],
-      "@vue-stately/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
-      "@vue-aria/disclosure": ["packages/@vue-aria/disclosure/src/index.ts"],
-      "@vue-aria/overlays": ["packages/@vue-aria/overlays/src/index.ts"],
-      "@vue-spectrum/theme-express": ["packages/@vue-spectrum/theme-express/src/index.ts"],
-      "@vue-spectrum/theme-dark": ["packages/@vue-spectrum/theme-dark/src/index.ts"],
-      "@vue-spectrum/theme-light": ["packages/@vue-spectrum/theme-light/src/index.ts"],
-      "@vue-spectrum/theme-default": ["packages/@vue-spectrum/theme-default/src/index.ts"],
-      "@vue-spectrum/theme": ["packages/@vue-spectrum/theme/src/index.ts"],
-      "@vue-spectrum/label": ["packages/@vue-spectrum/label/src/index.ts"],
-      "@vue-spectrum/accordion": ["packages/@vue-spectrum/accordion/src/index.ts"],
-      "@vue-spectrum/actiongroup": ["packages/@vue-spectrum/actiongroup/src/index.ts"],
-      "@vue-spectrum/actionbar": ["packages/@vue-spectrum/actionbar/src/index.ts"],
-      "@vue-spectrum/autocomplete": ["packages/@vue-spectrum/autocomplete/src/index.ts"],
-      "@vue-spectrum/buttongroup": ["packages/@vue-spectrum/buttongroup/src/index.ts"],
-      "@vue-spectrum/color": ["packages/@vue-spectrum/color/src/index.ts"],
-      "@vue-spectrum/contextualhelp": ["packages/@vue-spectrum/contextualhelp/src/index.ts"],
-      "@vue-spectrum/divider": ["packages/@vue-spectrum/divider/src/index.ts"],
-      "@vue-spectrum/dnd": ["packages/@vue-spectrum/dnd/src/index.ts"],
-      "@vue-spectrum/dropzone": ["packages/@vue-spectrum/dropzone/src/index.ts"],
-      "@vue-spectrum/filetrigger": ["packages/@vue-spectrum/filetrigger/src/index.ts"],
-      "@vue-spectrum/form": ["packages/@vue-spectrum/form/src/index.ts"],
-      "@vue-spectrum/statuslight": ["packages/@vue-spectrum/statuslight/src/index.ts"],
-      "@vue-spectrum/illustratedmessage": ["packages/@vue-spectrum/illustratedmessage/src/index.ts"],
-      "@vue-spectrum/labeledvalue": ["packages/@vue-spectrum/labeledvalue/src/index.ts"],
-      "@vue-spectrum/layout": ["packages/@vue-spectrum/layout/src/index.ts"],
-      "@vue-spectrum/list": ["packages/@vue-spectrum/list/src/index.ts"],
-      "@vue-spectrum/overlays": ["packages/@vue-spectrum/overlays/src/index.ts"],
-      "@vue-spectrum/s2": ["packages/@vue-spectrum/s2/src/index.ts"],
-      "@vue-spectrum/steplist": ["packages/@vue-spectrum/steplist/src/index.ts"],
-      "@vue-spectrum/story-utils": ["packages/@vue-spectrum/story-utils/src/index.ts"],
-      "@vue-spectrum/style-macro-s1": ["packages/@vue-spectrum/style-macro-s1/src/index.ts"],
-      "@vue-spectrum/tag": ["packages/@vue-spectrum/tag/src/index.ts"],
-      "@vue-spectrum/test-utils": ["packages/@vue-spectrum/test-utils/src/index.ts"],
-      "@vue-spectrum/text": ["packages/@vue-spectrum/text/src/index.ts"],
-      "@vue-spectrum/view": ["packages/@vue-spectrum/view/src/index.ts"],
-      "@vue-spectrum/well": ["packages/@vue-spectrum/well/src/index.ts"],
-      "@vue-spectrum/avatar": ["packages/@vue-spectrum/avatar/src/index.ts"],
-      "@vue-spectrum/badge": ["packages/@vue-spectrum/badge/src/index.ts"],
-      "@vue-spectrum/icon": ["packages/@vue-spectrum/icon/src/index.ts"],
-      "@vue-spectrum/image": ["packages/@vue-spectrum/image/src/index.ts"],
-      "@vue-spectrum/inlinealert": ["packages/@vue-spectrum/inlinealert/src/index.ts"],
-      "@vue-spectrum/card": ["packages/@vue-spectrum/card/src/index.ts"],
-      "@vue-spectrum/utils": ["packages/@vue-spectrum/utils/src/index.ts"],
-      "@vue-spectrum/provider": ["packages/@vue-spectrum/provider/src/index.ts"],
-      "@vue-spectrum/slider": ["packages/@vue-spectrum/slider/src/index.ts"],
-      "@vue-spectrum/button": ["packages/@vue-spectrum/button/src/index.ts"],
-      "@vue-spectrum/checkbox": ["packages/@vue-spectrum/checkbox/src/index.ts"],
-      "@vue-spectrum/radio": ["packages/@vue-spectrum/radio/src/index.ts"],
-      "@vue-spectrum/switch": ["packages/@vue-spectrum/switch/src/index.ts"],
-      "@vue-spectrum/link": ["packages/@vue-spectrum/link/src/index.ts"],
-      "@vue-spectrum/textfield": ["packages/@vue-spectrum/textfield/src/index.ts"],
-      "@vue-spectrum/searchfield": ["packages/@vue-spectrum/searchfield/src/index.ts"],
-      "@vue-spectrum/progress": ["packages/@vue-spectrum/progress/src/index.ts"],
-      "@vue-spectrum/meter": ["packages/@vue-spectrum/meter/src/index.ts"],
-      "@vue-spectrum/numberfield": ["packages/@vue-spectrum/numberfield/src/index.ts"],
-      "@vue-spectrum/breadcrumbs": ["packages/@vue-spectrum/breadcrumbs/src/index.ts"],
-      "@vue-spectrum/dialog": ["packages/@vue-spectrum/dialog/src/index.ts"],
-      "@vue-spectrum/tooltip": ["packages/@vue-spectrum/tooltip/src/index.ts"],
-      "@vue-spectrum/toast": ["packages/@vue-spectrum/toast/src/index.ts"],
-      "@vue-spectrum/menu": ["packages/@vue-spectrum/menu/src/index.ts"],
-      "@vue-spectrum/listbox": ["packages/@vue-spectrum/listbox/src/index.ts"],
-      "@vue-spectrum/picker": ["packages/@vue-spectrum/picker/src/index.ts"],
-      "@vue-spectrum/combobox": ["packages/@vue-spectrum/combobox/src/index.ts"],
-      "@vue-spectrum/tabs": ["packages/@vue-spectrum/tabs/src/index.ts"],
-      "@vue-spectrum/table": ["packages/@vue-spectrum/table/src/index.ts"],
-      "@vue-spectrum/tree": ["packages/@vue-spectrum/tree/src/index.ts"],
-      "@vue-spectrum/calendar": ["packages/@vue-spectrum/calendar/src/index.ts"],
-      "@vue-spectrum/datepicker": ["packages/@vue-spectrum/datepicker/src/index.ts"]
+      "@vue-aria/utils": [
+        "packages/@vue-aria/utils/src/index.ts"
+      ],
+      "@vue-types/shared": [
+        "packages/@vue-types/shared/src/index.ts"
+      ],
+      "@vue-aria/ssr": [
+        "packages/@vue-aria/ssr/src/index.ts"
+      ],
+      "@vue-aria/flags": [
+        "packages/@vue-aria/flags/src/index.ts"
+      ],
+      "@vue-aria/i18n": [
+        "packages/@vue-aria/i18n/src/index.ts"
+      ],
+      "@vue-aria/collections": [
+        "packages/@vue-aria/collections/src/index.ts"
+      ],
+      "@vue-stately/toggle": [
+        "./packages/@vue-aria/toggle-state/src/index.ts"
+      ],
+      "@vue-stately/utils": [
+        "./packages/@vue-aria/utils-state/src/index.ts"
+      ],
+      "@vue-stately/selection": [
+        "./packages/@vue-aria/selection-state/src/index.ts"
+      ],
+      "@vue-stately/autocomplete": [
+        "packages/@vue-aria/autocomplete/src/index.ts"
+      ],
+      "@vue-stately/color": [
+        "packages/@vue-stately/color/src/index.ts"
+      ],
+      "@vue-stately/data": [
+        "packages/@vue-aria/data/src/index.ts"
+      ],
+      "@vue-stately/dnd": [
+        "packages/@vue-aria/dnd/src/index.ts"
+      ],
+      "@vue-stately/layout": [
+        "packages/@vue-aria/layout/src/index.ts"
+      ],
+      "@vue-stately/steplist": [
+        "packages/@vue-stately/steplist/src/index.ts"
+      ],
+      "@vue-stately/virtualizer": [
+        "packages/@vue-stately/virtualizer/src/index.ts"
+      ],
+      "@vue-aria/selection": [
+        "packages/@vue-aria/selection/src/index.ts"
+      ],
+      "@vue-aria/interactions": [
+        "packages/@vue-aria/interactions/src/index.ts"
+      ],
+      "@vue-aria/focus": [
+        "packages/@vue-aria/focus/src/index.ts"
+      ],
+      "@vue-aria/live-announcer": [
+        "packages/@vue-aria/live-announcer/src/index.ts"
+      ],
+      "@vue-aria/aria-modal-polyfill": [
+        "packages/@vue-aria/aria-modal-polyfill/src/index.ts"
+      ],
+      "@vue-aria/landmark": [
+        "packages/@vue-aria/landmark/src/index.ts"
+      ],
+      "@vue-aria/visually-hidden": [
+        "packages/@vue-aria/visually-hidden/src/index.ts"
+      ],
+      "@vue-aria/label": [
+        "packages/@vue-aria/label/src/index.ts"
+      ],
+      "@vue-aria/button": [
+        "packages/@vue-aria/button/src/index.ts"
+      ],
+      "@vue-aria/actiongroup": [
+        "packages/@vue-aria/actiongroup/src/index.ts"
+      ],
+      "@vue-aria/link": [
+        "packages/@vue-aria/link/src/index.ts"
+      ],
+      "@vue-aria/toggle": [
+        "packages/@vue-aria/toggle/src/index.ts"
+      ],
+      "@vue-stately/checkbox": [
+        "./packages/@vue-aria/checkbox-state/src/index.ts"
+      ],
+      "@vue-aria/checkbox": [
+        "packages/@vue-aria/checkbox/src/index.ts"
+      ],
+      "@vue-stately/radio": [
+        "./packages/@vue-aria/radio-state/src/index.ts"
+      ],
+      "@vue-aria/radio": [
+        "packages/@vue-aria/radio/src/index.ts"
+      ],
+      "@vue-aria/switch": [
+        "packages/@vue-aria/switch/src/index.ts"
+      ],
+      "@vue-aria/textfield": [
+        "packages/@vue-aria/textfield/src/index.ts"
+      ],
+      "@vue-stately/searchfield": [
+        "./packages/@vue-aria/searchfield-state/src/index.ts"
+      ],
+      "@vue-aria/searchfield": [
+        "packages/@vue-aria/searchfield/src/index.ts"
+      ],
+      "@vue-aria/form": [
+        "packages/@vue-aria/form/src/index.ts"
+      ],
+      "@vue-stately/form": [
+        "./packages/@vue-aria/form-state/src/index.ts"
+      ],
+      "@vue-aria/spinbutton": [
+        "packages/@vue-aria/spinbutton/src/index.ts"
+      ],
+      "@vue-stately/numberfield": [
+        "./packages/@vue-aria/numberfield-state/src/index.ts"
+      ],
+      "@vue-stately/slider": [
+        "./packages/@vue-aria/slider-state/src/index.ts"
+      ],
+      "@vue-aria/numberfield": [
+        "packages/@vue-aria/numberfield/src/index.ts"
+      ],
+      "@vue-aria/slider": [
+        "packages/@vue-aria/slider/src/index.ts"
+      ],
+      "@vue-aria/progress": [
+        "packages/@vue-aria/progress/src/index.ts"
+      ],
+      "@vue-aria/meter": [
+        "packages/@vue-aria/meter/src/index.ts"
+      ],
+      "@vue-aria/dialog": [
+        "packages/@vue-aria/dialog/src/index.ts"
+      ],
+      "@vue-aria/breadcrumbs": [
+        "packages/@vue-aria/breadcrumbs/src/index.ts"
+      ],
+      "@vue-aria/separator": [
+        "packages/@vue-aria/separator/src/index.ts"
+      ],
+      "@vue-stately/overlays": [
+        "./packages/@vue-aria/overlays-state/src/index.ts"
+      ],
+      "@vue-aria/listbox": [
+        "packages/@vue-aria/listbox/src/index.ts"
+      ],
+      "@vue-stately/list": [
+        "./packages/@vue-aria/list-state/src/index.ts"
+      ],
+      "@vue-aria/select": [
+        "packages/@vue-aria/select/src/index.ts"
+      ],
+      "@vue-aria/menu": [
+        "packages/@vue-aria/menu/src/index.ts"
+      ],
+      "@vue-stately/combobox": [
+        "./packages/@vue-aria/combobox-state/src/index.ts"
+      ],
+      "@vue-aria/combobox": [
+        "packages/@vue-aria/combobox/src/index.ts"
+      ],
+      "@vue-stately/grid": [
+        "./packages/@vue-aria/grid-state/src/index.ts"
+      ],
+      "@vue-stately/table": [
+        "./packages/@vue-aria/table-state/src/index.ts"
+      ],
+      "@vue-stately/tree": [
+        "./packages/@vue-aria/tree-state/src/index.ts"
+      ],
+      "@vue-stately/calendar": [
+        "./packages/@vue-aria/calendar-state/src/index.ts"
+      ],
+      "@vue-stately/datepicker": [
+        "./packages/@vue-aria/datepicker-state/src/index.ts"
+      ],
+      "@vue-aria/datepicker": [
+        "packages/@vue-aria/datepicker/src/index.ts"
+      ],
+      "@vue-aria/calendar": [
+        "packages/@vue-aria/calendar/src/index.ts"
+      ],
+      "@vue-aria/table": [
+        "packages/@vue-aria/table/src/index.ts"
+      ],
+      "@vue-aria/gridlist": [
+        "packages/@vue-aria/gridlist/src/index.ts"
+      ],
+      "@vue-aria/tree": [
+        "packages/@vue-aria/tree/src/index.ts"
+      ],
+      "@vue-aria/grid": [
+        "packages/@vue-aria/grid/src/index.ts"
+      ],
+      "@vue-stately/tabs": [
+        "./packages/@vue-aria/tabs-state/src/index.ts"
+      ],
+      "@vue-aria/tabs": [
+        "packages/@vue-aria/tabs/src/index.ts"
+      ],
+      "@vue-aria/toast": [
+        "packages/@vue-aria/toast/src/index.ts"
+      ],
+      "@vue-stately/toast": [
+        "./packages/@vue-aria/toast-state/src/index.ts"
+      ],
+      "@vue-stately/tooltip": [
+        "./packages/@vue-aria/tooltip-state/src/index.ts"
+      ],
+      "@vue-aria/tooltip": [
+        "packages/@vue-aria/tooltip/src/index.ts"
+      ],
+      "@vue-stately/disclosure": [
+        "./packages/@vue-aria/disclosure-state/src/index.ts"
+      ],
+      "@vue-aria/disclosure": [
+        "packages/@vue-aria/disclosure/src/index.ts"
+      ],
+      "@vue-aria/overlays": [
+        "packages/@vue-aria/overlays/src/index.ts"
+      ],
+      "@vue-spectrum/theme-express": [
+        "packages/@vue-spectrum/theme-express/src/index.ts"
+      ],
+      "@vue-spectrum/theme-dark": [
+        "packages/@vue-spectrum/theme-dark/src/index.ts"
+      ],
+      "@vue-spectrum/theme-light": [
+        "packages/@vue-spectrum/theme-light/src/index.ts"
+      ],
+      "@vue-spectrum/theme-default": [
+        "packages/@vue-spectrum/theme-default/src/index.ts"
+      ],
+      "@vue-spectrum/label": [
+        "packages/@vue-spectrum/label/src/index.ts"
+      ],
+      "@vue-spectrum/accordion": [
+        "packages/@vue-spectrum/accordion/src/index.ts"
+      ],
+      "@vue-spectrum/actiongroup": [
+        "packages/@vue-spectrum/actiongroup/src/index.ts"
+      ],
+      "@vue-spectrum/actionbar": [
+        "packages/@vue-spectrum/actionbar/src/index.ts"
+      ],
+      "@vue-spectrum/autocomplete": [
+        "packages/@vue-spectrum/autocomplete/src/index.ts"
+      ],
+      "@vue-spectrum/buttongroup": [
+        "packages/@vue-spectrum/buttongroup/src/index.ts"
+      ],
+      "@vue-spectrum/color": [
+        "packages/@vue-spectrum/color/src/index.ts"
+      ],
+      "@vue-spectrum/contextualhelp": [
+        "packages/@vue-spectrum/contextualhelp/src/index.ts"
+      ],
+      "@vue-spectrum/divider": [
+        "packages/@vue-spectrum/divider/src/index.ts"
+      ],
+      "@vue-spectrum/dnd": [
+        "packages/@vue-spectrum/dnd/src/index.ts"
+      ],
+      "@vue-spectrum/dropzone": [
+        "packages/@vue-spectrum/dropzone/src/index.ts"
+      ],
+      "@vue-spectrum/filetrigger": [
+        "packages/@vue-spectrum/filetrigger/src/index.ts"
+      ],
+      "@vue-spectrum/form": [
+        "packages/@vue-spectrum/form/src/index.ts"
+      ],
+      "@vue-spectrum/statuslight": [
+        "packages/@vue-spectrum/statuslight/src/index.ts"
+      ],
+      "@vue-spectrum/illustratedmessage": [
+        "packages/@vue-spectrum/illustratedmessage/src/index.ts"
+      ],
+      "@vue-spectrum/labeledvalue": [
+        "packages/@vue-spectrum/labeledvalue/src/index.ts"
+      ],
+      "@vue-spectrum/layout": [
+        "packages/@vue-spectrum/layout/src/index.ts"
+      ],
+      "@vue-spectrum/list": [
+        "packages/@vue-spectrum/list/src/index.ts"
+      ],
+      "@vue-spectrum/overlays": [
+        "packages/@vue-spectrum/overlays/src/index.ts"
+      ],
+      "@vue-spectrum/s2": [
+        "packages/@vue-spectrum/s2/src/index.ts"
+      ],
+      "@vue-spectrum/steplist": [
+        "packages/@vue-spectrum/steplist/src/index.ts"
+      ],
+      "@vue-spectrum/story-utils": [
+        "packages/@vue-spectrum/story-utils/src/index.ts"
+      ],
+      "@vue-spectrum/style-macro-s1": [
+        "packages/@vue-spectrum/style-macro-s1/src/index.ts"
+      ],
+      "@vue-spectrum/tag": [
+        "packages/@vue-spectrum/tag/src/index.ts"
+      ],
+      "@vue-spectrum/test-utils": [
+        "packages/@vue-spectrum/test-utils/src/index.ts"
+      ],
+      "@vue-spectrum/text": [
+        "packages/@vue-spectrum/text/src/index.ts"
+      ],
+      "@vue-spectrum/view": [
+        "packages/@vue-spectrum/view/src/index.ts"
+      ],
+      "@vue-spectrum/well": [
+        "packages/@vue-spectrum/well/src/index.ts"
+      ],
+      "@vue-spectrum/avatar": [
+        "packages/@vue-spectrum/avatar/src/index.ts"
+      ],
+      "@vue-spectrum/badge": [
+        "packages/@vue-spectrum/badge/src/index.ts"
+      ],
+      "@vue-spectrum/icon": [
+        "packages/@vue-spectrum/icon/src/index.ts"
+      ],
+      "@vue-spectrum/image": [
+        "packages/@vue-spectrum/image/src/index.ts"
+      ],
+      "@vue-spectrum/inlinealert": [
+        "packages/@vue-spectrum/inlinealert/src/index.ts"
+      ],
+      "@vue-spectrum/card": [
+        "packages/@vue-spectrum/card/src/index.ts"
+      ],
+      "@vue-spectrum/utils": [
+        "packages/@vue-spectrum/utils/src/index.ts"
+      ],
+      "@vue-spectrum/provider": [
+        "packages/@vue-spectrum/provider/src/index.ts"
+      ],
+      "@vue-spectrum/slider": [
+        "packages/@vue-spectrum/slider/src/index.ts"
+      ],
+      "@vue-spectrum/button": [
+        "packages/@vue-spectrum/button/src/index.ts"
+      ],
+      "@vue-spectrum/checkbox": [
+        "packages/@vue-spectrum/checkbox/src/index.ts"
+      ],
+      "@vue-spectrum/radio": [
+        "packages/@vue-spectrum/radio/src/index.ts"
+      ],
+      "@vue-spectrum/switch": [
+        "packages/@vue-spectrum/switch/src/index.ts"
+      ],
+      "@vue-spectrum/link": [
+        "packages/@vue-spectrum/link/src/index.ts"
+      ],
+      "@vue-spectrum/textfield": [
+        "packages/@vue-spectrum/textfield/src/index.ts"
+      ],
+      "@vue-spectrum/searchfield": [
+        "packages/@vue-spectrum/searchfield/src/index.ts"
+      ],
+      "@vue-spectrum/progress": [
+        "packages/@vue-spectrum/progress/src/index.ts"
+      ],
+      "@vue-spectrum/meter": [
+        "packages/@vue-spectrum/meter/src/index.ts"
+      ],
+      "@vue-spectrum/numberfield": [
+        "packages/@vue-spectrum/numberfield/src/index.ts"
+      ],
+      "@vue-spectrum/breadcrumbs": [
+        "packages/@vue-spectrum/breadcrumbs/src/index.ts"
+      ],
+      "@vue-spectrum/dialog": [
+        "packages/@vue-spectrum/dialog/src/index.ts"
+      ],
+      "@vue-spectrum/tooltip": [
+        "packages/@vue-spectrum/tooltip/src/index.ts"
+      ],
+      "@vue-spectrum/toast": [
+        "packages/@vue-spectrum/toast/src/index.ts"
+      ],
+      "@vue-spectrum/menu": [
+        "packages/@vue-spectrum/menu/src/index.ts"
+      ],
+      "@vue-spectrum/listbox": [
+        "packages/@vue-spectrum/listbox/src/index.ts"
+      ],
+      "@vue-spectrum/picker": [
+        "packages/@vue-spectrum/picker/src/index.ts"
+      ],
+      "@vue-spectrum/combobox": [
+        "packages/@vue-spectrum/combobox/src/index.ts"
+      ],
+      "@vue-spectrum/tabs": [
+        "packages/@vue-spectrum/tabs/src/index.ts"
+      ],
+      "@vue-spectrum/table": [
+        "packages/@vue-spectrum/table/src/index.ts"
+      ],
+      "@vue-spectrum/tree": [
+        "packages/@vue-spectrum/tree/src/index.ts"
+      ],
+      "@vue-spectrum/calendar": [
+        "packages/@vue-spectrum/calendar/src/index.ts"
+      ],
+      "@vue-spectrum/datepicker": [
+        "packages/@vue-spectrum/datepicker/src/index.ts"
+      ],
+      "@vue-aria/data": [
+        "packages/@vue-aria/data/src/index.ts"
+      ],
+      "@vue-aria/layout": [
+        "packages/@vue-aria/layout/src/index.ts"
+      ]
     },
     "strict": true,
     "declaration": true,
@@ -158,5 +445,9 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["packages/**/*.ts", "packages/**/*.d.ts", "vitest.config.ts"]
+  "include": [
+    "packages/**/*.ts",
+    "packages/**/*.d.ts",
+    "vitest.config.ts"
+  ]
 }

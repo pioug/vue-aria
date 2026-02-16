@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/tooltip-state",
+  "name": "@vue-stately/tooltip",
   "version": "0.1.0",
   "private": true,
   "type": "module",

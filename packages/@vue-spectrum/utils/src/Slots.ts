@@ -1,5 +1,5 @@
 import { mergeProps } from "@vue-aria/utils";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import { computed, defineComponent, inject, provide, type PropType } from "vue";
 
 interface SlotProps {

@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick } from "vue";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { Tooltip, TooltipTrigger } from "@vue-spectrum/tooltip";
 import { Link } from "../src/Link";
 

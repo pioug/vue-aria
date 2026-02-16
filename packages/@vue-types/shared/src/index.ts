@@ -1,3 +1,5 @@
+import type { ComputedRef, MaybeRefOrGetter, Ref } from "vue";
+
 export type Key = string | number;
 
 export interface CollectionElement<T> {
@@ -134,6 +136,10 @@ export interface DraggableCollectionProps {
   onDragMove?: (e: DraggableCollectionMoveEvent) => void;
   onDragEnd?: (e: DraggableCollectionEndEvent) => void;
 }
+
+export type MaybeReactive<T> = MaybeRefOrGetter<T>;
+
+export type ReadonlyRef<T> = Readonly<Ref<T>> | Readonly<ComputedRef<T>>;
 
 export interface DraggableCollectionStartEvent {
   keys: Set<Key>;

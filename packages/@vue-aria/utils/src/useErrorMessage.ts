@@ -1,6 +1,6 @@
 import { computed, toValue } from "vue";
 import { useId } from "@vue-aria/ssr";
-import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
+import type { MaybeReactive, ReadonlyRef } from "@vue-types/shared";
 
 export interface UseErrorMessageOptions {
   errorMessage?: MaybeReactive<string | undefined>;

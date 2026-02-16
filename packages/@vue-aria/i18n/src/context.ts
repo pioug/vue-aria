@@ -1,7 +1,7 @@
 import { computed, defineComponent, getCurrentInstance, h, inject, provide, type PropType } from "vue";
 import { isRTL } from "./utils";
 import { type Locale, useDefaultLocale } from "./useDefaultLocale";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 
 const I18nContext = Symbol("vue-aria-i18n");
 

@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/toast-state",
+  "name": "@vue-stately/toast",
   "version": "0.1.0",
   "private": true,
   "type": "module",

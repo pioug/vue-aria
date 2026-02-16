@@ -3,7 +3,7 @@ import { FormValidationContext } from "@vue-stately/form";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { Radio } from "../src/Radio";
 import { RadioGroup } from "../src/RadioGroup";
 

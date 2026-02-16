@@ -1,4 +1,4 @@
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 
 export function useHasChild(

@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/datepicker-state",
+  "name": "@vue-stately/datepicker",
   "version": "0.1.0",
   "private": true,
   "type": "module",

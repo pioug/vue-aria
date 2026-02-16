@@ -3,7 +3,7 @@ import { defineComponent, h, nextTick } from "vue";
 import { expect, it, vi } from "vitest";
 import { I18nProvider } from "@vue-aria/i18n";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import {
   Cell,
   Column,

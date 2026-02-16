@@ -2,7 +2,7 @@ import { ModalProvider, useModal } from "@vue-aria/overlays";
 import { useRouter } from "@vue-aria/utils";
 import { ActionButton } from "@vue-spectrum/button";
 import { Checkbox } from "@vue-spectrum/checkbox";
-import { theme as defaultTheme } from "@vue-spectrum/theme";
+import { theme as defaultTheme } from "@vue-spectrum/theme-default";
 import { Switch } from "@vue-spectrum/switch";
 import { keepSpectrumClassNames, useBreakpoint, useStyleProps } from "@vue-spectrum/utils";
 import { createApp, defineComponent, h, nextTick, ref, type PropType } from "vue";

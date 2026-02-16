@@ -4,7 +4,7 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { DatePicker, DateRangePicker } from "../src";
 
 function createPointerEvent(type: "pointerdown" | "pointerup"): PointerEvent {

@@ -1,7 +1,7 @@
 import { computed, getCurrentScope, onScopeDispose, ref } from "vue";
 import { isRTL } from "./utils";
 import { useIsSSR } from "@vue-aria/ssr";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 
 export interface Locale {
   locale: string;

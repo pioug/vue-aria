@@ -7,7 +7,7 @@ import type {
   SingleSelection,
 } from "@vue-types/shared";
 import { useControlledState } from "@vue-stately/utils";
-import { useSingleSelectListState, type SingleSelectListState } from "@vue-aria/list-state";
+import { useSingleSelectListState, type SingleSelectListState } from "@vue-stately/list";
 
 export interface StepListProps<T>
   extends CollectionBase<T>,

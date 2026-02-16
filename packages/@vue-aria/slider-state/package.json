@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/slider-state",
+  "name": "@vue-stately/slider",
   "version": "0.1.0",
   "private": true,
   "type": "module",

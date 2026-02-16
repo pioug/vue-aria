@@ -1,4 +1,4 @@
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import type { InjectionKey } from "vue";
 import type { ProviderContext } from "./types";
 

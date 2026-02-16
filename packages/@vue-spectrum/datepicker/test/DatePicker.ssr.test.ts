@@ -3,7 +3,7 @@ import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { describe, expect, it } from "vitest";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { DatePicker, DateRangePicker } from "../src";
 
 describe("DatePicker SSR", () => {

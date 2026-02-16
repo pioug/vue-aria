@@ -1,5 +1,5 @@
 import { onScopeDispose, ref, toValue, watch, watchEffect } from "vue";
-import type { MaybeReactive } from "@vue-aria/types";
+import type { MaybeReactive } from "@vue-types/shared";
 
 export interface UseLoadMoreOptions<I = unknown> {
   isLoading?: MaybeReactive<boolean | undefined>;

@@ -1,4 +1,4 @@
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import { computed, onScopeDispose, ref, type Ref } from "vue";
 
 export interface DOMRefValue<T extends HTMLElement = HTMLElement> {

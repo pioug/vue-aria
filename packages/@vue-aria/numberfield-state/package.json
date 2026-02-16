@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/numberfield-state",
+  "name": "@vue-stately/numberfield",
   "version": "0.1.0",
   "private": true,
   "type": "module",

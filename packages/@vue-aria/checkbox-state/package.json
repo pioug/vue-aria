@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/checkbox-state",
+  "name": "@vue-stately/checkbox",
   "version": "0.1.0",
   "private": true,
   "type": "module",

@@ -1,5 +1,5 @@
 import { nextTick, readonly, ref, watch } from "vue";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 
 export type ValueEffectGenerator<S> = Generator<S, void, unknown>;
 export type SetValueEffectAction<S> = (prev: S) => ValueEffectGenerator<S>;

@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/disclosure-state",
+  "name": "@vue-stately/disclosure",
   "version": "0.1.0",
   "private": true,
   "type": "module",

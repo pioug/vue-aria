@@ -5,7 +5,7 @@ import {
   toValue,
   watchEffect,
 } from "vue";
-import type { MaybeReactive, ReadonlyRef } from "@vue-aria/types";
+import type { MaybeReactive, ReadonlyRef } from "@vue-types/shared";
 
 interface DescriptionNodeState {
   refCount: number;

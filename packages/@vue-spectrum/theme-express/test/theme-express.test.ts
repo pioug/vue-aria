@@ -13,7 +13,7 @@ const expectedGlobalKeys = [
   "express",
 ];
 
-describe("@vue-spectrum/theme-express", () => {
+describe("@vue-spectrum/theme-default-express", () => {
   it("exports only the upstream-aligned theme symbol", () => {
     expect(Object.keys(themeModule)).toEqual(["theme"]);
   });

@@ -1,5 +1,5 @@
 import { onScopeDispose, toValue, watch } from "vue";
-import type { MaybeReactive } from "@vue-aria/types";
+import type { MaybeReactive } from "@vue-types/shared";
 import { getScrollParent } from "./getScrollParent";
 
 export interface UseLoadMoreSentinelOptions<C = unknown> {

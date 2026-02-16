@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { FormValidationContext } from "@vue-stately/form";
 import { Provider } from "@vue-spectrum/provider";
-import { theme } from "@vue-spectrum/theme";
+import { theme } from "@vue-spectrum/theme-default";
 import { ComboBox } from "../src/ComboBox";
 import { Item } from "../src/Item";
 import { Section } from "../src/Section";

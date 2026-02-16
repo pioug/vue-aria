@@ -1,6 +1,6 @@
 import { onScopeDispose, readonly, ref } from "vue";
 import { willOpenKeyboard } from "./keyboard";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 
 interface ViewportSize {
   width: number;

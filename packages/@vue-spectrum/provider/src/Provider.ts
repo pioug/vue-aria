@@ -1,6 +1,6 @@
 import { I18nProvider, useLocale } from "@vue-aria/i18n";
 import { ModalProvider, useModalProvider } from "@vue-aria/overlays";
-import type { ReadonlyRef } from "@vue-aria/types";
+import type { ReadonlyRef } from "@vue-types/shared";
 import { filterDOMProps, RouterProvider } from "@vue-aria/utils";
 import {
   baseStyleProps,

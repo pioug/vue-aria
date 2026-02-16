@@ -12,7 +12,7 @@ const expectedGlobalKeys = [
   "spectrum--large",
 ];
 
-describe("@vue-spectrum/theme-dark", () => {
+describe("@vue-spectrum/theme-default-dark", () => {
   it("exports only the upstream-aligned theme symbol", () => {
     expect(Object.keys(themeModule)).toEqual(["theme"]);
   });

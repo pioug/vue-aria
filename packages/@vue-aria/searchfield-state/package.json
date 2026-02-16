@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/searchfield-state",
+  "name": "@vue-stately/searchfield",
   "version": "0.1.0",
   "private": true,
   "type": "module",

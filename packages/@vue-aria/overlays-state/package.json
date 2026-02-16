@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/overlays-state",
+  "name": "@vue-stately/overlays",
   "version": "0.1.0",
   "private": true,
   "type": "module",
