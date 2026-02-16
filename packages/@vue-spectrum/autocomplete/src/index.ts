@@ -1,5 +1,14 @@
-export { useAutocomplete, useSearchAutocomplete } from "@vue-aria/autocomplete";
+export { SearchAutocomplete } from "./SearchAutocomplete";
+export { SearchAutocompleteItem, Item } from "./Item";
+export { SearchAutocompleteSection, Section } from "./Section";
+
 export type {
-  AriaAutocompleteProps,
-  AriaSearchAutocompleteProps,
-} from "@vue-aria/autocomplete";
+  SearchAutocompleteCollectionNode,
+  SearchAutocompleteItemProps,
+  SearchAutocompleteKey,
+  SearchAutocompleteLoadingState,
+  SearchAutocompleteMenuTrigger,
+  SpectrumSearchAutocompleteNodeData,
+  SpectrumSearchAutocompleteSectionProps,
+  SpectrumSearchAutocompleteProps,
+} from "./types";

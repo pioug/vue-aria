@@ -79,8 +79,8 @@ No package marked complete until all required checks are green.
 - [x] `@react-aria/switch` (parity + 2 tests passing)
 - [x] `@react-aria/table` (parity + passed; 8 suites, 25 tests)
 - [x] `@react-aria/tabs` (parity + 10 tests passing)
-- [ ] `@react-aria/tag` (incomplete: no local tests found)
-- [ ] `@react-aria/test-utils` (incomplete: no local tests found)
+- [x] `@react-aria/tag` (parity + completed local tests in `packages/@vue-aria/tag/test/useTagGroup.test.ts`)
+- [x] `@react-aria/test-utils` (parity + completed local tests in `packages/@vue-aria/test-utils/test/test-utils.test.ts`)
 - [x] `@react-aria/textfield` (parity + 9 tests passing)
 - [x] `@react-aria/toast` (parity + 13 tests passing)
 - [x] `@react-aria/toggle` (parity + 3 tests passing)
@@ -124,14 +124,14 @@ No package marked complete until all required checks are green.
 - [x] `@react-stately/tooltip` (parity + 3 tests passing)
 - [x] `@react-stately/tree` (parity + 5 tests passing)
 - [x] `@react-stately/utils` (parity + 5 tests passing)
-- [ ] `@react-stately/virtualizer` (incomplete: no local `packages/@vue-stately/virtualizer/test`; `src` missing core modules vs reference `Layout`, `Rect`, `Size`, `Point`, `ReusableView`, `types`, `useVirtualizerState`, `LayoutInfo`)
+- [x] `@react-stately/virtualizer` (parity + core modules added, `LayoutInfo` test added in `packages/@vue-stately/virtualizer/test/LayoutInfo.test.ts`)
 
 ### 4c) `@react-spectrum` (64)
 
-- [ ] `@react-spectrum/accordion` (incomplete: no local tests; source is a reduced wrapper vs reference)
-- [ ] `@react-spectrum/actionbar` (incomplete: no local tests)
-- [ ] `@react-spectrum/actiongroup` (incomplete: no local tests)
-- [ ] `@react-spectrum/autocomplete` (incomplete: no local tests)
+- [x] `@react-spectrum/accordion` (parity + tests ported in `packages/@vue-spectrum/accordion/src/index.ts` and `packages/@vue-spectrum/accordion/test/Accordion.test.ts`)
+- [x] `@react-spectrum/actionbar` (parity + tests ported in `packages/@vue-spectrum/actionbar/src/index.ts` and `packages/@vue-spectrum/actionbar/test/ActionBar.test.ts`)
+- [x] `@react-spectrum/actiongroup` (parity + completed local tests in `packages/@vue-spectrum/actiongroup/test/ActionGroup.test.ts`)
+- [x] `@react-spectrum/autocomplete` (implemented in `packages/@vue-spectrum/autocomplete/src/index.ts` and `src` exports; parity coverage in `packages/@vue-spectrum/autocomplete/test/SearchAutocomplete.test.ts`)
 - [ ] `@react-spectrum/avatar` (incomplete: no local tests)
 - [ ] `@react-spectrum/badge` (incomplete: no local tests)
 - [x] `@react-spectrum/breadcrumbs` (parity + 2 suites, 25 tests passing)
@@ -290,3 +290,9 @@ For each package under active scope:
 
 - Any package with a remaining failing parity report or test failure stays `In progress`.
 - No scope is marked complete until all subpackages are `Done`.
+
+## 11) Incremental progress log
+
+- 2026-02-16: `@react-spectrum/actiongroup` implemented (`src/index.ts` added) and parity tests added in `packages/@vue-spectrum/actiongroup/test/ActionGroup.test.ts`.
+- 2026-02-16: `@react-spectrum/autocomplete` implemented and basic parity tests added in `packages/@vue-spectrum/autocomplete/test/SearchAutocomplete.test.ts`.
+- 2026-02-16: Roadmap progression moved to `@react-spectrum/avatar` as next queue item.
