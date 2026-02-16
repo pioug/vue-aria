@@ -145,7 +145,7 @@ No package marked complete until all required checks are green.
 - [ ] `@react-spectrum/contextualhelp` (incomplete: no local tests)
 - [x] `@react-spectrum/datepicker` (parity + 2 test suites passing)
 - [x] `@react-spectrum/dialog` (parity + 5 test suites passing)
-- [ ] `@react-spectrum/divider` (incomplete: no local tests)
+- [x] `@react-spectrum/divider` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/dnd` (incomplete: no local tests)
 - [ ] `@react-spectrum/dropzone` (incomplete: no local tests)
 - [ ] `@react-spectrum/filetrigger` (incomplete: no local tests)
@@ -299,4 +299,5 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/badge` implemented and parity tests added in `packages/@vue-spectrum/badge/test/Badge.test.ts`.
 - 2026-02-16: `@react-spectrum/buttongroup` implemented and parity tests added in `packages/@vue-spectrum/buttongroup/test/ButtonGroup.test.ts`.
 - 2026-02-16: `@react-spectrum/card` implemented and parity tests added in `packages/@vue-spectrum/card/test/Card.test.ts`.
-- 2026-02-16: Roadmap progression moved to `@react-spectrum/divider` as next queue item.
+- 2026-02-16: `@react-spectrum/divider` implemented and parity tests added in `packages/@vue-spectrum/divider/test/Divider.test.ts`.
+- 2026-02-16: Roadmap progression moved to `@react-spectrum/color` as next queue item.
