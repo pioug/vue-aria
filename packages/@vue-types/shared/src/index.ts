@@ -58,6 +58,34 @@ export interface SelectionBase {
   disabledKeys?: Iterable<Key>;
 }
 
+export interface DOMProps {
+  [key: string]: unknown;
+}
+
+export interface AriaLabelingProps extends DOMProps {
+  id?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
+}
+
+export interface StyleProps {
+  [key: string]: unknown;
+}
+
+export type ItemRenderer<T> = (item: T) => ItemElement<T>;
+
+export type Orientation = "horizontal" | "vertical";
+
+export type Alignment = "start" | "center" | "end";
+
+export interface PressEvents {
+  onPress?: () => void;
+  onPressStart?: () => void;
+  onPressChange?: () => void;
+  onPressEnd?: () => void;
+}
+
 export interface SingleSelection extends SelectionBase {
   selectedKey?: Key | null;
   defaultSelectedKey?: Key;
