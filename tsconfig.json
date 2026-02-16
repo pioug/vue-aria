@@ -35,7 +35,7 @@
         "packages/@vue-aria/collections/src/index.ts"
       ],
       "@vue-stately/toggle": [
-        "./packages/@vue-aria/toggle-state/src/index.ts"
+        "./packages/@vue-stately/toggle/src/index.ts"
       ],
       "@vue-stately/utils": [
         "./packages/@vue-aria/utils-state/src/index.ts"
