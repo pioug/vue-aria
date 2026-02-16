@@ -168,7 +168,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/listbox/src/index.ts", import.meta.url)
       ),
       "@vue-stately/list": fileURLToPath(
-        new URL("./packages/@vue-aria/list-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/list/src/index.ts", import.meta.url)
       ),
       "@vue-aria/select": fileURLToPath(
         new URL("./packages/@vue-aria/select/src/index.ts", import.meta.url)

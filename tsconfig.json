@@ -167,7 +167,7 @@
         "packages/@vue-aria/listbox/src/index.ts"
       ],
       "@vue-stately/list": [
-        "./packages/@vue-aria/list-state/src/index.ts"
+        "./packages/@vue-stately/list/src/index.ts"
       ],
       "@vue-aria/select": [
         "packages/@vue-aria/select/src/index.ts"
