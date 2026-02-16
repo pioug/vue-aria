@@ -132,7 +132,7 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/actionbar` (parity + tests ported in `packages/@vue-spectrum/actionbar/src/index.ts` and `packages/@vue-spectrum/actionbar/test/ActionBar.test.ts`)
 - [x] `@react-spectrum/actiongroup` (parity + completed local tests in `packages/@vue-spectrum/actiongroup/test/ActionGroup.test.ts`)
 - [x] `@react-spectrum/autocomplete` (implemented in `packages/@vue-spectrum/autocomplete/src/index.ts` and `src` exports; parity coverage in `packages/@vue-spectrum/autocomplete/test/SearchAutocomplete.test.ts`)
-- [ ] `@react-spectrum/avatar` (incomplete: no local tests)
+- [x] `@react-spectrum/avatar` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/badge` (incomplete: no local tests)
 - [x] `@react-spectrum/breadcrumbs` (parity + 2 suites, 25 tests passing)
 - [x] `@react-spectrum/button` (parity + tested; passing suite)
@@ -295,4 +295,5 @@ For each package under active scope:
 
 - 2026-02-16: `@react-spectrum/actiongroup` implemented (`src/index.ts` added) and parity tests added in `packages/@vue-spectrum/actiongroup/test/ActionGroup.test.ts`.
 - 2026-02-16: `@react-spectrum/autocomplete` implemented and basic parity tests added in `packages/@vue-spectrum/autocomplete/test/SearchAutocomplete.test.ts`.
-- 2026-02-16: Roadmap progression moved to `@react-spectrum/avatar` as next queue item.
+- 2026-02-16: `@react-spectrum/avatar` implemented and parity tests added in `packages/@vue-spectrum/avatar/test/Avatar.test.ts`.
+- 2026-02-16: Roadmap progression moved to `@react-spectrum/badge` as next queue item.
