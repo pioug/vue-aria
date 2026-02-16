@@ -248,6 +248,9 @@ export default defineConfig({
       "@vue-spectrum/label": fileURLToPath(
         new URL("./packages/@vue-spectrum/label/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/accordion": fileURLToPath(
+        new URL("./packages/@vue-spectrum/accordion/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/statuslight": fileURLToPath(
         new URL("./packages/@vue-spectrum/statuslight/src/index.ts", import.meta.url)
       ),

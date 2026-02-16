@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 43 | 21 | Open |
+| `@react-spectrum` | 64 | 44 | 20 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **125**
-- Current package-level gaps discovered: **21**
+- Local packages currently present: **126**
+- Current package-level gaps discovered: **20**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -82,6 +82,9 @@ Reference baseline: `references/react-spectrum`
   component.
 - Added `@vue-spectrum/card` compatibility package in
   `packages/@vue-spectrum/card` with placeholder `Card`-related components.
+- Added `@vue-spectrum/accordion` compatibility package in
+  `packages/@vue-spectrum/accordion` with placeholder `Accordion` and
+  `AccordionItem` components.
 
 ## 3) Remaining inconsistencies to close
 
@@ -93,7 +96,6 @@ Reference baseline: `references/react-spectrum`
 #### Missing `@react-aria` packages
 
 #### Missing `@react-spectrum` packages
-- `@react-spectrum/accordion`
 - `@react-spectrum/actionbar`
 - `@react-spectrum/actiongroup`
 - `@react-spectrum/autocomplete`
