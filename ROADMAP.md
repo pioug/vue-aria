@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 37 | 27 | Open |
+| `@react-spectrum` | 64 | 43 | 21 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **119**
-- Current package-level gaps discovered: **27**
+- Local packages currently present: **125**
+- Current package-level gaps discovered: **21**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -68,6 +68,20 @@ Reference baseline: `references/react-spectrum`
   and `Header` components.
 - Added `@vue-spectrum/well` compatibility package in
   `packages/@vue-spectrum/well` with placeholder `Well` component.
+- Added `@vue-spectrum/avatar` compatibility package in
+  `packages/@vue-spectrum/avatar` with a placeholder `Avatar` component.
+- Added `@vue-spectrum/badge` compatibility package in
+  `packages/@vue-spectrum/badge` with a placeholder `Badge` component.
+- Added `@vue-spectrum/icon` compatibility package in
+  `packages/@vue-spectrum/icon` with placeholder `Icon`, `UIIcon`, and
+  `Illustration` components.
+- Added `@vue-spectrum/image` compatibility package in
+  `packages/@vue-spectrum/image` with placeholder `Image` component.
+- Added `@vue-spectrum/inlinealert` compatibility package in
+  `packages/@vue-spectrum/inlinealert` with placeholder `InlineAlert`
+  component.
+- Added `@vue-spectrum/card` compatibility package in
+  `packages/@vue-spectrum/card` with placeholder `Card`-related components.
 
 ## 3) Remaining inconsistencies to close
 
@@ -83,10 +97,7 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/actionbar`
 - `@react-spectrum/actiongroup`
 - `@react-spectrum/autocomplete`
-- `@react-spectrum/avatar`
-- `@react-spectrum/badge`
 - `@react-spectrum/buttongroup`
-- `@react-spectrum/card`
 - `@react-spectrum/color`
 - `@react-spectrum/contextualhelp`
 - `@react-spectrum/divider`
@@ -94,10 +105,7 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/dropzone`
 - `@react-spectrum/filetrigger`
 - `@react-spectrum/form`
-- `@react-spectrum/icon`
 - `@react-spectrum/illustratedmessage`
-- `@react-spectrum/image`
-- `@react-spectrum/inlinealert`
 - `@react-spectrum/labeledvalue`
 - `@react-spectrum/layout`
 - `@react-spectrum/list`
@@ -122,8 +130,7 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ### Phase 2 — Add missing `@react-aria` packages
 
 ### Phase 3 — Add missing `@react-spectrum` packages
-1. `avatar`, `badge`, `icon`, `image`, `inlinealert`, `card`
-2. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
+1. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
 No remaining `@react-stately` gaps.

@@ -260,6 +260,24 @@ export default defineConfig({
       "@vue-spectrum/well": fileURLToPath(
         new URL("./packages/@vue-spectrum/well/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/avatar": fileURLToPath(
+        new URL("./packages/@vue-spectrum/avatar/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/badge": fileURLToPath(
+        new URL("./packages/@vue-spectrum/badge/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/icon": fileURLToPath(
+        new URL("./packages/@vue-spectrum/icon/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/image": fileURLToPath(
+        new URL("./packages/@vue-spectrum/image/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/inlinealert": fileURLToPath(
+        new URL("./packages/@vue-spectrum/inlinealert/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/card": fileURLToPath(
+        new URL("./packages/@vue-spectrum/card/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/utils": fileURLToPath(
         new URL("./packages/@vue-spectrum/utils/src/index.ts", import.meta.url)
       ),
