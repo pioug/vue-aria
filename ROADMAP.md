@@ -12,12 +12,12 @@ Reference baseline: `references/react-spectrum`
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
 | `@react-spectrum` | 64 | 30 | 34 | Open |
-| `@react-stately` | 32 | 27 | 5 | Open |
+| `@react-stately` | 32 | 28 | 4 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **107**
-- Current package-level gaps discovered: **39**
+- Local packages currently present: **108**
+- Current package-level gaps discovered: **38**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -92,7 +92,6 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/well`
 
 #### Missing `@react-stately` packages
-- `@react-stately/autocomplete`
 - `@react-stately/color`
 - `@react-stately/dnd`
 - `@react-stately/steplist`
@@ -113,8 +112,7 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
-1. `@react-stately/autocomplete` → `@vue-stately/autocomplete`
-2. `@react-stately/dnd` → `@vue-stately/dnd`
-3. `@react-stately/steplist` → `@vue-stately/steplist`
-4. `@react-stately/color` → `@vue-stately/color`
-5. `@react-stately/virtualizer` → `@vue-stately/virtualizer`
+1. `@react-stately/dnd` → `@vue-stately/dnd`
+2. `@react-stately/steplist` → `@vue-stately/steplist`
+3. `@react-stately/color` → `@vue-stately/color`
+4. `@react-stately/virtualizer` → `@vue-stately/virtualizer`
