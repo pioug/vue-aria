@@ -147,8 +147,8 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/dialog` (parity + 5 test suites passing)
 - [x] `@react-spectrum/divider` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/dnd` (incomplete: no local tests)
-- [ ] `@react-spectrum/dropzone` (incomplete: no local tests)
-- [ ] `@react-spectrum/filetrigger` (incomplete: no local tests)
+- [x] `@react-spectrum/dropzone` (parity + 1 test suite passing)
+- [x] `@react-spectrum/filetrigger` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/form` (incomplete: no local tests)
 - [ ] `@react-spectrum/icon` (incomplete: no local tests)
 - [ ] `@react-spectrum/illustratedmessage` (incomplete: no local tests)
@@ -302,3 +302,5 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/divider` implemented and parity tests added in `packages/@vue-spectrum/divider/test/Divider.test.ts`.
 - 2026-02-16: Roadmap progression moved to `@react-spectrum/color` as next queue item.
 - 2026-02-16: `@react-spectrum/contextualhelp` implemented and parity tests added in `packages/@vue-spectrum/contextualhelp/test/ContextualHelp.test.ts`.
+- 2026-02-16: `@react-spectrum/dropzone` implemented and parity tests added in `packages/@vue-spectrum/dropzone/test/Dropzone.test.ts`.
+- 2026-02-16: `@react-spectrum/filetrigger` implemented and parity tests added in `packages/@vue-spectrum/filetrigger/test/FileTrigger.test.ts`.
