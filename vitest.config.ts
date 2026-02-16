@@ -129,7 +129,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/form/src/index.ts", import.meta.url)
       ),
       "@vue-stately/form": fileURLToPath(
-        new URL("./packages/@vue-aria/form-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/form/src/index.ts", import.meta.url)
       ),
       "@vue-aria/spinbutton": fileURLToPath(
         new URL("./packages/@vue-aria/spinbutton/src/index.ts", import.meta.url)

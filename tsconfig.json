@@ -128,7 +128,7 @@
         "packages/@vue-aria/form/src/index.ts"
       ],
       "@vue-stately/form": [
-        "./packages/@vue-aria/form-state/src/index.ts"
+        "./packages/@vue-stately/form/src/index.ts"
       ],
       "@vue-aria/spinbutton": [
         "packages/@vue-aria/spinbutton/src/index.ts"
