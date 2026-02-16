@@ -19,16 +19,20 @@ Close implementation and test parity gaps package-by-package, then complete the 
   - `@react-spectrum`: 64 packages
   - `@react-types`: 47 packages
 - Local implementation inventory:
-  - `@vue-aria`: 56 packages,
+  - `@vue-aria`: 46 packages,
   - `@vue-spectrum`: 64 packages,
-  - `@vue-types`: 48 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
+  - `@vue-types`: 47 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
 - `@vue-stately`: 32 directories now moved out of legacy `@vue-aria/*-state`.
 - Coverage status:
   - Naming/alias gaps from previous phase: closed.
-  - `@react-aria` logical coverage: `54 / 54`.
+  - `@react-aria` canonical coverage (mapped to either `@vue-aria/*` or `@vue-stately/*` where applicable): `54 / 54`.
   - `@react-stately` logical coverage: `32 / 32` (now implemented as definitive `@vue-stately/*` packages).
   - `@react-spectrum` logical coverage: `64 / 64`.
 - `@react-types` logical coverage: `47 / 47`.
+
+Canonical parity check:
+
+- Run `node scripts/check-parity.mjs` for a strict missing/extra report that avoids false gaps from canonicalized `@react-aria` packages now represented in `@vue-stately/*`.
 
 ## 3) Gap target for this pass
 

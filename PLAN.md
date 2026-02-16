@@ -9,9 +9,9 @@ Close implementation/test parity gaps package-by-package, then remove all legacy
 - Reference baseline: `references/react-spectrum`
 - Focus families: `@react-aria`, `@react-stately`, `@react-spectrum`, `@react-types`
 - Naming rule:
-  - `@react-aria/*` implementations remain in `@vue-aria/*`
+  - `@react-aria/*` implementations remain in `@vue-aria/*`, with state primitives represented in canonical `@vue-stately/*` when applicable.
   - `@react-stately/*` must be implemented in `packages/@vue-stately/*`
-  - `*-state` packages under `@vue-aria` are temporary migration intermediates and should be removed after moves land
+  - Legacy `@vue-aria/*-state` package names are no longer expected after migration.
   - `@react-spectrum/*` remain in `@vue-spectrum/*`
   - `@react-types/*` remain in `@vue-types/*`
 
@@ -20,9 +20,9 @@ Close implementation/test parity gaps package-by-package, then remove all legacy
 1. Select next `@vue-stately/*` item from `ROADMAP.md`.
 2. Create/move package sources from legacy `packages/@vue-aria/<pkg>-state` to `packages/@vue-stately/<pkg>`.
 3. Preserve runtime and public API exports.
-4. Update all local imports/tests/docs from `@vue-aria/<pkg>-state` to `@vue-stately/<pkg>`.
+4. Update all local imports/tests/docs from `@vue-aria/<pkg>-state` to `@vue-stately/<pkg>` (canonical target).
 5. Update workspace config so `packages/@vue-stately/*` are included as build/test packages.
-6. Remove temporary mapping layer once all imports are direct.
+6. Remove any migration aliases left only for temporary compatibility.
 7. Update `ROADMAP.md` and commit a stable checkpoint.
 
 ## Parity protocol (after migration path is clear)
@@ -58,3 +58,8 @@ Close implementation/test parity gaps package-by-package, then remove all legacy
 - One package at a time.
 - Commit and push each stable checkpoint.
 - Keep `ROADMAP.md` as single source of active queue status.
+
+## Canonical gap reporting
+
+- Run `node scripts/check-parity.mjs` for strict missing/extra parity checks.
+- The checker treats `@react-aria/*` as covered when implemented as either `@vue-aria/*` or canonicalized `@vue-stately/*` variants.
