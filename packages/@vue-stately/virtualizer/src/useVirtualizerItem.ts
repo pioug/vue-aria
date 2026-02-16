@@ -1,18 +1,20 @@
-import type { Rect, Size } from "./utils";
+import type { Key } from "@vue-stately/layout/src/types";
+import type { LayoutInfo as VirtualizerLayoutInfo } from "./LayoutInfo";
+import type { Rect } from "./Rect";
+import type { Size } from "./Size";
 
-export type Key = string | number;
-export interface IVirtualizer {
-  updateItemSize: (key: Key, size: Size) => void;
-}
-
-export interface LayoutInfo extends Rect {
+type LayoutInfo = VirtualizerLayoutInfo | (Rect & {
   key?: Key;
-  estimatedSize?: number;
+  estimatedSize?: boolean;
   isSticky?: boolean;
   allowOverflow?: boolean;
   opacity?: number;
   zIndex?: number;
   transform?: string;
+});
+
+export interface IVirtualizer {
+  updateItemSize: (key: Key, size: Size) => void;
 }
 
 export interface VirtualizerItemOptions {
@@ -22,7 +24,7 @@ export interface VirtualizerItemOptions {
 }
 
 export function useVirtualizerItem(options: VirtualizerItemOptions): { updateSize: () => void } {
-  const {layoutInfo, virtualizer, ref} = options;
+  const { layoutInfo, virtualizer, ref } = options;
 
   const updateSize = () => {
     if (layoutInfo == null || !ref.current || typeof virtualizer?.updateItemSize !== "function") {
@@ -48,5 +50,5 @@ export function useVirtualizerItem(options: VirtualizerItemOptions): { updateSiz
     updateSize();
   }
 
-  return {updateSize};
+  return { updateSize };
 }

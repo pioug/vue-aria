@@ -24,12 +24,13 @@ export interface SpectrumBadgeProps {
 
 function isTextOnly(children: unknown[]): boolean {
   return (
-    children.length > 0
-    && children.every((child) =>
-      typeof child === "string"
-      || typeof child === "number"
-      || (isVNode(child) && child.type === Text)
-    );
+    children.length > 0 &&
+    children.every((child) =>
+      typeof child === "string" ||
+      typeof child === "number" ||
+      (isVNode(child) && child.type === Text)
+    )
+  );
 }
 
 export const Badge = defineComponent({

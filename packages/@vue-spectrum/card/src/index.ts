@@ -1,4 +1,6 @@
-import { useProviderProps, useStyleProps } from "@vue-spectrum/utils";
+import { useProviderProps } from "@vue-spectrum/provider";
+import { useStyleProps } from "@vue-spectrum/utils";
+import { filterDOMProps } from "@vue-aria/utils";
 import type { SpectrumCardProps, SpectrumCardViewProps } from "@vue-types/card";
 import { defineComponent, h, type PropType } from "vue";
 
@@ -18,23 +20,26 @@ const createLayout = (name: string, tag = "div", className: string) =>
         default: undefined,
       },
     },
-    setup(props, { slots, attrs }) {
-      const merged = useProviderProps({
-        ...props,
-        ...attrs,
-      } as Record<string, unknown>) as Record<string, unknown>;
-      const { styleProps } = useStyleProps(merged);
+  setup(props, { slots, attrs }) {
+    const merged = useProviderProps({
+      ...props,
+      ...attrs,
+    } as Record<string, unknown>) as Record<string, unknown>;
+    const { styleProps } = useStyleProps(merged);
+    const domProps = filterDOMProps(merged);
 
-      return () =>
-        h(
-          tag,
-          {
-            ...styleProps.value,
-            class: [
-              className,
-              styleProps.value.class,
-            ],
-          },
+    return () =>
+      h(
+        tag,
+        {
+          ...domProps,
+          ...styleProps.value,
+          class: [
+            className,
+            domProps.class,
+            styleProps.value.class,
+          ],
+        },
           slots.default ? slots.default() : null
         );
     },
@@ -85,6 +90,7 @@ export const Card = defineComponent({
       ...attrs,
     } as Record<string, unknown>) as SpectrumCardComponentProps & Record<string, unknown>;
     const { styleProps } = useStyleProps(merged);
+    const domProps = filterDOMProps(merged);
     const orientation = merged.orientation ?? "vertical";
     const layout = merged.layout;
 
@@ -92,6 +98,7 @@ export const Card = defineComponent({
       h(
         "article",
         {
+          ...domProps,
           ...merged.articleProps,
           ...styleProps.value,
           class: [
@@ -100,12 +107,13 @@ export const Card = defineComponent({
               "spectrum-Card--default": !merged.isQuiet && orientation !== "horizontal",
               "spectrum-Card--isQuiet": merged.isQuiet && orientation !== "horizontal",
               "spectrum-Card--horizontal": orientation === "horizontal",
-              "spectrum-Card--waterfall": layout === "waterfall",
-              "spectrum-Card--gallery": layout === "gallery",
-              "spectrum-Card--grid": layout === "grid",
-              "spectrum-Card--noLayout":
-                layout !== "waterfall" && layout !== "gallery" && layout !== "grid",
-            },
+	            "spectrum-Card--waterfall": layout === "waterfall",
+	            "spectrum-Card--gallery": layout === "gallery",
+	            "spectrum-Card--grid": layout === "grid",
+	            "spectrum-Card--noLayout":
+	              layout !== "waterfall" && layout !== "gallery" && layout !== "grid",
+	            },
+            domProps.class,
             styleProps.value.class,
           ],
         },
@@ -165,14 +173,17 @@ export const CardView = defineComponent({
       ...attrs,
     } as Record<string, unknown>) as SpectrumCardViewComponentProps & Record<string, unknown>;
     const { styleProps } = useStyleProps(merged);
+    const domProps = filterDOMProps(merged);
 
     return () =>
       h(
         "div",
         {
+          ...domProps,
           ...styleProps.value,
           class: [
             "spectrum-CardView",
+            domProps.class,
             styleProps.value.class,
           ],
         },

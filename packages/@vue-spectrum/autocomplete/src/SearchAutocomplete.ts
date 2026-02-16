@@ -472,7 +472,34 @@ export const SearchAutocomplete = defineComponent({
         "spectrum-Textfield-circleLoader spectrum-InputGroup-input-circleLoader spectrum-Search-circleLoader",
     });
 
-    const listBoxInput = computed(() => ({
+    const listBoxInput = computed(() => {
+      const onKeyDown = (event: KeyboardEvent) => {
+        const onKeyDownProp = (searchAutocomplete.inputProps.onKeydown ??
+          searchAutocomplete.inputProps.onKeyDown) as ((event: KeyboardEvent) => void) | undefined;
+        onKeyDownProp?.(event);
+
+        if (
+          event.key === "ArrowDown" &&
+          state.isOpen &&
+          state.selectionManager.focusedKey == null
+        ) {
+          const firstKey = state.collection.getFirstKey?.();
+          if (firstKey != null) {
+            state.selectionManager.setFocusedKey(firstKey);
+          }
+        } else if (
+          event.key === "ArrowUp" &&
+          state.isOpen &&
+          state.selectionManager.focusedKey == null
+        ) {
+          const lastKey = state.collection.getLastKey?.();
+          if (lastKey != null) {
+            state.selectionManager.setFocusedKey(lastKey);
+          }
+        }
+      };
+
+      return {
       ...searchAutocomplete.inputProps,
       ref: inputRef,
       id: merged.id ?? (searchAutocomplete.inputProps.id as string | undefined),
@@ -496,7 +523,10 @@ export const SearchAutocomplete = defineComponent({
         }
         syncControlledInputValue(event);
       },
-    }));
+      onKeydown: onKeyDown,
+      onKeyDown: onKeyDown,
+    };
+    });
 
     const searchLabel = computed(() =>
       [

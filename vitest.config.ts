@@ -89,6 +89,9 @@ export default defineConfig({
       "@vue-aria/label": fileURLToPath(
         new URL("./packages/@vue-aria/label/src/index.ts", import.meta.url)
       ),
+      "@vue-aria/color": fileURLToPath(
+        new URL("./packages/@vue-aria/color/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/button": fileURLToPath(
         new URL("./packages/@vue-aria/button/src/index.ts", import.meta.url)
       ),
@@ -112,6 +115,9 @@ export default defineConfig({
       ),
       "@vue-aria/radio": fileURLToPath(
         new URL("./packages/@vue-aria/radio/src/index.ts", import.meta.url)
+      ),
+      "@vue-aria/dnd": fileURLToPath(
+        new URL("./packages/@vue-aria/dnd/src/index.ts", import.meta.url)
       ),
       "@vue-aria/switch": fileURLToPath(
         new URL("./packages/@vue-aria/switch/src/index.ts", import.meta.url)

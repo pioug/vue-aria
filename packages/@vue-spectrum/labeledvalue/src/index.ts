@@ -1,4 +1,6 @@
-import { useProviderProps, useSlotProps, useStyleProps } from "@vue-spectrum/utils";
+import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
+import { filterDOMProps } from "@vue-aria/utils";
+import { useProviderProps } from "@vue-spectrum/provider";
 
 export interface SpectrumLabeledValueProps {
   UNSAFE_className?: string;
@@ -25,11 +27,13 @@ export const LabeledValue = defineComponent({
     const merged = useProviderProps(attrs) as SpectrumLabeledValueProps & Record<string, unknown>;
     const mergedSlot = useSlotProps(merged, "labeledValue");
     const { styleProps } = useStyleProps(mergedSlot);
+    const domProps = filterDOMProps(mergedSlot);
 
     return () =>
       h(
         "span",
         {
+          ...domProps,
           ...styleProps.value,
           class: ["spectrum-LabeledValue", styleProps.value.class],
         },

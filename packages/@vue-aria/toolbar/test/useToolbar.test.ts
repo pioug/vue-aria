@@ -29,7 +29,7 @@ describe("useToolbar", () => {
   };
 
   it("defaults to a toolbar role", () => {
-    const wrapper = mount(renderToolbar());
+    const wrapper = mount(renderToolbar(), { attachTo: document.body });
     expect(wrapper.get('[data-testid="toolbar"]').attributes("role")).toBe("toolbar");
     wrapper.unmount();
   });
@@ -45,14 +45,14 @@ describe("useToolbar", () => {
       },
     });
 
-    const wrapper = mount(Probe);
+    const wrapper = mount(Probe, { attachTo: document.body });
     await nextTick();
     expect(wrapper.find('[data-testid="toolbar"]').attributes("role")).toBe("group");
     wrapper.unmount();
   });
 
   it("moves focus with arrow keys", async () => {
-    const wrapper = mount(renderToolbar());
+    const wrapper = mount(renderToolbar(), { attachTo: document.body });
     await nextTick();
 
     const buttons = wrapper.findAll("button").map((button) => button.element as HTMLButtonElement);
@@ -67,7 +67,7 @@ describe("useToolbar", () => {
       setup() {
         return () => h(I18nProvider, { locale: "ar-AE" }, { default: () => h(renderToolbar({ orientation: "horizontal" })) });
       },
-    });
+    }, { attachTo: document.body });
     await nextTick();
 
     const buttons = wrapper.findAll("button").map((button) => button.element as HTMLButtonElement);

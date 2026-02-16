@@ -1,4 +1,5 @@
 import { useId } from "@vue-aria/utils";
+import { filterDOMProps } from "@vue-aria/utils";
 import { useField, useLabel } from "@vue-aria/label";
 import type { AriaFieldProps, FieldAria, LabelAria, LabelAriaProps } from "@vue-aria/label";
 import type { SpectrumFieldProps, SpectrumLabelProps, SpectrumFieldValidation, SpectrumHelpTextProps } from "@vue-types/label";
@@ -77,12 +78,14 @@ export const Label = defineComponent({
     const elementType = slotProps.elementType ?? "label";
     const htmlFor = slotProps.for ?? slotProps.htmlFor;
     const necessityIndicator = slotProps.necessityIndicator ?? (slotProps.isRequired ? "icon" : undefined);
+    const domProps = filterDOMProps(slotProps);
 
     return () => {
       const labelChildren = slots.default ? slots.default() : [];
       return h(
         elementType,
         {
+          ...domProps,
           ...styleProps.value,
           class: [
             "spectrum-FieldLabel",

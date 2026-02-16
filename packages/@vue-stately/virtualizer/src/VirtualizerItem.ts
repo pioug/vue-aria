@@ -1,5 +1,6 @@
 import { useVirtualizerItem, type IVirtualizer, type LayoutInfo, type VirtualizerItemOptions } from "./useVirtualizerItem";
 import type { Direction } from "./utils";
+import type { Rect } from "./Rect";
 
 export interface VirtualizerItemProps extends Omit<VirtualizerItemOptions, "ref"> {
   layoutInfo: LayoutInfo;
@@ -17,22 +18,31 @@ export interface VirtualizerItemHookOptions {
 
 const styleCache = new WeakMap<object, Record<string, unknown>>();
 
+function getRect(layoutInfo: LayoutInfo): Rect {
+  if ("rect" in layoutInfo) {
+    return layoutInfo.rect;
+  }
+  return layoutInfo;
+}
+
 export function layoutInfoToStyle(layoutInfo: LayoutInfo, dir: Direction, parent?: LayoutInfo | null) {
+  const rect = getRect(layoutInfo);
+  const parentRect = parent ? getRect(parent) : null;
   const xProperty = dir === "rtl" ? "right" : "left";
   const cacheKey = layoutInfo as object;
   const cached = styleCache.get(cacheKey);
   if (cached && cached[xProperty] != null) {
-    if (!parent) return cached;
-    const top = layoutInfo.y - (parent?.y ?? 0);
-    const x = layoutInfo.x - (parent?.x ?? 0);
+    if (!parentRect) return cached;
+    const top = rect.y - (parentRect.allowOverflow ? 0 : parentRect.y);
+    const x = rect.x - (parentRect.allowOverflow ? 0 : parentRect.x);
     if (cached.top === top && cached[xProperty] === x) return cached;
   }
 
   const rectStyles: Record<string, number | undefined> = {
-    top: layoutInfo.y - (parent && !parent.allowOverflow ? parent.y : 0),
-    [xProperty]: layoutInfo.x - (parent && !parent.allowOverflow ? parent.x : 0),
-    width: layoutInfo.width,
-    height: layoutInfo.height,
+    top: rect.y - (parentRect && !parentRect.allowOverflow ? parentRect.y : 0),
+    [xProperty]: rect.x - (parentRect && !parentRect.allowOverflow ? parentRect.x : 0),
+    width: rect.width,
+    height: rect.height,
   };
 
   const style: Record<string, unknown> = {

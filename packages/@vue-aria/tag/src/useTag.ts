@@ -51,8 +51,6 @@ export function useTag<T>(
     [key: string]: unknown;
   };
 
-  const isSelected = state.selectionManager.isSelected(key);
-
   let modality = useInteractionModality();
   if (modality === "virtual" && typeof window !== "undefined" && "ontouchstart" in window) {
     modality = "pointer";
@@ -67,7 +65,9 @@ export function useTag<T>(
   const onKeydown = (event: KeyboardEvent) => {
     if ((event.key === "Delete" || event.key === "Backspace") && onRemove && !isDisabled) {
       event.preventDefault();
-      onRemove(isSelected ? new Set(state.selectionManager.selectedKeys) : new Set([key]));
+      onRemove(state.selectionManager.isSelected(key)
+        ? new Set(state.selectionManager.selectedKeys)
+        : new Set([key]));
     }
   };
 

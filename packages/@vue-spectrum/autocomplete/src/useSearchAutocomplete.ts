@@ -55,7 +55,9 @@ export function useSearchAutocomplete<T>(
   const searchField = useSearchField(
     {
       ...otherProps,
-      value: state.inputValue,
+      get value() {
+        return state.inputValue;
+      },
       onChange: state.setInputValue,
       onClear: () => {
         state.setInputValue("");
@@ -64,16 +66,18 @@ export function useSearchAutocomplete<T>(
       onSubmit: (value) => {
         if (state.selectionManager.focusedKey == null) {
           onSubmit(value, null);
-          return;
         }
-
-        onSubmit(value, state.selectionManager.focusedKey);
       },
       onKeyDown,
       onKeyUp,
       onKeydown: onKeyDown as ((event: KeyboardEvent) => void) | undefined,
     },
-    state,
+    {
+      get value() {
+        return state.inputValue;
+      },
+      setValue: state.setInputValue,
+    },
     inputRef
   );
 
@@ -90,11 +94,7 @@ export function useSearchAutocomplete<T>(
       listBoxRef,
       keyboardDelegate,
       layoutDelegate,
-      onFocus: undefined,
-      onFocusChange: undefined,
-      onBlur: undefined,
-      onKeyDown: undefined,
-      onKeyUp: undefined,
+      onKeyDown,
       isInvalid,
       validationState,
       validationBehavior,

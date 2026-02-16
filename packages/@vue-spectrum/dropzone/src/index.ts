@@ -1,4 +1,5 @@
 import { useProviderProps } from "@vue-spectrum/provider";
+import { filterDOMProps } from "@vue-aria/utils";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h } from "vue";
 
@@ -29,11 +30,13 @@ export const Dropzone = defineComponent({
     } as Record<string, unknown>) as SpectrumDropzoneProps & Record<string, unknown>;
     const mergedSlot = useSlotProps(merged, "dropzone");
     const { styleProps } = useStyleProps(mergedSlot);
+    const domProps = filterDOMProps(mergedSlot);
 
     return () =>
       h(
         "div",
         {
+          ...domProps,
           ...styleProps.value,
           class: ["spectrum-Dropzone", styleProps.value.class],
         },

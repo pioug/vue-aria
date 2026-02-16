@@ -1,4 +1,5 @@
 import { useProviderProps } from "@vue-spectrum/provider";
+import { filterDOMProps } from "@vue-aria/utils";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h } from "vue";
 
@@ -47,11 +48,13 @@ export const ButtonGroup = defineComponent({
     } as Record<string, unknown>) as SpectrumButtonGroupProps & Record<string, unknown>;
     const merged = useSlotProps(mergedProvider, "buttonGroup");
     const { styleProps } = useStyleProps(merged);
+    const domProps = filterDOMProps(merged);
 
     return () =>
       h(
         "div",
         {
+          ...domProps,
           ...styleProps.value,
           class: [
             "spectrum-ButtonGroup",

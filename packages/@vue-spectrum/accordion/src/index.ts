@@ -315,7 +315,7 @@ export const Disclosure = defineComponent({
     const mergedPanelProps = computed(() => ({
       ...panelProps,
       role: "group" as const,
-      "aria-hidden": !state.isExpanded,
+      "aria-hidden": !isExpandedKey.value,
       class: ["spectrum-Accordion-itemContent"],
     }));
 
@@ -335,7 +335,7 @@ export const Disclosure = defineComponent({
         return groupDisabled.value;
       },
       get isExpanded() {
-        return state.isExpanded;
+        return isExpandedKey.value;
       },
     });
 
@@ -354,7 +354,7 @@ export const Disclosure = defineComponent({
             "spectrum-Accordion-item",
             {
               "spectrum-Accordion-item--quiet": Boolean(isQuiet.value),
-              "is-expanded": state.isExpanded,
+              "is-expanded": isExpandedKey.value,
               "is-disabled": groupDisabled.value,
               "in-accordion": Boolean(groupContext),
             },

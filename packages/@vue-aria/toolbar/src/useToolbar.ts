@@ -77,7 +77,6 @@ export function useToolbar(
     event.stopPropagation();
     event.preventDefault();
   };
-
   const onBlur = (event: FocusEvent & { currentTarget: EventTarget | null; relatedTarget: EventTarget | null }) => {
     const currentTarget = event.currentTarget as Element | null;
     const target = event.target as Element | null;

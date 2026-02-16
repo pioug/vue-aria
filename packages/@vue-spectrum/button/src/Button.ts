@@ -55,6 +55,14 @@ export const Button = defineComponent({
       type: Boolean,
       required: false,
     },
+    "aria-expanded": {
+      type: [Boolean, String] as PropType<boolean | "true" | "false" | undefined>,
+      required: false,
+    },
+    ariaExpanded: {
+      type: [Boolean, String] as PropType<boolean | "true" | "false" | undefined>,
+      required: false,
+    },
     autoFocus: {
       type: Boolean,
       required: false,
@@ -262,6 +270,7 @@ export const Button = defineComponent({
                 "data-style": styleVariant.value,
                 "data-static-color": staticColor.value || undefined,
                 "aria-disabled": isPending ? "true" : undefined,
+                "aria-expanded": props.ariaExpanded ?? props["aria-expanded"],
                 "aria-label": isPending ? pendingAriaLabel.value : buttonProps["aria-label"],
                 "aria-labelledby": isPending ? pendingAriaLabelledby.value : buttonProps["aria-labelledby"],
                 class: [

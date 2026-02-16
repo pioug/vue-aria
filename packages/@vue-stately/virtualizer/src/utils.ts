@@ -1,18 +1,6 @@
 export type RTLOffsetType = "negative" | "positive-descending" | "positive-ascending";
 export type Direction = "ltr" | "rtl";
 
-export interface Rect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-export interface Size {
-  width: number;
-  height: number;
-}
-
 let cachedRTLResult: RTLOffsetType | null = null;
 
 export function getRTLOffsetType(recalculate: boolean = false): RTLOffsetType {
@@ -48,14 +36,15 @@ export function getRTLOffsetType(recalculate: boolean = false): RTLOffsetType {
 }
 
 export function getScrollLeft(node: Element, direction: Direction): number {
-  let {scrollLeft} = node as Element & {scrollLeft: number; scrollWidth: number; clientWidth: number};
+  let { scrollLeft } = node as Element & { scrollLeft: number; scrollWidth: number; clientWidth: number };
   if (direction === "rtl") {
     switch (getRTLOffsetType()) {
       case "negative":
         scrollLeft = -scrollLeft;
         break;
       case "positive-descending":
-        scrollLeft = (node as Element & {scrollWidth: number; clientWidth: number}).scrollWidth - (node as Element & {clientWidth: number}).clientWidth - scrollLeft;
+        scrollLeft = (node as Element & { scrollWidth: number; clientWidth: number }).scrollWidth
+          - (node as Element & { clientWidth: number }).clientWidth - scrollLeft;
         break;
       case "positive-ascending":
         break;
@@ -65,7 +54,11 @@ export function getScrollLeft(node: Element, direction: Direction): number {
 }
 
 export function setScrollLeft(node: Element, direction: Direction, scrollLeft: number): void {
-  const el = node as Element & {scrollLeft: number; scrollWidth: number; clientWidth: number};
+  const el = node as Element & {
+    scrollLeft: number;
+    scrollWidth: number;
+    clientWidth: number;
+  };
   let target = scrollLeft;
   if (direction === "rtl") {
     switch (getRTLOffsetType()) {
@@ -80,4 +73,22 @@ export function setScrollLeft(node: Element, direction: Direction, scrollLeft: n
     }
   }
   el.scrollLeft = target;
+}
+
+export function isSetEqual<T>(a: Set<T>, b: Set<T>): boolean {
+  if (a === b) {
+    return true;
+  }
+
+  if (a.size !== b.size) {
+    return false;
+  }
+
+  for (const key of a) {
+    if (!b.has(key)) {
+      return false;
+    }
+  }
+
+  return true;
 }

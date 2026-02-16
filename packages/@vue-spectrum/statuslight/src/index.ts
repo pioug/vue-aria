@@ -1,4 +1,5 @@
 import { useProviderProps } from "@vue-spectrum/provider";
+import { filterDOMProps } from "@vue-aria/utils";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h } from "vue";
 
@@ -40,6 +41,7 @@ export const StatusLight = defineComponent({
     } as Record<string, unknown>) as SpectrumStatusLightProps & Record<string, unknown>;
     const mergedSlot = useSlotProps(merged, "statusLight");
     const { styleProps } = useStyleProps(mergedSlot);
+    const domProps = filterDOMProps(mergedSlot);
 
     const variant = mergedSlot.variant ?? "neutral";
 
@@ -47,6 +49,7 @@ export const StatusLight = defineComponent({
       h(
         "span",
         {
+          ...domProps,
           ...styleProps.value,
           class: [
             "spectrum-StatusLight",

@@ -24,6 +24,14 @@ export function useDisclosure(
   const isSSR = useIsSSR();
   let raf: number | null = null;
   const hasInstance = Boolean(getCurrentInstance());
+  let clickFallbackHandled = false;
+
+  const markClickHandled = () => {
+    clickFallbackHandled = true;
+    queueMicrotask(() => {
+      clickFallbackHandled = false;
+    });
+  };
 
   const syncPanelAttributes = () => {
     if (!ref.current || isSSR) {
@@ -81,29 +89,56 @@ export function useDisclosure(
     });
   }
 
+  const buttonProps: Record<string, unknown> = {
+    id: triggerId,
+    "aria-controls": panelId,
+    onPress: (event: { pointerType: string }) => {
+      if (!isDisabled && event.pointerType !== "keyboard") {
+        state.toggle();
+        markClickHandled();
+      }
+    },
+    isDisabled,
+    onPressStart: (event: { pointerType: string }) => {
+      if (event.pointerType === "keyboard" && !isDisabled) {
+        state.toggle();
+        markClickHandled();
+      }
+    },
+    onClick: () => {
+      if (!isDisabled && !clickFallbackHandled) {
+        state.toggle();
+      }
+      clickFallbackHandled = false;
+    },
+  };
+
+  Object.defineProperty(buttonProps, "aria-expanded", {
+    enumerable: true,
+    configurable: true,
+    get: () => state.isExpanded,
+  });
+
+  const panelProps: Record<string, unknown> = {
+    id: panelId,
+    role: "group",
+    "aria-labelledby": triggerId,
+  };
+
+  Object.defineProperty(panelProps, "aria-hidden", {
+    enumerable: true,
+    configurable: true,
+    get: () => !state.isExpanded,
+  });
+
+  Object.defineProperty(panelProps, "hidden", {
+    enumerable: true,
+    configurable: true,
+    get: () => (isSSR ? !state.isExpanded : undefined),
+  });
+
   return {
-    buttonProps: {
-      id: triggerId,
-      "aria-expanded": state.isExpanded,
-      "aria-controls": panelId,
-      onPress: (event: { pointerType: string }) => {
-        if (!isDisabled && event.pointerType !== "keyboard") {
-          state.toggle();
-        }
-      },
-      isDisabled,
-      onPressStart: (event: { pointerType: string }) => {
-        if (event.pointerType === "keyboard" && !isDisabled) {
-          state.toggle();
-        }
-      },
-    },
-    panelProps: {
-      id: panelId,
-      role: "group",
-      "aria-labelledby": triggerId,
-      "aria-hidden": !state.isExpanded,
-      hidden: isSSR ? !state.isExpanded : undefined,
-    },
+    buttonProps,
+    panelProps,
   };
 }

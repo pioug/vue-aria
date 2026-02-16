@@ -1,4 +1,4 @@
-import { defineComponent, h } from "vue";
+import { h } from "vue";
 
 export interface TextProps {
   as?: keyof HTMLElementTagNameMap;
@@ -16,70 +16,35 @@ export interface KeyboardProps {
 
 const resolveContent = (content: unknown) => (Array.isArray(content) ? content : [content]);
 
-export const Text = defineComponent({
-  name: "SpectrumText",
-  props: {
-    as: {
-      type: String as () => keyof HTMLElementTagNameMap,
-      required: false,
-      default: "span",
+export const Text = (props: TextProps, { slots, attrs }) =>
+  h(
+    props.as ?? "span",
+    {
+      ...attrs,
+      class: ["spectrum-Text", attrs.class],
     },
-    children: {
-      type: null as unknown as () => unknown,
-      required: false,
-    },
-  },
-  setup(props, { slots, attrs }) {
-    return () =>
-      h(
-        props.as,
-        {
-          ...attrs,
-          class: ["spectrum-Text", attrs.class],
-        },
-        slots.default ? slots.default() : resolveContent(props.children)
-      );
-  },
-});
+    slots.default ? slots.default() : resolveContent(props.children)
+  );
 
-export const Heading = defineComponent({
-  name: "SpectrumHeading",
-  props: {
-    level: {
-      type: Number as () => HeadingProps["level"],
-      required: false,
-      default: 1,
+export const Heading = (props: HeadingProps & Record<string, unknown>, { slots, attrs }) => {
+  const level = (props.level as HeadingProps["level"]) ?? 1;
+  const Tag = `h${Math.max(1, Math.min(6, level))}`;
+  return h(
+    Tag,
+    {
+      ...attrs,
+      class: ["spectrum-Heading", attrs.class],
     },
-    children: {
-      type: null as unknown as () => unknown,
-      required: false,
-    },
-  },
-  setup(props, { slots, attrs }) {
-    const Tag = `h${Math.max(1, Math.min(6, props.level ?? 1))}`;
-    return () =>
-      h(
-        Tag,
-        {
-          ...attrs,
-          class: ["spectrum-Heading", attrs.class],
-        },
-        slots.default ? slots.default() : resolveContent(props.children)
-      );
-  },
-});
+    slots.default ? slots.default() : resolveContent((props as { children?: unknown }).children)
+  );
+};
 
-export const Keyboard = defineComponent({
-  name: "SpectrumKeyboard",
-  setup(_, { slots, attrs }) {
-    return () =>
-      h(
-        "kbd",
-        {
-          ...attrs,
-          class: ["spectrum-Keyboard", attrs.class],
-        },
-        slots.default ? slots.default() : []
-      );
-  },
-});
+export const Keyboard = (_props: KeyboardProps, { slots, attrs }) =>
+  h(
+    "kbd",
+    {
+      ...attrs,
+      class: ["spectrum-Keyboard", attrs.class],
+    },
+    slots.default ? slots.default() : []
+  );

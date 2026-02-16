@@ -105,33 +105,42 @@ export const ActionButton = defineComponent({
       },
       "text"
     );
-    const { buttonProps, isPressed } = useButton(merged, domRefObject);
+    const { buttonProps: buttonPropsFromHook, isPressed } = useButton(merged, domRefObject);
+    const buttonProps = {
+      ...buttonPropsFromHook,
+    };
+    if ("disabled" in buttonProps) {
+      delete buttonProps.disabled;
+    }
     const { hoverProps, isHovered } = useHover({
       isDisabled: Boolean(merged.isDisabled),
     });
     const { styleProps } = useStyleProps(merged);
-    watch(
-      () => merged.isDisabled,
-      (isDisabled) => {
-        const button = domRef.value;
-        if (!button) {
-          return;
-        }
+    const syncDisabledAttribute = (isDisabled: boolean | undefined) => {
+      if (!domRef.value) {
+        return;
+      }
 
-        if (isDisabled) {
-          button.setAttribute("disabled", "disabled");
-        } else {
-          button.removeAttribute("disabled");
-        }
-      },
-      { immediate: true }
+      if (isDisabled) {
+        domRef.value.setAttribute("disabled", "disabled");
+      } else {
+        domRef.value.removeAttribute("disabled");
+      }
+    };
+
+    const getIsDisabled = () => props.isDisabled ?? merged.isDisabled;
+    watch(
+      () => getIsDisabled(),
+      syncDisabledAttribute
     );
 
     expose({
       focus: () => domRef.value?.focus(),
       UNSAFE_getDOMNode: () => domRef.value,
     });
+
     onMounted(() => {
+      syncDisabledAttribute(getIsDisabled());
       if (merged.autoFocus) {
         domRef.value?.focus();
       }

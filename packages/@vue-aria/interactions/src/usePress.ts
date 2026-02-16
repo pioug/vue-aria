@@ -425,6 +425,12 @@ export function usePress(props: PressHookProps): PressResult {
           state.isOverTarget = false;
           triggerClick(event);
           cancel(event);
+        } else if (!state.isPressed) {
+          const stopPressStart = triggerPressStart(event, "mouse");
+          const stopPressUp = triggerPressUp(event, "mouse");
+          const stopPressEnd = triggerPressEnd(event, "mouse", true);
+          triggerClick(event);
+          shouldStopPropagation = stopPressStart && stopPressUp && stopPressEnd;
         }
 
         state.ignoreEmulatedMouseEvents = false;

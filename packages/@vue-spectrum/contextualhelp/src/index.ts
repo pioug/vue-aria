@@ -1,5 +1,6 @@
 import type { SpectrumContextualHelpProps } from "@vue-types/contextualhelp";
 import { useProviderProps } from "@vue-spectrum/provider";
+import { filterDOMProps } from "@vue-aria/utils";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h, type PropType } from "vue";
 
@@ -30,11 +31,13 @@ export const ContextualHelp = defineComponent({
     } as Record<string, unknown>) as SpectrumContextualHelpProps & Record<string, unknown>;
     const mergedSlot = useSlotProps(merged, "contextualHelp");
     const { styleProps } = useStyleProps(mergedSlot);
+    const domProps = filterDOMProps(mergedSlot);
 
     return () =>
       h(
         "span",
         {
+          ...domProps,
           ...styleProps.value,
           class: [
             "spectrum-ContextualHelp",

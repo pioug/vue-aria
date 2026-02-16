@@ -1,5 +1,7 @@
 import { getScrollLeft, setScrollLeft } from "./utils";
-import type { Direction, Rect, Size } from "./utils";
+import type { Direction } from "./utils";
+import type { Rect } from "./Rect";
+import type { Size } from "./Size";
 
 export interface ScrollViewProps {
   contentSize: Size;

@@ -15,6 +15,7 @@ import {
   useSyntheticLinkProps,
 } from "@vue-aria/utils";
 import { getRowId, listMap } from "./utils";
+import { watchEffect } from "vue";
 
 export interface AriaGridListItemOptions {
   node: CollectionNode<unknown>;
@@ -270,7 +271,7 @@ export function useGridListItem<T>(
     }
   };
 
-  const onKeydown = (event: KeyboardEvent) => {
+  const onKeyDown = (event: KeyboardEvent) => {
     if (
       !nodeContains(event.currentTarget as globalThis.Node | null, event.target as globalThis.Node | null)
       || !ref.current
@@ -296,19 +297,57 @@ export function useGridListItem<T>(
   const rowProps = mergeProps(itemProps, linkProps, customRowProps, {
     role: "row",
     onKeydownCapture,
-    onKeydown,
+    onKeyDown,
+    onKeydown: onKeyDown,
     onFocus,
     "aria-label": (nodeAriaLabel ?? node["aria-label"] ?? node.textValue) || undefined,
-    "aria-selected": state.selectionManager.canSelectItem(node.key)
-      ? state.selectionManager.isSelected(node.key)
-      : undefined,
-    "aria-disabled": state.selectionManager.isDisabled(node.key) || undefined,
     "aria-labelledby":
       descriptionId && (node["aria-label"] || node.textValue)
         ? `${getRowId(state as object, node.key)} ${descriptionId}`
         : undefined,
     id: getRowId(state as object, node.key),
   }) as Record<string, unknown>;
+
+  watchEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const selected = state.selectionManager.canSelectItem(node.key)
+      ? state.selectionManager.isSelected(node.key)
+      : undefined;
+
+    if (selected === undefined) {
+      ref.current.removeAttribute("aria-selected");
+    } else {
+      ref.current.setAttribute("aria-selected", selected ? "true" : "false");
+    }
+
+    const isDisabled = state.selectionManager.isDisabled(node.key);
+    if (isDisabled) {
+      ref.current.setAttribute("aria-disabled", "true");
+    } else {
+      ref.current.removeAttribute("aria-disabled");
+    }
+  });
+
+  Object.defineProperty(rowProps, "aria-selected", {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return state.selectionManager.canSelectItem(node.key)
+        ? state.selectionManager.isSelected(node.key)
+        : undefined;
+    },
+  });
+
+  Object.defineProperty(rowProps, "aria-disabled", {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return state.selectionManager.isDisabled(node.key) || undefined;
+    },
+  });
 
   if (isVirtualized) {
     const collection = state.collection as unknown as Iterable<CollectionNode<T>> & {

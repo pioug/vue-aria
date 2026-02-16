@@ -19,15 +19,32 @@ function normalizeRole(role: string): string {
   return role.replace(/\"/g, "\\\"");
 }
 
+const implicitRoleSelectors: Record<string, string[]> = {
+  button: ["button"],
+};
+
 function collectNodesByRole(root: Element, role: string): HTMLElement[] {
-  const nodes: HTMLElement[] = [];
-  const selector = `[role="${normalizeRole(role)}"]`;
-  if ((root as HTMLElement).matches?.(selector)) {
-    nodes.push(root as HTMLElement);
+  const normalizedRole = normalizeRole(role);
+  const selectors = [`[role="${normalizedRole}"]`, ...(implicitRoleSelectors[normalizedRole] ?? [])];
+  const seen = new Set<HTMLElement>();
+
+  const addNode = (node: HTMLElement | null) => {
+    if (node != null) {
+      seen.add(node);
+    }
+  };
+
+  if ((root as HTMLElement).matches?.(`[role="${normalizedRole}"]`)) {
+    addNode(root as HTMLElement);
   }
 
-  nodes.push(...Array.from(root.querySelectorAll<HTMLElement>(selector)));
-  return nodes;
+  for (const selector of selectors) {
+    for (const node of root.querySelectorAll<HTMLElement>(selector)) {
+      addNode(node);
+    }
+  }
+
+  return Array.from(seen);
 }
 
 function collectNodesByText(root: Element, text: string): HTMLElement[] {

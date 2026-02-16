@@ -244,7 +244,7 @@ export class MenuTester extends BaseTester {
 
         await waitFor(() => {
           if (submenuTriggerTester.trigger?.getAttribute('aria-expanded') !== 'true') {
-            throw new Error('aria-expanded for the submenu trigger wasn\\'t changed to \"true\", unable to confirm the existance of the submenu');
+            throw new Error("aria-expanded for the submenu trigger wasn't changed to \"true\", unable to confirm the existance of the submenu");
           } else {
             return true;
           }

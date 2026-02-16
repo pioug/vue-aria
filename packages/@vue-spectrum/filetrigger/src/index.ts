@@ -1,4 +1,5 @@
 import { useProviderProps } from "@vue-spectrum/provider";
+import { filterDOMProps } from "@vue-aria/utils";
 import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h } from "vue";
 
@@ -29,11 +30,13 @@ export const FileTrigger = defineComponent({
     } as Record<string, unknown>) as SpectrumFileTriggerProps & Record<string, unknown>;
     const mergedSlot = useSlotProps(merged, "fileTrigger");
     const { styleProps } = useStyleProps(mergedSlot);
+    const domProps = filterDOMProps(mergedSlot);
 
     return () =>
       h(
         "input",
         {
+          ...domProps,
           ...styleProps.value,
           type: "file",
           class: ["spectrum-FileTrigger", styleProps.value.class],

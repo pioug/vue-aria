@@ -1,6 +1,6 @@
 import type { Key } from "@vue-aria/collections";
 import type { ListState } from "@vue-stately/list";
-import { mergeProps, useEffectEvent } from "@vue-aria/utils";
+import { useEffectEvent } from "@vue-aria/utils";
 import { onScopeDispose } from "vue";
 
 export interface AriaActionGroupItemProps {
@@ -30,13 +30,15 @@ export function useActionGroupItem<T>(
   };
 
   if (selectionMode !== "none") {
-    const isSelected = state.selectionManager.isSelected(props.key);
-    buttonProps["aria-checked"] = isSelected;
+    Object.defineProperty(buttonProps, "aria-checked", {
+      enumerable: true,
+      configurable: true,
+      get: () => state.selectionManager.isSelected(props.key),
+    });
   }
 
-  const isFocused = props.key === state.selectionManager.focusedKey;
   const onRemovedWithFocus = useEffectEvent(() => {
-    if (isFocused) {
+    if (state.selectionManager.focusedKey === props.key) {
       state.selectionManager.setFocusedKey(null);
     }
   });
@@ -45,15 +47,34 @@ export function useActionGroupItem<T>(
     onRemovedWithFocus();
   });
 
+  const getTabIndex = () =>
+    state.selectionManager.focusedKey == null || state.selectionManager.focusedKey === props.key
+      ? 0
+      : -1;
+
+  Object.defineProperty(buttonProps, "tabIndex", {
+    enumerable: true,
+    configurable: true,
+    get: getTabIndex,
+  });
+
+  Object.defineProperty(buttonProps, "onFocus", {
+    enumerable: true,
+    configurable: true,
+    value: () => {
+      state.selectionManager.setFocusedKey(props.key);
+    },
+  });
+
+  Object.defineProperty(buttonProps, "onPress", {
+    enumerable: true,
+    configurable: true,
+    value: () => {
+      state.selectionManager.select(props.key);
+    },
+  });
+
   return {
-    buttonProps: mergeProps(buttonProps, {
-      tabIndex: isFocused || state.selectionManager.focusedKey == null ? 0 : -1,
-      onFocus() {
-        state.selectionManager.setFocusedKey(props.key);
-      },
-      onPress() {
-        state.selectionManager.select(props.key);
-      },
-    }),
+    buttonProps,
   };
 }

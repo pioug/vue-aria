@@ -132,7 +132,7 @@ export class SelectTester extends BaseTester {
     }
     let listbox = this.listbox;
     if (!listbox) {
-      throw new Error('Select\\'s listbox not found.');
+      throw new Error("Select's listbox not found.");
     }
 
     if (listbox) {

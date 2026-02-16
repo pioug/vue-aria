@@ -90,7 +90,8 @@ class RGBColorValue implements Color {
     public blue: number,
     public alpha: number = 1,
     public space: ColorSpace = "rgb",
-    public format: ColorFormat = "css"
+    public format: ColorFormat = "css",
+    private hasExplicitAlpha = false
   ) {
   }
 
@@ -118,6 +119,9 @@ class RGBColorValue implements Color {
       Math.round(this.blue).toString(16).padStart(2, "0"),
     ].join("");
     if (this.alpha === 1) {
+      if (this.hasExplicitAlpha) {
+        return `#${hex}ff`;
+      }
       return `#${hex}`;
     }
 
@@ -262,7 +266,8 @@ function parseRgbValue(value: string): RGBColorValue {
     const green = Number.parseInt(withAlpha.slice(3, 5), 16);
     const blue = Number.parseInt(withAlpha.slice(5, 7), 16);
     const alpha = Number.parseInt(withAlpha.slice(7, 9), 16) / 255;
-    return new RGBColorValue(red, green, blue, alpha);
+    const hasExplicitAlpha = hex.length === 5 || hex.length === 9;
+    return new RGBColorValue(red, green, blue, alpha, "rgb", "hex", hasExplicitAlpha);
   }
 
   const normalized = /^rgba?\(([^)]+)\)$/.exec(hex)?.[1];
