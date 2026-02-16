@@ -135,7 +135,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/spinbutton/src/index.ts", import.meta.url)
       ),
       "@vue-stately/numberfield": fileURLToPath(
-        new URL("./packages/@vue-aria/numberfield-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/numberfield/src/index.ts", import.meta.url)
       ),
       "@vue-stately/slider": fileURLToPath(
         new URL("./packages/@vue-aria/slider-state/src/index.ts", import.meta.url)

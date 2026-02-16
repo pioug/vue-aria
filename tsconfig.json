@@ -134,7 +134,7 @@
         "packages/@vue-aria/spinbutton/src/index.ts"
       ],
       "@vue-stately/numberfield": [
-        "./packages/@vue-aria/numberfield-state/src/index.ts"
+        "./packages/@vue-stately/numberfield/src/index.ts"
       ],
       "@vue-stately/slider": [
         "./packages/@vue-aria/slider-state/src/index.ts"
