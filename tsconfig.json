@@ -182,7 +182,7 @@
         "packages/@vue-aria/menu/src/index.ts"
       ],
       "@vue-stately/combobox": [
-        "./packages/@vue-aria/combobox-state/src/index.ts"
+        "./packages/@vue-stately/combobox/src/index.ts"
       ],
       "@vue-aria/combobox": [
         "packages/@vue-aria/combobox/src/index.ts"

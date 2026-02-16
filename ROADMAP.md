@@ -47,7 +47,7 @@ Status: `Todo` / `In progress` / `Done`.
 
 - [x] `@vue-stately/calendar`
 - [x] `@vue-stately/checkbox`
-- [ ] `@vue-stately/combobox`
+- [x] `@vue-stately/combobox`
 - [ ] `@vue-stately/datepicker`
 - [ ] `@vue-stately/disclosure`
 - [ ] `@vue-stately/form`
