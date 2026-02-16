@@ -143,6 +143,24 @@ export interface TextInputBase {
   placeholder?: string;
 }
 
+export interface RangeInputBase<T = number> {
+  minValue?: T;
+  maxValue?: T;
+  step?: T;
+}
+
+export interface TextInputDOMEvents {
+  onCopy?: (event: Event) => void;
+  onCut?: (event: Event) => void;
+  onPaste?: (event: Event) => void;
+  onCompositionStart?: (event: Event) => void;
+  onCompositionEnd?: (event: Event) => void;
+  onCompositionUpdate?: (event: Event) => void;
+  onSelect?: (event: Event) => void;
+  onBeforeInput?: (event: Event) => void;
+  onInput?: (event: Event) => void;
+}
+
 export interface InputDOMProps {
   disabled?: boolean;
   name?: string;
