@@ -174,6 +174,7 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
   const longPressEnabled = hasAction && allowsSelection;
   const longPressEnabledOnPressStart = { current: false };
   const hadPrimaryActionOnPressStart = { current: false };
+  const didSelectOnPressUp = { current: false };
   const collectionItemProps = (manager.getItemProps(key) ?? {}) as Record<string, unknown>;
 
   const performAction = (event: MouseEvent | KeyboardEvent | PressEvent | LongPressEvent) => {
@@ -220,17 +221,35 @@ export function useSelectableItem(options: SelectableItemOptions): SelectableIte
       itemPressProps.onPressUp = hasPrimaryAction
         ? undefined
         : (event) => {
+            if (didSelectOnPressUp.current) {
+              didSelectOnPressUp.current = false;
+              return;
+            }
+
             if (event.pointerType === "mouse" && allowsSelection) {
+              didSelectOnPressUp.current = true;
               onSelect(event);
+            } else {
+              didSelectOnPressUp.current = false;
             }
           };
 
       itemPressProps.onPress = hasPrimaryAction
         ? performAction
         : (event) => {
-            if (event.pointerType !== "keyboard" && event.pointerType !== "mouse" && allowsSelection) {
+            if (didSelectOnPressUp.current) {
+              didSelectOnPressUp.current = false;
+              return;
+            }
+
+            if (
+              event.pointerType !== "keyboard"
+              && event.pointerType !== "mouse"
+              && allowsSelection
+            ) {
               onSelect(event);
             }
+            didSelectOnPressUp.current = false;
           };
     }
   } else {

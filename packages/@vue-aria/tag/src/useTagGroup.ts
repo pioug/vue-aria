@@ -35,11 +35,12 @@ export const hookData = new WeakMap<object, { onRemove?: (keys: Set<Key>) => voi
 export function useTagGroup<T>(
   props: AriaTagGroupOptions<T>,
   state: ListState<T>,
-  ref: { current: HTMLElement | null }
+  refValue: { current: HTMLElement | null }
 ): TagGroupAria {
   const {
     onRemove,
     label,
+    keyboardNavigationBehavior = "arrow",
     keyboardDelegate: providedKeyboardDelegate,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
@@ -59,7 +60,7 @@ export function useTagGroup<T>(
     providedKeyboardDelegate ||
     new ListKeyboardDelegate({
       collection: state.collection,
-      ref,
+      ref: refValue,
       orientation: "horizontal",
       direction,
       disabledKeys: state.disabledKeys,
@@ -70,28 +71,29 @@ export function useTagGroup<T>(
   const { focusWithinProps } = useFocusWithin({
     onFocusWithinChange: (focused) => {
       isFocusWithin.value = focused;
+      state.selectionManager.setFocused(focused);
     },
   });
 
   const { gridProps } = useGridList(
-    {
-      ...otherProps,
-      ...fieldProps,
-      keyboardDelegate,
-      shouldFocusWrap: true,
-      linkBehavior: "override",
-      keyboardNavigationBehavior: "tab",
-    },
+      {
+        ...otherProps,
+        ...fieldProps,
+        keyboardDelegate,
+        shouldFocusWrap: true,
+        linkBehavior: "override",
+        keyboardNavigationBehavior: "tab",
+      },
     state,
-    ref
+    refValue
   );
 
   const prevCount = ref(state.collection.size);
   watch(
     [() => state.collection.size, isFocusWithin],
     ([size]) => {
-      if (ref.current && prevCount.value > 0 && size === 0 && isFocusWithin.value) {
-        ref.current.focus();
+      if (refValue.current && prevCount.value > 0 && size === 0 && isFocusWithin.value) {
+        refValue.current.focus();
       }
       prevCount.value = size;
     },
