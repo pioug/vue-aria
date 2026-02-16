@@ -25,7 +25,7 @@ Close implementation and test parity gaps package-by-package across mapped `@rea
   - `@react-aria` logical coverage: `54 / 54`.
   - `@react-stately` logical coverage: `32 / 32` (via mapped `@vue-aria/*-state` and `@vue-stately/*` package names).
   - `@react-spectrum` logical coverage: `64 / 64`.
-- `@react-types` logical coverage: `42 / 47`.
+- `@react-types` logical coverage: `43 / 47`.
 
 ## 3) Gap target for this pass
 
@@ -76,7 +76,7 @@ Status: `Todo` / `In progress` / `Done`.
 - [x] `@react-types/switch`
 - [x] `@react-types/table`
 - [x] `@react-types/tabs`
-- [ ] `@react-types/text`
+- [x] `@react-types/text`
 - [ ] `@react-types/textfield`
 - [ ] `@react-types/tooltip`
 - [ ] `@react-types/view`
