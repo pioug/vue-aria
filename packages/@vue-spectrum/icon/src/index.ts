@@ -1,3 +1,5 @@
+import { useProviderProps } from "@vue-spectrum/provider";
+import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h } from "vue";
 
 export interface IconProps {
@@ -20,14 +22,38 @@ const createIconLike = (className: string, tag = "span") =>
         type: String,
         required: false,
       },
+      UNSAFE_className: {
+        type: String,
+        required: false,
+        default: undefined,
+      },
+      UNSAFE_style: {
+        type: Object as () => Record<string, unknown> | undefined,
+        required: false,
+        default: undefined,
+      },
     },
     setup(props, { attrs, slots }) {
+      const merged = useProviderProps({
+        ...props,
+        ...attrs,
+      } as Record<string, unknown>) as Record<string, unknown>;
+      const mergedSlot = useSlotProps(merged, "icon");
+      const { styleProps } = useStyleProps(mergedSlot);
+
       return () =>
-        h(tag, {
-          ...attrs,
-          class: [className, attrs.class],
-          "aria-label": attrs["aria-label"] ?? props.alt,
-        }, slots.default ? slots.default() : null);
+        h(
+          tag,
+          {
+            ...styleProps.value,
+            "aria-label": mergedSlot["aria-label"] ?? mergedSlot.alt,
+            class: [
+              className,
+              styleProps.value.class,
+            ],
+          },
+          slots.default ? slots.default() : null
+        );
     },
   });
 

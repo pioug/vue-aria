@@ -150,12 +150,12 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/dropzone` (parity + 1 test suite passing)
 - [x] `@react-spectrum/filetrigger` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/form` (incomplete: no local tests)
-- [ ] `@react-spectrum/icon` (incomplete: no local tests)
-- [ ] `@react-spectrum/illustratedmessage` (incomplete: no local tests)
-- [ ] `@react-spectrum/image` (incomplete: no local tests)
-- [ ] `@react-spectrum/inlinealert` (incomplete: no local tests)
+- [x] `@react-spectrum/icon` (parity + 1 test suite passing)
+- [x] `@react-spectrum/illustratedmessage` (parity + 1 test suite passing)
+- [x] `@react-spectrum/image` (parity + 1 test suite passing)
+- [x] `@react-spectrum/inlinealert` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/label` (incomplete: no local tests)
-- [ ] `@react-spectrum/labeledvalue` (incomplete: no local tests)
+- [x] `@react-spectrum/labeledvalue` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/layout` (incomplete: no local tests)
 - [x] `@react-spectrum/link` (parity + 2 test suites passing)
 - [ ] `@react-spectrum/list` (incomplete: no local tests)
@@ -171,7 +171,7 @@ No package marked complete until all required checks are green.
 - [ ] `@react-spectrum/s2` (incomplete: no local tests)
 - [x] `@react-spectrum/searchfield` (parity + 2 test suites passing)
 - [x] `@react-spectrum/slider` (parity + 2 test suites passing)
-- [ ] `@react-spectrum/statuslight` (incomplete: no local tests)
+- [x] `@react-spectrum/statuslight` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/steplist` (incomplete: no local tests)
 - [ ] `@react-spectrum/story-utils` (incomplete: no local tests)
 - [ ] `@react-spectrum/style-macro-s1` (incomplete: no local tests)
@@ -304,3 +304,9 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/contextualhelp` implemented and parity tests added in `packages/@vue-spectrum/contextualhelp/test/ContextualHelp.test.ts`.
 - 2026-02-16: `@react-spectrum/dropzone` implemented and parity tests added in `packages/@vue-spectrum/dropzone/test/Dropzone.test.ts`.
 - 2026-02-16: `@react-spectrum/filetrigger` implemented and parity tests added in `packages/@vue-spectrum/filetrigger/test/FileTrigger.test.ts`.
+- 2026-02-16: `@react-spectrum/icon` implemented and parity tests added in `packages/@vue-spectrum/icon/test/Icon.test.ts`.
+- 2026-02-16: `@react-spectrum/image` implemented and parity tests added in `packages/@vue-spectrum/image/test/Image.test.ts`.
+- 2026-02-16: `@react-spectrum/inlinealert` implemented and parity tests added in `packages/@vue-spectrum/inlinealert/test/InlineAlert.test.ts`.
+- 2026-02-16: `@react-spectrum/illustratedmessage` implemented and parity tests added in `packages/@vue-spectrum/illustratedmessage/test/IllustratedMessage.test.ts`.
+- 2026-02-16: `@react-spectrum/labeledvalue` implemented and parity tests added in `packages/@vue-spectrum/labeledvalue/test/LabeledValue.test.ts`.
+- 2026-02-16: `@react-spectrum/statuslight` implemented and parity tests added in `packages/@vue-spectrum/statuslight/test/StatusLight.test.ts`.

@@ -1,31 +1,61 @@
+import { useProviderProps } from "@vue-spectrum/provider";
+import { useSlotProps, useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h } from "vue";
 
-export interface SpectrumIllustratedMessageProps {}
+export interface SpectrumIllustratedMessageProps {
+  UNSAFE_className?: string;
+  UNSAFE_style?: Record<string, unknown>;
+}
 
-export const IllustratedMessage = defineComponent({
-  name: "SpectrumIllustratedMessage",
-  setup(_, { slots, attrs }) {
-    return () =>
-      h(
-        "div",
-        { ...attrs, class: ["spectrum-IllustratedMessage", attrs.class] },
-        slots.default ? slots.default() : null
-      );
-  },
-});
+const createIllustrated = (name: string, tag: string, className: string) =>
+  defineComponent({
+    name,
+    props: {
+      UNSAFE_className: {
+        type: String,
+        required: false,
+        default: undefined,
+      },
+      UNSAFE_style: {
+        type: Object as () => Record<string, unknown> | undefined,
+        required: false,
+        default: undefined,
+      },
+    },
+    setup(_, { attrs, slots }) {
+      const merged = useProviderProps(attrs) as SpectrumIllustratedMessageProps & Record<string, unknown>;
+      const mergedSlot = useSlotProps(merged, "illustratedMessage");
+      const { styleProps } = useStyleProps(mergedSlot);
 
-export const IllustratedMessageHeading = defineComponent({
-  name: "SpectrumIllustratedMessageHeading",
-  setup(_, { slots, attrs }) {
-    return () =>
-      h("h3", { ...attrs, class: ["spectrum-IllustratedMessage-heading", attrs.class] }, slots.default ? slots.default() : null);
-  },
-});
+      return () =>
+        h(
+          tag,
+          {
+            ...styleProps.value,
+            class: [
+              className,
+              styleProps.value.class,
+            ],
+          },
+          slots.default ? slots.default() : null
+        );
+    },
+  });
 
-export const IllustratedMessageDescription = defineComponent({
-  name: "SpectrumIllustratedMessageDescription",
-  setup(_, { slots, attrs }) {
-    return () =>
-      h("p", { ...attrs, class: ["spectrum-IllustratedMessage-description", attrs.class] }, slots.default ? slots.default() : null);
-  },
-});
+export const IllustratedMessage = createIllustrated(
+  "SpectrumIllustratedMessage",
+  "div",
+  "spectrum-IllustratedMessage"
+);
+
+export const IllustratedMessageHeading = createIllustrated(
+  "SpectrumIllustratedMessageHeading",
+  "h3",
+  "spectrum-IllustratedMessage-heading"
+);
+
+export const IllustratedMessageDescription = createIllustrated(
+  "SpectrumIllustratedMessageDescription",
+  "p",
+  "spectrum-IllustratedMessage-description"
+);
