@@ -230,7 +230,7 @@
         "packages/@vue-aria/toast/src/index.ts"
       ],
       "@vue-stately/toast": [
-        "./packages/@vue-aria/toast-state/src/index.ts"
+        "./packages/@vue-stately/toast/src/index.ts"
       ],
       "@vue-stately/tooltip": [
         "./packages/@vue-aria/tooltip-state/src/index.ts"
