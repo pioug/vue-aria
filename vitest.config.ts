@@ -192,7 +192,7 @@ export default defineConfig({
         new URL("./packages/@vue-stately/grid/src/index.ts", import.meta.url)
       ),
       "@vue-stately/table": fileURLToPath(
-        new URL("./packages/@vue-aria/table-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/table/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tree": fileURLToPath(
         new URL("./packages/@vue-aria/tree-state/src/index.ts", import.meta.url)

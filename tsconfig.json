@@ -191,7 +191,7 @@
         "./packages/@vue-stately/grid/src/index.ts"
       ],
       "@vue-stately/table": [
-        "./packages/@vue-aria/table-state/src/index.ts"
+        "./packages/@vue-stately/table/src/index.ts"
       ],
       "@vue-stately/tree": [
         "./packages/@vue-aria/tree-state/src/index.ts"
