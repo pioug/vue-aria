@@ -296,13 +296,15 @@ export const SearchAutocomplete = defineComponent({
       merged.allowsCustomValue ? "text" : (merged.formValue ?? "text")
     );
     const state = useComboBoxState({
-      get items() {
-        return itemCollectionNodes.value as any;
-      },
       get defaultItems() {
-        return merged.items == null && merged.defaultItems == null
-          ? slotCollectionNodes.value as any
-          : undefined;
+        if (merged.items != null || merged.defaultItems != null) {
+          return itemCollectionNodes.value as any;
+        }
+
+        return slotCollectionNodes.value as any;
+      },
+      get items() {
+        return undefined;
       },
       get disabledKeys() {
         return resolvedDisabledKeys.value;
@@ -331,6 +333,7 @@ export const SearchAutocomplete = defineComponent({
       get menuTrigger() {
         return merged.menuTrigger ?? "input";
       },
+      selectionBehavior: "replace",
       get allowsEmptyCollection() {
         return isAsync.value;
       },
@@ -481,6 +484,18 @@ export const SearchAutocomplete = defineComponent({
         (searchAutocomplete.inputProps.onChange as ((event: Event) => void) | undefined)?.(event);
         syncControlledInputValue(event);
       },
+      onInput: (event: Event) => {
+        (searchAutocomplete.inputProps.onInput as ((event: Event) => void) | undefined)?.(event);
+        if (
+          merged.menuTrigger !== "manual"
+          && !merged.isReadOnly
+          && !merged.isDisabled
+          && !state.isOpen
+        ) {
+          state.open(null, "input");
+        }
+        syncControlledInputValue(event);
+      },
     }));
 
     const searchLabel = computed(() =>
@@ -586,6 +601,7 @@ export const SearchAutocomplete = defineComponent({
               Popover,
               {
                 state,
+                portalContainer: rootRef.value,
                 UNSAFE_style: popoverStyle.value,
                 UNSAFE_className: popoverClassName.value,
                 ref: popoverRef,
@@ -611,7 +627,6 @@ export const SearchAutocomplete = defineComponent({
                     shouldSelectOnPressUp: searchAutocomplete.listBoxProps["shouldSelectOnPressUp"] as
                       | boolean
                       | undefined,
-                    shouldFocusOnHover: true,
                     onBlur: searchAutocomplete.listBoxProps.onBlur as
                       | ((event: FocusEvent) => void)
                       | undefined,

@@ -4,7 +4,7 @@ import { useHover } from "@vue-aria/interactions";
 import { mergeProps } from "@vue-aria/utils";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { ClearSlots, SlotProvider, useSlotProps, useStyleProps } from "@vue-spectrum/utils";
-import { defineComponent, h, onMounted, ref } from "vue";
+import { defineComponent, h, onMounted, ref, watch } from "vue";
 import type { SpectrumActionButtonProps } from "./types";
 import { createRefObject, isTextOnlyNodes, mapReactEventProps } from "./utils";
 
@@ -110,6 +110,22 @@ export const ActionButton = defineComponent({
       isDisabled: Boolean(merged.isDisabled),
     });
     const { styleProps } = useStyleProps(merged);
+    watch(
+      () => merged.isDisabled,
+      (isDisabled) => {
+        const button = domRef.value;
+        if (!button) {
+          return;
+        }
+
+        if (isDisabled) {
+          button.setAttribute("disabled", "disabled");
+        } else {
+          button.removeAttribute("disabled");
+        }
+      },
+      { immediate: true }
+    );
 
     expose({
       focus: () => domRef.value?.focus(),
