@@ -91,6 +91,9 @@
       "@vue-aria/button": [
         "packages/@vue-aria/button/src/index.ts"
       ],
+      "@vue-aria/color": [
+        "packages/@vue-aria/color/src/index.ts"
+      ],
       "@vue-aria/actiongroup": [
         "packages/@vue-aria/actiongroup/src/index.ts"
       ],

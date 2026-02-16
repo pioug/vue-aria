@@ -140,7 +140,7 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/calendar` (parity + 2 test suites passing)
 - [x] `@react-spectrum/card` (parity + 1 test suite passing)
 - [x] `@react-spectrum/checkbox` (parity + 3 test suites passing)
-- [ ] `@react-spectrum/color` (incomplete: no local tests)
+- [x] `@react-spectrum/color` (basic parity + local tests added in `packages/@vue-spectrum/color/test/Color.test.ts`)
 - [x] `@react-spectrum/combobox` (parity + 2 suites, 141 tests passing)
 - [x] `@react-spectrum/contextualhelp` (parity + 1 test suite passing)
 - [x] `@react-spectrum/datepicker` (parity + 2 test suites passing)
@@ -311,3 +311,4 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/labeledvalue` implemented and parity tests added in `packages/@vue-spectrum/labeledvalue/test/LabeledValue.test.ts`.
 - 2026-02-16: `@react-spectrum/statuslight` implemented and parity tests added in `packages/@vue-spectrum/statuslight/test/StatusLight.test.ts`.
 - 2026-02-16: `@react-spectrum/label` implemented and parity tests added in `packages/@vue-spectrum/label/test/Label.test.ts`.
+- 2026-02-16: `@react-spectrum/color` stabilized with `@vue-aria/color` parity-compatible color parsing/channel utilities and tests added in `packages/@vue-spectrum/color/test/Color.test.ts`.
