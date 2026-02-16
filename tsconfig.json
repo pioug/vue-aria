@@ -137,7 +137,7 @@
         "./packages/@vue-stately/numberfield/src/index.ts"
       ],
       "@vue-stately/slider": [
-        "./packages/@vue-aria/slider-state/src/index.ts"
+        "./packages/@vue-stately/slider/src/index.ts"
       ],
       "@vue-aria/numberfield": [
         "packages/@vue-aria/numberfield/src/index.ts"
