@@ -22,11 +22,11 @@ Close implementation and test parity gaps package-by-package, then complete the 
   - `@vue-aria`: 56 packages,
   - `@vue-spectrum`: 64 packages,
   - `@vue-types`: 48 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
-  - `@vue-stately`: 2 directories (`calendar`, `checkbox`) now moved out of legacy `@vue-aria/*-state`.
+  - `@vue-stately`: 20 directories now moved out of legacy `@vue-aria/*-state`.
 - Coverage status:
   - Naming/alias gaps from previous phase: closed.
   - `@react-aria` logical coverage: `54 / 54`.
-  - `@react-stately` logical coverage: `32 / 32` (currently via `@vue-aria/*-state`; must be moved to definitive `@vue-stately/*`).
+  - `@react-stately` logical coverage: `32 / 32` (now implemented as definitive `@vue-stately/*` packages).
   - `@react-spectrum` logical coverage: `64 / 64`.
 - `@react-types` logical coverage: `47 / 47`.
 
