@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 32 | 32 | Open |
+| `@react-spectrum` | 64 | 33 | 31 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **114**
-- Current package-level gaps discovered: **32**
+- Local packages currently present: **115**
+- Current package-level gaps discovered: **31**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -60,6 +60,9 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-spectrum/statuslight` compatibility package in
   `packages/@vue-spectrum/statuslight` with a lightweight `StatusLight`
   placeholder component.
+- Added `@vue-spectrum/text` compatibility package in
+  `packages/@vue-spectrum/text` with placeholder `Text`, `Heading`, and
+  `Keyboard` components.
 
 ## 3) Remaining inconsistencies to close
 
@@ -100,7 +103,6 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/style-macro-s1`
 - `@react-spectrum/tag`
 - `@react-spectrum/test-utils`
-- `@react-spectrum/text`
 - `@react-spectrum/view`
 - `@react-spectrum/well`
 
