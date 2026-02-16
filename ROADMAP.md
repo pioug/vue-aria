@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 55 | 9 | Open |
+| `@react-spectrum` | 64 | 64 | 0 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **137**
-- Current package-level gaps discovered: **9**
+- Local packages currently present: **146**
+- Current package-level gaps discovered: **0**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -112,6 +112,34 @@ Reference baseline: `references/react-spectrum`
   component.
 - Added `@vue-spectrum/form` compatibility package in `packages/@vue-spectrum/form`
   as a re-export layer over `@vue-aria/form`.
+- Added `@vue-spectrum/illustratedmessage` compatibility package in
+  `packages/@vue-spectrum/illustratedmessage` with placeholder components.
+- Added `@vue-spectrum/labeledvalue` compatibility package in
+  `packages/@vue-spectrum/labeledvalue` with placeholder `LabeledValue`
+  component.
+- Added `@vue-spectrum/layout` compatibility package in
+  `packages/@vue-spectrum/layout` as a re-export layer over `@vue-aria/layout`.
+- Added `@vue-spectrum/list` compatibility package in
+  `packages/@vue-spectrum/list` with placeholder `List`/`Item` components.
+- Added `@vue-spectrum/overlays` compatibility package in
+  `packages/@vue-spectrum/overlays` as a re-export layer over
+  `@vue-aria/overlays`.
+- Added `@vue-spectrum/s2` compatibility package in
+  `packages/@vue-spectrum/s2` with minimal style macro helpers.
+- Added `@vue-spectrum/steplist` compatibility package in
+  `packages/@vue-spectrum/steplist` with `@vue-stately/steplist` re-exports
+  and placeholder `StepList`/`Item` components.
+- Added `@vue-spectrum/story-utils` compatibility package in
+  `packages/@vue-spectrum/story-utils` with `ErrorBoundary` and
+  `generatePowerset` placeholders.
+- Added `@vue-spectrum/style-macro-s1` compatibility package in
+  `packages/@vue-spectrum/style-macro-s1` exporting minimal style utility
+  helpers.
+- Added `@vue-spectrum/tag` compatibility package in
+  `packages/@vue-spectrum/tag` as a re-export layer over `@vue-aria/tag`.
+- Added `@vue-spectrum/test-utils` compatibility package in
+  `packages/@vue-spectrum/test-utils` as a re-export layer over
+  `@vue-aria/test-utils`.
 
 ## 3) Remaining inconsistencies to close
 
@@ -123,17 +151,7 @@ Reference baseline: `references/react-spectrum`
 #### Missing `@react-aria` packages
 
 #### Missing `@react-spectrum` packages
-- `@react-spectrum/illustratedmessage`
-- `@react-spectrum/labeledvalue`
-- `@react-spectrum/layout`
-- `@react-spectrum/list`
-- `@react-spectrum/overlays`
-- `@react-spectrum/s2`
-- `@react-spectrum/steplist`
-- `@react-spectrum/story-utils`
-- `@react-spectrum/style-macro-s1`
-- `@react-spectrum/tag`
-- `@react-spectrum/test-utils`
+- None
 
 #### Missing `@react-stately` packages
 - None
@@ -148,7 +166,7 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ### Phase 2 — Add missing `@react-aria` packages
 
 ### Phase 3 — Add missing `@react-spectrum` packages
-1. `list`, `dnd`, `tag`, `steplist`
+- None
 
 ### Phase 4 — Add missing `@react-stately` packages
 No remaining `@react-stately` gaps.

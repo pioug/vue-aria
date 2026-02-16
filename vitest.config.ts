@@ -284,6 +284,39 @@ export default defineConfig({
       "@vue-spectrum/form": fileURLToPath(
         new URL("./packages/@vue-spectrum/form/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/illustratedmessage": fileURLToPath(
+        new URL("./packages/@vue-spectrum/illustratedmessage/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/labeledvalue": fileURLToPath(
+        new URL("./packages/@vue-spectrum/labeledvalue/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/layout": fileURLToPath(
+        new URL("./packages/@vue-spectrum/layout/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/list": fileURLToPath(
+        new URL("./packages/@vue-spectrum/list/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/overlays": fileURLToPath(
+        new URL("./packages/@vue-spectrum/overlays/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/s2": fileURLToPath(
+        new URL("./packages/@vue-spectrum/s2/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/steplist": fileURLToPath(
+        new URL("./packages/@vue-spectrum/steplist/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/story-utils": fileURLToPath(
+        new URL("./packages/@vue-spectrum/story-utils/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/style-macro-s1": fileURLToPath(
+        new URL("./packages/@vue-spectrum/style-macro-s1/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/tag": fileURLToPath(
+        new URL("./packages/@vue-spectrum/tag/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/test-utils": fileURLToPath(
+        new URL("./packages/@vue-spectrum/test-utils/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/statuslight": fileURLToPath(
         new URL("./packages/@vue-spectrum/statuslight/src/index.ts", import.meta.url)
       ),
