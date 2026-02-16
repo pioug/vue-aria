@@ -251,6 +251,24 @@ export default defineConfig({
       "@vue-spectrum/accordion": fileURLToPath(
         new URL("./packages/@vue-spectrum/accordion/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/actiongroup": fileURLToPath(
+        new URL("./packages/@vue-spectrum/actiongroup/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/actionbar": fileURLToPath(
+        new URL("./packages/@vue-spectrum/actionbar/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/autocomplete": fileURLToPath(
+        new URL("./packages/@vue-spectrum/autocomplete/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/buttongroup": fileURLToPath(
+        new URL("./packages/@vue-spectrum/buttongroup/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/color": fileURLToPath(
+        new URL("./packages/@vue-spectrum/color/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/contextualhelp": fileURLToPath(
+        new URL("./packages/@vue-spectrum/contextualhelp/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/statuslight": fileURLToPath(
         new URL("./packages/@vue-spectrum/statuslight/src/index.ts", import.meta.url)
       ),

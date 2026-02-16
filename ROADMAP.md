@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 44 | 20 | Open |
+| `@react-spectrum` | 64 | 50 | 14 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **126**
-- Current package-level gaps discovered: **20**
+- Local packages currently present: **132**
+- Current package-level gaps discovered: **14**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -85,6 +85,22 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-spectrum/accordion` compatibility package in
   `packages/@vue-spectrum/accordion` with placeholder `Accordion` and
   `AccordionItem` components.
+- Added `@vue-spectrum/actionbar` compatibility package in
+  `packages/@vue-spectrum/actionbar` with placeholder `ActionBar` and `Item`
+  components.
+- Added `@vue-spectrum/actiongroup` compatibility package in
+  `packages/@vue-spectrum/actiongroup` re-exporting `@vue-aria/actiongroup`
+  hooks and placeholder components.
+- Added `@vue-spectrum/autocomplete` compatibility package in
+  `packages/@vue-spectrum/autocomplete` re-exporting `@vue-aria/autocomplete`.
+- Added `@vue-spectrum/buttongroup` compatibility package in
+  `packages/@vue-spectrum/buttongroup` with a placeholder `ButtonGroup`
+  component.
+- Added `@vue-spectrum/color` compatibility package in
+  `packages/@vue-spectrum/color` with `@vue-aria/color` re-exports.
+- Added `@vue-spectrum/contextualhelp` compatibility package in
+  `packages/@vue-spectrum/contextualhelp` with placeholder `ContextualHelp`
+  component.
 
 ## 3) Remaining inconsistencies to close
 
@@ -96,12 +112,6 @@ Reference baseline: `references/react-spectrum`
 #### Missing `@react-aria` packages
 
 #### Missing `@react-spectrum` packages
-- `@react-spectrum/actionbar`
-- `@react-spectrum/actiongroup`
-- `@react-spectrum/autocomplete`
-- `@react-spectrum/buttongroup`
-- `@react-spectrum/color`
-- `@react-spectrum/contextualhelp`
 - `@react-spectrum/divider`
 - `@react-spectrum/dnd`
 - `@react-spectrum/dropzone`
