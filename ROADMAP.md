@@ -25,11 +25,11 @@ Close implementation and test parity gaps package-by-package across mapped `@rea
   - `@react-aria` logical coverage: `54 / 54`.
   - `@react-stately` logical coverage: `32 / 32` (via mapped `@vue-aria/*-state` and `@vue-stately/*` package names).
   - `@react-spectrum` logical coverage: `64 / 64`.
-  - `@react-types` logical coverage: `37 / 47`.
+  - `@react-types` logical coverage: `38 / 47`.
 
 ## 3) Gap target for this pass
 
-Primary gap now: implementation + test parity for `@react-types/*` packages (10 packages remain to map/implement).
+Primary gap now: implementation + test parity for `@react-types/*` packages (9 packages remain to map/implement).
 
 ## 4) Active queue (package-by-package)
 
@@ -71,7 +71,7 @@ Status: `Todo` / `In progress` / `Done`.
 - [x] `@react-types/searchfield`
 - [x] `@react-types/select`
 - [x] `@react-types/sidenav`
-- [ ] `@react-types/slider`
+- [x] `@react-types/slider`
 - [ ] `@react-types/statuslight`
 - [ ] `@react-types/switch`
 - [ ] `@react-types/table`
