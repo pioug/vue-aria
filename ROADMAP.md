@@ -10,14 +10,14 @@ Reference baseline: `references/react-spectrum`
 
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
-| `@react-aria` | 54 | 47 | 7 | Open |
+| `@react-aria` | 54 | 48 | 6 | Open |
 | `@react-spectrum` | 64 | 30 | 34 | Open |
 | `@react-stately` | 32 | 25 | 7 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **100**
-- Current package-level gaps discovered: **48**
+- Local packages currently present: **101**
+- Current package-level gaps discovered: **47**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -30,6 +30,7 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-aria/toolbar` package scaffold and hook parity implementation.
 - Added `@vue-aria/autocomplete` compatibility package and hooks for
   `useAutocomplete`/`useSearchAutocomplete`.
+- Added `@vue-aria/example-theme` compatibility package and upstream CSS export.
 
 ## 3) Remaining inconsistencies to close
 
@@ -41,7 +42,6 @@ Reference baseline: `references/react-spectrum`
 #### Missing `@react-aria` packages
 - `@react-aria/color`
 - `@react-aria/dnd`
-- `@react-aria/example-theme`
 - `@react-aria/steplist`
 - `@react-aria/tag`
 - `@react-aria/test-utils`
@@ -100,7 +100,7 @@ Reference baseline: `references/react-spectrum`
 ### Phase 2 — Add missing `@react-aria` packages
 1. `@react-aria/test-utils`, `@react-aria/virtualizer`
 2. `@react-aria/dnd`
-3. `@react-aria/color`, `@react-aria/steplist`, `@react-aria/tag`, `@react-aria/example-theme`
+3. `@react-aria/color`, `@react-aria/steplist`, `@react-aria/tag`
 
 ### Phase 3 — Add missing `@react-spectrum` packages
 1. `label`, `statuslight`, `text`, `view`, `well`
