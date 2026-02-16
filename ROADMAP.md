@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 50 | 14 | Open |
+| `@react-spectrum` | 64 | 55 | 9 | Open |
 | `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **132**
-- Current package-level gaps discovered: **14**
+- Local packages currently present: **137**
+- Current package-level gaps discovered: **9**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -101,6 +101,17 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-spectrum/contextualhelp` compatibility package in
   `packages/@vue-spectrum/contextualhelp` with placeholder `ContextualHelp`
   component.
+- Added `@vue-spectrum/divider` compatibility package in
+  `packages/@vue-spectrum/divider` with placeholder `Divider` component.
+- Added `@vue-spectrum/dnd` compatibility package in `packages/@vue-spectrum/dnd`
+  as a re-export layer over `@vue-aria/dnd`.
+- Added `@vue-spectrum/dropzone` compatibility package in
+  `packages/@vue-spectrum/dropzone` with placeholder `Dropzone` component.
+- Added `@vue-spectrum/filetrigger` compatibility package in
+  `packages/@vue-spectrum/filetrigger` with placeholder `FileTrigger`
+  component.
+- Added `@vue-spectrum/form` compatibility package in `packages/@vue-spectrum/form`
+  as a re-export layer over `@vue-aria/form`.
 
 ## 3) Remaining inconsistencies to close
 
@@ -112,11 +123,6 @@ Reference baseline: `references/react-spectrum`
 #### Missing `@react-aria` packages
 
 #### Missing `@react-spectrum` packages
-- `@react-spectrum/divider`
-- `@react-spectrum/dnd`
-- `@react-spectrum/dropzone`
-- `@react-spectrum/filetrigger`
-- `@react-spectrum/form`
 - `@react-spectrum/illustratedmessage`
 - `@react-spectrum/labeledvalue`
 - `@react-spectrum/layout`
@@ -142,7 +148,7 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ### Phase 2 — Add missing `@react-aria` packages
 
 ### Phase 3 — Add missing `@react-spectrum` packages
-1. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
+1. `list`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
 No remaining `@react-stately` gaps.

@@ -269,6 +269,21 @@ export default defineConfig({
       "@vue-spectrum/contextualhelp": fileURLToPath(
         new URL("./packages/@vue-spectrum/contextualhelp/src/index.ts", import.meta.url)
       ),
+      "@vue-spectrum/divider": fileURLToPath(
+        new URL("./packages/@vue-spectrum/divider/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/dnd": fileURLToPath(
+        new URL("./packages/@vue-spectrum/dnd/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/dropzone": fileURLToPath(
+        new URL("./packages/@vue-spectrum/dropzone/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/filetrigger": fileURLToPath(
+        new URL("./packages/@vue-spectrum/filetrigger/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/form": fileURLToPath(
+        new URL("./packages/@vue-spectrum/form/src/index.ts", import.meta.url)
+      ),
       "@vue-spectrum/statuslight": fileURLToPath(
         new URL("./packages/@vue-spectrum/statuslight/src/index.ts", import.meta.url)
       ),
