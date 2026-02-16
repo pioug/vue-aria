@@ -1,33 +1,101 @@
-# Vue Aria / Vue Spectrum Roadmap
+# Vue Aria / Vue Spectrum Gap-Closure Roadmap
 
 Generated: 2026-02-16
 Source: `/Users/piou/Dev/vue-aria-copy`
 Reference baseline: `references/react-spectrum`
 
-## 1) Current parity snapshot
+## 1) Working objective
 
-- Reference scope packages (`@react-aria`, `@react-stately`, `@react-spectrum`): `150`
-- Local package inventory in-scope: synced with current references (all mapped).
-- Directly mapped packages: `150 / 150`.
-- Historical `-state` suffix packages: resolved to `@vue-stately/*`.
-- Additional stately-aligned package renames completed:
-  - `autocomplete`, `collections`, `color`, `dnd`, `menu`, `select`, `steplist`, `virtualizer`
-- Remaining unmapped gaps: `0`.
+Close implementation and test parity gaps package-by-package across mapped `@react-*` and `@react-spectrum/*` families.
 
-## 2) Remaining inconsistencies to close
+## 2) Current baseline
 
-- None.
+- Reference package scope:
+  - `@react-aria`: 54 packages
+  - `@react-stately`: 32 packages
+  - `@react-spectrum`: 64 packages
+  - `@react-types`: 47 packages
+- Local implementation inventory:
+  - `@vue-aria`: 78 packages (includes `*-state` and mapped `@vue-stately/*` package names),
+  - `@vue-spectrum`: 64 packages,
+  - `@vue-types`: 1 package (`@vue-types/shared`),
+  - `@vue-stately`: 0 directories (implementation is currently co-located in `@vue-aria` for state-derived names).
+- Coverage status:
+  - Naming/alias gaps from previous phase: closed.
+  - `@react-aria` logical coverage: `54 / 54`.
+  - `@react-stately` logical coverage: `32 / 32` (via mapped `@vue-aria/*-state` and `@vue-stately/*` package names).
+  - `@react-spectrum` logical coverage: `64 / 64`.
+  - `@react-types` logical coverage: `1 / 47`.
 
-## 3) Sequencing (complete)
+## 3) Gap target for this pass
 
-1. Resolve stately-aligned naming for in-scope `@react-*` packages (`autocomplete`, `collections`, `color`, `dnd`, `menu`, `select`, `steplist`, `virtualizer`) by mapping to `@vue-stately/*`.
-2. Remove duplicate shim directories for `color`, `steplist`, and `virtualizer` now that canonical packages are renamed.
-3. Keep package alias configuration aligned (`tsconfig.json` and `vitest.config.ts`).
-4. Remove legacy package `@vue-spectrum/theme` and remap docs/examples to `@vue-spectrum/theme-default`.
-5. Re-run parity checks and keep roadmap docs synchronized.
+Primary gap now: implementation + test parity for `@react-types/*` packages (46 packages remain to map/implement).
 
-## 4) Completion criteria
+## 4) Active queue (package-by-package)
 
-- Zero unmapped packages in all in-scope families.
-- Naming for state packages follows `@react-stately/*` -> local `@vue-stately/*`.
-- `ROADMAP.md` and `PLAN.md` remain synchronized.
+Status: `Todo` / `In progress` / `Done`.
+
+- [ ] `@react-types/actionbar`
+- [ ] `@react-types/actiongroup`
+- [ ] `@react-types/autocomplete`
+- [ ] `@react-types/avatar`
+- [ ] `@react-types/badge`
+- [ ] `@react-types/breadcrumbs`
+- [ ] `@react-types/button`
+- [ ] `@react-types/buttongroup`
+- [ ] `@react-types/calendar`
+- [ ] `@react-types/card`
+- [ ] `@react-types/checkbox`
+- [ ] `@react-types/color`
+- [ ] `@react-types/combobox`
+- [ ] `@react-types/contextualhelp`
+- [ ] `@react-types/datepicker`
+- [ ] `@react-types/dialog`
+- [ ] `@react-types/divider`
+- [ ] `@react-types/form`
+- [ ] `@react-types/grid`
+- [ ] `@react-types/illustratedmessage`
+- [ ] `@react-types/image`
+- [ ] `@react-types/label`
+- [ ] `@react-types/layout`
+- [ ] `@react-types/link`
+- [ ] `@react-types/list`
+- [ ] `@react-types/listbox`
+- [ ] `@react-types/menu`
+- [ ] `@react-types/meter`
+- [ ] `@react-types/numberfield`
+- [ ] `@react-types/overlays`
+- [ ] `@react-types/progress`
+- [ ] `@react-types/provider`
+- [ ] `@react-types/radio`
+- [ ] `@react-types/searchfield`
+- [ ] `@react-types/select`
+- [ ] `@react-types/sidenav`
+- [ ] `@react-types/slider`
+- [ ] `@react-types/statuslight`
+- [ ] `@react-types/switch`
+- [ ] `@react-types/table`
+- [ ] `@react-types/tabs`
+- [ ] `@react-types/text`
+- [ ] `@react-types/textfield`
+- [ ] `@react-types/tooltip`
+- [ ] `@react-types/view`
+- [ ] `@react-types/well`
+
+## 5) Per-package completion criteria
+
+For each package marked done:
+
+- Upstream exports/signatures are mirrored in local package surface.
+- Public API and behavior tests added/updated in `packages/@vue-types/<package>/` and aligned test directories.
+- Package-level tests pass.
+- Import path/alias references remain valid.
+- `ROADMAP.md` checkbox is marked done and commit pushed.
+
+## 6) Execution rules
+
+1. One package at a time.
+2. Complete implementation + tests before moving on.
+3. Commit only when package scope is stable.
+4. Push on every stable commit.
+5. Keep `PLAN.md` and `ROADMAP.md` synchronized after each committed item.
