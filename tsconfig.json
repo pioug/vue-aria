@@ -161,7 +161,7 @@
         "packages/@vue-aria/separator/src/index.ts"
       ],
       "@vue-stately/overlays": [
-        "./packages/@vue-aria/overlays-state/src/index.ts"
+        "./packages/@vue-stately/overlays/src/index.ts"
       ],
       "@vue-aria/listbox": [
         "packages/@vue-aria/listbox/src/index.ts"
