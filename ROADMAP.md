@@ -10,14 +10,14 @@ Reference baseline: `references/react-spectrum`
 
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
-| `@react-aria` | 54 | 52 | 2 | Open |
+| `@react-aria` | 54 | 53 | 1 | Open |
 | `@react-spectrum` | 64 | 30 | 34 | Open |
 | `@react-stately` | 32 | 25 | 7 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **105**
-- Current package-level gaps discovered: **43**
+- Local packages currently present: **106**
+- Current package-level gaps discovered: **42**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -35,6 +35,7 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-aria/tag` compatibility package.
 - Added `@vue-aria/test-utils` compatibility package.
 - Added `@vue-aria/virtualizer` compatibility package.
+- Added `@vue-aria/dnd` compatibility package.
 
 ## 3) Remaining inconsistencies to close
 
@@ -45,7 +46,6 @@ Reference baseline: `references/react-spectrum`
 
 #### Missing `@react-aria` packages
 - `@react-aria/color`
-- `@react-aria/dnd`
 
 #### Missing `@react-spectrum` packages
 - `@react-spectrum/accordion`
@@ -98,8 +98,7 @@ Reference baseline: `references/react-spectrum`
 1. Decide whether `@vue-aria/types` should remain internal-only or be formalized into a mapped `@react-types` adapter layer.
 
 ### Phase 2 — Add missing `@react-aria` packages
-1. `@react-aria/dnd`
-2. `@react-aria/color`
+1. `@react-aria/color`
 
 ### Phase 3 — Add missing `@react-spectrum` packages
 1. `label`, `statuslight`, `text`, `view`, `well`
