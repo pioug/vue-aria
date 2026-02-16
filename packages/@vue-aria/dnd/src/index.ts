@@ -2,6 +2,8 @@ export type {
   DroppableCollectionOptions,
   DroppableCollectionResult,
 } from "./useDroppableCollection";
+export type { DroppableCollectionStateOptions } from "./useDroppableCollectionState";
+export type { DraggableCollectionStateOptions } from "./useDraggableCollectionState";
 export type { DroppableItemOptions, DroppableItemResult } from "./useDroppableItem";
 export type { DropIndicatorProps, DropIndicatorAria } from "./useDropIndicator";
 export type { DraggableItemProps, DraggableItemResult } from "./useDraggableItem";
@@ -31,11 +33,15 @@ export type {
   DropPosition,
   DropTarget,
   DropTargetDelegate,
+  DraggableCollectionState,
+  DroppableCollectionState,
 } from "./types";
 
 export { DIRECTORY_DRAG_TYPE } from "./utils";
 export { useDrag } from "./useDrag";
 export { useDrop } from "./useDrop";
+export { useDroppableCollectionState } from "./useDroppableCollectionState";
+export { useDraggableCollectionState } from "./useDraggableCollectionState";
 export { useDroppableCollection } from "./useDroppableCollection";
 export { useDroppableItem } from "./useDroppableItem";
 export { useDropIndicator } from "./useDropIndicator";
