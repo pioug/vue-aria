@@ -12,12 +12,12 @@ Reference baseline: `references/react-spectrum`
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
 | `@react-spectrum` | 64 | 30 | 34 | Open |
-| `@react-stately` | 32 | 25 | 7 | Open |
+| `@react-stately` | 32 | 27 | 5 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
 - Local packages currently present: **107**
-- Current package-level gaps discovered: **41**
+- Current package-level gaps discovered: **39**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -37,9 +37,14 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-aria/virtualizer` compatibility package.
 - Added `@vue-aria/dnd` compatibility package.
 - Added `@vue-aria/color` compatibility package.
+- Added `@vue-aria/layout` compatibility package in `packages/@vue-aria/layout` with parity implementation for
+  `GridLayout`, `ListLayout`, `TableLayout`, and `WaterfallLayout`.
 - Migrated internal/stately imports and workspace aliases from
   `@vue-aria/<name>-state` to `@vue-stately/<name>` for existing state-backed
   packages so historical `-state` suffixes are removed from usage and docs.
+- Added `@vue-stately/data`-compat target alias to `packages/@vue-aria/data`, and aligned
+  `@vue-stately/table` to resolve to `table-state` so `TableColumnLayout`/`TableState`
+  consumers follow reference contracts.
 
 ## 3) Remaining inconsistencies to close
 
@@ -89,9 +94,7 @@ Reference baseline: `references/react-spectrum`
 #### Missing `@react-stately` packages
 - `@react-stately/autocomplete`
 - `@react-stately/color`
-- `@react-stately/data`
 - `@react-stately/dnd`
-- `@react-stately/layout`
 - `@react-stately/steplist`
 - `@react-stately/virtualizer`
 
@@ -110,10 +113,8 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
-1. `@react-stately/data` → `@vue-stately/data`
-2. `@react-stately/layout` → `@vue-stately/layout`
-3. `@react-stately/autocomplete` → `@vue-stately/autocomplete`
-4. `@react-stately/dnd` → `@vue-stately/dnd`
-5. `@react-stately/steplist` → `@vue-stately/steplist`
-6. `@react-stately/color` → `@vue-stately/color`
-7. `@react-stately/virtualizer` → `@vue-stately/virtualizer`
+1. `@react-stately/autocomplete` → `@vue-stately/autocomplete`
+2. `@react-stately/dnd` → `@vue-stately/dnd`
+3. `@react-stately/steplist` → `@vue-stately/steplist`
+4. `@react-stately/color` → `@vue-stately/color`
+5. `@react-stately/virtualizer` → `@vue-stately/virtualizer`

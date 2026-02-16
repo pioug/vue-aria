@@ -35,6 +35,27 @@ export default defineConfig({
       "@vue-stately/selection": fileURLToPath(
         new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
       ),
+      "@vue-stately/autocomplete": fileURLToPath(
+        new URL("./packages/@vue-aria/autocomplete/src/index.ts", import.meta.url)
+      ),
+      "@vue-stately/color": fileURLToPath(
+        new URL("./packages/@vue-aria/color/src/index.ts", import.meta.url)
+      ),
+      "@vue-stately/data": fileURLToPath(
+        new URL("./packages/@vue-aria/data/src/index.ts", import.meta.url)
+      ),
+      "@vue-stately/dnd": fileURLToPath(
+        new URL("./packages/@vue-aria/dnd/src/index.ts", import.meta.url)
+      ),
+      "@vue-stately/layout": fileURLToPath(
+        new URL("./packages/@vue-aria/layout/src/index.ts", import.meta.url)
+      ),
+      "@vue-stately/steplist": fileURLToPath(
+        new URL("./packages/@vue-aria/steplist/src/index.ts", import.meta.url)
+      ),
+      "@vue-stately/virtualizer": fileURLToPath(
+        new URL("./packages/@vue-aria/virtualizer/src/index.ts", import.meta.url)
+      ),
       "@vue-aria/selection": fileURLToPath(
         new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
       ),
@@ -156,7 +177,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/grid/src/index.ts", import.meta.url)
       ),
       "@vue-stately/table": fileURLToPath(
-        new URL("./packages/@vue-aria/table/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-aria/table-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tree": fileURLToPath(
         new URL("./packages/@vue-aria/tree/src/index.ts", import.meta.url)

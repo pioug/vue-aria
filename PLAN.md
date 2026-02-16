@@ -19,7 +19,6 @@ Other work in `references/` (for example `@react-types`, `@adobe/*`, `@internati
 - `@react-aria/<name>` maps to `@vue-aria/<name>`
 - `@react-spectrum/<name>` maps to `@vue-spectrum/<name>`
 - `@react-stately/<name>` maps to `@vue-stately/<name>` for new work going forward.
-- Legacy package manifest names may still use `@vue-aria/<name>-state`, while imports and aliases are now `@vue-stately/<name>`.
 - Any mapping exceptions are documented explicitly in `ROADMAP.md`
 - In plan/roadmap staging, `@react-stately` entries are written with full upstream package names (for example `@react-stately/layout`) to match reference naming.
 
