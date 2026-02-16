@@ -119,7 +119,7 @@
         "packages/@vue-aria/textfield/src/index.ts"
       ],
       "@vue-stately/searchfield": [
-        "./packages/@vue-aria/searchfield-state/src/index.ts"
+        "./packages/@vue-stately/searchfield/src/index.ts"
       ],
       "@vue-aria/searchfield": [
         "packages/@vue-aria/searchfield/src/index.ts"
