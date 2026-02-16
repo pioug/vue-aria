@@ -102,7 +102,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/toggle/src/index.ts", import.meta.url)
       ),
       "@vue-stately/checkbox": fileURLToPath(
-        new URL("./packages/@vue-aria/checkbox-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/checkbox/src/index.ts", import.meta.url)
       ),
       "@vue-aria/checkbox": fileURLToPath(
         new URL("./packages/@vue-aria/checkbox/src/index.ts", import.meta.url)
@@ -198,7 +198,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/tree-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/calendar": fileURLToPath(
-        new URL("./packages/@vue-aria/calendar-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/calendar/src/index.ts", import.meta.url)
       ),
       "@vue-stately/datepicker": fileURLToPath(
         new URL("./packages/@vue-aria/datepicker-state/src/index.ts", import.meta.url)

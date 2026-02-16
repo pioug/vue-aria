@@ -101,7 +101,7 @@
         "packages/@vue-aria/toggle/src/index.ts"
       ],
       "@vue-stately/checkbox": [
-        "./packages/@vue-aria/checkbox-state/src/index.ts"
+        "./packages/@vue-stately/checkbox/src/index.ts"
       ],
       "@vue-aria/checkbox": [
         "packages/@vue-aria/checkbox/src/index.ts"
@@ -196,8 +196,8 @@
       "@vue-stately/tree": [
         "./packages/@vue-aria/tree-state/src/index.ts"
       ],
-      "@vue-stately/calendar": [
-        "./packages/@vue-aria/calendar-state/src/index.ts"
+    "@vue-stately/calendar": [
+        "./packages/@vue-stately/calendar/src/index.ts"
       ],
       "@vue-stately/datepicker": [
         "./packages/@vue-aria/datepicker-state/src/index.ts"

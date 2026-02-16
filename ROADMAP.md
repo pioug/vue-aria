@@ -19,10 +19,10 @@ Close implementation and test parity gaps package-by-package, then complete the 
   - `@react-spectrum`: 64 packages
   - `@react-types`: 47 packages
 - Local implementation inventory:
-  - `@vue-aria`: 57 packages,
+  - `@vue-aria`: 56 packages,
   - `@vue-spectrum`: 64 packages,
   - `@vue-types`: 48 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
-  - `@vue-stately`: 0 directories (legacy state implementations are currently under `@vue-aria/*-state`).
+  - `@vue-stately`: 2 directories (`calendar`, `checkbox`) now moved out of legacy `@vue-aria/*-state`.
 - Coverage status:
   - Naming/alias gaps from previous phase: closed.
   - `@react-aria` logical coverage: `54 / 54`.
@@ -39,14 +39,14 @@ Primary pass: definitive state-package migration.
 - Eliminate mapping dependencies and re-import/resolve all `@vue-stately/*` package references directly.
 - Keep `@react-types` package parity intact while migration runs.
 
-- State migration remaining: 20 packages.
+- State migration remaining: 18 packages.
 
 ## 4) Active queue (package-by-package)
 
 Status: `Todo` / `In progress` / `Done`.
 
-- [ ] `@vue-stately/calendar`
-- [ ] `@vue-stately/checkbox`
+- [x] `@vue-stately/calendar`
+- [x] `@vue-stately/checkbox`
 - [ ] `@vue-stately/combobox`
 - [ ] `@vue-stately/datepicker`
 - [ ] `@vue-stately/disclosure`
