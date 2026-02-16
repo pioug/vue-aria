@@ -42,7 +42,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/utils-state/src/index.ts", import.meta.url)
       ),
       "@vue-stately/selection": fileURLToPath(
-        new URL("./packages/@vue-aria/selection-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/selection/src/index.ts", import.meta.url)
       ),
       "@vue-stately/autocomplete": fileURLToPath(
         new URL("./packages/@vue-aria/autocomplete/src/index.ts", import.meta.url)

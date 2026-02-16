@@ -41,7 +41,7 @@
         "./packages/@vue-aria/utils-state/src/index.ts"
       ],
       "@vue-stately/selection": [
-        "./packages/@vue-aria/selection-state/src/index.ts"
+        "./packages/@vue-stately/selection/src/index.ts"
       ],
       "@vue-stately/autocomplete": [
         "packages/@vue-aria/autocomplete/src/index.ts"
