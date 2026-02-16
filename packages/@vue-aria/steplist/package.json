@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/steplist",
+  "name": "@vue-stately/steplist",
   "version": "0.1.0",
   "private": true,
   "type": "module",

@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/virtualizer",
+  "name": "@vue-stately/virtualizer",
   "version": "0.1.0",
   "private": true,
   "type": "module",

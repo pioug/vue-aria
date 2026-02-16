@@ -7,9 +7,11 @@ Reference baseline: `references/react-spectrum`
 ## 1) Current parity snapshot
 
 - Reference scope packages (`@react-aria`, `@react-stately`, `@react-spectrum`): `150`
-- Local package inventory in-scope: synced with current references (no unresolved mirrors).
-- Directly mapped packages: all in scope.
-- Historical `-state` suffix candidates: resolved to `@vue-stately/*`.
+- Local package inventory in-scope: synced with current references (all mapped).
+- Directly mapped packages: `150 / 150`.
+- Historical `-state` suffix packages: resolved to `@vue-stately/*`.
+- Additional stately-aligned package renames completed:
+  - `autocomplete`, `collections`, `color`, `dnd`, `menu`, `select`, `steplist`, `virtualizer`
 - Remaining unmapped gaps: `0`.
 
 ## 2) Remaining inconsistencies to close
@@ -18,10 +20,10 @@ Reference baseline: `references/react-spectrum`
 
 ## 3) Sequencing (complete)
 
-1. Close direct-mirror gaps for `@react-aria/data`, `@react-aria/flags`, `@react-aria/layout`, `@react-spectrum/theme` (`@vue-aria/data`, `@vue-aria/flags`, `@vue-aria/layout`, `@vue-spectrum/theme`).
-2. Normalize state package naming from `@vue-aria/*-state` to `@vue-stately/*` without changing package folder names.
-3. Replace obsolete `@vue-aria/types` with `@vue-types/shared`.
-4. Re-run parity checks and keep `PLAN.md` and `ROADMAP.md` synchronized.
+1. Resolve stately-aligned naming for in-scope `@react-*` packages (`autocomplete`, `collections`, `color`, `dnd`, `menu`, `select`, `steplist`, `virtualizer`) by mapping to `@vue-stately/*`.
+2. Remove duplicate shim directories for `color`, `steplist`, and `virtualizer` now that canonical packages are renamed.
+3. Keep package alias configuration aligned (`tsconfig.json` and `vitest.config.ts`).
+4. Re-run parity checks and keep roadmap docs synchronized.
 
 ## 4) Completion criteria
 

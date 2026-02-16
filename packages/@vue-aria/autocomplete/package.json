@@ -1,5 +1,5 @@
 {
-  "name": "@vue-aria/autocomplete",
+  "name": "@vue-stately/autocomplete",
   "version": "0.1.0",
   "private": true,
   "type": "module",

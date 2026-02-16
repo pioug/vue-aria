@@ -31,6 +31,9 @@
       "@vue-aria/collections": [
         "packages/@vue-aria/collections/src/index.ts"
       ],
+      "@vue-stately/collections": [
+        "packages/@vue-aria/collections/src/index.ts"
+      ],
       "@vue-stately/toggle": [
         "./packages/@vue-aria/toggle-state/src/index.ts"
       ],
@@ -44,7 +47,7 @@
         "packages/@vue-aria/autocomplete/src/index.ts"
       ],
       "@vue-stately/color": [
-        "packages/@vue-stately/color/src/index.ts"
+        "packages/@vue-aria/color/src/index.ts"
       ],
       "@vue-stately/data": [
         "packages/@vue-aria/data/src/index.ts"
@@ -56,10 +59,10 @@
         "packages/@vue-aria/layout/src/index.ts"
       ],
       "@vue-stately/steplist": [
-        "packages/@vue-stately/steplist/src/index.ts"
+        "packages/@vue-aria/steplist/src/index.ts"
       ],
       "@vue-stately/virtualizer": [
-        "packages/@vue-stately/virtualizer/src/index.ts"
+        "packages/@vue-aria/virtualizer/src/index.ts"
       ],
       "@vue-aria/selection": [
         "packages/@vue-aria/selection/src/index.ts"
@@ -169,7 +172,13 @@
       "@vue-aria/select": [
         "packages/@vue-aria/select/src/index.ts"
       ],
+      "@vue-stately/select": [
+        "packages/@vue-aria/select/src/index.ts"
+      ],
       "@vue-aria/menu": [
+        "packages/@vue-aria/menu/src/index.ts"
+      ],
+      "@vue-stately/menu": [
         "packages/@vue-aria/menu/src/index.ts"
       ],
       "@vue-stately/combobox": [
