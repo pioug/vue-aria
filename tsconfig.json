@@ -194,7 +194,7 @@
         "./packages/@vue-stately/table/src/index.ts"
       ],
       "@vue-stately/tree": [
-        "./packages/@vue-aria/tree-state/src/index.ts"
+        "./packages/@vue-stately/tree/src/index.ts"
       ],
     "@vue-stately/calendar": [
         "./packages/@vue-stately/calendar/src/index.ts"

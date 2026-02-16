@@ -195,7 +195,7 @@ export default defineConfig({
         new URL("./packages/@vue-stately/table/src/index.ts", import.meta.url)
       ),
       "@vue-stately/tree": fileURLToPath(
-        new URL("./packages/@vue-aria/tree-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/tree/src/index.ts", import.meta.url)
       ),
       "@vue-stately/calendar": fileURLToPath(
         new URL("./packages/@vue-stately/calendar/src/index.ts", import.meta.url)
