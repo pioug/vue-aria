@@ -200,7 +200,7 @@
         "./packages/@vue-stately/calendar/src/index.ts"
       ],
       "@vue-stately/datepicker": [
-        "./packages/@vue-aria/datepicker-state/src/index.ts"
+        "./packages/@vue-stately/datepicker/src/index.ts"
       ],
       "@vue-aria/datepicker": [
         "packages/@vue-aria/datepicker/src/index.ts"
