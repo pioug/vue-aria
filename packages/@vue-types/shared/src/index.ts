@@ -139,11 +139,25 @@ export interface InputBase {
   isInvalid?: boolean;
 }
 
+export interface TextInputBase {
+  placeholder?: string;
+}
+
 export interface InputDOMProps {
   disabled?: boolean;
   name?: string;
   autoComplete?: string;
   placeholder?: string;
+}
+
+export interface TextInputDOMProps extends InputDOMProps {
+  maxLength?: number;
+  minLength?: number;
+  pattern?: string;
+  type?: string;
+  inputMode?: string;
+  autoCorrect?: string;
+  spellCheck?: string | boolean;
 }
 
 export interface HelpTextProps {
