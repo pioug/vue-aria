@@ -150,6 +150,8 @@ export interface InputDOMProps {
   placeholder?: string;
 }
 
+export type LoadingState = "loading" | "sorting" | "loadingMore" | "error" | "idle" | "filtering";
+
 export interface TextInputDOMProps extends InputDOMProps {
   maxLength?: number;
   minLength?: number;
