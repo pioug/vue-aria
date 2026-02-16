@@ -11,13 +11,13 @@ Reference baseline: `references/react-spectrum`
 | Scope | Upstream packages | Mapped local packages | Missing | Status |
 | --- | ---: | ---: | ---: | --- |
 | `@react-aria` | 54 | 54 | 0 | Open |
-| `@react-spectrum` | 64 | 30 | 34 | Open |
-| `@react-stately` | 32 | 29 | 3 | Open |
+| `@react-spectrum` | 64 | 31 | 33 | Open |
+| `@react-stately` | 32 | 32 | 0 | Open |
 
 ### Overall count
 - Reference scope packages considered: **150**
-- Local packages currently present: **109**
-- Current package-level gaps discovered: **37**
+- Local packages currently present: **113**
+- Current package-level gaps discovered: **33**
 - Namespace exceptions to close: **1** (`@vue-aria/types`)
 
 ## 2) Closed gaps
@@ -45,6 +45,18 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-stately/data`-compat target alias to `packages/@vue-aria/data`, and aligned
   `@vue-stately/table` to resolve to `table-state` so `TableColumnLayout`/`TableState`
   consumers follow reference contracts.
+- Added `@vue-stately/steplist` package at `packages/@vue-stately/steplist` with the
+  `useStepListState`, `StepListProps`, and `StepListState` exports.
+- Added `@vue-stately/color` package at `packages/@vue-stately/color` and routed
+  `@vue-stately/color` resolution there.
+- Added `@vue-stately/virtualizer` package at `packages/@vue-stately/virtualizer` and
+  routed `@vue-stately/virtualizer` resolution there.
+- Updated `tsconfig.json` and `vitest.config.ts` aliases so
+  `@vue-stately/color`, `@vue-stately/steplist`, and `@vue-stately/virtualizer`
+  resolve from canonical `packages/@vue-stately/*` paths.
+- Added `@vue-spectrum/label` compatibility package in
+  `packages/@vue-spectrum/label`, currently exporting label utilities from
+  `@vue-aria/label`.
 
 ## 3) Remaining inconsistencies to close
 
@@ -75,7 +87,6 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/illustratedmessage`
 - `@react-spectrum/image`
 - `@react-spectrum/inlinealert`
-- `@react-spectrum/label`
 - `@react-spectrum/labeledvalue`
 - `@react-spectrum/layout`
 - `@react-spectrum/list`
@@ -92,9 +103,7 @@ Reference baseline: `references/react-spectrum`
 - `@react-spectrum/well`
 
 #### Missing `@react-stately` packages
-- `@react-stately/steplist`
-- `@react-stately/color`
-- `@react-stately/virtualizer`
+- None
 
 Local targets for remaining stately work are `@vue-stately/<name>`.
 
@@ -106,11 +115,9 @@ Local targets for remaining stately work are `@vue-stately/<name>`.
 ### Phase 2 — Add missing `@react-aria` packages
 
 ### Phase 3 — Add missing `@react-spectrum` packages
-1. `label`, `statuslight`, `text`, `view`, `well`
+1. `statuslight`, `text`, `view`, `well`
 2. `avatar`, `badge`, `icon`, `image`, `inlinealert`, `card`
 3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
-1. `@react-stately/steplist` → `@vue-stately/steplist`
-2. `@react-stately/color` → `@vue-stately/color`
-3. `@react-stately/virtualizer` → `@vue-stately/virtualizer`
+No remaining `@react-stately` gaps.

@@ -39,7 +39,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/autocomplete/src/index.ts", import.meta.url)
       ),
       "@vue-stately/color": fileURLToPath(
-        new URL("./packages/@vue-aria/color/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/color/src/index.ts", import.meta.url)
       ),
       "@vue-stately/data": fileURLToPath(
         new URL("./packages/@vue-aria/data/src/index.ts", import.meta.url)
@@ -51,10 +51,10 @@ export default defineConfig({
         new URL("./packages/@vue-aria/layout/src/index.ts", import.meta.url)
       ),
       "@vue-stately/steplist": fileURLToPath(
-        new URL("./packages/@vue-aria/steplist/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/steplist/src/index.ts", import.meta.url)
       ),
       "@vue-stately/virtualizer": fileURLToPath(
-        new URL("./packages/@vue-aria/virtualizer/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/virtualizer/src/index.ts", import.meta.url)
       ),
       "@vue-aria/selection": fileURLToPath(
         new URL("./packages/@vue-aria/selection/src/index.ts", import.meta.url)
@@ -244,6 +244,9 @@ export default defineConfig({
       ),
       "@vue-spectrum/theme": fileURLToPath(
         new URL("./packages/@vue-spectrum/theme/src/index.ts", import.meta.url)
+      ),
+      "@vue-spectrum/label": fileURLToPath(
+        new URL("./packages/@vue-spectrum/label/src/index.ts", import.meta.url)
       ),
       "@vue-spectrum/utils": fileURLToPath(
         new URL("./packages/@vue-spectrum/utils/src/index.ts", import.meta.url)
