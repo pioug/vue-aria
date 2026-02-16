@@ -7,9 +7,16 @@ export interface UserOpts {
 }
 
 export interface BaseTesterOpts extends UserOpts {
+  /** @private */
+  user?: {
+    click: (element: Element) => Promise<void>;
+    dblClick: (element: Element) => Promise<void>;
+    hover: (element: Element) => Promise<void>;
+    pointer: (opts: { target: Element; keys?: string; coords?: Record<string, unknown> }) => Promise<void>;
+    keyboard: (keys: string) => Promise<void>;
+    tab: (opts?: { shift?: boolean }) => Promise<void>;
+  };
   root: HTMLElement;
-  interactionType?: UserOpts["interactionType"];
-  user?: { click: (element: HTMLElement) => Promise<void> };
 }
 
 export interface CheckboxGroupTesterOpts extends BaseTesterOpts {}

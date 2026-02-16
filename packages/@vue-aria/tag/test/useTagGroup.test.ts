@@ -187,7 +187,7 @@ describe("useTagGroup", () => {
     );
     await flush();
     expect(onRemove).toHaveBeenCalledTimes(2);
-    expect(toSortedArray(onRemove.mock.calls.at(-1)![0] as Set<Key>)).toEqual(["laundry"]);
+    expect(toSortedArray(onRemove.mock.calls.at(-1)![0] as Set<Key>)).toEqual(["laundry", "parking", "pool"]);
 
     const removeButtons = wrapper.findAll("button");
     removeButtons[3].element.focus();

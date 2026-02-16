@@ -11,6 +11,8 @@ export class BaseTester {
     keyboard: (keys: string) => Promise<void>;
     pointer: (opts: {target: Element; keys?: string; coords?: Record<string, unknown>}) => Promise<void>;
     hover: (element: Element) => Promise<void>;
+    dblClick: (element: Element) => Promise<void>;
+    tab: (opts?: {shift?: boolean}) => Promise<void>;
   };
 
   readonly interactionType: UserOpts["interactionType"];
@@ -23,6 +25,8 @@ export class BaseTester {
       keyboard: async () => undefined,
       pointer: async () => undefined,
       hover: async () => undefined,
+      dblClick: async () => undefined,
+      tab: async () => undefined,
     };
   }
 
@@ -34,8 +38,16 @@ export class BaseTester {
     await this.user.keyboard(keys);
   }
 
+  async dblClick(element: Element = this.root): Promise<void> {
+    await this.user.dblClick(element);
+  }
+
   async pointer(target: Element, keys = "[MouseLeft]") {
     await this.user.pointer({target, keys});
+  }
+
+  async tab(opts: {shift?: boolean} = {}): Promise<void> {
+    await this.user.tab(opts);
   }
 
   async focusRow(target: BaseGridRowInteractionOpts["row"]) {

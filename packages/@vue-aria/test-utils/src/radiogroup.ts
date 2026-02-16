@@ -1,15 +1,139 @@
-import { BaseTester } from "./_base";
-import type { RadioGroupTesterOpts } from "./types";
+import {act, within} from './testing';
+import {BaseTester} from "./_base";
+import {Direction, Orientation, RadioGroupTesterOpts, UserOpts} from './types';
+import {pressElement} from './events';
+
+interface TriggerRadioOptions {
+  interactionType?: UserOpts['interactionType'];
+  radio: number | string | HTMLElement;
+}
 
 export class RadioGroupTester extends BaseTester {
+  private user;
+  private _interactionType: UserOpts['interactionType'];
+  private _radiogroup: HTMLElement;
+  private _direction: Direction;
+
   constructor(opts: RadioGroupTesterOpts) {
+    let {root, user, interactionType, direction} = opts;
     super(opts);
-    this.direction = opts.direction ?? "ltr";
+    this.user = user;
+    this._interactionType = interactionType || 'mouse';
+    this._direction = direction || 'ltr';
+
+    this._radiogroup = root;
+    let radiogroup = within(root).queryAllByRole('radiogroup');
+    if (radiogroup.length > 0) {
+      this._radiogroup = radiogroup[0];
+    }
   }
 
-  direction: RadioGroupTesterOpts["direction"];
+  setInteractionType(type: UserOpts['interactionType']): void {
+    this._interactionType = type;
+  }
 
-  async choose(option: string | number | HTMLElement) {
-    await this.click(option instanceof HTMLElement ? option : this.root);
+  findRadio(opts: {radioIndexOrText: number | string}): HTMLElement {
+    let {radioIndexOrText} = opts;
+
+    let radio;
+    if (typeof radioIndexOrText === 'number') {
+      radio = this.radios[radioIndexOrText];
+    } else if (typeof radioIndexOrText === 'string') {
+      let label = within(this.radiogroup).getByText(radioIndexOrText);
+      if (label) {
+        radio = within(label).queryByRole('radio');
+        if (!radio) {
+          let labelWrapper = label.closest('label');
+          if (labelWrapper) {
+            radio = within(labelWrapper).queryByRole('radio');
+          } else {
+            radio = label.closest('[role=radio]');
+          }
+        }
+      }
+    }
+
+    return radio;
+  }
+
+  private async keyboardNavigateToRadio(opts: {radio: HTMLElement, orientation?: Orientation}) {
+    let {radio, orientation = 'vertical'} = opts;
+    let radios = this.radios;
+    radios = radios.filter(radio => !(radio.hasAttribute('disabled') || radio.getAttribute('aria-disabled') === 'true'));
+    if (radios.length === 0) {
+      throw new Error('Radio group doesnt have any non-disabled radios. Please double check your radio group.');
+    }
+
+    let targetIndex = radios.indexOf(radio);
+    if (targetIndex === -1) {
+      throw new Error('Radio provided is not in the radio group.');
+    }
+
+    if (!this.radiogroup.contains(document.activeElement)) {
+      let selectedRadio = this.selectedRadio;
+      if (selectedRadio != null) {
+        act(() => selectedRadio.focus());
+      } else {
+        act(() => radios[0]?.focus());
+      }
+    }
+
+    let currIndex = radios.indexOf(document.activeElement as HTMLElement);
+    if (currIndex === -1) {
+      throw new Error('Active element is not in the radio group.');
+    }
+
+    let arrowUp = 'ArrowUp';
+    let arrowDown = 'ArrowDown';
+    if (orientation === 'horizontal') {
+      if (this._direction === 'ltr') {
+        arrowUp = 'ArrowLeft';
+        arrowDown = 'ArrowRight';
+      } else {
+        arrowUp = 'ArrowRight';
+        arrowDown = 'ArrowLeft';
+      }
+    }
+
+    let movementDirection = targetIndex > currIndex ? 'down' : 'up';
+    for (let i = 0; i < Math.abs(targetIndex - currIndex); i++) {
+      await this.user.keyboard(`[${movementDirection === 'down' ? arrowDown : arrowUp}]`);
+    }
+  };
+
+  async triggerRadio(opts: TriggerRadioOptions): Promise<void> {
+    let {
+      radio,
+      interactionType = this._interactionType
+    } = opts;
+
+    if (typeof radio === 'string' || typeof radio === 'number') {
+      radio = this.findRadio({radioIndexOrText: radio});
+    }
+
+    if (!radio) {
+      throw new Error('Target radio not found in the radio group.');
+    } else if (radio.hasAttribute('disabled')) {
+      throw new Error('Target radio is disabled.');
+    }
+
+    if (interactionType === 'keyboard') {
+      let radioOrientation = this.radiogroup.getAttribute('aria-orientation') || 'horizontal';
+      await this.keyboardNavigateToRadio({radio, orientation: radioOrientation as Orientation});
+    } else {
+      await pressElement(this.user, radio, interactionType);
+    }
+  }
+
+  get radiogroup(): HTMLElement {
+    return this._radiogroup;
+  }
+
+  get radios(): HTMLElement[] {
+    return within(this.radiogroup).queryAllByRole('radio');
+  }
+
+  get selectedRadio(): HTMLElement | null {
+    return this.radios.find(radio => (radio as HTMLInputElement).checked) || null;
   }
 }
