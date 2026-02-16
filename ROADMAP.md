@@ -92,6 +92,8 @@ Reference baseline: `references/react-spectrum`
 - `@react-stately/steplist`
 - `@react-stately/virtualizer`
 
+Local targets for remaining stately work are `@vue-stately/<name>`.
+
 ## 4) Gap-close order (next)
 
 ### Phase 1 — Close namespace exceptions
@@ -105,6 +107,10 @@ Reference baseline: `references/react-spectrum`
 3. `list`, `dropzone`, `autocomplete`, `dnd`, `tag`, `steplist`
 
 ### Phase 4 — Add missing `@react-stately` packages
-1. `@react-stately/data`, `@react-stately/layout`
-2. `@react-stately/autocomplete`, `@react-stately/dnd`, `@react-stately/steplist`
-3. `@react-stately/color`, `@react-stately/virtualizer`
+1. `@react-stately/data` → `@vue-stately/data`
+2. `@react-stately/layout` → `@vue-stately/layout`
+3. `@react-stately/autocomplete` → `@vue-stately/autocomplete`
+4. `@react-stately/dnd` → `@vue-stately/dnd`
+5. `@react-stately/steplist` → `@vue-stately/steplist`
+6. `@react-stately/color` → `@vue-stately/color`
+7. `@react-stately/virtualizer` → `@vue-stately/virtualizer`
