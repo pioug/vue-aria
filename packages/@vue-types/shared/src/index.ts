@@ -118,7 +118,7 @@ export interface ValueBase<T = unknown, U = unknown> {
 }
 
 export type ValidationState = "valid" | "invalid";
-export type ValidationErrors = Array<string>;
+export type ValidationErrors = Array<string> | Record<string, string | string[]>;
 export interface Validation<T = unknown> {
   validationState?: ValidationState;
   isInvalid?: boolean;
