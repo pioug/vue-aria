@@ -154,7 +154,7 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/illustratedmessage` (parity + 1 test suite passing)
 - [x] `@react-spectrum/image` (parity + 1 test suite passing)
 - [x] `@react-spectrum/inlinealert` (parity + 1 test suite passing)
-- [ ] `@react-spectrum/label` (incomplete: no local tests)
+- [x] `@react-spectrum/label` (parity + local tests added in `packages/@vue-spectrum/label/test/Label.test.ts`)
 - [x] `@react-spectrum/labeledvalue` (parity + 1 test suite passing)
 - [ ] `@react-spectrum/layout` (incomplete: no local tests)
 - [x] `@react-spectrum/link` (parity + 2 test suites passing)
@@ -310,3 +310,4 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/illustratedmessage` implemented and parity tests added in `packages/@vue-spectrum/illustratedmessage/test/IllustratedMessage.test.ts`.
 - 2026-02-16: `@react-spectrum/labeledvalue` implemented and parity tests added in `packages/@vue-spectrum/labeledvalue/test/LabeledValue.test.ts`.
 - 2026-02-16: `@react-spectrum/statuslight` implemented and parity tests added in `packages/@vue-spectrum/statuslight/test/StatusLight.test.ts`.
+- 2026-02-16: `@react-spectrum/label` implemented and parity tests added in `packages/@vue-spectrum/label/test/Label.test.ts`.
