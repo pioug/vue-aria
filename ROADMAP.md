@@ -138,7 +138,7 @@ No package marked complete until all required checks are green.
 - [x] `@react-spectrum/button` (parity + tested; passing suite)
 - [x] `@react-spectrum/buttongroup` (parity + 1 test suite passing)
 - [x] `@react-spectrum/calendar` (parity + 2 test suites passing)
-- [ ] `@react-spectrum/card` (incomplete: no local tests)
+- [x] `@react-spectrum/card` (parity + 1 test suite passing)
 - [x] `@react-spectrum/checkbox` (parity + 3 test suites passing)
 - [ ] `@react-spectrum/color` (incomplete: no local tests)
 - [x] `@react-spectrum/combobox` (parity + 2 suites, 141 tests passing)
@@ -298,4 +298,5 @@ For each package under active scope:
 - 2026-02-16: `@react-spectrum/avatar` implemented and parity tests added in `packages/@vue-spectrum/avatar/test/Avatar.test.ts`.
 - 2026-02-16: `@react-spectrum/badge` implemented and parity tests added in `packages/@vue-spectrum/badge/test/Badge.test.ts`.
 - 2026-02-16: `@react-spectrum/buttongroup` implemented and parity tests added in `packages/@vue-spectrum/buttongroup/test/ButtonGroup.test.ts`.
-- 2026-02-16: Roadmap progression moved to `@react-spectrum/card` as next queue item.
+- 2026-02-16: `@react-spectrum/card` implemented and parity tests added in `packages/@vue-spectrum/card/test/Card.test.ts`.
+- 2026-02-16: Roadmap progression moved to `@react-spectrum/divider` as next queue item.
