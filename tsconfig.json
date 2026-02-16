@@ -107,7 +107,7 @@
         "packages/@vue-aria/checkbox/src/index.ts"
       ],
       "@vue-stately/radio": [
-        "./packages/@vue-aria/radio-state/src/index.ts"
+        "./packages/@vue-stately/radio/src/index.ts"
       ],
       "@vue-aria/radio": [
         "packages/@vue-aria/radio/src/index.ts"

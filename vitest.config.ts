@@ -108,7 +108,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/checkbox/src/index.ts", import.meta.url)
       ),
       "@vue-stately/radio": fileURLToPath(
-        new URL("./packages/@vue-aria/radio-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/radio/src/index.ts", import.meta.url)
       ),
       "@vue-aria/radio": fileURLToPath(
         new URL("./packages/@vue-aria/radio/src/index.ts", import.meta.url)
