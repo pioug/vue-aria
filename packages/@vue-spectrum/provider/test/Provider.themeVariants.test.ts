@@ -1,6 +1,6 @@
-import { theme as themeDark } from "@vue-spectrum/theme-default-dark";
-import { theme as themeExpress } from "@vue-spectrum/theme-default-express";
-import { theme as themeLight } from "@vue-spectrum/theme-default-light";
+import { theme as themeDark } from "@vue-spectrum/theme-dark";
+import { theme as themeExpress } from "@vue-spectrum/theme-express";
+import { theme as themeLight } from "@vue-spectrum/theme-light";
 import { createApp, defineComponent, h } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Provider } from "../src/Provider";
