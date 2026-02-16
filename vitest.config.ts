@@ -189,7 +189,7 @@ export default defineConfig({
         new URL("./packages/@vue-aria/combobox/src/index.ts", import.meta.url)
       ),
       "@vue-stately/grid": fileURLToPath(
-        new URL("./packages/@vue-aria/grid-state/src/index.ts", import.meta.url)
+        new URL("./packages/@vue-stately/grid/src/index.ts", import.meta.url)
       ),
       "@vue-stately/table": fileURLToPath(
         new URL("./packages/@vue-aria/table-state/src/index.ts", import.meta.url)
