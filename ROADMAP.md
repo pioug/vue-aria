@@ -6,7 +6,10 @@ Reference baseline: `references/react-spectrum`
 
 ## 1) Working objective
 
-Close implementation and test parity gaps package-by-package across mapped `@react-*` and `@react-spectrum/*` families.
+Close implementation and test parity gaps package-by-package, then complete the naming migration:
+
+- Move all `@react-stately` primitives out of legacy `@vue-aria/*-state` package layouts.
+- Define and use definitive `@vue-stately/*` packages directly so no mapping layer is required.
 
 ## 2) Current baseline
 
@@ -16,80 +19,68 @@ Close implementation and test parity gaps package-by-package across mapped `@rea
   - `@react-spectrum`: 64 packages
   - `@react-types`: 47 packages
 - Local implementation inventory:
-  - `@vue-aria`: 78 packages (includes `*-state` and mapped `@vue-stately/*` package names),
+  - `@vue-aria`: 57 packages,
   - `@vue-spectrum`: 64 packages,
   - `@vue-types`: 48 packages (`@vue-types/shared` + all mapped `@react-types/*` packages),
-  - `@vue-stately`: 0 directories (implementation is currently co-located in `@vue-aria` for state-derived names).
+  - `@vue-stately`: 0 directories (legacy state implementations are currently under `@vue-aria/*-state`).
 - Coverage status:
   - Naming/alias gaps from previous phase: closed.
   - `@react-aria` logical coverage: `54 / 54`.
-  - `@react-stately` logical coverage: `32 / 32` (via mapped `@vue-aria/*-state` and `@vue-stately/*` package names).
+  - `@react-stately` logical coverage: `32 / 32` (currently via `@vue-aria/*-state`; must be moved to definitive `@vue-stately/*`).
   - `@react-spectrum` logical coverage: `64 / 64`.
 - `@react-types` logical coverage: `47 / 47`.
 
 ## 3) Gap target for this pass
 
-Primary gap now: implementation + test parity for `@react-types/*` packages (`0` packages remain to map/implement).
+Primary pass: definitive state-package migration.
+
+- Remove legacy `@vue-aria/*-state` naming.
+- Add/verify package directories under `packages/@vue-stately/*`.
+- Eliminate mapping dependencies and re-import/resolve all `@vue-stately/*` package references directly.
+- Keep `@react-types` package parity intact while migration runs.
+
+- State migration remaining: 20 packages.
 
 ## 4) Active queue (package-by-package)
 
 Status: `Todo` / `In progress` / `Done`.
 
-- [x] `@react-types/actionbar`
-- [x] `@react-types/actiongroup`
-- [x] `@react-types/autocomplete`
-- [x] `@react-types/avatar`
-- [x] `@react-types/badge`
-- [x] `@react-types/breadcrumbs`
-- [x] `@react-types/button`
-- [x] `@react-types/buttongroup`
-- [x] `@react-types/calendar`
-- [x] `@react-types/card`
-- [x] `@react-types/checkbox`
-- [x] `@react-types/color`
-- [x] `@react-types/combobox`
-- [x] `@react-types/contextualhelp`
-- [x] `@react-types/datepicker`
-- [x] `@react-types/dialog`
-- [x] `@react-types/divider`
-- [x] `@react-types/form`
-- [x] `@react-types/grid`
-- [x] `@react-types/illustratedmessage`
-- [x] `@react-types/image`
-- [x] `@react-types/label`
-- [x] `@react-types/layout`
-- [x] `@react-types/link`
-- [x] `@react-types/list`
-- [x] `@react-types/listbox`
-- [x] `@react-types/menu`
-- [x] `@react-types/meter`
-- [x] `@react-types/numberfield`
-- [x] `@react-types/overlays`
-- [x] `@react-types/progress`
-- [x] `@react-types/provider`
-- [x] `@react-types/radio`
-- [x] `@react-types/searchfield`
-- [x] `@react-types/select`
-- [x] `@react-types/sidenav`
-- [x] `@react-types/slider`
-- [x] `@react-types/statuslight`
-- [x] `@react-types/switch`
-- [x] `@react-types/table`
-- [x] `@react-types/tabs`
-- [x] `@react-types/text`
-- [x] `@react-types/textfield`
-- [x] `@react-types/tooltip`
-- [x] `@react-types/view`
-- [x] `@react-types/well`
+- [ ] `@vue-stately/calendar`
+- [ ] `@vue-stately/checkbox`
+- [ ] `@vue-stately/combobox`
+- [ ] `@vue-stately/datepicker`
+- [ ] `@vue-stately/disclosure`
+- [ ] `@vue-stately/form`
+- [ ] `@vue-stately/grid`
+- [ ] `@vue-stately/list`
+- [ ] `@vue-stately/numberfield`
+- [ ] `@vue-stately/overlays`
+- [ ] `@vue-stately/radio`
+- [ ] `@vue-stately/searchfield`
+- [ ] `@vue-stately/selection`
+- [ ] `@vue-stately/slider`
+- [ ] `@vue-stately/table`
+- [ ] `@vue-stately/tabs`
+- [ ] `@vue-stately/toast`
+- [ ] `@vue-stately/toggle`
+- [ ] `@vue-stately/tooltip`
+- [ ] `@vue-stately/tree`
+- [ ] `@vue-stately/utils`
+
+## 4b) Completed packages preserved from previous pass
+
+- `@react-types/*` parity is closed at `47 / 47`.
 
 ## 5) Per-package completion criteria
 
 For each package marked done:
 
 - Upstream exports/signatures are mirrored in local package surface.
-- Public API and behavior tests added/updated in `packages/@vue-types/<package>/` and aligned test directories.
+- Legacy `*-state` locations are removed or left behind only as temporary transition artifacts.
+- All imports for moved packages use definitive `@vue-stately/<package>` paths.
+- Public API and behavior tests added/updated in `packages/@vue-stately/<package>/` and aligned test directories.
 - Package-level tests pass.
-- Import path/alias references remain valid.
+- Import path regressions are eliminated.
 - `ROADMAP.md` checkbox is marked done and commit pushed.
 
 ## 6) Execution rules

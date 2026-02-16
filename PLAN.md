@@ -1,43 +1,50 @@
-# Gap-Closure Plan: Package-by-Package
+# Gap-Closure Plan: Package-by-Package and `@vue-stately` Migration
 
 ## Objective
 
-Close remaining parity gaps by iterating package-by-package and resolving implementation and tests for each package before moving on.
+Close implementation/test parity gaps package-by-package, then remove all legacy `@vue-aria/*-state` layouts by moving state packages to definitive `@vue-stately/*` directories with no mapping dependency.
 
 ## Current scope
 
 - Reference baseline: `references/react-spectrum`
 - Focus families: `@react-aria`, `@react-stately`, `@react-spectrum`, `@react-types`
-- Implementation naming rule:
+- Naming rule:
   - `@react-aria/*` implementations remain in `@vue-aria/*`
-  - `@react-stately/*` implementations and related state exports are implemented with `@vue-stately/*` naming; `*-state` legacy mappings are also accepted.
+  - `@react-stately/*` must be implemented in `packages/@vue-stately/*`
+  - `*-state` packages under `@vue-aria` are temporary migration intermediates and should be removed after moves land
   - `@react-spectrum/*` remain in `@vue-spectrum/*`
-  - `@react-types/*` implementations remain in `@vue-types/*`
+  - `@react-types/*` remain in `@vue-types/*`
 
-## Sweep protocol (per package)
+## Migration protocol (state packages first)
 
-1. Select one package from the active ROADMAP queue.
+1. Select next `@vue-stately/*` item from `ROADMAP.md`.
+2. Create/move package sources from legacy `packages/@vue-aria/<pkg>-state` to `packages/@vue-stately/<pkg>`.
+3. Preserve runtime and public API exports.
+4. Update all local imports/tests/docs from `@vue-aria/<pkg>-state` to `@vue-stately/<pkg>`.
+5. Update workspace config so `packages/@vue-stately/*` are included as build/test packages.
+6. Remove temporary mapping layer once all imports are direct.
+7. Update `ROADMAP.md` and commit a stable checkpoint.
+
+## Parity protocol (after migration path is clear)
+
+1. Select the next package from active gap queue.
 2. Compare upstream and local:
    - Upstream source: `references/react-spectrum/packages/<scope>/<package>/`
-   - Local package: corresponding `packages/<mapped-scope>/<package>/`
-3. Resolve implementation gap first (hooks, exports, types, side effects).
-4. Resolve test gap:
-   - Add missing unit/integration tests where behavior is exposed.
-   - Fix failing tests for behavior parity and edge cases.
-5. Validate locally:
-   - run package-level tests for the package (and dependent consumers when needed)
-   - ensure no naming/integration mismatch remains for that package.
-6. Update docs if behavior signature or import surface changes.
-7. Update `ROADMAP.md` entry status for that package.
-8. **Commit + push immediately** if state is stable and tests are passing.
+   - Local package: `packages/<mapped-scope>/<package>/`
+3. Resolve implementation gaps (hooks, exports, types, side effects).
+4. Resolve tests:
+   - add missing unit/integration tests where behavior is exposed.
+   - fix failing tests for parity and edge cases.
+5. Validate scoped import path stability.
+6. Update docs if signature/import surface changes.
+7. Update `ROADMAP.md` entry status.
+8. Commit + push immediately in stable state.
 
 ## Stable-state rule
 
-- Stable means:
-  - package implementation is complete for the scoped task,
-  - package tests pass (targeted run),
-  - repo is in a logically coherent state for that package,
-  - no local reference/import regressions for that package.
+- Implementation scope complete for the selected package
+- Targeted package-level tests pass
+- No local import/regression risk introduced
 
 ## Commit convention
 
@@ -48,13 +55,6 @@ Close remaining parity gaps by iterating package-by-package and resolving implem
 
 ## Execution cadence
 
-- Work continuously through one package at a time.
-- After each stable pass:
-  - commit,
-  - push,
-  - then start the next package immediately.
-- Do not merge multiple unstable package edits into one commit.
-
-## Package source-of-truth
-
-- Roadmap and status are maintained in `ROADMAP.md` and considered the active queue.
+- One package at a time.
+- Commit and push each stable checkpoint.
+- Keep `ROADMAP.md` as single source of active queue status.
