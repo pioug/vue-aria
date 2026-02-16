@@ -146,6 +146,24 @@ export interface InputDOMProps {
   placeholder?: string;
 }
 
+export interface HelpTextProps {
+  "aria-describedby"?: string;
+  description?: string;
+}
+
+export interface LabelableProps {
+  label?: string;
+  labelPosition?: "side" | "top";
+}
+
+export interface SpectrumHelpTextProps extends HelpTextProps {}
+
+export interface SpectrumLabelableProps extends LabelableProps {}
+
+export interface AriaValidationProps {
+  "aria-invalid"?: boolean | "true" | "false";
+}
+
 export interface LinkDOMProps {
   href?: Href;
 }
