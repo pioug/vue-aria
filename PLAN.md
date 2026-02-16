@@ -1,51 +1,24 @@
-# Plan: Quality Audit for All Ported Modules
+# Task: Ensure visual parity of UI components
 
-## Objective
+## Context
+All modules in `references/` have already been ported.
 
-Run a complete parity-and-test audit for every ported package against the reference baseline and ensure no implementation or testing gaps remain.
+## Problem
+The components currently lack styles, making them unusable.
 
-Reference baseline: `references/react-spectrum`
+## Goal
+Apply correct styles so the ported UI components visually match the reference.
 
-## Scope
+## Requirements
+1. Investigate the `references/` directory to understand how styles are written and applied in the original implementation. :contentReference[oaicite:0]{index=0}
+2. Identify how those styles can be adapted or rewritten to work with the Vue port.
+3. Produce a documented solution that integrates the styles into the Vue codebase.
+4. Provide a working, interactive proof-of-concept example: a styled dialog component with all relevant styles applied.
+5. Append all findings, analysis, and attempts below so future agents can learn from them and avoid repeating work.
 
-- `@react-aria` (54 packages): compare against fixed local targets `@vue-aria/*` only.
-- `@react-stately` (32 packages): compare against local `packages/@vue-stately/*`.
-- `@react-spectrum` (64 packages): compare against local `packages/@vue-spectrum/*`.
-- `@react-types` (47 packages): compare against local `packages/@vue-types/*`.
-
-## Work order
-
-1. Freeze current state and verify mapping table from source to local package names.
-2. Build a package-by-package queue in strict order by scope:
-   1. `@react-aria`
-   2. `@react-stately`
-   3. `@react-spectrum`
-   4. `@react-types`
-3. For each package:
-   - run manual parity review against reference and local source,
-   - compare exported API surface and behavior,
-   - add/repair equivalent tests,
-   - run package-level tests.
-4. Record package status in `ROADMAP.md` as `TODO` / `In progress` / `Done`.
-5. Continue in a strict sequence: always start with the first unchecked package listed in `ROADMAP.md`, and once it is moved to `Done`, immediately start the next unchecked package until none remain.
-6. Manually move to the next unchecked package in list order.
-
-## Quality gate for “Done”
-
-A package is `Done` only when all are true:
-
-- Upstream references show no implementation gap (or documented, approved exception).
-- Behavioral parity is evidenced by tests.
-- Equivalent or stronger tests exist for known edge cases.
-- Package-level tests pass in local equivalent of CI.
-
-## Required checks
-
-- Manual mapping check against `references/react-spectrum` for package presence and API parity.
-- Scoped package test runs for each touched package.
-- Manual path-mapping validation so `@react-*` imports map to expected local packages.
-
-## Commit rule
-
-- No more than one package scope should be advanced per checkpoint.
-- Update `ROADMAP.md` and commit only after quality gates are met.
+## Deliverables
+- Summary of style patterns from `references/`
+- List of style files, dependencies, and mapping to Vue components
+- Code changes required to port styles
+- Interactive example of a dialog with styles applied
+- Notes on failed approaches and lessons learned
