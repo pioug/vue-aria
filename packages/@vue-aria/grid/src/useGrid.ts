@@ -3,7 +3,7 @@ import { useCollator, useLocale } from "@vue-aria/i18n";
 import { useSelectableCollection, type KeyboardDelegate } from "@vue-aria/selection";
 import { filterDOMProps, mergeProps, nodeContains, useId } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/collections";
-import type { GridCollectionType, GridState } from "@vue-aria/grid-state";
+import type { GridCollectionType, GridState } from "@vue-stately/grid";
 import { GridKeyboardDelegate } from "./GridKeyboardDelegate";
 import { useGridSelectionAnnouncement } from "./useGridSelectionAnnouncement";
 import { useHighlightSelectionDescription } from "./useHighlightSelectionDescription";

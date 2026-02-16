@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GridCollection, type GridNode } from "@vue-aria/grid-state";
+import { GridCollection, type GridNode } from "@vue-stately/grid";
 import { GridKeyboardDelegate } from "../src/GridKeyboardDelegate";
 
 function cell(key: string, index: number): GridNode<object> {

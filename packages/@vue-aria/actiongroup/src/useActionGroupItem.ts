@@ -1,5 +1,5 @@
 import type { Key } from "@vue-aria/collections";
-import type { ListState } from "@vue-aria/list-state";
+import type { ListState } from "@vue-stately/list";
 import { mergeProps, useEffectEvent } from "@vue-aria/utils";
 import { onScopeDispose } from "vue";
 

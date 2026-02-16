@@ -1,5 +1,5 @@
 import type { AriaCheckboxGroupProps, AriaCheckboxProps } from "@vue-aria/checkbox";
-import type { CheckboxGroupProps } from "@vue-aria/checkbox-state";
+import type { CheckboxGroupProps } from "@vue-stately/checkbox";
 
 export interface SpectrumCheckboxProps extends AriaCheckboxProps {
   isEmphasized?: boolean;

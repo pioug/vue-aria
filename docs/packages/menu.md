@@ -16,8 +16,8 @@
 ```vue
 <script setup lang="ts">
 import { useMenu, useMenuItem, useMenuSection, useMenuTrigger, useSubmenuTrigger } from "@vue-aria/menu";
-import { useListState } from "@vue-aria/list-state";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useListState } from "@vue-stately/list";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 
 const triggerRef = { current: null as HTMLElement | null };
 const menuRef = { current: null as HTMLElement | null };
@@ -56,7 +56,7 @@ const { submenuTriggerProps, submenuProps, popoverProps } = useSubmenuTrigger({
 <script setup lang="ts">
 import { I18nProvider } from "@vue-aria/i18n";
 import { useMenuTrigger } from "@vue-aria/menu";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 
 const triggerRef = { current: null as HTMLElement | null };
 const triggerState = useOverlayTriggerState({});

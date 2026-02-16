@@ -7,10 +7,10 @@ import {
   toCalendar,
 } from "@internationalized/date";
 import { NumberFormatter } from "@internationalized/number";
-import { useFormValidationState } from "@vue-aria/form-state";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useFormValidationState } from "@vue-stately/form";
+import { useControlledState } from "@vue-stately/utils";
 import { computed, ref, watchEffect } from "vue";
-import type { DateValue, ValidationState } from "@vue-aria/calendar-state";
+import type { DateValue, ValidationState } from "@vue-stately/calendar";
 import { IncompleteDate } from "./IncompleteDate";
 import { getPlaceholder } from "./placeholders";
 import {

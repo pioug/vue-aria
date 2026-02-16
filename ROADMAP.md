@@ -37,6 +37,9 @@ Reference baseline: `references/react-spectrum`
 - Added `@vue-aria/virtualizer` compatibility package.
 - Added `@vue-aria/dnd` compatibility package.
 - Added `@vue-aria/color` compatibility package.
+- Migrated internal/stately imports and workspace aliases from
+  `@vue-aria/<name>-state` to `@vue-stately/<name>` for existing state-backed
+  packages so historical `-state` suffixes are removed from usage and docs.
 
 ## 3) Remaining inconsistencies to close
 

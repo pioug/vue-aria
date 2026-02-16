@@ -1,7 +1,7 @@
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, watch } from "vue";
 import { useId } from "@vue-aria/utils";
 import { useIsSSR } from "@vue-aria/ssr";
-import type { DisclosureState } from "@vue-aria/disclosure-state";
+import type { DisclosureState } from "@vue-stately/disclosure";
 
 export interface AriaDisclosureProps {
   isDisabled?: boolean;

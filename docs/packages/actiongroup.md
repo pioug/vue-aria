@@ -20,7 +20,7 @@
 
 ```ts
 import { useActionGroup } from "@vue-aria/actiongroup";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 import { ref } from "vue";
 
 const state = useListState({

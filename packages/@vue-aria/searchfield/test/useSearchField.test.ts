@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { I18nProvider } from "@vue-aria/i18n";
-import { useSearchFieldState } from "@vue-aria/searchfield-state";
+import { useSearchFieldState } from "@vue-stately/searchfield";
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSearchField } from "../src";

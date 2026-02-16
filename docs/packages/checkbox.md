@@ -7,14 +7,14 @@
 - `useCheckbox`
 - `useCheckboxGroup`
 - `useCheckboxGroupItem`
-- `@vue-aria/checkbox-state/useCheckboxGroupState`
+- `@vue-stately/checkbox/useCheckboxGroupState`
 
 ## Upstream-aligned examples
 
 ```vue
 <script setup lang="ts">
 import { useCheckbox } from "@vue-aria/checkbox";
-import { useToggleState } from "@vue-aria/toggle-state";
+import { useToggleState } from "@vue-stately/toggle";
 
 const inputRef = { current: null as HTMLInputElement | null };
 const state = useToggleState();

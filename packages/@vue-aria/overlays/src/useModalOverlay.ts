@@ -1,5 +1,5 @@
 import { ariaHideOutside } from "./ariaHideOutside";
-import type { OverlayTriggerState } from "@vue-aria/overlays-state";
+import type { OverlayTriggerState } from "@vue-stately/overlays";
 import { mergeProps } from "@vue-aria/utils";
 import { watchEffect } from "vue";
 import { useOverlay } from "./useOverlay";

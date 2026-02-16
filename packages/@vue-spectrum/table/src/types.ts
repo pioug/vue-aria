@@ -1,5 +1,5 @@
 import type { Key } from "@vue-aria/collections";
-import type { SortDescriptor, SortDirection } from "@vue-aria/table-state";
+import type { SortDescriptor, SortDirection } from "@vue-stately/table";
 import { Fragment, Text, isVNode, type VNode, type VNodeChild } from "vue";
 
 export type TableKey = Key;

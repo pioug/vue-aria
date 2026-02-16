@@ -5,7 +5,7 @@
 ## Implemented modules
 
 - `useDisclosure`
-- `@vue-aria/disclosure-state/useDisclosureState`
+- `@vue-stately/disclosure/useDisclosureState`
 
 ## Upstream-aligned examples
 
@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useDisclosure } from "@vue-aria/disclosure";
-import { useDisclosureState } from "@vue-aria/disclosure-state";
+import { useDisclosureState } from "@vue-stately/disclosure";
 
 const panelRef = { current: null as HTMLElement | null };
 const state = useDisclosureState({});

@@ -7,7 +7,7 @@ import {
   mergeValidation,
   privateValidationStateProp,
   type ValidationResult,
-} from "@vue-aria/form-state";
+} from "@vue-stately/form";
 import {
   filterDOMProps,
   mergeProps,
@@ -19,7 +19,7 @@ import { ref as vueRef } from "vue";
 import { intlMessages } from "./intlMessages";
 import { focusManagerSymbol, roleSymbol } from "./useDateField";
 import { useDatePickerGroup } from "./useDatePickerGroup";
-import type { DateRangePickerState } from "@vue-aria/datepicker-state";
+import type { DateRangePickerState } from "@vue-stately/datepicker";
 import type {
   AriaDatePickerProps,
   AriaDateRangePickerProps,

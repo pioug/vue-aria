@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe } from "vitest";
-import { useTableColumnResizeState } from "@vue-aria/table-state";
+import { useTableColumnResizeState } from "@vue-stately/table";
 import { useTableColumnResize } from "../src/useTableColumnResize";
 import { gridIds } from "../src/utils";
 import { createTableState } from "./helpers";

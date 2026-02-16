@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { GridNode } from "@vue-aria/grid-state";
+import type { GridNode } from "@vue-stately/grid";
 import { nextTick, ref } from "vue";
 import {
   TableCollection,

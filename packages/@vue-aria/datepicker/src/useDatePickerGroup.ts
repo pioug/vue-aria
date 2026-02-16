@@ -9,7 +9,7 @@ import type {
   DateFieldState,
   DatePickerState,
   DateRangePickerState,
-} from "@vue-aria/datepicker-state";
+} from "@vue-stately/datepicker";
 import type { DOMAttributes, RefObject } from "./types";
 
 export function useDatePickerGroup(

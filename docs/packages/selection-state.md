@@ -1,6 +1,6 @@
-# @vue-aria/selection-state
+# @vue-stately/selection
 
-`@vue-aria/selection-state` ports upstream `@react-stately/selection` state primitives to Vue-friendly APIs.
+`@vue-stately/selection` ports upstream `@react-stately/selection` state primitives to Vue-friendly APIs.
 
 ## Implemented modules
 
@@ -13,7 +13,7 @@
 ### `useMultipleSelectionState`
 
 ```ts
-import { useMultipleSelectionState, Selection } from "@vue-aria/selection-state";
+import { useMultipleSelectionState, Selection } from "@vue-stately/selection";
 
 const state = useMultipleSelectionState({
   selectionMode: "multiple",
@@ -28,7 +28,7 @@ state.setSelectedKeys(new Selection(["a", "b"]));
 ### `SelectionManager`
 
 ```ts
-import { SelectionManager, useMultipleSelectionState } from "@vue-aria/selection-state";
+import { SelectionManager, useMultipleSelectionState } from "@vue-stately/selection";
 
 const state = useMultipleSelectionState({
   selectionMode: "multiple",

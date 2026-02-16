@@ -1,6 +1,6 @@
 import type { Key, Node } from "@vue-aria/collections";
-import type { ListState } from "@vue-aria/list-state";
-import type { SelectionValue } from "@vue-aria/selection-state";
+import type { ListState } from "@vue-stately/list";
+import type { SelectionValue } from "@vue-stately/selection";
 import type { VNode } from "vue";
 
 export interface SpectrumListBoxNodeData {

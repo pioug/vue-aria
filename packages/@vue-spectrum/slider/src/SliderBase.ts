@@ -1,6 +1,6 @@
 import { useNumberFormatter } from "@vue-aria/i18n";
 import { useSlider } from "@vue-aria/slider";
-import { useSliderState, type SliderState } from "@vue-aria/slider-state";
+import { useSliderState, type SliderState } from "@vue-stately/slider";
 import {
   computed,
   defineComponent,

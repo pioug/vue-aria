@@ -1,5 +1,5 @@
 import { useDatePicker, useDateRangePicker } from "@vue-aria/datepicker";
-import { useDatePickerState, useDateRangePickerState } from "@vue-aria/datepicker-state";
+import { useDatePickerState, useDateRangePickerState } from "@vue-stately/datepicker";
 import { useFormValidation } from "@vue-aria/form";
 import { useLocale } from "@vue-aria/i18n";
 import { useFormReset, useId } from "@vue-aria/utils";

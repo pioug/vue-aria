@@ -2,9 +2,9 @@ import {
   VALID_VALIDITY_STATE,
   useFormValidationState,
   type ValidationResult as FormValidationResult,
-} from "@vue-aria/form-state";
+} from "@vue-stately/form";
 import { ref } from "vue";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 
 export type ValidationResult = FormValidationResult;
 

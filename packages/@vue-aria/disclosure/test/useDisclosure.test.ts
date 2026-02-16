@@ -1,7 +1,7 @@
 import { effectScope, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useDisclosure } from "../src";
-import { useDisclosureState } from "@vue-aria/disclosure-state";
+import { useDisclosureState } from "@vue-stately/disclosure";
 
 describe("useDisclosure", () => {
   const createRef = () => ({ current: document.createElement("div") });

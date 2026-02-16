@@ -16,8 +16,8 @@ import {
   VALID_VALIDITY_STATE,
   mergeValidation,
   type ValidationResult,
-} from "@vue-aria/form-state";
-import type { DateValue, RangeValue } from "@vue-aria/calendar-state";
+} from "@vue-stately/form";
+import type { DateValue, RangeValue } from "@vue-stately/calendar";
 import type {
   DatePickerProps,
   FieldOptions,

@@ -2,7 +2,7 @@ import type {
   CalendarProps,
   CalendarState,
   DateValue,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 import type { CalendarAria } from "./useCalendarBase";
 import { useCalendarBase } from "./useCalendarBase";
 

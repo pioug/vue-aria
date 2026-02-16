@@ -1,6 +1,6 @@
 import { GridKeyboardDelegate } from "@vue-aria/grid";
 import type { Key } from "@vue-aria/collections";
-import type { GridCollectionType, GridNode } from "@vue-aria/grid-state";
+import type { GridCollectionType, GridNode } from "@vue-stately/grid";
 
 interface TableCollectionLike<T> extends GridCollectionType<T> {
   headerRows: GridNode<T>[];

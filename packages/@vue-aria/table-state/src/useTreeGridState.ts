@@ -1,5 +1,5 @@
 import { tableNestedRows } from "@vue-aria/flags";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import { computed } from "vue";
 import { TableCollection } from "./TableCollection";
 import type { GridNode, Key, TableCollection as ITableCollection } from "./types";

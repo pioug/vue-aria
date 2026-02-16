@@ -1,5 +1,5 @@
 import type { AriaSearchFieldProps } from "@vue-aria/searchfield";
-import type { SearchFieldProps } from "@vue-aria/searchfield-state";
+import type { SearchFieldProps } from "@vue-stately/searchfield";
 
 export interface SpectrumSearchFieldProps extends AriaSearchFieldProps, SearchFieldProps {
   label?: string;

@@ -1,7 +1,7 @@
 import { useId } from "@vue-aria/utils";
 import { watchEffect } from "vue";
 import { onCloseMap } from "./useCloseOnScroll";
-import type { OverlayTriggerState } from "@vue-aria/overlays-state";
+import type { OverlayTriggerState } from "@vue-stately/overlays";
 
 export interface OverlayTriggerProps {
   type: "dialog" | "menu" | "listbox" | "tree" | "grid";

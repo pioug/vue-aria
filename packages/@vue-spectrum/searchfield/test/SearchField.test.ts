@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
-import { FormValidationContext } from "@vue-aria/form-state";
+import { FormValidationContext } from "@vue-stately/form";
 import { SearchField } from "../src/SearchField";
 
 const TEST_ID = "test-id";

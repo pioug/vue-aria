@@ -1,4 +1,4 @@
-import type { SliderState } from "@vue-aria/slider-state";
+import type { SliderState } from "@vue-stately/slider";
 import type { InjectionKey, Ref } from "vue";
 
 export interface SliderContext {

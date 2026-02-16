@@ -1,7 +1,7 @@
 import { dispatchVirtualFocus, getFocusableTreeWalker, moveVirtualFocus } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
 import { focusSafely } from "@vue-aria/interactions";
-import type { FocusStrategy, Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { FocusStrategy, Key, MultipleSelectionManager } from "@vue-stately/selection";
 import { onScopeDispose, watch } from "vue";
 import {
   CLEAR_FOCUS_EVENT,

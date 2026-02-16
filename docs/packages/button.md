@@ -52,7 +52,7 @@ const { buttonProps } = useToggleButton({ elementType: "button" }, state);
 
 ```ts
 import { useToggleButtonGroup, useToggleButtonGroupItem } from "@vue-aria/button";
-import { useToggleGroupState } from "@vue-aria/toggle-state";
+import { useToggleGroupState } from "@vue-stately/toggle";
 
 const state = useToggleGroupState({
   selectionMode: "single",

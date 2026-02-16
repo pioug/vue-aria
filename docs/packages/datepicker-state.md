@@ -1,6 +1,6 @@
-# @vue-aria/datepicker-state
+# @vue-stately/datepicker
 
-`@vue-aria/datepicker-state` ports upstream `@react-stately/datepicker` state hooks for picker, field, and range flows.
+`@vue-stately/datepicker` ports upstream `@react-stately/datepicker` state hooks for picker, field, and range flows.
 
 ## Implemented modules
 
@@ -15,7 +15,7 @@
 
 ```ts
 import { CalendarDate } from "@internationalized/date";
-import { useDatePickerState } from "@vue-aria/datepicker-state";
+import { useDatePickerState } from "@vue-stately/datepicker";
 
 const state = useDatePickerState({
   granularity: "minute",
@@ -30,7 +30,7 @@ state.setTimeValue({ hour: 9, minute: 30 } as any);
 
 ```ts
 import { CalendarDate } from "@internationalized/date";
-import { useDateRangePickerState } from "@vue-aria/datepicker-state";
+import { useDateRangePickerState } from "@vue-stately/datepicker";
 
 const state = useDateRangePickerState({
   granularity: "day",
@@ -46,7 +46,7 @@ state.setDateRange({
 
 ```ts
 import { createCalendar } from "@internationalized/date";
-import { useDateFieldState } from "@vue-aria/datepicker-state";
+import { useDateFieldState } from "@vue-stately/datepicker";
 
 const state = useDateFieldState({
   locale: "en-US",
@@ -61,7 +61,7 @@ state.setSegment("year", 2025);
 ## useTimeFieldState example
 
 ```ts
-import { useTimeFieldState } from "@vue-aria/datepicker-state";
+import { useTimeFieldState } from "@vue-stately/datepicker";
 
 const state = useTimeFieldState({
   locale: "en-US",

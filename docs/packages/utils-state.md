@@ -1,6 +1,6 @@
-# @vue-aria/utils-state
+# @vue-stately/utils
 
-`@vue-aria/utils-state` ports upstream `@react-stately/utils` state helpers for controlled/uncontrolled value handling and numeric helpers.
+`@vue-stately/utils` ports upstream `@react-stately/utils` state helpers for controlled/uncontrolled value handling and numeric helpers.
 
 ## Implemented modules
 
@@ -13,7 +13,7 @@
 ## Upstream-aligned example
 
 ```ts
-import { useControlledState, clamp, snapValueToStep } from "@vue-aria/utils-state";
+import { useControlledState, clamp, snapValueToStep } from "@vue-stately/utils";
 
 const [value, setValue] = useControlledState<number | undefined>(
   undefined,

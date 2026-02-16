@@ -1,4 +1,4 @@
-import type { SearchFieldState } from "@vue-aria/searchfield-state";
+import type { SearchFieldState } from "@vue-stately/searchfield";
 import { chain } from "@vue-aria/utils";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useTextField } from "@vue-aria/textfield";

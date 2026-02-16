@@ -1,12 +1,12 @@
 import type { Key, Node } from "@vue-aria/collections";
-import { ListCollection, useSingleSelectListState } from "@vue-aria/list-state";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
-import type { FocusStrategy } from "@vue-aria/selection-state";
-import { useControlledState } from "@vue-aria/utils-state";
+import { ListCollection, useSingleSelectListState } from "@vue-stately/list";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
+import type { FocusStrategy } from "@vue-stately/selection";
+import { useControlledState } from "@vue-stately/utils";
 import {
   useFormValidationState,
   type FormValidationState,
-} from "@vue-aria/form-state";
+} from "@vue-stately/form";
 import { computed, ref, toValue, watch, watchEffect } from "vue";
 
 type FilterFn = (textValue: string, inputValue: string) => boolean;

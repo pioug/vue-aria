@@ -1,11 +1,11 @@
-import type { DateValue as CalendarDateValue, RangeValue } from "@vue-aria/calendar-state";
+import type { DateValue as CalendarDateValue, RangeValue } from "@vue-stately/calendar";
 import type {
   DatePickerProps,
   DateRangePickerProps,
   TimePickerProps,
   TimeValue as PickerTimeValue,
-} from "@vue-aria/datepicker-state";
-import type { ValidationResult } from "@vue-aria/form-state";
+} from "@vue-stately/datepicker";
+import type { ValidationResult } from "@vue-stately/form";
 
 export type RefObject<T> = { current: T | null };
 export type DOMAttributes = Record<string, unknown>;

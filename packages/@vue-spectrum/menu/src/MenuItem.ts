@@ -5,7 +5,7 @@ import { useMenuItem } from "@vue-aria/menu";
 import { computed, defineComponent, h, ref, type PropType } from "vue";
 import { intlMessages } from "./intlMessages";
 import type { MenuCollectionNode } from "./types";
-import type { ListState } from "@vue-aria/list-state";
+import type { ListState } from "@vue-stately/list";
 
 /** @private */
 export const MenuItem = defineComponent({

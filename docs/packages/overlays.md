@@ -23,7 +23,7 @@
 ```vue
 <script setup lang="ts">
 import { ref } from "vue";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 import { useOverlayTrigger, useOverlay, useOverlayPosition } from "@vue-aria/overlays";
 
 const state = useOverlayTriggerState({});

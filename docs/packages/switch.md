@@ -11,7 +11,7 @@
 ```vue
 <script setup lang="ts">
 import { useSwitch } from "@vue-aria/switch";
-import { useToggleState } from "@vue-aria/toggle-state";
+import { useToggleState } from "@vue-stately/toggle";
 
 const inputRef = { current: null as HTMLInputElement | null };
 const state = useToggleState();

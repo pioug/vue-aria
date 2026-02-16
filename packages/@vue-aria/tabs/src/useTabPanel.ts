@@ -1,7 +1,7 @@
 import { mergeProps, useLabels } from "@vue-aria/utils";
 import { useHasTabbableChild } from "@vue-aria/focus";
 import type { Key } from "@vue-aria/collections";
-import type { TabListState } from "@vue-aria/tabs-state";
+import type { TabListState } from "@vue-stately/tabs";
 import { generateId } from "./utils";
 
 export interface AriaTabPanelProps {

@@ -1,8 +1,8 @@
 import { effectScope } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { setInteractionModality } from "@vue-aria/interactions";
-import { useTableColumnResizeState, type TableColumnResizeState } from "@vue-aria/table-state";
-import type { ColumnSize, Key } from "@vue-aria/table-state";
+import { useTableColumnResizeState, type TableColumnResizeState } from "@vue-stately/table";
+import type { ColumnSize, Key } from "@vue-stately/table";
 import { useTableColumnResize } from "../src/useTableColumnResize";
 import { gridIds } from "../src/utils";
 import { createTableState } from "./helpers";

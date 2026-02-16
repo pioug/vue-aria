@@ -1,6 +1,6 @@
-# @vue-aria/form-state
+# @vue-stately/form
 
-`@vue-aria/form-state` ports React Stately form validation state primitives used by form controls.
+`@vue-stately/form` ports React Stately form validation state primitives used by form controls.
 
 ## API
 
@@ -33,7 +33,7 @@ Returns validation state with parity-oriented commit behavior:
 
 ```ts
 import { ref } from "vue";
-import { useFormValidationState } from "@vue-aria/form-state";
+import { useFormValidationState } from "@vue-stately/form";
 
 const value = ref(5);
 
@@ -75,7 +75,7 @@ const validation = useFormValidationState<string>({
 ### Server-error context integration
 
 ```ts
-import { FormValidationContext } from "@vue-aria/form-state";
+import { FormValidationContext } from "@vue-stately/form";
 
 // Provider value example:
 // { email: ["Address already in use"] }
@@ -85,7 +85,7 @@ import { FormValidationContext } from "@vue-aria/form-state";
 ### Merge multiple validation results
 
 ```ts
-import { mergeValidation } from "@vue-aria/form-state";
+import { mergeValidation } from "@vue-stately/form";
 
 const merged = mergeValidation(clientValidation, nativeValidation);
 ```

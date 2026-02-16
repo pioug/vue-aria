@@ -23,7 +23,7 @@
 
 ```ts
 import { useTree, useTreeItem } from "@vue-aria/tree";
-import { useTreeState } from "@vue-aria/tree-state";
+import { useTreeState } from "@vue-stately/tree";
 
 const treeRef = { current: null as HTMLElement | null };
 const rowRef = { current: null as HTMLElement | null };

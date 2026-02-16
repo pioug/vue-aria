@@ -1,7 +1,7 @@
 import type { Node } from "@vue-aria/collections";
 import { effectScope, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
-import { useTreeState } from "@vue-aria/tree-state";
+import { useTreeState } from "@vue-stately/tree";
 import { useTree } from "../src/useTree";
 import { useTreeItem } from "../src/useTreeItem";
 

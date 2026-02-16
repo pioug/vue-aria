@@ -3,7 +3,7 @@ import { useLocalizedStringFormatter, useNumberFormatter } from "@vue-aria/i18n"
 import { useFocus, useFocusWithin } from "@vue-aria/interactions";
 import { useSpinButton } from "@vue-aria/spinbutton";
 import { useFormattedTextField } from "@vue-aria/textfield";
-import { privateValidationStateProp } from "@vue-aria/form-state";
+import { privateValidationStateProp } from "@vue-stately/form";
 import {
   chain,
   filterDOMProps,
@@ -15,7 +15,7 @@ import {
   useId,
 } from "@vue-aria/utils";
 import { ref } from "vue";
-import type { NumberFieldState } from "@vue-aria/numberfield-state";
+import type { NumberFieldState } from "@vue-stately/numberfield";
 import { intlMessages } from "./intlMessages";
 
 interface ValidationResult {

@@ -1,7 +1,7 @@
 import { useGridSelectionCheckbox } from "@vue-aria/grid";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type { Key } from "@vue-aria/collections";
-import type { TableState } from "@vue-aria/table-state";
+import type { TableState } from "@vue-stately/table";
 import { intlMessages } from "./intlMessages";
 import { getRowLabelledBy } from "./utils";
 

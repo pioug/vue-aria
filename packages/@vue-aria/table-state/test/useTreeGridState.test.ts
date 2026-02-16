@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { effectScope, nextTick, reactive } from "vue";
 import { disableTableNestedRows, enableTableNestedRows } from "@vue-aria/flags";
-import type { GridNode } from "@vue-aria/grid-state";
+import type { GridNode } from "@vue-stately/grid";
 import { UNSTABLE_useTreeGridState } from "../src";
 
 function createColumn(

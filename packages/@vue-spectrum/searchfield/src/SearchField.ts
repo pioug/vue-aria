@@ -1,5 +1,5 @@
 import { useSearchField } from "@vue-aria/searchfield";
-import { useSearchFieldState } from "@vue-aria/searchfield-state";
+import { useSearchFieldState } from "@vue-stately/searchfield";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { useSlotProps } from "@vue-spectrum/utils";
 import { ClearButton } from "@vue-spectrum/button";

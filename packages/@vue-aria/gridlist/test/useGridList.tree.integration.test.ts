@@ -1,7 +1,7 @@
 import type { Node } from "@vue-aria/collections";
 import { effectScope, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
-import { useTreeState } from "@vue-aria/tree-state";
+import { useTreeState } from "@vue-stately/tree";
 import { useGridList } from "../src/useGridList";
 import { useGridListItem } from "../src/useGridListItem";
 

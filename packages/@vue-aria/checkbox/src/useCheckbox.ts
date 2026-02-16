@@ -1,6 +1,6 @@
 import { mergeProps } from "@vue-aria/utils";
 import { useToggle, type ToggleState } from "@vue-aria/toggle";
-import type { ValidationResult } from "@vue-aria/checkbox-state";
+import type { ValidationResult } from "@vue-stately/checkbox";
 
 interface PrivateValidationState {
   commitValidation?: () => void;

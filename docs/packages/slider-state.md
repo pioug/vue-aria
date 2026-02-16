@@ -1,6 +1,6 @@
-# @vue-aria/slider-state
+# @vue-stately/slider
 
-`@vue-aria/slider-state` ports slider state management from upstream `@react-stately/slider`.
+`@vue-stately/slider` ports slider state management from upstream `@react-stately/slider`.
 
 ## API
 
@@ -13,7 +13,7 @@
 ## Upstream-aligned examples
 
 ```ts
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {});
 const state = useSliderState({
@@ -68,7 +68,7 @@ const rangeState = useSliderState({
 
 ```ts
 import { reactive } from "vue";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 // Controlled/reactive usage: state values follow external prop updates.
 const props = reactive({
@@ -109,7 +109,7 @@ rangeLifecycleState.setThumbDragging(1, false); // onChangeEnd now fires
 ```vue
 <script setup lang="ts">
 import { reactive } from "vue";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 const model = reactive({ value: [20, 80] });
 const numberFormatter = new Intl.NumberFormat("en-US", {});
@@ -131,7 +131,7 @@ const state = useSliderState({
 ```vue
 <script setup lang="ts">
 import { computed } from "vue";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 const state = useSliderState({
   defaultValue: [30, 70],

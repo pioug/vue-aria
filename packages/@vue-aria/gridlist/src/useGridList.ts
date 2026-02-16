@@ -2,9 +2,9 @@ import { useHasTabbableChild } from "@vue-aria/focus";
 import { useGridSelectionAnnouncement, useHighlightSelectionDescription } from "@vue-aria/grid";
 import { useSelectableList, type KeyboardDelegate, type LayoutDelegate } from "@vue-aria/selection";
 import type { Key } from "@vue-aria/collections";
-import type { DisabledBehavior, FocusStrategy } from "@vue-aria/selection-state";
-import type { ListState } from "@vue-aria/list-state";
-import type { TreeState } from "@vue-aria/tree-state";
+import type { DisabledBehavior, FocusStrategy } from "@vue-stately/selection";
+import type { ListState } from "@vue-stately/list";
+import type { TreeState } from "@vue-stately/tree";
 import { filterDOMProps, mergeProps, useId } from "@vue-aria/utils";
 import { listMap } from "./utils";
 

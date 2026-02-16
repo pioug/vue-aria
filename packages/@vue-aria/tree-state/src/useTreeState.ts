@@ -1,4 +1,4 @@
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import {
   SelectionManager,
   useMultipleSelectionState,
@@ -6,7 +6,7 @@ import {
   type Key,
   type MultipleSelectionManager,
   type MultipleSelectionStateProps,
-} from "@vue-aria/selection-state";
+} from "@vue-stately/selection";
 import type { Node } from "@vue-aria/collections";
 import { computed, watchEffect } from "vue";
 import { TreeCollection, type TreeCollectionType } from "./TreeCollection";

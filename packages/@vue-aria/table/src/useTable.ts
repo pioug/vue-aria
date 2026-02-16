@@ -9,7 +9,7 @@ import {
   useUpdateEffect,
 } from "@vue-aria/utils";
 import type { Key, LayoutDelegate, Rect, Size } from "@vue-aria/selection";
-import type { TableState, TreeGridState } from "@vue-aria/table-state";
+import type { TableState, TreeGridState } from "@vue-stately/table";
 import { computed } from "vue";
 import { intlMessages } from "./intlMessages";
 import { TableKeyboardDelegate } from "./TableKeyboardDelegate";

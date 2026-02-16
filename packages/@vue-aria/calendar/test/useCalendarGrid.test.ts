@@ -1,7 +1,7 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useCalendarState } from "@vue-aria/calendar-state";
+import { useCalendarState } from "@vue-stately/calendar";
 import { useCalendar } from "../src/useCalendar";
 import { useCalendarGrid } from "../src/useCalendarGrid";
 

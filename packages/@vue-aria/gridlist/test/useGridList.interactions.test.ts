@@ -1,6 +1,6 @@
 import { effectScope, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 import { useGridList } from "../src/useGridList";
 import { useGridListItem } from "../src/useGridListItem";
 

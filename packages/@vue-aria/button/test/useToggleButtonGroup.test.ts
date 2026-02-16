@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useToggleGroupState } from "@vue-aria/toggle-state";
+import { useToggleGroupState } from "@vue-stately/toggle";
 import { useToggleButtonGroup, useToggleButtonGroupItem } from "../src";
 
 describe("useToggleButtonGroup", () => {

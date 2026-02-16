@@ -1,6 +1,6 @@
 # @vue-spectrum/slider
 
-`@vue-spectrum/slider` ports the React Spectrum slider components to Vue 3 using `@vue-aria/slider` and `@vue-aria/slider-state`.
+`@vue-spectrum/slider` ports the React Spectrum slider components to Vue 3 using `@vue-aria/slider` and `@vue-stately/slider`.
 
 ## API
 

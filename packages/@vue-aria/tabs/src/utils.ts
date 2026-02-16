@@ -1,5 +1,5 @@
 import type { Key } from "@vue-aria/collections";
-import type { TabListState } from "@vue-aria/tabs-state";
+import type { TabListState } from "@vue-stately/tabs";
 
 export const tabsIds: WeakMap<TabListState<unknown>, string> = new WeakMap<
   TabListState<unknown>,

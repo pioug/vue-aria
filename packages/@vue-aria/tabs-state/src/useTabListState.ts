@@ -1,5 +1,5 @@
 import type { Key, Node } from "@vue-aria/collections";
-import { useSingleSelectListState, type SingleSelectListState } from "@vue-aria/list-state";
+import { useSingleSelectListState, type SingleSelectListState } from "@vue-stately/list";
 import { ref, watchEffect } from "vue";
 
 export interface TabListStateOptions<T> {

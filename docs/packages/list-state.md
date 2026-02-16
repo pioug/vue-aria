@@ -1,6 +1,6 @@
-# @vue-aria/list-state
+# @vue-stately/list
 
-`@vue-aria/list-state` ports list state management utilities from upstream `@react-stately/list`.
+`@vue-stately/list` ports list state management utilities from upstream `@react-stately/list`.
 
 ## Implemented modules
 
@@ -12,7 +12,7 @@
 ## Upstream-aligned example
 
 ```ts
-import { useSingleSelectListState } from "@vue-aria/list-state";
+import { useSingleSelectListState } from "@vue-stately/list";
 
 const state = useSingleSelectListState({
   defaultSelectedKey: "2",

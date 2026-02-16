@@ -1,9 +1,9 @@
 import { filterDOMProps, mergeProps, useFormReset } from "@vue-aria/utils";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import { useField } from "@vue-aria/label";
 import { useFocusable } from "@vue-aria/interactions";
 import { useFormValidation } from "@vue-aria/form";
-import { useFormValidationState } from "@vue-aria/form-state";
+import { useFormValidationState } from "@vue-stately/form";
 
 type ValidateResult = boolean | string | string[] | null | undefined;
 type ValidateFn = (value: string) => ValidateResult;

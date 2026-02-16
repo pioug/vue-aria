@@ -3,7 +3,7 @@ import type {
   DateValue,
   RangeCalendarProps,
   RangeCalendarState,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 import { nodeContains, useEvent } from "@vue-aria/utils";
 import type { CalendarAria } from "./useCalendarBase";
 import { useCalendarBase } from "./useCalendarBase";

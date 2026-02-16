@@ -1,4 +1,4 @@
-import type { RadioGroupProps, RadioGroupState, ValidationResult } from "@vue-aria/radio-state";
+import type { RadioGroupProps, RadioGroupState, ValidationResult } from "@vue-stately/radio";
 import { useField } from "@vue-aria/label";
 import { useFocusWithin } from "@vue-aria/interactions";
 import { getFocusableTreeWalker } from "@vue-aria/focus";

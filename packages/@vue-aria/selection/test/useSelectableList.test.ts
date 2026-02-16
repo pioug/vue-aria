@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { effectScope, ref } from "vue";
 import { useSelectableList } from "../src/useSelectableList";
-import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { Key, MultipleSelectionManager } from "@vue-stately/selection";
 
 vi.mock("@vue-aria/i18n", async () => {
   return {

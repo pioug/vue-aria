@@ -1,7 +1,7 @@
 import { effectScope, nextTick } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useNumberField } from "../src";
-import { useNumberFieldState } from "@vue-aria/numberfield-state";
+import { useNumberFieldState } from "@vue-stately/numberfield";
 
 describe("useNumberField integration with useNumberFieldState", () => {
   afterEach(() => {

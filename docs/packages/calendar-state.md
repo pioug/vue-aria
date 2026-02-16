@@ -1,6 +1,6 @@
-# @vue-aria/calendar-state
+# @vue-stately/calendar
 
-`@vue-aria/calendar-state` ports the upstream `@react-stately/calendar` state primitives for single-date and range calendar navigation/selection.
+`@vue-stately/calendar` ports the upstream `@react-stately/calendar` state primitives for single-date and range calendar navigation/selection.
 
 ## API
 
@@ -24,7 +24,7 @@ See `/docs/packages/calendar.md` for full `useCalendar` and `useRangeCalendar` c
 
 ```ts
 import { CalendarDate, createCalendar } from "@internationalized/date";
-import { useCalendarState } from "@vue-aria/calendar-state";
+import { useCalendarState } from "@vue-stately/calendar";
 
 const state = useCalendarState({
   locale: "en-US",
@@ -42,7 +42,7 @@ state.selectFocusedDate();
 
 ```ts
 import { CalendarDate, createCalendar } from "@internationalized/date";
-import { useRangeCalendarState } from "@vue-aria/calendar-state";
+import { useRangeCalendarState } from "@vue-stately/calendar";
 
 const state = useRangeCalendarState({
   locale: "en-US",

@@ -1,7 +1,7 @@
 import type { Key, Node } from "@vue-aria/collections";
 import type { LayoutDelegate, KeyboardDelegate, SearchableCollection } from "@vue-aria/selection";
-import type { MultipleSelectionManager } from "@vue-aria/selection-state";
-import type { ListState as ListStateBase } from "@vue-aria/list-state";
+import type { MultipleSelectionManager } from "@vue-stately/selection";
+import type { ListState as ListStateBase } from "@vue-stately/list";
 
 export type ListState<T> = ListStateBase<T> & {
   collection: SearchableCollection<T> & {

@@ -1,6 +1,6 @@
 import { useGridSelectionCheckbox, type AriaGridSelectionCheckboxProps, type GridSelectionCheckboxAria } from "@vue-aria/grid";
-import type { ListState } from "@vue-aria/list-state";
-import type { TreeState } from "@vue-aria/tree-state";
+import type { ListState } from "@vue-stately/list";
+import type { TreeState } from "@vue-stately/tree";
 import { getRowId } from "./utils";
 
 /**

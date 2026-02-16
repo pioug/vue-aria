@@ -1,9 +1,9 @@
 import { DateFormatter, toCalendarDate, toCalendarDateTime } from "@internationalized/date";
-import { useFormValidationState } from "@vue-aria/form-state";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useFormValidationState } from "@vue-stately/form";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
+import { useControlledState } from "@vue-stately/utils";
 import { computed, ref, watch, watchEffect } from "vue";
-import type { DateValue, RangeValue, ValidationState } from "@vue-aria/calendar-state";
+import type { DateValue, RangeValue, ValidationState } from "@vue-stately/calendar";
 import type {
   DateRange,
   DateRangePickerState,

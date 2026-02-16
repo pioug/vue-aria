@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { GridNode } from "@vue-aria/grid-state";
+import type { GridNode } from "@vue-stately/grid";
 import { TableCollection } from "../src/TableCollection";
 
 function createColumn(

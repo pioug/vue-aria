@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSelectableItem } from "../src/useSelectableItem";
-import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { Key, MultipleSelectionManager } from "@vue-stately/selection";
 import { useCollectionId } from "../src/utils";
 import { openLink } from "@vue-aria/utils";
 import { effectScope, type EffectScope } from "vue";

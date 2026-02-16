@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 
 export interface ToggleStateOptions {
   isSelected?: boolean;

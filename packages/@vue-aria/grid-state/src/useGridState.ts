@@ -1,5 +1,5 @@
-import type { Key, FocusStrategy, MultipleSelectionState, MultipleSelectionStateProps } from "@vue-aria/selection-state";
-import { SelectionManager, useMultipleSelectionState } from "@vue-aria/selection-state";
+import type { Key, FocusStrategy, MultipleSelectionState, MultipleSelectionStateProps } from "@vue-stately/selection";
+import { SelectionManager, useMultipleSelectionState } from "@vue-stately/selection";
 import { computed, ref, watch } from "vue";
 import type { GridCollectionType, GridNode } from "./GridCollection";
 

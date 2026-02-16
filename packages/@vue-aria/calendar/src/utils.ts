@@ -9,7 +9,7 @@ import { useDateFormatter, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type {
   CalendarState,
   RangeCalendarState,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 import type { LocalizedStringFormatter } from "@internationalized/string";
 import { intlMessages } from "./intlMessages";
 

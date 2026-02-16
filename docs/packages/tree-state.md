@@ -1,6 +1,6 @@
-# @vue-aria/tree-state
+# @vue-stately/tree
 
-`@vue-aria/tree-state` ports the upstream `@react-stately/tree` primitives for flattened tree collections, expanded-key state, and selection manager wiring used by tree/gridlist consumers.
+`@vue-stately/tree` ports the upstream `@react-stately/tree` primitives for flattened tree collections, expanded-key state, and selection manager wiring used by tree/gridlist consumers.
 
 ## Reference sources
 
@@ -28,7 +28,7 @@
 ### Collection-driven state
 
 ```ts
-import { TreeCollection, useTreeState } from "@vue-aria/tree-state";
+import { TreeCollection, useTreeState } from "@vue-stately/tree";
 
 const nodes = [] as any;
 const collection = new TreeCollection(nodes, {
@@ -48,7 +48,7 @@ state.setExpandedKeys(new Set(["plants"]));
 ### Item-data builder callbacks
 
 ```ts
-import { useTreeState } from "@vue-aria/tree-state";
+import { useTreeState } from "@vue-stately/tree";
 
 const state = useTreeState({
   selectionMode: "single",
@@ -71,7 +71,7 @@ const state = useTreeState({
 
 ```ts
 import { useTree } from "@vue-aria/tree";
-import { useTreeState } from "@vue-aria/tree-state";
+import { useTreeState } from "@vue-stately/tree";
 
 const treeRef = { current: null as HTMLElement | null };
 

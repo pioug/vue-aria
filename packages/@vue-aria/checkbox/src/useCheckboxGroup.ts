@@ -1,4 +1,4 @@
-import type { CheckboxGroupProps, CheckboxGroupState, ValidationResult } from "@vue-aria/checkbox-state";
+import type { CheckboxGroupProps, CheckboxGroupState, ValidationResult } from "@vue-stately/checkbox";
 import { useField } from "@vue-aria/label";
 import { useFocusWithin } from "@vue-aria/interactions";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";

@@ -3,7 +3,7 @@ import { useSeparator } from "@vue-aria/separator";
 import { defineComponent, h, type PropType } from "vue";
 import { MenuItem } from "./MenuItem";
 import type { MenuCollectionNode } from "./types";
-import type { ListState } from "@vue-aria/list-state";
+import type { ListState } from "@vue-stately/list";
 
 /** @private */
 export const MenuSection = defineComponent({

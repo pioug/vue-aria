@@ -9,7 +9,7 @@ import type {
   SelectionBehavior,
   SelectionMode,
 } from "./types";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 
 function equalSets(setA: SelectionType, setB: SelectionType) {
   if (setA === "all" || setB === "all") {

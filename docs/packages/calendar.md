@@ -45,7 +45,7 @@ A complete implementation is composed from three pieces:
 
 ```ts
 import { createCalendar } from "@internationalized/date";
-import { useCalendarState } from "@vue-aria/calendar-state";
+import { useCalendarState } from "@vue-stately/calendar";
 import { useCalendar } from "@vue-aria/calendar";
 
 const state = useCalendarState({
@@ -98,7 +98,7 @@ const cell = useCalendarCell({ date }, state, cellRef);
 
 ```ts
 import { createCalendar } from "@internationalized/date";
-import { useRangeCalendarState } from "@vue-aria/calendar-state";
+import { useRangeCalendarState } from "@vue-stately/calendar";
 import { useRangeCalendar } from "@vue-aria/calendar";
 
 const rangeState = useRangeCalendarState({
@@ -188,7 +188,7 @@ function useCalendarNavButton() {
 
 ```ts
 import { CalendarDate } from "@internationalized/date";
-import { useCalendarState } from "@vue-aria/calendar-state";
+import { useCalendarState } from "@vue-stately/calendar";
 
 const controlled = useCalendarState({
   locale: "en-US",

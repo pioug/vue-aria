@@ -1,4 +1,4 @@
-import type { RadioGroupState } from "@vue-aria/radio-state";
+import type { RadioGroupState } from "@vue-stately/radio";
 import type { InjectionKey } from "vue";
 
 export interface RadioGroupContextValue {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { effectScope, nextTick } from "vue";
-import { GridCollection, useGridState } from "@vue-aria/grid-state";
+import { GridCollection, useGridState } from "@vue-stately/grid";
 import { useGrid } from "../src/useGrid";
 import { useGridCell } from "../src/useGridCell";
 import { useGridRow } from "../src/useGridRow";

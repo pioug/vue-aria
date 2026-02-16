@@ -6,14 +6,14 @@
 
 - `useTooltip`
 - `useTooltipTrigger`
-- `@vue-aria/tooltip-state/useTooltipTriggerState`
+- `@vue-stately/tooltip/useTooltipTriggerState`
 
 ## Upstream-aligned examples
 
 ```vue
 <script setup lang="ts">
 import { useTooltip, useTooltipTrigger } from "@vue-aria/tooltip";
-import { useTooltipTriggerState } from "@vue-aria/tooltip-state";
+import { useTooltipTriggerState } from "@vue-stately/tooltip";
 
 const triggerRef = { current: null as Element | null };
 const state = useTooltipTriggerState({ delay: 0 });
@@ -30,4 +30,4 @@ const { tooltipProps: finalTooltipProps } = useTooltip(tooltipProps, state);
 ## Notes
 
 - `Spectrum S2` is ignored for this port.
-- Tooltip trigger behavior depends on focus/hover modality and delay semantics from `@vue-aria/tooltip-state`.
+- Tooltip trigger behavior depends on focus/hover modality and delay semantics from `@vue-stately/tooltip`.

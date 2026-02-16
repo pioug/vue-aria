@@ -1,6 +1,6 @@
 import { createCalendar as defaultCreateCalendar, type CalendarDate } from "@internationalized/date";
 import { useCalendar, useCalendarCell, useCalendarGrid, useRangeCalendar } from "@vue-aria/calendar";
-import { useCalendarState, useRangeCalendarState, type CalendarState, type RangeCalendarState } from "@vue-aria/calendar-state";
+import { useCalendarState, useRangeCalendarState, type CalendarState, type RangeCalendarState } from "@vue-stately/calendar";
 import { useLocale } from "@vue-aria/i18n";
 import { defineComponent, h, computed, ref, useAttrs, type PropType, type Ref } from "vue";
 

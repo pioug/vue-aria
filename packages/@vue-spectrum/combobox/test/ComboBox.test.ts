@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
-import { FormValidationContext } from "@vue-aria/form-state";
+import { FormValidationContext } from "@vue-stately/form";
 import { Provider } from "@vue-spectrum/provider";
 import { theme } from "@vue-spectrum/theme";
 import { ComboBox } from "../src/ComboBox";

@@ -8,7 +8,7 @@ import {
   type PressHookProps,
 } from "@vue-aria/interactions";
 import { moveVirtualFocus } from "@vue-aria/focus";
-import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { Key, MultipleSelectionManager } from "@vue-stately/selection";
 import { chain, isCtrlKeyPressed, mergeProps, openLink, useId, useRouter } from "@vue-aria/utils";
 import type { RouterOptions } from "@vue-aria/utils";
 import { watchEffect } from "vue";

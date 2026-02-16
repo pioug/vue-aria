@@ -1,7 +1,7 @@
 import { DOMLayoutDelegate } from "@vue-aria/selection";
 import type { Direction, Key, KeyboardDelegate, LayoutDelegate, Rect, Size } from "@vue-aria/selection";
-import type { DisabledBehavior } from "@vue-aria/selection-state";
-import type { GridCollectionType, GridNode } from "@vue-aria/grid-state";
+import type { DisabledBehavior } from "@vue-stately/selection";
+import type { GridCollectionType, GridNode } from "@vue-stately/grid";
 
 export interface GridKeyboardDelegateOptions<C> {
   collection: C;

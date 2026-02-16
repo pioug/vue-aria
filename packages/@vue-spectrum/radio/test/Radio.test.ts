@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { FormValidationContext } from "@vue-aria/form-state";
+import { FormValidationContext } from "@vue-stately/form";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { Provider } from "@vue-spectrum/provider";

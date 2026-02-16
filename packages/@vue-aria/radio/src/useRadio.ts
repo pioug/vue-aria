@@ -1,4 +1,4 @@
-import type { RadioGroupState } from "@vue-aria/radio-state";
+import type { RadioGroupState } from "@vue-stately/radio";
 import { filterDOMProps, mergeProps, useFormReset } from "@vue-aria/utils";
 import { useFocusable, usePress } from "@vue-aria/interactions";
 import { radioGroupData } from "./utils";

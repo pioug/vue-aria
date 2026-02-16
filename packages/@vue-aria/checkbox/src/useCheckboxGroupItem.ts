@@ -1,5 +1,5 @@
-import { useToggleState } from "@vue-aria/toggle-state";
-import type { CheckboxGroupState, ValidationResult } from "@vue-aria/checkbox-state";
+import { useToggleState } from "@vue-stately/toggle";
+import type { CheckboxGroupState, ValidationResult } from "@vue-stately/checkbox";
 import { useCheckbox, type AriaCheckboxProps, type CheckboxAria } from "./useCheckbox";
 import { checkboxGroupData } from "./utils";
 

@@ -1,5 +1,5 @@
 import type { PlacementAxis } from "@vue-aria/overlays";
-import type { TooltipTriggerState } from "@vue-aria/tooltip-state";
+import type { TooltipTriggerState } from "@vue-stately/tooltip";
 import type { InjectionKey, Ref } from "vue";
 
 export interface TooltipContextValue {

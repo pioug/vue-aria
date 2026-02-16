@@ -1,7 +1,7 @@
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useId } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/collections";
-import type { GridCollectionType, GridState } from "@vue-aria/grid-state";
+import type { GridCollectionType, GridState } from "@vue-stately/grid";
 import { intlMessages } from "./intlMessages";
 
 export interface AriaGridSelectionCheckboxProps {

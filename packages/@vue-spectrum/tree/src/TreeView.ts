@@ -2,7 +2,7 @@ import { useButton } from "@vue-aria/button";
 import { useGridListSelectionCheckbox } from "@vue-aria/gridlist";
 import { isFocusVisible } from "@vue-aria/interactions";
 import { useTree, useTreeItem } from "@vue-aria/tree";
-import { useTreeState, type TreeState } from "@vue-aria/tree-state";
+import { useTreeState, type TreeState } from "@vue-stately/tree";
 import type { Key, Node } from "@vue-aria/collections";
 import { mergeProps } from "@vue-aria/utils";
 import { computed, defineComponent, h, ref, type PropType, type VNode, type VNodeChild } from "vue";

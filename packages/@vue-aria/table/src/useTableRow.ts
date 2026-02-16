@@ -2,8 +2,8 @@ import { useGridRow, type GridRowAria, type GridRowProps } from "@vue-aria/grid"
 import { useLocale } from "@vue-aria/i18n";
 import { tableNestedRows } from "@vue-aria/flags";
 import { mergeProps, useSyntheticLinkProps } from "@vue-aria/utils";
-import type { GridNode } from "@vue-aria/grid-state";
-import type { TableState, TreeGridState } from "@vue-aria/table-state";
+import type { GridNode } from "@vue-stately/grid";
+import type { TableState, TreeGridState } from "@vue-stately/table";
 import { getRowLabelledBy } from "./utils";
 
 const EXPANSION_KEYS = {

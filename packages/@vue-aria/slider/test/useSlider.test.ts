@@ -1,7 +1,7 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSlider } from "../src/useSlider";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 import * as interactions from "@vue-aria/interactions";
 
 const HORIZONTAL_TRACK_RECT = {

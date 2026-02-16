@@ -2,7 +2,7 @@ import { announce } from "@vue-aria/live-announcer";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useUpdateEffect } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/collections";
-import type { SelectionValue } from "@vue-aria/selection-state";
+import type { SelectionValue } from "@vue-stately/selection";
 import { ref } from "vue";
 import { intlMessages } from "./intlMessages";
 

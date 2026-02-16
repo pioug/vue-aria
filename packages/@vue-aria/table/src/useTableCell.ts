@@ -1,6 +1,6 @@
 import { useGridCell } from "@vue-aria/grid";
-import type { GridNode } from "@vue-aria/grid-state";
-import type { TableState } from "@vue-aria/table-state";
+import type { GridNode } from "@vue-stately/grid";
+import type { TableState } from "@vue-stately/table";
 import { getCellId } from "./utils";
 
 export interface AriaTableCellProps {

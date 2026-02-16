@@ -1,6 +1,6 @@
-# @vue-aria/numberfield-state
+# @vue-stately/numberfield
 
-`@vue-aria/numberfield-state` ports number field state management from upstream `@react-stately/numberfield`.
+`@vue-stately/numberfield` ports number field state management from upstream `@react-stately/numberfield`.
 
 ## API
 
@@ -13,7 +13,7 @@
 ## Upstream-aligned example
 
 ```ts
-import { useNumberFieldState } from "@vue-aria/numberfield-state";
+import { useNumberFieldState } from "@vue-stately/numberfield";
 
 const state = useNumberFieldState({
   locale: "en-US",

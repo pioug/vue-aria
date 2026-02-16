@@ -1,5 +1,5 @@
 import { useOverlayTrigger, useUNSAFE_PortalContext } from "@vue-aria/overlays";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 import {
   Teleport,
   cloneVNode,

@@ -4,7 +4,7 @@ import { ListBoxOption } from "./ListBoxOption";
 import { ListBoxSection } from "./ListBoxSection";
 import { provideListBoxContext } from "./context";
 import type { ListBoxCollectionNode, SpectrumListBoxProps } from "./types";
-import type { ListState } from "@vue-aria/list-state";
+import type { ListState } from "@vue-stately/list";
 
 const loadMoreScrollHeightCache = new Map<string, number>();
 

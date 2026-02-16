@@ -2,7 +2,7 @@ import { filterDOMProps, mergeProps, useLinkProps } from "@vue-aria/utils";
 import { useFocusable } from "@vue-aria/interactions";
 import { useSelectableItem } from "@vue-aria/selection";
 import type { Key } from "@vue-aria/collections";
-import type { TabListState } from "@vue-aria/tabs-state";
+import type { TabListState } from "@vue-stately/tabs";
 import { generateId } from "./utils";
 
 export interface AriaTabProps {

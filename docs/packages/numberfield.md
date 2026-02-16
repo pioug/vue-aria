@@ -14,7 +14,7 @@
 
 ```ts
 import { useNumberField } from "@vue-aria/numberfield";
-import { useNumberFieldState } from "@vue-aria/numberfield-state";
+import { useNumberFieldState } from "@vue-stately/numberfield";
 
 const inputRef = { current: null as HTMLInputElement | null };
 const state = useNumberFieldState({ locale: "en-US", defaultValue: 0 });

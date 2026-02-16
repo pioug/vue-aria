@@ -11,7 +11,7 @@ import type {
   CalendarPropsBase,
   CalendarState,
   RangeCalendarState,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 import { computed, ref, watchEffect } from "vue";
 import { intlMessages } from "./intlMessages";
 import {

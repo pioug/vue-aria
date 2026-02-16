@@ -1,6 +1,6 @@
-# @vue-aria/toast-state
+# @vue-stately/toast
 
-`@vue-aria/toast-state` ports upstream `@react-stately/toast` queue/state management.
+`@vue-stately/toast` ports upstream `@react-stately/toast` queue/state management.
 
 ## API
 
@@ -11,7 +11,7 @@
 ## Example
 
 ```ts
-import { useToastState } from "@vue-aria/toast-state";
+import { useToastState } from "@vue-stately/toast";
 
 const state = useToastState<string>({ maxVisibleToasts: 2 });
 state.add("First toast", { timeout: 5000 });
@@ -21,7 +21,7 @@ state.add("Second toast", { timeout: 5000 });
 ## Queue behavior
 
 ```ts
-import { ToastQueue } from "@vue-aria/toast-state";
+import { ToastQueue } from "@vue-stately/toast";
 
 const queue = new ToastQueue<string>({ maxVisibleToasts: 1 });
 queue.add("A");

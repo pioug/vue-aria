@@ -11,7 +11,7 @@ import type {
   CalendarState,
   FirstDayOfWeek,
   RangeCalendarState,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 import { hookData, useVisibleRangeDescription } from "./utils";
 
 export interface AriaCalendarGridProps {

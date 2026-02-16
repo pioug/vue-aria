@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { computed, defineComponent, h, ref, type PropType } from "vue";
 import { describe, expect, it } from "vitest";
 import { useSlider, useSliderThumb } from "../src";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 const SliderStoryHarness = defineComponent({
   name: "SliderStoryHarness",

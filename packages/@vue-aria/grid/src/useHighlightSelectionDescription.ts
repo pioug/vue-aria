@@ -1,7 +1,7 @@
 import { useInteractionModality } from "@vue-aria/interactions";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useDescription } from "@vue-aria/utils";
-import type { MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { MultipleSelectionManager } from "@vue-stately/selection";
 import { intlMessages } from "./intlMessages";
 
 export interface HighlightSelectionDescriptionProps {

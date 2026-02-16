@@ -2,7 +2,7 @@ import { createFocusManager } from "@vue-aria/focus";
 import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { useFocusWithin } from "@vue-aria/interactions";
 import { useField } from "@vue-aria/label";
-import { privateValidationStateProp, type ValidationResult } from "@vue-aria/form-state";
+import { privateValidationStateProp, type ValidationResult } from "@vue-stately/form";
 import {
   filterDOMProps,
   mergeProps,
@@ -14,7 +14,7 @@ import { ref as vueRef } from "vue";
 import { intlMessages } from "./intlMessages";
 import { roleSymbol } from "./useDateField";
 import { useDatePickerGroup } from "./useDatePickerGroup";
-import type { DatePickerState } from "@vue-aria/datepicker-state";
+import type { DatePickerState } from "@vue-stately/datepicker";
 import type {
   AriaDatePickerProps,
   DateValue,

@@ -17,7 +17,7 @@ import {
 import type {
   CalendarState,
   RangeCalendarState,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 import { watchEffect } from "vue";
 import { intlMessages } from "./intlMessages";
 import { getEraFormat, hookData } from "./utils";

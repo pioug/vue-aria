@@ -4,7 +4,7 @@ import { useToastRegion } from "@vue-aria/toast";
 import { mergeProps } from "@vue-aria/utils";
 import { Teleport, computed, defineComponent, h, ref } from "vue";
 import type { SpectrumToastContainerProps, SpectrumToastValue, ToastPlacement } from "./types";
-import type { ToastState } from "@vue-aria/toast-state";
+import type { ToastState } from "@vue-stately/toast";
 
 interface ToastContainerProps extends SpectrumToastContainerProps {
   state: ToastState<SpectrumToastValue>;

@@ -7,10 +7,10 @@ import {
   toZoned,
   today,
 } from "@internationalized/date";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import { computed } from "vue";
 import { useDateFieldState } from "./useDateFieldState";
-import type { DateValue } from "@vue-aria/calendar-state";
+import type { DateValue } from "@vue-stately/calendar";
 import type {
   DateFieldState,
   MappedTimeValue,

@@ -1,4 +1,4 @@
-import type { TooltipTriggerState } from "@vue-aria/tooltip-state";
+import type { TooltipTriggerState } from "@vue-stately/tooltip";
 import { getInteractionModality, isFocusVisible, useFocusable, useHover } from "@vue-aria/interactions";
 import { mergeProps, useId } from "@vue-aria/utils";
 import { getCurrentInstance, onBeforeUnmount, watchEffect } from "vue";

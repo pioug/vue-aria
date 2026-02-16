@@ -1,5 +1,5 @@
 import type { Key, Node } from "@vue-aria/collections";
-import type { DisabledBehavior } from "@vue-aria/selection-state";
+import type { DisabledBehavior } from "@vue-stately/selection";
 
 export type Orientation = "vertical" | "horizontal";
 export type Direction = "ltr" | "rtl";

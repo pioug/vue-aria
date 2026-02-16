@@ -1,5 +1,5 @@
 import type { Key, Node } from "@vue-aria/collections";
-import type { MenuTriggerAction } from "@vue-aria/combobox-state";
+import type { MenuTriggerAction } from "@vue-stately/combobox";
 import type { VNode } from "vue";
 
 export type ComboBoxKey = Key;

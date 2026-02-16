@@ -1,7 +1,7 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useCalendarState, useRangeCalendarState } from "@vue-aria/calendar-state";
+import { useCalendarState, useRangeCalendarState } from "@vue-stately/calendar";
 import { useCalendarCell } from "../src/useCalendarCell";
 
 function createPointerEvent(target: HTMLElement, pointerType = "mouse"): PointerEvent {

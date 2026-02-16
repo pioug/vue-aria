@@ -1,9 +1,9 @@
-import { useGridState, type GridState } from "@vue-aria/grid-state";
+import { useGridState, type GridState } from "@vue-stately/grid";
 import type {
   MultipleSelectionState,
   MultipleSelectionStateProps,
   SelectionMode,
-} from "@vue-aria/selection-state";
+} from "@vue-stately/selection";
 import { computed, ref } from "vue";
 import { TableCollection } from "./TableCollection";
 import type {

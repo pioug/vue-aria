@@ -1,5 +1,5 @@
 import type { Key } from "@vue-aria/collections";
-import type { TableState } from "@vue-aria/table-state";
+import type { TableState } from "@vue-stately/table";
 
 export const gridIds: WeakMap<TableState<unknown>, string> = new WeakMap();
 

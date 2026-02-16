@@ -1,5 +1,5 @@
 import { useMenu } from "@vue-aria/menu";
-import { ListCollection, useListState, type ListState } from "@vue-aria/list-state";
+import { ListCollection, useListState, type ListState } from "@vue-stately/list";
 import { defineComponent, h, nextTick, ref, type PropType, type VNode } from "vue";
 import { createMenuCollection } from "./collection";
 import { provideMenuStateContext } from "./context";

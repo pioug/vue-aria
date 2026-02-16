@@ -6,14 +6,14 @@
 
 - `useRadio`
 - `useRadioGroup`
-- `@vue-aria/radio-state/useRadioGroupState`
+- `@vue-stately/radio/useRadioGroupState`
 
 ## Upstream-aligned examples
 
 ```vue
 <script setup lang="ts">
 import { useRadio, useRadioGroup } from "@vue-aria/radio";
-import { useRadioGroupState } from "@vue-aria/radio-state";
+import { useRadioGroupState } from "@vue-stately/radio";
 
 const state = useRadioGroupState({ defaultValue: "cats" });
 const { radioGroupProps, labelProps } = useRadioGroup({ label: "Favorite pet" }, state);

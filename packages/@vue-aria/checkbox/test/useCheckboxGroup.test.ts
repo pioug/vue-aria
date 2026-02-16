@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useCheckboxGroupState } from "@vue-aria/checkbox-state";
+import { useCheckboxGroupState } from "@vue-stately/checkbox";
 import { useCheckboxGroup, useCheckboxGroupItem } from "../src";
 
 function createEvent(checked: boolean): Event {

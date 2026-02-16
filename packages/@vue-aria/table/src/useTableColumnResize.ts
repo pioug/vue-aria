@@ -1,5 +1,5 @@
-import type { GridNode } from "@vue-aria/grid-state";
-import type { ColumnSize, Key, TableColumnResizeState } from "@vue-aria/table-state";
+import type { GridNode } from "@vue-stately/grid";
+import type { ColumnSize, Key, TableColumnResizeState } from "@vue-stately/table";
 import { focusSafely, useInteractionModality, useKeyboard, useMove, usePress } from "@vue-aria/interactions";
 import { mergeProps, useDescription, useEffectEvent, useId } from "@vue-aria/utils";
 import { useLocale, useLocalizedStringFormatter } from "@vue-aria/i18n";

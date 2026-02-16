@@ -12,7 +12,7 @@
 
 ```ts
 import { useTab, useTabList, useTabPanel } from "@vue-aria/tabs";
-import { useTabListState } from "@vue-aria/tabs-state";
+import { useTabListState } from "@vue-stately/tabs";
 
 const state = useTabListState({
   items: [

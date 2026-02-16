@@ -1,6 +1,6 @@
-# @vue-aria/grid-state
+# @vue-stately/grid
 
-`@vue-aria/grid-state` ports upstream `@react-stately/grid` collection and selection state helpers for grid-style data structures.
+`@vue-stately/grid` ports upstream `@react-stately/grid` collection and selection state helpers for grid-style data structures.
 
 ## Implemented modules
 
@@ -10,7 +10,7 @@
 ## Upstream-aligned example
 
 ```ts
-import { GridCollection, useGridState } from "@vue-aria/grid-state";
+import { GridCollection, useGridState } from "@vue-stately/grid";
 
 const collection = new GridCollection({
   columnCount: 2,

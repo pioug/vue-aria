@@ -1,5 +1,5 @@
 import type { Key } from "@vue-aria/collections";
-import type { GridNode } from "@vue-aria/grid-state";
+import type { GridNode } from "@vue-stately/grid";
 
 export type ColumnSize = number | string;
 export type ColumnStaticSize = number | `${number}` | `${number}%`;

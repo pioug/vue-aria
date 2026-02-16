@@ -1,6 +1,6 @@
-# @vue-aria/combobox-state
+# @vue-stately/combobox
 
-`@vue-aria/combobox-state` ports upstream `@react-stately/combobox` state management for input value, menu open state, filtering, and selection workflows.
+`@vue-stately/combobox` ports upstream `@react-stately/combobox` state management for input value, menu open state, filtering, and selection workflows.
 
 ## Implemented modules
 
@@ -9,7 +9,7 @@
 ## Upstream-aligned example
 
 ```ts
-import { useComboBoxState } from "@vue-aria/combobox-state";
+import { useComboBoxState } from "@vue-stately/combobox";
 
 const state = useComboBoxState({
   items: [

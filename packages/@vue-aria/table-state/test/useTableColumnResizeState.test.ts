@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { effectScope, nextTick, reactive } from "vue";
-import type { GridNode } from "@vue-aria/grid-state";
+import type { GridNode } from "@vue-stately/grid";
 import {
   TableCollection,
   useTableColumnResizeState,

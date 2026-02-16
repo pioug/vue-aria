@@ -29,7 +29,7 @@ const items = [
 ];
 
 // collection/selection state setup omitted for brevity.
-// In package usage, pair with @vue-aria/selection-state and @vue-aria/collections.
+// In package usage, pair with @vue-stately/selection and @vue-aria/collections.
 </script>
 ```
 

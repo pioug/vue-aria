@@ -7,7 +7,7 @@ export type {
   CalendarProps,
   DateValue,
   RangeCalendarProps,
-} from "@vue-aria/calendar-state";
+} from "@vue-stately/calendar";
 
 export type { AriaCalendarProps } from "./useCalendar";
 export type { AriaRangeCalendarProps } from "./useRangeCalendar";

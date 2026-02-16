@@ -1,6 +1,6 @@
 import { NumberFormatter, NumberParser } from "@internationalized/number";
-import { useFormValidationState, type ValidationResult } from "@vue-aria/form-state";
-import { clamp, snapValueToStep, useControlledState } from "@vue-aria/utils-state";
+import { useFormValidationState, type ValidationResult } from "@vue-stately/form";
+import { clamp, snapValueToStep, useControlledState } from "@vue-stately/utils";
 import { computed, ref, watch } from "vue";
 
 export interface NumberFieldState {

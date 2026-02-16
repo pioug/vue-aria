@@ -1,6 +1,6 @@
-# @vue-aria/table-state
+# @vue-stately/table
 
-`@vue-aria/table-state` ports upstream `@react-stately/table` state and layout utilities for table collections and column sizing.
+`@vue-stately/table` ports upstream `@react-stately/table` state and layout utilities for table collections and column sizing.
 
 ## Implemented modules
 
@@ -33,7 +33,7 @@ import {
   useTableState,
   useTableColumnResizeState,
   UNSTABLE_useTreeGridState,
-} from "@vue-aria/table-state";
+} from "@vue-stately/table";
 
 const layout = new TableColumnLayout({
   getDefaultWidth: () => "1fr",

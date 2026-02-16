@@ -1,6 +1,6 @@
 import { mergeProps, useId } from "@vue-aria/utils";
 import { useComboBox, type AriaComboBoxOptions, type ComboBoxAria } from "@vue-aria/combobox";
-import type { ComboBoxState } from "@vue-aria/combobox-state";
+import type { ComboBoxState } from "@vue-stately/combobox";
 import type { Node } from "@vue-aria/collections";
 
 export interface InputProps {

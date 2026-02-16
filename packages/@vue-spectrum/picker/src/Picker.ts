@@ -1,5 +1,5 @@
 import { HiddenSelect, useSelect } from "@vue-aria/select";
-import { ListCollection } from "@vue-aria/list-state";
+import { ListCollection } from "@vue-stately/list";
 import { useId } from "@vue-aria/utils";
 import {
   computed,

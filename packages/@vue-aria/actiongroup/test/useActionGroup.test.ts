@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it } from "vitest";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 import { mount } from "@vue/test-utils";
 import { I18nProvider } from "@vue-aria/i18n";
 import { defineComponent, h, nextTick, ref } from "vue";

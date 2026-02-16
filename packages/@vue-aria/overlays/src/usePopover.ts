@@ -1,7 +1,7 @@
 import { ariaHideOutside, keepVisible } from "./ariaHideOutside";
 import { useOverlayPosition, type AriaPositionProps } from "./useOverlayPosition";
 import { mergeProps } from "@vue-aria/utils";
-import type { OverlayTriggerState } from "@vue-aria/overlays-state";
+import type { OverlayTriggerState } from "@vue-stately/overlays";
 import type { PlacementAxis } from "./types";
 import { watchEffect } from "vue";
 import { useOverlay } from "./useOverlay";

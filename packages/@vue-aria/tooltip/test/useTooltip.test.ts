@@ -1,7 +1,7 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useTooltip, useTooltipTrigger } from "../src";
-import { useTooltipTriggerState } from "@vue-aria/tooltip-state";
+import { useTooltipTriggerState } from "@vue-stately/tooltip";
 
 describe("useTooltip", () => {
   it("sets tooltip role", () => {

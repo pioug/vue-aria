@@ -1,6 +1,6 @@
 import { chain } from "@vue-aria/utils";
 import { useSelectableItem, type SelectableItemStates } from "@vue-aria/selection";
-import type { GridCollectionType, GridNode, GridState } from "@vue-aria/grid-state";
+import type { GridCollectionType, GridNode, GridState } from "@vue-stately/grid";
 import { gridMap } from "./utils";
 
 export interface GridRowProps<T> {

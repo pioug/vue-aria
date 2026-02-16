@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import { effectScope, defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@vue-aria/i18n";
-import { useDateFieldState } from "@vue-aria/datepicker-state";
+import { useDateFieldState } from "@vue-stately/datepicker";
 import { hookData, useDateField } from "../src/useDateField";
 import { useDateSegment } from "../src/useDateSegment";
 

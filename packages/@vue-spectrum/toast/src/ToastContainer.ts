@@ -1,5 +1,5 @@
 import { filterDOMProps } from "@vue-aria/utils";
-import { ToastQueue as StatelyToastQueue, useToastQueue } from "@vue-aria/toast-state";
+import { ToastQueue as StatelyToastQueue, useToastQueue } from "@vue-stately/toast";
 import { computed, defineComponent, h } from "vue";
 import { Toast } from "./Toast";
 import { Toaster } from "./Toaster";

@@ -135,7 +135,7 @@ const { checkboxProps: rowCheckboxProps } = useTableSelectionCheckbox({ key: "ro
 
 ```ts
 import { useTableColumnResize } from "@vue-aria/table";
-import { useTableColumnResizeState } from "@vue-aria/table-state";
+import { useTableColumnResizeState } from "@vue-stately/table";
 
 const state = {} as any;
 const resizeState = useTableColumnResizeState({ tableWidth: 960 }, state);
@@ -210,6 +210,6 @@ const { inputProps, resizerProps, isResizing } = useTableColumnResize(
 
 ## Notes
 
-- This package depends on `@vue-aria/table-state` for collection and resize state.
-- `UNSTABLE_useTreeGridState` support comes from `@vue-aria/table-state` and requires `tableNestedRows` to be enabled in `@vue-aria/flags`.
+- This package depends on `@vue-stately/table` for collection and resize state.
+- `UNSTABLE_useTreeGridState` support comes from `@vue-stately/table` and requires `tableNestedRows` to be enabled in `@vue-aria/flags`.
 - `Spectrum S2` is out of scope unless explicitly requested.

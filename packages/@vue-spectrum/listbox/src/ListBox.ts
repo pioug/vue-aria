@@ -1,4 +1,4 @@
-import { ListCollection, useListState } from "@vue-aria/list-state";
+import { ListCollection, useListState } from "@vue-stately/list";
 import { defineComponent, h, type PropType, type VNode } from "vue";
 import { ListBoxBase, useListBoxLayout } from "./ListBoxBase";
 import { createListBoxCollection } from "./collection";

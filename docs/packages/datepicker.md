@@ -16,7 +16,7 @@
 
 ```ts
 import { useDatePicker } from "@vue-aria/datepicker";
-import { useDatePickerState } from "@vue-aria/datepicker-state";
+import { useDatePickerState } from "@vue-stately/datepicker";
 
 const state = useDatePickerState({});
 const rootRef = { current: null as HTMLElement | null };
@@ -34,7 +34,7 @@ const aria = useDatePicker(
 
 ```ts
 import { useDateRangePicker } from "@vue-aria/datepicker";
-import { useDateRangePickerState } from "@vue-aria/datepicker-state";
+import { useDateRangePickerState } from "@vue-stately/datepicker";
 
 const state = useDateRangePickerState({});
 const rootRef = { current: null as HTMLElement | null };
@@ -52,7 +52,7 @@ const aria = useDateRangePicker(
 
 ```ts
 import { createCalendar } from "@internationalized/date";
-import { useDateFieldState } from "@vue-aria/datepicker-state";
+import { useDateFieldState } from "@vue-stately/datepicker";
 import { useDateField, useDateSegment } from "@vue-aria/datepicker";
 
 const state = useDateFieldState({

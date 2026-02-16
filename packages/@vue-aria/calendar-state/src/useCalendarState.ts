@@ -15,7 +15,7 @@ import {
   toCalendarDate,
   today,
 } from "@internationalized/date";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import { computed, ref, watch, watchEffect } from "vue";
 import {
   alignCenter,

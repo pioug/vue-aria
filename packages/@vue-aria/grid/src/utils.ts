@@ -1,4 +1,4 @@
-import type { GridCollectionType, GridState } from "@vue-aria/grid-state";
+import type { GridCollectionType, GridState } from "@vue-stately/grid";
 import type { Key } from "@vue-aria/collections";
 import type { KeyboardDelegate } from "@vue-aria/selection";
 

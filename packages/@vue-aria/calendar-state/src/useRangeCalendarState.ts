@@ -8,7 +8,7 @@ import {
   toCalendar,
   toCalendarDate,
 } from "@internationalized/date";
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import { computed, ref, watchEffect } from "vue";
 import { useCalendarState } from "./useCalendarState";
 import { alignCenter, constrainValue, isInvalid, previousAvailableDate } from "./utils";

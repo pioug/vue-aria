@@ -1,6 +1,6 @@
 import { createFocusManager } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
-import type { ToggleGroupProps, ToggleGroupState } from "@vue-aria/toggle-state";
+import type { ToggleGroupProps, ToggleGroupState } from "@vue-stately/toggle";
 import { filterDOMProps, mergeProps, nodeContains } from "@vue-aria/utils";
 import { type AriaToggleButtonOptions, type ToggleButtonAria, type ToggleState, useToggleButton } from "./useToggleButton";
 

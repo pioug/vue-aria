@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { effectScope, nextTick, ref } from "vue";
 import { useSelectableCollection } from "../src/useSelectableCollection";
-import type { Key, MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { Key, MultipleSelectionManager } from "@vue-stately/selection";
 import type { KeyboardDelegate } from "../src/types";
 
 vi.mock("@vue-aria/i18n", () => ({

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { ColumnSize, Key, TableColumnResizeState } from "@vue-aria/table-state";
+import type { ColumnSize, Key, TableColumnResizeState } from "@vue-stately/table";
 
 export interface ResizeHarness {
   cleanup: () => void;

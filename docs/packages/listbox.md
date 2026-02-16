@@ -15,7 +15,7 @@
 ```vue
 <script setup lang="ts">
 import { useListBox, useOption } from "@vue-aria/listbox";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 
 const listRef = { current: null as HTMLElement | null };
 const optionARef = { current: null as HTMLElement | null };
@@ -50,5 +50,5 @@ const { optionProps: optionBProps } = useOption({ key: "b" }, state, optionBRef)
 
 ## Notes
 
-- Pair `useListBox` with `useListState` from `@vue-aria/list-state` for upstream-equivalent behavior.
+- Pair `useListBox` with `useListState` from `@vue-stately/list` for upstream-equivalent behavior.
 - `Spectrum S2` is ignored for this port.

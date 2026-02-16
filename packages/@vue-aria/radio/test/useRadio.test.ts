@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it } from "vitest";
-import { useRadioGroupState } from "@vue-aria/radio-state";
+import { useRadioGroupState } from "@vue-stately/radio";
 import { useRadio, useRadioGroup } from "../src";
 
 describe("useRadio + useRadioGroup", () => {

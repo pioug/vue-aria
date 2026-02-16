@@ -1,5 +1,5 @@
 import type { Key, Node } from "@vue-aria/collections";
-import type { SelectionValue } from "@vue-aria/selection-state";
+import type { SelectionValue } from "@vue-stately/selection";
 import type { VNode } from "vue";
 
 export type MenuTriggerType = "press" | "longPress";

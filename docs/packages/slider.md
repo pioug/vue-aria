@@ -11,7 +11,7 @@
 
 - `useSlider` (initial parity slice)
 - `useSliderThumb` (initial parity slice)
-- `useSlider` + `useSliderThumb` integration with `@vue-aria/slider-state`
+- `useSlider` + `useSliderThumb` integration with `@vue-stately/slider`
 
 ## Story variants mirrored
 
@@ -27,7 +27,7 @@
 ```ts
 import { ref } from "vue";
 import { useSlider, useSliderThumb } from "@vue-aria/slider";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 const trackRef = { current: null as Element | null };
 const inputRef = ref<HTMLInputElement | null>(null);
@@ -49,7 +49,7 @@ const thumb = useSliderThumb({ index: 0, trackRef, inputRef }, state);
 ```ts
 import { ref } from "vue";
 import { useSlider, useSliderThumb } from "@vue-aria/slider";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 
 const trackRef = { current: null as Element | null };
 const minInputRef = ref<HTMLInputElement | null>(null);

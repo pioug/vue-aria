@@ -13,12 +13,12 @@ import {
 import { ref as vueRef } from "vue";
 import { useDatePickerGroup } from "./useDatePickerGroup";
 import { intlMessages } from "./intlMessages";
-import type { ValidationResult } from "@vue-aria/form-state";
+import type { ValidationResult } from "@vue-stately/form";
 import type {
   DateFieldState,
   TimeFieldState,
   TimeValue,
-} from "@vue-aria/datepicker-state";
+} from "@vue-stately/datepicker";
 import type {
   AriaDateFieldProps,
   AriaTimeFieldProps,

@@ -1,7 +1,7 @@
 import { CalendarDate, createCalendar } from "@internationalized/date";
 import { effectScope, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
-import { useRangeCalendarState } from "@vue-aria/calendar-state";
+import { useRangeCalendarState } from "@vue-stately/calendar";
 import { useRangeCalendar } from "../src/useRangeCalendar";
 
 async function flush() {

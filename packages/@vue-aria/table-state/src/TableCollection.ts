@@ -1,5 +1,5 @@
 import type { Key } from "@vue-aria/collections";
-import { GridCollection, type GridNode } from "@vue-aria/grid-state";
+import { GridCollection, type GridNode } from "@vue-stately/grid";
 import type { TableCollection as ITableCollection } from "./types";
 
 interface GridCollectionOptions {

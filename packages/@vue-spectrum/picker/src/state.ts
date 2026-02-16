@@ -1,6 +1,6 @@
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
-import { useSingleSelectListState } from "@vue-aria/list-state";
-import { useFormValidationState, type ValidationResult } from "@vue-aria/form-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
+import { useSingleSelectListState } from "@vue-stately/list";
+import { useFormValidationState, type ValidationResult } from "@vue-stately/form";
 import { ref, watch } from "vue";
 import type { Key } from "@vue-aria/collections";
 import type { SpectrumPickerProps } from "./types";

@@ -5,14 +5,14 @@
 ## Implemented modules
 
 - `useSearchField`
-- `@vue-aria/searchfield-state/useSearchFieldState`
+- `@vue-stately/searchfield/useSearchFieldState`
 
 ## Upstream-aligned examples
 
 ```vue
 <script setup lang="ts">
 import { useSearchField } from "@vue-aria/searchfield";
-import { useSearchFieldState } from "@vue-aria/searchfield-state";
+import { useSearchFieldState } from "@vue-stately/searchfield";
 
 const inputRef = { current: null as HTMLInputElement | null };
 const state = useSearchFieldState({});
@@ -36,7 +36,7 @@ const { inputProps, clearButtonProps, labelProps } = useSearchField(
 <script setup lang="ts">
 import { I18nProvider } from "@vue-aria/i18n";
 import { useSearchField } from "@vue-aria/searchfield";
-import { useSearchFieldState } from "@vue-aria/searchfield-state";
+import { useSearchFieldState } from "@vue-stately/searchfield";
 
 const inputRef = { current: null as HTMLInputElement | null };
 const state = useSearchFieldState({});

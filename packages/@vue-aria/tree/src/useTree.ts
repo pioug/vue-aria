@@ -1,6 +1,6 @@
 import { useGridList, type AriaGridListOptions, type AriaGridListProps, type GridListProps } from "@vue-aria/gridlist";
 import type { KeyboardDelegate } from "@vue-aria/selection";
-import type { TreeState } from "@vue-aria/tree-state";
+import type { TreeState } from "@vue-stately/tree";
 
 export interface TreeProps<T> extends GridListProps<T> {}
 

@@ -1,7 +1,7 @@
-import { SelectionManager, useMultipleSelectionState, type MultipleSelectionStateProps } from "@vue-aria/selection-state";
+import { SelectionManager, useMultipleSelectionState, type MultipleSelectionStateProps } from "@vue-stately/selection";
 import type { Key, Node } from "@vue-aria/collections";
 import type { LayoutDelegate } from "@vue-aria/selection";
-import type { Collection } from "@vue-aria/selection-state";
+import type { Collection } from "@vue-stately/selection";
 import { ListCollection } from "./ListCollection";
 import { computed } from "vue";
 

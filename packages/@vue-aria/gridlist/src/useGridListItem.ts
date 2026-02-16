@@ -3,8 +3,8 @@ import { isFocusVisible } from "@vue-aria/interactions";
 import { useLocale } from "@vue-aria/i18n";
 import { useSelectableItem, type SelectableItemStates } from "@vue-aria/selection";
 import type { Key, Node as CollectionNode } from "@vue-aria/collections";
-import type { ListState } from "@vue-aria/list-state";
-import type { TreeState } from "@vue-aria/tree-state";
+import type { ListState } from "@vue-stately/list";
+import type { TreeState } from "@vue-stately/tree";
 import {
   chain,
   getScrollParent,

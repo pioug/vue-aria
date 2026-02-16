@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 import type { Key } from "@vue-aria/collections";
 import type { SpectrumMenuTriggerProps, SpectrumRootMenuTriggerState } from "./types";
 

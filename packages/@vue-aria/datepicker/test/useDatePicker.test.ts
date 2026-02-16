@@ -6,7 +6,7 @@ import {
   useDatePickerState,
   useDateRangePickerState,
   useTimeFieldState,
-} from "@vue-aria/datepicker-state";
+} from "@vue-stately/datepicker";
 import { useDateField, useTimeField } from "../src/useDateField";
 import { useDatePicker } from "../src/useDatePicker";
 import { useDateRangePicker } from "../src/useDateRangePicker";

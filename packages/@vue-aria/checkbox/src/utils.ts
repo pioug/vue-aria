@@ -1,4 +1,4 @@
-import type { CheckboxGroupState } from "@vue-aria/checkbox-state";
+import type { CheckboxGroupState } from "@vue-stately/checkbox";
 
 export interface CheckboxGroupData {
   name?: string;

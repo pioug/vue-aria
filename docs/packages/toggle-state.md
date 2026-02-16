@@ -1,6 +1,6 @@
-# @vue-aria/toggle-state
+# @vue-stately/toggle
 
-`@vue-aria/toggle-state` ports upstream `@react-stately/toggle` primitives for single-toggle and toggle-group state.
+`@vue-stately/toggle` ports upstream `@react-stately/toggle` primitives for single-toggle and toggle-group state.
 
 ## Implemented modules
 
@@ -12,7 +12,7 @@
 ### `useToggleState`
 
 ```ts
-import { useToggleState } from "@vue-aria/toggle-state";
+import { useToggleState } from "@vue-stately/toggle";
 
 const state = useToggleState({
   defaultSelected: false,
@@ -27,7 +27,7 @@ state.toggle();
 ### `useToggleGroupState`
 
 ```ts
-import { useToggleGroupState } from "@vue-aria/toggle-state";
+import { useToggleGroupState } from "@vue-stately/toggle";
 
 const group = useToggleGroupState({
   selectionMode: "multiple",

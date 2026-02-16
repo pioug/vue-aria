@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it } from "vitest";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 import { useActionGroupItem } from "../src";
 
 describe("useActionGroupItem", () => {

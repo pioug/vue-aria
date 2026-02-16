@@ -8,9 +8,9 @@ import type {
   DateValue,
   RangeValue,
   ValidationState,
-} from "@vue-aria/calendar-state";
-import type { FormValidationState } from "@vue-aria/form-state";
-import type { OverlayTriggerProps, OverlayTriggerState } from "@vue-aria/overlays-state";
+} from "@vue-stately/calendar";
+import type { FormValidationState } from "@vue-stately/form";
+import type { OverlayTriggerProps, OverlayTriggerState } from "@vue-stately/overlays";
 
 export type Granularity =
   | "year"

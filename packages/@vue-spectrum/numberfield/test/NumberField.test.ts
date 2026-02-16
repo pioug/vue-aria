@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
-import { FormValidationContext } from "@vue-aria/form-state";
+import { FormValidationContext } from "@vue-stately/form";
 import { I18nProvider } from "@vue-aria/i18n";
 import { NumberField } from "../src/NumberField";
 import { StepButton } from "../src/StepButton";

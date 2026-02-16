@@ -1,4 +1,4 @@
-import { useControlledState } from "@vue-aria/utils-state";
+import { useControlledState } from "@vue-stately/utils";
 import type { Key, Node } from "@vue-aria/collections";
 import { useListState, type ListState } from "./useListState";
 import { computed } from "vue";

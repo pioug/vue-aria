@@ -4,7 +4,7 @@ import { useLocale } from "@vue-aria/i18n";
 import { useSelectableItem } from "@vue-aria/selection";
 import { getScrollParent, mergeProps, nodeContains, scrollIntoViewport } from "@vue-aria/utils";
 import type { Key } from "@vue-aria/collections";
-import type { GridCollectionType, GridNode, GridState } from "@vue-aria/grid-state";
+import type { GridCollectionType, GridNode, GridState } from "@vue-stately/grid";
 import { gridMap } from "./utils";
 
 export interface GridCellProps {

@@ -1,6 +1,6 @@
 import type { GridRowProps } from "@vue-aria/grid";
 import { tableNestedRows } from "@vue-aria/flags";
-import type { TableState } from "@vue-aria/table-state";
+import type { TableState } from "@vue-stately/table";
 
 export interface TableHeaderRowAria {
   rowProps: Record<string, unknown>;

@@ -1,6 +1,6 @@
-# @vue-aria/tabs-state
+# @vue-stately/tabs
 
-`@vue-aria/tabs-state` ports upstream `@react-stately/tabs` state management for tab selection and focus behavior.
+`@vue-stately/tabs` ports upstream `@react-stately/tabs` state management for tab selection and focus behavior.
 
 ## Implemented modules
 
@@ -9,7 +9,7 @@
 ## Upstream-aligned example
 
 ```ts
-import { useTabListState } from "@vue-aria/tabs-state";
+import { useTabListState } from "@vue-stately/tabs";
 
 const state = useTabListState({
   items: [

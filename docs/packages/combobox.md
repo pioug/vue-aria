@@ -10,7 +10,7 @@
 
 ```ts
 import { useComboBox } from "@vue-aria/combobox";
-import { useComboBoxState } from "@vue-aria/combobox-state";
+import { useComboBoxState } from "@vue-stately/combobox";
 
 const inputRef = { current: null as HTMLInputElement | null };
 const listBoxRef = { current: null as HTMLElement | null };

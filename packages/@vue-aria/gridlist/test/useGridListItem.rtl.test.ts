@@ -1,6 +1,6 @@
 import { computed, effectScope, nextTick } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 
 vi.mock("@vue-aria/i18n", async () => {
   const actual = await vi.importActual<typeof import("@vue-aria/i18n")>("@vue-aria/i18n");

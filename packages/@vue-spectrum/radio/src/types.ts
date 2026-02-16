@@ -1,5 +1,5 @@
 import type { AriaRadioGroupProps, AriaRadioProps } from "@vue-aria/radio";
-import type { RadioGroupProps } from "@vue-aria/radio-state";
+import type { RadioGroupProps } from "@vue-stately/radio";
 
 export interface SpectrumRadioProps extends AriaRadioProps {
   autoFocus?: boolean;

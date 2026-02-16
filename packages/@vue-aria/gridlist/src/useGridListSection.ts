@@ -1,5 +1,5 @@
 import { useLabels, useSlotId } from "@vue-aria/utils";
-import type { ListState } from "@vue-aria/list-state";
+import type { ListState } from "@vue-stately/list";
 
 export interface AriaGridListSectionProps {
   "aria-label"?: string;

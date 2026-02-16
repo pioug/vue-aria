@@ -1,5 +1,5 @@
 import { useCheckboxGroup } from "@vue-aria/checkbox";
-import { useCheckboxGroupState } from "@vue-aria/checkbox-state";
+import { useCheckboxGroupState } from "@vue-stately/checkbox";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { useStyleProps } from "@vue-spectrum/utils";
 import { defineComponent, h, provide, ref, type PropType } from "vue";

@@ -2,7 +2,7 @@ import { ariaHideOutside } from "@vue-aria/overlays";
 import { announce } from "@vue-aria/live-announcer";
 import { useMenuTrigger } from "@vue-aria/menu";
 import { useTextField } from "@vue-aria/textfield";
-import { privateValidationStateProp } from "@vue-aria/form-state";
+import { privateValidationStateProp } from "@vue-stately/form";
 import { dispatchVirtualFocus } from "@vue-aria/focus";
 import { listData, getItemId, type AriaListBoxOptions } from "@vue-aria/listbox";
 import { ListKeyboardDelegate, useSelectableCollection } from "@vue-aria/selection";
@@ -19,7 +19,7 @@ import {
   useRouter,
 } from "@vue-aria/utils";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
-import type { ComboBoxState } from "@vue-aria/combobox-state";
+import type { ComboBoxState } from "@vue-stately/combobox";
 import type { Key } from "@vue-aria/collections";
 import { computed, ref, watchEffect } from "vue";
 import { intlMessages } from "./intlMessages";

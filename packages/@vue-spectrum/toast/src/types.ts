@@ -1,5 +1,5 @@
 import type { AriaToastRegionProps } from "@vue-aria/toast";
-import type { QueuedToast, ToastOptions, ToastState } from "@vue-aria/toast-state";
+import type { QueuedToast, ToastOptions, ToastState } from "@vue-stately/toast";
 
 export type ToastPlacement = "top" | "top end" | "bottom" | "bottom end";
 export type ToastVariant = "positive" | "negative" | "info" | "neutral";

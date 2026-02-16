@@ -19,7 +19,7 @@ import {
   type TableColumnResizeState,
   type TableState,
   type TreeGridState,
-} from "@vue-aria/table-state";
+} from "@vue-stately/table";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import { mergeProps } from "@vue-aria/utils";
 import { defineComponent, h, ref, shallowRef, computed, watchEffect, nextTick, type PropType, type VNode, type VNodeChild } from "vue";

@@ -1,5 +1,5 @@
 import type { Key, Node } from "@vue-aria/collections";
-import type { Collection } from "@vue-aria/selection-state";
+import type { Collection } from "@vue-stately/selection";
 
 export class ListCollection<T> implements Collection<Node<T>> {
   private keyMap: Map<Key, Node<T>> = new Map();

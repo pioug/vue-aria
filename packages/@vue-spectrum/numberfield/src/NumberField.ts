@@ -1,5 +1,5 @@
 import { useNumberField } from "@vue-aria/numberfield";
-import { useNumberFieldState } from "@vue-aria/numberfield-state";
+import { useNumberFieldState } from "@vue-stately/numberfield";
 import { FocusRing } from "@vue-aria/focus";
 import { useHover } from "@vue-aria/interactions";
 import { useLocale } from "@vue-aria/i18n";

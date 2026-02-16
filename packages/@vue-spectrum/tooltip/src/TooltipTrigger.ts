@@ -1,7 +1,7 @@
 import { FocusableProvider } from "@vue-aria/focus";
 import { useOverlayPosition } from "@vue-aria/overlays";
 import { useTooltipTrigger } from "@vue-aria/tooltip";
-import { useTooltipTriggerState } from "@vue-aria/tooltip-state";
+import { useTooltipTriggerState } from "@vue-stately/tooltip";
 import {
   cloneVNode,
   computed,

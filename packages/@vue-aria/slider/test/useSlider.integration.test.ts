@@ -2,7 +2,7 @@ import { computed, effectScope, ref } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { useSlider } from "../src/useSlider";
 import { useSliderThumb } from "../src/useSliderThumb";
-import { useSliderState } from "@vue-aria/slider-state";
+import { useSliderState } from "@vue-stately/slider";
 import * as i18n from "@vue-aria/i18n";
 
 const TRACK_RECT = {

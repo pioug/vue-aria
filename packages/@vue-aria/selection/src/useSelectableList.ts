@@ -1,6 +1,6 @@
 import { useCollator } from "@vue-aria/i18n";
 import type { Key, Node } from "@vue-aria/collections";
-import type { MultipleSelectionManager } from "@vue-aria/selection-state";
+import type { MultipleSelectionManager } from "@vue-stately/selection";
 import type { LayoutDelegate, KeyboardDelegate, SearchableCollection } from "./types";
 import { ListKeyboardDelegate } from "./ListKeyboardDelegate";
 import {

@@ -1,5 +1,5 @@
 import { useComboBox } from "@vue-aria/combobox";
-import { useComboBoxState } from "@vue-aria/combobox-state";
+import { useComboBoxState } from "@vue-stately/combobox";
 import { useFilter } from "@vue-aria/i18n";
 import { getItemId } from "@vue-aria/listbox";
 import { useId } from "@vue-aria/utils";

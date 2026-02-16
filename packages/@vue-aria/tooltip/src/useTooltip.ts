@@ -1,4 +1,4 @@
-import type { TooltipTriggerState } from "@vue-aria/tooltip-state";
+import type { TooltipTriggerState } from "@vue-stately/tooltip";
 import { filterDOMProps, mergeProps } from "@vue-aria/utils";
 import { useHover } from "@vue-aria/interactions";
 

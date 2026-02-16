@@ -1,4 +1,4 @@
-import { clamp, snapValueToStep, useControlledState } from "@vue-aria/utils-state";
+import { clamp, snapValueToStep, useControlledState } from "@vue-stately/utils";
 import { computed, ref, watch } from "vue";
 
 export interface SliderState {

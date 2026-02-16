@@ -1,5 +1,5 @@
 import { CalendarDate, CalendarDateTime, parseZonedDateTime } from "@internationalized/date";
-import { FormValidationContext } from "@vue-aria/form-state";
+import { FormValidationContext } from "@vue-stately/form";
 import { mount } from "@vue/test-utils";
 import { defineComponent, h, nextTick, provide, ref } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";

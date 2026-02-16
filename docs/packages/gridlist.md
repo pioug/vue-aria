@@ -22,7 +22,7 @@
 
 ```ts
 import { useGridList, useGridListItem, useGridListSelectionCheckbox } from "@vue-aria/gridlist";
-import { useListState } from "@vue-aria/list-state";
+import { useListState } from "@vue-stately/list";
 
 const listRef = { current: null as HTMLElement | null };
 const rowRef = { current: null as HTMLElement | null };
@@ -143,7 +143,7 @@ Use reusable primitives for row checkboxes and action buttons.
 
 ```ts
 import { useCheckbox } from "@vue-aria/checkbox";
-import { useToggleState } from "@vue-aria/toggle-state";
+import { useToggleState } from "@vue-stately/toggle";
 import { useButton } from "@vue-aria/button";
 
 const checkboxRef = { current: null as HTMLInputElement | null };

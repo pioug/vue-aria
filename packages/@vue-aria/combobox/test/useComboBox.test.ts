@@ -35,7 +35,7 @@ vi.mock("@vue-aria/utils", async () => {
 });
 
 import { useComboBox } from "../src/useComboBox";
-import { useComboBoxState } from "@vue-aria/combobox-state";
+import { useComboBoxState } from "@vue-stately/combobox";
 
 interface Item {
   id: number;

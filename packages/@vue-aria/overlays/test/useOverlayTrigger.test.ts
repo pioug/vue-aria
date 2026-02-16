@@ -1,6 +1,6 @@
 import { effectScope } from "vue";
 import { describe, expect, it, vi } from "vitest";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 import { useCloseOnScroll } from "../src/useCloseOnScroll";
 import { useOverlayTrigger } from "../src/useOverlayTrigger";
 

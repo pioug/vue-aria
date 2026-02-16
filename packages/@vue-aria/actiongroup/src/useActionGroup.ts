@@ -1,7 +1,7 @@
 import { createFocusManager } from "@vue-aria/focus";
 import { useLocale } from "@vue-aria/i18n";
 import { filterDOMProps, nodeContains } from "@vue-aria/utils";
-import type { ListState } from "@vue-aria/list-state";
+import type { ListState } from "@vue-stately/list";
 import type { Key } from "@vue-aria/collections";
 
 type Orientation = "horizontal" | "vertical";

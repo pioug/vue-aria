@@ -1,7 +1,7 @@
 import { mergeProps } from "@vue-aria/utils";
 import { useSearchField, type AriaSearchFieldProps } from "@vue-aria/searchfield";
 import { useComboBox, type AriaComboBoxOptions, type ComboBoxAria } from "@vue-aria/combobox";
-import type { ComboBoxState } from "@vue-aria/combobox-state";
+import type { ComboBoxState } from "@vue-stately/combobox";
 
 export interface AriaSearchAutocompleteOptions<T> extends AriaSearchFieldProps {
   inputRef: { current: HTMLInputElement | null };

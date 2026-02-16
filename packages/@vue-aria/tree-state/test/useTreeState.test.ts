@@ -1,6 +1,6 @@
 import { effectScope, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
-import type { Key } from "@vue-aria/selection-state";
+import type { Key } from "@vue-stately/selection";
 import type { Node } from "@vue-aria/collections";
 import { TreeCollection } from "../src/TreeCollection";
 import { useTreeState } from "../src/useTreeState";

@@ -1,6 +1,6 @@
 import { useHover } from "@vue-aria/interactions";
 import { useSliderThumb } from "@vue-aria/slider";
-import type { SliderState } from "@vue-aria/slider-state";
+import type { SliderState } from "@vue-stately/slider";
 import { mergeProps } from "@vue-aria/utils";
 import { VisuallyHidden } from "@vue-aria/visually-hidden";
 import {

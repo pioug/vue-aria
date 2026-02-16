@@ -2,7 +2,7 @@ import { mergeProps, useId, useLabels } from "@vue-aria/utils";
 import { useLocale } from "@vue-aria/i18n";
 import { useSelectableCollection } from "@vue-aria/selection";
 import type { Key } from "@vue-aria/collections";
-import type { TabListState } from "@vue-aria/tabs-state";
+import type { TabListState } from "@vue-stately/tabs";
 import { TabsKeyboardDelegate } from "./TabsKeyboardDelegate";
 import { tabsIds } from "./utils";
 

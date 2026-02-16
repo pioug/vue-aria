@@ -1,5 +1,5 @@
 import { useRadioGroup } from "@vue-aria/radio";
-import { useRadioGroupState } from "@vue-aria/radio-state";
+import { useRadioGroupState } from "@vue-stately/radio";
 import { useProviderProps } from "@vue-spectrum/provider";
 import { useStyleProps } from "@vue-spectrum/utils";
 import { computed, defineComponent, h, provide, ref, type PropType } from "vue";

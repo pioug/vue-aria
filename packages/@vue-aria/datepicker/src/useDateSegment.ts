@@ -17,7 +17,7 @@ import { useDateFormatter, useFilter, useLocale } from "@vue-aria/i18n";
 import { useDisplayNames } from "./useDisplayNames";
 import { hookData } from "./useDateField";
 import { useSpinButton } from "@vue-aria/spinbutton";
-import type { DateFieldState, DateSegment } from "@vue-aria/datepicker-state";
+import type { DateFieldState, DateSegment } from "@vue-stately/datepicker";
 import type { RefObject } from "./types";
 
 export interface DateSegmentAria {

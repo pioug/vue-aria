@@ -2,7 +2,7 @@ import type { AriaButtonOptions } from "@vue-aria/button";
 import { useGridListItem, type AriaGridListItemOptions, type GridListItemAria } from "@vue-aria/gridlist";
 import { useLocalizedStringFormatter } from "@vue-aria/i18n";
 import type { Node } from "@vue-aria/collections";
-import type { TreeState } from "@vue-aria/tree-state";
+import type { TreeState } from "@vue-stately/tree";
 import { useLabels } from "@vue-aria/utils";
 import { intlMessages } from "./intlMessages";
 

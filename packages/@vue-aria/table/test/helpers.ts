@@ -1,5 +1,5 @@
-import type { GridNode } from "@vue-aria/grid-state";
-import { TableCollection, useTableState, type TableState } from "@vue-aria/table-state";
+import type { GridNode } from "@vue-stately/grid";
+import { TableCollection, useTableState, type TableState } from "@vue-stately/table";
 
 export function createColumn(
   key: string,

@@ -1,5 +1,5 @@
 import { getCurrentInstance, onBeforeUnmount } from "vue";
-import { useOverlayTriggerState } from "@vue-aria/overlays-state";
+import { useOverlayTriggerState } from "@vue-stately/overlays";
 
 export interface TooltipTriggerProps {
   delay?: number;
